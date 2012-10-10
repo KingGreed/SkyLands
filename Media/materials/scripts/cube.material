@@ -1,0 +1,14 @@
+material Cube
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture metal.png
+			}
+
+		}
+	}
+}
