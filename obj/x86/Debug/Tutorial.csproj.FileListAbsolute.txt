@@ -1,7 +1,0 @@
-C:\Users\Renaud\lib\Mogre\Start\bin\Debug\Tutorial.exe.config
-C:\Users\Renaud\lib\Mogre\Start\bin\Debug\Tutorial.exe
-C:\Users\Renaud\lib\Mogre\Start\bin\Debug\Tutorial.pdb
-C:\Users\Renaud\lib\Mogre\Start\bin\Debug\Mogre.xml
-C:\Users\Renaud\lib\Mogre\Start\obj\x86\Debug\ResolveAssemblyReference.cache
-C:\Users\Renaud\lib\Mogre\Start\obj\x86\Debug\Tutorial.exe
-C:\Users\Renaud\lib\Mogre\Start\obj\x86\Debug\Tutorial.pdb
