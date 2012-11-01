@@ -15,7 +15,7 @@ namespace Game.Terrain
         private SceneNode mChunkNode;
         private Vector3 mChunkPos;
 
-        private World mWorld;
+        //private World mWorld;
 
         Dictionary<Vector3, Block> mLoadedChunks = new Dictionary<Vector3, Block>();
 

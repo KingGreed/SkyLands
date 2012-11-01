@@ -10,7 +10,7 @@ namespace Game.Terrain
     {
         private SceneManager mSceneMgr;
         private RenderWindow mRenderWindow;
-        private List<Player> mPlayerList;
+        //private List<Player> mPlayerList;
         Dictionary<Vector3, Chunk> mLoadedChunks = new Dictionary<Vector3, Chunk>();
 
         private Vector3 mSpawnPoint;

@@ -6,7 +6,7 @@ using Game.Terrain;
 
 namespace Game.PlayerSystem
 {
-    public abstract class Player
+    abstract class Player
     {
         protected World mWorldRef;
         protected Vector3 mCoord;
