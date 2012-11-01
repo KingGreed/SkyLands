@@ -1,6 +1,8 @@
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
 bin
-obj
+obj/
 
 # mstest test results
 TestResults
+
+# Files to ignore here
