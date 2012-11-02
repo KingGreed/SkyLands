@@ -1,0 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using Mogre;
+
+namespace Game.CharacSystem
+{
+    /* Needs to be completed for multiplayer */
+    class Player : Character
+    {
+        /* Constructors of Player has to be called by the CharacMgr */
+        public Player(Breed charac, CharacterInfo info)
+        {
+            mBreed = charac;
+
+            mInfo = info;
+            update();
+        }
+    }
+}

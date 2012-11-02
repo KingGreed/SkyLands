@@ -1,0 +1,14 @@
+material Black
+{
+	technique
+	{
+		pass
+		{
+			lighting    off
+			texture_unit
+			{
+				texture black.png
+			}
+		}
+	}
+}
