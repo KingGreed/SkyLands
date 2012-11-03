@@ -4,11 +4,19 @@ using Mogre;
 
 namespace Game.CharacSystem
 {
+<<<<<<< HEAD
+    class Breed //sure it's a good name ?
+    {
+        public enum Action { idle, run, jump, dance }
+
+        public Entity mEnt { get; protected set; }//planing to inherit the class ?
+=======
     class Breed
     {
         public enum Action { idle, run, jump, dance }
 
         public Entity mEnt { get; protected set; }
+>>>>>>> 5c3cc93d3dff01cb6a4c43c92d95002796543de9
         public SceneNode mNode { get; protected set; }
         //public AnimationState mAnimState;
 

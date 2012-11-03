@@ -6,3 +6,5 @@ obj
 TestResults
 
 # Files to ignore here
+bin\Release\Ogre.log
+*.suo
