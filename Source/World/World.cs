@@ -1,57 +1,3 @@
-<<<<<<< HEAD
--?using System;
--using Mogre;
--using System.Collections.Generic;
--
--using Game.PlayerSystem;
--
--namespace Game.Terrain
--{
--    class World
--    {
--        private SceneManager mSceneMgr;
--        private RenderWindow mRenderWindow;
--        //private List<Player> mPlayerList;
--        Dictionary<Vector3, Chunk> mLoadedChunks = new Dictionary<Vector3, Chunk>();
--
--        private Vector3 mSpawnPoint;
--
--
--        public World(ref SceneManager sceneMgr, ref RenderWindow renderWindow)
--        {
--            this.mSceneMgr = sceneMgr;
--            this.mRenderWindow = renderWindow;
--        }
--
--        public void generateWorld() {
--            if (mSpawnPoint == null) { this.mSpawnPoint = generateSpawnPoint(); }
--            Vector3 chunkPos;
--            for (int x = 0; x < 9; x++)
--            {
--                for (int y = 0; y < 9; y++)
--                {
--                    for (int z = 0; z < 9; z++)
--                    {
--                        chunkPos = new Vector3(x, y, z);
--                        try
--                        {
--                            this.mLoadedChunks.Add(chunkPos, new Chunk(ref chunkPos, ref this.mSceneMgr));
--                        }
--                        catch (ArgumentException)
--                        {
--                            LogManager.Singleton.DefaultLog.LogMessage("An element with position " + chunkPos + "already exists.");
--                        }
--                    }
--                }
--            }
--        }
--
--        public Vector3 generateSpawnPoint() {
--            return new Vector3(0, 0, 0);
--        }
--    }
--}
-=======
 ﻿using System;
 using System.Collections.Generic;
 using Mogre;
@@ -66,7 +12,6 @@ namespace Game.Land
         private const int NUMBER_CHUNK_Y = 1;
         private const int NUMBER_CHUNK_Z = 1;
         private const int CHUNK_SIDE = 16;
-        private const int CUBE_SIDE = 10;   // Small CUBE_SIZE since Sinbad.mesh is small as well
 
         public SceneNode mNode { get; private set; }
         private Chunk[, ,] mChunkArray;// { get; private set; }
@@ -79,8 +24,6 @@ namespace Game.Land
             mNode = sceneMgr.RootSceneNode.CreateChildSceneNode();
             mChunkArray = new Chunk[NUMBER_CHUNK_X, NUMBER_CHUNK_Y, NUMBER_CHUNK_Z];
             mSpawnPoint = Vector3.ZERO;
-
-            sceneMgr.AmbientLight = new ColourValue(1, 1, 1);
 
             CreateWorld(ref sceneMgr);
             Console.WriteLine("Created");
@@ -98,7 +41,8 @@ namespace Game.Land
                     for (int z = 0; z < NUMBER_CHUNK_Z; z++)
                     {
                         chunkPos = new Vector3(x, y, z);
-                        mChunkArray[x, y, z] = new Chunk(ref sceneMgr, mNode.CreateChildSceneNode(CHUNK_SIDE * CUBE_SIDE * chunkPos), "-Chunk-" + chunkPos.ToString(), CHUNK_SIDE, CUBE_SIDE);
+                        mChunkArray[x, y, z] = new Chunk(ref sceneMgr, mNode.CreateChildSceneNode(CHUNK_SIDE * CUBE_SIDE * chunkPos), 
+                            "-Chunk-" + chunkPos.ToString(), CHUNK_SIDE, CUBE_SIDE);
                     }
                 }
             }
@@ -181,4 +125,3 @@ namespace Game.Land
         }
     }
 }
->>>>>>> 5c3cc93d3dff01cb6a4c43c92d95002796543de9

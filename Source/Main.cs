@@ -9,6 +9,7 @@ namespace Game
 {
     class Program : BaseApplication
     {
+        private const int CUBE_SIDE = 10;   // Small CUBE_SIZE since Sinbad.mesh is small as well
         public static void Main()
         {
             new Program().Go();
@@ -16,13 +17,22 @@ namespace Game
 
         protected override void CreateScene()
         {
-<<<<<<< HEAD
-=======
-            World world = new World(ref mSceneMgr);
->>>>>>> 5c3cc93d3dff01cb6a4c43c92d95002796543de9
+        }
 
-            CharacMgr characMgr = new CharacMgr(ref world);
-            characMgr.addPlayer(new Breed(mSceneMgr, "Sinbad.mesh"), new CharacterInfo("Sinbad", new Vector3(5, 15, 5)));
+        private void generateFace(){
+
+            string defaultMaterial = "Cube";
+            ManualObject block = new ManualObject("cubeObject");
+
+            block.Begin(defaultMaterial, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
+
+            block.Position(new Vector3(0, 0, 0)); block.TextureCoord(1, 1);
+            block.Position(new Vector3(0, CUBE_SIDE, 0)); block.TextureCoord(1, 0);
+            block.Position(new Vector3(CUBE_SIDE, CUBE_SIDE, 0)); block.TextureCoord(0, 0);
+            block.Position(new Vector3(CUBE_SIDE, 0, 0)); block.TextureCoord(0, 1);
+
+            block.Quad(3, 2, 1, 0);
+            block.End();
         }
     }
 }
