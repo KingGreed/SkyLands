@@ -1,15 +1,12 @@
-\documentclass[a4paper]{report}
+\documentclass[13pt]{report}
 
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{latexsym}
-\usepackage{amssymb}
-\usepackage{amsmath}
-\usepackage{array}
 \usepackage[francais]{babel}
 \usepackage{url}
-\usepackage{geometry}%
-\geometry{tmargin=2cm, bmargin=2.5cm, lmargin=2cm, rmargin=1.5cm}
+\usepackage{geometry}
+\geometry{tmargin=2cm, bmargin=2.5cm, lmargin=3cm, rmargin=2cm}
 \usepackage{graphicx}
 \usepackage{pdfpages}
 \usepackage{newcent}
@@ -23,16 +20,7 @@
 \usepackage{multicol}
 \setlength{\columnsep}{1cm}
 
-
-\definecolor{dkgreen}{rgb}{0,0.6,0}
-\definecolor{gray}{rgb}{0.5,0.5,0.5}
-\definecolor{mauve}{rgb}{0.58,0,0.82}
-\definecolor{rouge2}{RGB}{230,68,57} 
-
-
-\bibliographystyle{apalike}  
-
-\parskip = 0.5cm
+\parskip = 0.25cm
 
 %
 % Document
@@ -42,7 +30,7 @@
   			\begin{titlepage} 
 						\vspace*{5cm} 
   					\begin{center} 
-  							{\huge{\textsc{Cahier des charges} \\ ~\\  {\large From } \\ ~\\ Team Dedalus \\ ~ \\ Islands}}
+  							{\huge{\textsc{Cahier des charges} \\ ~ \\{\large From}\\ ~\\ Team Dedalus \\ ~ \\ Islands}}
 	  						\vspace*{11cm}
 						\end{center}
   					\hfill {\large Romain \textsc{Biessy}}
@@ -53,18 +41,22 @@
   	\renewcommand{\contentsname}{Sommaire}
 
   	\tableofcontents
-    		\part{Partie 1}
-						\chapter{Chapitre 1}
-								\section{Section 1}
-										Votre texte ici
-								\section{Section 2}
-										Votre texte ici
-						\chapter{Chapitre 2}
-								\section{Section 1}
-										\subsection{Subsection 1}
-												Votre texte ici
-    		\part{Partie 2}
-      			\chapter{Chapitre 1}
+  			\newpage
+				\chapter{Introduction}%<- modifier la pagination
+								Even though we didn't start coding, we still had six to seven group meeting to discuss about the project. And spent at least 15 hours speeking together.\newline
+								However, the project's general gameplay was fixed unanimously on the first reunion. It will be a 3D RTS at the first person. Thus a mix between RTS and FPS. Creating a game has never been an easy task but, the game how we see could be described as ambitious. Nevertheless, our teamwork should not be underestimate.\\
+								
+								When we assigned the differents task to our members, we had in mind the idea that everybody should know how most of the game works and not only one member. Therfore, we had to split the project in a way that would help us later : modules. Thus even if we didn't begin to code the game, we have some kind of base. 
+								  
+								
+								
+				\part{Project presentation}
+      			\chapter{Gameplay}
 								\section{Section 1}
 									  \subsection{Sub 1}
+						\chapter{Goals and interest}
+								\section{Section 1}
+									  \subsection{Sub 1}
+     		\part{What must be done}
+     		
 \end{document}
