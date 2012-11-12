@@ -1,27 +1,32 @@
-\documentclass[article]{report}
+\documentclass[article]{report} % Type of document
 
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{latexsym}
-\usepackage[english]{babel}
-\usepackage{url}
-\usepackage{geometry}
+\usepackage[utf8]{inputenc}     % Encoding
+\usepackage[english]{babel}	    % Language
+\usepackage{geometry}           % Page margin
+\usepackage{graphicx}           % For images
+\usepackage{newcent}            % Font
+\usepackage{color}              % Colors
+\usepackage{listings}           % Lists
+
+\usepackage{fancyhdr}           % We might have a need for them
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{graphicx}
+
+
+\title {Book of specifications}
+\parskip = 0.25cm              % Summary options (spaces between lines)
+
+% Margin
 \geometry{tmargin=2.5cm, bmargin=2.5cm, lmargin=3cm, rmargin=2cm}
-\usepackage{graphicx}
-\usepackage{pdfpages}
-\usepackage{newcent}
-\usepackage{color}
-\usepackage{listings}
-\usepackage{tikz}
-\usepackage{ifthen}
-\usepackage{wrapfig}
-\usepackage{graphicx}
-\usepackage{textcomp}
-\usepackage{multicol}
-\setlength{\columnsep}{1cm}
 
-\bibliographystyle{apalike}
-\parskip = 0.25cm
+\definecolor{blue}{rgb}{0.13,0.29,0.46}
+\definecolor{red}{rgb}{1,0,0}
+\definecolor{couleur_titre}{rgb}{0.20, 0.45, 0.80}
+\definecolor{couleur_nom}{rgb}{0.11, 0.6, 0.18}
+
+% Title at the top of the page
+\pagestyle{fancyplain} \chead{}\lhead{\textit{Team Dedalus}} \rhead{\textcolor{couleur_titre}{\emph{\textit{Project: Islands}}}}
 
 %
 % Document
@@ -39,9 +44,10 @@
   					\hfill {\large Aenora \textsc{Tye}}
   					\hfill {\large Erwan  \textsc{Vasseure}}
   			\end{titlepage} 
-  	\renewcommand{\contentsname}{Summary}
+  	\renewcommand{\contentsname}{Table of contents}
 
   	\tableofcontents
+  			\pagenumbering{arabic}
   			\newpage
 				\title{Introduction}%<- modifier la pagination
 								Even though we didn't start coding, we still had six to seven group meeting to discuss about the project. And spent at least 15 hours speeking together.\newline
@@ -49,21 +55,28 @@
 								
 								When we assigned the differents task to our members, we had in mind the idea that everybody should know how most of the game works and not only one member. Therfore, we had to split the project in a way that would help us later : modules. Thus even if we didn't begin to code the game, we have some kind of base. 								
 								
-				\part{Project presentation}
-      			\chapter{Gameplay}
-								\section{Section 1}
-									  \subsection{Sub 1}
-						\chapter{Goals and interest}
-								\section{Learning}
-										Since half of the group are inexperienced programmers, one of the major goal of the project will be to learn about computer programming.\\
-										
-										Of course it won't be limited to C\#, because of the fact that we are working with OO, to ensure that everybody can understand the code, we will be using UML.\newline
-										Also we will be discovering and thus learning about the following languages : 
-										\begin{itemize}
-												\item HTML5/CSS3 and PHP/MySQL with maybe some JavaScript for the website;
-												\item XML because this is how the GUI layout will be written.
-										\end{itemize}
-									  \subsection{Sub 1}
-     		\part{What must be done}
+  			\chapter{Gameplay}
+						\section{Section 1}
+							  \subsection{Sub 1}
+				\chapter{Goals and interest}
+						\section{Learning}
+								Since half of the group are inexperienced programmers, one of the major goal of the project will be to learn about computer programming.\\
+								
+								Of course it won't be limited to C\#, because of the fact that we are working with OO, to ensure that everybody can understand the code, we will be using UML.\newline
+								Also we will be discovering and thus learning about the following languages : 
+								\begin{itemize}
+										\item HTML5/CSS3 and PHP/MySQL with maybe some JavaScript for the website;
+										\item XML because this is how the GUI layout will be written.
+								\end{itemize}
+															
+								We will be using some OO well known principles such as inheritance and abstract class. We also might use Symfony2 (with Doctrine) for the website.
+							  
+							  \subsection{About the website}
+							  		Symfony is a PHP Web Development Framework. Thus it provides generic functionality and "helps" you writting good code. What i mean with good code is the fact that because of its own architecture organize your code.\\
+							  		
+							  		The power of symfony lies in the MVC organization. Indeed Symfony2 is developped in an architecture that separates the representation of information from the user's interaction with it.\newline
+							  		 Thus when the user will try to access to a website URL, this URL will be submited to the router, which will then call the right PHP function which will then send variables, after processing the data relative to it's function, to a TWIG page which will then be displayed.
+							  		 
+					\section{3d is fun !}
      	     		
 \end{document}
