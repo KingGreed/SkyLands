@@ -6,3 +6,8 @@
 \contentsline {section}{\numberline {2.1}Learning}{4}
 \contentsline {subsection}{\numberline {2.1.1}About the website}{4}
 \contentsline {section}{\numberline {2.2}3d is fun !}{4}
+\contentsline {chapter}{\numberline {3}Behind the scene}{5}
+\contentsline {section}{\numberline {3.1}Language \& Game design pattern}{5}
+\contentsline {section}{\numberline {3.2}3D Engine \& Library}{6}
+\contentsline {section}{\numberline {3.3}Softwares}{6}
+\contentsline {section}{\numberline {3.4}Algorithm}{6}
