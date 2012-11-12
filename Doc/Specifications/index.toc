@@ -1,0 +1,9 @@
+\select@language {english}
+\contentsline {part}{I\hspace {1em}Project presentation}{3}
+\contentsline {chapter}{\numberline {1}Gameplay}{4}
+\contentsline {section}{\numberline {1.1}Section 1}{4}
+\contentsline {subsection}{\numberline {1.1.1}Sub 1}{4}
+\contentsline {chapter}{\numberline {2}Goals and interest}{5}
+\contentsline {section}{\numberline {2.1}Learning}{5}
+\contentsline {subsection}{\numberline {2.1.1}Sub 1}{5}
+\contentsline {part}{II\hspace {1em}What must be done}{6}

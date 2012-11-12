@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.10.21)  10 NOV 2012 18:16
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.10.21)  12 NOV 2012 22:09
 entering extended mode
 **C:/Users/Durium/lib/Epita/Islands/Doc/ScopeStatement/index.tex
 (C:/Users/Durium/lib/Epita/Islands/Doc/ScopeStatement/index.tex
@@ -270,32 +270,18 @@ Package: babel 2008/07/08 v3.8m The Babel package
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\00miktex\bblopts.cfg"
 File: bblopts.cfg 2006/07/31 v1.0 MiKTeX 'babel' configuration
 )
-("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\babel\frenchb.ldf"
-Language: frenchb 2009/03/16 v2.3d French support from the babel system
+("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\babel\english.ldf"
+Language: english 2005/03/30 v3.3o English support from the babel system
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\babel\babel.def"
 File: babel.def 2008/07/08 v3.8m Babel common definitions
 \babel@savecnt=\count88
 \U@D=\dimen103
 )
-Package babel Info: Making : an active character on input line 120.
-Package babel Info: Making ; an active character on input line 121.
-Package babel Info: Making ! an active character on input line 122.
-Package babel Info: Making ? an active character on input line 123.
-\FB@Mht=\dimen104
-\std@mcc=\count89
-\dec@mcc=\count90
-\parindentFFN=\dimen105
-
-*************************************
-* Local config file frenchb.cfg used
-*
-("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\babel\frenchb.cfg")))
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\carlisle\scalefnt.sty")
-("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
-Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
-\KV@toks@=\toks16
-)
+\l@canadian = a dialect from \language\l@american 
+\l@australian = a dialect from \language\l@british 
+\l@newzealand = a dialect from \language\l@british 
+))
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\ltxmisc\url.sty"
 \Urlmuskip=\muskip10
 Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
@@ -303,6 +289,10 @@ Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\geometry\geometry.sty"
 Package: geometry 2010/09/12 v5.6 Page Geometry
 
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks16
+)
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\ifpdf.sty"
 Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
 Package ifpdf Info: pdfTeX in PDF mode is detected.
@@ -314,17 +304,17 @@ Package ifvtex Info: VTeX not detected.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\ifxetex\ifxetex.sty"
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
-\Gm@cnth=\count91
-\Gm@cntv=\count92
-\c@Gm@tempcnt=\count93
-\Gm@bindingoffset=\dimen106
-\Gm@wd@mp=\dimen107
-\Gm@odd@mp=\dimen108
-\Gm@even@mp=\dimen109
-\Gm@layoutwidth=\dimen110
-\Gm@layoutheight=\dimen111
-\Gm@layouthoffset=\dimen112
-\Gm@layoutvoffset=\dimen113
+\Gm@cnth=\count89
+\Gm@cntv=\count90
+\c@Gm@tempcnt=\count91
+\Gm@bindingoffset=\dimen104
+\Gm@wd@mp=\dimen105
+\Gm@odd@mp=\dimen106
+\Gm@even@mp=\dimen107
+\Gm@layoutwidth=\dimen108
+\Gm@layoutheight=\dimen109
+\Gm@layouthoffset=\dimen110
+\Gm@layoutvoffset=\dimen111
 \Gm@dimlist=\toks17
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\geometry\geometry.cfg"))
@@ -351,10 +341,10 @@ Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
 Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 )
-\Gread@gobject=\count94
+\Gread@gobject=\count92
 ))
-\Gin@req@height=\dimen114
-\Gin@req@width=\dimen115
+\Gin@req@height=\dimen112
+\Gin@req@width=\dimen113
 )
 (C:\Users\Durium\lib\Epita\Islands\Doc\ScopeStatement\pdfpages.sty
 Package: pdfpages 2002/12/14 v0.2l Insert pages of external PDF documents (AM)
@@ -364,15 +354,15 @@ Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\calc.sty"
 Package: calc 2007/08/22 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count95
-\calc@Bcount=\count96
-\calc@Adimen=\dimen116
-\calc@Bdimen=\dimen117
+\calc@Acount=\count93
+\calc@Bcount=\count94
+\calc@Adimen=\dimen114
+\calc@Bdimen=\dimen115
 \calc@Askip=\skip43
 \calc@Bskip=\skip44
 LaTeX Info: Redefining \setlength on input line 76.
 LaTeX Info: Redefining \addtolength on input line 77.
-\calc@Ccount=\count97
+\calc@Ccount=\count95
 \calc@Cskip=\skip45
 )
 (C:\Users\Durium\lib\Epita\Islands\Doc\ScopeStatement\eso-pic.sty
@@ -382,7 +372,7 @@ Package: eso-pic 2001/07/20 v0.7 eso-pic (RN)
 Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
 ))
 \AM@toc@title=\toks18
-\c@AM@survey=\count98
+\c@AM@survey=\count96
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\newcent.sty"
 Package: newcent 2005/04/12 PSNFSS-v9.2a (SPQR) 
@@ -396,23 +386,23 @@ File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
 Package color Info: Driver file: pdftex.def on input line 130.
 )
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\latex\listings\listings.sty
-\lst@mode=\count99
+\lst@mode=\count97
 \lst@gtempboxa=\box26
 \lst@token=\toks19
-\lst@length=\count100
-\lst@currlwidth=\dimen118
-\lst@column=\count101
-\lst@pos=\count102
-\lst@lostspace=\dimen119
-\lst@width=\dimen120
-\lst@newlines=\count103
-\lst@lineno=\count104
-\lst@maxwidth=\dimen121
+\lst@length=\count98
+\lst@currlwidth=\dimen116
+\lst@column=\count99
+\lst@pos=\count100
+\lst@lostspace=\dimen117
+\lst@width=\dimen118
+\lst@newlines=\count101
+\lst@lineno=\count102
+\lst@maxwidth=\dimen119
 
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\latex\listings\lstmisc.sty
 File: lstmisc.sty 2007/02/22 1.4 (Carsten Heinz)
-\c@lstnumber=\count105
-\lst@skipnumbers=\count106
+\c@lstnumber=\count103
+\lst@skipnumbers=\count104
 \lst@framebox=\box27
 )
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\latex\listings\listings.cfg
@@ -454,20 +444,20 @@ ode.tex
 ltered.code.tex
 \pgfkeys@tmptoks=\toks23
 ))
-\pgf@x=\dimen122
-\pgf@y=\dimen123
-\pgf@xa=\dimen124
-\pgf@ya=\dimen125
-\pgf@xb=\dimen126
-\pgf@yb=\dimen127
-\pgf@xc=\dimen128
-\pgf@yc=\dimen129
+\pgf@x=\dimen120
+\pgf@y=\dimen121
+\pgf@xa=\dimen122
+\pgf@ya=\dimen123
+\pgf@xb=\dimen124
+\pgf@yb=\dimen125
+\pgf@xc=\dimen126
+\pgf@yc=\dimen127
 \w@pgf@writea=\write3
 \r@pgf@reada=\read1
-\c@pgf@counta=\count107
-\c@pgf@countb=\count108
-\c@pgf@countc=\count109
-\c@pgf@countd=\count110
+\c@pgf@counta=\count105
+\c@pgf@countb=\count106
+\c@pgf@countc=\count107
+\c@pgf@countd=\count108
 
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\systemlayer\pgf.cfg
 File: pgf.cfg 2008/05/14  (rcs-revision 1.7)
@@ -485,8 +475,8 @@ File: pgfsys-common-pdf.def 2008/05/19  (rcs-revision 1.10)
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\systemlayer\pgfsyss
 oftpath.code.tex
 File: pgfsyssoftpath.code.tex 2008/07/18  (rcs-revision 1.7)
-\pgfsyssoftpath@smallbuffer@items=\count111
-\pgfsyssoftpath@bigbuffer@items=\count112
+\pgfsyssoftpath@smallbuffer@items=\count109
+\pgfsyssoftpath@bigbuffer@items=\count110
 )
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\systemlayer\pgfsysp
 rotocol.code.tex
@@ -522,8 +512,8 @@ de.tex
 de.tex)
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\math\pgfmathparser.
 code.tex
-\pgfmath@dimen=\dimen130
-\pgfmath@count=\count113
+\pgfmath@dimen=\dimen128
+\pgfmath@count=\count111
 \pgfmath@box=\box29
 \pgfmath@toks=\toks24
 \pgfmath@stack@operand=\toks25
@@ -547,37 +537,37 @@ ns.round.code.tex)
 ns.misc.code.tex)))
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\math\pgfmathfloat.c
 ode.tex
-\c@pgfmathroundto@lastzeros=\count114
+\c@pgfmathroundto@lastzeros=\count112
 ))
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcorep
 oints.code.tex
 File: pgfcorepoints.code.tex 2010/04/09  (rcs-revision 1.20)
-\pgf@picminx=\dimen131
-\pgf@picmaxx=\dimen132
-\pgf@picminy=\dimen133
-\pgf@picmaxy=\dimen134
-\pgf@pathminx=\dimen135
-\pgf@pathmaxx=\dimen136
-\pgf@pathminy=\dimen137
-\pgf@pathmaxy=\dimen138
-\pgf@xx=\dimen139
-\pgf@xy=\dimen140
-\pgf@yx=\dimen141
-\pgf@yy=\dimen142
-\pgf@zx=\dimen143
-\pgf@zy=\dimen144
+\pgf@picminx=\dimen129
+\pgf@picmaxx=\dimen130
+\pgf@picminy=\dimen131
+\pgf@picmaxy=\dimen132
+\pgf@pathminx=\dimen133
+\pgf@pathmaxx=\dimen134
+\pgf@pathminy=\dimen135
+\pgf@pathmaxy=\dimen136
+\pgf@xx=\dimen137
+\pgf@xy=\dimen138
+\pgf@yx=\dimen139
+\pgf@yy=\dimen140
+\pgf@zx=\dimen141
+\pgf@zy=\dimen142
 )
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcorep
 athconstruct.code.tex
 File: pgfcorepathconstruct.code.tex 2010/08/03  (rcs-revision 1.24)
-\pgf@path@lastx=\dimen145
-\pgf@path@lasty=\dimen146
+\pgf@path@lastx=\dimen143
+\pgf@path@lasty=\dimen144
 )
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcorep
 athusage.code.tex
 File: pgfcorepathusage.code.tex 2008/04/22  (rcs-revision 1.12)
-\pgf@shorten@end@additional=\dimen147
-\pgf@shorten@start@additional=\dimen148
+\pgf@shorten@end@additional=\dimen145
+\pgf@shorten@start@additional=\dimen146
 )
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcores
 copes.code.tex
@@ -585,19 +575,19 @@ File: pgfcorescopes.code.tex 2010/09/08  (rcs-revision 1.34)
 \pgfpic=\box30
 \pgf@hbox=\box31
 \pgf@layerbox@main=\box32
-\pgf@picture@serial@count=\count115
+\pgf@picture@serial@count=\count113
 )
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcoreg
 raphicstate.code.tex
 File: pgfcoregraphicstate.code.tex 2008/04/22  (rcs-revision 1.9)
-\pgflinewidth=\dimen149
+\pgflinewidth=\dimen147
 )
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcoret
 ransformations.code.tex
 File: pgfcoretransformations.code.tex 2009/06/10  (rcs-revision 1.11)
-\pgf@pt@x=\dimen150
-\pgf@pt@y=\dimen151
-\pgf@pt@temp=\dimen152
+\pgf@pt@x=\dimen148
+\pgf@pt@y=\dimen149
+\pgf@pt@temp=\dimen150
 )
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcoreq
 uick.code.tex
@@ -618,8 +608,8 @@ File: pgfcorearrows.code.tex 2008/04/23  (rcs-revision 1.11)
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcores
 hade.code.tex
 File: pgfcoreshade.code.tex 2008/11/23  (rcs-revision 1.13)
-\pgf@max=\dimen153
-\pgf@sys@shading@range@num=\count116
+\pgf@max=\dimen151
+\pgf@sys@shading@range@num=\count114
 )
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\basiclayer\pgfcorei
 mage.code.tex
@@ -654,8 +644,8 @@ File: pgfmoduleplot.code.tex 2010/10/22  (rcs-revision 1.8)
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\latex\pgf\compatibility\pgfcomp
 -version-0-65.sty
 Package: pgfcomp-version-0-65 2007/07/03 v2.10 (rcs-revision 1.7)
-\pgf@nodesepstart=\dimen154
-\pgf@nodesepend=\dimen155
+\pgf@nodesepstart=\dimen152
+\pgf@nodesepend=\dimen153
 )
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\latex\pgf\compatibility\pgfcomp
 -version-1-18.sty
@@ -669,8 +659,8 @@ ode.tex))
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\utilities\pgffor.co
 de.tex
 Package: pgffor 2010/03/23 v2.10 (rcs-revision 1.18)
-\pgffor@iter=\dimen156
-\pgffor@skip=\dimen157
+\pgffor@iter=\dimen154
+\pgffor@skip=\dimen155
 \pgffor@stack=\toks27
 \pgffor@toks=\toks28
 ))
@@ -681,39 +671,39 @@ Package: tikz 2010/10/13 v2.10 (rcs-revision 1.76)
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\libraries\pgflibrar
 yplothandlers.code.tex
 File: pgflibraryplothandlers.code.tex 2010/05/31 v2.10 (rcs-revision 1.15)
-\pgf@plot@mark@count=\count117
-\pgfplotmarksize=\dimen158
+\pgf@plot@mark@count=\count115
+\pgfplotmarksize=\dimen156
 )
-\tikz@lastx=\dimen159
-\tikz@lasty=\dimen160
-\tikz@lastxsaved=\dimen161
-\tikz@lastysaved=\dimen162
-\tikzleveldistance=\dimen163
-\tikzsiblingdistance=\dimen164
+\tikz@lastx=\dimen157
+\tikz@lasty=\dimen158
+\tikz@lastxsaved=\dimen159
+\tikz@lastysaved=\dimen160
+\tikzleveldistance=\dimen161
+\tikzsiblingdistance=\dimen162
 \tikz@figbox=\box35
 \tikz@tempbox=\box36
-\tikztreelevel=\count118
-\tikznumberofchildren=\count119
-\tikznumberofcurrentchild=\count120
-\tikz@fig@count=\count121
+\tikztreelevel=\count116
+\tikznumberofchildren=\count117
+\tikznumberofcurrentchild=\count118
+\tikz@fig@count=\count119
 
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\modules\pgfmodulema
 trix.code.tex
 File: pgfmodulematrix.code.tex 2010/08/24  (rcs-revision 1.4)
-\pgfmatrixcurrentrow=\count122
-\pgfmatrixcurrentcolumn=\count123
-\pgf@matrix@numberofcolumns=\count124
+\pgfmatrixcurrentrow=\count120
+\pgfmatrixcurrentcolumn=\count121
+\pgf@matrix@numberofcolumns=\count122
 )
-\tikz@expandcount=\count125
+\tikz@expandcount=\count123
 
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\generic\pgf\frontendlayer\tikz\
 libraries\tikzlibrarytopaths.code.tex
 File: tikzlibrarytopaths.code.tex 2008/06/17 v2.10 (rcs-revision 1.2)
 )))
 (C:\Users\Durium\lib\Epita\Islands\Doc\ScopeStatement\wrapfig.sty
-\wrapoverhang=\dimen165
-\WF@size=\dimen166
-\c@WF@wrappedlines=\count126
+\wrapoverhang=\dimen163
+\WF@size=\dimen164
+\c@WF@wrappedlines=\count124
 \WF@box=\box37
 \WF@everypar=\toks29
 Package: wrapfig 2003/01/31  v 3.6
@@ -875,18 +865,18 @@ Package textcomp Info: Setting ptmj sub-encoding to TS1/4 on input line 340.
 )
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\tools\multicol.sty"
 Package: multicol 2011/06/27 v1.7a multicolumn formatting (FMi)
-\c@tracingmulticols=\count127
+\c@tracingmulticols=\count125
 \mult@box=\box38
-\multicol@leftmargin=\dimen167
-\c@unbalance=\count128
-\c@collectmore=\count129
-\doublecol@number=\count130
-\multicoltolerance=\count131
-\multicolpretolerance=\count132
-\full@width=\dimen168
-\page@free=\dimen169
-\premulticols=\dimen170
-\postmulticols=\dimen171
+\multicol@leftmargin=\dimen165
+\c@unbalance=\count126
+\c@collectmore=\count127
+\doublecol@number=\count128
+\multicoltolerance=\count129
+\multicolpretolerance=\count130
+\full@width=\dimen166
+\page@free=\dimen167
+\premulticols=\dimen168
+\postmulticols=\dimen169
 \multicolsep=\skip46
 \multicolbaselineskip=\skip47
 \partial@page=\box39
@@ -912,48 +902,44 @@ Package: multicol 2011/06/27 v1.7a multicolumn formatting (FMi)
 \@tempa=\box59
 \@tempa=\box60
 \@tempa=\box61
-\c@columnbadness=\count133
-\c@finalcolumnbadness=\count134
-\last@try=\dimen172
-\multicolovershoot=\dimen173
-\multicolundershoot=\dimen174
+\c@columnbadness=\count131
+\c@finalcolumnbadness=\count132
+\last@try=\dimen170
+\multicolovershoot=\dimen171
+\multicolundershoot=\dimen172
 \mult@nat@firstbox=\box62
 \colbreak@box=\box63
-\multicol@sort@counter=\count135
+\multicol@sort@counter=\count133
 )
 
 LaTeX Warning: Unused global option(s):
-    [13pt].
+    [article].
 
 (C:\Users\Durium\lib\Epita\Islands\Doc\ScopeStatement\index.aux)
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 28.
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 28.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 28.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 29.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 29.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 29.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ts1cmr.fd"
 File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 28.
-LaTeX Font Info:    Try loading font information for T1+pnc on input line 28.
+LaTeX Font Info:    ... okay on input line 29.
+LaTeX Font Info:    Try loading font information for T1+pnc on input line 29.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\t1pnc.fd"
 File: t1pnc.fd 2001/06/04 font definitions for T1/pnc.
 )
-LaTeX Info: Redefining \degres on input line 28.
-LaTeX Info: Redefining \dots on input line 28.
-LaTeX Info: Redefining \up on input line 28.
-
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
@@ -963,14 +949,14 @@ LaTeX Info: Redefining \up on input line 28.
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
 * h-part:(L,W,R)=(85.35826pt, 472.03123pt, 56.9055pt)
-* v-part:(T,H,B)=(56.9055pt, 666.9326pt, 71.13188pt)
+* v-part:(T,H,B)=(71.13188pt, 652.70622pt, 71.13188pt)
 * \paperwidth=614.295pt
 * \paperheight=794.96999pt
 * \textwidth=472.03123pt
-* \textheight=666.9326pt
+* \textheight=652.70622pt
 * \oddsidemargin=13.08827pt
 * \evensidemargin=13.08827pt
-* \topmargin=-52.36449pt
+* \topmargin=-38.1381pt
 * \headheight=12.0pt
 * \headsep=25.0pt
 * \topskip=10.0pt
@@ -990,35 +976,35 @@ LaTeX Info: Redefining \up on input line 28.
 
 (C:\Users\Durium\AppData\Roaming\MiKTeX\2.9\tex\context\base\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count136
-\scratchdimen=\dimen175
+\scratchcounter=\count134
+\scratchdimen=\dimen173
 \scratchbox=\box64
-\nofMPsegments=\count137
-\nofMParguments=\count138
+\nofMPsegments=\count135
+\nofMParguments=\count136
 \everyMPshowfont=\toks30
-\MPscratchCnt=\count139
-\MPscratchDim=\dimen176
-\MPnumerator=\count140
-\makeMPintoPDFobject=\count141
+\MPscratchCnt=\count137
+\MPscratchDim=\dimen174
+\MPnumerator=\count138
+\makeMPintoPDFobject=\count139
 \everyMPtoPDFconversion=\toks31
 ) ABD: EveryShipout initializing macros
-\c@lstlisting=\count142
+\c@lstlisting=\count140
  [1
 
 {C:/Users/Durium/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}] [2]
 LaTeX Font Info:    Font shape `T1/pnc/bx/n' in size <24.88> not available
-(Font)              Font shape `T1/pnc/b/n' tried instead on input line 43.
+(Font)              Font shape `T1/pnc/b/n' tried instead on input line 44.
 
 (C:\Users\Durium\lib\Epita\Islands\Doc\ScopeStatement\index.toc
-LaTeX Font Info:    Font shape `T1/pnc/bx/n' in size <10> not available
-(Font)              Font shape `T1/pnc/b/n' tried instead on input line 2.
 LaTeX Font Info:    Font shape `T1/pnc/bx/n' in size <12> not available
+(Font)              Font shape `T1/pnc/b/n' tried instead on input line 2.
+LaTeX Font Info:    Font shape `T1/pnc/bx/n' in size <10> not available
 (Font)              Font shape `T1/pnc/b/n' tried instead on input line 3.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 5.
+(Font)              <7> on input line 4.
 LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 5.
-LaTeX Font Info:    Try loading font information for U+lasy on input line 5.
+(Font)              <5> on input line 4.
+LaTeX Font Info:    Try loading font information for U+lasy on input line 4.
 
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\ulasy.fd"
 File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
@@ -1027,44 +1013,50 @@ File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
  [1
 
 ]
-Chapitre 1.
-LaTeX Font Info:    Font shape `T1/pnc/bx/n' in size <20.74> not available
-(Font)              Font shape `T1/pnc/b/n' tried instead on input line 45.
-
-Underfull \hbox (badness 10000) in paragraph at lines 46--48
+Underfull \hbox (badness 10000) in paragraph at lines 47--49
 
  []
 
-[2
-
-] [3
+[2]
+LaTeX Font Info:    Font shape `T1/pnc/bx/n' in size <20.74> not available
+(Font)              Font shape `T1/pnc/b/n' tried instead on input line 52.
+ [3
 
 ]
-Chapitre 2.
+Chapter 1.
 LaTeX Font Info:    Font shape `T1/pnc/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/pnc/b/n' tried instead on input line 55.
+(Font)              Font shape `T1/pnc/b/n' tried instead on input line 54.
 [4
 
 ]
-Chapitre 3.
-[5
+Chapter 2.
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--59
+
+ []
+
+LaTeX Font Info:    Try loading font information for TS1+pnc on input line 63.
+("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\psnfss\ts1pnc.fd"
+File: ts1pnc.fd 2001/06/04 font definitions for TS1/pnc.
+) [5
 
 ] [6
 
-] (C:\Users\Durium\lib\Epita\Islands\Doc\ScopeStatement\index.aux) ) 
+]
+(C:\Users\Durium\lib\Epita\Islands\Doc\ScopeStatement\index.aux) ) 
 Here is how much of TeX's memory you used:
- 13586 strings out of 494045
- 240911 string characters out of 3145965
- 284968 words of memory out of 3000000
- 16602 multiletter control sequences out of 15000+200000
- 31719 words of font info for 40 fonts, out of 3000000 for 9000
+ 13242 strings out of 494045
+ 235731 string characters out of 3145965
+ 275554 words of memory out of 3000000
+ 16260 multiletter control sequences out of 15000+200000
+ 32029 words of font info for 41 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
  56i,5n,55p,468b,219s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program
- Files (x86)/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<C:/Program Files (x86)
-/MiKTeX 2.9/fonts/type1/urw/ncntrsbk/uncb8a.pfb><C:/Program Files (x86)/MiKTeX 
-2.9/fonts/type1/urw/ncntrsbk/uncr8a.pfb>
-Output written on index.pdf (8 pages, 37176 bytes).
+{C:/Program F
+iles (x86)/MiKTeX 2.9/fonts/enc/dvips/fontname/8r.enc}<C:/Program Files (x86)/M
+iKTeX 2.9/fonts/type1/urw/ncntrsbk/uncb8a.pfb><C:/Program Files (x86)/MiKTeX 2.
+9/fonts/type1/urw/ncntrsbk/uncr8a.pfb>
+Output written on index.pdf (8 pages, 39104 bytes).
 PDF statistics:
  41 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
