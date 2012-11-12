@@ -7,3 +7,8 @@
 \contentsline {section}{\numberline {2.1}Learning}{5}
 \contentsline {subsection}{\numberline {2.1.1}Sub 1}{5}
 \contentsline {part}{II\hspace {1em}What must be done}{6}
+\contentsline {chapter}{\numberline {3}Behind the scene}{7}
+\contentsline {section}{\numberline {3.1}Language \& Game design pattern}{7}
+\contentsline {section}{\numberline {3.2}3D Engine \& Library}{8}
+\contentsline {section}{\numberline {3.3}Softwares}{8}
+\contentsline {section}{\numberline {3.4}Algorithm}{8}
