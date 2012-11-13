@@ -8,6 +8,7 @@
 \usepackage{color}              			% Colors
 \usepackage{listings}           			% Lists
 \usepackage[footnote, nolist]{acronym}	% Acronyms
+\usepackage[absolute, overlay]{textpos}	% Text positioning
 
 \usepackage{fancyhdr}          			 % We might have a need for them
 \usepackage{float}
@@ -21,6 +22,9 @@
 \usepackage{textcomp}
 \usepackage{multicol}
 
+\setlength{\columnsep}{1cm}
+\setlength{\TPHorizModule}{\paperwidth}	% Used for textblock
+\setlength{\TPVertModule}{\paperheight}	% Used for textblock
 
 \title {Book of specifications}
 \parskip = 0.25cm              % Summary options (spaces between lines)
@@ -104,23 +108,32 @@
 						\section{Goals}
 				\chapter{Behind the scene}
      				\section{Language \& Game design pattern}
-     						Our project will be coded in \textbf{C\#} .NET 4.0 mainly because of the \ac{OOP} paradigm and also for the large choice there is about 3d engine and libraries. The OO let us use the \textbf{game state} pattern in order to structure the code. Basically, we consider our game as a stack of different states. Here is an example of a game state:\newline
-     						\includegraphics[height=300px]{Images/GameStateDesign.png}\\
+     						Our project will be coded in \textbf{C\#} .NET 4.0 mainly because of the \ac{OOP} paradigm and also for the large choice there is about 3D engine and libraries. The OO let us use the \textbf{game state} pattern in order to structure the code. Basically, we consider our game as a stack of different states. Here is an example of a game state:
+							\begin{figure}[h]
+							\centering
+							\includegraphics[height=242px]{Images/GameStateDesign.png}
+							\it \\ There is always a master state at the beginning of the stack. Then other states may be added or removed; only the state at the top of the stack is updated and drawn. Depending on some condition as an input entry or a game event, each state can call any other states via a state manager.
+							\end{figure}
+
+							\begin{textblock}{0.128}(0.719, 0.642)
+							\noindent \it 	Here is the state stack if the user goes to a shop. As soon as he leaves the shop, the dialogue will continue and then will only remain the game state.
+							\end{textblock}
      						
-     						This pattern is advised for \ac{RTS} games, among others. As we are working in a group, it is important to keep homogeneity throughout the program. Besides, a well-structured code will be easier to understand and to edit.
+     						This pattern is advised for \ac{RTS} games, among others. As we are working in a group, it\textquoteright s important to keep homogeneity throughout the program. Besides, a well-structured code will be easier to understand and to edit.
 						\section{3D Engine \& Library}
 						The 3d engine we will use is \textbf{\ac{Mogre}}. Initially, this is an \ac{API} coded in C++ called Ogre; Mogre is an advanced .NET 2.0 wrapper for Ogre. We have chosen this \ac{API} since it is known as an effective, handy and well-documented 3D engine in C\#.\\			
-						Our \ac{GUI} will be implemented with the library \textbf{\ac{MyGUI}}. It’s very flexible since all parameters are settable directly in the XML\'s files.\\	
-						Since our 3D engine doesn\'t handle sound we have to use an audio library. We will use \textbf{NAudio} - an open source .NET library - because of its simplicity and completeness.
+						Our \ac{GUI} will be implemented with the library \textbf{\ac{MyGUI}}. It’s very flexible since all parameters are settable directly in the XML\textquoteright s files.\\	
+						Since our 3D engine doesn\textquoteright t handle sound we have to use an audio library. We will use \textbf{NAudio} - an open source .NET library - because of its simplicity and completeness.
 						\section{Softwares}
-							Our \ac{IDE} will be \textbf{Visual Studio 2010 Ultimate}. We will also need \textbf{Blender} so that we can create our own meshes and then use them for our game with the script Blender2Ogre. Basically, all of our 3D objects will be created with Blender except for the terrain\'s cubes which are generated directly in the source code.
-						\section{Algorithm}
+							Our \ac{IDE} will be \textbf{Visual Studio 2010 Ultimate}. We will also need \textbf{Blender} so that we can create our own meshes and then use them for our game with the script Blender2Ogre. Basically, all of our 3D objects will be created with Blender except for the terrain\textquoteright s cubes which are generated directly in the source code.
+						The 3D engine we will use is \textbf{\ac{Mogre}}. Initially, this is an \ac{API} coded in C++ called Ogre; Mogre is an advanced .NET 2.0 wrapper for Ogre. We have chosen this \ac{API} since it\textquoteright s known as an effective, handy and well-documented 3D engine in C\#.\\		
 							
 							There are two key points in our projects which will have to be implemented using some well-known algorithms:
+							\renewcommand{\labelitemi}{$\bullet$}
 							\begin{itemize}
 									\item \textbf{Terrain generation}. We want our land to be generated pseudo-randomly in order to create realistic islands - apart the fact that they are suspended in the sky. We want our islands to have mountains, jungles and rivers but we will definitely not build them ourselves. What we need to implement is the algorithm of \textbf{Perlin noise} in 3 dimensions. The idea for one dimension is to generate a list of random points, then to create a function which goes through these points. We repeat this step many times with an amplitude between the points getting smaller and smaller and then we add all the functions obtained. The concept is the same in 3 dimensions.\\
 
-									\item \textbf{Pathfinding}. This is part of the \ac{AI} for the \ac{NPC}. The goal is to find the shortest way from a point A to a point B. A common solution for this problem is the \textbf{(A*)} algorithm. Basically, it tests all possibilities of path and then remembers the path which is getting closer to the arrival. This method is efficient and quick as long as there is no intricate labyrinth that’s why we think (A*) is adapted for our project.
+									\item \textbf{Pathfinding}. This is part of the \ac{AI} for the \ac{NPC}. The goal is to find the shortest way from a point A to a point B. A common solution for this problem is the \textbf{A*} (A star) algorithm. Basically, it tests all possibilities of path and then remembers the path which is getting closer to the arrival. This method is efficient and quick as long as there is no intricate labyrinth \textquoteright s why we think A* is adapted for our project.
 							\end{itemize}
 
 							\begin{acronym}
