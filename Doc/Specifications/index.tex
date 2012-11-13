@@ -1,20 +1,19 @@
 \documentclass[article]{report} % Type of document
 
-\usepackage[utf8]{inputenc}     % Encoding
-\usepackage[english]{babel}	    % Language
-\usepackage{geometry}           % Page margin
-\usepackage{graphicx}           % For images
-\usepackage{newcent}            % Font
-\usepackage{color}              % Colors
-\usepackage{listings}           % Lists
+\usepackage[utf8]{inputenc}    		 	% Encoding
+\usepackage[english]{babel}			% Language
+\usepackage{geometry}           			% Page margin
+\usepackage{graphicx}           			% For images
+\usepackage{newcent}            			% Font
+\usepackage{color}              			% Colors
+\usepackage{listings}           			% Lists
+\usepackage[footnote, nolist]{acronym}	% Acronyms
 
-\usepackage{fancyhdr}           % We might have a need for them
+\usepackage{fancyhdr}          			 % We might have a need for them
 \usepackage{float}
 \usepackage{tabularx}
-\usepackage{graphicx}
 
 \usepackage{latexsym}
-\usepackage[footnote, nolist]{acronym}
 \usepackage{pdfpages}
 \usepackage{tikz}
 \usepackage{ifthen}
@@ -92,7 +91,7 @@
 				\chapter{Behind the scene}
      				\section{Language \& Game design pattern}
      						Our project will be coded in \textbf{C\#} .NET 4.0 mainly because of the \ac{OOP} paradigm and also for the large choice there is about 3d engine and libraries. The OO let us use the \textbf{game state} pattern in order to structure the code. Basically, we consider our game as a stack of different states. Here is an example of a game state:\newline
-     						\includegraphics[height=300px]{GameStateDesign.png}\\
+     						\includegraphics[height=300px]{Images/GameStateDesign.png}\\
      						
      						This pattern is advised for \ac{RTS} games, among others. As we are working in a group, it is important to keep homogeneity throughout the program. Besides, a well-structured code will be easier to understand and to edit.
 						\section{3D Engine \& Library}
