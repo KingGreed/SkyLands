@@ -6,25 +6,23 @@ namespace Game.Land
 {
     class Chunk
     {
-        public SceneNode mNode { get; private set; }
-        public Block[, ,] mBlockArray { get; internal set; }
+        public SceneNode mNode { get; public set; }
+        public Block[, ,] mBlockArray;
 
-        public Chunk(ref SceneManager sceneMgr, SceneNode chunkNode, string chunkName, int chunkSide, int cubeSide)
+        public Chunk(ref SceneManager sceneMgr, SceneNode chunkNode)
         {
-            mNode = chunkNode;
-            mBlockArray = new Block[chunkSide, chunkSide, chunkSide];
+            this.mNode = chunkNode;
+            this.mBlockArray = new Block[World.CHUNK_SIDE, World.CHUNK_SIDE, World.CHUNK_SIDE];
 
             Vector3 blockPos;
-            for (int x = 0; x < chunkSide; x++)
+            for (int x = 0; x < World.CHUNK_SIDE; x++)
             {
-                for (int y = 0; y < chunkSide; y++)
+                for (int y = 0; y < World.CHUNK_SIDE; y++)
                 {
-                    for (int z = 0; z < chunkSide; z++)
+                    for (int z = 0; z < World.CHUNK_SIDE; z++)
                     {
                         blockPos = new Vector3 (x, y, z);
-                        //Console.WriteLine("Create Block " + blockPos.ToString());
-                        mBlockArray[x, y, z] =
-                            new Block(ref sceneMgr, mNode.CreateChildSceneNode(cubeSide * blockPos), "-Block-" + blockPos.ToString() + chunkName, cubeSide);
+                        this.mBlockArray[x, y, z] = new Block(blockPos);
                     }
                 }
             }
