@@ -1,58 +1,32 @@
--?using System;
--using System.Collections.Generic;
--using Mogre;
--
--
--namespace Game.Terrain
--{
--
--    public class Chunk
--    {
--        public const int HEIGHT = 16;
--        public const int WIDTH = 16;
--
--        private SceneManager mSceneMgr;
--        private SceneNode mChunkNode;
--        private Vector3 mChunkPos;
--
--        //private World mWorld;
--
--        Dictionary<Vector3, Block> mLoadedChunks = new Dictionary<Vector3, Block>();
--
--        public Chunk(ref Vector3 chunkPos, ref SceneManager sceneMgr)
--        {
--            this.mSceneMgr = sceneMgr;
--            this.mChunkPos = chunkPos;
--
--            this.mChunkNode = sceneMgr.RootSceneNode.CreateChildSceneNode("ChunkNode");
--        }
--
--        public void displayChunk()
--        {
--            Entity ent;
--            SceneNode entNode;
--            for (int x = 0; x < HEIGHT; x++)
--            {
--                for (int y = 0; y < HEIGHT; y++)
--                {
--                    for (int z = 0; z < HEIGHT; z++)
--                    {
--                        ent = mSceneMgr.CreateEntity("cube" + x + "-" + y + "-" + z, "cube.mesh");
--                        ent.SetMaterialName("Cube");
--                        entNode = this.mChunkNode.CreateChildSceneNode("cubeNode" + x + "-" + y + "-" + z, new Vector3(100 * x, 100 * y, 100 * z));
--
--                        entNode.AttachObject(ent);
--
--
--                    }
--
--
--                }
--
--            }
--
--        }
--
--
--    }
--}
+﻿using System;
+using System.Collections.Generic;
+using Mogre;
+
+namespace Game.Land
+{
+    public class Chunk
+    {
+        SceneNode mNode { get; set; }
+        public Block[, ,] mBlockArray;
+
+        public Chunk(ref SceneManager sceneMgr, SceneNode chunkNode)
+        {
+            this.mNode = chunkNode;
+            this.mBlockArray = new Block[World.CHUNK_SIDE, World.CHUNK_SIDE, World.CHUNK_SIDE];
+
+            Vector3 blockPos;
+            for (int x = 0; x < World.CHUNK_SIDE; x++)
+            {
+                for (int y = 0; y < World.CHUNK_SIDE; y++)
+                {
+                    for (int z = 0; z < World.CHUNK_SIDE; z++)
+                    {
+                        blockPos = new Vector3 (x, y, z);
+                        this.mBlockArray[x, y, z] = new Block(blockPos);
+                    }
+                }
+            }
+        }
+
+    }
+}

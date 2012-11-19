@@ -8,10 +8,10 @@ namespace Game.Land
 {
     public class World
     {
-        public static const int NUMBER_CHUNK_X = 1;
-        public static const int NUMBER_CHUNK_Y = 1;
-        public static const int NUMBER_CHUNK_Z = 1;
-        public static const int CHUNK_SIDE = 16;
+        public const int NUMBER_CHUNK_X = 1;
+        public const int NUMBER_CHUNK_Y = 1;
+        public const int NUMBER_CHUNK_Z = 1;
+        public const int CHUNK_SIDE = 16;
 
         public SceneNode mNode { get; private set; }
         private Chunk[, ,] mChunkArray;// { get; private set; }
