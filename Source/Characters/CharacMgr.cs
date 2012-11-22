@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Mogre;
 
-using Game.Land;
+using Game;
 
 namespace Game.CharacSystem
 {

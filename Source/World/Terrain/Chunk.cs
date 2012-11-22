@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Mogre;
 
-namespace Game.Land
+namespace Game.Terrain
 {
     public class Chunk
     {
@@ -26,6 +26,7 @@ namespace Game.Land
                     }
                 }
             }
+            this.mBlockArray[0, 0, 0].SetType(TypeBlock.AIR);
         }
 
     }

@@ -32,3 +32,23 @@ material Cube2
 		}
 	}
 }
+material 1
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture grass_1024.jpg 2d
+				tex_coord_set 1
+			}
+			texture_unit
+			{
+				texture metal.png 2d
+				tex_coord_set 0
+			}
+
+		}
+	}
+}

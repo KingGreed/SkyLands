@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using Mogre;
 
 using Game.CharacSystem;
+using Game.Terrain;
+using Game.Display;
 
-namespace Game.Land
+namespace Game
 {
     public class World
     {
@@ -12,9 +14,10 @@ namespace Game.Land
         public const int NUMBER_CHUNK_Y = 1;
         public const int NUMBER_CHUNK_Z = 1;
         public const int CHUNK_SIDE = 16;
+        public const int CUBE_SIDE = 10;
 
         public SceneNode mNode { get; private set; }
-        private Chunk[, ,] mChunkArray;// { get; private set; }
+        Dictionary<Vector3, Chunk> mChunkArray;
 
         public Vector3 mSpawnPoint { get; private set; }
 
@@ -22,14 +25,21 @@ namespace Game.Land
         public World(ref SceneManager sceneMgr)
         {
             mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("TerrainNode");
-            mChunkArray = new Chunk[NUMBER_CHUNK_X, NUMBER_CHUNK_Y, NUMBER_CHUNK_Z];
             mSpawnPoint = Vector3.ZERO;
+            this.mChunkArray = new Dictionary<Vector3, Chunk>();
+            LogManager.Singleton.DefaultLog.LogMessage("World Init done");
 
             CreateWorld(ref sceneMgr);
+            LogManager.Singleton.DefaultLog.LogMessage("World Created");
+
             GenerateWorld();
+            LogManager.Singleton.DefaultLog.LogMessage("World Generated");
+
+            DisplayWorld wrld = new DisplayWorld(ref this.mChunkArray, this, ref sceneMgr);
+            wrld.DisplayChunkAt(new Vector3(0, 0, 0));
+            LogManager.Singleton.DefaultLog.LogMessage("World Displayed");
         }
 
-        /* Create each chunks and blocks. Blocks are AIR by default */
         private void CreateWorld(ref SceneManager sceneMgr)
         {
             Vector3 chunkPos;
@@ -44,7 +54,7 @@ namespace Game.Land
                         chunkNode = this.mNode.CreateChildSceneNode("chunkNode;" + x + ";" + y + ";" + z);
                         chunkNode.SetPosition(x, y, z);
 
-                        mChunkArray[x, y, z] = new Chunk(ref sceneMgr, chunkNode);
+                        this.mChunkArray.Add(new Vector3(x, y, z), new Chunk(ref sceneMgr, chunkNode));
                     }
                 }
             }
@@ -55,12 +65,12 @@ namespace Game.Land
         {
         }
 
-        private Block getBlock(Vector3 chunkPos, Vector3 blockPos)
+        public Block getBlock(Vector3 chunkPos, Vector3 blockPos)
         {
             int[] chunkPosArray = new int[3] { (int)chunkPos.x, (int)chunkPos.y, (int)chunkPos.z };
             int[] blockPosArray = new int[3] { (int)blockPos.x, (int)blockPos.y, (int)blockPos.z };
 
-            for (int i = 0; i < blockPosArray.Length; i++)
+            for (int i = 0; i < 3; i++)
             {
                 chunkPosArray[i] += blockPosArray[i] / CHUNK_SIDE;  // Division entière
                 blockPosArray[i] %= CHUNK_SIDE;
@@ -71,12 +81,13 @@ namespace Game.Land
                     blockPosArray[i] += CHUNK_SIDE;
                 }
             }
+            chunkPos = new Vector3(chunkPosArray[0], chunkPosArray[1], chunkPosArray[2]);
 
-            if (chunkPosArray[0] > NUMBER_CHUNK_X || chunkPosArray[1] > NUMBER_CHUNK_Y || chunkPosArray[2] > NUMBER_CHUNK_Z ||
-                chunkPosArray[0] < 0 || chunkPosArray[1] < 0 || chunkPosArray[2] < 0)
-                return null;   // Block out of bounds
-
-            return mChunkArray[chunkPosArray[0], chunkPosArray[1], chunkPosArray[2]].mBlockArray[blockPosArray[0], blockPosArray[1], blockPosArray[2]];
+            if(chunkPosArray[0] >= NUMBER_CHUNK_X || chunkPosArray[1] >= NUMBER_CHUNK_Y || chunkPosArray[2] >= NUMBER_CHUNK_Z ||
+                chunkPosArray[0] < 0 || chunkPosArray[1] < 0 || chunkPosArray[2] < 0) {
+                return new Block(new Vector3(-5, 6, 0), TypeBlock.AIR);   // Block out of bounds
+            }
+            return mChunkArray[chunkPos].mBlockArray[blockPosArray[0], blockPosArray[1], blockPosArray[2]];
         }
     }
 }

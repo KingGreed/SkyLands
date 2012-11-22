@@ -2,28 +2,39 @@
 using System.Collections.Generic;
 using Mogre;
 
-namespace Game.Land
+namespace Game.Terrain
 {
-    public enum BlockFace { TOP, DOWN, FRONT, BEHIND, RIGHT, LEFT } // If you change this order, you have to modify GenerateBlock as well
-    public enum TypeBlock : byte { AIR, METAL } // Metal is just here for the test
+    public enum TypeBlock : byte { AIR, METAL }
     
     public class Block
     {
         private TypeBlock mType;// { get { return mType; } private set { mType = value; UpdateMaterial(); } }
         private SceneNode mNode   { get; set; }
-        private Vector3 mBlockPos { get; set; }
+        //public Vector3 mBlockPos { get; set; }
+        private Vector3 mBlockPos;
 
 
-        public Block(Vector3 blockPos, TypeBlock blockType = TypeBlock.AIR)
+        public Vector3 blockPos
+        {
+            get { return this.mBlockPos; }
+        }
+        public Vector3 setBlockPos
+        {
+            set { this.mBlockPos = value; }
+        }
+
+
+        public Block(Vector3 blockPos, TypeBlock blockType = TypeBlock.METAL)
         {
             this.mType = blockType;
+            this.mBlockPos = blockPos;
         }
 
         public bool hasSceneNode() {
             return (this.mNode != null);
         }
 
-        public bool IsAir() { return (mType == 0); }
+        public bool IsAir() { return (mType == TypeBlock.AIR); }
         
 
 
