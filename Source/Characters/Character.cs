@@ -7,21 +7,33 @@ namespace Game.CharacSystem
     struct CharacterInfo
     {
         public string name;
+        public Vector3 spawnPoint;
         public float life;
-        public Vector3 coord;
 
-        public CharacterInfo(string _name, Vector3 _coord,  float _life = 100) { name = _name; life = _life; coord = _coord; }//Never use "_" before var names
+        public CharacterInfo(string gName, Vector3 gSpawnPoint, float gLife = 100)
+        { 
+            name = gName;
+            spawnPoint = gSpawnPoint;
+            life = gLife;
+        }
     }
     
     /* Mother class of Player and NonPlayer */
     abstract class Character
     {
-        public Breed mBreed { get; protected set; }
-        public CharacterInfo mInfo { get; protected set; }
+        protected Race mRace;
+        protected CharacterInfo mInfo;
+
+        public Character(Race charac, CharacterInfo info)
+        {
+            mRace = charac;
+            mInfo = info;
+
+            mRace.Node.SetPosition(info.spawnPoint.x, info.spawnPoint.y, info.spawnPoint.z);
+        }
 
         public void update()
         {
-            mBreed.mNode.Position = mInfo.coord;
         }
 
         public Vector3 Move(Vector3 direction)  // Return the vector of the effective move

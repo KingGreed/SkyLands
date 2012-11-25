@@ -8,15 +8,13 @@ namespace Game.CharacSystem
 {
     class CharacMgr
     {
-        private World mWorldRef;
         private List<Character> mCharacList = new List<Character>();
 
-        public CharacMgr(ref World worldRef)
+        public CharacMgr()
         {
-            mWorldRef = worldRef;
         }
 
-        public void addPlayer(Breed breed, CharacterInfo info)
+        public void addPlayer(Race breed, CharacterInfo info)
         {
             mCharacList.Add(new Player(breed, info));
         }
