@@ -51,7 +51,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Source\Characters\Breed.cs" />
+    <Compile Include="Source\Characters\Race.cs" />
     <Compile Include="Source\Characters\CharacMgr.cs" />
     <Compile Include="Source\Characters\Character.cs" />
     <Compile Include="Source\Characters\NonPlayer.cs" />

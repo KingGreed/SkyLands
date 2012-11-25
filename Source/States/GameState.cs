@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
 using Mogre;
+
+using Game.CharacSystem;
 
 namespace Game.States
 {
     class GameState : State
     {
-        SceneNode mGround;
-        OverlayElement[] mOverlayElements = new OverlayElement[6];
+        private OverlayElement[] mOverlayElements;
+        private CharacMgr mCharacMgr;
         
         public GameState() : base()
         {
-
+            mOverlayElements = new OverlayElement[6];
+            mCharacMgr = new CharacMgr();
         }
 
         public override bool Startup(StateManager stateMgr)
@@ -61,6 +63,8 @@ namespace Game.States
             mOverlayElements[4] = OverlayManager.Singleton.GetOverlayElement("Core/NumTris");
             mOverlayElements[5] = OverlayManager.Singleton.GetOverlayElement("Core/NumBatches");
             overlay.Show();
+
+            mCharacMgr.addPlayer(new Race(mStateMgr.Engine, "Sinbad.mesh"), new CharacterInfo("Sinbad", new Vector3(0, 0, -250)));
 
             return true;
         }

@@ -8,11 +8,8 @@ namespace Game.CharacSystem
     class Player : Character
     {
         /* Constructors of Player has to be called by the CharacMgr *///Not needed or created doc comments. But still not needed
-        public Player(Breed charac, CharacterInfo info)
+        public Player(Race charac, CharacterInfo info) : base(charac, info)
         {
-            mBreed = charac;
-
-            mInfo = info;
             update();
         }
     }
