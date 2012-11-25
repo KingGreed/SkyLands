@@ -13,7 +13,7 @@ namespace Game.States
             isStartedUp = false;
         }
 
-        /* A State is Startup in the StateManager */
+        /* A State is started up in the StateManager */
         public abstract bool Startup(StateManager stateMgr);
 
         public abstract void Shutdown();

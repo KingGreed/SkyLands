@@ -12,13 +12,13 @@ namespace Game
         public bool isFullScreen;
         public NameValuePairList param;
 
-        public WindowInfo(string givenName, int givenWidth, int givenHeight, bool givenIsFullScreen, NameValuePairList givenParam)
+        public WindowInfo(string gName, int gWidth, int gHeight, bool gIsFullScreen, NameValuePairList gParam)
         {
-            name = givenName;
-            width = (uint) givenWidth;
-            height = (uint) givenHeight;
-            isFullScreen = givenIsFullScreen;
-            param = givenParam;
+            name = gName;
+            width = (uint) gWidth;
+            height = (uint) gHeight;
+            isFullScreen = gIsFullScreen;
+            param = gParam;
         }
     }
     
@@ -84,7 +84,6 @@ namespace Game
             RenderSystem renderSys = mRoot.GetRenderSystemByName("Direct3D9 Rendering Subsystem");
             mRoot.RenderSystem = renderSys;
 
-
             mRoot.RenderSystem.EventOccurred += OnRenderSystemEventOccurred;    // register event to get notified when application lost or regained focus
 
             mRoot.Initialise(false);
@@ -97,7 +96,6 @@ namespace Game
             mCamera = mSceneMgr.CreateCamera("DefaultCamera");
             mCamera.AutoAspectRatio = true;
             mCamera.NearClipDistance = 1.0f;
-            mCamera.FarClipDistance = 1000.0f;
 
             mViewport = mWindow.AddViewport(mCamera);
 
@@ -181,7 +179,7 @@ namespace Game
                 evt(this, args);
         }
 
-        internal SceneNode CreateSimpleObject(string name, string mesh)
+        internal SceneNode CreateSimpleObject(string name, string mesh, string material = "")
         {
             if (mSceneMgr.HasEntity(name) || mSceneMgr.HasSceneNode(name))
                 return null;
@@ -190,6 +188,8 @@ namespace Game
             try
             {
                 entity = mSceneMgr.CreateEntity(name, mesh);
+                if (material != "")
+                    entity.SetMaterialName(material);
             }
             catch
             {
