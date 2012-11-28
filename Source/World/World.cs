@@ -26,6 +26,7 @@ namespace Game
         {
             mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("TerrainNode");
             mSpawnPoint = Vector3.ZERO;
+
             this.mChunkArray = new Dictionary<Vector3, Chunk>();
             LogManager.Singleton.DefaultLog.LogMessage("World Init done");
 

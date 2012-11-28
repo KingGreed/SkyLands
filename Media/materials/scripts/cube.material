@@ -32,7 +32,7 @@ material Cube2
 		}
 	}
 }
-material 1
+material Cube3
 {
 	technique
 	{
@@ -40,7 +40,7 @@ material 1
 		{
 			texture_unit
 			{
-				texture grass_1024.jpg 2d
+				texture gold.png 2d
 				tex_coord_set 1
 			}
 			texture_unit

@@ -24,6 +24,7 @@ namespace Game
             CharacMgr.addPlayer(new Race(this.mSceneMgr, "Sinbad.mesh"), new CharacterInfo("Sinbad", new Vector3(0, 0, -250)));
             
             LogManager.Singleton.DefaultLog.LogMessage("\n ====================Program Logs====================\n");
+
             new World(this.mSceneMgr);
 
             LogManager.Singleton.DefaultLog.LogMessage("\n ====================Program Logs End====================\n");

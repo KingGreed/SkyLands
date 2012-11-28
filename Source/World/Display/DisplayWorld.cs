@@ -57,16 +57,12 @@ namespace Game.Display
 
 
             foreach(var block in coordToCheck) {
-                if (this.mWorld.getBlock(chunkCoord, block.Value).IsAir())
-                {
-                    returnList.Add(block.Key);
-                }
+                if (this.mWorld.getBlock(chunkCoord, block.Value).IsAir()) { returnList.Add(block.Key); }
             }
             return returnList;
         }
 
         public void displayFaces(Vector3 chunkCoord, Vector3 blockCoord, List<GraphicBlock.blockFace> faceToDisplay) {
-
             if(faceToDisplay.Count == 0) { return; }
 
             Vector3 absoluteCoord = DisplayWorld.getAbsoluteCoordAt(chunkCoord, blockCoord);
@@ -85,23 +81,26 @@ namespace Game.Display
                 faceName = GraphicBlock.getFaceName(face);
                 faceEntName = getFaceName(absoluteCoord, faceName);
 
+                /*if(blockCoord == new Vector3(1, 0, 0) || blockCoord == new Vector3(0, 1, 0) || blockCoord == new Vector3(0, 0, 1)){
+                    LogManager.Singleton.DefaultLog.LogMessage("Block at " + blockCoord.ToString() +  " has abs coord : " + absoluteCoord.ToString());
+                    LogManager.Singleton.DefaultLog.LogMessage("    It\'s face is : " +  faceName);
+                    LogManager.Singleton.DefaultLog.LogMessage("");
+                }*/
+
                 ent = this.mSceneMgr.CreateEntity(faceEntName, faceName);
-                ent.SetMaterialName("Cube");
+
+                if(faceName == "backFace")       { ent.SetMaterialName("Cube"); }
+                else if(faceName == "leftFace")  { ent.SetMaterialName("Cube2"); }
+                else                             { ent.SetMaterialName("Cube3"); }
+
                 blockNode.AttachObject(ent);
 
             }
 
         }
 
-        public static string getCubeNodeName(Vector3 absCoord){
-            return "cubeNode-" + absCoord.x + "-" + absCoord.y + "-" + absCoord.z;
-        }
-
-
-        public static string getFaceName(Vector3 absCoord, string face)
-        {
-            return "face-" + absCoord.x + "-" + absCoord.y + "-" + absCoord.z + "-" + face;
-        }
+        public static string getCubeNodeName(Vector3 absCoord)          { return "cubeNode-" + absCoord.x + "-" + absCoord.y + "-" + absCoord.z; }
+        public static string getFaceName(Vector3 absCoord, string face) { return "face-" + absCoord.x + "-" + absCoord.y + "-" + absCoord.z + "-" + face; }
 
         public static Vector3 getAbsoluteCoordAt(Vector3 chunkCoord, Vector3 blockCoord){
             float x, y, z; //absolute coord

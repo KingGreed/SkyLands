@@ -18,19 +18,12 @@ namespace Game.Display
             rightFace
         };
         public static string getFaceName(blockFace name) {
-            if(name == blockFace.frontFace) {
-                return "frontFace";
-            } else if(name == blockFace.backFace) {
-                return "backFace";
-            } else if(name == blockFace.rightFace) {
-                return "rightFace";
-            } else if(name == blockFace.leftFace) {
-                return "leftFace";
-            } else if(name == blockFace.underFace) {
-                return "underFace";
-            } else {//name == blockFace.upperFace
-                return "upperFace";
-            }
+            if(name == blockFace.frontFace)      { return "frontFace"; }
+            else if(name == blockFace.backFace)  { return "backFace" ; }
+            else if(name == blockFace.rightFace) { return "rightFace"; } 
+            else if(name == blockFace.leftFace)  { return "leftFace" ; }
+            else if(name == blockFace.underFace) { return "underFace"; }
+            else /*name == blockFace.upperFace*/ { return "upperFace"; }
         }
 
         public static void generateFace()
@@ -54,11 +47,11 @@ namespace Game.Display
             block.Begin(defaultMaterial, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
 
             block.Position(new Vector3(0, 0, 0)); block.TextureCoord(1, 1);
-            block.Position(new Vector3(0, 0, World.CUBE_SIDE)); block.TextureCoord(1, 0);
-            block.Position(new Vector3(World.CUBE_SIDE, 0, World.CUBE_SIDE)); block.TextureCoord(0, 0);
+            block.Position(new Vector3(0, 0, -World.CUBE_SIDE)); block.TextureCoord(1, 0);
+            block.Position(new Vector3(World.CUBE_SIDE, 0, -World.CUBE_SIDE)); block.TextureCoord(0, 0);
             block.Position(new Vector3(World.CUBE_SIDE, 0, 0)); block.TextureCoord(0, 1);
 
-            block.Quad(3, 2, 1, 0);
+            block.Quad(0, 1, 2, 3);
             block.End();
             block.ConvertToMesh("underFace");
 
@@ -67,11 +60,11 @@ namespace Game.Display
             block.Begin(defaultMaterial, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
 
             block.Position(new Vector3(World.CUBE_SIDE, 0, 0)); block.TextureCoord(1, 1);
-            block.Position(new Vector3(World.CUBE_SIDE, 0, World.CUBE_SIDE)); block.TextureCoord(1, 0);
-            block.Position(new Vector3(World.CUBE_SIDE, World.CUBE_SIDE, World.CUBE_SIDE)); block.TextureCoord(0, 0);
+            block.Position(new Vector3(World.CUBE_SIDE, 0, -World.CUBE_SIDE)); block.TextureCoord(1, 0);
+            block.Position(new Vector3(World.CUBE_SIDE, World.CUBE_SIDE, -World.CUBE_SIDE)); block.TextureCoord(0, 0);
             block.Position(new Vector3(World.CUBE_SIDE, World.CUBE_SIDE, 0)); block.TextureCoord(0, 1);
 
-            block.Quad(3, 2, 1, 0);
+            block.Quad(0, 1, 2, 3);
             block.End();
             block.ConvertToMesh("rightFace");
 
