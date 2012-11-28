@@ -21,8 +21,6 @@ namespace Game.BaseApp
         protected int          mRenderMode   = 0;
         protected Overlay      mDebugOverlay;
 
-
-
         public void Go()
         {
             try
@@ -134,11 +132,7 @@ namespace Game.BaseApp
 
         protected void ReloadAllTextures() { TextureManager.Singleton.ReloadAll(); }
 
-        protected virtual void UpdateScene(FrameEvent evt)
-        {
-            this.mSceneMgr.GetEntity("MainPlayer").GetAnimationState("IdleBase").AddTime(evt.timeSinceLastEvent);
-            this.mSceneMgr.GetEntity("MainPlayer").GetAnimationState("IdleTop").AddTime(evt.timeSinceLastEvent);
-        }
+        protected virtual void UpdateScene(FrameEvent evt) {}
 
         protected void CycleTextureFilteringMode()
         {

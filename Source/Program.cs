@@ -10,6 +10,7 @@ namespace Game
 {
     public class Program : BaseApplication
     {
+        CharacMgr mCharacMgr;
 
         static void Main()
         {
@@ -18,19 +19,21 @@ namespace Game
 
         protected override void CreateScene()
         {
-            CharacMgr CharacMgr = new CharacMgr();
-            GraphicBlock.generateFace();
-
-            CharacMgr.addPlayer(new Race(this.mSceneMgr, "Sinbad.mesh"), new CharacterInfo("Sinbad", new Vector3(0, 0, -250)));
-            
             LogManager.Singleton.DefaultLog.LogMessage("\n ====================Program Logs====================\n");
 
+            GraphicBlock.generateFace();
             new World(this.mSceneMgr);
-
-            LogManager.Singleton.DefaultLog.LogMessage("\n ====================Program Logs End====================\n");
             //this.mCamera.SetPosition(0, 0, -50);
 
-            
+            this.mCharacMgr = new CharacMgr();
+            this.mCharacMgr.AddPlayer(new Race(this.mSceneMgr, "Sinbad.mesh"), new CharacterInfo("Sinbad", new Vector3(0, 0, -250)));
+
+            LogManager.Singleton.DefaultLog.LogMessage("\n ====================Program Logs End====================\n");
        }
+
+        protected override void UpdateScene(FrameEvent evt)
+        {
+            this.mCharacMgr.Update(evt.timeSinceLastFrame);
+        }
     }
 }

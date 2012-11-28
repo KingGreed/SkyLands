@@ -26,14 +26,15 @@ namespace Game.CharacSystem
 
         public Character(Race charac, CharacterInfo info)
         {
-            mRace = charac;
-            mInfo = info;
+            this.mRace = charac;
+            this.mInfo = info;
 
-            mRace.Node.SetPosition(info.spawnPoint.x, info.spawnPoint.y, info.spawnPoint.z);
+            this.mRace.Node.SetPosition(info.spawnPoint.x, info.spawnPoint.y, info.spawnPoint.z);
         }
 
-        public void update()
+        public void Update(float frameTime)
         {
+            this.mRace.UpdateAnimation(frameTime);
         }
 
         public Vector3 Move(Vector3 direction)  // Return the vector of the effective move

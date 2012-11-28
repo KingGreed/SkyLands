@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Mogre;
 
-using Game;
-
 namespace Game.CharacSystem
 {
     class CharacMgr
@@ -14,14 +12,20 @@ namespace Game.CharacSystem
         {
         }
 
-        public void addPlayer(Race breed, CharacterInfo info)
+        public void AddPlayer(Race breed, CharacterInfo info)
         {
-            mCharacList.Add(new Player(breed, info));
+            this.mCharacList.Add(new Player(breed, info));
         }
 
-        public Character getCharacter(int index = 0)   // By default, return the main character which is the player
+        public Character GetCharacter(int index = 0)   // By default, return the main character which is the player
         {
-            return mCharacList[index];
+            return this.mCharacList[index];
+        }
+
+        public void Update(float frameTime)
+        {
+            for (int i = 0; i < this.mCharacList.Count; i++)
+                this.mCharacList[i].Update(frameTime);
         }
     }
 }

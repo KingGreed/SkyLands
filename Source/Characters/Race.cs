@@ -6,40 +6,67 @@ namespace Game.CharacSystem
 {
     class Race
     {
-        public enum Action { idle, run, jump, dance }
+        public enum AnimType { idle, run, jump, fall, land, dance }
+        private SceneNode mNode;
+        private AnimationStateSet mAnimSet;
+        private string[] mAnimNames;
 
-        protected SceneNode mNode;
-        //public AnimationState mAnimState;
-
-        public SceneNode Node
-        {
-            get { return mNode; }
-        }
+        public SceneNode Node { get { return mNode; } }
 
         public Race(SceneManager sceneMgr, string meshName)
         {
             Entity sinbad = sceneMgr.CreateEntity("MainPlayer", meshName);
 
-            mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("PlayerNd");
-            mNode.AttachObject(sinbad);
+            this.mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("PlayerNd");
+            this.mNode.AttachObject(sinbad);
+            this.mNode.Scale(17, 17, 17);
 
-            mNode.Scale(17, 17, 17);
             sinbad.Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
+            this.mAnimSet = sinbad.AllAnimationStates;
+            this.mAnimNames = new string[] { "IdleBase", "IdleTop", "RunBase", "RunTop", "JumpStart", "JumpLoop", "JumpEnd", "Dance" };
 
-            sinbad.GetAnimationState("IdleBase").Enabled = true;
-            sinbad.GetAnimationState("IdleBase").Loop    = true;
+            for(int i = 0; i < mAnimNames.Length; i++)
+            {
+                bool isLooped = true;
+                if (i == 4 || i == 6)   // JumpStart and JumpEnd aren't looped
+                    isLooped = false;
 
-            sinbad.GetAnimationState("IdleTop").Enabled  = true;
-            sinbad.GetAnimationState("IdleTop").Loop     = true;
+                this.mAnimSet.GetAnimationState(this.mAnimNames[i]).Loop = isLooped;
+            }
 
-            //mListAnim = mEnt.AllAnimationStates;
-
+            this.ChangeAnimation(AnimType.dance);
         }
 
-        /* Play the animation(s) corresponding to an action */
-        public void makeAction(Action act)
+        public void ChangeAnimation(AnimType anim)
         {
+            foreach (string name in mAnimNames) // Turn all animations off
+                this.mAnimSet.GetAnimationState(name).Enabled = false;
 
+            List<int> listAnimToEnable = new List<int>();
+
+            if (anim == AnimType.run)        { listAnimToEnable.Add(2); listAnimToEnable.Add(3); }
+            else if (anim == AnimType.jump)  { listAnimToEnable.Add(4); }
+            else if (anim == AnimType.fall)  { listAnimToEnable.Add(5); }
+            else if (anim == AnimType.land)  { listAnimToEnable.Add(6); }
+            else if (anim == AnimType.dance) { listAnimToEnable.Add(7); }
+            else                             { listAnimToEnable.Add(0); listAnimToEnable.Add(1); }
+
+            this.EnableAnimation(listAnimToEnable);
+        }
+
+        private void EnableAnimation(List<int> listIndex)
+        {
+            foreach (int i in listIndex)
+                this.mAnimSet.GetAnimationState(this.mAnimNames[i]).Enabled = true;
+        }
+
+        public void UpdateAnimation(float frameTime)
+        {
+            foreach (string animName in this.mAnimNames)
+            {
+                if (this.mAnimSet.GetAnimationState(animName).Enabled)
+                    this.mAnimSet.GetAnimationState(animName).AddTime(frameTime);
+            }
         }
     }
 }
