@@ -84,7 +84,7 @@ namespace Game.Display
             block.Position(new Vector3(0, World.CUBE_SIDE, -World.CUBE_SIDE)); block.TextureCoord(0, 0);
             block.Position(new Vector3(0, World.CUBE_SIDE, 0)); block.TextureCoord(0, 1);
 
-            block.Quad(3, 2, 1, 0);
+            block.Quad(0, 1, 2, 3);
             block.End();
             block.ConvertToMesh("upperFace");
 
@@ -97,7 +97,7 @@ namespace Game.Display
             block.Position(new Vector3(0, World.CUBE_SIDE, -World.CUBE_SIDE)); block.TextureCoord(0, 0);
             block.Position(new Vector3(0, 0, -World.CUBE_SIDE)); block.TextureCoord(0, 1);
 
-            block.Quad(3, 2, 1, 0);
+            block.Quad(0, 1, 2, 3);
             block.End();
             block.ConvertToMesh("leftFace");
 
@@ -110,7 +110,7 @@ namespace Game.Display
             block.Position(new Vector3(World.CUBE_SIDE, World.CUBE_SIDE, -World.CUBE_SIDE)); block.TextureCoord(0, 0);
             block.Position(new Vector3(World.CUBE_SIDE, 0, -World.CUBE_SIDE)); block.TextureCoord(0, 1);
 
-            block.Quad(3, 2, 1, 0);
+            block.Quad(0, 1, 2, 3);
             block.End();
             block.ConvertToMesh("backFace");
 

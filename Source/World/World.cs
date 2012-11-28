@@ -4,7 +4,7 @@ using Mogre;
 
 using Game.CharacSystem;
 using Game.Terrain;
-//using Game.Display;
+using Game.Display;
 
 namespace Game
 {
@@ -22,7 +22,7 @@ namespace Game
         public Vector3 mSpawnPoint { get; private set; }
 
 
-        public World(ref SceneManager sceneMgr)
+        public World(SceneManager sceneMgr)
         {
             mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("TerrainNode");
             mSpawnPoint = Vector3.ZERO;
@@ -35,9 +35,9 @@ namespace Game
             GenerateWorld();
             LogManager.Singleton.DefaultLog.LogMessage("World Generated");
 
-            /*DisplayWorld wrld = new DisplayWorld(ref this.mChunkArray, this, ref sceneMgr);
+            DisplayWorld wrld = new DisplayWorld(ref this.mChunkArray, this, ref sceneMgr);
             wrld.DisplayChunkAt(new Vector3(0, 0, 0));
-            LogManager.Singleton.DefaultLog.LogMessage("World Displayed");*/
+            LogManager.Singleton.DefaultLog.LogMessage("World Displayed");
         }
 
         private void CreateWorld(ref SceneManager sceneMgr)

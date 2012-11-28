@@ -16,14 +16,24 @@ namespace Game.CharacSystem
             get { return mNode; }
         }
 
-        public Race(OgreManager engine, string meshName)
+        public Race(SceneManager sceneMgr, string meshName)
         {
-            mNode = engine.CreateSimpleObject("MainPlayer", meshName);
+            Entity sinbad = sceneMgr.CreateEntity("MainPlayer", meshName);
+
+            mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("PlayerNd");
+            mNode.AttachObject(sinbad);
+
             mNode.Scale(17, 17, 17);
-            engine.SceneMgr.GetEntity("MainPlayer").Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
+            sinbad.Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
+
+            sinbad.GetAnimationState("IdleBase").Enabled = true;
+            sinbad.GetAnimationState("IdleBase").Loop    = true;
+
+            sinbad.GetAnimationState("IdleTop").Enabled  = true;
+            sinbad.GetAnimationState("IdleTop").Loop     = true;
+
             //mListAnim = mEnt.AllAnimationStates;
 
-            engine.AddObjectToScene(mNode);
         }
 
         /* Play the animation(s) corresponding to an action */
