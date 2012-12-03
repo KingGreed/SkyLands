@@ -34,17 +34,17 @@ namespace Game.Terrain
             this.mBlockArray[0, World.CHUNK_SIDE-1, 0].SetType(TypeBlock.AIR);
             this.mBlockArray[0, World.CHUNK_SIDE-1, World.CHUNK_SIDE-1].SetType(TypeBlock.AIR);
             this.mBlockArray[World.CHUNK_SIDE-1, World.CHUNK_SIDE-1, 0].SetType(TypeBlock.AIR);
-            this.mBlockArray[World.CHUNK_SIDE-1, World.CHUNK_SIDE-1, World.CHUNK_SIDE-1].SetType(TypeBlock.AIR);*/
+            this.mBlockArray[World.CHUNK_SIDE-1, World.CHUNK_SIDE-1, World.CHUNK_SIDE-1].SetType(TypeBlock.AIR);
 
             double sin;
             for(int x = 0; x < World.CHUNK_SIDE; x++){
                     for(int y = 0; y < World.CHUNK_SIDE; y++){
                         for(int z = 0; z < World.CHUNK_SIDE; z++){
-                            sin = (System.Math.Cos(x) + 1)*2;
+                            sin = (System.Math.Sin(x) + 1)*4;
                             if(y >sin + 0.4 ) { this.mBlockArray[x, y, z].SetType(TypeBlock.AIR); };
                         }
                     }
-                }
+                }*/
         }
 
     }

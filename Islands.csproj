@@ -65,6 +65,7 @@
     <Compile Include="Source\World\Display\Materials.cs" />
     <Compile Include="Source\World\Terrain\Block.cs" />
     <Compile Include="Source\World\Terrain\Chunk.cs" />
+    <Compile Include="Source\World\Terrain\Island.cs" />
     <Compile Include="Source\World\World.cs" />
   </ItemGroup>
   <ItemGroup>

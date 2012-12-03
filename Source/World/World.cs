@@ -11,7 +11,7 @@ namespace Game
     public class World
     {
         public const int NUMBER_CHUNK_X = 6;
-        public const int NUMBER_CHUNK_Y = 1;
+        public const int NUMBER_CHUNK_Y = 2;
         public const int NUMBER_CHUNK_Z = 6;
         public const int CHUNK_SIDE = 16;
         public const int CUBE_SIDE = 50;
