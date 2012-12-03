@@ -1,54 +1,89 @@
-material Cube
-{
-	technique
-	{
-		pass
-		{
-			texture_unit
-			{
-				texture metal.png 2d
-				tex_coord_set 0
-			}
+material Default{
+    technique{
+        pass{
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0       
+        }
+    }
+}
+material cube/grass/side{
+    technique{
+        pass{
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0       
+            texture_unit{ texture earth_side.jpg }
+        }
+    }
+}
+material cube/grass/top {
+	technique {
+		pass {
+			ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+			texture_unit { texture grass2.jpg 2d }
 		}
 	}
 }
-material Cube2
+material cube/grass/bottom{
+    technique {
+        pass {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit{ texture dirt.jpg }
+        }
+    }
+}
+material cube/stone
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+            
+            texture_unit { texture stone.png }
+        }
+    }
+}
+material cube/metal
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+            
+            texture_unit { texture metal.png }
+        }
+    }
+}
+material Cube/wood/side
 {
 	technique
 	{
 		pass
 		{
-			texture_unit
-			{
-				texture grass_1024.jpg 2d
-				tex_coord_set 1
-			}
-			texture_unit
-			{
-				texture metal.png 2d
-				tex_coord_set 0
-			}
+			ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
 
+			texture_unit { texture lightwood.jpg }
 		}
 	}
 }
-material Cube3
+material Cube/sand
 {
 	technique
 	{
 		pass
 		{
-			texture_unit
-			{
-				texture gold.png 2d
-				tex_coord_set 1
-			}
-			texture_unit
-			{
-				texture metal.png 2d
-				tex_coord_set 0
-			}
+			ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
 
+			texture_unit { texture sand3.jpg 2d }
 		}
 	}
 }

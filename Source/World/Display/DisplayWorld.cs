@@ -13,12 +13,20 @@ namespace Game.Display
         private Dictionary<Vector3, Chunk> mChunkArray;
         private World mWorld;
         private SceneManager mSceneMgr;
+        private Materials mtr;
 
         public DisplayWorld(ref Dictionary<Vector3, Chunk> chunkArray, World refToWorld, ref SceneManager sceneMgr)
         {
             this.mChunkArray = chunkArray;
             this.mWorld = refToWorld;
             this.mSceneMgr = sceneMgr;
+            this.mtr = new Materials();
+        }
+
+        public void DisplayAllChunks(){
+            foreach (var chunk in this.mChunkArray) {
+	            this.DisplayChunkAt(chunk.Key);
+	        }
         }
 
         public void DisplayChunkAt(Vector3 coord) {
@@ -41,19 +49,16 @@ namespace Game.Display
         public List<GraphicBlock.blockFace> getDisplayableFacesAt(Vector3 chunkCoord, Vector3 blockCoord)
         {
             List<GraphicBlock.blockFace> returnList = new List<GraphicBlock.blockFace>();
-            if (this.mWorld.getBlock(chunkCoord, blockCoord).IsAir())
-            {
-                return returnList;
-            }
+            if (this.mWorld.getBlock(chunkCoord, blockCoord).IsAir()) { return returnList; }
 
             Dictionary<GraphicBlock.blockFace, Vector3> coordToCheck = new Dictionary<GraphicBlock.blockFace,Vector3>();
 
             coordToCheck.Add(GraphicBlock.blockFace.rightFace, new Vector3(blockCoord.x + 1, blockCoord.y, blockCoord.z));
-            coordToCheck.Add(GraphicBlock.blockFace.leftFace, new Vector3(blockCoord.x - 1, blockCoord.y, blockCoord.z));
+            coordToCheck.Add(GraphicBlock.blockFace.leftFace,  new Vector3(blockCoord.x - 1, blockCoord.y, blockCoord.z));
             coordToCheck.Add(GraphicBlock.blockFace.upperFace, new Vector3(blockCoord.x, blockCoord.y + 1, blockCoord.z));
             coordToCheck.Add(GraphicBlock.blockFace.underFace, new Vector3(blockCoord.x, blockCoord.y - 1, blockCoord.z));
             coordToCheck.Add(GraphicBlock.blockFace.frontFace, new Vector3(blockCoord.x, blockCoord.y, blockCoord.z + 1));
-            coordToCheck.Add(GraphicBlock.blockFace.backFace, new Vector3(blockCoord.x, blockCoord.y, blockCoord.z - 1));
+            coordToCheck.Add(GraphicBlock.blockFace.backFace,  new Vector3(blockCoord.x, blockCoord.y, blockCoord.z - 1));
 
 
             foreach(var block in coordToCheck) {
@@ -69,6 +74,7 @@ namespace Game.Display
             string faceName, faceEntName, cubeNodeName = getCubeNodeName(absoluteCoord);
             SceneNode blockNode;
             Entity ent;
+            string type = this.mWorld.getBlock(chunkCoord, blockCoord).getType();
 
 
             if(this.mSceneMgr.HasSceneNode(cubeNodeName)) {
@@ -81,17 +87,11 @@ namespace Game.Display
                 faceName = GraphicBlock.getFaceName(face);
                 faceEntName = getFaceName(absoluteCoord, faceName);
 
-                /*if(blockCoord == new Vector3(1, 0, 0) || blockCoord == new Vector3(0, 1, 0) || blockCoord == new Vector3(0, 0, 1)){
-                    LogManager.Singleton.DefaultLog.LogMessage("Block at " + blockCoord.ToString() +  " has abs coord : " + absoluteCoord.ToString());
-                    LogManager.Singleton.DefaultLog.LogMessage("    It\'s face is : " +  faceName);
-                    LogManager.Singleton.DefaultLog.LogMessage("");
-                }*/
-
                 ent = this.mSceneMgr.CreateEntity(faceEntName, faceName);
 
-                if(faceName == "backFace")       { ent.SetMaterialName("Cube"); }
-                else if(faceName == "leftFace")  { ent.SetMaterialName("Cube2"); }
-                else                             { ent.SetMaterialName("Cube3"); }
+
+                ent.SetMaterialName(this.mtr.getMaterial(type, face));
+
 
                 blockNode.AttachObject(ent);
 
@@ -104,9 +104,9 @@ namespace Game.Display
 
         public static Vector3 getAbsoluteCoordAt(Vector3 chunkCoord, Vector3 blockCoord){
             float x, y, z; //absolute coord
-            x = chunkCoord.x * World.CHUNK_SIDE + blockCoord.x * World.CUBE_SIDE;
-            y = chunkCoord.y * World.CHUNK_SIDE + blockCoord.y * World.CUBE_SIDE;
-            z = chunkCoord.z * World.CHUNK_SIDE + blockCoord.z * World.CUBE_SIDE;
+            x = chunkCoord.x * World.CHUNK_SIDE * World.CUBE_SIDE + blockCoord.x * World.CUBE_SIDE;
+            y = chunkCoord.y * World.CHUNK_SIDE * World.CUBE_SIDE + blockCoord.y * World.CUBE_SIDE;
+            z = chunkCoord.z * World.CHUNK_SIDE * World.CUBE_SIDE + blockCoord.z * World.CUBE_SIDE;
 
             return new Vector3(x, y, z);
 

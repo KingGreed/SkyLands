@@ -26,7 +26,7 @@ namespace Game.Terrain
                     }
                 }
             }
-            this.mBlockArray[0, 0, 0].SetType(TypeBlock.AIR);
+            /*this.mBlockArray[0, 0, 0].SetType(TypeBlock.AIR);
             this.mBlockArray[0, 0, World.CHUNK_SIDE-1].SetType(TypeBlock.AIR);
             this.mBlockArray[World.CHUNK_SIDE-1, 0, 0].SetType(TypeBlock.AIR);
             this.mBlockArray[World.CHUNK_SIDE-1, 0, World.CHUNK_SIDE-1].SetType(TypeBlock.AIR);
@@ -34,15 +34,14 @@ namespace Game.Terrain
             this.mBlockArray[0, World.CHUNK_SIDE-1, 0].SetType(TypeBlock.AIR);
             this.mBlockArray[0, World.CHUNK_SIDE-1, World.CHUNK_SIDE-1].SetType(TypeBlock.AIR);
             this.mBlockArray[World.CHUNK_SIDE-1, World.CHUNK_SIDE-1, 0].SetType(TypeBlock.AIR);
-            this.mBlockArray[World.CHUNK_SIDE-1, World.CHUNK_SIDE-1, World.CHUNK_SIDE-1].SetType(TypeBlock.AIR);
+            this.mBlockArray[World.CHUNK_SIDE-1, World.CHUNK_SIDE-1, World.CHUNK_SIDE-1].SetType(TypeBlock.AIR);*/
 
+            double sin;
             for(int x = 0; x < World.CHUNK_SIDE; x++){
                     for(int y = 0; y < World.CHUNK_SIDE; y++){
                         for(int z = 0; z < World.CHUNK_SIDE; z++){
-                            int dx = World.CHUNK_SIDE/2-x;
-                            int dy = World.CHUNK_SIDE/2-y;
-                            int dz = World.CHUNK_SIDE/2-z;
-                            if(dx*dx + dy*dy + dz*dz >81) this.mBlockArray[x, y, z].SetType(TypeBlock.AIR);
+                            sin = (System.Math.Cos(x) + 1)*2;
+                            if(y >sin + 0.4 ) { this.mBlockArray[x, y, z].SetType(TypeBlock.AIR); };
                         }
                     }
                 }

@@ -62,6 +62,7 @@
     <Compile Include="Source\Characters\Player.cs" />
     <Compile Include="Source\World\Display\DisplayWorld.cs" />
     <Compile Include="Source\World\Display\GraphicBlock.cs" />
+    <Compile Include="Source\World\Display\Materials.cs" />
     <Compile Include="Source\World\Terrain\Block.cs" />
     <Compile Include="Source\World\Terrain\Chunk.cs" />
     <Compile Include="Source\World\World.cs" />
@@ -102,6 +103,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Source\States\" />

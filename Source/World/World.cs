@@ -10,11 +10,11 @@ namespace Game
 {
     public class World
     {
-        public const int NUMBER_CHUNK_X = 1;
+        public const int NUMBER_CHUNK_X = 6;
         public const int NUMBER_CHUNK_Y = 1;
-        public const int NUMBER_CHUNK_Z = 1;
+        public const int NUMBER_CHUNK_Z = 6;
         public const int CHUNK_SIDE = 16;
-        public const int CUBE_SIDE = 10;
+        public const int CUBE_SIDE = 50;
 
         public SceneNode mNode { get; private set; }
         Dictionary<Vector3, Chunk> mChunkArray;
@@ -37,7 +37,7 @@ namespace Game
             LogManager.Singleton.DefaultLog.LogMessage("World Generated");
 
             DisplayWorld wrld = new DisplayWorld(ref this.mChunkArray, this, ref sceneMgr);
-            wrld.DisplayChunkAt(new Vector3(0, 0, 0));
+            wrld.DisplayAllChunks();
             LogManager.Singleton.DefaultLog.LogMessage("World Displayed");
         }
 

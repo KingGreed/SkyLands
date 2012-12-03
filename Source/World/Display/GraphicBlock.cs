@@ -28,7 +28,7 @@ namespace Game.Display
 
         public static void generateFace()
         {
-            string defaultMaterial = "Cube";
+            string defaultMaterial = "Default";
 
             ManualObject block = new ManualObject("frontFace");
             block.Begin(defaultMaterial, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
@@ -59,10 +59,10 @@ namespace Game.Display
             block = new ManualObject("rightFace");
             block.Begin(defaultMaterial, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
 
-            block.Position(new Vector3(World.CUBE_SIDE, 0, 0)); block.TextureCoord(1, 1);
-            block.Position(new Vector3(World.CUBE_SIDE, 0, -World.CUBE_SIDE)); block.TextureCoord(1, 0);
-            block.Position(new Vector3(World.CUBE_SIDE, World.CUBE_SIDE, -World.CUBE_SIDE)); block.TextureCoord(0, 0);
-            block.Position(new Vector3(World.CUBE_SIDE, World.CUBE_SIDE, 0)); block.TextureCoord(0, 1);
+            block.Position(new Vector3(World.CUBE_SIDE, 0, 0)); block.TextureCoord(0, 1);
+            block.Position(new Vector3(World.CUBE_SIDE, 0, -World.CUBE_SIDE)); block.TextureCoord(1, 1);
+            block.Position(new Vector3(World.CUBE_SIDE, World.CUBE_SIDE, -World.CUBE_SIDE)); block.TextureCoord(1, 0);
+            block.Position(new Vector3(World.CUBE_SIDE, World.CUBE_SIDE, 0)); block.TextureCoord(0, 0);
 
             block.Quad(0, 1, 2, 3);
             block.End();

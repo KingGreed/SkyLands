@@ -14,14 +14,8 @@ namespace Game.Terrain
         private Vector3 mBlockPos;
 
 
-        public Vector3 blockPos
-        {
-            get { return this.mBlockPos; }
-        }
-        public Vector3 setBlockPos
-        {
-            set { this.mBlockPos = value; }
-        }
+        public Vector3 blockPos    { get { return this.mBlockPos; } }
+        public Vector3 setBlockPos { set { this.mBlockPos = value; } }
 
 
         public Block(Vector3 blockPos, TypeBlock blockType = TypeBlock.METAL)
@@ -30,13 +24,11 @@ namespace Game.Terrain
             this.mBlockPos = blockPos;
         }
 
-        public bool hasSceneNode() {
-            return (this.mNode != null);
-        }
+        public bool hasSceneNode() { return (this.mNode != null); }
 
         public bool IsAir() { return (mType == TypeBlock.AIR); }
         
-
+        public string getType(){ return "1";}
 
         /* Return whether the block needs to update the visibility of its neighbor or not */
         internal bool SetType(TypeBlock type)
