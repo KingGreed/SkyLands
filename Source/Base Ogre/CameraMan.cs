@@ -2,7 +2,6 @@ using Mogre;
 using System;
 
 
-
 namespace Game.BaseApp
 {
     public class CameraMan

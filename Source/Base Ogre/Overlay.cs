@@ -1,6 +1,5 @@
-using Mogre;
 using System;
-
+using Mogre;
 
 
 namespace Game.BaseApp

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Mogre;
 
+
 namespace Game.CharacSystem
 {
     class Race

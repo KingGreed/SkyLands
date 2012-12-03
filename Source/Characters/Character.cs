@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Mogre;
 
+
 namespace Game.CharacSystem
 {
     struct CharacterInfo
@@ -12,9 +13,9 @@ namespace Game.CharacSystem
 
         public CharacterInfo(string gName, Vector3 gSpawnPoint, float gLife = 100)
         { 
-            name = gName;
-            spawnPoint = gSpawnPoint;
-            life = gLife;
+            this.name = gName;
+            this.spawnPoint = gSpawnPoint;
+            this.life = gLife;
         }
     }
     
