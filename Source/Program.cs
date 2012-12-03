@@ -1,9 +1,7 @@
 ﻿using System;
 using Mogre;
 
-using Game.Terrain;
-using Game.CharacSystem;
-using Game.Display;
+using Game.States;
 using Game.BaseApp;
 
 
@@ -11,8 +9,8 @@ namespace Game
 {
     public class Program : BaseApplication
     {
-        CharacMgr mCharacMgr;
-
+        private StateManager mStateMgr;
+        
         static void Main()
         {
             new Program().Go();
@@ -20,26 +18,33 @@ namespace Game
 
         protected override void CreateScene()
         {
-            
-            LogManager.Singleton.DefaultLog.LogMessage("\n ====================Program Logs====================\n");
-
-
-            GraphicBlock.generateFace();
-
-            new World(this.mSceneMgr);
-            this.mCamera.FarClipDistance = 3000;
-            //this.mCamera.SetPosition(0, 0, -50);
-
-            this.mCharacMgr = new CharacMgr();
-            this.mCharacMgr.AddPlayer(new Race(this.mSceneMgr, "Sinbad.mesh"), new CharacterInfo("Sinbad", new Vector3(0, 0, -250)));
-
-            LogManager.Singleton.DefaultLog.LogMessage("\n ====================Program Logs End====================\n");
-
+            mStateMgr = new StateManager(mSceneMgr, mInput, mWindow);
+            mStateMgr.Startup(typeof(GameState));
        }
 
         protected override void UpdateScene(FrameEvent evt)
         {
-            this.mCharacMgr.Update(evt.timeSinceLastFrame);
+            this.mStateMgr.Update(evt.timeSinceLastFrame);
+        }
+
+        /* We don't use the camera of BaseApplication */
+        protected override void CreateCamera() {}
+
+        protected override void CreateViewports() {}
+
+        protected override void ProcessInput()
+        {
+            this.mInput.Update();
+
+            if (mInput.WasKeyPressed(MOIS.KeyCode.KC_R)) { this.CycleTextureFilteringMode(); }
+            if (mInput.WasKeyPressed(MOIS.KeyCode.KC_F5)) { this.ReloadAllTextures(); }
+            if (mInput.WasKeyPressed(MOIS.KeyCode.KC_SYSRQ)) { this.TakeScreenshot(); }
+            if (mInput.WasKeyPressed(MOIS.KeyCode.KC_ESCAPE)) { this.Shutdown(); }
+        }
+
+        protected override void DestroyScene()
+        {
+            this.mStateMgr.Shutdown();
         }
     }
 }

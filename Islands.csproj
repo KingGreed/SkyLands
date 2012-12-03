@@ -51,8 +51,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Source\Base Ogre\BaseApplication.cs" />
-    <Compile Include="Source\Base Ogre\BaseApplicationInput.cs" />
     <Compile Include="Source\Base Ogre\CameraMan.cs" />
+    <Compile Include="Source\Base Ogre\MoisManager.cs" />
     <Compile Include="Source\Base Ogre\Overlay.cs" />
     <Compile Include="Source\Characters\Race.cs" />
     <Compile Include="Source\Program.cs" />
@@ -60,6 +60,9 @@
     <Compile Include="Source\Characters\Character.cs" />
     <Compile Include="Source\Characters\NonPlayer.cs" />
     <Compile Include="Source\Characters\Player.cs" />
+    <Compile Include="Source\States\GameState.cs" />
+    <Compile Include="Source\States\State.cs" />
+    <Compile Include="Source\States\StateManager.cs" />
     <Compile Include="Source\World\Display\DisplayWorld.cs" />
     <Compile Include="Source\World\Display\GraphicBlock.cs" />
     <Compile Include="Source\World\Display\Materials.cs" />
@@ -106,8 +109,6 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Source\States\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

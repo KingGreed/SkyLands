@@ -1,19 +1,25 @@
-using Mogre;
 using System;
-
+using Mogre;
 
 
 namespace Game.BaseApp
 {
-    class ShutdownException : Exception { }
+    class ShutdownException : Exception
+    {
+        public ShutdownException(MoisManager input)
+        {
+            input.Shutdown();
+        }
+    }
     
-    public abstract partial class BaseApplication
+    public abstract class BaseApplication
     {
         protected Root         mRoot;
         protected SceneManager mSceneMgr;
-        protected Camera       mCamera;
-        protected CameraMan    mCameraMan;
+        protected Camera       mCamera = null;
+        protected CameraMan    mCameraMan = null;
         protected RenderWindow mWindow;
+        protected MoisManager  mInput;
         protected string       mPluginsCfg   = "plugins.cfg";
         protected string       mResourcesCfg = "resources.cfg";
         protected bool         mShutDown     = false;
@@ -65,10 +71,14 @@ namespace Game.BaseApp
             this.CreateResourceListener();
             this.LoadResources();
 
+            mInput = new MoisManager();
+            int windowHnd;
+            mWindow.GetCustomAttribute("WINDOW", out windowHnd);
+            mInput.Startup(windowHnd, mWindow.Width, mWindow.Height);
+
             this.CreateScene();
 
             this.CreateFrameListeners();
-            this.InitializeInput();
 
             this.mDebugOverlay = new Overlay(mWindow);
             this.mDebugOverlay.AdditionalInfo = "Bilinear";
@@ -86,7 +96,7 @@ namespace Game.BaseApp
 
         protected virtual void CreateCamera()
         {
-            this.mCamera = this.mSceneMgr.CreateCamera("PlayerCam");
+            this.mCamera = this.mSceneMgr.CreateCamera("DefaultCam");
 
             this.mCamera.Position = new Vector3(0, 100, 250);
 
@@ -133,6 +143,33 @@ namespace Game.BaseApp
         protected void ReloadAllTextures() { TextureManager.Singleton.ReloadAll(); }
 
         protected virtual void UpdateScene(FrameEvent evt) {}
+
+        protected virtual void ProcessInput()
+        {
+            this.mInput.Update();
+
+            if (mInput.IsKeyDown(MOIS.KeyCode.KC_W) || mInput.IsKeyDown(MOIS.KeyCode.KC_UP)) { this.mCameraMan.GoingForward = true; }
+            else { this.mCameraMan.GoingForward = false; }
+            if (mInput.IsKeyDown(MOIS.KeyCode.KC_S) || mInput.IsKeyDown(MOIS.KeyCode.KC_DOWN))   { this.mCameraMan.GoingBack = true; }
+            else { this.mCameraMan.GoingBack = false; }
+            if (mInput.IsKeyDown(MOIS.KeyCode.KC_A) || mInput.IsKeyDown(MOIS.KeyCode.KC_LEFT))   { this.mCameraMan.GoingLeft = true; }
+            else { this.mCameraMan.GoingLeft = false; }
+            if (mInput.IsKeyDown(MOIS.KeyCode.KC_D) || mInput.IsKeyDown(MOIS.KeyCode.KC_RIGHT))  { this.mCameraMan.GoingRight = true; }
+            else { this.mCameraMan.GoingRight = false; }
+            if (mInput.IsKeyDown(MOIS.KeyCode.KC_E) || mInput.IsKeyDown(MOIS.KeyCode.KC_PGUP))   { this.mCameraMan.GoingUp = true; }
+            else { this.mCameraMan.GoingUp = false; }
+            if (mInput.IsKeyDown(MOIS.KeyCode.KC_Q) || mInput.IsKeyDown(MOIS.KeyCode.KC_PGDOWN)) { this.mCameraMan.GoingDown = true; }
+            else { this.mCameraMan.GoingDown = false; }
+            if (mInput.IsKeyDown(MOIS.KeyCode.KC_LSHIFT) || mInput.IsKeyDown(MOIS.KeyCode.KC_RSHIFT)) { this.mCameraMan.FastMove = true; }
+            else { this.mCameraMan.FastMove = false; }
+             
+            this.mCameraMan.MouseMovement(mInput.MouseMoveX, mInput.MouseMoveY);
+            
+            if (mInput.WasKeyPressed(MOIS.KeyCode.KC_R)) { this.CycleTextureFilteringMode(); }
+            if (mInput.WasKeyPressed(MOIS.KeyCode.KC_F5)) { this.ReloadAllTextures(); }
+            if (mInput.WasKeyPressed(MOIS.KeyCode.KC_SYSRQ)) { this.TakeScreenshot(); }
+            if (mInput.WasKeyPressed(MOIS.KeyCode.KC_ESCAPE)) { this.Shutdown(); }
+        }
 
         protected void CycleTextureFilteringMode()
         {
@@ -188,14 +225,16 @@ namespace Game.BaseApp
                 this.ProcessInput();
                 this.UpdateScene(evt);
 
-                this.mCameraMan.UpdateCamera(evt.timeSinceLastFrame);
+                if (this.mCameraMan != null)
+                    this.mCameraMan.UpdateCamera(evt.timeSinceLastFrame);
+
                 this.mDebugOverlay.Update(evt.timeSinceLastFrame);
                 return true;
             }
             catch (ShutdownException) { this.mShutDown = true; return false; }
         }
 
-        protected void Shutdown() { throw new ShutdownException(); }
+        protected void Shutdown() { throw new ShutdownException(mInput); }
 
         protected virtual void DestroyScene() {}
     }
