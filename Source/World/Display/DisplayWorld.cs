@@ -11,14 +11,12 @@ namespace Game.Display
     class DisplayWorld
     {
         private Dictionary<Vector3, Chunk> mChunkArray;
-        private World mWorld;
         private SceneManager mSceneMgr;
         private Materials mtr;
 
-        public DisplayWorld(ref Dictionary<Vector3, Chunk> chunkArray, World refToWorld, SceneManager sceneMgr)
+        public DisplayWorld(ref Dictionary<Vector3, Chunk> chunkArray, SceneManager sceneMgr)
         {
             this.mChunkArray = chunkArray;
-            this.mWorld = refToWorld;
             this.mSceneMgr = sceneMgr;
             this.mtr = new Materials();
         }
@@ -49,7 +47,7 @@ namespace Game.Display
         public List<GraphicBlock.blockFace> getDisplayableFacesAt(Vector3 chunkCoord, Vector3 blockCoord)
         {
             List<GraphicBlock.blockFace> returnList = new List<GraphicBlock.blockFace>();
-            if (this.mWorld.getBlock(chunkCoord, blockCoord).IsAir()) { return returnList; }
+            if (World.getBlock(chunkCoord, blockCoord).IsAir()) { return returnList; }
 
             Dictionary<GraphicBlock.blockFace, Vector3> coordToCheck = new Dictionary<GraphicBlock.blockFace,Vector3>();
 
@@ -62,7 +60,7 @@ namespace Game.Display
 
 
             foreach(var block in coordToCheck) {
-                if (this.mWorld.getBlock(chunkCoord, block.Value).IsAir()) { returnList.Add(block.Key); }
+                if (World.getBlock(chunkCoord, block.Value).IsAir()) { returnList.Add(block.Key); }
             }
             return returnList;
         }
@@ -74,7 +72,7 @@ namespace Game.Display
             string faceName, faceEntName, cubeNodeName = getCubeNodeName(absoluteCoord);
             SceneNode blockNode;
             Entity ent;
-            string type = this.mWorld.getBlock(chunkCoord, blockCoord).getType();
+            string type = World.getBlock(chunkCoord, blockCoord).getType();
 
 
             if(this.mSceneMgr.HasSceneNode(cubeNodeName)) {

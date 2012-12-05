@@ -25,12 +25,12 @@ namespace Game
         private Camera mCamera; // Replace the camera from BaseApplication
         private CameraMan mCameraMan;
 
-        Dictionary<Vector3, Chunk> mChunkArray;
+        public static Dictionary<Vector3, Chunk> chunkArray;
 
 
         public World() { 
             this.mSpawnPoint = Vector3.ZERO; 
-            this.mChunkArray = new Dictionary<Vector3, Chunk>();
+            chunkArray = new Dictionary<Vector3, Chunk>();
         }
 
         public override bool Startup(StateManager stateMgr){
@@ -43,11 +43,11 @@ namespace Game
 
             GraphicBlock.generateFace();
 
-            this.createWorld();   LogManager.Singleton.DefaultLog.LogMessage("World Created");
+            //this.createWorld();   LogManager.Singleton.DefaultLog.LogMessage("World Created");
             this.generateWorld(); LogManager.Singleton.DefaultLog.LogMessage("World Generated");
             this.populate();      LogManager.Singleton.DefaultLog.LogMessage("World Populated");
 
-            DisplayWorld wrld = new DisplayWorld(ref this.mChunkArray, this, this.mStateMgr.SceneManager);
+            DisplayWorld wrld = new DisplayWorld(ref chunkArray, this.mStateMgr.SceneManager);
 
             wrld.displayAllChunks(); LogManager.Singleton.DefaultLog.LogMessage("World Displayed");
 
@@ -64,13 +64,13 @@ namespace Game
                         chunkPos  = new Vector3(x, y, z);
                         chunkNode = this.mNode.CreateChildSceneNode("chunkNode;" + x + ";" + y + ";" + z); chunkNode.SetPosition(x, y, z);
 
-                        this.mChunkArray.Add(new Vector3(x, y, z), new Chunk(this.mStateMgr.SceneManager, chunkNode));
+                        chunkArray.Add(new Vector3(x, y, z), new Chunk(this.mStateMgr.SceneManager, chunkNode));
                     }
                 }
             }
         }
 
-        private void generateWorld() {} /* Algorithm of terrain generation */
+        private void generateWorld() {new Island(new Vector2(0, 0), this.mNode, this.mStateMgr.SceneManager);} /* Algorithm of terrain generation */
 
         private void populate(){
             this.mCharacMgr = new CharacMgr();
@@ -108,7 +108,7 @@ namespace Game
             this.mCharacMgr.Update(frameTime);
         }
 
-        public Block getBlock(Vector3 chunkPos, Vector3 blockPos)
+        public static Block getBlock(Vector3 chunkPos, Vector3 blockPos)
         {
             int[] chunkPosArray = new int[3] { (int)chunkPos.x, (int)chunkPos.y, (int)chunkPos.z };
             int[] blockPosArray = new int[3] { (int)blockPos.x, (int)blockPos.y, (int)blockPos.z };
@@ -130,7 +130,13 @@ namespace Game
                 chunkPosArray[0] < 0 || chunkPosArray[1] < 0 || chunkPosArray[2] < 0) {
                 return new Block(new Vector3(-5, 6, 0), TypeBlock.AIR);   // Block out of bounds
             }
-            return mChunkArray[chunkPos].mBlockArray[blockPosArray[0], blockPosArray[1], blockPosArray[2]];
+            
+            return chunkArray[chunkPos].mBlockArray[blockPosArray[0], blockPosArray[1], blockPosArray[2]];
+        }
+
+        public static Chunk getChunkAt(Vector3 chunkPos){
+            if(!chunkArray.ContainsKey(chunkPos)){ return null; }
+            return chunkArray[chunkPos];
         }
 
         public override void Shutdown()
