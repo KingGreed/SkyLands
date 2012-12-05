@@ -51,22 +51,25 @@ namespace Game.BaseApp
         }
 
         private void updateKeys(MoisManager input){
-            if (input.IsKeyDown(MOIS.KeyCode.KC_W) || input.IsKeyDown(MOIS.KeyCode.KC_UP))          { this.GoingForward = true; }
-            else { this.GoingForward = false; }
-            if (input.IsKeyDown(MOIS.KeyCode.KC_S) || input.IsKeyDown(MOIS.KeyCode.KC_DOWN))        { this.GoingBack = true; }
-            else { this.GoingBack = false; }
-            if (input.IsKeyDown(MOIS.KeyCode.KC_A) || input.IsKeyDown(MOIS.KeyCode.KC_LEFT))        { this.GoingLeft = true; }
-            else { this.GoingLeft = false; }
-            if (input.IsKeyDown(MOIS.KeyCode.KC_D) || input.IsKeyDown(MOIS.KeyCode.KC_RIGHT))       { this.GoingRight = true; }
-            else { this.GoingRight = false; }
-            if (input.IsKeyDown(MOIS.KeyCode.KC_E) || input.IsKeyDown(MOIS.KeyCode.KC_PGUP))        { this.GoingUp = true; }
-            else { this.GoingUp = false; }
-            if (input.IsKeyDown(MOIS.KeyCode.KC_Q) || input.IsKeyDown(MOIS.KeyCode.KC_PGDOWN))      { this.GoingDown = true; }
-            else { this.GoingDown = false; }
-            if (input.IsKeyDown(MOIS.KeyCode.KC_LSHIFT) || input.IsKeyDown(MOIS.KeyCode.KC_RSHIFT)) { this.FastMove = true; }
-            else { this.FastMove = false; }
+            if (!input.IsKeyDown(MOIS.KeyCode.KC_LCONTROL) && !input.IsKeyDown(MOIS.KeyCode.KC_RCONTROL))
+            {
+                if (input.IsKeyDown(MOIS.KeyCode.KC_W) || input.IsKeyDown(MOIS.KeyCode.KC_UP)) { this.GoingForward = true; }
+                else { this.GoingForward = false; }
+                if (input.IsKeyDown(MOIS.KeyCode.KC_S) || input.IsKeyDown(MOIS.KeyCode.KC_DOWN)) { this.GoingBack = true; }
+                else { this.GoingBack = false; }
+                if (input.IsKeyDown(MOIS.KeyCode.KC_A) || input.IsKeyDown(MOIS.KeyCode.KC_LEFT)) { this.GoingLeft = true; }
+                else { this.GoingLeft = false; }
+                if (input.IsKeyDown(MOIS.KeyCode.KC_D) || input.IsKeyDown(MOIS.KeyCode.KC_RIGHT)) { this.GoingRight = true; }
+                else { this.GoingRight = false; }
+                if (input.IsKeyDown(MOIS.KeyCode.KC_E) || input.IsKeyDown(MOIS.KeyCode.KC_PGUP)) { this.GoingUp = true; }
+                else { this.GoingUp = false; }
+                if (input.IsKeyDown(MOIS.KeyCode.KC_Q) || input.IsKeyDown(MOIS.KeyCode.KC_PGDOWN)) { this.GoingDown = true; }
+                else { this.GoingDown = false; }
+                if (input.IsKeyDown(MOIS.KeyCode.KC_LSHIFT) || input.IsKeyDown(MOIS.KeyCode.KC_RSHIFT)) { this.FastMove = true; }
+                else { this.FastMove = false; }
 
-            this.MouseMovement(input.MouseMoveX, input.MouseMoveY);
+                this.MouseMovement(input.MouseMoveX, input.MouseMoveY);
+            }
         }
 
         public void MouseMovement(int x, int y)

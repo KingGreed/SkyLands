@@ -74,7 +74,7 @@ namespace Game
 
         private void populate(){
             this.mCharacMgr = new CharacMgr();
-            this.mCharacMgr.AddPlayer(new Race(this.mStateMgr.SceneManager, "Sinbad.mesh"), new CharacterInfo("Sinbad", new Vector3(0, 0, -250)));
+            this.mCharacMgr.AddPlayer(new Race(this.mStateMgr.SceneManager, "Sinbad.mesh"), new CharacterInfo("Sinbad", new Vector3(50, 0, -300)));
 
             this.CreateCamera();  this.CreateViewports();
         }
@@ -103,9 +103,9 @@ namespace Game
         public override void Update(float frameTime)
         {
             MoisManager input = this.mStateMgr.Input;
+
             this.mCameraMan.UpdateCamera(frameTime, input);
-            
-            this.mCharacMgr.Update(frameTime);
+            this.mCharacMgr.Update(frameTime, input);
         }
 
         public Block getBlock(Vector3 chunkPos, Vector3 blockPos)

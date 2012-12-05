@@ -1,7 +1,8 @@
 ﻿using System;
 using MOIS;
 
-namespace Game.BaseApp
+
+namespace Game
 {
     public class MoisManager
     {

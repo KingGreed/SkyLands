@@ -4,12 +4,32 @@ using Mogre;
 
 namespace Game.CharacSystem
 {
-    /* Needs to be completed for multiplayer *///Not needed
     class Player : Character
     {
-        /* Constructors of Player has to be called by the CharacMgr *///Not needed or created doc comments. But still not needed
-        public Player(Race charac, CharacterInfo info) : base(charac, info)
+        public Player(Race race, CharacterInfo info) : base(race, info)
         {
+        }
+
+        public void Update(float frameTime, MoisManager input)
+        {
+            Vector3 direction = new Vector3();
+
+            if (input.IsKeyDown(MOIS.KeyCode.KC_LCONTROL) || input.IsKeyDown(MOIS.KeyCode.KC_RCONTROL))
+            {
+                if (input.IsKeyDown(MOIS.KeyCode.KC_W) || input.IsKeyDown(MOIS.KeyCode.KC_UP))    { direction.z = 1; }
+                if (input.IsKeyDown(MOIS.KeyCode.KC_S) || input.IsKeyDown(MOIS.KeyCode.KC_DOWN))  { direction.z = -1; }
+                if (input.IsKeyDown(MOIS.KeyCode.KC_A) || input.IsKeyDown(MOIS.KeyCode.KC_LEFT))  { direction.x = 1; }
+                if (input.IsKeyDown(MOIS.KeyCode.KC_D) || input.IsKeyDown(MOIS.KeyCode.KC_RIGHT)) { direction.x = -1; }
+            }
+            
+            base.Move(direction);
+            
+            base.Update(frameTime);
+        }
+
+        private void UpdateCameraGoal(float deltaYaw, float deltaPitch, float deltaZoom)
+        {
+
         }
     }
 }

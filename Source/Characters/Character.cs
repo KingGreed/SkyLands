@@ -25,25 +25,31 @@ namespace Game.CharacSystem
         protected Race mRace;
         protected CharacterInfo mInfo;
 
-        public Character(Race charac, CharacterInfo info)
+        public Character(Race race, CharacterInfo info)
         {
-            this.mRace = charac;
+            this.mRace = race;
             this.mInfo = info;
 
-            this.mRace.Node.SetPosition(info.spawnPoint.x, info.spawnPoint.y, info.spawnPoint.z);
+            this.mRace.SetPosition(info.spawnPoint);
         }
 
         public void Update(float frameTime)
         {
-            this.mRace.UpdateAnimation(frameTime);
+            this.mRace.Update(frameTime);
         }
 
-        public Vector3 Move(Vector3 direction)  // Return the vector of the effective move
+        protected void Move(Vector3 direction)
         {
-            return Vector3.ZERO;
+            mRace.ChangeDirection(direction);
+
+            if (direction.z != 0 && mRace.CurrentAnim != Race.AnimType.run)
+                mRace.ChangeAnimation(Race.AnimType.run);
+
+            if (direction == Vector3.ZERO && mRace.CurrentAnim != Race.AnimType.idle)
+                mRace.ChangeAnimation(Race.AnimType.idle);
         }
 
-        public void Jump()
+        protected void Jump()
         {
 
         }
