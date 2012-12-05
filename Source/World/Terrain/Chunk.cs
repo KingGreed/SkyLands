@@ -9,7 +9,7 @@ namespace Game.Terrain
         SceneNode mNode { get; set; }
         public Block[, ,] mBlockArray;
 
-        public Chunk(ref SceneManager sceneMgr, SceneNode chunkNode)
+        public Chunk(SceneManager sceneMgr, SceneNode chunkNode)
         {
             this.mNode = chunkNode;
             this.mBlockArray = new Block[World.CHUNK_SIDE, World.CHUNK_SIDE, World.CHUNK_SIDE];

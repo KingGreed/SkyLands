@@ -15,7 +15,7 @@ namespace Game.Display
         private SceneManager mSceneMgr;
         private Materials mtr;
 
-        public DisplayWorld(ref Dictionary<Vector3, Chunk> chunkArray, World refToWorld, ref SceneManager sceneMgr)
+        public DisplayWorld(ref Dictionary<Vector3, Chunk> chunkArray, World refToWorld, SceneManager sceneMgr)
         {
             this.mChunkArray = chunkArray;
             this.mWorld = refToWorld;
@@ -23,13 +23,13 @@ namespace Game.Display
             this.mtr = new Materials();
         }
 
-        public void DisplayAllChunks(){
+        public void displayAllChunks(){
             foreach (var chunk in this.mChunkArray) {
-	            this.DisplayChunkAt(chunk.Key);
+	            this.displayChunkAt(chunk.Key);
 	        }
         }
 
-        public void DisplayChunkAt(Vector3 coord) {
+        public void displayChunkAt(Vector3 coord) {
 
             if(!this.mChunkArray.ContainsKey(coord)){
                 LogManager.Singleton.DefaultLog.LogMessage("Key : " + coord.ToString() + " was not found in mChunkArray");

@@ -32,7 +32,7 @@ namespace Game.Terrain
                         chunkNode = this.mNode.CreateChildSceneNode("chunkNode;" + chunkPos.x + ";" + chunkPos.y + ";" + chunkPos.z);
                         chunkNode.SetPosition(chunkPos.x, chunkPos.y, chunkPos.z);
 
-                        this.mChunkList.Add(new Vector3(chunkPos.x, chunkPos.y, chunkPos.z), new Chunk(ref this.mSceneMgr, chunkNode));
+                        this.mChunkList.Add(new Vector3(chunkPos.x, chunkPos.y, chunkPos.z), new Chunk(this.mSceneMgr, chunkNode));
                     }
                 }
             }

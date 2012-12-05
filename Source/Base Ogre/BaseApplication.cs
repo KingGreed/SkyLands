@@ -225,8 +225,7 @@ namespace Game.BaseApp
                 this.ProcessInput();
                 this.UpdateScene(evt);
 
-                if (this.mCameraMan != null)
-                    this.mCameraMan.UpdateCamera(evt.timeSinceLastFrame);
+                if (this.mCameraMan != null) { this.mCameraMan.UpdateCamera(evt.timeSinceLastFrame); }
 
                 this.mDebugOverlay.Update(evt.timeSinceLastFrame);
                 return true;

@@ -60,7 +60,6 @@
     <Compile Include="Source\Characters\Character.cs" />
     <Compile Include="Source\Characters\NonPlayer.cs" />
     <Compile Include="Source\Characters\Player.cs" />
-    <Compile Include="Source\States\GameState.cs" />
     <Compile Include="Source\States\State.cs" />
     <Compile Include="Source\States\StateManager.cs" />
     <Compile Include="Source\World\Display\DisplayWorld.cs" />

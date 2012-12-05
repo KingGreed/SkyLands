@@ -5,11 +5,12 @@ using Mogre;
 using Game.CharacSystem;
 using Game.Terrain;
 using Game.Display;
-
+using Game.States;
+using Game.BaseApp;
 
 namespace Game
 {
-    public class World
+    public class World : State
     {
         public const int NUMBER_CHUNK_X = 6;
         public const int NUMBER_CHUNK_Y = 2;
@@ -17,54 +18,94 @@ namespace Game
         public const int CHUNK_SIDE = 16;
         public const int CUBE_SIDE = 50;
 
-        public SceneNode mNode { get; private set; }
+        private Vector3 mSpawnPoint;
+        private SceneNode mNode;
+
+        private CharacMgr mCharacMgr;
+        private Camera mCamera; // Replace the camera from BaseApplication
+        private CameraMan mCameraMan;
+
         Dictionary<Vector3, Chunk> mChunkArray;
 
-        public Vector3 mSpawnPoint { get; private set; }
 
-
-        public World(SceneManager sceneMgr)
-        {
-            mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("TerrainNode");
-            mSpawnPoint = Vector3.ZERO;
-
+        public World() { 
+            this.mSpawnPoint = Vector3.ZERO; 
             this.mChunkArray = new Dictionary<Vector3, Chunk>();
-            LogManager.Singleton.DefaultLog.LogMessage("World Init done");
-
-            CreateWorld(ref sceneMgr);
-            LogManager.Singleton.DefaultLog.LogMessage("World Created");
-
-            GenerateWorld();
-            LogManager.Singleton.DefaultLog.LogMessage("World Generated");
-
-            DisplayWorld wrld = new DisplayWorld(ref this.mChunkArray, this, ref sceneMgr);
-            wrld.DisplayAllChunks();
-            LogManager.Singleton.DefaultLog.LogMessage("World Displayed");
         }
 
-        private void CreateWorld(ref SceneManager sceneMgr)
+        public override bool Startup(StateManager stateMgr){
+            if (this.mIsStartedUp) { return false; }
+
+            this.mStateMgr    = stateMgr;
+            this.mIsStartedUp = true;
+
+            this.mNode        = this.mStateMgr.SceneManager.RootSceneNode.CreateChildSceneNode("TerrainNode"); 
+
+            GraphicBlock.generateFace();
+
+            this.createWorld();   LogManager.Singleton.DefaultLog.LogMessage("World Created");
+            this.generateWorld(); LogManager.Singleton.DefaultLog.LogMessage("World Generated");
+            this.populate();      LogManager.Singleton.DefaultLog.LogMessage("World Populated");
+
+            DisplayWorld wrld = new DisplayWorld(ref this.mChunkArray, this, this.mStateMgr.SceneManager);
+
+            wrld.displayAllChunks(); LogManager.Singleton.DefaultLog.LogMessage("World Displayed");
+
+            return true;
+        }
+
+        private void createWorld()
         {
             Vector3 chunkPos;
             SceneNode chunkNode;
-            for (int x = 0; x < NUMBER_CHUNK_X; x++)
-            {
-                for (int y = 0; y < NUMBER_CHUNK_Y; y++)
-                {
-                    for (int z = 0; z < NUMBER_CHUNK_Z; z++)
-                    {
+            for (int x = 0; x < NUMBER_CHUNK_X; x++) {
+                for (int y = 0; y < NUMBER_CHUNK_Y; y++) {
+                    for (int z = 0; z < NUMBER_CHUNK_Z; z++) {
                         chunkPos  = new Vector3(x, y, z);
-                        chunkNode = this.mNode.CreateChildSceneNode("chunkNode;" + x + ";" + y + ";" + z);
-                        chunkNode.SetPosition(x, y, z);
+                        chunkNode = this.mNode.CreateChildSceneNode("chunkNode;" + x + ";" + y + ";" + z); chunkNode.SetPosition(x, y, z);
 
-                        this.mChunkArray.Add(new Vector3(x, y, z), new Chunk(ref sceneMgr, chunkNode));
+                        this.mChunkArray.Add(new Vector3(x, y, z), new Chunk(this.mStateMgr.SceneManager, chunkNode));
                     }
                 }
             }
         }
 
-        /* Algorithm which modify the type of the blocks */
-        private void GenerateWorld()
+        private void generateWorld() {} /* Algorithm of terrain generation */
+
+        private void populate(){
+            this.mCharacMgr = new CharacMgr();
+            this.mCharacMgr.AddPlayer(new Race(this.mStateMgr.SceneManager, "Sinbad.mesh"), new CharacterInfo("Sinbad", new Vector3(0, 0, -250)));
+
+            this.CreateCamera();  this.CreateViewports();
+        }
+
+        private void CreateCamera()
         {
+            this.mCamera = this.mStateMgr.SceneManager.CreateCamera("DebugCam");
+
+            this.mCamera.Position = new Vector3(0, 100, 250);
+
+            this.mCamera.LookAt(new Vector3(0, 50, 0));
+            this.mCamera.NearClipDistance = 5;
+            this.mCamera.FarClipDistance = 3000;
+
+            this.mCameraMan = new CameraMan(this.mCamera);
+        }
+
+        private void CreateViewports()
+        {
+            var vp = this.mStateMgr.Window.AddViewport(mCamera);
+            vp.BackgroundColour = ColourValue.Black;
+
+            this.mCamera.AspectRatio = (vp.ActualWidth / vp.ActualHeight);
+        }
+
+        public override void Update(float frameTime)
+        {
+            MoisManager input = this.mStateMgr.Input;
+            this.mCameraMan.UpdateCamera(frameTime, input);
+            
+            this.mCharacMgr.Update(frameTime);
         }
 
         public Block getBlock(Vector3 chunkPos, Vector3 blockPos)
@@ -90,6 +131,14 @@ namespace Game
                 return new Block(new Vector3(-5, 6, 0), TypeBlock.AIR);   // Block out of bounds
             }
             return mChunkArray[chunkPos].mBlockArray[blockPosArray[0], blockPosArray[1], blockPosArray[2]];
+        }
+
+        public override void Shutdown()
+        {
+            if (this.mStateMgr == null) { return; }
+
+            this.mStateMgr = null;
+            this.mIsStartedUp = false;
         }
     }
 }

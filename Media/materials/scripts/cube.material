@@ -21,7 +21,7 @@ material cube/grass/top {
 			ambient 1.0 1.0 1.0
             diffuse 1.0 1.0 1.0
 
-			texture_unit { texture grass2.jpg 2d }
+			texture_unit { texture grass2.jpg }
 		}
 	}
 }
