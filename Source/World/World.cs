@@ -17,13 +17,11 @@ namespace Game
         public const int NUMBER_CHUNK_Z = 6;
         public const int CHUNK_SIDE = 16;
         public const int CUBE_SIDE = 50;
+        private const string CAMERA_NAME = "PlayerCam";
 
         private Vector3 mSpawnPoint;
         private SceneNode mNode;
-
         private CharacMgr mCharacMgr;
-        private Camera mCamera; // Replace the camera from BaseApplication
-        private CameraMan mCameraMan;
 
         Dictionary<Vector3, Chunk> mChunkArray;
 
@@ -73,39 +71,32 @@ namespace Game
         private void generateWorld() {} /* Algorithm of terrain generation */
 
         private void populate(){
-            this.mCharacMgr = new CharacMgr();
-            this.mCharacMgr.AddPlayer(new Race(this.mStateMgr.SceneManager, "Sinbad.mesh"), new CharacterInfo("Sinbad", new Vector3(50, 0, -300)));
+            this.CreateCamera();    this.CreateViewports();
 
-            this.CreateCamera();  this.CreateViewports();
+            this.mCharacMgr = new CharacMgr();
+            this.mCharacMgr.AddPlayer(new Race(this.mStateMgr.SceneManager, "Sinbad.mesh"), new CharacterInfo("Sinbad", new Vector3(50, 1600, 10)), this.mStateMgr.SceneManager, CAMERA_NAME);
         }
 
         private void CreateCamera()
         {
-            this.mCamera = this.mStateMgr.SceneManager.CreateCamera("DebugCam");
-
-            this.mCamera.Position = new Vector3(0, 100, 250);
-
-            this.mCamera.LookAt(new Vector3(0, 50, 0));
-            this.mCamera.NearClipDistance = 5;
-            this.mCamera.FarClipDistance = 3000;
-
-            this.mCameraMan = new CameraMan(this.mCamera);
+            Camera cam = this.mStateMgr.SceneManager.CreateCamera(CAMERA_NAME);
+            cam.NearClipDistance = 5;
+            cam.FarClipDistance = 3000;
         }
 
         private void CreateViewports()
         {
-            var vp = this.mStateMgr.Window.AddViewport(mCamera);
+            Camera cam = this.mStateMgr.SceneManager.GetCamera(CAMERA_NAME);
+            var vp = this.mStateMgr.Window.AddViewport(cam);
             vp.BackgroundColour = ColourValue.Black;
 
-            this.mCamera.AspectRatio = (vp.ActualWidth / vp.ActualHeight);
+            // Alter the camera aspect ratio to match the viewport
+            cam.AspectRatio = (vp.ActualWidth / vp.ActualHeight);
         }
 
         public override void Update(float frameTime)
         {
-            MoisManager input = this.mStateMgr.Input;
-
-            this.mCameraMan.UpdateCamera(frameTime, input);
-            this.mCharacMgr.Update(frameTime, input);
+            this.mCharacMgr.Update(frameTime, this.mStateMgr.Input);
         }
 
         public Block getBlock(Vector3 chunkPos, Vector3 blockPos)

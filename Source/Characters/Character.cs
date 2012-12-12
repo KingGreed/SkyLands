@@ -30,7 +30,7 @@ namespace Game.CharacSystem
             this.mRace = race;
             this.mInfo = info;
 
-            this.mRace.SetPosition(info.spawnPoint);
+            this.SetFeetToPos(this.mInfo.spawnPoint);
         }
 
         public void Update(float frameTime)
@@ -52,6 +52,12 @@ namespace Game.CharacSystem
         protected void Jump()
         {
 
+        }
+
+        /* Use this function if the character is changing of height */
+        private void SetFeetToPos(Vector3 pos)
+        {
+            this.mRace.Node.SetPosition(pos.x, pos.y + mRace.Height / 2 + 4, pos.z);
         }
     }
 }

@@ -7,6 +7,9 @@ namespace Game.CharacSystem
 {
     class Race
     {
+        private const float WALK_SPEED = 100.0f;
+        private const float FADE_SPEED = 7.5f;        
+        
         public enum AnimType { none, idle, run, jump, fall, land, dance }
         private SceneNode mNode;
         private AnimationStateSet mAnimSet;
@@ -14,12 +17,12 @@ namespace Game.CharacSystem
         private List<string> mFadingIn;
         private List<string> mFadingOut;
         private AnimType mCurrentAnim;
-        private const float WALK_SPEED = 100.0f;
-        private const float FADE_SPEED = 7.5f;
         private Vector3 mGoalDirection;   // Specify in which direction, the node has to be moved
+        private float mHeight;  // Height of the mesh use to place the camera at head level
 
-        public AnimType  CurrentAnim { get { return mCurrentAnim; } }
-        public SceneNode Node { get { return mNode; } }
+        public AnimType CurrentAnim { get { return this.mCurrentAnim; } }
+        public SceneNode Node       { get { return this.mNode; } }
+        public float Height         { get { return this.mHeight; } }
 
         public Race(SceneManager sceneMgr, string meshName)
         {
@@ -27,7 +30,8 @@ namespace Game.CharacSystem
 
             this.mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("PlayerNd");
             this.mNode.AttachObject(sinbad);
-            this.mNode.Scale(17, 17, 17);
+            this.mNode.Scale(8, 8, 8);
+            this.mHeight = sinbad.BoundingBox.Size.y * this.mNode.GetScale().y;
 
             sinbad.Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
             this.mAnimSet = sinbad.AllAnimationStates;
@@ -75,14 +79,10 @@ namespace Game.CharacSystem
             return names;   // Return an empty list if anim == AnimType.none
         }
 
-        public void SetPosition(Vector3 pos)
-        {
-            this.mNode.SetPosition(pos.x, pos.y, pos.z);
-        }
-
         /* Doesn't rotate the node but specifiy if the character will move forwards, to the left, etc */
         public void ChangeDirection(Vector3 direction)
         {
+            direction.Normalise();
             this.mGoalDirection = direction;
         }
 
