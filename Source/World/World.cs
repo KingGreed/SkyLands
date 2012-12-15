@@ -17,7 +17,6 @@ namespace Game
         public const int NUMBER_CHUNK_Z = 6;
         public const int CHUNK_SIDE = 16;
         public const int CUBE_SIDE = 50;
-        private const string CAMERA_NAME = "PlayerCam";
 
         private Vector3 mSpawnPoint;
         private SceneNode mNode;
@@ -26,15 +25,15 @@ namespace Game
         Dictionary<Vector3, Chunk> mChunkArray;
 
 
-        public World() { 
+        public World(StateManager stateMgr) : base(stateMgr)
+        { 
             this.mSpawnPoint = Vector3.ZERO; 
             this.mChunkArray = new Dictionary<Vector3, Chunk>();
         }
 
-        public override bool Startup(StateManager stateMgr){
+        public override bool Startup(){
             if (this.mIsStartedUp) { return false; }
 
-            this.mStateMgr    = stateMgr;
             this.mIsStartedUp = true;
 
             this.mNode        = this.mStateMgr.SceneManager.RootSceneNode.CreateChildSceneNode("TerrainNode"); 
@@ -71,32 +70,20 @@ namespace Game
         private void generateWorld() {} /* Algorithm of terrain generation */
 
         private void populate(){
-            this.CreateCamera();    this.CreateViewports();
-
             this.mCharacMgr = new CharacMgr();
-            this.mCharacMgr.AddPlayer(new Race(this.mStateMgr.SceneManager, "Sinbad.mesh"), new CharacterInfo("Sinbad", new Vector3(50, 1600, 10)), this.mStateMgr.SceneManager, CAMERA_NAME);
+            this.mCharacMgr.AddPlayer(new Race(this.mStateMgr.SceneManager, "Sinbad.mesh"),
+                                      new CharacterInfo("Sinbad", new Vector3(50, 1600, 10)),
+                                      this.mStateMgr.Camera);
         }
 
-        private void CreateCamera()
-        {
-            Camera cam = this.mStateMgr.SceneManager.CreateCamera(CAMERA_NAME);
-            cam.NearClipDistance = 5;
-            cam.FarClipDistance = 3000;
-        }
-
-        private void CreateViewports()
-        {
-            Camera cam = this.mStateMgr.SceneManager.GetCamera(CAMERA_NAME);
-            var vp = this.mStateMgr.Window.AddViewport(cam);
-            vp.BackgroundColour = ColourValue.Black;
-
-            // Alter the camera aspect ratio to match the viewport
-            cam.AspectRatio = (vp.ActualWidth / vp.ActualHeight);
-        }
+        public override void Hide() { }
+        public override void Show() { }
 
         public override void Update(float frameTime)
         {
             this.mCharacMgr.Update(frameTime, this.mStateMgr.Input);
+
+            if (this.mStateMgr.Input.IsKeyDown(MOIS.KeyCode.KC_ESCAPE)) { this.mStateMgr.RequestStatePop(); }    // Return to the MenuState
         }
 
         public Block getBlock(Vector3 chunkPos, Vector3 blockPos)
@@ -126,8 +113,6 @@ namespace Game
 
         public override void Shutdown()
         {
-            if (this.mStateMgr == null) { return; }
-
             this.mStateMgr = null;
             this.mIsStartedUp = false;
         }

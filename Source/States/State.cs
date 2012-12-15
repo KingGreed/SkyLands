@@ -8,17 +8,21 @@ namespace Game.States
         protected StateManager mStateMgr;
         protected bool mIsStartedUp;
         
-        public State()
+        public State(StateManager stateMgr)
         {
-            this.mStateMgr = null;
+            this.mStateMgr = stateMgr;
             this.mIsStartedUp = false;
         }
 
         /* A State is started up in the StateManager */
-        public abstract bool Startup(StateManager stateMgr);
+        public abstract bool Startup();
 
-        public abstract void Shutdown();
+        public abstract void Hide();
+
+        public abstract void Show();
 
         public abstract void Update(float frameTime);
+
+        public abstract void Shutdown();
     }
 }

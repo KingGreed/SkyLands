@@ -3,7 +3,6 @@ using Mogre;
 
 using Game.BaseApp;
 
-
 namespace Game.CharacSystem
 {
     class Player : Character
@@ -19,13 +18,13 @@ namespace Game.CharacSystem
         private SceneNode mCamPitchNode = null;
         private CameraMan mCameraMan = null;
 
-        public Player(Race race, CharacterInfo info, SceneManager sceneMgr = null, string cameraName = null) : base(race, info)
+        public Player(Race race, CharacterInfo info, Camera cam = null) : base(race, info)
         {
-            this.mIsMainPlayer = sceneMgr != null && cameraName != null;
+            this.mIsMainPlayer = cam != null;
 
             if (this.mIsMainPlayer)
             {
-                this.mPlayerCam = sceneMgr.GetCamera(cameraName);
+                this.mPlayerCam = cam;
                 this.ChangeCameraMode(CameraView.FIRST_PERSON, true);
             }
         }

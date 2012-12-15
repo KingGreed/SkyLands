@@ -4,13 +4,7 @@ using Mogre;
 
 namespace Game.BaseApp
 {
-    class ShutdownException : Exception
-    {
-        public ShutdownException(MoisManager input)
-        {
-            input.Shutdown();
-        }
-    }
+    class ShutdownException : Exception {}
     
     public abstract class BaseApplication
     {
@@ -88,7 +82,7 @@ namespace Game.BaseApp
 
         protected virtual bool Configure()
         {
-            if (this.mRoot.ShowConfigDialog()) { this.mWindow = this.mRoot.Initialise(true, "TutorialApplication Render Window"); return true; }
+            if (this.mRoot.ShowConfigDialog()) { this.mWindow = this.mRoot.Initialise(true, "SkyLands"); return true; }
             else { return false; }
         }
 
@@ -233,8 +227,12 @@ namespace Game.BaseApp
             catch (ShutdownException) { this.mShutDown = true; return false; }
         }
 
-        protected void Shutdown() { throw new ShutdownException(mInput); }
+        protected void Shutdown() { throw new ShutdownException(); }
 
-        protected virtual void DestroyScene() {}
+        protected virtual void DestroyScene()
+        {
+            this.mInput.Shutdown();
+            this.mRoot.Dispose();
+        }
     }
 }

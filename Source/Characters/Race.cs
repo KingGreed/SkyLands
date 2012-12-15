@@ -30,7 +30,7 @@ namespace Game.CharacSystem
 
             this.mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("PlayerNd");
             this.mNode.AttachObject(sinbad);
-            this.mNode.Scale(8, 8, 8);
+            this.mNode.Scale(9, 10, 9);
             this.mHeight = sinbad.BoundingBox.Size.y * this.mNode.GetScale().y;
 
             sinbad.Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
