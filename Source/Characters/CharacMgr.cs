@@ -13,9 +13,9 @@ namespace Game.CharacSystem
         {
         }
 
-        public void AddPlayer(Race race, CharacterInfo info, Camera cam = null)
+        public void AddPlayer(Race race, CharacterInfo info, MoisManager input = null,  Camera cam = null)
         {
-            this.mCharacList.Add(new Player(race, info, cam));
+            this.mCharacList.Add(new Player(race, info, input, cam));
 
             LogManager.Singleton.DefaultLog.LogMessage("Player added");
         }
@@ -25,18 +25,14 @@ namespace Game.CharacSystem
             return this.mCharacList[index];
         }
 
-        public void Update(float frameTime, MoisManager input)
+        public void Update(float frameTime)
         {
             for (int i = 0; i < this.mCharacList.Count; i++)
             {
                 if (this.mCharacList[i].GetType() == typeof(Player))
                 {
                     Player player = (Player)this.mCharacList[i];
-
-                    if (i == 0)
-                        player.Update(frameTime, input);
-                    else
-                        player.Update(frameTime);
+                    player.Update(frameTime);
                 }
                 else
                 {

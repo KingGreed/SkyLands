@@ -1,110 +1,129 @@
 ﻿using System;
 using Mogre;
 
-using Game.BaseApp;
-
 namespace Game.CharacSystem
 {
     class Player : Character
     {
-        private const float YAW_SENSIVITY = 0.1f;
-        private const float PITCH_SENSIVITY = 0.15f;
+        private MainPlayerCarac mMainPlayerCarac;
 
-        private enum CameraView { DEBUG, FIRST_PERSON, THIRD_PERSON }
-        private CameraView mCamView;
-        private bool mIsMainPlayer;
+        public MainPlayerCarac MainPlayerCarac { get { return this.mMainPlayerCarac; } }
 
-        private Camera mPlayerCam = null;
-        private SceneNode mCamPitchNode = null;
-        private CameraMan mCameraMan = null;
-
-        public Player(Race race, CharacterInfo info, Camera cam = null) : base(race, info)
+        public Player(Race race, CharacterInfo info, MoisManager  input = null, Camera cam = null) : base(race, info)
         {
-            this.mIsMainPlayer = cam != null;
+            this.mMainPlayerCarac = new MainPlayerCarac(input, cam);
 
-            if (this.mIsMainPlayer)
-            {
-                this.mPlayerCam = cam;
-                this.ChangeCameraMode(CameraView.FIRST_PERSON, true);
-            }
+            if (this.mMainPlayerCarac.IsMainPlayer)
+                this.ChangeCameraMode(MainPlayerCarac.CamView.FIRST_PERSON, true);
         }
 
-        public void Update(float frameTime, MoisManager input)
+        public override void Update(float frameTime)
         {
-            if (input.IsKeyDown(MOIS.KeyCode.KC_F1))      { this.ChangeCameraMode(CameraView.DEBUG); }
-            else if (input.IsKeyDown(MOIS.KeyCode.KC_F2)) { this.ChangeCameraMode(CameraView.FIRST_PERSON); }
-            //else if (input.IsKeyDown(MOIS.KeyCode.KC_F3)) { this.ChangeCameraMode(CameraView.THIRD_PERSON); }
+            if (this.mMainPlayerCarac.IsMainPlayer) { this.ProcessMainPlayerUpdate(frameTime); }
+        }
 
-            this.ProcessMouseInput(frameTime, input);
+        #region MainPlayer
+        private void ProcessMainPlayerUpdate(float frameTime)
+        {
+            MoisManager input = this.mMainPlayerCarac.Input;
 
-            Vector3 moveDirection = new Vector3();
-
-            if (this.mCamView == CameraView.DEBUG)  // Don't move the character anymore in debug camera
-                this.mCameraMan.UpdateCamera(frameTime, input);
-            else
+            if (input.WasKeyPressed(MOIS.KeyCode.KC_F1))    // Switch debug mode
             {
-                if (input.IsKeyDown(MOIS.KeyCode.KC_W) || input.IsKeyDown(MOIS.KeyCode.KC_UP))    { moveDirection.z = 1; }
-                if (input.IsKeyDown(MOIS.KeyCode.KC_S) || input.IsKeyDown(MOIS.KeyCode.KC_DOWN))  { moveDirection.z = -1; }
-                if (input.IsKeyDown(MOIS.KeyCode.KC_A) || input.IsKeyDown(MOIS.KeyCode.KC_LEFT))  { moveDirection.x = 1; }
-                if (input.IsKeyDown(MOIS.KeyCode.KC_D) || input.IsKeyDown(MOIS.KeyCode.KC_RIGHT)) { moveDirection.x = -1; }
+                this.mMainPlayerCarac.IsDebugMode = !this.mMainPlayerCarac.IsDebugMode;
+
+                if (this.mMainPlayerCarac.IsDebugMode)
+                    this.ChangeCameraMode(MainPlayerCarac.CamView.DEBUG);
+                else
+                    this.ChangeCameraMode(MainPlayerCarac.CamView.FIRST_PERSON);
+            }
+            if (!this.mMainPlayerCarac.IsDebugMode && input.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Middle))  // Switch camera view
+            {
+                if (this.mMainPlayerCarac.CameraView == CharacSystem.MainPlayerCarac.CamView.FIRST_PERSON)
+                    this.ChangeCameraMode(CharacSystem.MainPlayerCarac.CamView.THIRD_PERSON);
+                else
+                    this.ChangeCameraMode(CharacSystem.MainPlayerCarac.CamView.FIRST_PERSON);
             }
 
-            base.Move(moveDirection);
+            this.mMainPlayerCarac.IsPlayerMoving = !this.mMainPlayerCarac.IsDebugMode || input.IsKeyDown(MOIS.KeyCode.KC_LCONTROL) || input.IsKeyDown(MOIS.KeyCode.KC_RCONTROL);
+
+            if (!this.mMainPlayerCarac.IsPlayerMoving)
+                this.ProcessDebugUpdate(frameTime);
+            else    // Move the player if we are in debug view with ctrl pressed or if we aren't in debug view
+            {
+                float yawValue   = -input.MouseMoveX * frameTime * MainPlayerCarac.YAW_SENSIVITY;
+                float pitchValue = -input.MouseMoveY * frameTime * MainPlayerCarac.PITCH_SENSIVITY;
+
+                if (this.mMainPlayerCarac.CameraView == MainPlayerCarac.CamView.THIRD_PERSON)
+                    this.ProcessThirdPersonUpdate(yawValue, pitchValue);
+                else
+                    this.ProcessFirstPersonUpdate(yawValue, pitchValue);
+            }
+
             base.Update(frameTime);
         }
 
-        private void ProcessMouseInput(float frameTime, MoisManager input)
+        private void ProcessDebugUpdate(float frameTime)
         {
-            if (this.mCamView == CameraView.DEBUG) { this.mCameraMan.MouseMovement(input.MouseMoveX, input.MouseMoveY); }
-
-            else if (this.mCamView == CameraView.FIRST_PERSON)
-            {
-                this.mRace.Node.Yaw(-input.MouseMoveX * frameTime * YAW_SENSIVITY);
-
-                this.mCamPitchNode.Pitch(input.MouseMoveY * frameTime * PITCH_SENSIVITY);
-
-                float pitchAngle = 2 * new Degree(Mogre.Math.ACos(this.mCamPitchNode.Orientation.w)).ValueAngleUnits;
-                float pitchAngleSign = this.mCamPitchNode.Orientation.x;
-
-                // Limit the pitch between -90 degrees and +90 degrees
-                if (pitchAngle > 90.0f)
-                {
-                    if (pitchAngleSign > 0) { this.mCamPitchNode.SetOrientation(Mogre.Math.Sqrt(0.5f), Mogre.Math.Sqrt(0.5f), 0, 0); }
-                    else if (pitchAngleSign < 0) { this.mCamPitchNode.SetOrientation(Mogre.Math.Sqrt(0.5f), -Mogre.Math.Sqrt(0.5f), 0, 0); }
-                }
-            }
-            else if (this.mCamView == CameraView.THIRD_PERSON) { }
+            MoisManager input = this.mMainPlayerCarac.Input;            
+            
+            this.mMainPlayerCarac.CameraMan.MouseMovement(input.MouseMoveX, input.MouseMoveY);
+            this.mMainPlayerCarac.CameraMan.UpdateCamera(frameTime, input);
         }
 
-        private void ChangeCameraMode(CameraView mode, bool firstInit = false)
+        private void ProcessFirstPersonUpdate(float yawValue, float pitchValue)
         {
-            if (this.mCamView == mode && !firstInit)
+            MoisManager input = this.mMainPlayerCarac.Input;
+
+            /* Move the player */
+            Vector3 moveDirection = new Vector3();
+            if (input.IsKeyDown(MOIS.KeyCode.KC_W) || input.IsKeyDown(MOIS.KeyCode.KC_UP))    { moveDirection.z = 1; }
+            if (input.IsKeyDown(MOIS.KeyCode.KC_S) || input.IsKeyDown(MOIS.KeyCode.KC_DOWN))  { moveDirection.z = -1; }
+            if (input.IsKeyDown(MOIS.KeyCode.KC_A) || input.IsKeyDown(MOIS.KeyCode.KC_LEFT))  { moveDirection.x = 1; }
+            if (input.IsKeyDown(MOIS.KeyCode.KC_D) || input.IsKeyDown(MOIS.KeyCode.KC_RIGHT)) { moveDirection.x = -1; }
+
+            /* Yaw the player */
+            this.mMovementInfo.YawValue = yawValue;
+
+            /* Pitch the camera */
+            Radian newPitch = Mogre.Math.Abs(pitchValue + this.mMainPlayerCarac.CamPitchNode.Orientation.Pitch);
+            if (newPitch < new Radian(Mogre.Math.PI / 2 - MainPlayerCarac.PITCH_OFFSET) || newPitch > new Radian(Mogre.Math.PI / 2 + MainPlayerCarac.PITCH_OFFSET))
+                this.mMainPlayerCarac.CamPitchNode.Pitch(pitchValue);
+            this.mMovementInfo.MoveDirection = moveDirection;
+        }
+
+        private void ProcessThirdPersonUpdate(float yawValue, float pitchValue) { }
+
+        private void ChangeCameraMode(MainPlayerCarac.CamView mode, bool firstInit = false)
+        {
+            if (!this.mMainPlayerCarac.IsMainPlayer || (this.mMainPlayerCarac.CameraView == mode && !firstInit))
                 return;
             
-            this.mCamView = mode;
+            this.mMainPlayerCarac.CameraView = mode;
 
-            if (this.mCamView == CameraView.DEBUG)
+            if (this.mMainPlayerCarac.CameraView == MainPlayerCarac.CamView.DEBUG)
             {
                 this.mRace.Node.SetVisible(true);
 
-                this.mPlayerCam.DetachFromParent();
-                this.mPlayerCam.Position += this.mRace.Node.Position;
-                this.mCameraMan = new CameraMan(this.mPlayerCam);
+                this.mMainPlayerCarac.Camera.DetachFromParent();
+                this.mMainPlayerCarac.Camera.Position += this.mRace.Node.Position;
+                this.mMainPlayerCarac.CameraMan = new Game.BaseApp.CameraMan(this.mMainPlayerCarac.Camera);
             }
-            else if (this.mCamView == CameraView.FIRST_PERSON)
+            else if (this.mMainPlayerCarac.CameraView == MainPlayerCarac.CamView.FIRST_PERSON)
             {
                 this.mRace.Node.SetVisible(false);
 
-                this.mCamPitchNode = null;
-                this.mCamPitchNode = this.mRace.Node.CreateChildSceneNode();
-                this.mCamPitchNode.AttachObject(this.mPlayerCam);
+                this.mMainPlayerCarac.CamYawNode = this.mRace.Node.CreateChildSceneNode();
 
-                this.mPlayerCam.SetPosition(0, this.mRace.Height / 2 - 10, 0);  // Camera is set at eyes level
-                this.mPlayerCam.Orientation = new Quaternion(1, 0, 0, 0);
-                this.mPlayerCam.Yaw(new Degree(180));
+                this.mMainPlayerCarac.CamPitchNode = this.mMainPlayerCarac.CamYawNode.CreateChildSceneNode();
+                this.mMainPlayerCarac.CamPitchNode.AttachObject(this.mMainPlayerCarac.Camera);
+
+                this.mMainPlayerCarac.Camera.SetPosition(0, this.mRace.Height / 2 - 10, 0);  // Camera is set at eyes level
+                this.mMainPlayerCarac.Camera.Orientation = new Quaternion(1, 0, 0, 0);
+                this.mMainPlayerCarac.CamYawNode.Yaw(new Degree(180));
 
             }
-            else if (this.mCamView == CameraView.THIRD_PERSON) {}
+            else if (this.mMainPlayerCarac.CameraView == MainPlayerCarac.CamView.THIRD_PERSON) {}
         }
+        #endregion
     }
 }

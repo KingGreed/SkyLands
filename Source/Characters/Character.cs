@@ -5,59 +5,32 @@ using Mogre;
 
 namespace Game.CharacSystem
 {
-    struct CharacterInfo
-    {
-        public string name;
-        public Vector3 spawnPoint;
-        public float life;
-
-        public CharacterInfo(string gName, Vector3 gSpawnPoint, float gLife = 100)
-        { 
-            this.name = gName;
-            this.spawnPoint = gSpawnPoint;
-            this.life = gLife;
-        }
-    }
-    
     /* Mother class of Player and NonPlayer */
     abstract class Character
     {
         protected Race mRace;
-        protected CharacterInfo mInfo;
+        protected CharacterInfo mCharInfo;
+        protected MovementInfo mMovementInfo;
 
-        public Character(Race race, CharacterInfo info)
+        public Character(Race race, CharacterInfo charInfo)
         {
             this.mRace = race;
-            this.mInfo = info;
+            this.mCharInfo = charInfo;
+            this.mMovementInfo = new MovementInfo();
 
-            this.SetFeetToPos(this.mInfo.spawnPoint);
+            this.SetFeetToPos(this.mCharInfo.SpawnPoint);
         }
 
-        public void Update(float frameTime)
+        public virtual void Update(float frameTime)
         {
-            this.mRace.Update(frameTime);
-        }
-
-        protected void Move(Vector3 direction)
-        {
-            mRace.ChangeDirection(direction);
-
-            if (direction.z != 0 && mRace.CurrentAnim != Race.AnimType.run)
-                mRace.ChangeAnimation(Race.AnimType.run);
-
-            if (direction == Vector3.ZERO && mRace.CurrentAnim != Race.AnimType.idle)
-                mRace.ChangeAnimation(Race.AnimType.idle);
-        }
-
-        protected void Jump()
-        {
-
+            this.mRace.Update(frameTime, this.mMovementInfo);
+            this.mMovementInfo = new MovementInfo();
         }
 
         /* Use this function if the character is changing of height */
-        private void SetFeetToPos(Vector3 pos)
+        protected void SetFeetToPos(Vector3 pos)
         {
-            this.mRace.Node.SetPosition(pos.x, pos.y + mRace.Height / 2 + 4, pos.z);
+            this.mRace.Node.SetPosition(pos.x, pos.y + mRace.Height / 2 + 5, pos.z);
         }
     }
 }

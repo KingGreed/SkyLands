@@ -73,7 +73,7 @@ namespace Game
             this.mCharacMgr = new CharacMgr();
             this.mCharacMgr.AddPlayer(new Race(this.mStateMgr.SceneManager, "Sinbad.mesh"),
                                       new CharacterInfo("Sinbad", new Vector3(50, 1600, 10)),
-                                      this.mStateMgr.Camera);
+                                      this.mStateMgr.Input, this.mStateMgr.Camera); // Optional parameters that make it the main player
         }
 
         public override void Hide() { }
@@ -81,7 +81,7 @@ namespace Game
 
         public override void Update(float frameTime)
         {
-            this.mCharacMgr.Update(frameTime, this.mStateMgr.Input);
+            this.mCharacMgr.Update(frameTime);
 
             if (this.mStateMgr.Input.IsKeyDown(MOIS.KeyCode.KC_ESCAPE)) { this.mStateMgr.RequestStatePop(); }    // Return to the MenuState
         }

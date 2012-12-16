@@ -16,10 +16,6 @@ namespace Game.BaseApp
         private bool   mFastMove;
         private bool   mFreeze;
 
-
-
-        public CameraMan(Camera camera) { this.mCamera = camera; }
-
         public bool GoingForward { set { mGoingForward = value; } get { return mGoingForward; } }
         public bool GoingBack    { set { mGoingBack = value; }    get { return mGoingBack; } }
         public bool GoingLeft    { set { mGoingLeft = value; }    get { return mGoingLeft; } }
@@ -29,6 +25,7 @@ namespace Game.BaseApp
         public bool FastMove     { set { mFastMove = value; }     get { return mFastMove; } }
         public bool Freeze       { set { mFreeze = value; }       get { return mFreeze; } }
 
+        public CameraMan(Camera camera) { this.mCamera = camera; }
 
         public void UpdateCamera(float frameTime, MoisManager input = null)
         {
@@ -36,7 +33,6 @@ namespace Game.BaseApp
             if (input != null) { this.UpdateKeys(input); }
             if (this.mFreeze) { return; }
 
-            // build our acceleration vector based on keyboard input composite
             var move = Vector3.ZERO;
             if (this.mGoingForward) move += this.mCamera.Direction;
             if (this.mGoingBack)    move -= this.mCamera.Direction;
@@ -46,8 +42,8 @@ namespace Game.BaseApp
             if (this.mGoingDown)    move -= this.mCamera.Up;
 
             move.Normalise();
-            move *= 150; // Natural speed is 150 units/sec.
-            if (mFastMove) { move *= 3; } // With shift button pressed, move twice as fast.
+            move *= 250;
+            if (mFastMove) { move *= 3; }
             if (move != Vector3.ZERO) { mCamera.Move(move * frameTime); }
         }
 

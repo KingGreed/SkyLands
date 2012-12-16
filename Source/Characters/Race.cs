@@ -7,7 +7,7 @@ namespace Game.CharacSystem
 {
     class Race
     {
-        private const float WALK_SPEED = 100.0f;
+        private const float WALK_SPEED = 200.0f;
         private const float FADE_SPEED = 7.5f;        
         
         public enum AnimType { none, idle, run, jump, fall, land, dance }
@@ -17,7 +17,6 @@ namespace Game.CharacSystem
         private List<string> mFadingIn;
         private List<string> mFadingOut;
         private AnimType mCurrentAnim;
-        private Vector3 mGoalDirection;   // Specify in which direction, the node has to be moved
         private float mHeight;  // Height of the mesh use to place the camera at head level
 
         public AnimType CurrentAnim { get { return this.mCurrentAnim; } }
@@ -26,15 +25,15 @@ namespace Game.CharacSystem
 
         public Race(SceneManager sceneMgr, string meshName)
         {
-            Entity sinbad = sceneMgr.CreateEntity("MainPlayer", meshName);
+            Entity playerEnt = sceneMgr.CreateEntity("MainPlayer", meshName);
 
             this.mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("PlayerNd");
-            this.mNode.AttachObject(sinbad);
+            this.mNode.AttachObject(playerEnt);
             this.mNode.Scale(9, 10, 9);
-            this.mHeight = sinbad.BoundingBox.Size.y * this.mNode.GetScale().y;
+            this.mHeight = playerEnt.BoundingBox.Size.y * this.mNode.GetScale().y;
 
-            sinbad.Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
-            this.mAnimSet = sinbad.AllAnimationStates;
+            playerEnt.Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
+            this.mAnimSet = playerEnt.AllAnimationStates;
             this.mAnimNames = new string[] { "IdleBase", "IdleTop", "RunBase", "RunTop", "JumpStart", "JumpLoop", "JumpEnd", "Dance" };
 
             for(int i = 0; i < mAnimNames.Length; i++)
@@ -51,7 +50,6 @@ namespace Game.CharacSystem
 
             this.mCurrentAnim = AnimType.none;
             this.ChangeAnimation(AnimType.idle);
-            this.mGoalDirection = new Vector3();
         }
 
         public void ChangeAnimation(AnimType anim)
@@ -79,29 +77,23 @@ namespace Game.CharacSystem
             return names;   // Return an empty list if anim == AnimType.none
         }
 
-        /* Doesn't rotate the node but specifiy if the character will move forwards, to the left, etc */
-        public void ChangeDirection(Vector3 direction)
+        public void Update(float frameTime, MovementInfo info)
         {
-            direction.Normalise();
-            this.mGoalDirection = direction;
+            this.mNode.Translate(WALK_SPEED * frameTime * info.MoveDirection, Mogre.Node.TransformSpace.TS_LOCAL);
+
+            this.mNode.Yaw(info.YawValue);
+            // TO DO : add animation for that
+            
+            this.UpdateAnimation(frameTime, info);
         }
 
-        public void Update(float frameTime)
+        private void UpdateAnimation(float frameTime, MovementInfo info)
         {
-            this.UpdateMovement(frameTime);
-            this.UpdateAnimation(frameTime);
-        }
-
-        private void UpdateMovement(float frameTime)
-        {
-            Vector3 move = WALK_SPEED * frameTime * this.mGoalDirection;
-
-            this.mNode.Translate(move, Mogre.Node.TransformSpace.TS_LOCAL);
-            this.mGoalDirection = Vector3.ZERO;
-        }
-
-        private void UpdateAnimation(float frameTime)
-        {
+            if (info.MoveDirection.z != 0 && this.mCurrentAnim != Race.AnimType.run)
+                this.ChangeAnimation(Race.AnimType.run);
+            if (info.MoveDirection == Vector3.ZERO && this.CurrentAnim != Race.AnimType.idle)
+                this.ChangeAnimation(Race.AnimType.idle);
+            
             this.FadeAnimations(frameTime);
             
             foreach (string animName in this.mAnimNames)
@@ -125,7 +117,7 @@ namespace Game.CharacSystem
             foreach (string name in mFadingIn)    // Slowly fade an animation until it has full weight
             {
                 float newWeight = this.mAnimSet.GetAnimationState(name).Weight + frameTime * FADE_SPEED;
-                this.mAnimSet.GetAnimationState(name).Weight = Clamp<float>(newWeight, 0, 1);   // Be sure the new weight is between 0 and 1
+                this.mAnimSet.GetAnimationState(name).Weight = MyMath.Clamp<float>(newWeight, 0, 1);   // Be sure the new weight is between 0 and 1
                 if (newWeight >= 1) { namesToDelete.Add(name); }  // Don't neet to fade an anmiation with weight == 1 anymore
             }
 
@@ -137,7 +129,7 @@ namespace Game.CharacSystem
             foreach (string name in mFadingOut)  // Slowly fade an animation out until it has no weight, and then disable it
             {
                 float newWeight = this.mAnimSet.GetAnimationState(name).Weight - frameTime * FADE_SPEED;
-                this.mAnimSet.GetAnimationState(name).Weight = Clamp<float>(newWeight, 0, 1);   // Be sure the weight is between 0 and 1
+                this.mAnimSet.GetAnimationState(name).Weight = MyMath.Clamp<float>(newWeight, 0, 1);   // Be sure the weight is between 0 and 1
                 if (newWeight <= 0)
                 {
                     namesToDelete.Add(name);  // Don't neet to fade an anmiation out with weight == 0 anymore
@@ -147,13 +139,6 @@ namespace Game.CharacSystem
 
             foreach (string name in namesToDelete)
                 this.mFadingOut.Remove(name);
-        }
-
-        private T Clamp<T>(T val, T min, T max) where T : IComparable<T>
-        {
-            if (val.CompareTo(min) < 0)      { return min; }
-            else if (val.CompareTo(max) > 0) { return max; }
-            else                             { return val; }
         }
     }
 }
