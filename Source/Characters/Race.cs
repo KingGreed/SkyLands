@@ -18,10 +18,20 @@ namespace Game.CharacSystem
         private List<string> mFadingOut;
         private AnimType mCurrentAnim;
         private float mHeight;  // Height of the mesh use to place the camera at head level
+        private Vector3 mFeetPosition;  // Notice that Node.Position is at hip level
 
         public AnimType CurrentAnim { get { return this.mCurrentAnim; } }
         public SceneNode Node       { get { return this.mNode; } }
         public float Height         { get { return this.mHeight; } }
+        public Vector3 FeetPosition
+        {
+            get { return this.mFeetPosition; }
+            set
+            {
+                this.mFeetPosition = value;
+                this.mNode.SetPosition(this.mFeetPosition.x, this.mFeetPosition.y + this.mHeight / 2 + 5, this.mFeetPosition.z);
+            }
+        }
 
         public Race(SceneManager sceneMgr, string meshName)
         {
