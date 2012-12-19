@@ -24,7 +24,7 @@ namespace Game {
         }
 
         public override void Shutdown() {
-
+            this.mStateMgr.SceneManager.ClearScene();
             if (this.mStateMgr == null) { return; }
 
             this.mStateMgr = null;
