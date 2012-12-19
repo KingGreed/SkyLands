@@ -7,7 +7,7 @@ using Mogre;
 
 namespace Game.Display
 {
-    class Materials
+    public class Materials
     {
         public XmlDocument mDoc;
 

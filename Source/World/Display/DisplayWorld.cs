@@ -8,34 +8,29 @@ using Game.Terrain;
 
 namespace Game.Display
 {
-    class DisplayWorld
+    public class DisplayWorld
     {
-        private Dictionary<Vector3, Chunk> mChunkArray;
-        private World mWorld;
         private SceneManager mSceneMgr;
         private Materials mtr;
 
-        public DisplayWorld(ref Dictionary<Vector3, Chunk> chunkArray, World refToWorld, SceneManager sceneMgr)
+        public DisplayWorld(SceneManager sceneMgr)
         {
-            this.mChunkArray = chunkArray;
-            this.mWorld = refToWorld;
             this.mSceneMgr = sceneMgr;
             this.mtr = new Materials();
         }
 
         public void displayAllChunks(){
-            foreach (var chunk in this.mChunkArray) {
+            foreach (var chunk in World.chunkArray) {
 	            this.displayChunkAt(chunk.Key);
 	        }
         }
 
         public void displayChunkAt(Vector3 coord) {
-
-            if(!this.mChunkArray.ContainsKey(coord)){
+            if(!World.chunkArray.ContainsKey(coord)){
                 LogManager.Singleton.DefaultLog.LogMessage("Key : " + coord.ToString() + " was not found in mChunkArray");
                 throw new KeyNotFoundException("Key was not found in mChunkArray");
             }
-            Chunk displayingChunk = this.mChunkArray[coord];
+            Chunk displayingChunk = World.chunkArray[coord];
 
             for(int x = 0; x < World.CHUNK_SIDE; x++) {
                 for(int y = 0; y < World.CHUNK_SIDE; y++) {
@@ -48,21 +43,22 @@ namespace Game.Display
 
         public List<GraphicBlock.blockFace> getDisplayableFacesAt(Vector3 chunkCoord, Vector3 blockCoord)
         {
+
             List<GraphicBlock.blockFace> returnList = new List<GraphicBlock.blockFace>();
-            if (this.mWorld.getBlock(chunkCoord, blockCoord).IsAir()) { return returnList; }
+            if (World.getBlock(chunkCoord, blockCoord).IsAir()) { return returnList; }
 
             Dictionary<GraphicBlock.blockFace, Vector3> coordToCheck = new Dictionary<GraphicBlock.blockFace,Vector3>();
 
-            coordToCheck.Add(GraphicBlock.blockFace.rightFace, new Vector3(blockCoord.x + 1, blockCoord.y, blockCoord.z));
-            coordToCheck.Add(GraphicBlock.blockFace.leftFace,  new Vector3(blockCoord.x - 1, blockCoord.y, blockCoord.z));
-            coordToCheck.Add(GraphicBlock.blockFace.upperFace, new Vector3(blockCoord.x, blockCoord.y + 1, blockCoord.z));
-            coordToCheck.Add(GraphicBlock.blockFace.underFace, new Vector3(blockCoord.x, blockCoord.y - 1, blockCoord.z));
-            coordToCheck.Add(GraphicBlock.blockFace.frontFace, new Vector3(blockCoord.x, blockCoord.y, blockCoord.z + 1));
-            coordToCheck.Add(GraphicBlock.blockFace.backFace,  new Vector3(blockCoord.x, blockCoord.y, blockCoord.z - 1));
+            coordToCheck.Add(GraphicBlock.blockFace.rightFace, new Vector3(blockCoord.x + 1, blockCoord.y,     blockCoord.z));
+            coordToCheck.Add(GraphicBlock.blockFace.leftFace,  new Vector3(blockCoord.x - 1, blockCoord.y,     blockCoord.z));
+            coordToCheck.Add(GraphicBlock.blockFace.upperFace, new Vector3(blockCoord.x,     blockCoord.y + 1, blockCoord.z));
+            coordToCheck.Add(GraphicBlock.blockFace.underFace, new Vector3(blockCoord.x,     blockCoord.y - 1, blockCoord.z));
+            coordToCheck.Add(GraphicBlock.blockFace.frontFace, new Vector3(blockCoord.x,     blockCoord.y,     blockCoord.z + 1));
+            coordToCheck.Add(GraphicBlock.blockFace.backFace,  new Vector3(blockCoord.x,     blockCoord.y,     blockCoord.z - 1));
 
 
             foreach(var block in coordToCheck) {
-                if (this.mWorld.getBlock(chunkCoord, block.Value).IsAir()) { returnList.Add(block.Key); }
+                if (World.getBlock(chunkCoord, block.Value).IsAir()) { returnList.Add(block.Key); }
             }
             return returnList;
         }
@@ -70,22 +66,22 @@ namespace Game.Display
         public void displayFaces(Vector3 chunkCoord, Vector3 blockCoord, List<GraphicBlock.blockFace> faceToDisplay) {
             if(faceToDisplay.Count == 0) { return; }
 
-            Vector3 absoluteCoord = DisplayWorld.getAbsoluteCoordAt(chunkCoord, blockCoord);
-            string faceName, faceEntName, cubeNodeName = getCubeNodeName(absoluteCoord);
+            Vector3 absCoord = DisplayWorld.getAbsoluteCoordAt(chunkCoord, blockCoord);
+            string faceName, faceEntName, cubeNodeName = "cubeNode-" + absCoord.x + "-" + absCoord.y + "-" + absCoord.z;
             SceneNode blockNode;
             Entity ent;
-            string type = this.mWorld.getBlock(chunkCoord, blockCoord).getType();
+            string type = World.getBlock(chunkCoord, blockCoord).getType();
 
 
             if(this.mSceneMgr.HasSceneNode(cubeNodeName)) {
                 blockNode = this.mSceneMgr.GetSceneNode(cubeNodeName);
             } else {
-                blockNode = this.mSceneMgr.RootSceneNode.CreateChildSceneNode(cubeNodeName, absoluteCoord);
+                blockNode = this.mSceneMgr.RootSceneNode.CreateChildSceneNode(cubeNodeName, absCoord);
             }
 
             foreach(var face in faceToDisplay) {
                 faceName = GraphicBlock.getFaceName(face);
-                faceEntName = getFaceName(absoluteCoord, faceName);
+                faceEntName = "face-" + absCoord.x + "-" + absCoord.y + "-" + absCoord.z + "-" + faceName;
 
                 ent = this.mSceneMgr.CreateEntity(faceEntName, faceName);
 
@@ -98,9 +94,6 @@ namespace Game.Display
             }
 
         }
-
-        public static string getCubeNodeName(Vector3 absCoord)          { return "cubeNode-" + absCoord.x + "-" + absCoord.y + "-" + absCoord.z; }
-        public static string getFaceName(Vector3 absCoord, string face) { return "face-" + absCoord.x + "-" + absCoord.y + "-" + absCoord.z + "-" + face; }
 
         public static Vector3 getAbsoluteCoordAt(Vector3 chunkCoord, Vector3 blockCoord){
             float x, y, z; //absolute coord

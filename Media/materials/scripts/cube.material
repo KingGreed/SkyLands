@@ -21,7 +21,7 @@ material cube/grass/top {
 			ambient 1.0 1.0 1.0
             diffuse 1.0 1.0 1.0
 
-			texture_unit { texture grass2.jpg }
+			texture_unit { texture grass3.jpg }
 		}
 	}
 }
@@ -31,7 +31,7 @@ material cube/grass/bottom{
             ambient 1.0 1.0 1.0
             diffuse 1.0 1.0 1.0
 
-            texture_unit{ texture dirt.jpg }
+            texture_unit{ texture soil.jpg }
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Game.Display
 {
-    static class GraphicBlock
+    public static class GraphicBlock
     {
         public enum blockFace { 
             frontFace,
