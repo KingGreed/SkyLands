@@ -52,7 +52,6 @@ namespace Game
             return true;
         }
 
-
         private void generateWorld() {new Island(new Vector2(7, 7));} /* Algorithm of terrain generation */
 
         private void populate() {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -138,6 +138,7 @@ namespace Game.Terrain
                         if(!World.hasChunk(chunkTempPosition)) { World.chunkArray.Add(chunkTempPosition, new Chunk()); }
 					    
                         double noiseValue = noise[xx, yy, zz] * noise[xx, yy, zz] - Math.Abs(1 / smoothHeight * (yy - smoothHeight - minElevation));
+
 					    if (noiseValue >= 0) {      
 						    World.getBlock(chunkTempPosition, blockTempPosition).setType(Materials.GRASS);
 					    } else {
@@ -158,9 +159,6 @@ namespace Game.Terrain
                 chunkTempPosition.y = i / World.CHUNK_SIDE;
                 blockTempPosition.y = i % World.CHUNK_SIDE;
                 
-                //LogManager.Singleton.DefaultLog.LogMessage("chunkPos : " + chunkTempPosition.ToString());
-                //LogManager.Singleton.DefaultLog.LogMessage("blockPos : " + blockTempPosition.ToString());
-
                 if(!World.hasChunk(chunkTempPosition)) { World.chunkArray.Add(chunkTempPosition, new Chunk()); }
                 if(i <= lowerPosition || i > upperPosition) { World.getBlock(chunkTempPosition, blockTempPosition).setType(Materials.AIR); }
                 else {
