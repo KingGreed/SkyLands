@@ -4,48 +4,51 @@ using System.Collections.Generic;
 using Mogre;
 
 using Game.BaseApp;
-
+using Game.GUISystem;
 
 namespace Game.States
 {
     public class StateManager
     {
         private SceneManager mSceneMgr;
-        private MoisManager mInput;
         private RenderWindow mWindow;
+        private MoisManager mInput;
+        private MiyagiManager mMiyagiMgr;
+        private Camera mCam;
         private Stack<State> mStateStack;
         private Type mNewState;
         private bool mIsPopRequested;
+        private bool mIsShuttedDown;
 
-        public SceneManager SceneManager
-        {
-            get { return mSceneMgr; }
-        }
-
-        public MoisManager Input
-        {
-            get { return mInput; }
-        }
-
-        public RenderWindow Window
-        {
-            get { return mWindow; }
-        }
+        public SceneManager SceneManager   { get { return this.mSceneMgr; } }
+        public RenderWindow Window         { get { return this.mWindow; } }
+        public MoisManager Input           { get { return this.mInput; } }
+        public MiyagiManager MiyagiManager { get { return this.mMiyagiMgr; } }
+        public Camera Camera               { get { return this.mCam; } }
+        public bool IsShuttedDown          { get { return this.mIsShuttedDown; } }
 
         public StateManager(SceneManager sceneMgr, MoisManager input, RenderWindow window)
         {
-            mSceneMgr = sceneMgr;
-            mInput = input;
-            mWindow = window;
-            mStateStack = new Stack<State>();
-            mIsPopRequested = false;
+            this.mSceneMgr = sceneMgr;
+            this.mWindow = window;
+            this.mInput = input;
+            this.mMiyagiMgr = new MiyagiManager();
+            this.mCam = null;
+            this.mStateStack = new Stack<State>();
+            this.mIsPopRequested = false;
+            this.mIsShuttedDown = false;
         }
 
         public bool Startup(Type firstState)
         {
-            mIsPopRequested = false;
+            this.mIsPopRequested = false;
+            this.mIsShuttedDown = false;
 
-            if (mStateStack.Count != 0)
+            this.CreateCamera(); this.CreateViewports();
+
+            this.mMiyagiMgr.Startup(this.mInput);
+
+            if (this.mStateStack.Count != 0)
                 return false;
 
             if (!RequestStatePush(firstState))
@@ -54,30 +57,51 @@ namespace Game.States
             return true;
         }
 
+        private void CreateCamera()
+        {
+            this.mCam = this.mSceneMgr.CreateCamera("MainCamera");
+            this.mCam.NearClipDistance = 5;
+            this.mCam.FarClipDistance = 3000;
+        }
+
+        private void CreateViewports()
+        {
+            var vp = this.mWindow.AddViewport(this.mCam);
+            vp.BackgroundColour = ColourValue.Black;
+
+            // Alter the camera aspect ratio to match the viewport
+            this.mCam.AspectRatio = (vp.ActualWidth / vp.ActualHeight);
+        }
+
         public void Update(float frameTime)
         {
-            if (mIsPopRequested)
-                PopState();
-
-            if (mNewState != null)  // A pushState was requested
+            if (this.mIsShuttedDown)
+                return;
+            
+            if (this.mNewState != null)  // A pushState was requested
             {
                 State newState = null;
                 
                 // Use reflection to get new state class default constructor
-                ConstructorInfo constructor = mNewState.GetConstructor(Type.EmptyTypes);
+                ConstructorInfo constructor = this.mNewState.GetConstructor(new Type[1] {typeof(StateManager)});
 
                 // Try to create an object from the requested state class
                 if (constructor != null)
-                    newState = (State)constructor.Invoke(null);
+                    newState = (State)constructor.Invoke(new StateManager[1] {this});
 
                 if (newState != null)
-                    PushState(newState);
+                    this.PushState(newState);
 
-                mNewState = null;
+                this.mNewState = null;
             }
 
-            if (mStateStack.Count > 0)
-                mStateStack.Peek().Update(frameTime);
+            this.mMiyagiMgr.Update();
+
+            if (this.mStateStack.Count > 0)
+                this.mStateStack.Peek().Update(frameTime);
+
+            if (this.mIsPopRequested)
+                this.PopState();
         }
 
         /* Add a State to the stack and start it up */
@@ -87,34 +111,41 @@ namespace Game.States
                 return false;
             else
             {
-                LogManager.Singleton.DefaultLog.LogMessage("Start up state : " + newState.ToString());
-                
-                if (!newState.Startup(this))
+                LogManager.Singleton.DefaultLog.LogMessage("Try to start up state : " + newState.ToString());
+                if (!newState.Startup())
+                {
+                    LogManager.Singleton.DefaultLog.LogMessage("ERROR : Failed to start up state : " + newState.ToString());
                     return false;
-                
-                mStateStack.Push(newState);
+                }
+
+                if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Hide(); }
+                this.mStateStack.Push(newState);
+
+                this.mInput.Clear();
+
                 return true;
             }
         }
 
         private void PopState()
         {
-            if (mStateStack.Count > 0)
+            if (this.mStateStack.Count > 0)
             {
-                mStateStack.Peek().Shutdown();
-                mStateStack.Pop();
+                string stateName = this.mStateStack.Peek().ToString();
+                this.mStateStack.Peek().Shutdown();
+                this.mStateStack.Pop();
+                this.mInput.Clear();
+                if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Show(); }
+                LogManager.Singleton.DefaultLog.LogMessage("Popped state : " + stateName);
             }
 
-            mIsPopRequested = false;
+            this.mIsPopRequested = false;
         }
 
-        public bool RequestStatePop()
+        public void RequestStatePop()
         {
-            if (mStateStack.Count <= 1)  // User can't pop the first State
-                return false;
-            
-            mIsPopRequested = true; // Will pop the state in Update()
-            return true;
+            if (this.mStateStack.Count > 1) { this.mIsPopRequested = true; } // Will pop the state in Update()
+            else                            { this.Shutdown(); }
         }
 
         public bool RequestStatePush(Type newState)
@@ -123,14 +154,17 @@ namespace Game.States
             if (newState == null || !newState.IsSubclassOf(typeof(State)))
                 return false;
 
-            mNewState = newState;   // Will push the state in Update()
+            this.mNewState = newState;   // Will push the state in Update()
             return true;
         }
 
         public void Shutdown()
         {
-            while (mStateStack.Count > 0)
+            while (this.mStateStack.Count > 0)
                 PopState();
+
+            mMiyagiMgr.ShutDown();
+            this.mIsShuttedDown = true;
         }
     }
 }

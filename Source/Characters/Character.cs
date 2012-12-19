@@ -5,47 +5,26 @@ using Mogre;
 
 namespace Game.CharacSystem
 {
-    struct CharacterInfo
-    {
-        public string name;
-        public Vector3 spawnPoint;
-        public float life;
-
-        public CharacterInfo(string gName, Vector3 gSpawnPoint, float gLife = 100)
-        { 
-            this.name = gName;
-            this.spawnPoint = gSpawnPoint;
-            this.life = gLife;
-        }
-    }
-    
     /* Mother class of Player and NonPlayer */
     abstract class Character
     {
         protected Race mRace;
-        protected CharacterInfo mInfo;
+        protected CharacterInfo mCharInfo;
+        protected MovementInfo mMovementInfo;
 
-        public Character(Race charac, CharacterInfo info)
+        public Character(Race race, CharacterInfo charInfo)
         {
-            this.mRace = charac;
-            this.mInfo = info;
+            this.mRace = race;
+            this.mCharInfo = charInfo;
+            this.mMovementInfo = new MovementInfo();
 
-            this.mRace.Node.SetPosition(info.spawnPoint.x, info.spawnPoint.y, info.spawnPoint.z);
+            this.mRace.FeetPosition = this.mCharInfo.SpawnPoint;
         }
 
-        public void Update(float frameTime)
+        public virtual void Update(float frameTime)
         {
-            this.mRace.UpdateAnimation(frameTime);
-        }
-
-        public Vector3 Move(Vector3 direction)  // Return the vector of the effective move
-        {
-            return Vector3.ZERO;
-        }
-
-        public void Jump()
-        {
-
+            this.mRace.Update(frameTime, this.mMovementInfo);
+            this.mMovementInfo = new MovementInfo();
         }
     }
 }

@@ -20,22 +20,20 @@ namespace Game
 
         private Vector3 mSpawnPoint;
         private SceneNode mNode;
-
         private CharacMgr mCharacMgr;
-        private Camera mCamera; // Replace the camera from BaseApplication
-        private CameraMan mCameraMan;
 
         public static Dictionary<Vector3, Chunk> chunkArray;
 
-        public World() { 
+        public World(StateManager stateMgr) : base(stateMgr)
+        { 
             this.mSpawnPoint = Vector3.ZERO; 
             chunkArray = new Dictionary<Vector3, Chunk>();
         }
 
-        public override bool Startup(StateManager stateMgr) {
+
+        public override bool Startup(){
             if (this.mIsStartedUp) { return false; }
 
-            this.mStateMgr    = stateMgr;
             this.mIsStartedUp = true;
 
             this.mNode        = this.mStateMgr.SceneManager.RootSceneNode.CreateChildSceneNode("TerrainNode"); 
@@ -56,9 +54,9 @@ namespace Game
 
         private void populate() {
             this.mCharacMgr = new CharacMgr();
-            this.mCharacMgr.AddPlayer(new Race(this.mStateMgr.SceneManager, "Sinbad.mesh"), new CharacterInfo("Sinbad", new Vector3(0, 0, -250)));
-
-            this.CreateCamera();  this.CreateViewports();
+            this.mCharacMgr.AddPlayer(new Race(this.mStateMgr.SceneManager, "Sinbad.mesh"),
+                                      new CharacterInfo("Sinbad", new Vector3(50, 1600, 10)),
+                                      this.mStateMgr.Input, this.mStateMgr.Camera); // Optional parameters that make it the main player
         }
     }
 }

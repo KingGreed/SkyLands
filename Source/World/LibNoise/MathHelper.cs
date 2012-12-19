@@ -160,26 +160,12 @@ namespace Game.LibNoise
 	    }
 
 
-        public static double clamp(double value, double low, double high) {
-		    if (value < low) {
-			    return low;
-		    }
-		    if (value > high) {
-			    return high;
-		    }
-		    return value;
-	    }
+        static public T clamp<T>(T val, T min, T max) where T : IComparable<T> {
 
-	    public static int clamp(int value, int low, int high) {
-		    if (value < low) {
-			    return low;
-		    }
-		    if (value > high) {
-			    return high;
-		    }
-		    return value;
-	    }
-	    // Integer Maths
+            if (val.CompareTo(min) < 0) { return min; }
+            else if (val.CompareTo(max) > 0) { return max; }
+            else { return val; }
+        }
 
 	    public static int floor(double x) {
 		    int y = (int) x;

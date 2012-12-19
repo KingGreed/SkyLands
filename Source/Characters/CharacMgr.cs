@@ -13,9 +13,11 @@ namespace Game.CharacSystem
         {
         }
 
-        public void AddPlayer(Race breed, CharacterInfo info)
+        public void AddPlayer(Race race, CharacterInfo info, MoisManager input = null,  Camera cam = null)
         {
-            this.mCharacList.Add(new Player(breed, info));
+            this.mCharacList.Add(new Player(race, info, input, cam));
+
+            LogManager.Singleton.DefaultLog.LogMessage("Player added");
         }
 
         public Character GetCharacter(int index = 0)   // By default, return the main character which is the player
@@ -26,7 +28,18 @@ namespace Game.CharacSystem
         public void Update(float frameTime)
         {
             for (int i = 0; i < this.mCharacList.Count; i++)
-                this.mCharacList[i].Update(frameTime);
+            {
+                if (this.mCharacList[i].GetType() == typeof(Player))
+                {
+                    Player player = (Player)this.mCharacList[i];
+                    player.Update(frameTime);
+                }
+                else
+                {
+                    NonPlayer nonPlayer = (NonPlayer)this.mCharacList[i];
+                    nonPlayer.Update(frameTime);
+                }
+            }
         }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using System;
 using MOIS;
 
-namespace Game.BaseApp
+
+namespace Game
 {
     public class MoisManager
     {
@@ -16,6 +17,9 @@ namespace Game.BaseApp
         private Vector3 mMousePos;
         private Vector3 mMousePressedPos;
         private Vector3 mMouseReleasedPos;
+
+        public Keyboard KeyBoard { get { return this.mKeyboard; } }
+        public Mouse Mouse { get { return this.mMouse; } }
 
         // Get last relative mouse movement (and wheel movement on Z axis)
         public int MouseMoveX { get { return (int)this.mMouseMove.x; } }

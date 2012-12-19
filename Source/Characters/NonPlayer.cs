@@ -11,5 +11,10 @@ namespace Game.CharacSystem
         {
 
         }
+
+        public override void Update(float frameTime)
+        {
+            base.Update(frameTime);
+        }
     }
 }

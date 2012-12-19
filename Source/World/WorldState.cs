@@ -10,45 +10,21 @@ using Game.BaseApp;
 
 using Mogre;
 
-namespace Game
-{
+namespace Game {
+
     public partial class World
     {
-        private void CreateCamera()
-        {
-            this.mCamera = this.mStateMgr.SceneManager.CreateCamera("DebugCam");
+        public override void Hide() { }
+        public override void Show() { }
 
-            this.mCamera.Position = new Vector3(0, 100, 250);
-
-            this.mCamera.LookAt(new Vector3(0, 50, 0));
-            this.mCamera.NearClipDistance = 5;
-            this.mCamera.FarClipDistance = 3500;
-
-            this.mCameraMan = new CameraMan(this.mCamera);
-        }
-
-        private void CreateViewports()
-        {
-            ColourValue fadeColor = new ColourValue(0.1f, 0.1f, 0.1f);
-
-            var vp = this.mStateMgr.Window.AddViewport(mCamera);
-            vp.BackgroundColour = fadeColor;
-
-            this.mCamera.AspectRatio = (vp.ActualWidth / vp.ActualHeight);
-
-            //this.mStateMgr.SceneManager.SetFog(FogMode.FOG_LINEAR, fadeColor, 1, 2800, 3500);
-        }
-
-        public override void Update(float frameTime)
-        {
-            MoisManager input = this.mStateMgr.Input;
-            this.mCameraMan.UpdateCamera(frameTime, input);
-            
+        public override void Update(float frameTime) {
             this.mCharacMgr.Update(frameTime);
+
+            if (this.mStateMgr.Input.IsKeyDown(MOIS.KeyCode.KC_ESCAPE)) { this.mStateMgr.RequestStatePop(); }    // Return to the MenuState
         }
 
-        public override void Shutdown()
-        {
+        public override void Shutdown() {
+
             if (this.mStateMgr == null) { return; }
 
             this.mStateMgr = null;
