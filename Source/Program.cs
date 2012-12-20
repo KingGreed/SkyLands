@@ -19,10 +19,10 @@ namespace Game
         protected override void CreateScene()
         {
             LogManager.Singleton.DefaultLog.LogMessage("***********************Program\'s Log***********************");
-            mStateMgr = new StateManager(mSceneMgr, mInput, mWindow);
+            this.mStateMgr = new StateManager(this.mRoot, this.mSceneMgr, this.mInput, this.mWindow);
             LogManager.Singleton.DefaultLog.LogMessage("StateMgr created");
             //mStateMgr.Startup(typeof(World));
-            mStateMgr.Startup(typeof(MainMenu));
+            this.mStateMgr.Startup(typeof(MainMenu));
        }
 
         protected override void UpdateScene(FrameEvent evt)

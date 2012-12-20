@@ -10,25 +10,30 @@ namespace Game.States
 {
     public class StateManager
     {
+        private Root mRoot;
         private SceneManager mSceneMgr;
         private RenderWindow mWindow;
         private MoisManager mInput;
         private MiyagiManager mMiyagiMgr;
         private Camera mCam;
+        private Viewport mViewport;
         private Stack<State> mStateStack;
         private Type mNewState;
         private bool mIsPopRequested;
         private bool mIsShuttedDown;
 
+        public Root Root                   { get { return this.mRoot; } }
         public SceneManager SceneManager   { get { return this.mSceneMgr; } }
         public RenderWindow Window         { get { return this.mWindow; } }
         public MoisManager Input           { get { return this.mInput; } }
         public MiyagiManager MiyagiManager { get { return this.mMiyagiMgr; } }
         public Camera Camera               { get { return this.mCam; } }
+        public Viewport Viewport           { get { return this.mViewport; } }
         public bool IsShuttedDown          { get { return this.mIsShuttedDown; } }
 
-        public StateManager(SceneManager sceneMgr, MoisManager input, RenderWindow window)
+        public StateManager(Root root, SceneManager sceneMgr, MoisManager input, RenderWindow window)
         {
+            this.mRoot = root;
             this.mSceneMgr = sceneMgr;
             this.mWindow = window;
             this.mInput = input;
@@ -66,11 +71,11 @@ namespace Game.States
 
         private void CreateViewports()
         {
-            var vp = this.mWindow.AddViewport(this.mCam);
-            vp.BackgroundColour = ColourValue.Black;
+            this.mViewport = this.mWindow.AddViewport(this.mCam);
+            this.mViewport.BackgroundColour = ColourValue.Black;
 
             // Alter the camera aspect ratio to match the viewport
-            this.mCam.AspectRatio = (vp.ActualWidth / vp.ActualHeight);
+            this.mCam.AspectRatio = (this.mViewport.ActualWidth / this.mViewport.ActualHeight);
         }
 
         public void Update(float frameTime)
