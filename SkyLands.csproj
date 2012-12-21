@@ -54,10 +54,10 @@
     <Compile Include="Source\Base Ogre\CameraMan.cs" />
     <Compile Include="Source\Base Ogre\MoisManager.cs" />
     <Compile Include="Source\Base Ogre\Overlay.cs" />
+    <Compile Include="Source\Characters\AnimationManager.cs" />
     <Compile Include="Source\Characters\Info\CharacterInfo.cs" />
     <Compile Include="Source\Characters\Info\MainPlayerCarac.cs" />
     <Compile Include="Source\Characters\Info\MovementInfo.cs" />
-    <Compile Include="Source\Characters\Race.cs" />
     <Compile Include="Source\GUI\GUIManager.cs" />
     <Compile Include="Source\GUI\MainMenu.cs" />
     <Compile Include="Source\Program.cs" />

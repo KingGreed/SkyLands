@@ -9,7 +9,7 @@ namespace Game.CharacSystem
 
         public MainPlayerCarac MainPlayerCarac { get { return this.mMainPlayerCarac; } }
 
-        public Player(Race race, CharacterInfo info, MoisManager  input = null, Camera cam = null) : base(race, info)
+        public Player(SceneManager sceneMgr, string meshName, CharacterInfo info, MoisManager  input = null, Camera cam = null) : base(sceneMgr, meshName, info)
         {
             this.mMainPlayerCarac = new MainPlayerCarac(input, cam);
 
@@ -20,6 +20,8 @@ namespace Game.CharacSystem
         public override void Update(float frameTime)
         {
             if (this.mMainPlayerCarac.IsMainPlayer) { this.ProcessMainPlayerUpdate(frameTime); }
+
+            base.Update(frameTime);
         }
 
         #region MainPlayer
@@ -44,7 +46,10 @@ namespace Game.CharacSystem
                     this.ChangeCameraMode(CharacSystem.MainPlayerCarac.CamView.FIRST_PERSON);
             }
 
-            this.mMainPlayerCarac.IsPlayerMoving = !this.mMainPlayerCarac.IsDebugMode || input.IsKeyDown(MOIS.KeyCode.KC_LCONTROL) || input.IsKeyDown(MOIS.KeyCode.KC_RCONTROL);
+            bool isMoving = !this.mMainPlayerCarac.IsDebugMode || input.IsKeyDown(MOIS.KeyCode.KC_LCONTROL) || input.IsKeyDown(MOIS.KeyCode.KC_RCONTROL);
+            if (this.mMainPlayerCarac.IsPlayerMoving && !isMoving)
+                this.mAnim.DeleteAllAnims();
+            this.mMainPlayerCarac.IsPlayerMoving = isMoving;
 
             if (!this.mMainPlayerCarac.IsPlayerMoving)
                 this.ProcessDebugUpdate(frameTime);
@@ -58,8 +63,6 @@ namespace Game.CharacSystem
                 else
                     this.ProcessFirstPersonUpdate(yawValue, pitchValue);
             }
-
-            base.Update(frameTime);
         }
 
         private void ProcessDebugUpdate(float frameTime)
@@ -80,6 +83,17 @@ namespace Game.CharacSystem
             if (input.IsKeyDown(MOIS.KeyCode.KC_S) || input.IsKeyDown(MOIS.KeyCode.KC_DOWN))  { moveDirection.z = -1; }
             if (input.IsKeyDown(MOIS.KeyCode.KC_A) || input.IsKeyDown(MOIS.KeyCode.KC_LEFT))  { moveDirection.x = 1; }
             if (input.IsKeyDown(MOIS.KeyCode.KC_D) || input.IsKeyDown(MOIS.KeyCode.KC_RIGHT)) { moveDirection.x = -1; }
+
+            /* Update the animations */
+            if (input.WasKeyPressed(MOIS.KeyCode.KC_W) || input.WasKeyPressed(MOIS.KeyCode.KC_UP)) { this.mAnim.AddAnim(Anim.RunBase, Anim.RunTop); }
+            if (input.WasKeyReleased(MOIS.KeyCode.KC_W) || input.WasKeyReleased(MOIS.KeyCode.KC_UP)) { this.mAnim.DeleteAnim(Anim.RunBase, Anim.RunTop); }
+            if (input.WasKeyPressed(MOIS.KeyCode.KC_1))
+            {
+                if (!this.mAnim.CurrentAnims.Contains(Anim.Dance))
+                    this.mAnim.AddAnim(Anim.Dance);
+                else
+                    this.mAnim.DeleteAnim(Anim.Dance);
+            }
 
             /* Yaw the player */
             this.mMovementInfo.YawValue = yawValue;
@@ -102,22 +116,22 @@ namespace Game.CharacSystem
 
             if (this.mMainPlayerCarac.CameraView == MainPlayerCarac.CamView.DEBUG)
             {
-                this.mRace.Node.SetVisible(true);
+                this.mNode.SetVisible(true);
 
                 this.mMainPlayerCarac.Camera.DetachFromParent();
-                this.mMainPlayerCarac.Camera.Position += this.mRace.Node.Position;
+                this.mMainPlayerCarac.Camera.Position += this.mNode.Position;
                 this.mMainPlayerCarac.CameraMan = new Game.BaseApp.CameraMan(this.mMainPlayerCarac.Camera);
             }
             else if (this.mMainPlayerCarac.CameraView == MainPlayerCarac.CamView.FIRST_PERSON)
             {
-                this.mRace.Node.SetVisible(false);
+                this.mNode.SetVisible(false);
 
-                this.mMainPlayerCarac.CamYawNode = this.mRace.Node.CreateChildSceneNode();
+                this.mMainPlayerCarac.CamYawNode = this.mNode.CreateChildSceneNode();
 
                 this.mMainPlayerCarac.CamPitchNode = this.mMainPlayerCarac.CamYawNode.CreateChildSceneNode();
                 this.mMainPlayerCarac.CamPitchNode.AttachObject(this.mMainPlayerCarac.Camera);
 
-                this.mMainPlayerCarac.Camera.SetPosition(0, this.mRace.Height / 2 - 10, 0);  // Camera is set at eyes level
+                this.mMainPlayerCarac.Camera.SetPosition(0, this.Height / 2 - 10, 0);  // Camera is set at eyes level
                 this.mMainPlayerCarac.Camera.Orientation = new Quaternion(1, 0, 0, 0);
                 this.mMainPlayerCarac.CamYawNode.Yaw(new Degree(180));
 

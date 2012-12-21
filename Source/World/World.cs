@@ -19,10 +19,10 @@ namespace Game
         public const int CHUNK_SIDE = 16;
         public const int CUBE_SIDE = 50;
 
+        private CaelumSystem mCaelumSystem;
         private Vector3 mSpawnPoint;
         private SceneNode mNode;
         private CharacMgr mCharacMgr;
-        private CaelumSystem mCaelumSystem;
 
         public static Dictionary<Vector3, Chunk> chunkArray;
 
@@ -42,7 +42,7 @@ namespace Game
 
             GraphicBlock.generateFace();
 
-            this.createSky();     LogManager.Singleton.DefaultLog.LogMessage("Sky Created");
+            this.createSky(); LogManager.Singleton.DefaultLog.LogMessage("Sky Created");
             this.generateWorld(); LogManager.Singleton.DefaultLog.LogMessage("World Generated");
             this.populate();      LogManager.Singleton.DefaultLog.LogMessage("World Populated");
 
@@ -52,8 +52,6 @@ namespace Game
 
             return true;
         }
-
-        private void generateWorld() {new Island(new Vector2(7, 7));} /* Algorithm of terrain generation */
 
         private void createSky()
         {
@@ -88,9 +86,11 @@ namespace Game
 
         }
 
+        private void generateWorld() {new Island(new Vector2(2, 2));} /* Algorithm of terrain generation */
+
         private void populate() {
             this.mCharacMgr = new CharacMgr();
-            this.mCharacMgr.AddPlayer(new Race(this.mStateMgr.SceneManager, "Sinbad.mesh"),
+            this.mCharacMgr.AddPlayer(this.mStateMgr.SceneManager, "Sinbad.mesh",
                                       new CharacterInfo("Sinbad", new Vector3(50, 1600, 10)),
                                       this.mStateMgr.Input, this.mStateMgr.Camera); // Optional parameters that make it the main player
         }

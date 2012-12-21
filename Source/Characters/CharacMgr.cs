@@ -13,9 +13,9 @@ namespace Game.CharacSystem
         {
         }
 
-        public void AddPlayer(Race race, CharacterInfo info, MoisManager input = null,  Camera cam = null)
+        public void AddPlayer(SceneManager sceneMgr, string meshName, CharacterInfo info, MoisManager input = null,  Camera cam = null)
         {
-            this.mCharacList.Add(new Player(race, info, input, cam));
+            this.mCharacList.Add(new Player(sceneMgr, meshName, info, input, cam));
 
             LogManager.Singleton.DefaultLog.LogMessage("Player added");
         }

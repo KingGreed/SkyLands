@@ -11,6 +11,7 @@ namespace Game
         private Mouse mMouse;
         private bool[] mKeyDown;
         private bool[] mKeyPressed;
+        private bool[] mKeyReleased;
         private bool[] mMouseDown;
         private bool[] mMousePressed;
         private Vector3 mMouseMove;
@@ -45,6 +46,7 @@ namespace Game
             this.mMouse = null;
             this.mKeyDown = new bool[256];
             this.mKeyPressed = new bool[256];
+            this.mKeyReleased = new bool[256];
             this.mMouseDown = new bool[8];
             this.mMousePressed = new bool[8];
             this.mMouseMove = new Vector3();
@@ -97,6 +99,7 @@ namespace Game
         internal void Update()
         {
             this.ClearKeyPressed();
+            this.ClearKeyReleased();
             this.ClearMousePressed();
             this.ClearMouseMove();
 
@@ -107,6 +110,7 @@ namespace Game
         public void Clear()
         {
             this.ClearKeyPressed();
+            this.ClearKeyReleased();
             this.ClearKeyDown();
             this.ClearMousePressed();
             this.ClearMouseDown();
@@ -121,6 +125,11 @@ namespace Game
         public bool WasKeyPressed(KeyCode key)
         {
             return this.mKeyPressed[(int) key];
+        }
+
+        public bool WasKeyReleased(KeyCode key)
+        {
+            return this.mKeyReleased[(int)key];
         }
 
         public bool IsMouseButtonDown(MouseButtonID button)
@@ -142,6 +151,12 @@ namespace Game
         {
             for (int i = 0; i < this.mKeyPressed.Length; ++i)
                 this.mKeyPressed[i] = false;
+        }
+
+        private void ClearKeyReleased()
+        {
+            for (int i = 0; i < this.mKeyReleased.Length; ++i)
+                this.mKeyReleased[i] = false;
         }
 
         private void ClearKeyDown()
@@ -179,6 +194,7 @@ namespace Game
         private bool OnKeyReleased(KeyEvent arg)
         {
             this.mKeyDown[(int)arg.key] = false;
+            this.mKeyReleased[(int)arg.key] = true;
             return true;
         }
 
