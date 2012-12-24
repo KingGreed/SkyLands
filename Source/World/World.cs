@@ -47,7 +47,7 @@ namespace Game
 
             GraphicBlock.generateFace();
 
-            //this.createSky(); LogManager.Singleton.DefaultLog.LogMessage("Sky Created");
+            this.createSky(); LogManager.Singleton.DefaultLog.LogMessage("Sky Created");
             this.generateWorld(); LogManager.Singleton.DefaultLog.LogMessage("World Generated");
             this.populate();      LogManager.Singleton.DefaultLog.LogMessage("World Populated");
 
@@ -60,38 +60,15 @@ namespace Game
 
         private void createSky()
         {
-            this.mCaelumSystem = new CaelumSystem(this.mStateMgr.Root, this.mStateMgr.SceneManager, CaelumSystem.CaelumComponent.None);
-            //this.mStateMgr.Root.FrameStarted += mCaelumSystem.FrameStarted;
-            this.mCaelumSystem.AttachViewport(this.mStateMgr.Viewport);
+            this.mCaelumSystem = new CaelumSystem(this.mStateMgr.Root, this.mStateMgr.SceneManager, CaelumSystem.CaelumComponent.Default);
+            this.mStateMgr.Root.FrameStarted += mCaelumSystem.FrameStarted;
             this.mStateMgr.Window.PreViewportUpdate += mCaelumSystem.PreViewportUpdate;
-            this.mCaelumSystem.EnsureSingleLightSource = true;
-            this.mCaelumSystem.TimeScale = 100;
 
-            //this.mCaelumSystem.AutoConfigure(CaelumSystem.CaelumComponent.Default);
-
-            /* Sky */
-            this.mCaelumSystem.SkyDome = new SkyDome(this.mStateMgr.SceneManager, this.mCaelumSystem.GetCaelumCameraNode());
-
-            /* Sun */
-            this.mCaelumSystem.Sun = new SpriteSun(this.mStateMgr.SceneManager, this.mCaelumSystem.GetCaelumCameraNode());
-            this.mCaelumSystem.Sun.AmbientMultiplier = new ColourValue(0.5f, 0.5f, 0.5f);
-            this.mCaelumSystem.Sun.DiffuseMultiplier = new ColourValue(3, 3, 2.7f);
-            this.mCaelumSystem.Sun.SpecularMultiplier = new ColourValue(5, 5, 5);
-            this.mCaelumSystem.Sun.AutoDisable = true;
-            this.mCaelumSystem.Sun.AutoDisableThreshold = 0.05f;
-
-            //FlatCloudLayer cloudLayer = this.mSky.CloudSystem.CreateLayer();
-            //this.mSky.ManageSceneFog = false;
-
-            // Load Script
-            //this.mSky = CaelumSystem.FromScript(this.mStateMgr.Root, this.mStateMgr.SceneManager, "SandStormTest");
-
-
-            //this.mSky.DepthComposer.GetViewportInstance(this.mStateMgr.Viewport).GetDepthRenderer().ViewportVisibilityMask = 0x001000;
-
+            this.mCaelumSystem.SceneFogDensityMultiplier = 0.0008f;
+            this.mCaelumSystem.ManageSceneFog = true;
         }
 
-        private void generateWorld() {new Island(new Vector2(2, 2));} /* Algorithm of terrain generation */
+        private void generateWorld() {new Island(new Vector2(7, 7));} /* Algorithm of terrain generation */
 
         private void populate() {
             this.mCharacMgr = new CharacMgr(this.mStateMgr.Camera);
