@@ -18,6 +18,7 @@ namespace Game
         private Vector3 mMousePos;
         private Vector3 mMousePressedPos;
         private Vector3 mMouseReleasedPos;
+        public delegate bool IsKeyEvent(MOIS.KeyCode key);   // Represents WasKeyPressed, WasKeyReleased or IsKeyDown
 
         public Keyboard KeyBoard { get { return this.mKeyboard; } }
         public Mouse Mouse { get { return this.mMouse; } }
@@ -145,6 +146,19 @@ namespace Game
         public bool WasMouseMoved()
         {
             return this.mMouseMove.x != 0 || this.mMouseMove.y != 0 || this.mMouseMove.z != 0;
+        }
+
+        public bool IsOneKeyEventTrue(IsKeyEvent keyEvent, params MOIS.KeyCode[] keys)
+        {
+            foreach (MOIS.KeyCode key in keys)
+                if (keyEvent(key)) { return true; }
+
+            return false;
+        }
+
+        public bool AreAllKeyEventTrue(IsKeyEvent keyEvent, params MOIS.KeyCode[] keys)
+        {
+            return !this.IsOneKeyEventTrue(keyEvent, keys);
         }
 
         private void ClearKeyPressed()

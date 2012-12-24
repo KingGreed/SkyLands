@@ -23,12 +23,17 @@ namespace Game
         private Vector3 mSpawnPoint;
         private SceneNode mNode;
         private CharacMgr mCharacMgr;
-
+        private CameraMan mCameraMan;
+        private bool mIsDebugMode;
+        
         public static Dictionary<Vector3, Chunk> chunkArray;
 
         public World(StateManager stateMgr) : base(stateMgr)
-        { 
-            this.mSpawnPoint = Vector3.ZERO; 
+        {
+            this.mSpawnPoint = Vector3.ZERO;
+            this.mIsDebugMode = false;
+            this.mCameraMan = null;
+
             chunkArray = new Dictionary<Vector3, Chunk>();
         }
 
@@ -42,7 +47,7 @@ namespace Game
 
             GraphicBlock.generateFace();
 
-            this.createSky(); LogManager.Singleton.DefaultLog.LogMessage("Sky Created");
+            //this.createSky(); LogManager.Singleton.DefaultLog.LogMessage("Sky Created");
             this.generateWorld(); LogManager.Singleton.DefaultLog.LogMessage("World Generated");
             this.populate();      LogManager.Singleton.DefaultLog.LogMessage("World Populated");
 
@@ -59,21 +64,21 @@ namespace Game
             //this.mStateMgr.Root.FrameStarted += mCaelumSystem.FrameStarted;
             this.mCaelumSystem.AttachViewport(this.mStateMgr.Viewport);
             this.mStateMgr.Window.PreViewportUpdate += mCaelumSystem.PreViewportUpdate;
-            //this.mCaelumSystem.EnsureSingleLightSource = true;
-            //this.mCaelumSystem.TimeScale = 100;
+            this.mCaelumSystem.EnsureSingleLightSource = true;
+            this.mCaelumSystem.TimeScale = 100;
 
             //this.mCaelumSystem.AutoConfigure(CaelumSystem.CaelumComponent.Default);
 
             /* Sky */
-            //this.mCaelumSystem.SkyDome = new SkyDome(this.mStateMgr.SceneManager, this.mCaelumSystem.GetCaelumCameraNode());
+            this.mCaelumSystem.SkyDome = new SkyDome(this.mStateMgr.SceneManager, this.mCaelumSystem.GetCaelumCameraNode());
 
             /* Sun */
-            /*this.mCaelumSystem.Sun = new SpriteSun(this.mStateMgr.SceneManager, this.mCaelumSystem.GetCaelumCameraNode());
+            this.mCaelumSystem.Sun = new SpriteSun(this.mStateMgr.SceneManager, this.mCaelumSystem.GetCaelumCameraNode());
             this.mCaelumSystem.Sun.AmbientMultiplier = new ColourValue(0.5f, 0.5f, 0.5f);
             this.mCaelumSystem.Sun.DiffuseMultiplier = new ColourValue(3, 3, 2.7f);
             this.mCaelumSystem.Sun.SpecularMultiplier = new ColourValue(5, 5, 5);
             this.mCaelumSystem.Sun.AutoDisable = true;
-            this.mCaelumSystem.Sun.AutoDisableThreshold = 0.05f;*/
+            this.mCaelumSystem.Sun.AutoDisableThreshold = 0.05f;
 
             //FlatCloudLayer cloudLayer = this.mSky.CloudSystem.CreateLayer();
             //this.mSky.ManageSceneFog = false;
@@ -89,10 +94,10 @@ namespace Game
         private void generateWorld() {new Island(new Vector2(2, 2));} /* Algorithm of terrain generation */
 
         private void populate() {
-            this.mCharacMgr = new CharacMgr();
+            this.mCharacMgr = new CharacMgr(this.mStateMgr.Camera);
             this.mCharacMgr.AddPlayer(this.mStateMgr.SceneManager, "Sinbad.mesh",
                                       new CharacterInfo("Sinbad", new Vector3(50, 1600, 10)),
-                                      this.mStateMgr.Input, this.mStateMgr.Camera); // Optional parameters that make it the main player
+                                      this.mStateMgr.Input);
         }
     }
 }

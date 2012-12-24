@@ -17,10 +17,35 @@ namespace Game {
         public override void Hide() { }
         public override void Show() { }
 
-        public override void Update(float frameTime) {
+        public override void Update(float frameTime)
+        {
+            if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_F1))
+            {
+                this.mIsDebugMode = !this.mIsDebugMode;
+
+                ((Player)this.mCharacMgr.GetCharacter()).IsDebugMode = this.mIsDebugMode;
+                
+                if (this.mIsDebugMode)
+                {
+                    Camera cam = this.mCharacMgr.MainPlayerCam.Camera;
+                    cam.DetachFromParent();
+                    cam.Position += this.mCharacMgr.GetCharacter().Node.Position;
+                    this.mCameraMan = new Game.BaseApp.CameraMan(cam);
+                }
+                else 
+                    this.mCharacMgr.MainPlayerCam.InitCamera();
+            }
+
             this.mCharacMgr.Update(frameTime);
 
-            if (this.mStateMgr.Input.IsKeyDown(MOIS.KeyCode.KC_ESCAPE)) { this.mStateMgr.RequestStatePop(); }    // Return to the MenuState
+            if (!this.mCharacMgr.GetCharacter().IsMoving)
+            {
+                MoisManager input = ((Player)this.mCharacMgr.GetCharacter()).Input;
+                this.mCameraMan.MouseMovement(input.MouseMoveX, input.MouseMoveY);
+                this.mCameraMan.UpdateCamera(frameTime, input);
+            }
+
+            if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_ESCAPE)) { this.mStateMgr.RequestStatePop(); }    // Return to the MenuState
         }
 
         public override void Shutdown() {

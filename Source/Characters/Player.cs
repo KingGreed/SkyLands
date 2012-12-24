@@ -1,143 +1,145 @@
 ﻿using System;
+using System.Collections.Generic;
 using Mogre;
+
+using Game.AnimSystem;
 
 namespace Game.CharacSystem
 {
-    class Player : Character
+    public class Player : Character
     {
-        private MainPlayerCarac mMainPlayerCarac;
-
-        public MainPlayerCarac MainPlayerCarac { get { return this.mMainPlayerCarac; } }
-
-        public Player(SceneManager sceneMgr, string meshName, CharacterInfo info, MoisManager  input = null, Camera cam = null) : base(sceneMgr, meshName, info)
+        private struct Emote
         {
-            this.mMainPlayerCarac = new MainPlayerCarac(input, cam);
+            private Anim mAnim;
+            private MOIS.KeyCode mKey;
 
-            if (this.mMainPlayerCarac.IsMainPlayer)
-                this.ChangeCameraMode(MainPlayerCarac.CamView.FIRST_PERSON, true);
+            public Anim Anim        { get { return this.mAnim; } }
+            public MOIS.KeyCode Key { get { return this.mKey; } }
+
+            public Emote(MOIS.KeyCode key, Anim anim) { this.mKey = key; this.mAnim = anim; }
+        }
+        
+        private MoisManager mInput;
+        private Emote[] mEmotes;
+        private float mYawCamValue;
+        private float mPitchCamValue;
+        private bool mIsFirstView;
+        private bool mIsDebugMode;
+
+        public MoisManager Input   { get { return this.mInput; } }
+        public float YawCamValue   { get { return this.mYawCamValue; } }
+        public float PitchCamValue { get { return this.mPitchCamValue; } }
+        public bool IsFirstView    { get { return this.mIsFirstView; } }
+        public bool IsDebugMode
+        { 
+            get { return this.mIsDebugMode; }
+            set
+            {
+                this.mIsDebugMode = value;
+                this.mNode.SetVisible(this.mIsDebugMode);
+            }
+        }
+
+        public Player(SceneManager sceneMgr, string meshName, CharacterInfo info, MoisManager input) : base(sceneMgr, meshName, info)
+        {
+            this.mInput = input;
+            this.mIsFirstView = true;
+
+            this.mEmotes = new Emote[]
+            {
+                new Emote(MOIS.KeyCode.KC_1, Anim.Dance)
+            };
         }
 
         public override void Update(float frameTime)
         {
-            if (this.mMainPlayerCarac.IsMainPlayer) { this.ProcessMainPlayerUpdate(frameTime); }
+            bool isNowMoving = !this.mIsDebugMode || this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_LCONTROL, MOIS.KeyCode.KC_RCONTROL);
+            if (this.mMovementInfo.IsMoving && !isNowMoving) { this.mAnimMgr.DeleteAllAnims(); }
+            this.mMovementInfo.IsMoving = isNowMoving;
 
-            base.Update(frameTime);
+            if (this.mMovementInfo.IsMoving)
+            {
+                float yawValue = -this.mInput.MouseMoveX * frameTime * CharacMgr.YAW_SENSIVITY;
+                float pitchValue = -this.mInput.MouseMoveY * frameTime * CharacMgr.PITCH_SENSIVITY;
+
+                if (this.mIsFirstView) { this.FirstPersonUpdate(yawValue, pitchValue); }
+                else { this.ThirdPersonUpdate(yawValue, pitchValue); }
+
+                if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_SPACE))                                                 { this.mAnimMgr.SetAnims(Anim.JumpStart); }
+                if (this.mInput.IsOneKeyEventTrue(this.mInput.WasKeyPressed, MOIS.KeyCode.KC_W, MOIS.KeyCode.KC_UP))  { this.mAnimMgr.SetAnims(this.mRunAnims); }
+                if (this.mInput.IsOneKeyEventTrue(this.mInput.WasKeyReleased, MOIS.KeyCode.KC_W, MOIS.KeyCode.KC_UP)) { this.mAnimMgr.DeleteAnims(this.mRunAnims); }
+
+                if (!this.mAnimMgr.AreAnimationsPlaying(Anim.JumpStart, Anim.JumpLoop, Anim.JumpEnd, Anim.RunBase, Anim.RunTop))
+                {
+                    foreach (Emote emote in this.mEmotes)
+                    {
+                        if (this.mInput.WasKeyPressed(emote.Key))
+                        {
+                            if (!this.mAnimMgr.AreAnimationsPlaying(emote.Anim)) { this.mAnimMgr.SetAnims(emote.Anim); }
+                            else                                                 { this.mAnimMgr.DeleteAnims(emote.Anim); }
+                        }
+                    }
+                }
+
+                /*foreach (AnimCondition animCondition in this.mMainAnimsConditions)   // Update main animations
+                {
+                    if (this.mInput.IsOneKeyEventTrue(this.mInput.WasKeyPressed, animCondition.Keys))
+                    {
+                        this.mAnimMgr.DeleteAllAnims();
+                        this.mAnimMgr.AddAnim(animCondition.Anims);
+                        break;
+                    }
+                    if (this.mInput.IsOneKeyEventTrue(this.mInput.WasKeyReleased, animCondition.Keys))
+                        this.mAnimMgr.DeleteAnim(animCondition.Anims);
+                }*/
+
+                /*bool isInMainAnimations = false;
+                foreach(AnimCondition animCondition in this.mMainAnimsConditions)
+                    if (this.mAnimMgr.AreAnimationsPlaying(animCondition.Anims)) { isInMainAnimations = true; }
+
+                if (!isInMainAnimations)  // Update emotes animations
+                {
+                    foreach (AnimCondition animCondition in this.mEmoteAnimsConditions)
+                    {
+                        if (this.mInput.IsOneKeyEventTrue(this.mInput.WasKeyPressed, animCondition.Keys))
+                        {
+                            if (!this.mAnimMgr.AreAnimationsPlaying(animCondition.Anims))
+                            {
+                                this.mAnimMgr.DeleteAllAnims();
+                                this.mAnimMgr.AddAnim(animCondition.Anims);
+                            }
+                            else
+                                this.mAnimMgr.DeleteAnim(animCondition.Anims);
+                        }
+                    }
+                }*/
+            }
+
+            base.Update(frameTime); // Apply the MovementInfo
         }
 
-        #region MainPlayer
-        private void ProcessMainPlayerUpdate(float frameTime)
+        private void FirstPersonUpdate(float yawValue, float pitchValue)
         {
-            MoisManager input = this.mMainPlayerCarac.Input;
-
-            if (input.WasKeyPressed(MOIS.KeyCode.KC_F1))    // Switch debug mode
-            {
-                this.mMainPlayerCarac.IsDebugMode = !this.mMainPlayerCarac.IsDebugMode;
-
-                if (this.mMainPlayerCarac.IsDebugMode)
-                    this.ChangeCameraMode(MainPlayerCarac.CamView.DEBUG);
-                else
-                    this.ChangeCameraMode(MainPlayerCarac.CamView.FIRST_PERSON);
-            }
-            if (!this.mMainPlayerCarac.IsDebugMode && input.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Middle))  // Switch camera view
-            {
-                if (this.mMainPlayerCarac.CameraView == CharacSystem.MainPlayerCarac.CamView.FIRST_PERSON)
-                    this.ChangeCameraMode(CharacSystem.MainPlayerCarac.CamView.THIRD_PERSON);
-                else
-                    this.ChangeCameraMode(CharacSystem.MainPlayerCarac.CamView.FIRST_PERSON);
-            }
-
-            bool isMoving = !this.mMainPlayerCarac.IsDebugMode || input.IsKeyDown(MOIS.KeyCode.KC_LCONTROL) || input.IsKeyDown(MOIS.KeyCode.KC_RCONTROL);
-            if (this.mMainPlayerCarac.IsPlayerMoving && !isMoving)
-                this.mAnim.DeleteAllAnims();
-            this.mMainPlayerCarac.IsPlayerMoving = isMoving;
-
-            if (!this.mMainPlayerCarac.IsPlayerMoving)
-                this.ProcessDebugUpdate(frameTime);
-            else    // Move the player if we are in debug view with ctrl pressed or if we aren't in debug view
-            {
-                float yawValue   = -input.MouseMoveX * frameTime * MainPlayerCarac.YAW_SENSIVITY;
-                float pitchValue = -input.MouseMoveY * frameTime * MainPlayerCarac.PITCH_SENSIVITY;
-
-                if (this.mMainPlayerCarac.CameraView == MainPlayerCarac.CamView.THIRD_PERSON)
-                    this.ProcessThirdPersonUpdate(yawValue, pitchValue);
-                else
-                    this.ProcessFirstPersonUpdate(yawValue, pitchValue);
-            }
-        }
-
-        private void ProcessDebugUpdate(float frameTime)
-        {
-            MoisManager input = this.mMainPlayerCarac.Input;            
-            
-            this.mMainPlayerCarac.CameraMan.MouseMovement(input.MouseMoveX, input.MouseMoveY);
-            this.mMainPlayerCarac.CameraMan.UpdateCamera(frameTime, input);
-        }
-
-        private void ProcessFirstPersonUpdate(float yawValue, float pitchValue)
-        {
-            MoisManager input = this.mMainPlayerCarac.Input;
-
-            /* Move the player */
             Vector3 moveDirection = new Vector3();
-            if (input.IsKeyDown(MOIS.KeyCode.KC_W) || input.IsKeyDown(MOIS.KeyCode.KC_UP))    { moveDirection.z = 1; }
-            if (input.IsKeyDown(MOIS.KeyCode.KC_S) || input.IsKeyDown(MOIS.KeyCode.KC_DOWN))  { moveDirection.z = -1; }
-            if (input.IsKeyDown(MOIS.KeyCode.KC_A) || input.IsKeyDown(MOIS.KeyCode.KC_LEFT))  { moveDirection.x = 1; }
-            if (input.IsKeyDown(MOIS.KeyCode.KC_D) || input.IsKeyDown(MOIS.KeyCode.KC_RIGHT)) { moveDirection.x = -1; }
-
-            /* Update the animations */
-            if (input.WasKeyPressed(MOIS.KeyCode.KC_W) || input.WasKeyPressed(MOIS.KeyCode.KC_UP)) { this.mAnim.AddAnim(Anim.RunBase, Anim.RunTop); }
-            if (input.WasKeyReleased(MOIS.KeyCode.KC_W) || input.WasKeyReleased(MOIS.KeyCode.KC_UP)) { this.mAnim.DeleteAnim(Anim.RunBase, Anim.RunTop); }
-            if (input.WasKeyPressed(MOIS.KeyCode.KC_1))
-            {
-                if (!this.mAnim.CurrentAnims.Contains(Anim.Dance))
-                    this.mAnim.AddAnim(Anim.Dance);
-                else
-                    this.mAnim.DeleteAnim(Anim.Dance);
-            }
-
-            /* Yaw the player */
-            this.mMovementInfo.YawValue = yawValue;
-
-            /* Pitch the camera */
-            Radian newPitch = Mogre.Math.Abs(pitchValue + this.mMainPlayerCarac.CamPitchNode.Orientation.Pitch);
-            if (newPitch < new Radian(Mogre.Math.PI / 2 - MainPlayerCarac.PITCH_OFFSET) || newPitch > new Radian(Mogre.Math.PI / 2 + MainPlayerCarac.PITCH_OFFSET))
-                this.mMainPlayerCarac.CamPitchNode.Pitch(pitchValue);
+            if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_W) || this.mInput.IsKeyDown(MOIS.KeyCode.KC_UP))    { moveDirection.z = 1; }
+            if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_S) || this.mInput.IsKeyDown(MOIS.KeyCode.KC_DOWN))  { moveDirection.z = -1; }
+            if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_A) || this.mInput.IsKeyDown(MOIS.KeyCode.KC_LEFT))  { moveDirection.x = 1; }
+            if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_D) || this.mInput.IsKeyDown(MOIS.KeyCode.KC_RIGHT)) { moveDirection.x = -1; }
             this.mMovementInfo.MoveDirection = moveDirection;
+
+            this.mMovementInfo.YawValue = yawValue;
+            this.mMovementInfo.PitchValue = pitchValue;
+
+            this.mYawCamValue = 0;
+            this.mPitchCamValue = pitchValue;
         }
 
-        private void ProcessThirdPersonUpdate(float yawValue, float pitchValue) { }
+        private void ThirdPersonUpdate(float yawValue, float pitchValue) { }
 
-        private void ChangeCameraMode(MainPlayerCarac.CamView mode, bool firstInit = false)
+        /*private void DeleteEmotesAnim()
         {
-            if (!this.mMainPlayerCarac.IsMainPlayer || (this.mMainPlayerCarac.CameraView == mode && !firstInit))
-                return;
-            
-            this.mMainPlayerCarac.CameraView = mode;
-
-            if (this.mMainPlayerCarac.CameraView == MainPlayerCarac.CamView.DEBUG)
-            {
-                this.mNode.SetVisible(true);
-
-                this.mMainPlayerCarac.Camera.DetachFromParent();
-                this.mMainPlayerCarac.Camera.Position += this.mNode.Position;
-                this.mMainPlayerCarac.CameraMan = new Game.BaseApp.CameraMan(this.mMainPlayerCarac.Camera);
-            }
-            else if (this.mMainPlayerCarac.CameraView == MainPlayerCarac.CamView.FIRST_PERSON)
-            {
-                this.mNode.SetVisible(false);
-
-                this.mMainPlayerCarac.CamYawNode = this.mNode.CreateChildSceneNode();
-
-                this.mMainPlayerCarac.CamPitchNode = this.mMainPlayerCarac.CamYawNode.CreateChildSceneNode();
-                this.mMainPlayerCarac.CamPitchNode.AttachObject(this.mMainPlayerCarac.Camera);
-
-                this.mMainPlayerCarac.Camera.SetPosition(0, this.Height / 2 - 10, 0);  // Camera is set at eyes level
-                this.mMainPlayerCarac.Camera.Orientation = new Quaternion(1, 0, 0, 0);
-                this.mMainPlayerCarac.CamYawNode.Yaw(new Degree(180));
-
-            }
-            else if (this.mMainPlayerCarac.CameraView == MainPlayerCarac.CamView.THIRD_PERSON) {}
-        }
-        #endregion
+            foreach(AnimCondition animCondition in this.mEmoteAnimsConditions)
+                this.mAnimMgr.DeleteAnim(animCondition.Anims);
+        }*/
     }
 }
