@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Mogre;
 
-using Game.AnimSystem;
-
 namespace Game.CharacSystem
 {
     public class Player : Character
@@ -59,8 +57,8 @@ namespace Game.CharacSystem
 
             if (this.mMovementInfo.IsMoving)
             {
-                float yawValue = -this.mInput.MouseMoveX * frameTime * CharacMgr.YAW_SENSIVITY;
-                float pitchValue = -this.mInput.MouseMoveY * frameTime * CharacMgr.PITCH_SENSIVITY;
+                float yawValue = -this.mInput.MouseMoveX * CharacMgr.YAW_SENSIVITY;
+                float pitchValue = -this.mInput.MouseMoveY * CharacMgr.PITCH_SENSIVITY;
 
                 if (this.mIsFirstView) { this.FirstPersonUpdate(yawValue, pitchValue); }
                 else { this.ThirdPersonUpdate(yawValue, pitchValue); }
@@ -128,7 +126,6 @@ namespace Game.CharacSystem
             this.mMovementInfo.MoveDirection = moveDirection;
 
             this.mMovementInfo.YawValue = yawValue;
-            this.mMovementInfo.PitchValue = pitchValue;
 
             this.mYawCamValue = 0;
             this.mPitchCamValue = pitchValue;

@@ -57,7 +57,7 @@ namespace Game.CharacSystem
             if (this.mMovementInfo.IsMoving)
             {
                 this.mNode.Translate(WALK_SPEED * frameTime * this.mMovementInfo.MoveDirection, Mogre.Node.TransformSpace.TS_LOCAL);
-                this.mNode.Yaw(this.mMovementInfo.YawValue);
+                this.mNode.Yaw(new Degree(this.mMovementInfo.YawValue));
             }
 
             if (this.mAnimMgr.CurrentAnims.Count == 0) { this.mAnimMgr.SetAnims(this.mIdleAnims); }

@@ -38,10 +38,10 @@ namespace Game.CharacSystem
             /* Pitch the camera */
             Radian newPitch = Mogre.Math.Abs(this.mPlayer.PitchCamValue + this.mCamPitchNode.Orientation.Pitch);
             if (newPitch < new Radian(Mogre.Math.PI / 2 - MainPlayerCamera.PITCH_OFFSET) || newPitch > new Radian(Mogre.Math.PI / 2 + MainPlayerCamera.PITCH_OFFSET))
-                this.mCamPitchNode.Pitch(this.mPlayer.PitchCamValue);
+                this.mCamPitchNode.Pitch(new Degree(this.mPlayer.PitchCamValue));
 
             /* Yaw the camera */
-            this.mCamYawNode.Yaw(this.mPlayer.YawCamValue);
+            this.mCamYawNode.Yaw(new Degree(this.mPlayer.YawCamValue));
         }
 
         public void SwitchCameraView()
