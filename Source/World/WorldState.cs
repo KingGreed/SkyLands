@@ -28,8 +28,12 @@ namespace Game {
                 if (this.mIsDebugMode)
                 {
                     Camera cam = this.mCharacMgr.MainPlayerCam.Camera;
+                    Vector3 position = cam.RealPosition;
+                    Quaternion orientation = cam.RealOrientation;
                     cam.DetachFromParent();
-                    cam.Position += this.mCharacMgr.GetCharacter().Node.Position;
+                    cam.Position = position;
+                    cam.Orientation = orientation;
+                    
                     this.mCameraMan = new Game.BaseApp.CameraMan(cam);
                 }
                 else 

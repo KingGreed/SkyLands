@@ -57,14 +57,13 @@ namespace Game.CharacSystem
                 this.mPlayer.Node.SetVisible(false);
 
                 this.mCamYawNode = this.mPlayer.Node.CreateChildSceneNode();
+                this.mCamYawNode.Yaw(new Degree(180));
 
                 this.mCamPitchNode = this.mCamYawNode.CreateChildSceneNode();
                 this.mCamPitchNode.AttachObject(this.mCam);
 
                 this.mCam.SetPosition(0, this.mPlayer.Height / 2 - 10, 0);  // Camera is set at eyes level
                 this.mCam.Orientation = new Quaternion(1, 0, 0, 0);
-                this.mCamYawNode.Yaw(new Degree(180));
-
             }
             else { }
         }
