@@ -40,6 +40,13 @@ namespace Game {
                     this.mCharacMgr.MainPlayerCam.InitCamera();
             }
 
+            if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_F2))
+                Console.WriteLine(this.mCaelumSystem.Sun.Node.Position);
+
+            float delta = 150;
+            if (this.mStateMgr.Input.MouseMoveZ > 0) { this.mCaelumSystem.TimeScale += delta; }
+            else if (this.mStateMgr.Input.MouseMoveZ < 0) { this.mCaelumSystem.TimeScale -= delta; }
+
             this.mCharacMgr.Update(frameTime);
 
             if (!this.mCharacMgr.GetCharacter().IsMoving)

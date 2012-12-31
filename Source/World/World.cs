@@ -60,49 +60,40 @@ namespace Game
 
         private void createSky()
         {
-            //CaelumSharp.CaelumScript.Singleton.LoadScript("test");
-            //this.mStateMgr.SceneManager.ShadowTechnique = ShadowTechnique.SHADOWTYPE_TEXTURE_MODULATIVE;
-            this.mCaelumSystem = new CaelumSystem(this.mStateMgr.Root, this.mStateMgr.SceneManager, CaelumSystem.CaelumComponent.All);
-            this.mStateMgr.Root.FrameStarted += mCaelumSystem.FrameStarted;
+            this.mCaelumSystem = new CaelumSystem(this.mStateMgr.Root, this.mStateMgr.SceneManager, CaelumSystem.CaelumComponent.None);
+            this.mCaelumSystem.AttachViewport(this.mStateMgr.Viewport);
             this.mStateMgr.Window.PreViewportUpdate += mCaelumSystem.PreViewportUpdate;
+            this.mStateMgr.Root.FrameStarted += mCaelumSystem.FrameStarted;
 
-            //this.mCaelumSystem.TimeScale = 100;
-            this.mCaelumSystem.SceneFogDensityMultiplier = 0.0007f;
-            this.mCaelumSystem.ManageSceneFog = true;
-            //this.mCaelumSystem.ManageAmbientLight = true;
-            //this.mCaelumSystem.EnsureSingleLightSource = true;
-            //this.mCaelumSystem.EnsureSingleShadowSource = true;
+            this.mCaelumSystem.GetUniversalClock().SetGregorianDateTime(2012, 12, 21, 12, 0, 0);
+            this.mCaelumSystem.TimeScale = 600;
 
-            //this.mCaelumSystem.SetSkyGradientsImage("CustomSkyGradient2.png");
-
-            /*mCaelumSystem.PrecipitationController = new PrecipitationController(this.mStateMgr.SceneManager);
-
-            mCaelumSystem.PrecipitationController.CreateViewportInstance(this.mStateMgr.Viewport);
-
-            mCaelumSystem.PrecipitationController.PresetType = PrecipitationType.Rain;
-            mCaelumSystem.PrecipitationController.Intensity = 0.2f;
-            mCaelumSystem.PrecipitationController.Speed = 0.1f;*/
-            
             /* Sky */
             this.mCaelumSystem.SkyDome = new SkyDome(this.mStateMgr.SceneManager, this.mCaelumSystem.GetCaelumCameraNode());
-            //this.mCaelumSystem.SkyDome.HazeEnabled = true;
-            //this.mCaelumSystem.SkyDome.SkyGradientsImage = "CustomSkyGradient2.png";
-            //this.mCaelumSystem.SkyDome.SkyGradientsImage = "CustomSkyGradient.png";
-            //this.mCaelumSystem.SkyDome.HazeColour = new ColourValue(0.86f, 0.89f, 0.89f);
-            //this.mCaelumSystem.SkyDome.AtmosphereDepthImage = "CustomAtmosphereDepth.png";
-            //this.mCaelumSystem.SkyDome.QueryFlags = 0;
-            //this.mCaelumSystem.SkyDome.VisibilityFlags = 256;
-            //this.mCaelumSystem.SkyDome.SetAutoRadius();
-            //this.mCaelumSystem.SkyDome.SunDirection = new Vector3(0, 1, 0);
-            
+
             /* Sun */
+            this.mCaelumSystem.ManageAmbientLight = true;
+            this.mCaelumSystem.MinimumAmbientLight = new ColourValue(0.2f, 0.2f, 0.3f);            
             this.mCaelumSystem.Sun = new SpriteSun(this.mStateMgr.SceneManager, this.mCaelumSystem.GetCaelumCameraNode(), "Custom_sun_disc.png", 4);
             this.mCaelumSystem.Sun.AmbientMultiplier = new ColourValue(0.8f, 0.8f, 0.8f);
             this.mCaelumSystem.Sun.DiffuseMultiplier = new ColourValue(3, 3, 2.7f);
             this.mCaelumSystem.Sun.SpecularMultiplier = new ColourValue(5, 5, 5);
             this.mCaelumSystem.Sun.AutoDisable = true;
             this.mCaelumSystem.Sun.AutoDisableThreshold = 0.05f;
-            //this.mCaelumSystem.Sun.Node.SetPosition(0, 1, 0);
+
+            /* Moon */
+            this.mCaelumSystem.Moon = new Moon(this.mStateMgr.SceneManager, this.mCaelumSystem.GetCaelumCameraNode());
+            this.mCaelumSystem.Moon.DiffuseMultiplier = new ColourValue(2, 2, 1.7f);
+            this.mCaelumSystem.Moon.SpecularMultiplier = new ColourValue(4, 4, 4);
+
+            /* Stars */
+            this.mCaelumSystem.PointStarfield = new PointStarfield(this.mStateMgr.SceneManager, this.mCaelumSystem.GetCaelumCameraNode());
+            this.mCaelumSystem.PointStarfield.MagnitudeScale = 1.05f;
+
+            /* Fog */
+            this.mCaelumSystem.SceneFogDensityMultiplier = 0.0007f;
+            this.mCaelumSystem.SceneFogColourMultiplier = new ColourValue(0.3f, 0.3f, 0.3f);
+            this.mCaelumSystem.ManageSceneFog = true;
         }
 
         private void generateWorld() {new Island(new Vector2(2, 2));} /* Algorithm of terrain generation */
