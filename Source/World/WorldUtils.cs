@@ -6,43 +6,30 @@ using System.Text;
 using Game.Terrain;
 using Game.Material;
 using Mogre;
+using Game.Display;
 
 namespace Game
 {
     public partial class World {
 
-        public static Vector3 getBlocCoord(Vector3 chunkPos, Vector3 blockPos){
-            int[] chunkPosArray = new int[3] { (int)chunkPos.x, (int)chunkPos.y, (int)chunkPos.z };
-            int[] blockPosArray = new int[3] { (int)blockPos.x, (int)blockPos.y, (int)blockPos.z };
-            for (int i = 0; i < 3; i++) {
-                chunkPosArray[i] += blockPosArray[i] / CHUNK_SIDE;  // Division entière
-                blockPosArray[i] %= CHUNK_SIDE;
 
-                while (blockPosArray[i] < 0) { chunkPosArray[i]--; blockPosArray[i] += CHUNK_SIDE; }
-            }
-            return new Vector3(blockPosArray[0], blockPosArray[1], blockPosArray[2]);
+
+        public static Vector3 getBlockRelativeCoord(Vector3 blockPos) {
+            blockPos.x %= CHUNK_SIDE; blockPos.y %= CHUNK_SIDE; blockPos.z %= CHUNK_SIDE;
+            return blockPos;
         }
 
-        public static Vector3 getChunkCoord(Vector3 chunkPos, Vector3 blockPos){
-            int[] chunkPosArray = new int[3] { (int)chunkPos.x, (int)chunkPos.y, (int)chunkPos.z };
-            int[] blockPosArray = new int[3] { (int)blockPos.x, (int)blockPos.y, (int)blockPos.z };
-            for (int i = 0; i < 3; i++) {
-                chunkPosArray[i] += blockPosArray[i] / CHUNK_SIDE;  // Division entière
-                blockPosArray[i] %= CHUNK_SIDE;
-
-                while (blockPosArray[i] < 0) { chunkPosArray[i]--; blockPosArray[i] += CHUNK_SIDE; }
-            }
-            return new Vector3(chunkPosArray[0], chunkPosArray[1], chunkPosArray[2]);
+        public static Vector3 getChunkRelativeCoord(Vector3 blockPos) {
+            blockPos.x /= CHUNK_SIDE; blockPos.y /= CHUNK_SIDE; blockPos.z /= CHUNK_SIDE;
+            return blockPos;
         }
-
 
          public static Block getBlock(Vector3 chunkPos, Vector3 blockPos) {
             
-            chunkPos = getChunkCoord(chunkPos, blockPos);
-            blockPos = getBlocCoord (chunkPos, blockPos);
+             Vector3 blockCoord = chunkPos * CHUNK_SIDE + blockPos;
 
-            //LogManager.Singleton.DefaultLog.LogMessage("chunkPos : " + chunkPos.ToString());
-            //LogManager.Singleton.DefaultLog.LogMessage("blockPos : " + blockPos.ToString());
+            chunkPos = getChunkRelativeCoord(blockCoord);
+            blockPos = getBlockRelativeCoord(blockCoord);
 
             if(!hasChunk(chunkPos)) { return new Block(new Vector3(0, 0, 0)); }
             
@@ -50,18 +37,41 @@ namespace Game
         }
 
         public static Chunk getChunk(Vector3 chunkPos, Vector3 blockPos){
-            chunkPos = getChunkCoord(chunkPos, blockPos);
-            blockPos = getBlocCoord (chunkPos, blockPos);
+
+            Vector3 blockCoord = chunkPos * CHUNK_SIDE + blockPos;
+
+            chunkPos = getChunkRelativeCoord(blockCoord);
 
             if(!hasChunk(chunkPos)) { return null; }
             return chunkArray[chunkPos];
 
         }
 
-        public static Chunk getChunkAt(Vector3 chunkPos) {
-            if(!chunkArray.ContainsKey(chunkPos)){ return null; }
-            return chunkArray[chunkPos];
-        }
         public static bool hasChunk(Vector3 chunkPos){ return chunkArray.ContainsKey(chunkPos); }
+
+        public static void getBlockAndChunkPosFromAbsolute(Vector3 blockAbs, ref Vector3 chunkPos, ref Vector3 blockPos) {
+            chunkPos = World.getChunkRelativeCoord(blockAbs);
+            blockPos = World.getBlockRelativeCoord(blockAbs);
+        }
+
+        public static bool hasCollision(Vector3 playerPos, float hitBoxForCollision, GraphicBlock.blockFace collisionSide) {
+            
+            Vector3 chunkPos = Vector3.ZERO, blockPos = playerPos;
+
+            if(collisionSide == GraphicBlock.blockFace.leftFace)  { blockPos.x -= hitBoxForCollision; }
+            if(collisionSide == GraphicBlock.blockFace.rightFace) { blockPos.x += hitBoxForCollision; }
+            if(collisionSide == GraphicBlock.blockFace.frontFace) { blockPos.z += hitBoxForCollision; }
+            if(collisionSide == GraphicBlock.blockFace.backFace)  { blockPos.z -= hitBoxForCollision; }
+            if(collisionSide == GraphicBlock.blockFace.underFace) { blockPos.x -= hitBoxForCollision; }
+            if(collisionSide == GraphicBlock.blockFace.upperFace) { blockPos.x -= hitBoxForCollision; }
+
+            World.getBlockAndChunkPosFromAbsolute(blockPos, ref chunkPos, ref blockPos);
+
+            if(!World.getBlock(chunkPos, blockPos).IsAir()) { return true; }
+
+            return false;
+        }
+
+
     }
 }
