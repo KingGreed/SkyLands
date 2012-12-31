@@ -7,8 +7,6 @@ namespace Game.CharacSystem
 {
     public class MainPlayerCamera
     {
-        private static float PITCH_OFFSET = 0.2f;
-
         private Player      mPlayer;
         private Camera      mCam;
         private SceneNode   mCamYawNode;
@@ -34,14 +32,21 @@ namespace Game.CharacSystem
         {
             if (this.mPlayer.IsFirstView != this.mIsCameraFirstView)
                 this.SwitchCameraView();
-            
-            /* Pitch the camera */
-            Radian newPitch = Mogre.Math.Abs(this.mPlayer.PitchCamValue + this.mCamPitchNode.Orientation.Pitch);
-            if (newPitch < new Radian(Mogre.Math.PI / 2 - MainPlayerCamera.PITCH_OFFSET) || newPitch > new Radian(Mogre.Math.PI / 2 + MainPlayerCamera.PITCH_OFFSET))
-                this.mCamPitchNode.Pitch(new Degree(this.mPlayer.PitchCamValue));
 
             /* Yaw the camera */
             this.mCamYawNode.Yaw(new Degree(this.mPlayer.YawCamValue));
+
+            /* Pitch the camera */
+            this.mCamPitchNode.Pitch(new Degree(this.mPlayer.PitchCamValue));
+
+            float pitchAngle = 2 * new Degree(Mogre.Math.ACos(this.mCamPitchNode.Orientation.w)).ValueAngleUnits;
+            float pitchAngleSign = this.mCamPitchNode.Orientation.x;
+
+            if (pitchAngle > 90.0f) // Limit the pitch between -90 degrees and +90 degrees
+            {
+                if (pitchAngleSign > 0) { this.mCamPitchNode.SetOrientation(Mogre.Math.Sqrt(0.5f), Mogre.Math.Sqrt(0.5f), 0, 0); }
+                else if (pitchAngleSign < 0) { this.mCamPitchNode.SetOrientation(Mogre.Math.Sqrt(0.5f), -Mogre.Math.Sqrt(0.5f), 0, 0); }
+            }
         }
 
         public void SwitchCameraView()
