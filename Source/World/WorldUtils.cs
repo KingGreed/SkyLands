@@ -26,7 +26,7 @@ namespace Game
 
          public static Block getBlock(Vector3 chunkPos, Vector3 blockPos) {
             
-             Vector3 blockCoord = chunkPos * CHUNK_SIDE + blockPos;
+             Vector3 blockCoord = (chunkPos * CHUNK_SIDE) + blockPos;
 
             chunkPos = getChunkRelativeCoord(blockCoord);
             blockPos = getBlockRelativeCoord(blockCoord);
@@ -53,6 +53,9 @@ namespace Game
             chunkPos = World.getChunkRelativeCoord(blockAbs);
             blockPos = World.getBlockRelativeCoord(blockAbs);
         }
+
+
+        //HitBox for collision is the distance between the player's center of gravity and the actual side you wanna test
 
         public static bool hasCollision(Vector3 playerPos, float hitBoxForCollision, GraphicBlock.blockFace collisionSide) {
             
