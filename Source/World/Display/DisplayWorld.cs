@@ -61,7 +61,7 @@ namespace Game.Display
             foreach (KeyValuePair<GraphicBlock.blockFace, Vector3> keyVal in coordToCheck)
             {
                 Block tempBlock = World.getBlock(chunkCoord, keyVal.Value);
-                if (tempBlock != null && tempBlock.IsAir()) { returnList.Add(keyVal.Key); }
+                if (tempBlock == null || tempBlock.IsAir()) { returnList.Add(keyVal.Key); }
             }
             return returnList;
         }

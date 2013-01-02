@@ -96,7 +96,7 @@ namespace Game
             this.mCaelumSystem.ManageSceneFog = true;
         }
 
-        private void generateWorld() {new Island(new Vector2(2, 2));} /* Algorithm of terrain generation */
+        private void generateWorld() {new Island(new Vector2(7, 7));} /* Algorithm of terrain generation */
 
         private void populate() {
             this.mCharacMgr = new CharacMgr(this.mStateMgr.Camera);
