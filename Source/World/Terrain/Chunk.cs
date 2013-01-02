@@ -6,7 +6,9 @@ namespace Game.Terrain
 {
     public class Chunk
     {
-        public Block[, ,] mBlockArray;
+        private Block[, ,] mBlockArray;
+
+        public Block[, ,] BlockArray { get { return this.mBlockArray; } }
 
         public Chunk()
         {

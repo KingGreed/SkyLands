@@ -139,11 +139,11 @@ namespace Game.Terrain
 					    
                         double noiseValue = noise[xx, yy, zz] * noise[xx, yy, zz] - Math.Abs(1 / smoothHeight * (yy - smoothHeight - minElevation));
 
-					    if (noiseValue >= 0) {      
-						    World.getBlock(chunkTempPosition, blockTempPosition).setType(Materials.GRASS);
-					    } else {
-						    World.getBlock(chunkTempPosition, blockTempPosition).setType(Materials.AIR);
-					    }
+					    Block block = World.getBlock(chunkTempPosition, blockTempPosition);
+                        if(block == null) { continue; }
+
+                        if (noiseValue >= 0) { block.setType(Materials.GRASS); }
+                        else                 { block.setType(Materials.AIR); }
 				    }
 			    }
             }
@@ -160,9 +160,11 @@ namespace Game.Terrain
                 blockTempPosition.y = i % World.CHUNK_SIDE;
                 
                 if(!World.hasChunk(chunkTempPosition)) { World.chunkArray.Add(chunkTempPosition, new Chunk()); }
-                if(i <= lowerPosition || i > upperPosition) { World.getBlock(chunkTempPosition, blockTempPosition).setType(Materials.AIR); }
-                else {
-                    World.getBlock(chunkTempPosition, blockTempPosition).setType(Materials.GRASS); 
+                Block block = World.getBlock(chunkTempPosition, blockTempPosition);
+                if(block != null)
+                {
+                    if (i <= lowerPosition || i > upperPosition) { block.setType(Materials.AIR); }
+                    else                                         { block.setType(Materials.GRASS); }
                 }
 
                 i++;

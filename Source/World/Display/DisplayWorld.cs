@@ -45,7 +45,8 @@ namespace Game.Display
         {
 
             List<GraphicBlock.blockFace> returnList = new List<GraphicBlock.blockFace>();
-            if (World.getBlock(chunkCoord, blockCoord).IsAir()) { return returnList; }
+            Block block = World.getBlock(chunkCoord, blockCoord);
+            if (block != null && block.IsAir()) { return returnList; }
 
             Dictionary<GraphicBlock.blockFace, Vector3> coordToCheck = new Dictionary<GraphicBlock.blockFace,Vector3>();
 
@@ -57,8 +58,10 @@ namespace Game.Display
             coordToCheck.Add(GraphicBlock.blockFace.backFace,  new Vector3(blockCoord.x,     blockCoord.y,     blockCoord.z - 1));
 
 
-            foreach(var block in coordToCheck) {
-                if (World.getBlock(chunkCoord, block.Value).IsAir()) { returnList.Add(block.Key); }
+            foreach (KeyValuePair<GraphicBlock.blockFace, Vector3> keyVal in coordToCheck)
+            {
+                Block tempBlock = World.getBlock(chunkCoord, keyVal.Value);
+                if (tempBlock != null && tempBlock.IsAir()) { returnList.Add(keyVal.Key); }
             }
             return returnList;
         }
@@ -66,11 +69,14 @@ namespace Game.Display
         public void displayFaces(Vector3 chunkCoord, Vector3 blockCoord, List<GraphicBlock.blockFace> faceToDisplay) {
             if(faceToDisplay.Count == 0) { return; }
 
+            Block block = World.getBlock(chunkCoord, blockCoord);
+            if (block == null) { return; }
+            
             Vector3 absCoord = DisplayWorld.getAbsoluteCoordAt(chunkCoord, blockCoord);
             string faceName, faceEntName, cubeNodeName = "cubeNode-" + absCoord.x + "-" + absCoord.y + "-" + absCoord.z;
             SceneNode blockNode;
             Entity ent;
-            string type = World.getBlock(chunkCoord, blockCoord).getType();
+            string type = block.getType();
 
 
             if(this.mSceneMgr.HasSceneNode(cubeNodeName)) {
