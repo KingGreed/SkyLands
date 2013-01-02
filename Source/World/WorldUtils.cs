@@ -13,15 +13,33 @@ namespace Game
     public partial class World {
 
 
-
         public static Vector3 getBlockRelativeCoord(Vector3 blockPos) {
-            blockPos.x %= CHUNK_SIDE; blockPos.y %= CHUNK_SIDE; blockPos.z %= CHUNK_SIDE;
+            blockPos.x %= CHUNK_SIDE;
+            blockPos.y %= CHUNK_SIDE;
+            blockPos.z %= CHUNK_SIDE;
+
+            if(blockPos.x < 0) { blockPos.x += 16; }
+            if(blockPos.z < 0) { blockPos.z += 16; }
+
             return blockPos;
         }
 
         public static Vector3 getChunkRelativeCoord(Vector3 blockPos) {
-            blockPos.x = (int)blockPos.x / CHUNK_SIDE; blockPos.y = (int)blockPos.y / CHUNK_SIDE; blockPos.z = (int)blockPos.z / CHUNK_SIDE;
-            return blockPos;
+
+            Vector3 chunkPos = Vector3.ZERO;
+            
+            chunkPos.x = (int)blockPos.x / CHUNK_SIDE;
+            chunkPos.y = (int)blockPos.y / CHUNK_SIDE;
+            chunkPos.z = (int)blockPos.z / CHUNK_SIDE;
+
+            blockPos.x %= CHUNK_SIDE;
+            blockPos.y %= CHUNK_SIDE;
+            blockPos.z %= CHUNK_SIDE;
+
+            if(blockPos.x < 0) { chunkPos.x--; }
+            if(blockPos.z < 0) { chunkPos.z--; }
+
+            return chunkPos;
         }
 
          public static Block getBlock(Vector3 chunkPos, Vector3 blockPos) {
@@ -33,10 +51,7 @@ namespace Game
 
             if(!hasChunk(chunkPos)) { return null; }
 
-            if (blockPos.x < 0 || blockPos.y < 0 || blockPos.z < 0 || blockPos.x > World.CHUNK_SIDE || blockPos.y > World.CHUNK_SIDE || blockPos.z > World.CHUNK_SIDE)
-                return null;
-            else
-                return chunkArray[chunkPos].BlockArray[(int)blockPos.x, (int)blockPos.y, (int)blockPos.z];
+            return chunkArray[chunkPos].BlockArray[(int)blockPos.x, (int)blockPos.y, (int)blockPos.z];
         }
 
         public static Chunk getChunk(Vector3 chunkPos, Vector3 blockPos){
@@ -52,17 +67,17 @@ namespace Game
 
         public static bool hasChunk(Vector3 chunkPos){ return chunkArray.ContainsKey(chunkPos); }
 
-        public static void getBlockAndChunkPosFromAbsolute(Vector3 blockAbs, ref Vector3 chunkPos, ref Vector3 blockPos) {
+        public static void getBlockAndChunkPosFromAbsolute(Vector3 blockAbs, out Vector3 chunkPos, out Vector3 blockPos) {
             chunkPos = World.getChunkRelativeCoord(blockAbs);
             blockPos = World.getBlockRelativeCoord(blockAbs);
         }
 
 
-        //HitBox for collision is the distance between the player's center of gravity and the actual side you wanna test
+        //HitBox for collision is the distance between the player's center of gravity and the actual side you want to test
 
         public static bool hasCollision(Vector3 playerPos, float hitBoxForCollision, GraphicBlock.blockFace collisionSide) {
             
-            Vector3 chunkPos = Vector3.ZERO, blockPos = playerPos;
+            Vector3 chunkPos, blockPos = playerPos;
 
             if(collisionSide == GraphicBlock.blockFace.leftFace)  { blockPos.x -= hitBoxForCollision; }
             if(collisionSide == GraphicBlock.blockFace.rightFace) { blockPos.x += hitBoxForCollision; }
@@ -71,7 +86,7 @@ namespace Game
             if(collisionSide == GraphicBlock.blockFace.underFace) { blockPos.y -= hitBoxForCollision; }
             if(collisionSide == GraphicBlock.blockFace.upperFace) { blockPos.y += hitBoxForCollision; }
 
-            World.getBlockAndChunkPosFromAbsolute(blockPos, ref chunkPos, ref blockPos);
+            World.getBlockAndChunkPosFromAbsolute(blockPos, out chunkPos, out blockPos);
 
             Block block = World.getBlock(chunkPos, blockPos);
             if (block != null && block.IsAir()) { return true; }
