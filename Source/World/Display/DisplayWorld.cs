@@ -41,24 +41,24 @@ namespace Game.Display
             }
         }
 
-        public List<GraphicBlock.blockFace> getDisplayableFacesAt(Vector3 chunkCoord, Vector3 blockCoord)
+        public List<CubeFace> getDisplayableFacesAt(Vector3 chunkCoord, Vector3 blockCoord)
         {
 
-            List<GraphicBlock.blockFace> returnList = new List<GraphicBlock.blockFace>();
+            List<CubeFace> returnList = new List<CubeFace>();
             Block block = World.getBlock(chunkCoord, blockCoord);
             if (block != null && block.IsAir()) { return returnList; }
 
-            Dictionary<GraphicBlock.blockFace, Vector3> coordToCheck = new Dictionary<GraphicBlock.blockFace,Vector3>();
+            Dictionary<CubeFace, Vector3> coordToCheck = new Dictionary<CubeFace,Vector3>();
 
-            coordToCheck.Add(GraphicBlock.blockFace.rightFace, new Vector3(blockCoord.x + 1, blockCoord.y,     blockCoord.z));
-            coordToCheck.Add(GraphicBlock.blockFace.leftFace,  new Vector3(blockCoord.x - 1, blockCoord.y,     blockCoord.z));
-            coordToCheck.Add(GraphicBlock.blockFace.upperFace, new Vector3(blockCoord.x,     blockCoord.y + 1, blockCoord.z));
-            coordToCheck.Add(GraphicBlock.blockFace.underFace, new Vector3(blockCoord.x,     blockCoord.y - 1, blockCoord.z));
-            coordToCheck.Add(GraphicBlock.blockFace.frontFace, new Vector3(blockCoord.x,     blockCoord.y,     blockCoord.z + 1));
-            coordToCheck.Add(GraphicBlock.blockFace.backFace,  new Vector3(blockCoord.x,     blockCoord.y,     blockCoord.z - 1));
+            coordToCheck.Add(CubeFace.rightFace, new Vector3(blockCoord.x + 1, blockCoord.y,     blockCoord.z));
+            coordToCheck.Add(CubeFace.leftFace,  new Vector3(blockCoord.x - 1, blockCoord.y,     blockCoord.z));
+            coordToCheck.Add(CubeFace.upperFace, new Vector3(blockCoord.x,     blockCoord.y + 1, blockCoord.z));
+            coordToCheck.Add(CubeFace.underFace, new Vector3(blockCoord.x,     blockCoord.y - 1, blockCoord.z));
+            coordToCheck.Add(CubeFace.frontFace, new Vector3(blockCoord.x,     blockCoord.y,     blockCoord.z + 1));
+            coordToCheck.Add(CubeFace.backFace,  new Vector3(blockCoord.x,     blockCoord.y,     blockCoord.z - 1));
 
 
-            foreach (KeyValuePair<GraphicBlock.blockFace, Vector3> keyVal in coordToCheck)
+            foreach (KeyValuePair<CubeFace, Vector3> keyVal in coordToCheck)
             {
                 Block tempBlock = World.getBlock(chunkCoord, keyVal.Value);
                 if (tempBlock == null || tempBlock.IsAir()) { returnList.Add(keyVal.Key); }
@@ -66,7 +66,7 @@ namespace Game.Display
             return returnList;
         }
 
-        public void displayFaces(Vector3 chunkCoord, Vector3 blockCoord, List<GraphicBlock.blockFace> faceToDisplay) {
+        public void displayFaces(Vector3 chunkCoord, Vector3 blockCoord, List<CubeFace> faceToDisplay) {
             if(faceToDisplay.Count == 0) { return; }
 
             Block block = World.getBlock(chunkCoord, blockCoord);

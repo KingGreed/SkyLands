@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Mogre;
 
 using Game.Terrain;
 using Game.Material;
-using Mogre;
-using Game.Display;
 
 namespace Game
 {
     public partial class World {
-
 
         public static Vector3 getBlockRelativeCoord(Vector3 blockPos) {
             blockPos.x %= CHUNK_SIDE;
@@ -68,23 +64,23 @@ namespace Game
         public static bool hasChunk(Vector3 chunkPos){ return chunkArray.ContainsKey(chunkPos); }
 
         public static void getBlockAndChunkPosFromAbsolute(Vector3 blockAbs, out Vector3 chunkPos, out Vector3 blockPos) {
+            blockAbs /= World.CUBE_SIDE;
             chunkPos = World.getChunkRelativeCoord(blockAbs);
             blockPos = World.getBlockRelativeCoord(blockAbs);
         }
 
 
         //HitBox for collision is the distance between the player's center of gravity and the actual side you want to test
-
-        public static bool hasCollision(Vector3 playerPos, float hitBoxForCollision, GraphicBlock.blockFace collisionSide) {
+        public static bool hasCollision(Vector3 playerPos, float hitBoxForCollision, CubeFace collisionSide) {
             
             Vector3 chunkPos, blockPos = playerPos;
 
-            if(collisionSide == GraphicBlock.blockFace.leftFace)  { blockPos.x -= hitBoxForCollision; }
-            if(collisionSide == GraphicBlock.blockFace.rightFace) { blockPos.x += hitBoxForCollision; }
-            if(collisionSide == GraphicBlock.blockFace.frontFace) { blockPos.z += hitBoxForCollision; }
-            if(collisionSide == GraphicBlock.blockFace.backFace)  { blockPos.z -= hitBoxForCollision; }
-            if(collisionSide == GraphicBlock.blockFace.underFace) { blockPos.y -= hitBoxForCollision; }
-            if(collisionSide == GraphicBlock.blockFace.upperFace) { blockPos.y += hitBoxForCollision; }
+            if(collisionSide == CubeFace.leftFace)  { blockPos.x -= hitBoxForCollision; }
+            if(collisionSide == CubeFace.rightFace) { blockPos.x += hitBoxForCollision; }
+            if(collisionSide == CubeFace.frontFace) { blockPos.z += hitBoxForCollision; }
+            if(collisionSide == CubeFace.backFace)  { blockPos.z -= hitBoxForCollision; }
+            if(collisionSide == CubeFace.underFace) { blockPos.y -= hitBoxForCollision; }
+            if(collisionSide == CubeFace.upperFace) { blockPos.y += hitBoxForCollision; }
 
             World.getBlockAndChunkPosFromAbsolute(blockPos, out chunkPos, out blockPos);
 

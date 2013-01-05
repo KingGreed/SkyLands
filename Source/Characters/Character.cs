@@ -7,7 +7,7 @@ namespace Game.CharacSystem
     /* Mother class of Player and NonPlayer */
     public abstract class Character
     {
-        private const float WALK_SPEED = 200.0f;
+        private const float WALK_SPEED = 300.0f;
 
         protected SceneNode mNode;
         protected AnimationMgr mAnimMgr;

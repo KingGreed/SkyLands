@@ -66,7 +66,7 @@ namespace Game
             this.mStateMgr.Root.FrameStarted += mCaelumSystem.FrameStarted;
 
             this.mCaelumSystem.GetUniversalClock().SetGregorianDateTime(2012, 12, 21, 12, 0, 0);
-            this.mCaelumSystem.TimeScale = 600;
+            this.mCaelumSystem.TimeScale = 1;
 
             /* Sky */
             this.mCaelumSystem.SkyDome = new SkyDome(this.mStateMgr.SceneManager, this.mCaelumSystem.GetCaelumCameraNode());
@@ -101,7 +101,7 @@ namespace Game
         private void populate() {
             this.mCharacMgr = new CharacMgr(this.mStateMgr.Camera);
             this.mCharacMgr.AddPlayer(this.mStateMgr.SceneManager, "Sinbad.mesh",
-                                      new CharacterInfo("Sinbad", new Vector3(50, 1600, 10)),
+                                      new CharacterInfo("Sinbad", new Vector3(300, 7000, 1000)),
                                       this.mStateMgr.Input);
         }
     }

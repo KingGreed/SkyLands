@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Mogre;
 
 using Game.CharacSystem;
-using Game.Terrain;
-using Game.States;
 using Game.BaseApp;
-
-using Mogre;
 
 namespace Game {
 
@@ -34,7 +29,7 @@ namespace Game {
                     cam.Position = position;
                     cam.Orientation = orientation;
                     
-                    this.mCameraMan = new Game.BaseApp.CameraMan(cam);
+                    this.mCameraMan = new CameraMan(cam);
                 }
                 else 
                     this.mCharacMgr.MainPlayerCam.InitCamera();

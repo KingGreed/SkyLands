@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Mogre;
 
-using Game.LibNoise;
-
 namespace Game.CharacSystem
 {
     public enum Anim : byte { IdleBase, IdleTop, RunBase, RunTop, JumpStart, JumpLoop, JumpEnd, Dance }

@@ -9,21 +9,13 @@ namespace Game.Display
 {
     public static class GraphicBlock
     {
-        public enum blockFace { 
-            frontFace,
-            backFace,
-            upperFace,
-            underFace,
-            leftFace,
-            rightFace
-        };
-        public static string getFaceName(blockFace name) {
-            if(name == blockFace.frontFace)      { return "frontFace"; }
-            else if(name == blockFace.backFace)  { return "backFace" ; }
-            else if(name == blockFace.rightFace) { return "rightFace"; } 
-            else if(name == blockFace.leftFace)  { return "leftFace" ; }
-            else if(name == blockFace.underFace) { return "underFace"; }
-            else /*name == blockFace.upperFace*/ { return "upperFace"; }
+        public static string getFaceName(CubeFace name) {
+            if(name == CubeFace.frontFace)      { return "frontFace"; }
+            else if(name == CubeFace.backFace)  { return "backFace" ; }
+            else if(name == CubeFace.rightFace) { return "rightFace"; } 
+            else if(name == CubeFace.leftFace)  { return "leftFace" ; }
+            else if(name == CubeFace.underFace) { return "underFace"; }
+            else /*name == CubeFace.upperFace*/ { return "upperFace"; }
         }
 
         public static void generateFace()

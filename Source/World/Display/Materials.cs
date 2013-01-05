@@ -17,7 +17,7 @@ namespace Game.Display
 
         }
 
-        public string getMaterial(string id, GraphicBlock.blockFace face){
+        public string getMaterial(string id, CubeFace face){
             
             string XmlFace = this.getFaceName(face);
             XmlNodeList cube = this.mDoc.SelectNodes("cube");
@@ -38,9 +38,9 @@ namespace Game.Display
             throw new NotImplementedException("Textures has not been implemented");
         }
 
-        private string getFaceName(GraphicBlock.blockFace face){
-            if(face == GraphicBlock.blockFace.underFace){ return "bottom";}
-            if(face == GraphicBlock.blockFace.upperFace){ return "top";   }
+        private string getFaceName(CubeFace face){
+            if(face == CubeFace.underFace){ return "bottom";}
+            if(face == CubeFace.upperFace){ return "top";   }
             else                                        { return "side";}
         }
     }
