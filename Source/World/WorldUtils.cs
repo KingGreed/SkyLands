@@ -10,9 +10,9 @@ namespace Game
     public partial class World {
 
         public static Vector3 getBlockRelativeCoord(Vector3 blockPos) {
-            blockPos.x %= CHUNK_SIDE;
-            blockPos.y %= CHUNK_SIDE;
-            blockPos.z %= CHUNK_SIDE;
+            blockPos.x = (int)blockPos.x % CHUNK_SIDE;
+            blockPos.y = (int)blockPos.y % CHUNK_SIDE;
+            blockPos.z = (int)blockPos.z % CHUNK_SIDE;
 
             if(blockPos.x < 0) { blockPos.x += 16; }
             if(blockPos.z < 0) { blockPos.z += 16; }
@@ -71,21 +71,21 @@ namespace Game
 
 
         //HitBox for collision is the distance between the player's center of gravity and the actual side you want to test
-        public static bool hasCollision(Vector3 playerPos, float hitBoxForCollision, CubeFace collisionSide) {
-            
-            Vector3 chunkPos, blockPos = playerPos;
+        public static bool hasCollision(Vector3 blockPos, CubeFace collisionSide)
+        {
+            Vector3 chunkPos;
 
-            if(collisionSide == CubeFace.leftFace)  { blockPos.x -= hitBoxForCollision; }
-            if(collisionSide == CubeFace.rightFace) { blockPos.x += hitBoxForCollision; }
-            if(collisionSide == CubeFace.frontFace) { blockPos.z += hitBoxForCollision; }
-            if(collisionSide == CubeFace.backFace)  { blockPos.z -= hitBoxForCollision; }
-            if(collisionSide == CubeFace.underFace) { blockPos.y -= hitBoxForCollision; }
-            if(collisionSide == CubeFace.upperFace) { blockPos.y += hitBoxForCollision; }
+            if      (collisionSide == CubeFace.leftFace)    { blockPos.x--; }
+            else if (collisionSide == CubeFace.rightFace)   { blockPos.x++; }
+            else if (collisionSide == CubeFace.frontFace)   { blockPos.z++; }
+            else if (collisionSide == CubeFace.backFace)    { blockPos.z--; }
+            else if (collisionSide == CubeFace.underFace)   { blockPos.y--; }
+            else  /*(collisionSide == CubeFace.upperFace)*/ { blockPos.y++; }
 
             World.getBlockAndChunkPosFromAbsolute(blockPos, out chunkPos, out blockPos);
 
             Block block = World.getBlock(chunkPos, blockPos);
-            if (block != null && block.IsAir()) { return true; }
+            if (block != null && !block.IsAir()) { return true; }
 
             return false;
         }

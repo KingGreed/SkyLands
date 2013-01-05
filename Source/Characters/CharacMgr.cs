@@ -36,10 +36,7 @@ namespace Game.CharacSystem
         public void Update(float frameTime)
         {
             foreach (Character charac in this.mCharacList)
-            {
-                if (charac.GetType() == typeof(Player)) { ((Player)charac).Update(frameTime); }
-                else                                    { ((NonPlayer)charac).Update(frameTime); }
-            }
+                charac.Update(frameTime);
 
             this.mMainPlayerCam.Update();
         }

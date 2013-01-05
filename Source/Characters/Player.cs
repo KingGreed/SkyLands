@@ -38,7 +38,7 @@ namespace Game.CharacSystem
             }
         }
 
-        public Player(SceneManager sceneMgr, string meshName, CharacterInfo info, MoisManager input) : base(sceneMgr, meshName, info)
+        public Player(SceneManager sceneMgr, string meshName, CharacterInfo info, MoisManager input) : base(sceneMgr, meshName, info, true)
         {
             this.mInput = input;
             this.mIsFirstView = true;
@@ -49,7 +49,7 @@ namespace Game.CharacSystem
             };
         }
 
-        public override void Update(float frameTime)
+        public new void Update(float frameTime)
         {
             bool isNowMoving = !this.mIsDebugMode || this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_LCONTROL, MOIS.KeyCode.KC_RCONTROL);
             if (this.mMovementInfo.IsMoving && !isNowMoving) { this.mAnimMgr.DeleteAllAnims(); }
@@ -78,42 +78,7 @@ namespace Game.CharacSystem
                         }
                     }
                 }
-
-                /*foreach (AnimCondition animCondition in this.mMainAnimsConditions)   // Update main animations
-                {
-                    if (this.mInput.IsOneKeyEventTrue(this.mInput.WasKeyPressed, animCondition.Keys))
-                    {
-                        this.mAnimMgr.DeleteAllAnims();
-                        this.mAnimMgr.AddAnim(animCondition.Anims);
-                        break;
-                    }
-                    if (this.mInput.IsOneKeyEventTrue(this.mInput.WasKeyReleased, animCondition.Keys))
-                        this.mAnimMgr.DeleteAnim(animCondition.Anims);
-                }*/
-
-                /*bool isInMainAnimations = false;
-                foreach(AnimCondition animCondition in this.mMainAnimsConditions)
-                    if (this.mAnimMgr.AreAnimationsPlaying(animCondition.Anims)) { isInMainAnimations = true; }
-
-                if (!isInMainAnimations)  // Update emotes animations
-                {
-                    foreach (AnimCondition animCondition in this.mEmoteAnimsConditions)
-                    {
-                        if (this.mInput.IsOneKeyEventTrue(this.mInput.WasKeyPressed, animCondition.Keys))
-                        {
-                            if (!this.mAnimMgr.AreAnimationsPlaying(animCondition.Anims))
-                            {
-                                this.mAnimMgr.DeleteAllAnims();
-                                this.mAnimMgr.AddAnim(animCondition.Anims);
-                            }
-                            else
-                                this.mAnimMgr.DeleteAnim(animCondition.Anims);
-                        }
-                    }
-                }*/
             }
-
-            base.Update(frameTime); // Apply the MovementInfo
         }
 
         private void FirstPersonUpdate(float yawValue, float pitchValue)
@@ -132,11 +97,5 @@ namespace Game.CharacSystem
         }
 
         private void ThirdPersonUpdate(float yawValue, float pitchValue) { }
-
-        /*private void DeleteEmotesAnim()
-        {
-            foreach(AnimCondition animCondition in this.mEmoteAnimsConditions)
-                this.mAnimMgr.DeleteAnim(animCondition.Anims);
-        }*/
     }
 }
