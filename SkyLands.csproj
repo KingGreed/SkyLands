@@ -79,7 +79,7 @@
     <Compile Include="Source\World\Generation\Biomes\PlainBiome.cs" />
     <Compile Include="Source\World\Generation\Biomes\RiverBiome.cs" />
     <Compile Include="Source\World\Generation\SkyLandsBiomeSelector.cs" />
-    <Compile Include="Source\World\LibNoise\MathHelper.cs" />
+    <Compile Include="Source\MathHelper.cs" />
     <Compile Include="Source\World\LibNoise\Module\combiner\Add.cs" />
     <Compile Include="Source\World\LibNoise\Module\combiner\Multiply.cs" />
     <Compile Include="Source\World\LibNoise\Module\modifier\Clamp.cs" />

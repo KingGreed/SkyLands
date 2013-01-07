@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using Mogre;
 
-using Game.LibNoise;
-
 namespace Game.CharacSystem
 {
     public enum Anim : byte { IdleBase, IdleTop, RunBase, RunTop, JumpStart, JumpLoop, JumpEnd, Dance }
@@ -13,19 +11,20 @@ namespace Game.CharacSystem
         private const float FADE_SPEED = 7.5f;
 
         private AnimationState[] mAnimStates;   // All the AnimationState available
-        private List<Anim> mWantedAnims;        // Animations asked by the input or AI 
+        private List<Anim> mWantedAnims;        // Animations asked by the input or AI
+        private List<Anim> mNonLoopedAnimations;
 
         public List<Anim> CurrentAnims { get { return this.mWantedAnims; } }
 
         public AnimationMgr(AnimationStateSet animSet)
         {
             this.mAnimStates = new AnimationState[Enum.GetNames(typeof(Anim)).Length];
-            for(int i = 0; i < this.mAnimStates.Length; i++)
+            this.mNonLoopedAnimations = new List<Anim>() { Anim.JumpStart, Anim.JumpEnd };
+            for (int i = 0; i < this.mAnimStates.Length; i++)
             {
                 this.mAnimStates[i] = animSet.GetAnimationState(Enum.GetName(typeof(Anim), (Anim)i));   // Stores all the AnimationState
-                
-                if ((Anim)i == Anim.JumpStart || (Anim)i == Anim.JumpEnd)
-                    continue;
+
+                if (this.mNonLoopedAnimations.Contains((Anim)i)) { this.mAnimStates[i].Loop = false; }
 
                 this.mAnimStates[i].Loop = true;    // All the animation excepted JumpStart and JumpLoop are looped
             }
@@ -61,10 +60,15 @@ namespace Game.CharacSystem
 
         public bool AreAnimationsPlaying(params Anim[] anims)
         {
-            foreach(Anim anim in anims)
+            foreach (Anim anim in anims)
                 if (!this.mWantedAnims.Contains(anim)) { return false; }
 
             return true;
+        }
+
+        public bool HasAnimEnded(Anim anim)
+        {
+            return this.mAnimStates[(int)anim].HasEnded;
         }
 
         public void Update(float frameTime)
@@ -72,7 +76,7 @@ namespace Game.CharacSystem
             this.FadeAnimations(frameTime);
 
             foreach (Anim anim in this.mWantedAnims)
-                this.mAnimStates[(int) anim].AddTime(frameTime);
+                this.mAnimStates[(int)anim].AddTime(frameTime);
         }
 
         private void FadeAnimations(float frameTime)
@@ -85,6 +89,9 @@ namespace Game.CharacSystem
 
                     float newWeight = this.mAnimStates[i].Weight + FADE_SPEED * frameTime;
                     this.mAnimStates[i].Weight = MathHelper.clamp<float>(newWeight, 0, 1);
+
+                    if (this.mNonLoopedAnimations.Contains((Anim)i) && this.mAnimStates[i].HasEnded)
+                        this.DeleteAnims((Anim)i);
                 }
                 else
                 {

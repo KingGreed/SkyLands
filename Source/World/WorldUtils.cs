@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Mogre;
 
 using Game.Terrain;
 using Game.Material;
-using Mogre;
-using Game.Display;
 
 namespace Game
 {
     public partial class World {
 
-
         public static Vector3 getBlockRelativeCoord(Vector3 blockPos) {
-            blockPos.x %= CHUNK_SIDE;
-            blockPos.y %= CHUNK_SIDE;
-            blockPos.z %= CHUNK_SIDE;
+            blockPos.x = (int)blockPos.x % CHUNK_SIDE;
+            blockPos.y = (int)blockPos.y % CHUNK_SIDE;
+            blockPos.z = (int)blockPos.z % CHUNK_SIDE;
 
             if(blockPos.x < 0) { blockPos.x += 16; }
             if(blockPos.z < 0) { blockPos.z += 16; }
@@ -68,28 +64,28 @@ namespace Game
         public static bool hasChunk(Vector3 chunkPos){ return chunkArray.ContainsKey(chunkPos); }
 
         public static void getBlockAndChunkPosFromAbsolute(Vector3 blockAbs, out Vector3 chunkPos, out Vector3 blockPos) {
+            blockAbs /= World.CUBE_SIDE;
             chunkPos = World.getChunkRelativeCoord(blockAbs);
             blockPos = World.getBlockRelativeCoord(blockAbs);
         }
 
 
         //HitBox for collision is the distance between the player's center of gravity and the actual side you want to test
+        public static bool hasCollision(Vector3 blockPos, CubeFace collisionSide)
+        {
+            Vector3 chunkPos;
 
-        public static bool hasCollision(Vector3 playerPos, float hitBoxForCollision, GraphicBlock.blockFace collisionSide) {
-            
-            Vector3 chunkPos, blockPos = playerPos;
-
-            if(collisionSide == GraphicBlock.blockFace.leftFace)  { blockPos.x -= hitBoxForCollision; }
-            if(collisionSide == GraphicBlock.blockFace.rightFace) { blockPos.x += hitBoxForCollision; }
-            if(collisionSide == GraphicBlock.blockFace.frontFace) { blockPos.z += hitBoxForCollision; }
-            if(collisionSide == GraphicBlock.blockFace.backFace)  { blockPos.z -= hitBoxForCollision; }
-            if(collisionSide == GraphicBlock.blockFace.underFace) { blockPos.y -= hitBoxForCollision; }
-            if(collisionSide == GraphicBlock.blockFace.upperFace) { blockPos.y += hitBoxForCollision; }
+            if      (collisionSide == CubeFace.leftFace)    { blockPos.x--; }
+            else if (collisionSide == CubeFace.rightFace)   { blockPos.x++; }
+            else if (collisionSide == CubeFace.frontFace)   { blockPos.z++; }
+            else if (collisionSide == CubeFace.backFace)    { blockPos.z--; }
+            else if (collisionSide == CubeFace.underFace)   { blockPos.y--; }
+            else  /*(collisionSide == CubeFace.upperFace)*/ { blockPos.y++; }
 
             World.getBlockAndChunkPosFromAbsolute(blockPos, out chunkPos, out blockPos);
 
             Block block = World.getBlock(chunkPos, blockPos);
-            if (block != null && block.IsAir()) { return true; }
+            if (block != null && !block.IsAir()) { return true; }
 
             return false;
         }
