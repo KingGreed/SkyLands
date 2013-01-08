@@ -1,36 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using Miyagi.Common;
-using Miyagi.Common.Data;
-using Miyagi.Common.Resources;
-using Miyagi.UI;
-using Miyagi.UI.Controls;
-using Miyagi.UI.Controls.Layout;
 
 using Game.States;
+using Game.GUI;
 
 namespace Game
 {
     public class MainMenu : State
     {
-        private MiyagiSystem mSystem;
-        private GUI mMenuGUI;
+        MenuGUI mMenuGUI;
 
         public MainMenu(StateManager stateMgr) : base(stateMgr)
         {
-            this.mSystem = null;
-            this.mMenuGUI = new GUI("Menu GUI");
+            this.mMenuGUI = new MenuGUI(stateMgr, "Menu GUI");
+
         }
 
         public override bool Startup()
         {
             if (this.mIsStartedUp) { return false; }
 
-            this.mSystem      = this.mStateMgr.MiyagiManager.System;
             this.mIsStartedUp = true;
             
-            this.CreateMenu();
-            this.mSystem.GUIManager.GUIs.Add(this.mMenuGUI);
             
             return true;
         }

@@ -25,6 +25,9 @@ namespace Game
         private CharacMgr mCharacMgr;
         private CameraMan mCameraMan;
         private bool mIsDebugMode;
+
+        private GUIFactory mMenu;
+
         
         public static Dictionary<Vector3, Chunk> chunkArray;
 
@@ -35,6 +38,8 @@ namespace Game
             this.mCameraMan = null;
 
             chunkArray = new Dictionary<Vector3, Chunk>();
+
+            this.mMenu = new WorldGUI(stateMgr, "World GUI");
         }
 
 

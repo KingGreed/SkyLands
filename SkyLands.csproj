@@ -58,8 +58,10 @@
     <Compile Include="Source\Characters\Info\CharacterInfo.cs" />
     <Compile Include="Source\Characters\MainPlayerCamera.cs" />
     <Compile Include="Source\Characters\Info\MovementInfo.cs" />
-    <Compile Include="Source\GUI\GUIManager.cs" />
+    <Compile Include="Source\GUI\GUIFactory.cs" />
     <Compile Include="Source\GUI\MainMenu.cs" />
+    <Compile Include="Source\GUI\MenuGUI.cs" />
+    <Compile Include="Source\GUI\WorldGUI.cs" />
     <Compile Include="Source\Program.cs" />
     <Compile Include="Source\Characters\CharacMgr.cs" />
     <Compile Include="Source\Characters\Character.cs" />
