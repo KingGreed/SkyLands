@@ -91,5 +91,9 @@ namespace Game
         }
 
 
+        public static Vector3 getSafeSpawn() {
+
+        }
+
     }
 }
