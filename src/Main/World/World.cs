@@ -9,6 +9,8 @@ using Game.Display;
 using Game.States;
 using Game.BaseApp;
 
+using Game.GUICreator;
+
 namespace Game
 {
     public partial class World : State

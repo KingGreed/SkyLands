@@ -50,59 +50,6 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Source\Base Ogre\BaseApplication.cs" />
-    <Compile Include="Source\Base Ogre\CameraMan.cs" />
-    <Compile Include="Source\Base Ogre\MoisManager.cs" />
-    <Compile Include="Source\Base Ogre\Overlay.cs" />
-    <Compile Include="Source\Characters\AnimationMgr.cs" />
-    <Compile Include="Source\Characters\Info\CharacterInfo.cs" />
-    <Compile Include="Source\Characters\MainPlayerCamera.cs" />
-    <Compile Include="Source\Characters\Info\MovementInfo.cs" />
-    <Compile Include="Source\GUI\GUIFactory.cs" />
-    <Compile Include="Source\GUI\MainMenu.cs" />
-    <Compile Include="Source\GUI\MenuGUI.cs" />
-    <Compile Include="Source\GUI\WorldGUI.cs" />
-    <Compile Include="Source\Program.cs" />
-    <Compile Include="Source\Characters\CharacMgr.cs" />
-    <Compile Include="Source\Characters\Character.cs" />
-    <Compile Include="Source\Characters\NonPlayer.cs" />
-    <Compile Include="Source\Characters\Player.cs" />
-    <Compile Include="Source\States\State.cs" />
-    <Compile Include="Source\States\StateManager.cs" />
-    <Compile Include="Source\World\Generation\BiomeSelector.cs" />
-    <Compile Include="Source\World\Generation\Biomes\Biome.cs" />
-    <Compile Include="Source\World\Generation\Biomes\BiomeMap.cs" />
-    <Compile Include="Source\World\Generation\Biomes\DesertBiome.cs" />
-    <Compile Include="Source\World\Generation\Biomes\MountainsBiome.cs" />
-    <Compile Include="Source\World\Display\DisplayWorld.cs" />
-    <Compile Include="Source\World\Display\GraphicBlock.cs" />
-    <Compile Include="Source\World\Display\Materials.cs" />
-    <Compile Include="Source\World\Generation\Biomes\GrassyBiome.cs" />
-    <Compile Include="Source\World\Generation\Biomes\PlainBiome.cs" />
-    <Compile Include="Source\World\Generation\Biomes\RiverBiome.cs" />
-    <Compile Include="Source\World\Generation\SkyLandsBiomeSelector.cs" />
-    <Compile Include="Source\MathHelper.cs" />
-    <Compile Include="Source\World\LibNoise\Module\combiner\Add.cs" />
-    <Compile Include="Source\World\LibNoise\Module\combiner\Multiply.cs" />
-    <Compile Include="Source\World\LibNoise\Module\modifier\Clamp.cs" />
-    <Compile Include="Source\World\LibNoise\Module\modifier\ScalePoint.cs" />
-    <Compile Include="Source\World\LibNoise\Module\source\Cylinder.cs" />
-    <Compile Include="Source\World\LibNoise\Module\Module.cs" />
-    <Compile Include="Source\World\LibNoise\Module\modifier\Turbulence.cs" />
-    <Compile Include="Source\World\LibNoise\Module\source\Voronoi.cs" />
-    <Compile Include="Source\World\LibNoise\Noise.cs" />
-    <Compile Include="Source\World\LibNoise\NoiseQuality.cs" />
-    <Compile Include="Source\World\LibNoise\Module\source\Perlin.cs" />
-    <Compile Include="Source\World\LibNoise\Utils.cs" />
-    <Compile Include="Source\World\Material\Materials.cs" />
-    <Compile Include="Source\World\Terrain\Block.cs" />
-    <Compile Include="Source\World\Terrain\Chunk.cs" />
-    <Compile Include="Source\World\Terrain\Island.cs" />
-    <Compile Include="Source\World\WorldState.cs" />
-    <Compile Include="Source\World\World.cs" />
-    <Compile Include="Source\World\WorldUtils.cs" />
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
@@ -126,6 +73,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="src\Media\fonts\bluehigh.ttf" />
+    <None Include="src\Media\materials\scripts\black.material" />
+    <None Include="src\Media\materials\scripts\cube.material" />
+    <None Include="src\Media\models\cube.mesh" />
+    <None Include="src\Media\packs\CaelumPack.zip" />
+    <None Include="src\Media\packs\OgreCore.zip" />
+    <None Include="src\Media\packs\Sinbad.zip" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="CaelumSharp, Version=0.4.4737.33521, Culture=neutral, processorArchitecture=x86">
@@ -149,6 +103,162 @@
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="src\Main\Base Ogre\BaseApplication.cs" />
+    <Compile Include="src\Main\Base Ogre\CameraMan.cs" />
+    <Compile Include="src\Main\Base Ogre\MoisManager.cs" />
+    <Compile Include="src\Main\Base Ogre\Overlay.cs" />
+    <Compile Include="src\Main\Characters\AnimationMgr.cs" />
+    <Compile Include="src\Main\Characters\CharacMgr.cs" />
+    <Compile Include="src\Main\Characters\Character.cs" />
+    <Compile Include="src\Main\Characters\Info\CharacterInfo.cs" />
+    <Compile Include="src\Main\Characters\Info\MovementInfo.cs" />
+    <Compile Include="src\Main\Characters\MainPlayerCamera.cs" />
+    <Compile Include="src\Main\Characters\NonPlayer.cs" />
+    <Compile Include="src\Main\Characters\Player.cs" />
+    <Compile Include="src\Main\GUI\GUIFactory.cs" />
+    <Compile Include="src\Main\GUI\GUIManager.cs" />
+    <Compile Include="src\Main\GUI\MainMenu.cs" />
+    <Compile Include="src\Main\GUI\MenuGUI.cs" />
+    <Compile Include="src\Main\GUI\WorldGUI.cs" />
+    <Compile Include="src\Main\MathHelper.cs" />
+    <Compile Include="src\Main\Program.cs" />
+    <Compile Include="src\Main\States\State.cs" />
+    <Compile Include="src\Main\States\StateManager.cs" />
+    <Compile Include="src\Main\World\Display\DisplayWorld.cs" />
+    <Compile Include="src\Main\World\Display\GraphicBlock.cs" />
+    <Compile Include="src\Main\World\Display\Materials.cs" />
+    <Compile Include="src\Main\World\Generation\BiomeSelector.cs" />
+    <Compile Include="src\Main\World\Generation\Biomes\Biome.cs" />
+    <Compile Include="src\Main\World\Generation\Biomes\BiomeMap.cs" />
+    <Compile Include="src\Main\World\Generation\Biomes\DesertBiome.cs" />
+    <Compile Include="src\Main\World\Generation\Biomes\GrassyBiome.cs" />
+    <Compile Include="src\Main\World\Generation\Biomes\MountainsBiome.cs" />
+    <Compile Include="src\Main\World\Generation\Biomes\PlainBiome.cs" />
+    <Compile Include="src\Main\World\Generation\Biomes\RiverBiome.cs" />
+    <Compile Include="src\Main\World\Generation\SkyLandsBiomeSelector.cs" />
+    <Compile Include="src\Main\World\Material\Materials.cs" />
+    <Compile Include="src\Main\World\Terrain\Block.cs" />
+    <Compile Include="src\Main\World\Terrain\Chunk.cs" />
+    <Compile Include="src\Main\World\Terrain\Island.cs" />
+    <Compile Include="src\Main\World\World.cs" />
+    <Compile Include="src\Main\World\WorldState.cs" />
+    <Compile Include="src\Main\World\WorldUtils.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="src\LibNoise\exception\NoiseException.cs" />
+    <Compile Include="src\LibNoise\exception\NoModuleException.cs" />
+    <Compile Include="src\LibNoise\MathHelper.cs" />
+    <Compile Include="src\LibNoise\model\Cylinder.cs" />
+    <Compile Include="src\LibNoise\model\Line.cs" />
+    <Compile Include="src\LibNoise\model\Plane.cs" />
+    <Compile Include="src\LibNoise\model\Sphere.cs" />
+    <Compile Include="src\LibNoise\module\Cache.cs" />
+    <Compile Include="src\LibNoise\module\combiner\Add.cs" />
+    <Compile Include="src\LibNoise\module\combiner\Blend.cs" />
+    <Compile Include="src\LibNoise\module\combiner\Displace.cs" />
+    <Compile Include="src\LibNoise\module\combiner\Max.cs" />
+    <Compile Include="src\LibNoise\module\combiner\Min.cs" />
+    <Compile Include="src\LibNoise\module\combiner\Multiply.cs" />
+    <Compile Include="src\LibNoise\module\combiner\Power.cs" />
+    <Compile Include="src\LibNoise\module\combiner\Select.cs" />
+    <Compile Include="src\LibNoise\module\modifier\Abs.cs" />
+    <Compile Include="src\LibNoise\module\modifier\Clamp.cs" />
+    <Compile Include="src\LibNoise\module\modifier\Curve.cs" />
+    <Compile Include="src\LibNoise\module\modifier\Exponent.cs" />
+    <Compile Include="src\LibNoise\module\modifier\Invert.cs" />
+    <Compile Include="src\LibNoise\module\modifier\RotatePoint.cs" />
+    <Compile Include="src\LibNoise\module\modifier\ScaleBias.cs" />
+    <Compile Include="src\LibNoise\module\modifier\ScalePoint.cs" />
+    <Compile Include="src\LibNoise\module\modifier\Terrace.cs" />
+    <Compile Include="src\LibNoise\module\modifier\TranslatePoint.cs" />
+    <Compile Include="src\LibNoise\module\modifier\Turbulence.cs" />
+    <Compile Include="src\LibNoise\module\Module.cs" />
+    <Compile Include="src\LibNoise\module\source\Billow.cs" />
+    <Compile Include="src\LibNoise\module\source\Checkerboard.cs" />
+    <Compile Include="src\LibNoise\module\source\Const.cs" />
+    <Compile Include="src\LibNoise\module\source\Cylinders.cs" />
+    <Compile Include="src\LibNoise\module\source\Perlin.cs" />
+    <Compile Include="src\LibNoise\module\source\RidgedMulti.cs" />
+    <Compile Include="src\LibNoise\module\source\Spheres.cs" />
+    <Compile Include="src\LibNoise\module\source\Voronoi.cs" />
+    <Compile Include="src\LibNoise\Noise.cs" />
+    <Compile Include="src\LibNoise\NoiseQuality.cs" />
+    <Compile Include="src\LibNoise\Utils.cs" />
+    <Content Include="src\Media\fonts\TrueTypeFonts.xml" />
+    <Content Include="src\Media\materials\textures\aquawood1.jpg" />
+    <Content Include="src\Media\materials\textures\aquawood2.jpg" />
+    <Content Include="src\Media\materials\textures\aquawood3.jpg" />
+    <Content Include="src\Media\materials\textures\bloodcave_below.jpg" />
+    <Content Include="src\Media\materials\textures\bloodcave_dark.jpg" />
+    <Content Include="src\Media\materials\textures\bloodcave_left.jpg" />
+    <Content Include="src\Media\materials\textures\bloodcave_light.jpg" />
+    <Content Include="src\Media\materials\textures\bloodcave_right.jpg" />
+    <Content Include="src\Media\materials\textures\bloodcave_up.jpg" />
+    <Content Include="src\Media\materials\textures\bloodwood1.jpg" />
+    <Content Include="src\Media\materials\textures\bloodwood2.jpg" />
+    <Content Include="src\Media\materials\textures\bloodwood3.jpg" />
+    <Content Include="src\Media\materials\textures\copper.jpg" />
+    <Content Include="src\Media\materials\textures\crystalwood1.jpg" />
+    <Content Include="src\Media\materials\textures\crystalwood2.jpg" />
+    <Content Include="src\Media\materials\textures\crystalwood3.jpg" />
+    <Content Include="src\Media\materials\textures\cuivre.jpg" />
+    <Content Include="src\Media\materials\textures\darksand.jpg" />
+    <Content Include="src\Media\materials\textures\darksand2.jpg" />
+    <Content Include="src\Media\materials\textures\darkwood.jpg" />
+    <Content Include="src\Media\materials\textures\dirt.jpg" />
+    <Content Include="src\Media\materials\textures\dust.jpg" />
+    <Content Include="src\Media\materials\textures\earth_side.jpg" />
+    <Content Include="src\Media\materials\textures\fire1.jpg" />
+    <Content Include="src\Media\materials\textures\fire2.jpg" />
+    <Content Include="src\Media\materials\textures\gold.jpg" />
+    <Content Include="src\Media\materials\textures\granite.jpg" />
+    <Content Include="src\Media\materials\textures\grass16.png" />
+    <Content Include="src\Media\materials\textures\grass2.jpg" />
+    <Content Include="src\Media\materials\textures\grass3.jpg" />
+    <Content Include="src\Media\materials\textures\grasscolor.png" />
+    <Content Include="src\Media\materials\textures\icewood1.jpg" />
+    <Content Include="src\Media\materials\textures\icewood2.jpg" />
+    <Content Include="src\Media\materials\textures\icewood3.jpg" />
+    <Content Include="src\Media\materials\textures\lightsand.jpg" />
+    <Content Include="src\Media\materials\textures\lightwood.jpg" />
+    <Content Include="src\Media\materials\textures\moon.jpg" />
+    <Content Include="src\Media\materials\textures\pavement.jpg" />
+    <Content Include="src\Media\materials\textures\poisonwood1.jpg" />
+    <Content Include="src\Media\materials\textures\poisonwood2.jpg" />
+    <Content Include="src\Media\materials\textures\poisonwood3.jpg" />
+    <Content Include="src\Media\materials\textures\redsand1.jpg" />
+    <Content Include="src\Media\materials\textures\redsand2.jpg" />
+    <Content Include="src\Media\materials\textures\redsand3.jpg" />
+    <Content Include="src\Media\materials\textures\redsand4.jpg" />
+    <Content Include="src\Media\materials\textures\redsand5.jpg" />
+    <Content Include="src\Media\materials\textures\sand.jpg" />
+    <Content Include="src\Media\materials\textures\sand2.jpg" />
+    <Content Include="src\Media\materials\textures\sand3.jpg" />
+    <Content Include="src\Media\materials\textures\sandblock.jpg" />
+    <Content Include="src\Media\materials\textures\shore1.jpg" />
+    <Content Include="src\Media\materials\textures\shore2.jpg" />
+    <Content Include="src\Media\materials\textures\shore3.jpg" />
+    <Content Include="src\Media\materials\textures\soil.jpg" />
+    <Content Include="src\Media\materials\textures\stone.jpg" />
+    <Content Include="src\Media\materials\textures\sunwood1.jpg" />
+    <Content Include="src\Media\materials\textures\sunwood2.jpg" />
+    <Content Include="src\Media\materials\textures\sunwood3.jpg" />
+    <Content Include="src\Media\materials\textures\terrain.png" />
+    <Content Include="src\Media\materials\textures\texture feuillage.jpg" />
+    <Content Include="src\Media\materials\textures\underwater1.jpg" />
+    <Content Include="src\Media\materials\textures\underwater2.jpg" />
+    <Content Include="src\Media\materials\textures\underwater3.jpg" />
+    <Content Include="src\Media\materials\textures\underwater4.jpg" />
+    <Content Include="src\Media\materials\textures\water.jpg" />
+    <Content Include="src\Media\materials\textures\water1.jpg" />
+    <Content Include="src\Media\materials\textures\water2.jpg" />
+    <Content Include="src\Media\materials\textures\water3.jpg" />
+    <Content Include="src\Media\materials\textures\wood.jpg" />
+    <Content Include="src\Media\materials\xml\textures.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\Test\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

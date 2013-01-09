@@ -2,7 +2,14 @@
 using System.Collections.Generic;
 
 using Game.States;
-using Game.GUI;
+using Game.GUICreator;
+
+using Miyagi.Common;
+using Miyagi.Common.Data;
+using Miyagi.Common.Resources;
+using Miyagi.UI;
+using Miyagi.UI.Controls;
+using Miyagi.UI.Controls.Layout;
 
 namespace Game
 {

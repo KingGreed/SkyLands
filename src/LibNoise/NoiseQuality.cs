@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Game.LibNoise
+namespace LibNoise
 {
+
     public enum NoiseQuality {
 	    /**
 	     *  Generates coherent noise quickly.  When a coherent-noise function with

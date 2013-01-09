@@ -8,30 +8,22 @@ using Miyagi.UI.Controls;
 using Miyagi.UI.Controls.Layout;
 
 using Mogre;
+using Game.States;
 
-namespace Game.GUI {
+namespace Game.GUICreator {
 
 	public class WorldGUI : GUIFactory {
 
         private ProgressBar mProgress;
 
-        p
-
-        public void override createMenu() {
-            progress = new ProgressBar();
-            progress.Size = new Size(300, 50);
-            progress.Skin = skinDict["ProgressBar"];
-            progress.Location = new Point(50, 50);
-            gui.Controls.Add(progress);
+        public WorldGUI(StateManager stateMgr, string name) : base(stateMgr, name) {}
+        public override void  createMenu() {
+            this.mProgress = new ProgressBar();
+            this.mProgress.Size = new Size(300, 50);
+            //this.mProgress.Skin = skinDict["ProgressBar"];
+            this.mProgress.Location = new Point(50, 50);
+            this.mMenuGUI.Controls.Add(this.mProgress);
         }
 
-        protected override void UpdateProgress(int i)
-        {
-            /*barval += 0.1f;
-            progress.Value = (int)barval;*/
-
-            system.Update();
-            //base.UpdateScene(evt);
-        }
 	}
 }

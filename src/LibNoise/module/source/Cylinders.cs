@@ -1,16 +1,19 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Game.LibNoise.Module
+using LibNoise;
+using LibNoise.Modules;
+
+namespace LibNoise.Modules.Source
 {
     public class Cylinders : Module {
 	    public const double DEFAULT_CYLINDERS_FREQUENCY = 1.0;
 
 	    double frequency = DEFAULT_CYLINDERS_FREQUENCY;
 
-	    public Cylinders() : base(0){ }
+	    public Cylinders() :base(0) {}
 
 	    public double getFrequency() {
 		    return frequency;
@@ -30,7 +33,7 @@ namespace Game.LibNoise.Module
             x1 *= frequency;
             z1 *= frequency;
 
-            double distFromCenter = Math.Sqrt(x1 * x1 + z1 * z1);
+            double distFromCenter = MathHelper.sqrt(x1 * x1 + z1 * z1);
             double distFromSmallerSphere = distFromCenter - MathHelper.floor(distFromCenter);
             double distFromLargerSphere = 1.0 - distFromSmallerSphere;
             double nearestDist = Utils.GetMin(distFromSmallerSphere, distFromLargerSphere);
@@ -38,5 +41,5 @@ namespace Game.LibNoise.Module
 
         }
 
-}
+    }
 }

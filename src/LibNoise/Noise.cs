@@ -1,22 +1,24 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Game.LibNoise
+namespace LibNoise
 {
-    public class Noise
-    {
-        public const int X_NOISE_GEN     = 1619;
-	    public const int Y_NOISE_GEN     = 31337;
-	    public const int Z_NOISE_GEN     = 6971;
-	    public const int SEED_NOISE_GEN  = 1013;
+    public class Noise {
+	    public const int X_NOISE_GEN = 1619;
+	    public const int Y_NOISE_GEN = 31337;
+	    public const int Z_NOISE_GEN = 6971;
+	    public const int SEED_NOISE_GEN = 1013;
 	    public const int SHIFT_NOISE_GEN = 8;
 
-        /**
+	    /**
 	     * Generates a gradient-coherent-noise value from the coordinates of a
 	     * three-dimensional input value.
 	     * 
+	     * @param x The @a x coordinate of the input value.
+	     * @param y The @a y coordinate of the input value.
+	     * @param z The @a z coordinate of the input value.
 	     * @param seed The random number seed.
 	     * @param noiseQuality The quality of the coherent-noise.
 	     * @return The generated gradient-coherent-noise value.
@@ -63,7 +65,8 @@ namespace Game.LibNoise
 
 		    // Now calculate the noise values at each vertex of the cube.  To generate
 		    // the coherent-noise value at the input point, interpolate these eight
-		    // noise values using the S-curve value as the interpolant (trilinear interpolation.)
+		    // noise values using the S-curve value as the interpolant (trilinear
+		    // interpolation.)
 		    double n0, n1, ix0, ix1, iy0, iy1;
 		    n0 = GradientNoise3D(x, y, z, x0, y0, z0, seed);
 		    n1 = GradientNoise3D(x, y, z, x1, y0, z0, seed);
@@ -260,5 +263,6 @@ namespace Game.LibNoise
 		    return 1.0 - (IntValueNoise3D(x, y, z, seed) / 1073741824.0);
 
 	    }
+
     }
 }

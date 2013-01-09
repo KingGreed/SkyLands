@@ -4,8 +4,13 @@ using System.Linq;
 using System.Text;
 
 using Mogre;
-using Game.LibNoise;
-using Game.LibNoise.Module;
+
+using LibNoise;
+using LibNoise.Modules;
+using LibNoise.Modules.Source;
+using LibNoise.Modules.Modifier;
+using LibNoise.Modules.Combiner;
+
 using Game.Material;
 using Game.Generation;
 using Game.Generation.Biomes;

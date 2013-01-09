@@ -9,14 +9,14 @@ using Miyagi.UI.Controls.Layout;
 
 using Mogre;
 
-using Game.State;
+using Game.States;
 
-namespace Game.GUI {
+namespace Game.GUICreator {
 
 	public abstract class GUIFactory {
-		private GUI mMenuGUI;
-        private MiyagiSystem mSystem;
-        private StateManager mStateMgr;
+		protected GUI mMenuGUI;
+        protected MiyagiSystem mSystem;
+        protected StateManager mStateMgr;
 
         public GUIFactory(StateManager stateMgr, string name) {
 
@@ -24,11 +24,11 @@ namespace Game.GUI {
             this.mSystem   = this.mStateMgr.MiyagiManager.System;
             this.mMenuGUI  = new GUI("World GUI");
 
-            this.CreateMenu();
+            this.createMenu();
             this.mSystem.GUIManager.GUIs.Add(this.mMenuGUI);
         }
 
-        public void abstract createMenu();
+        public abstract void createMenu();
 
 	}
 }

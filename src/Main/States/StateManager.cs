@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Mogre;
 
 using Game.BaseApp;
-using Game.GUISystem;
+using Game.GUICreator;
 
 namespace Game.States
 {

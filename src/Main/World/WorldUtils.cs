@@ -92,7 +92,7 @@ namespace Game
 
 
         public static Vector3 getSafeSpawn() {
-
+            return Vector3.ZERO;
         }
 
     }

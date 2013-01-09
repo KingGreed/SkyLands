@@ -1,13 +1,17 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Game.LibNoise.Module
+using LibNoise;
+using LibNoise.Modules;
+using LibNoise.Modules.Source;
+
+namespace LibNoise.Modules.Modifier
 {
     public class Turbulence : Module {
 	    /// Default frequency for the noise::module::Turbulence noise module.
-	    public const double DEFAULT_TURBULENCE_FREQUENCY = Perlin.DEFAULT_PERLIN_FREQUENCY;
+	    public readonly double DEFAULT_TURBULENCE_FREQUENCY = Perlin.DEFAULT_PERLIN_FREQUENCY;
 
 	    /// Default power for the noise::module::Turbulence noise module.
 	    public const double DEFAULT_TURBULENCE_POWER = 1.0;
@@ -16,21 +20,21 @@ namespace Game.LibNoise.Module
 	    public const int DEFAULT_TURBULENCE_ROUGHNESS = 3;
 
 	    /// Default noise seed for the noise::module::Turbulence noise module.
-	    public const int DEFAULT_TURBULENCE_SEED = Perlin.DEFAULT_PERLIN_SEED;
+	    public readonly int DEFAULT_TURBULENCE_SEED = Perlin.DEFAULT_PERLIN_SEED;
 
 	    /// The power (scale) of the displacement.
 	    double power = DEFAULT_TURBULENCE_POWER;
 
 	    /// Noise module that displaces the @a x coordinate.
-        public Perlin xDistortModule;
+         Perlin xDistortModule;
 
 	    /// Noise module that displaces the @a y coordinate.
-        public Perlin yDistortModule;
+         Perlin yDistortModule;
 
 	    /// Noise module that displaces the @a z coordinate.
-        public Perlin zDistortModule;
+         Perlin zDistortModule;
 
-	    public Turbulence() : base(1){
+	    public Turbulence() : base(1) {
 		    xDistortModule = new Perlin();
 		    yDistortModule = new Perlin();
 		    zDistortModule = new Perlin();
@@ -74,14 +78,13 @@ namespace Game.LibNoise.Module
 		    zDistortModule.setOctaveCount(roughness);
 	    }
 
-	    
 	    public override int GetSourceModuleCount() {
 		    return 1;
 	    }
 
 	    public override double GetValue(double x, double y, double z) {
 		    if (SourceModule[0] == null)
-			    throw new Exception("No module");
+			    throw new NoModuleException();
 
 		    // Get the values from the three noise::module::Perlin noise modules and
 		    // add each value to each coordinate of the input value.  There are also
