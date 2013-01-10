@@ -11,11 +11,7 @@ material cube/grass/side{
         pass{
             ambient 1.0 1.0 1.0
             diffuse 1.0 1.0 1.0       
-            texture_unit{ texture grass16.png  }
-            texture_unit{ 
-                texture grasscolor.png
-                tex_coord_set 0  
-            }
+            texture_unit{ texture earth_side.jpg  }
             
         }
     }
@@ -26,11 +22,7 @@ material cube/grass/top {
 			ambient 1.0 1.0 1.0
             diffuse 1.0 1.0 1.0
 
-			texture_unit{ texture grass16.png  }
-            texture_unit{ 
-                texture grasscolor.png
-                tex_coord_set 0  
-            }
+			texture_unit{ texture grass3.jpg  }
 		}
 	}
 }
@@ -40,11 +32,7 @@ material cube/grass/bottom{
             ambient 1.0 1.0 1.0
             diffuse 1.0 1.0 1.0
 
-            texture_unit{ texture grass16.png  }
-            texture_unit{ 
-                texture grasscolor.png
-                tex_coord_set 0  
-            }
+            texture_unit{ texture soil.jpg  }
         }
     }
 }
