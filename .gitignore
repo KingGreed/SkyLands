@@ -20,6 +20,8 @@ TestResults
 # Files to ignore here
 bin\Release\Ogre.log
 *.suo
-Doc\Specifications\index.log
-Doc\Specifications\index.synctex.gz
+*.log
+*.synctex.gz
 *.toc
+*.testsettings
+*.vsmdi
