@@ -41,7 +41,7 @@ namespace Game
 
             chunkArray = new Dictionary<Vector3, Chunk>();
 
-            this.mMenu = new WorldGUI(stateMgr, "World GUI");
+            //this.mMenu = new WorldGUI(stateMgr, "World GUI");
         }
 
 
@@ -103,7 +103,7 @@ namespace Game
             this.mCaelumSystem.ManageSceneFog = true;
         }
 
-        private void generateWorld() {new Island(new Vector2(7, 7));} /* Algorithm of terrain generation */
+        private void generateWorld() {new Island(new Vector2(3, 3));} /* Algorithm of terrain generation */
 
         private void populate() {
             this.mCharacMgr = new CharacMgr(this.mStateMgr.Camera);

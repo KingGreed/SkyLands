@@ -42,7 +42,7 @@ namespace LibNoise.Modules.Combiner
 
 	    public void setControlModule(Module m) {
 		    if (m == null)
-			    throw new IllegalArgumentException("the module cannot be null");
+			    throw new ArgumentException("the module cannot be null");
 		    SourceModule[2] = m;
 	    }
 

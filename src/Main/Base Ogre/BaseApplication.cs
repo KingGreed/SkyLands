@@ -38,7 +38,7 @@ namespace Game.BaseApp
                     System.Windows.Forms.MessageBoxButtons.OK,
                     System.Windows.Forms.MessageBoxIcon.Error);
             }
-            catch (Exception e)
+            /*catch (Exception e)
             {
                 Console.WriteLine(e);
 
@@ -46,7 +46,7 @@ namespace Game.BaseApp
                     e.Message, "Error",
                     System.Windows.Forms.MessageBoxButtons.OK,
                     System.Windows.Forms.MessageBoxIcon.Error);
-            }
+            }*/
         }
 
         protected virtual bool Setup()

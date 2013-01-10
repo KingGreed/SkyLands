@@ -13,7 +13,7 @@ namespace Game.Display
 
         public Materials(){
             this.mDoc = new XmlDocument();
-            this.mDoc.Load(System.IO.Directory.GetCurrentDirectory() + @"../../../Media/materials/xml/textures.xml");
+            this.mDoc.Load(System.IO.Directory.GetCurrentDirectory() + @"../../../src/Media/materials/xml/textures.xml");
 
         }
 

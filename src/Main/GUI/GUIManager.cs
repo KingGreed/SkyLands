@@ -29,7 +29,7 @@ namespace Game.GUICreator
         {
             this.mGUISystem.PluginManager.LoadPlugin(@"Miyagi.Plugin.Input.Mois.dll", input.KeyBoard, input.Mouse);
 
-            foreach (Font font in TrueTypeFont.CreateFromXml("../../Media/fonts/TrueTypeFonts.xml", this.mGUISystem))
+            foreach (Font font in TrueTypeFont.CreateFromXml("../../src/Media/fonts/TrueTypeFonts.xml", this.mGUISystem))
                 this.mFonts.Add(font.Name, font);
             Font.Default = this.mFonts["BlueHighway"];
             
@@ -37,7 +37,7 @@ namespace Game.GUICreator
             return true;
         }
 
-        public void Update() { mGUISystem.Update(); }
+        public void Update()   { mGUISystem.Update(); }
 
         public void ShutDown() { this.mGUISystem.Dispose(); }
     }

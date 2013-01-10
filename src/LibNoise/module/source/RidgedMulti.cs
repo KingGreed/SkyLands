@@ -103,7 +103,7 @@ namespace LibNoise.Modules.Source
 		    SpectralWeights = new double[RIDGED_MAX_OCTAVE];
 		    for (int i = 0; i < RIDGED_MAX_OCTAVE; i++) {
 			    // Compute weight for each frequency.
-			    SpectralWeights[i] = Math.pow(frequency, -h);
+			    SpectralWeights[i] = Math.Pow(frequency, -h);
 			    frequency *= lacunarity;
 		    }
 

@@ -82,7 +82,7 @@ namespace LibNoise.Modules.Source
 
 	    public void setOctaveCount(int octaveCount) {
 		    if (octaveCount < 1 || octaveCount > PERLIN_MAX_OCTAVE) {
-			    throw new IllegalArgumentException("octaveCount must be between 1 and MAX OCTAVE: " + PERLIN_MAX_OCTAVE);
+			    throw new ArgumentException("octaveCount must be between 1 and MAX OCTAVE: " + PERLIN_MAX_OCTAVE);
 		    }
 
 		    this.octaveCount = octaveCount;

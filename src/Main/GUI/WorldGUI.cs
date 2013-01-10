@@ -22,7 +22,7 @@ namespace Game.GUICreator {
             this.mProgress.Size = new Size(300, 50);
             //this.mProgress.Skin = skinDict["ProgressBar"];
             this.mProgress.Location = new Point(50, 50);
-            this.mMenuGUI.Controls.Add(this.mProgress);
+            this.mGUI.Controls.Add(this.mProgress);
         }
 
 	}

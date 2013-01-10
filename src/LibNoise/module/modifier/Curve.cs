@@ -40,7 +40,7 @@ namespace LibNoise.Modules.Modifier
 				    // We found the array index in which to insert the new control point.
 				    // Exit now.
 				    break;
-			    } else if (inputValue == controlPoints.[insertionPos].inputValue) {
+			    } else if (inputValue == controlPoints[insertionPos].inputValue) {
 				    // Each control point is required to contain a unique input value, so
 				    // throw an exception.
 				    throw new ArgumentException("inputValue must be unique");
@@ -74,7 +74,7 @@ namespace LibNoise.Modules.Modifier
 		    // larger than the output value from the source module.
 		    int indexPos;
 		    for (indexPos = 0; indexPos < controlPoints.Count; indexPos++) {
-			    if (sourceModuleValue < controlPoints.[indexPos].inputValue) {
+			    if (sourceModuleValue < controlPoints[indexPos].inputValue) {
 				    break;
 			    }
 		    }
@@ -91,12 +91,12 @@ namespace LibNoise.Modules.Modifier
 		    // smallest input value of the control point array), get the corresponding
 		    // output value of the nearest control point and exit now.
 		    if (index1 == index2) {
-			    return controlPoints.[indexPos].outputValue;
+			    return controlPoints[indexPos].outputValue;
 		    }
 
 		    // Compute the alpha value used for cubic interpolation.
-		    double input0 = controlPoints.get(indexPos).inputValue;
-		    double input1 = controlPoints.get(indexPos).inputValue;
+		    double input0 = controlPoints[indexPos].inputValue;
+		    double input1 = controlPoints[indexPos].inputValue;
 		    double alpha = (sourceModuleValue - input0) / (input1 - input0);
 
 		    // Now perform the cubic interpolation given the alpha value.

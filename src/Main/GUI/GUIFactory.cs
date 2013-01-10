@@ -14,7 +14,7 @@ using Game.States;
 namespace Game.GUICreator {
 
 	public abstract class GUIFactory {
-		protected GUI mMenuGUI;
+		protected GUI mGUI;
         protected MiyagiSystem mSystem;
         protected StateManager mStateMgr;
 
@@ -22,13 +22,17 @@ namespace Game.GUICreator {
 
             this.mStateMgr = stateMgr;
             this.mSystem   = this.mStateMgr.MiyagiManager.System;
-            this.mMenuGUI  = new GUI("World GUI");
+            this.mGUI  = new GUI("World GUI");
 
             this.createMenu();
-            this.mSystem.GUIManager.GUIs.Add(this.mMenuGUI);
+            this.mSystem.GUIManager.GUIs.Add(this.mGUI);
         }
 
         public abstract void createMenu();
+
+        public void Shutdown() { this.mGUI.Dispose();       }
+        public void Hide()     { this.mGUI.Visible = false; }
+        public void Show()     { this.mGUI.Visible = true;  }
 
 	}
 }
