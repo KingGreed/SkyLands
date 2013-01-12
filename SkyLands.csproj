@@ -52,14 +52,18 @@
   <ItemGroup>
     <Compile Include="Source\Base Ogre\BaseApplication.cs" />
     <Compile Include="Source\Base Ogre\CameraMan.cs" />
+    <Compile Include="Source\Base Ogre\Listener.cs" />
     <Compile Include="Source\Base Ogre\MoisManager.cs" />
     <Compile Include="Source\Base Ogre\Overlay.cs" />
     <Compile Include="Source\Characters\AnimationMgr.cs" />
     <Compile Include="Source\Characters\Info\CharacterInfo.cs" />
     <Compile Include="Source\Characters\MainPlayerCamera.cs" />
     <Compile Include="Source\Characters\Info\MovementInfo.cs" />
-    <Compile Include="Source\GUI\GUIManager.cs" />
+    <Compile Include="Source\GUI\GUIFactory.cs" />
+    <Compile Include="Source\GUI\LoadingBarGUI.cs" />
     <Compile Include="Source\GUI\MainMenu.cs" />
+    <Compile Include="Source\GUI\MenuGUI.cs" />
+    <Compile Include="Source\GUI\MiyagiManager.cs" />
     <Compile Include="Source\Program.cs" />
     <Compile Include="Source\Characters\CharacMgr.cs" />
     <Compile Include="Source\Characters\Character.cs" />
@@ -93,6 +97,7 @@
     <Compile Include="Source\World\LibNoise\Module\source\Perlin.cs" />
     <Compile Include="Source\World\LibNoise\Utils.cs" />
     <Compile Include="Source\World\Material\Materials.cs" />
+    <Compile Include="Source\World\Sky\SkyMgr.cs" />
     <Compile Include="Source\World\Terrain\Block.cs" />
     <Compile Include="Source\World\Terrain\Chunk.cs" />
     <Compile Include="Source\World\Terrain\Island.cs" />

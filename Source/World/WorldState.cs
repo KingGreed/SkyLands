@@ -4,6 +4,7 @@ using Mogre;
 
 using Game.CharacSystem;
 using Game.BaseApp;
+using Game.Display;
 
 namespace Game {
 
@@ -14,6 +15,23 @@ namespace Game {
 
         public override void Update(float frameTime)
         {
+            if (!this.mIsWorldLoaded)
+            {
+                if (this.mIsWorldGenerated)
+                {
+                    new DisplayWorld(this.mStateMgr.SceneManager).displayAllChunks();
+                    this.mSkyMgr.AddListeners();
+                    this.mLoadingBar.Dispose();
+                    LogManager.Singleton.DefaultLog.LogMessage("World Displayed");
+                    this.mIsWorldLoaded = true;
+                }
+                else
+                {
+                    this.mLoadingBar.Value += 100 * frameTime;
+                    return;
+                }
+            }
+            
             if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_F1))
             {
                 this.mIsDebugMode = !this.mIsDebugMode;
@@ -35,12 +53,9 @@ namespace Game {
                     this.mCharacMgr.MainPlayerCam.InitCamera();
             }
 
-            if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_F2))
-                Console.WriteLine(this.mCaelumSystem.Sun.Node.Position);
-
-            float delta = 150;
-            if (this.mStateMgr.Input.MouseMoveZ > 0) { this.mCaelumSystem.TimeScale += delta; }
-            else if (this.mStateMgr.Input.MouseMoveZ < 0) { this.mCaelumSystem.TimeScale -= delta; }
+            float delta = 100;
+            if (this.mStateMgr.Input.MouseMoveZ > 0)      { this.mSkyMgr.TimeScale += delta; }
+            else if (this.mStateMgr.Input.MouseMoveZ < 0) { this.mSkyMgr.TimeScale -= delta; }
 
             this.mCharacMgr.Update(frameTime);
 
@@ -57,11 +72,9 @@ namespace Game {
         public override void Shutdown() {
             if (this.mStateMgr == null) { return; }
 
-            this.mStateMgr.Window.PreViewportUpdate -= this.mCaelumSystem.PreViewportUpdate;
-            this.mCaelumSystem.Shutdown(true);
+            this.mSkyMgr.Shutdown();
             this.mStateMgr.SceneManager.ClearScene();
 
-            this.mStateMgr = null;
             this.mIsStartedUp = false;
         }
     }
