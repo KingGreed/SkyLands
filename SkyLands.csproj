@@ -140,6 +140,8 @@
     <Compile Include="src\Main\Characters\MainPlayerCamera.cs" />
     <Compile Include="src\Main\Characters\NonPlayer.cs" />
     <Compile Include="src\Main\Characters\Player.cs" />
+    <Compile Include="src\Main\Generator\MainWorld.cs" />
+    <Compile Include="src\Main\Generator\MainWorldState.cs" />
     <Compile Include="src\Main\GUI\GUIFactory.cs" />
     <Compile Include="src\Main\GUI\GUIManager.cs" />
     <Compile Include="src\Main\GUI\MainMenu.cs" />

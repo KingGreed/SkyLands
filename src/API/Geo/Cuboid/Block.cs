@@ -26,67 +26,18 @@ namespace API.Geo.Cuboid
 	    /**
 	     * Gets the {@link Chunk} this block is in
 	     * 
+         * Note that this is the chunks Position relativly to the Island
+         * 
 	     * @return the Chunk
 	     */
-	    Chunk getChunk();
+	    Vector3 getChunkLocation();
 
-	    /**
-	     * Gets the {@link Region} this block is in
+        /**
+	     * Gets the {@link Material} this block has
 	     * 
-	     * @return the Region
+	     * @return the Material
 	     */
-	    Island getRegion();
-
-	    /**
-	     * Gets the x-coordinate of this block
-	     * 
-	     * @return the x-coordinate
-	     */
-	    int getX();
-
-	    /**
-	     * Gets the y-coordinate of this block
-	     * 
-	     * @return the y-coordinate
-	     */
-	    int getY();
-
-	    /**
-	     * Gets the z-coordinate of this block
-	     * 
-	     * @return the z-coordinate
-	     */
-	    int getZ();
-
-	    /**
-	     * Translates this block using the offset and distance given
-	     * 
-	     * @param offset BlockFace to translate
-	     * @param distance to translate
-	     * @return a new Block instance
-	     */
-	    Block translate(BlockFace offset, int distance);
-
-	    /**
-	     * Translates this block using the offset given
-	     * 
-	     * @param offset BlockFace to translate
-	     * @return a new Block instance
-	     */
-	    Block translate(BlockFace offset);
-
-	    /**
-	     * Translates this block using the offset given
-	     * 
-	     * @param offset Vector to translate
-	     * @return a new Block instance
-	     */
-	    Block translate(Vector3 offset);
-
-
 	    Material getMaterial();
-
-
 
 	    /**
 	     * Sets the material of this block
@@ -94,23 +45,12 @@ namespace API.Geo.Cuboid
 	     * @param material to set to
 	     * @return whether the material set was successful
 	     */
-	    bool setMaterial(Material material);
+	    void setMaterial(Material material);
 
 
-	    /**
-	     * Sets the block light level to the given light level<br><br>
-	     * <b>Note: For persistence, alter block material light levels instead</b>
-	     *
-	     * @param light level to set to
-	     * @return this Block
+        /**
+	     * @return whether the material is air or not
 	     */
-	    Block setBlockLight(byte level);
-
-	    /**
-	     * Gets the block light level
-	     *
-	     * @return the block light level
-	     */
-	    byte getBlockLight();
+        bool IsAir();
     }
 }

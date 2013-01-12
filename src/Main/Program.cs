@@ -4,6 +4,7 @@ using Mogre;
 using Game.States;
 using Game.BaseApp;
 
+using Game.Display;
 
 namespace Game
 {
@@ -18,6 +19,7 @@ namespace Game
 
         protected override void CreateScene()
         {
+            GraphicBlock.generateFace();
             LogManager.Singleton.DefaultLog.LogMessage("***********************Program\'s Log***********************");
             this.mStateMgr = new StateManager(this.mRoot, this.mSceneMgr, this.mInput, this.mWindow);
             LogManager.Singleton.DefaultLog.LogMessage("StateMgr created");

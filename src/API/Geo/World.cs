@@ -10,11 +10,14 @@ using Mogre;
 namespace API.Geo
 {
     public interface World {
+
 	    /**
 	     * Gets the name of the world
 	     * @return the name of the world
 	     */
 	    String getName();
+
+        void   setName();
 
 	    /**
 	     * Gets the age of the world in ms. This count cannot be modified, and

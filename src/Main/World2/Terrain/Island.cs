@@ -24,12 +24,12 @@ namespace Game.Terrain
         public  int HEIGHT;
 	    public  int SEA_LEVEL = 63;
 	    // noise for generation
-	    private  Perlin ELEVATION = new Perlin();
-	    private  Perlin ROUGHNESS = new Perlin();
-	    private  Perlin DETAIL = new Perlin();
+	    private  Perlin     ELEVATION  = new Perlin();
+	    private  Perlin     ROUGHNESS  = new Perlin();
+	    private  Perlin     DETAIL     = new Perlin();
 	    private  Turbulence TURBULENCE = new Turbulence();
-	    private  ScalePoint SCALE = new ScalePoint();
-	    private  Clamp FINAL = new Clamp();
+	    private  ScalePoint SCALE      = new ScalePoint();
+	    private  Clamp      FINAL      = new Clamp();
 	    // smoothing stuff
 	    private  int SMOOTH_SIZE = 4;
 

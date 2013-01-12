@@ -20,10 +20,13 @@ namespace API.Geo.Cuboid
 
 	    private Vector3   mChunkSize;
         public Block[, ,] mBlockList;
+        private Island    mIsland;
 
         private Biome mBiomeType;
 
-	    public Chunk(Vector3 chunkSize) { this.mChunkSize = chunkSize; }
+	    public Chunk(Vector3 chunkSize, Island island) {
+            this.mChunkSize = chunkSize; 
+        }
 
 	    /**
 	     * Gets the region that this chunk is located in
