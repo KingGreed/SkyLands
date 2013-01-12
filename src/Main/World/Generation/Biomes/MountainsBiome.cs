@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 
 using Mogre;
-using Game.Material;
+using Material = API.Generic.Material;
 
 namespace Game.Generation.Biomes
 {
     class MountainsBiome : Biome
     {
         public MountainsBiome(int id) : base(id){
-            this.addTopCover(Materials.DIRT, Materials.GRASS, Materials.STONE);
+            this.addTopCover(Material.DIRT, Material.GRASS, Material.STONE);
             this.setMinMax(32.5f, 160);
         }
 

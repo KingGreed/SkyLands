@@ -11,7 +11,7 @@ using LibNoise.Modules.Source;
 using LibNoise.Modules.Modifier;
 using LibNoise.Modules.Combiner;
 
-using Game.Material;
+using Material = API.Generic.Material;
 using Game.Generation;
 using Game.Generation.Biomes;
 
@@ -147,8 +147,8 @@ namespace Game.Terrain
 					    Block block = World.getBlock(chunkTempPosition, blockTempPosition);
                         if(block == null) { continue; }
 
-                        if (noiseValue >= 0) { block.setType(Materials.GRASS); }
-                        else                 { block.setType(Materials.AIR); }
+                        if (noiseValue >= 0) { block.setType(Material.GRASS); }
+                        else                 { block.setType(Material.AIR); }
 				    }
 			    }
             }
@@ -168,8 +168,8 @@ namespace Game.Terrain
                 Block block = World.getBlock(chunkTempPosition, blockTempPosition);
                 if(block != null)
                 {
-                    if (i <= lowerPosition || i > upperPosition) { block.setType(Materials.AIR); }
-                    else                                         { block.setType(Materials.GRASS); }
+                    if (i <= lowerPosition || i > upperPosition) { block.setType(Material.AIR); }
+                    else                                         { block.setType(Material.GRASS); }
                 }
 
                 i++;

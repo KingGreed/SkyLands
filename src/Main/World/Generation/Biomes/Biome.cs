@@ -5,7 +5,7 @@ using System.Text;
 
 using Mogre;
 using Game.Terrain;
-using Game.Material;
+using Material = API.Generic.Material;
 
 namespace Game.Generation.Biomes
 {
@@ -15,11 +15,11 @@ namespace Game.Generation.Biomes
         protected float mMin;
 	    protected float mMax;
 
-        protected List<Materials> mGroundCover;
+        protected List<Material> mGroundCover;
 
         public Biome(int id) {
             this.mId = id;
-            this.mGroundCover = new List<Materials>();
+            this.mGroundCover = new List<Material>();
         }
 
         protected void setMinMax(float min, float max) {
@@ -30,8 +30,8 @@ namespace Game.Generation.Biomes
 	    public float getMin() { return mMin; }
 	    public float getMax() { return mMax; }
 
-        protected void addTopCover(params Materials[] mtrNames){
-            foreach(Materials mtrName in mtrNames) { mGroundCover.Add(mtrName); } 
+        protected void addTopCover(params Material[] mtrNames){
+            foreach(Material mtrName in mtrNames) { mGroundCover.Add(mtrName); } 
         }
 
 

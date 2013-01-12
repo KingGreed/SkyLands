@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Mogre;
 
 using Game.Terrain;
-using Game.Material;
+using API.Generic;
 
 namespace Game
 {

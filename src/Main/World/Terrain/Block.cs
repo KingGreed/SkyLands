@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using Mogre;
 
-using Game.Material;
+using Material = API.Generic.Material;
 
 namespace Game.Terrain
 {    
     public class Block
     {
-        private Materials mType;// { get { return mType; } private set { mType = value; UpdateMaterial(); } }
+        private Material mType;// { get { return mType; } private set { mType = value; UpdateMaterial(); } }
         private SceneNode mNode   { get; set; }
         //public Vector3 mBlockPos { get; set; }
         private Vector3 mBlockPos;
@@ -18,7 +18,7 @@ namespace Game.Terrain
         public Vector3 setBlockPos { set { this.mBlockPos = value; } }
 
 
-        public Block(Vector3 blockPos, Materials blockType = Materials.AIR)
+        public Block(Vector3 blockPos, Material blockType = Material.AIR)
         {
             this.mType = blockType;
             this.mBlockPos = blockPos;
@@ -26,11 +26,11 @@ namespace Game.Terrain
 
         public bool hasSceneNode() { return (this.mNode != null); }
 
-        public bool IsAir() { return (mType == Materials.AIR); }
+        public bool IsAir() { return (mType == Material.AIR); }
         
         public string getType() { return "1";}
 
-        public void setType(Materials type) { this.mType = type; }
+        public void setType(Material type) { this.mType = type; }
 
 
         public override string ToString() { return this.mBlockPos.ToString(); }

@@ -28,8 +28,6 @@ namespace Game
         private CameraMan mCameraMan;
         private bool mIsDebugMode;
 
-        private GUIFactory mMenu;
-
         
         public static Dictionary<Vector3, Chunk> chunkArray;
 

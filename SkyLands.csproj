@@ -104,6 +104,30 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\API\Ent\Character.cs" />
+    <Compile Include="src\API\Ent\Entity.cs" />
+    <Compile Include="src\API\Generator\biome\Biome.cs" />
+    <Compile Include="src\API\Generator\biome\BiomePopulator.cs" />
+    <Compile Include="src\API\Generator\biome\Decorator.cs" />
+    <Compile Include="src\API\Generator\EmptyWorldGenerator.cs" />
+    <Compile Include="src\API\Generator\FlatWorldGenerator.cs" />
+    <Compile Include="src\API\Generator\GeneratorPopulator.cs" />
+    <Compile Include="src\API\Generator\Populator.cs" />
+    <Compile Include="src\API\Generator\WorldGenerator.cs" />
+    <Compile Include="src\API\Generator\WorldGeneratorObject.cs" />
+    <Compile Include="src\API\Generator\WorldGeneratorUtils.cs" />
+    <Compile Include="src\API\Generic\BlockFace.cs" />
+    <Compile Include="src\API\Generic\Material.cs" />
+    <Compile Include="src\API\Generic\PlayerFace.cs" />
+    <Compile Include="src\API\Geo\AreaBlockAccess.cs" />
+    <Compile Include="src\API\Geo\AreaBlockSource.cs" />
+    <Compile Include="src\API\Geo\AreaChunkAccess.cs" />
+    <Compile Include="src\API\Geo\AreaIslandAccess.cs" />
+    <Compile Include="src\API\Geo\Cuboid\Block.cs" />
+    <Compile Include="src\API\Geo\Cuboid\Chunk.cs" />
+    <Compile Include="src\API\Geo\Cuboid\Island.cs" />
+    <Compile Include="src\API\Geo\World.cs" />
+    <Compile Include="src\API\Math\Point.cs" />
     <Compile Include="src\Main\Base Ogre\BaseApplication.cs" />
     <Compile Include="src\Main\Base Ogre\CameraMan.cs" />
     <Compile Include="src\Main\Base Ogre\MoisManager.cs" />
@@ -137,7 +161,6 @@
     <Compile Include="src\Main\World\Generation\Biomes\PlainBiome.cs" />
     <Compile Include="src\Main\World\Generation\Biomes\RiverBiome.cs" />
     <Compile Include="src\Main\World\Generation\SkyLandsBiomeSelector.cs" />
-    <Compile Include="src\Main\World\Material\Materials.cs" />
     <Compile Include="src\Main\World\Terrain\Block.cs" />
     <Compile Include="src\Main\World\Terrain\Chunk.cs" />
     <Compile Include="src\Main\World\Terrain\Island.cs" />
@@ -257,8 +280,6 @@
     <Content Include="src\Media\materials\textures\wood.jpg" />
     <Content Include="src\Media\materials\xml\textures.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\Test\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

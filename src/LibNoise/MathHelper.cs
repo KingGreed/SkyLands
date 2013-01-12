@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Vector3 = Mogre.Vector3;
+using Vector2 = Mogre.Vector2;
+
 namespace LibNoise
 {
     /**
@@ -183,6 +186,124 @@ namespace LibNoise
 	    public static int lerp(int a, int b, double percent) {
 		    return (int) ((1 - percent) * a + percent * b);
 	    }
+
+        /**
+	     * Calculates the value at x using linear interpolation
+	     *
+	     * @param x the X coord of the value to interpolate
+	     * @param x1 the X coord of q0
+	     * @param x2 the X coord of q1
+	     * @param q0 the first known value (x1)
+	     * @param q1 the second known value (x2)
+	     * @return the interpolated value
+	     */
+	    public static double lerp(double x, double x1, double x2, double q0, double q1) {
+		    return ((x2 - x) / (x2 - x1)) * q0 + ((x - x1) / (x2 - x1)) * q1;
+	    }
+
+        	/**
+	     * Calculates the value at x,y using bilinear interpolation
+	     *
+	     * @param x the X coord of the value to interpolate
+	     * @param y the Y coord of the value to interpolate
+	     * @param q00 the first known value (x1, y1)
+	     * @param q01 the second known value (x1, y2)
+	     * @param q10 the third known value (x2, y1)
+	     * @param q11 the fourth known value (x2, y2)
+	     * @param x1 the X coord of q00 and q01
+	     * @param x2 the X coord of q10 and q11
+	     * @param y1 the Y coord of q00 and q10
+	     * @param y2 the Y coord of q01 and q11
+	     * @return the interpolated value
+	     */
+	    public static double biLerp(double x, double y, double q00, double q01,
+			    double q10, double q11, double x1, double x2, double y1, double y2) {
+		    double q0 = lerp(x, x1, x2, q00, q10);
+		    double q1 = lerp(x, x1, x2, q01, q11);
+		    return lerp(y, y1, y2, q0, q1);
+	    }
+	
+	    /**
+	     * Calculates the value at a target using bilinear interpolation
+	     *
+	     * @param target the vector of the value to interpolate
+	     * @param q00 the first known value (known1.x, known1.y)
+	     * @param q01 the second known value (known1.x, known2.y)
+	     * @param q10 the third known value (known2.x, known1.y)
+	     * @param q11 the fourth known value (known2.x, known2.y)
+	     * @param known1 the X coord of q00 and q01 and the Y coord of q00 and q10
+	     * @param known2 the X coord of q10 and q11 and the Y coord of q01 and q11
+	     * @return the interpolated value
+	     */
+	    public static double biLerp(Vector2 target, double q00, double q01,
+			    double q10, double q11, Vector2 known1, Vector2 known2) {
+		        double q0 = lerp(target.x, known1.x, known2.x, q00, q10);
+		        double q1 = lerp(target.x, known1.x, known2.x, q01, q11);
+		        return lerp(target.y, known1.y, known2.y, q0, q1);
+	        }
+
+	        /**
+	         * Calculates the value at x,y,z using trilinear interpolation
+	         *
+	         * @param x the X coord of the value to interpolate
+	         * @param y the Y coord of the value to interpolate
+	         * @param z the Z coord of the value to interpolate
+	         * @param q000 the first known value (x1, y1, z1)
+	         * @param q001 the second known value (x1, y2, z1)
+	         * @param q010 the third known value (x1, y1, z2)
+	         * @param q011 the fourth known value (x1, y2, z2)
+	         * @param q100 the fifth known value (x2, y1, z1)
+	         * @param q101 the sixth known value (x2, y2, z1)
+	         * @param q110 the seventh known value (x2, y1, z2)
+	         * @param q111 the eighth known value (x2, y2, z2)
+	         * @param x1 the X coord of q000, q001, q010 and q011
+	         * @param x2 the X coord of q100, q101, q110 and q111
+	         * @param y1 the Y coord of q000, q010, q100 and q110
+	         * @param y2 the Y coord of q001, q011, q101 and q111
+	         * @param z1 the Z coord of q000, q001, q100 and q101
+	         * @param z2 the Z coord of q010, q011, q110 and q111
+	         * @return the interpolated value
+	         */
+	        public static double triLerp(double x, double y, double z, double q000, double q001,
+			        double q010, double q011, double q100, double q101, double q110, double q111,
+			        double x1, double x2, double y1, double y2, double z1, double z2) {
+		        double q00 = lerp(x, x1, x2, q000, q100);
+		        double q01 = lerp(x, x1, x2, q010, q110);
+		        double q10 = lerp(x, x1, x2, q001, q101);
+		        double q11 = lerp(x, x1, x2, q011, q111);
+		        double q0 = lerp(y, y1, y2, q00, q10);
+		        double q1 = lerp(y, y1, y2, q01, q11);
+		        return lerp(z, z1, z2, q0, q1);
+	        }
+	
+	        /**
+	         * Calculates the value at target using trilinear interpolation
+	         *
+	         * @param target the vector of the value to interpolate
+	         * @param q000 the first known value (known1.x, known1.y, known1.z)
+	         * @param q001 the second known value (known1.x, known2.y, known1.z)
+	         * @param q010 the third known value (known1.x, known1.y, known2.z)
+	         * @param q011 the fourth known value (known1.x, known2.y, known2.z)
+	         * @param q100 the fifth known value (known2.x, known1.y, known1.z)
+	         * @param q101 the sixth known value (known2.x, known2.y, known1.z)
+	         * @param q110 the seventh known value (known2.x, known1.y, known2.z)
+	         * @param q111 the eighth known value (known2.x, known2.y, known2.z)
+	         * @param known1 the X coord of q000, q001, q010 and q011, the Y coord of q000, q010, q100 and q110
+	         * and the Z coord of q000, q001, q100 and q101
+	         * @param known2 the X coord of q100, q101, q110 and q111, the Y coord of q001, q011, q101 and q111
+	         * and the Z coord of q010, q011, q110 and q111
+	         * @return the interpolated value
+	         */
+	        public static double triLerp(Vector3 target, double q000, double q001, double q010,
+			        double q011, double q100, double q101, double q110, double q111, Vector3 known1, Vector3 known2) {
+		        double q00 = lerp(target.x, known1.x, known2.x, q000, q100);
+		        double q01 = lerp(target.x, known1.x, known2.x, q010, q110);
+		        double q10 = lerp(target.x, known1.x, known2.x, q001, q101);
+		        double q11 = lerp(target.x, known1.x, known2.x, q011, q111);
+		        double q0  = lerp(target.y, known1.y, known2.y, q00, q10);
+		        double q1  = lerp(target.y, known1.y, known2.y, q01, q11);
+		        return lerp(target.z, known1.z, known2.z, q0, q1);
+	        }
 
 
 	    /**
