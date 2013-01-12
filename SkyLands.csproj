@@ -140,8 +140,10 @@
     <Compile Include="src\Main\Characters\MainPlayerCamera.cs" />
     <Compile Include="src\Main\Characters\NonPlayer.cs" />
     <Compile Include="src\Main\Characters\Player.cs" />
-    <Compile Include="src\Main\Generator\MainWorld.cs" />
-    <Compile Include="src\Main\Generator\MainWorldState.cs" />
+    <Compile Include="src\Main\World\Generator\DomeIsland.cs" />
+    <Compile Include="src\Main\World\Generator\VanillaBlock.cs" />
+    <Compile Include="src\Main\World\MainWorld.cs" />
+    <Compile Include="src\Main\World\MainWorldState.cs" />
     <Compile Include="src\Main\GUI\GUIFactory.cs" />
     <Compile Include="src\Main\GUI\GUIManager.cs" />
     <Compile Include="src\Main\GUI\MainMenu.cs" />
@@ -149,26 +151,14 @@
     <Compile Include="src\Main\GUI\WorldGUI.cs" />
     <Compile Include="src\Main\MathHelper.cs" />
     <Compile Include="src\Main\Program.cs" />
-    <Compile Include="src\Main\States\State.cs" />
-    <Compile Include="src\Main\States\StateManager.cs" />
-    <Compile Include="src\Main\World\Display\DisplayWorld.cs" />
-    <Compile Include="src\Main\World\Display\GraphicBlock.cs" />
-    <Compile Include="src\Main\World\Display\Materials.cs" />
-    <Compile Include="src\Main\World\Generation\BiomeSelector.cs" />
-    <Compile Include="src\Main\World\Generation\Biomes\Biome.cs" />
-    <Compile Include="src\Main\World\Generation\Biomes\BiomeMap.cs" />
-    <Compile Include="src\Main\World\Generation\Biomes\DesertBiome.cs" />
-    <Compile Include="src\Main\World\Generation\Biomes\GrassyBiome.cs" />
-    <Compile Include="src\Main\World\Generation\Biomes\MountainsBiome.cs" />
-    <Compile Include="src\Main\World\Generation\Biomes\PlainBiome.cs" />
-    <Compile Include="src\Main\World\Generation\Biomes\RiverBiome.cs" />
-    <Compile Include="src\Main\World\Generation\SkyLandsBiomeSelector.cs" />
-    <Compile Include="src\Main\World\Terrain\Block.cs" />
-    <Compile Include="src\Main\World\Terrain\Chunk.cs" />
-    <Compile Include="src\Main\World\Terrain\Island.cs" />
-    <Compile Include="src\Main\World\World.cs" />
-    <Compile Include="src\Main\World\WorldState.cs" />
-    <Compile Include="src\Main\World\WorldUtils.cs" />
+    <Compile Include="src\Main\World\States\State.cs" />
+    <Compile Include="src\Main\World\States\StateManager.cs" />
+    <Compile Include="src\Main\World2\Display\DisplayWorld.cs" />
+    <Compile Include="src\Main\World2\Display\GraphicBlock.cs" />
+    <Compile Include="src\Main\World2\Display\Materials.cs" />
+    <Compile Include="src\Main\World2\Terrain\Block.cs" />
+    <Compile Include="src\Main\World2\Terrain\Chunk.cs" />
+    <Compile Include="src\Main\World2\Terrain\Island.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\LibNoise\exception\NoiseException.cs" />
