@@ -25,9 +25,8 @@ namespace Game
         private Vector3 mSpawnPoint;
         private SceneNode mNode;
         private CharacMgr mCharacMgr;
-        private CameraMan mCameraMan;
-        private bool mIsDebugMode;
         private LoadingBarGUI mLoadingBar;
+        private DebugMode mDebugMode;
         private bool mIsWorldGenerated;
         private bool mIsWorldLoaded;
         
@@ -36,13 +35,10 @@ namespace Game
         public World(StateManager stateMgr) : base(stateMgr)
         {
             this.mSpawnPoint = Vector3.ZERO;
-            this.mIsDebugMode = false;
-            this.mCameraMan = null;
             this.mLoadingBar = new LoadingBarGUI(this.mStateMgr.MiyagiManager, "LoadingBar GUI");
             this.mSkyMgr = new SkyMgr(this.mStateMgr);
             chunkArray = new Dictionary<Vector3, Chunk>();
         }
-
 
         public override bool Startup(){
             if (this.mIsStartedUp) { return false; }
@@ -72,6 +68,7 @@ namespace Game
             this.mCharacMgr.AddPlayer(this.mStateMgr.SceneManager, "Sinbad.mesh",
                                       new CharacterInfo("Sinbad", new Vector3(300, 7000, 1000)),
                                       this.mStateMgr.Input);
+            this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr);
         }
     }
 }

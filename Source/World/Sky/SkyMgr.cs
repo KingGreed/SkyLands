@@ -13,8 +13,6 @@ namespace Game.Sky
         private CaelumSystem mCaelumSystem;
         private RootLstn mListener;
 
-        public float TimeScale { get { return this.mCaelumSystem.TimeScale; } set { this.mCaelumSystem.TimeScale = value; } }
-
         public SkyMgr(StateManager stateMgr)
         {
             this.mStateMgr = stateMgr;
@@ -56,6 +54,8 @@ namespace Game.Sky
             this.mCaelumSystem.SceneFogColourMultiplier = new ColourValue(0.3f, 0.3f, 0.3f);
             this.mCaelumSystem.ManageSceneFog = true;
         }
+
+        public void Update() { this.mCaelumSystem.TimeScale += this.mStateMgr.Input.MouseMoveZ; }
 
         public void AddListeners()
         {

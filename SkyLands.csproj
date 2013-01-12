@@ -71,6 +71,7 @@
     <Compile Include="Source\Characters\Player.cs" />
     <Compile Include="Source\States\State.cs" />
     <Compile Include="Source\States\StateManager.cs" />
+    <Compile Include="Source\World\DebugMode.cs" />
     <Compile Include="Source\World\Generation\BiomeSelector.cs" />
     <Compile Include="Source\World\Generation\Biomes\Biome.cs" />
     <Compile Include="Source\World\Generation\Biomes\BiomeMap.cs" />

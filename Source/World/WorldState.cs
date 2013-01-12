@@ -31,40 +31,9 @@ namespace Game {
                     return;
                 }
             }
-            
-            if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_F1))
-            {
-                this.mIsDebugMode = !this.mIsDebugMode;
 
-                ((Player)this.mCharacMgr.GetCharacter()).IsDebugMode = this.mIsDebugMode;
-                
-                if (this.mIsDebugMode)
-                {
-                    Camera cam = this.mCharacMgr.MainPlayerCam.Camera;
-                    Vector3 position = cam.RealPosition;
-                    Quaternion orientation = cam.RealOrientation;
-                    cam.DetachFromParent();
-                    cam.Position = position;
-                    cam.Orientation = orientation;
-                    
-                    this.mCameraMan = new CameraMan(cam);
-                }
-                else 
-                    this.mCharacMgr.MainPlayerCam.InitCamera();
-            }
-
-            float delta = 100;
-            if (this.mStateMgr.Input.MouseMoveZ > 0)      { this.mSkyMgr.TimeScale += delta; }
-            else if (this.mStateMgr.Input.MouseMoveZ < 0) { this.mSkyMgr.TimeScale -= delta; }
-
-            this.mCharacMgr.Update(frameTime);
-
-            if (!this.mCharacMgr.GetCharacter().IsMoving)
-            {
-                MoisManager input = ((Player)this.mCharacMgr.GetCharacter()).Input;
-                this.mCameraMan.MouseMovement(input.MouseMoveX, input.MouseMoveY);
-                this.mCameraMan.UpdateCamera(frameTime, input);
-            }
+            this.mDebugMode.Update(frameTime);
+            this.mSkyMgr.Update();
 
             if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_ESCAPE)) { this.mStateMgr.RequestStatePop(); }    // Return to the MenuState
         }
