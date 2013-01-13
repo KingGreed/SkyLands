@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Mogre;
 
+using Game.World;
+
 namespace Game.CharacSystem
 {
     public class Player : Character
@@ -38,7 +40,7 @@ namespace Game.CharacSystem
             }
         }
 
-        public Player(SceneManager sceneMgr, string meshName, CharacterInfo info, MoisManager input) : base(sceneMgr, meshName, info, true)
+        public Player(SceneManager sceneMgr, string meshName, CharacterInfo info, MoisManager input, MainWorld world) : base(sceneMgr, meshName, info, true, world)
         {
             this.mInput = input;
             this.mIsFirstView = true;

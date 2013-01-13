@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Mogre;
 
+using Game.World;
 
 namespace Game.CharacSystem
 {
@@ -20,9 +21,9 @@ namespace Game.CharacSystem
             this.mMainPlayerCam = new MainPlayerCamera(cam);
         }
 
-        public void AddPlayer(SceneManager sceneMgr, string meshName, CharacterInfo info, MoisManager input)
+        public void AddPlayer(SceneManager sceneMgr, string meshName, CharacterInfo info, MoisManager input, MainWorld world)
         {
-            this.mCharacList.Add(new Player(sceneMgr, meshName, info, input));
+            this.mCharacList.Add(new Player(sceneMgr, meshName, info, input, world));
             if (this.mCharacList.Count == 1) { this.mMainPlayerCam.AttachToPlayer((Player)this.mCharacList[0]); }
 
             LogManager.Singleton.DefaultLog.LogMessage("Player added");

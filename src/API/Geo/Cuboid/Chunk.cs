@@ -16,16 +16,18 @@ namespace API.Geo.Cuboid
     /**
      * Represents a cube containing 16x16x16 Blocks
      */
-    public class Chunk : AreaBlockAccess {
+    public abstract class Chunk : AreaBlockAccess {
 
-	    private Vector3   mChunkSize;
-        public Block[, ,] mBlockList;
-        private Island    mIsland;
+	    protected Vector3    mChunkSize;
+        protected Vector3    mChunkLocation;
+        protected Block[, ,] mBlockList;
+        protected Island     mIsland;
 
         private Biome mBiomeType;
 
-	    public Chunk(Vector3 chunkSize, Island island) {
-            this.mChunkSize = chunkSize; 
+	    public Chunk(Vector3 chunkSize, Vector3 location, Island island) {
+            this.mChunkSize = chunkSize;
+            this.mChunkLocation = location;
         }
 
 	    /**
@@ -33,7 +35,7 @@ namespace API.Geo.Cuboid
 	     *
 	     * @return region
 	     */
-	    public virtual Island getIsland() { throw new NotImplementedException(); }
+	    public virtual Island getIsland() { return this.mIsland; }
 
         /**
 	     * Gets the biome that this chunk is located in

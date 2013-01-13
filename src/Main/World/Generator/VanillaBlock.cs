@@ -25,6 +25,7 @@ namespace Game.World.Generator
         public VanillaBlock(Vector3 location, Vector3 chunkPosition) {
             this.mLoc      = location;
             this.mchunkLoc = chunkPosition;
+            this.mType     = Material.AIR;
         }
 
         public Vector3  getPosition()                  { return this.mLoc;      }
@@ -32,7 +33,7 @@ namespace Game.World.Generator
 	    public Material getMaterial()                  { return this.mType;     }
 	    public void     setMaterial(Material material) { this.mType = material; }
 
-        public bool IsAir() { return (mType == Material.AIR); }
+        public bool IsAir() { return (this.mType == Material.AIR); }
 
     }
 }

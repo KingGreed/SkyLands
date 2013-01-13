@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Mogre;
 
+using Game.World;
+
 namespace Game.CharacSystem
 {
     /* Mother class of Player and NonPlayer */
@@ -12,6 +14,8 @@ namespace Game.CharacSystem
             downFrontLeft, downFrontRight, downBackLeft, downBackRight,
             upFrontLeft, upFrontRight, upBackLeft, upBackRight,
         }
+
+        private MainWorld mWorld;
 
         private readonly Vector3 SCALE_CHARAC = new Vector3(9, 10, 9);
         private const float WALK_SPEED = 300.0f;
@@ -40,8 +44,9 @@ namespace Game.CharacSystem
             set { this.mNode.SetPosition(value.x, value.y + this.Height / 2 + 5, value.z); }
         }
 
-        protected Character(SceneManager sceneMgr, string meshName, CharacterInfo charInfo, bool isPlayer)
+        protected Character(SceneManager sceneMgr, string meshName, CharacterInfo charInfo, bool isPlayer, MainWorld world)
         {
+            this.mWorld = world;
             this.mIsPlayer = isPlayer;
             this.mCharInfo = charInfo;
             this.mMovementInfo = new MovementInfo();
@@ -90,8 +95,8 @@ namespace Game.CharacSystem
                 this.mAnimMgr.SetAnims(Anim.JumpEnd);
 
                 /* Reposition the character at the exact position */
-                Vector3 translation = new Vector3(0, 1 - this.FeetPosition.y % World.CUBE_SIDE, 0);
-                if (this.FeetPosition.y > 0) { translation.y += World.CUBE_SIDE; }
+                Vector3 translation = new Vector3(0, 1 - this.FeetPosition.y % MainWorld.CUBE_SIDE, 0);
+                if (this.FeetPosition.y > 0) { translation.y += MainWorld.CUBE_SIDE; }
                 this.mNode.Translate(translation * frameTime, Mogre.Node.TransformSpace.TS_LOCAL);
             }
 
@@ -117,7 +122,7 @@ namespace Game.CharacSystem
             Vector3[] coordsToTest = this.GetFacesPoints(face);
 
             foreach(Vector3 coord in coordsToTest)
-                if (World.hasCollision(coord, face)) { return true; }
+                if (this.mWorld.hasCollision(coord, face)) { return true; }
 
             return false;
         }

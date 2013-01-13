@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Mogre;
 
+using Game.GUICreator;
 
 namespace Game.BaseApp
 {
@@ -8,18 +10,19 @@ namespace Game.BaseApp
     
     public abstract class BaseApplication
     {
-        protected Root         mRoot;
-        protected SceneManager mSceneMgr;
-        protected Camera       mCamera = null;
-        protected CameraMan    mCameraMan = null;
-        protected RenderWindow mWindow;
-        protected MoisManager  mInput;
-        protected string       mPluginsCfg   = "plugins.cfg";
-        protected string       mResourcesCfg = "resources.cfg";
-        protected bool         mShutDown     = false;
-        protected int          mTextureMode  = 0;
-        protected int          mRenderMode   = 0;
-        protected Overlay      mDebugOverlay;
+        protected Root          mRoot;
+        protected SceneManager  mSceneMgr;
+        protected RenderWindow  mWindow;
+        protected MoisManager   mInput;
+        protected Camera        mCam;
+        protected Viewport      mViewport;
+        protected MiyagiManager mMiyagiMgr;
+        protected bool          mIsShutDownRequested = false;
+        private string          mPluginsCfg          = "plugins.cfg";
+        private string          mResourcesCfg        = "resources.cfg";
+        private int             mTextureMode         = 0;
+        private int             mRenderMode          = 0;
+        private Overlay         mDebugOverlay;
 
         public void Go()
         {
@@ -27,7 +30,7 @@ namespace Game.BaseApp
             {
                 if (!this.Setup()) { return; }
                 this.mRoot.StartRendering();
-                this.DestroyScene();
+                this.Shutdown();
             }
             catch (System.Runtime.InteropServices.SEHException e)
             {
@@ -49,7 +52,7 @@ namespace Game.BaseApp
             }*/
         }
 
-        protected virtual bool Setup()
+        private bool Setup()
         {
             this.mRoot = new Root(mPluginsCfg);
 
@@ -62,7 +65,6 @@ namespace Game.BaseApp
 
             TextureManager.Singleton.DefaultNumMipmaps = 5;
 
-            this.CreateResourceListener();
             this.LoadResources();
 
             mInput = new MoisManager();
@@ -70,51 +72,43 @@ namespace Game.BaseApp
             mWindow.GetCustomAttribute("WINDOW", out windowHnd);
             mInput.Startup(windowHnd, mWindow.Width, mWindow.Height);
 
-            this.CreateScene();
-
-            this.CreateFrameListeners();
-
+            this.mMiyagiMgr = new MiyagiManager(this.mInput, new Mogre.Vector2(this.mWindow.Width, this.mWindow.Height));
             this.mDebugOverlay = new Overlay(mWindow);
             this.mDebugOverlay.AdditionalInfo = "Bilinear";
+
+            this.Create();
+            this.AddFrameLstn(new RootLstn(RootLstn.TypeLstn.FrameRendering, this.OnFrameRendering));
 
             return true;
         }
 
-        protected virtual bool Configure()
+        private bool Configure()
         {
             if (this.mRoot.ShowConfigDialog()) { this.mWindow = this.mRoot.Initialise(true, "SkyLands"); return true; }
             else { return false; }
         }
 
-        protected virtual void ChooseSceneManager() { this.mSceneMgr = this.mRoot.CreateSceneManager(SceneType.ST_GENERIC); }
+        private void ChooseSceneManager() { this.mSceneMgr = this.mRoot.CreateSceneManager(SceneType.ST_GENERIC); }
 
-        protected virtual void CreateCamera()
+        private void CreateCamera()
         {
-            this.mCamera = this.mSceneMgr.CreateCamera("DefaultCam");
-
-            this.mCamera.Position = new Vector3(0, 100, 250);
-
-            this.mCamera.LookAt(new Vector3(0, 50, 0));
-            this.mCamera.NearClipDistance = 5;
-
-            this.mCameraMan = new CameraMan(mCamera);
+            this.mCam = this.mSceneMgr.CreateCamera("MainCamera");
+            this.mCam.NearClipDistance = 5;
+            this.mCam.FarClipDistance = 3000;
         }
 
-        protected virtual void CreateViewports()
+        private void CreateViewports()
         {
-            // Create one viewport, entire window
-            var vp = mWindow.AddViewport(mCamera);
-            vp.BackgroundColour = ColourValue.Black;
-
-            // Alter the camera aspect ratio to match the viewport
-            this.mCamera.AspectRatio = (vp.ActualWidth / vp.ActualHeight);
+            this.mViewport = this.mWindow.AddViewport(this.mCam);
+            this.mViewport.BackgroundColour = ColourValue.Black;
+            this.mCam.AspectRatio = (this.mViewport.ActualWidth / this.mViewport.ActualHeight);
         }
 
-        protected virtual void CreateResourceListener() {}
+        protected abstract void Create();
 
-        protected virtual void CreateScene(){}
+        protected abstract void Update(FrameEvent evt);
 
-        protected virtual void LoadResources()
+        private void LoadResources()
         {
             // Load resource paths from config file
             var cf = new ConfigFile();
@@ -134,38 +128,18 @@ namespace Game.BaseApp
             ResourceGroupManager.Singleton.InitialiseAllResourceGroups();
         }
 
-        protected void ReloadAllTextures() { TextureManager.Singleton.ReloadAll(); }
+        private void ReloadAllTextures() { TextureManager.Singleton.ReloadAll(); }
 
-        protected virtual void UpdateScene(FrameEvent evt) {}
-
-        protected virtual void ProcessInput()
+        private void ProcessInput()
         {
             this.mInput.Update();
 
-            if (mInput.IsKeyDown(MOIS.KeyCode.KC_W) || mInput.IsKeyDown(MOIS.KeyCode.KC_UP)) { this.mCameraMan.GoingForward = true; }
-            else { this.mCameraMan.GoingForward = false; }
-            if (mInput.IsKeyDown(MOIS.KeyCode.KC_S) || mInput.IsKeyDown(MOIS.KeyCode.KC_DOWN))   { this.mCameraMan.GoingBack = true; }
-            else { this.mCameraMan.GoingBack = false; }
-            if (mInput.IsKeyDown(MOIS.KeyCode.KC_A) || mInput.IsKeyDown(MOIS.KeyCode.KC_LEFT))   { this.mCameraMan.GoingLeft = true; }
-            else { this.mCameraMan.GoingLeft = false; }
-            if (mInput.IsKeyDown(MOIS.KeyCode.KC_D) || mInput.IsKeyDown(MOIS.KeyCode.KC_RIGHT))  { this.mCameraMan.GoingRight = true; }
-            else { this.mCameraMan.GoingRight = false; }
-            if (mInput.IsKeyDown(MOIS.KeyCode.KC_E) || mInput.IsKeyDown(MOIS.KeyCode.KC_PGUP))   { this.mCameraMan.GoingUp = true; }
-            else { this.mCameraMan.GoingUp = false; }
-            if (mInput.IsKeyDown(MOIS.KeyCode.KC_Q) || mInput.IsKeyDown(MOIS.KeyCode.KC_PGDOWN)) { this.mCameraMan.GoingDown = true; }
-            else { this.mCameraMan.GoingDown = false; }
-            if (mInput.IsKeyDown(MOIS.KeyCode.KC_LSHIFT) || mInput.IsKeyDown(MOIS.KeyCode.KC_RSHIFT)) { this.mCameraMan.FastMove = true; }
-            else { this.mCameraMan.FastMove = false; }
-             
-            this.mCameraMan.MouseMovement(mInput.MouseMoveX, mInput.MouseMoveY);
-            
             if (mInput.WasKeyPressed(MOIS.KeyCode.KC_R)) { this.CycleTextureFilteringMode(); }
             if (mInput.WasKeyPressed(MOIS.KeyCode.KC_F5)) { this.ReloadAllTextures(); }
             if (mInput.WasKeyPressed(MOIS.KeyCode.KC_SYSRQ)) { this.TakeScreenshot(); }
-            if (mInput.WasKeyPressed(MOIS.KeyCode.KC_ESCAPE)) { this.Shutdown(); }
         }
 
-        protected void CycleTextureFilteringMode()
+        private void CycleTextureFilteringMode()
         {
             this.mTextureMode = (this.mTextureMode + 1) % 4;
             switch (this.mTextureMode)
@@ -194,43 +168,44 @@ namespace Game.BaseApp
             }
         }
 
-        protected void CyclePolygonMode()
+        private void CyclePolygonMode()
         {
             this.mRenderMode = (this.mRenderMode + 1) % 3;
             switch (mRenderMode)
             {
-                case 0: mCamera.PolygonMode = PolygonMode.PM_SOLID;     break;
-                case 1: mCamera.PolygonMode = PolygonMode.PM_WIREFRAME; break;
-                case 2: mCamera.PolygonMode = PolygonMode.PM_POINTS;    break;
+                case 0: mCam.PolygonMode = PolygonMode.PM_SOLID;     break;
+                case 1: mCam.PolygonMode = PolygonMode.PM_WIREFRAME; break;
+                case 2: mCam.PolygonMode = PolygonMode.PM_POINTS;    break;
             }
         }
 
-        protected void TakeScreenshot() { mWindow.WriteContentsToTimestampedFile("screenshot", ".png"); }
+        private void TakeScreenshot() { mWindow.WriteContentsToTimestampedFile("screenshot", ".png"); }
 
-        protected virtual void CreateFrameListeners() { this.mRoot.FrameRenderingQueued += new FrameListener.FrameRenderingQueuedHandler(OnFrameRenderingQueued); }
+        public void AddFrameLstn(RootLstn listener)    { listener.AddListener(this.mRoot); }
+        public void RemoveFrameLstn(RootLstn listener) { listener.RemoveListener(this.mRoot); }
 
-        protected virtual bool OnFrameRenderingQueued(FrameEvent evt)
+        private bool OnFrameRendering(FrameEvent evt)
         {
-            if (this.mWindow.IsClosed) { return false; }
-            if (this.mShutDown)        { return false; }
-
+            if (this.mWindow.IsClosed || this.mIsShutDownRequested) { return false; }
             try
             {
                 this.ProcessInput();
-                this.UpdateScene(evt);
-
-                if (this.mCameraMan != null) { this.mCameraMan.UpdateCamera(evt.timeSinceLastFrame); }
+                this.mMiyagiMgr.Update();
+                this.Update(evt);
 
                 this.mDebugOverlay.Update(evt.timeSinceLastFrame);
                 return true;
             }
-            catch (ShutdownException) { this.mShutDown = true; return false; }
+            catch (ShutdownException)
+            { 
+                this.mIsShutDownRequested = true;
+                return false;
+            }
         }
 
-        protected void Shutdown() { throw new ShutdownException(); }
-
-        protected virtual void DestroyScene()
+        protected virtual void Shutdown()
         {
+            this.mMiyagiMgr.ShutDown();
             this.mInput.Shutdown();
             this.mRoot.Dispose();
         }

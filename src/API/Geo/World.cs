@@ -17,7 +17,7 @@ namespace API.Geo
 	     */
 	    String getName();
 
-        void   setName();
+        void   setName(string name);
 
 	    /**
 	     * Gets the age of the world in ms. This count cannot be modified, and
@@ -34,7 +34,7 @@ namespace API.Geo
 	     * @param z the block z coordinate of the column
 	     * @return the highest of the highest block
 	     */
-	    int getSurfaceHeight(int x, int z);
+	    int getSurfaceHeight(int x, int z, Vector3 islandLoc);
 
 
 	    /**

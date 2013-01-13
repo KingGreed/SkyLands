@@ -7,30 +7,29 @@ using Miyagi.UI;
 using Miyagi.UI.Controls;
 using Miyagi.UI.Controls.Layout;
 
-using Mogre;
-
 using Game.States;
 
-namespace Game.GUICreator {
+namespace Game.GUICreator
+{
+	public abstract class GUIFactory
+    {
+        protected MiyagiManager mMiyagiMgr;
+        protected GUI mGUI;
 
-	public abstract class GUIFactory {
-		protected GUI mGUI;
-        protected MiyagiSystem mSystem;
-        protected StateManager mStateMgr;
+        protected int Width  { get { return (int) this.mMiyagiMgr.WindowSize.x; } }
+        protected int Height { get { return (int) this.mMiyagiMgr.WindowSize.y; } }
 
-        public GUIFactory(StateManager stateMgr, string name) {
-
-            this.mStateMgr = stateMgr;
-            this.mSystem   = this.mStateMgr.MiyagiManager.System;
-            this.mGUI  = new GUI("World GUI");
-
-            this.createMenu();
-            this.mSystem.GUIManager.GUIs.Add(this.mGUI);
+        public GUIFactory(MiyagiManager miyagiMgr, string name)
+        {
+            this.mMiyagiMgr = miyagiMgr;
+            this.mGUI       = new GUI(name);
+            this.CreateGUI();
+            this.mMiyagiMgr.Add(this.mGUI);
         }
 
-        public abstract void createMenu();
+        protected abstract void CreateGUI();
 
-        public void Shutdown() { this.mGUI.Dispose();       }
+        public void Dispose()  { this.mGUI.Dispose();       }
         public void Hide()     { this.mGUI.Visible = false; }
         public void Show()     { this.mGUI.Visible = true;  }
 

@@ -1,26 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 
+using Game.World;
 using Game.States;
 using Game.GUICreator;
-
-using Miyagi.Common;
-using Miyagi.Common.Data;
-using Miyagi.Common.Resources;
-using Miyagi.UI;
-using Miyagi.UI.Controls;
-using Miyagi.UI.Controls.Layout;
 
 namespace Game
 {
     public class MainMenu : State
     {
-        MenuGUI mMenuGUI;
+        MenuGUI mGUI;
 
         public MainMenu(StateManager stateMgr) : base(stateMgr)
         {
-            this.mMenuGUI = new MenuGUI(stateMgr, "Menu GUI");
-
+            this.mGUI = new MenuGUI(stateMgr.MiyagiManager, "Menu GUI");
+            Mogre.LogManager.Singleton.DefaultLog.LogMessage("Menu Created");
         }
 
         public override bool Startup()
@@ -33,16 +26,16 @@ namespace Game
             return true;
         }
 
-        public override void Hide() { this.mMenuGUI.Hide(); }
+        public override void Hide() { this.mGUI.Hide(); }
 
-        public override void Show() { this.mMenuGUI.Show(); }
+        public override void Show() { this.mGUI.Show(); }
 
         public override void Update(float frameTime)
         {
-            if (this.mStateMgr.Input.IsKeyDown(MOIS.KeyCode.KC_E)) { this.mStateMgr.RequestStatePush(typeof(World)); }
+            if (this.mStateMgr.Input.IsKeyDown(MOIS.KeyCode.KC_E)) { this.mStateMgr.RequestStatePush(typeof(MainWorld)); }
             if (this.mStateMgr.Input.IsKeyDown(MOIS.KeyCode.KC_ESCAPE)) { this.mStateMgr.RequestStatePop(); }
         }
 
-        public override void Shutdown() { mMenuGUI.Shutdown(); }
+        public override void Shutdown() { mGUI.Dispose(); }
     }
 }
