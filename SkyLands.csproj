@@ -111,10 +111,7 @@
     <Compile Include="src\API\Generator\biome\Decorator.cs" />
     <Compile Include="src\API\Generator\EmptyWorldGenerator.cs" />
     <Compile Include="src\API\Generator\FlatWorldGenerator.cs" />
-    <Compile Include="src\API\Generator\GeneratorPopulator.cs" />
     <Compile Include="src\API\Generator\Populator.cs" />
-    <Compile Include="src\API\Generator\WorldGenerator.cs" />
-    <Compile Include="src\API\Generator\WorldGeneratorObject.cs" />
     <Compile Include="src\API\Generator\WorldGeneratorUtils.cs" />
     <Compile Include="src\API\Generic\BlockFace.cs" />
     <Compile Include="src\API\Generic\Material.cs" />
@@ -146,6 +143,7 @@
     <Compile Include="src\Main\World\DebugMode.cs" />
     <Compile Include="src\Main\World\Display\GraphicBlock.cs" />
     <Compile Include="src\Main\World\Display\Materials.cs" />
+    <Compile Include="src\Main\World\Generator\RandomIsland.cs" />
     <Compile Include="src\Main\World\Generator\DomeIsland.cs" />
     <Compile Include="src\Main\World\Generator\VanillaBlock.cs" />
     <Compile Include="src\Main\World\Generator\VanillaChunk.cs" />

@@ -54,7 +54,7 @@ namespace Game.World
 
             this.mIsStartedUp = true;
 
-            this.mIslandList.Add(new Vector3(0, 0, 0), new DomeIsland(new Vector3(0, 0, 0), new Vector2(4, 4)));
+            this.mIslandList.Add(new Vector3(0, 0, 0), new RandomIsland(new Vector3(0, 0, 0), new Vector2(6, 6)));
             this.mIslandList[new Vector3(0, 0, 0)].display(this.mStateMgr.SceneManager);
 
             this.setSafeSpawnPoint(new Vector3(0, 0, 0));
@@ -115,8 +115,8 @@ namespace Game.World
 
                 y = this.getSurfaceHeight(x, z, islandLoc);
                 if(y != -1) {
-                    LogManager.Singleton.DefaultLog.LogMessage("\n \n New SpawnPoint at : " + new Vector3(x * CHUNK_SIDE, y * CHUNK_SIDE, z * CHUNK_SIDE).ToString());
-                    this.mSpawnPoint = new Vector3(x * CHUNK_SIDE, 1000, z * CHUNK_SIDE);
+                    LogManager.Singleton.DefaultLog.LogMessage("\n \n New SpawnPoint at : " + new Vector3(x * CUBE_SIDE, y * CUBE_SIDE, z * CUBE_SIDE).ToString());
+                    this.mSpawnPoint = new Vector3(x * CUBE_SIDE, 1000, z * CUBE_SIDE);
                     break;
                 }
             }
