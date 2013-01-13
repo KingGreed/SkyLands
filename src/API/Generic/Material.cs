@@ -2,8 +2,13 @@
 
 namespace API.Generic
 {
-    public enum Material : byte
+    public enum Material
     {
-        GRASS, DIRT, STONE, AIR
+        GRASS = 1,
+        DIRT,
+        STONE,
+        WOOD,
+        LEAVES,
+        AIR
     }
 }

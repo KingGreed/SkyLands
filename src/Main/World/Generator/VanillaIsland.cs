@@ -102,7 +102,7 @@ namespace Game.World.Generator
             string faceName, faceEntName, cubeNodeName = "cubeNode-" + absCoord.x + "-" + absCoord.y + "-" + absCoord.z;
             SceneNode blockNode;
             Entity ent;
-            string type = "1";
+            string type = ((int)block.getMaterial()).ToString();
 
             if(sceneMgr.HasSceneNode(cubeNodeName)) {
                 blockNode = sceneMgr.GetSceneNode(cubeNodeName);

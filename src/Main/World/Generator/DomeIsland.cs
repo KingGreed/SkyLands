@@ -19,11 +19,21 @@ namespace Game.World.Generator
 {
     public class DomeIsland : VanillaIsland
     {
+        private Perlin ELEVATION  = new Perlin();
+
         public DomeIsland(Vector3 islandCoord, Vector2 size) : base(islandCoord, size) {
 
             if(size.x != size.y) { throw new ArgumentException("Dome Islands can't be non square Islands"); }
 
+            ELEVATION.setFrequency(0.2);
+		    ELEVATION.setLacunarity(1);
+		    ELEVATION.setNoiseQuality(NoiseQuality.STANDARD);
+		    ELEVATION.setPersistence(0.7);
+		    ELEVATION.setOctaveCount(1);
+
             this.generate();
+
+            this.trees();
         }
 
         public override void generate() {
@@ -31,12 +41,13 @@ namespace Game.World.Generator
 
             for (int xx = 0; xx < this.mIslandSize.x * MainWorld.CHUNK_SIDE; xx++) {
                 for (int zz = 0; zz < this.mIslandSize.z * MainWorld.CHUNK_SIDE; zz++) {
+                    chunkTempPosition.x = xx / MainWorld.CHUNK_SIDE;
+                    chunkTempPosition.z = zz / MainWorld.CHUNK_SIDE;
                     for (int yy = 0; yy < MainWorld.MaxHeight; yy++) {
-                        if(yy <= 100) {                            
+                        chunkTempPosition.y = yy / MainWorld.CHUNK_SIDE;
+                        
+                        if(yy <= 100) {
                             if(this.isInSphere(xx, yy, zz)) {
-                                chunkTempPosition.x = xx / MainWorld.CHUNK_SIDE;
-                                chunkTempPosition.y = yy / MainWorld.CHUNK_SIDE;
-                                chunkTempPosition.z = zz / MainWorld.CHUNK_SIDE;
 
                                 if(!this.hasChunk(chunkTempPosition)) {
                                     this.mChunkList.Add(chunkTempPosition, new VanillaChunk(new Vector3(16,16,16), chunkTempPosition, this));
@@ -49,6 +60,23 @@ namespace Game.World.Generator
                             }
                         }
 				    }
+                }
+            }
+        }
+
+        public void trees() {
+            Random rd = new Random();
+            int amount = rd.Next(20);
+
+            for(int i = 0; i < amount; i++) {
+                int x = rd.Next(16*(int)this.mIslandSize.x);
+			    int z = rd.Next(16*(int)this.mIslandSize.z);
+                int height = rd.Next(3, 8);
+
+                if(this.getBlock(x, 101, z).getMaterial() != API.Generic.Material.WOOD) {
+                    for(int j = 0; j < height; j++) {
+                        this.getBlock(x, 101 + j, z).setMaterial(API.Generic.Material.WOOD);
+                    }
                 }
             }
         }

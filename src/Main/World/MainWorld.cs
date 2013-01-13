@@ -54,7 +54,7 @@ namespace Game.World
 
             this.mIsStartedUp = true;
 
-            this.mIslandList.Add(new Vector3(0, 0, 0), new RandomIsland(new Vector3(0, 0, 0), new Vector2(6, 6)));
+            this.mIslandList.Add(new Vector3(0, 0, 0), new DomeIsland(new Vector3(0, 0, 0), new Vector2(6, 6)));
             this.mIslandList[new Vector3(0, 0, 0)].display(this.mStateMgr.SceneManager);
 
             this.setSafeSpawnPoint(new Vector3(0, 0, 0));

@@ -16,14 +16,14 @@
 		<bottom>cube/stone</bottom>
 	</texture>
 	<texture id="4">
-		<side>cube/coal</side>
-		<top>cube/coal</top>
-		<bottom>cube/coal</bottom>
+		<side>cube/wood/side</side>
+		<top>cube/wood/side</top>
+		<bottom>cube/wood/side</bottom>
 	</texture>
 	<texture id="5">
-		<side>cube/gold</side>
-		<top>cube/gold</top>
-		<bottom>cube/gold</bottom>
+		<side>cube/leaves</side>
+		<top>cube/leaves</top>
+		<bottom>cube/leaves</bottom>
 	</texture>
 	<texture id="7"><!-- dirt -->
 		<side>cube/grass/bottom</side>

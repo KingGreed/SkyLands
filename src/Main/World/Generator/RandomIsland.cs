@@ -22,12 +22,12 @@ namespace Game.World.Generator
     public class RandomIsland : VanillaIsland
     {
 
-        private  Perlin     ELEVATION  = new Perlin();
-	    private  Perlin     ROUGHNESS  = new Perlin();
-	    private  Perlin     DETAIL     = new Perlin();
-	    private  Turbulence TURBULENCE = new Turbulence();
-	    private  ScalePoint SCALE      = new ScalePoint();
-	    private  Clamp      FINAL      = new Clamp();
+        private Perlin     ELEVATION  = new Perlin();
+	    private Perlin     ROUGHNESS  = new Perlin();
+	    private Perlin     DETAIL     = new Perlin();
+	    private Turbulence TURBULENCE = new Turbulence();
+	    private ScalePoint SCALE      = new ScalePoint();
+	    private Clamp      FINAL      = new Clamp();
 	    // smoothing stuff
 	    //private  int SMOOTH_SIZE = 4;
 
@@ -86,7 +86,6 @@ namespace Game.World.Generator
 		    DETAIL.setSeed((int) seed * 17);
 		    TURBULENCE.setSeed((int) seed * 53);
 
-            Random random = new Random(seed);
 		    double[, ,] noise  = WorldGeneratorUtils.fastNoise(FINAL, 16*(int)this.mIslandSize.x, 256, 16*(int)this.mIslandSize.z, 4, 0, 0, 0);
 
 

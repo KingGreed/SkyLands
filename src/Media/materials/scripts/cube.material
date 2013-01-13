@@ -75,6 +75,19 @@ material Cube/wood/side
 		}
 	}
 }
+material Cube/leaves
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture leaves.jpg }
+        }
+    }
+}
 material Cube/sand
 {
 	technique
