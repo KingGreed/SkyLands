@@ -19,6 +19,9 @@ namespace API.Generator
     public abstract class Biome {
 	    private int id;
 	    private bool registered = false;
+
+        private float min, max;
+
 	    List<Decorator> decorators = new List<Decorator>();
 
 	    public Biome(params Decorator[] decorators) {
@@ -36,6 +39,11 @@ namespace API.Generator
 			    this.id = id;
 			    registered = true;
 		    }
+	    }
+
+        protected void setMinMax(float min, float max) {
+		    this.min = min;
+		    this.max = max;
 	    }
         
 	    public abstract String getName();

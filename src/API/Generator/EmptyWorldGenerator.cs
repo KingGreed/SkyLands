@@ -15,7 +15,7 @@ namespace API.Generator
     /**
      * Generates an empty world using air blocks
      */
-    public class EmptyWorldGenerator : WorldGenerator {
+    public class EmptyWorldGenerator {
 	    public void generate(int chunkX, int chunkY, int chunkZ, World world) {
 		    throw new NotImplementedException();
 	    }
@@ -24,9 +24,6 @@ namespace API.Generator
 		    return new Populator[0];
 	    }
 
-	    public GeneratorPopulator[] getGeneratorPopulators() {
-		    return new GeneratorPopulator[0];
-	    }
 
 	    public int[,] getSurfaceHeight(World world, int chunkX, int chunkZ) {
 		    throw new NotImplementedException();
