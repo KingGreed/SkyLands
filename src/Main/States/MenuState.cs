@@ -24,9 +24,7 @@ namespace Game
 
         private void ClickPlayButton(object obj, MouseButtonEventArgs arg)
         {
-            //this.mStateMgr.OverlayVisibility = false;
-            //this.mStateMgr.MiyagiManager.CursorVisibility = false;
-            this.Hide();
+            this.mStateMgr.MiyagiManager.CursorVisibility = false;
             this.mStateMgr.RequestStatePush(typeof(GameState));
         }
 
