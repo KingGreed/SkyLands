@@ -13,7 +13,7 @@ namespace Game
 
         public MainMenu(StateManager stateMgr) : base(stateMgr) { }
 
-        protected override void StartUp()
+        protected override void Startup()
         {
             this.mMenuGUI = new MenuGUI(this.mStateMgr.MiyagiManager, "Menu GUI");
             this.mMenuGUI.SetListener(MenuGUI.Buttons.Play, this.ClickPlayButton);
@@ -27,7 +27,7 @@ namespace Game
             //this.mStateMgr.OverlayVisibility = false;
             //this.mStateMgr.MiyagiManager.CursorVisibility = false;
             this.Hide();
-            this.mStateMgr.RequestStatePush(typeof(MainWorld));
+            this.mStateMgr.RequestStatePush(typeof(GameState));
         }
 
         private void ClickExitButton(object obj, MouseButtonEventArgs arg) { this.mStateMgr.RequestStatePop(); }
@@ -51,6 +51,6 @@ namespace Game
             if (this.mStateMgr.Input.IsKeyDown(MOIS.KeyCode.KC_ESCAPE)) { this.mStateMgr.RequestStatePop(); }
         }
 
-        public override void Shutdown() { mMenuGUI.Dispose(); }
+        protected override void Shutdown() { mMenuGUI.Dispose(); }
     }
 }

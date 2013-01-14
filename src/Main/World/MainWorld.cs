@@ -9,9 +9,8 @@ using API.Generator;
 using Entity    = API.Ent.Entity;
 using Character = API.Ent.Character; 
 
-using Game.CharacSystem;
-using Game.States;
 using Game.World.Generator;
+using Game.States;
 using Game.Sky;
 
 using Mogre;
@@ -19,7 +18,7 @@ using Mogre;
 
 namespace Game.World
 {
-    public partial class MainWorld : State, API.Geo.World
+    public class MainWorld : API.Geo.World
     {
         private string   mName;
         private long     mAge;
@@ -33,37 +32,22 @@ namespace Game.World
         private Dictionary<Vector3, Island> mIslandList;
         
         private SkyMgr mSkyMgr;
-        private CharacMgr mCharacMgr;
-        private DebugMode mDebugMode;
 
-        public MainWorld(StateManager stateMgr) : base(stateMgr) {
-            
+        public MainWorld(StateManager stateMgr)
+        {
             this.mEntityList = new List<Entity>();
             this.mAge        = 0;
             this.mSeed       = 42;
 
-            this.mSpawnPoint = Vector3.ZERO;
             this.mIslandList = new Dictionary<Vector3, Island>();
-
-            this.mSkyMgr = new SkyMgr(this.mStateMgr);
-
-        }
-
-        protected override void StartUp()
-        {
             this.mIslandList.Add(new Vector3(0, 0, 0), new RandomIsland(new Vector3(0, 0, 0), new Vector2(6, 6)));
-            this.mIslandList[new Vector3(0, 0, 0)].display(this.mStateMgr.SceneManager);
+            this.mIslandList[new Vector3(0, 0, 0)].display(stateMgr.SceneManager);
 
+            this.mSpawnPoint = Vector3.ZERO;
             this.setSafeSpawnPoint(new Vector3(0, 0, 0));
-            this.mSkyMgr.CreateSky(); LogManager.Singleton.DefaultLog.LogMessage("Sky Created");
-
-            this.mCharacMgr = new CharacMgr(this.mStateMgr.Camera);
-            this.mCharacMgr.AddPlayer(this.mStateMgr.SceneManager, "Sinbad.mesh",
-                                      new CharacterInfo("Sinbad", this.mSpawnPoint),
-                                      this.mStateMgr.Input, this);
-            this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr);
-            this.mSkyMgr.AddListeners();
+            this.mSkyMgr = new SkyMgr(stateMgr); LogManager.Singleton.DefaultLog.LogMessage("Sky Created");
         }
+
 
         //get
 
@@ -141,5 +125,7 @@ namespace Game.World
             return false;
         }
 
+        public void Update() { this.mSkyMgr.Update(); }
+        public void Shutdown() { this.mSkyMgr.Shutdown(); }
     }
 }

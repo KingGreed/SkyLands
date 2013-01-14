@@ -14,15 +14,15 @@ namespace Game.States
             this.mIsStartedUp = false;
         }
 
-        public bool Startup()
+        public bool StartupState()
         {
             if (this.mIsStartedUp) { return false; }
             this.mIsStartedUp = true;
-            this.StartUp();
+            this.Startup();
             return true;
         }
 
-        protected abstract void StartUp();
+        protected abstract void Startup();
 
         public abstract void Hide();
 
@@ -30,6 +30,13 @@ namespace Game.States
 
         public abstract void Update(float frameTime);
 
-        public abstract void Shutdown();
+        public void ShutdownState()
+        {
+            if (this.mStateMgr == null) { return; }
+            this.Shutdown();
+            this.mIsStartedUp = false;
+        }
+
+        protected abstract void Shutdown();
     }
 }
