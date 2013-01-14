@@ -23,17 +23,17 @@ namespace Game.BaseApp
         private int             mRenderMode          = 0;
         private MyOverlay       mDebugOverlay;
 
-        public bool OverlayVisibility { get { return this.mDebugOverlay.Visibility; } set { this.mDebugOverlay.Visibility = value; } }
+        public bool OverlayVisibility        { get { return this.mDebugOverlay.Visibility; } set { this.mDebugOverlay.Visibility = value; } }
 
         public void Go()
         {
-            try
+            //try
             {
                 if (!this.Setup()) { return; }
                 this.mRoot.StartRendering();
                 this.Shutdown();
             }
-            catch (System.Runtime.InteropServices.SEHException e)
+            /*catch (System.Runtime.InteropServices.SEHException e)
             {
                 Console.WriteLine(e);
 
@@ -50,7 +50,7 @@ namespace Game.BaseApp
                     e.Message, "Error",
                     System.Windows.Forms.MessageBoxButtons.OK,
                     System.Windows.Forms.MessageBoxIcon.Error);
-            }
+            }*/
         }
 
         private bool Setup()
@@ -68,12 +68,12 @@ namespace Game.BaseApp
 
             this.LoadResources();
 
-            mInput = new MoisManager();
+            this.mInput = new MoisManager();
             int windowHnd;
-            mWindow.GetCustomAttribute("WINDOW", out windowHnd);
-            mInput.Startup(windowHnd, mWindow.Width, mWindow.Height);
+            this.mWindow.GetCustomAttribute("WINDOW", out windowHnd);
+            mInput.Startup(windowHnd, this.mWindow.Width, this.mWindow.Height);
 
-            this.mDebugOverlay = new MyOverlay(mWindow);
+            this.mDebugOverlay = new MyOverlay(this.mWindow);
             this.mDebugOverlay.AdditionalInfo = "Bilinear";
 
             this.Create();
@@ -134,8 +134,8 @@ namespace Game.BaseApp
         {
             this.mInput.Update();
 
-            if (mInput.WasKeyPressed(MOIS.KeyCode.KC_R)) { this.CycleTextureFilteringMode(); }
-            if (mInput.WasKeyPressed(MOIS.KeyCode.KC_F5)) { this.ReloadAllTextures(); }
+            if (mInput.WasKeyPressed(MOIS.KeyCode.KC_R))     { this.CycleTextureFilteringMode(); }
+            if (mInput.WasKeyPressed(MOIS.KeyCode.KC_F5))    { this.ReloadAllTextures(); }
             if (mInput.WasKeyPressed(MOIS.KeyCode.KC_SYSRQ)) { this.TakeScreenshot(); }
         }
 
@@ -202,10 +202,6 @@ namespace Game.BaseApp
             }
         }
 
-        private void Shutdown()
-        {
-            this.mInput.Shutdown();
-            this.mRoot.Dispose();
-        }
+        protected abstract void Shutdown();
     }
 }
