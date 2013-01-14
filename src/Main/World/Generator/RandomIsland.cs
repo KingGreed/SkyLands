@@ -100,8 +100,8 @@ namespace Game.World.Generator
                     chunkTempPosition.x = xx / MainWorld.CHUNK_SIDE;
                     chunkTempPosition.z = zz / MainWorld.CHUNK_SIDE;
 
-				    maxSum = 32.5f;
-				    minSum = 160;
+				    maxSum = 53;
+				    minSum = 90;
 				    
 				    minElevation = minSum;
 				    smoothHeight = (maxSum - minElevation) / 2d;

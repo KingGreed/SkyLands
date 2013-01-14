@@ -62,7 +62,7 @@ material cube/metal
         }
     }
 }
-material Cube/wood/side
+material cube/wood/side
 {
 	technique
 	{
@@ -75,7 +75,7 @@ material Cube/wood/side
 		}
 	}
 }
-material Cube/leaves
+material cube/leaves
 {
     technique
     {
@@ -88,7 +88,7 @@ material Cube/leaves
         }
     }
 }
-material Cube/sand
+material cube/sand
 {
 	technique
 	{

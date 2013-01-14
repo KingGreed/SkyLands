@@ -54,6 +54,15 @@ namespace Game.World.Generator
             else { return new VanillaBlock(new Vector3(0,0,0), new Vector3(0,0,0)); }
         }
 
+        public override int getSurfaceHeight(int x, int z) {
+            for(int y = (int)this.mIslandSize.y * MainWorld.CHUNK_SIDE; y != 0 ; y--) { 
+                if(!this.getBlock(x, y, z).IsAir()) {
+                    return y + 1; 
+                }
+            }
+            return -1;
+        }
+
         public override void display(SceneManager sceneMgr) {
             for(int x = 0; x < this.mIslandSize.x * MainWorld.CHUNK_SIDE; x++) {
                 for(int y = 0; y < this.mIslandSize.y * MainWorld.CHUNK_SIDE; y++) {

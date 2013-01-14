@@ -46,6 +46,8 @@ namespace API.Geo.Cuboid
         public Chunk getChunkFromBlock(int x, int y, int z)           { throw new NotImplementedException(); }
         public Chunk getChunkFromBlock(Vector3 position)              { throw new NotImplementedException(); }
 
+        public abstract int getSurfaceHeight(int x, int z);
+
         public Block getBlock(Vector3 loc)                            { return this.getBlock((int) loc.x, (int) loc.y, (int) loc.z); }
         public abstract Block getBlock(int x, int y, int z);
         

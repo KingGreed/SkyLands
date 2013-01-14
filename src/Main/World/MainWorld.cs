@@ -59,7 +59,7 @@ namespace Game.World
 
             this.mCharacMgr = new CharacMgr(this.mStateMgr.Camera);
             this.mCharacMgr.AddPlayer(this.mStateMgr.SceneManager, "Sinbad.mesh",
-                                      new CharacterInfo("Sinbad", new Vector3(300, 7000, 1000)),
+                                      new CharacterInfo("Sinbad", this.mSpawnPoint),
                                       this.mStateMgr.Input, this);
             this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr);
             this.mSkyMgr.AddListeners();
@@ -74,12 +74,7 @@ namespace Game.World
         public int     getHeight()     { return MaxHeight;        }
         
         public int getSurfaceHeight(int x, int z, Vector3 islandLoc) {
-            for(int y = 0; y < this.mIslandList[islandLoc].getSize().y * CHUNK_SIDE; y++) { 
-                if(!this.mIslandList[islandLoc].getBlock(x, y, z).IsAir()) {
-                    return y; 
-                }
-            }
-            return -1;
+            return this.mIslandList[islandLoc].getSurfaceHeight(x, z);
         }
 
 	    public List<Entity> getNearbyEntities(Vector3 position, Entity ignore, int range)      { throw new NotImplementedException(); }
@@ -111,7 +106,7 @@ namespace Game.World
                 y = this.getSurfaceHeight(x, z, islandLoc);
                 if(y != -1) {
                     LogManager.Singleton.DefaultLog.LogMessage("\n \n New SpawnPoint at : " + new Vector3(x * CUBE_SIDE, y * CUBE_SIDE, z * CUBE_SIDE).ToString());
-                    this.mSpawnPoint = new Vector3(x * CUBE_SIDE, 1000, z * CUBE_SIDE);
+                    this.mSpawnPoint = islandLoc + new Vector3(x * CUBE_SIDE, y * CUBE_SIDE, z * CUBE_SIDE);
                     break;
                 }
             }
