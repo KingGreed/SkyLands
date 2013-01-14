@@ -47,6 +47,7 @@ namespace Game.World.Generator
             blockLocation.z = z % MainWorld.CHUNK_SIDE;
 
             if(blockLocation.x < 0) { chunkLocation.x--; blockLocation.x += 16;}
+            if(blockLocation.y < 0) { chunkLocation.y--; blockLocation.y += 16; }
             if(blockLocation.z < 0) { chunkLocation.z--; blockLocation.z += 16;}
 
             if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation].getBlock(blockLocation); }

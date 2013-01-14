@@ -14,8 +14,15 @@ namespace Game.States
             this.mIsStartedUp = false;
         }
 
-        /* A State is started up in the StateManager */
-        public abstract bool Startup();
+        public bool Startup()
+        {
+            if (this.mIsStartedUp) { return false; }
+            this.mIsStartedUp = true;
+            this.StartUp();
+            return true;
+        }
+
+        protected abstract void StartUp();
 
         public abstract void Hide();
 

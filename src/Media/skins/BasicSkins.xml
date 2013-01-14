@@ -6,13 +6,13 @@
       <SubSkin Name="Button.MouseDown">
         <Frames>
           <Frame>
-            <FileName>testSkin.png</FileName>
+            <FileName>SheetSprite.png</FileName>
             <Duration>0</Duration>
             <UV>
               <X>0</X>
-              <Y>0</Y>
-              <Width>0.996108949</Width>
-              <Height>0.2819383</Height>
+              <Y>0.4520547945</Y>
+              <Width>1</Width>
+              <Height>0.1369863014</Height>
             </UV>
           </Frame>
         </Frames>
@@ -26,13 +26,13 @@
       <SubSkin Name="Button.MouseEnter">
         <Frames>
           <Frame>
-            <FileName>testSkin.png</FileName>
+            <FileName>SheetSprite.png</FileName>
             <Duration>0</Duration>
             <UV>
               <X>0</X>
-              <Y>0.2863436</Y>
-              <Width>0.996108949</Width>
-              <Height>0.2819383</Height>
+              <Y>0.4520547945</Y>
+              <Width>1</Width>
+              <Height>0.1369863014</Height>
             </UV>
           </Frame>
         </Frames>
@@ -46,13 +46,13 @@
       <SubSkin Name="Button">
         <Frames>
           <Frame>
-            <FileName>testSkin.png</FileName>
+            <FileName>SheetSprite.png</FileName>
             <Duration>0</Duration>
             <UV>
               <X>0</X>
-              <Y>0.5726872</Y>
-              <Width>0.996108949</Width>
-              <Height>0.2819383</Height>
+              <Y>0.4520547945</Y>
+              <Width>1</Width>
+              <Height>0.1369863014</Height>
             </UV>
           </Frame>
         </Frames>

@@ -11,25 +11,29 @@ namespace Game.States
 {
     public abstract class StateManager : BaseApplication
     {
+        private MiyagiMgr mMiyagiMgr;        
         private Stack<State> mStateStack;
         private Type mNewState;
         private bool mIsPopRequested;
+        private bool mWaitOneFrame; // Wait one frame before pushing a state to display some info
 
-        public Root Root                   { get { return this.mRoot; } }
-        public SceneManager SceneManager   { get { return this.mSceneMgr; } }
-        public RenderWindow Window         { get { return this.mWindow; } }
-        public MoisManager Input           { get { return this.mInput; } }
-        public MiyagiMgr MiyagiManager { get { return this.mMiyagiMgr; } }
-        public Camera Camera               { get { return this.mCam; } }
-        public Viewport Viewport           { get { return this.mViewport; } }
+        public Root Root                 { get { return this.mRoot; } }
+        public SceneManager SceneManager { get { return this.mSceneMgr; } }
+        public RenderWindow Window       { get { return this.mWindow; } }
+        public MoisManager Input         { get { return this.mInput; } }
+        public MiyagiMgr MiyagiManager   { get { return this.mMiyagiMgr; } }
+        public Camera Camera             { get { return this.mCam; } }
+        public Viewport Viewport         { get { return this.mViewport; } }
 
         protected override void Create()
         {
             GraphicBlock.generateFace();
             LogManager.Singleton.DefaultLog.LogMessage("***********************Program\'s Log***********************");
+            this.mMiyagiMgr = new MiyagiMgr(this.mInput, new Vector2(this.mWindow.Width, this.mWindow.Height));
             this.mStateStack = new Stack<State>();
             this.mNewState = null;
             this.mIsPopRequested = false;
+            this.mWaitOneFrame = false;
             this.RequestStatePush(typeof(MainMenu));
         }
 
@@ -40,26 +44,31 @@ namespace Game.States
             if (this.mIsShutDownRequested)
             {
                 this.Shutdown();
-                LogManager.Singleton.DefaultLog.LogMessage("***********************End of Program\'s Log***********************");
                 return;
             }
+
+            this.mMiyagiMgr.Update();
+
+            if (this.mWaitOneFrame) { this.mWaitOneFrame = false; return; }
             
             if (this.mNewState != null)  // A pushState was requested
             {
                 State newState = null;
                 
                 // Use reflection to get new state class default constructor
-                ConstructorInfo constructor = this.mNewState.GetConstructor(new Type[1] {typeof(StateManager)});
+                ConstructorInfo constructor = this.mNewState.GetConstructor(new Type[] {typeof(StateManager)});
 
                 // Try to create an object from the requested state class
                 if (constructor != null)
-                    newState = (State)constructor.Invoke(new StateManager[1] {this});
+                    newState = (State)constructor.Invoke(new StateManager[] {this});
 
                 if (newState != null)
                     this.PushState(newState);
 
                 this.mNewState = null;
             }
+
+            if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F2)) { this.OverlayVisibility = !this.OverlayVisibility; }
 
             if (this.mStateStack.Count > 0)
                 this.mStateStack.Peek().Update(floatTime);
@@ -118,13 +127,15 @@ namespace Game.States
             if (newState == null || !newState.IsSubclassOf(typeof(State))) { return false; }
 
             this.mNewState = newState;   // Will push the state in Update()
+            this.mWaitOneFrame = true;
             return true;
         }
 
-        protected override void Shutdown()
+        private void Shutdown()
         {
             while (this.mStateStack.Count > 0) { this.PopState(); }
-            base.Shutdown();
+            this.mMiyagiMgr.ShutDown();
+            LogManager.Singleton.DefaultLog.LogMessage("***********************End of Program\'s Log***********************");
         }
     }
 }

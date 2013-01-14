@@ -20,8 +20,8 @@ namespace Game.World {
             this.mDebugMode.Update(frameTime);
             this.mSkyMgr.Update();
 
+            //if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_F2))     { this.mStateMgr.OverlayVisibility = !this.mStateMgr.OverlayVisibility; }
             if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_ESCAPE)) { this.mStateMgr.RequestStatePop(); }    // Return to the MenuState
-
         }
 
         public override void Shutdown() {
