@@ -41,15 +41,5 @@ namespace Game.CharacSystem
 
             this.mMainPlayerCam.Update();
         }
-
-        /*private void FirstPersonUpdate(float yawValue, float pitchValue)
-        {
-            /* Pitch the camera 
-            Radian newPitch = Mogre.Math.Abs(pitchValue + this.mMainPlayerCarac.CamPitchNode.Orientation.Pitch);
-            if (newPitch < new Radian(Mogre.Math.PI / 2 - MainPlayerCamera.PITCH_OFFSET) || newPitch > new Radian(Mogre.Math.PI / 2 + MainPlayerCamera.PITCH_OFFSET))
-                this.mMainPlayerCarac.CamPitchNode.Pitch(pitchValue);
-        }
-
-        private void ThirdPersonUpdate(float yawValue, float pitchValue) { }*/
     }
 }

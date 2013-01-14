@@ -143,7 +143,7 @@
     <Compile Include="src\Main\Characters\Player.cs" />
     <Compile Include="src\Main\GUI\LoadingBarGUI.cs" />
     <Compile Include="src\Main\GUI\MiyagiMgr.cs" />
-    <Compile Include="src\Main\World\DebugMode.cs" />
+    <Compile Include="src\Main\States\DebugMode.cs" />
     <Compile Include="src\Main\World\Display\GraphicBlock.cs" />
     <Compile Include="src\Main\World\Display\Materials.cs" />
     <Compile Include="src\Main\World\Generator\RandomIsland.cs" />
@@ -152,15 +152,15 @@
     <Compile Include="src\Main\World\Generator\VanillaChunk.cs" />
     <Compile Include="src\Main\World\Generator\VanillaIsland.cs" />
     <Compile Include="src\Main\World\MainWorld.cs" />
-    <Compile Include="src\Main\World\MainWorldState.cs" />
+    <Compile Include="src\Main\States\GameState.cs" />
     <Compile Include="src\Main\GUI\GUIFactory.cs" />
-    <Compile Include="src\Main\GUI\MainMenu.cs" />
+    <Compile Include="src\Main\States\MenuState.cs" />
     <Compile Include="src\Main\GUI\MenuGUI.cs" />
     <Compile Include="src\Main\MathHelper.cs" />
     <Compile Include="src\Main\Program.cs" />
     <Compile Include="src\Main\World\Sky\SkyMgr.cs" />
-    <Compile Include="src\Main\World\States\State.cs" />
-    <Compile Include="src\Main\World\States\StateManager.cs" />
+    <Compile Include="src\Main\States\State.cs" />
+    <Compile Include="src\Main\States\StateManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\LibNoise\exception\NoiseException.cs" />

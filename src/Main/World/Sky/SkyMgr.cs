@@ -18,9 +18,10 @@ namespace Game.Sky
             this.mStateMgr = stateMgr;
             this.mCaelumSystem = new CaelumSystem(this.mStateMgr.Root, this.mStateMgr.SceneManager, CaelumSystem.CaelumComponent.None);
             this.mListener = new RootLstn(RootLstn.TypeLstn.FrameStarted, mCaelumSystem.FrameStarted);
+            this.CreateSky(); this.AddListeners();
         }
 
-        public void CreateSky()
+        private void CreateSky()
         {
             this.mCaelumSystem.AttachViewport(this.mStateMgr.Viewport);
 

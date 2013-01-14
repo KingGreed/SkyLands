@@ -80,7 +80,7 @@ namespace Game.States
             else
             {
                 LogManager.Singleton.DefaultLog.LogMessage("Try to start up state : " + newState.ToString());
-                if (!newState.Startup())
+                if (!newState.StartupState())
                 {
                     LogManager.Singleton.DefaultLog.LogMessage("ERROR : Failed to start up state : " + newState.ToString());
                     return false;
@@ -100,7 +100,7 @@ namespace Game.States
             if (this.mStateStack.Count > 0)
             {
                 string stateName = this.mStateStack.Peek().ToString();
-                this.mStateStack.Peek().Shutdown();
+                this.mStateStack.Peek().ShutdownState();
                 this.mStateStack.Pop();
                 this.mInput.Clear();
                 if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Show(); }
