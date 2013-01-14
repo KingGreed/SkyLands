@@ -118,35 +118,12 @@ namespace Game
             this.ClearMouseMove();
         }
 
-        public bool IsKeyDown(KeyCode key)
-        {
-            return this.mKeyDown[(int) key];
-        }
-
-        public bool WasKeyPressed(KeyCode key)
-        {
-            return this.mKeyPressed[(int) key];
-        }
-
-        public bool WasKeyReleased(KeyCode key)
-        {
-            return this.mKeyReleased[(int)key];
-        }
-
-        public bool IsMouseButtonDown(MouseButtonID button)
-        {
-            return this.mMouseDown[(int) button];
-        }
-
-        public bool WasMouseButtonPressed(MouseButtonID button)
-        {
-            return this.mMousePressed[(int) button];
-        }
-
-        public bool WasMouseMoved()
-        {
-            return this.mMouseMove.x != 0 || this.mMouseMove.y != 0 || this.mMouseMove.z != 0;
-        }
+        public bool IsKeyDown(KeyCode key)                      { return this.mKeyDown[(int) key]; }
+        public bool WasKeyPressed(KeyCode key)                  { return this.mKeyPressed[(int) key]; }
+        public bool WasKeyReleased(KeyCode key)                 { return this.mKeyReleased[(int)key]; }
+        public bool IsMouseButtonDown(MouseButtonID button)     { return this.mMouseDown[(int) button]; }
+        public bool WasMouseButtonPressed(MouseButtonID button) { return this.mMousePressed[(int) button]; }
+        public bool WasMouseMoved()                             { return this.mMouseMove.x != 0 || this.mMouseMove.y != 0 || this.mMouseMove.z != 0; }
 
         public bool IsOneKeyEventTrue(IsKeyEvent keyEvent, params MOIS.KeyCode[] keys)
         {

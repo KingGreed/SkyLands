@@ -39,19 +39,14 @@ namespace Game.States
 
         protected override void Update(FrameEvent evt)
         {
+            if (this.mIsShutDownRequested) { return; }
+
             float floatTime = ((FrameEvent)evt).timeSinceLastFrame;            
-            
-            if (this.mIsShutDownRequested)
-            {
-                this.Shutdown();
-                return;
-            }
 
             this.mMiyagiMgr.Update();
 
-            if (this.mWaitOneFrame) { this.mWaitOneFrame = false; return; }
-            
-            if (this.mNewState != null)  // A pushState was requested
+            if (this.mWaitOneFrame) { this.mWaitOneFrame = false; }
+            else if (this.mNewState != null)  // A pushState was requested
             {
                 State newState = null;
                 
@@ -131,11 +126,14 @@ namespace Game.States
             return true;
         }
 
-        private void Shutdown()
+        protected override void Shutdown()
         {
+            LogManager.Singleton.DefaultLog.LogMessage("Shutting down state manager");
             while (this.mStateStack.Count > 0) { this.PopState(); }
             this.mMiyagiMgr.ShutDown();
             LogManager.Singleton.DefaultLog.LogMessage("***********************End of Program\'s Log***********************");
+            this.mInput.Shutdown(); 
+            this.mRoot.Dispose();
         }
     }
 }

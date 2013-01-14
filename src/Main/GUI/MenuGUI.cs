@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 using Miyagi.Common;
 using Miyagi.Common.Data;
@@ -12,16 +13,8 @@ namespace Game.GUICreator
 {
 	public class MenuGUI : GUIFactory
     {
-        private Button mPlayButton, mExitButton;
-        
-        public EventHandler<MouseButtonEventArgs> MouseClickPlayButton
-        {
-            set { this.mPlayButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(value); }
-        }
-        public EventHandler<MouseButtonEventArgs> MouseClickExitButton
-        {
-            set { this.mExitButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(value); }
-        }
+        public enum Buttons { Play, Options, Exit }
+        private Dictionary<string, Button> mButtons;
 
         public MenuGUI(MiyagiMgr miyagiMgr, string name) : base(miyagiMgr, name) {}
 
@@ -35,26 +28,30 @@ namespace Game.GUICreator
             this.mGUI.Controls.Add(backgroung);
             
             /* Buttons */
-            Point pos = new Point(this.WndSize.Width / 10, this.WndSize.Height / 4);
-            Size size = new Size(250, 65);
+            //Size originalImgSize = new Size(1600, 900);
+            Point[] pos = new Point[] { new Point(688, 372), new Point(685, 491), new Point(686, 626) };
+            //Point relativePos = new Point(originalPos.X / originalImgSize.Width * backgroung.Size.Width, originalPos.Y / originalImgSize.Height * backgroung.Size.Height);
+            Size buttonSize = new Size(188, 76);
             TextStyle style = new TextStyle();
             style.Alignment = Alignment.MiddleCenter;
-            this.mPlayButton = new Button();
-            this.mPlayButton.Size = size;
-            this.mPlayButton.Text = "Play";
-            this.mPlayButton.TextStyle = style;
-            //this.mPlayButton.TextBounds = new Rectangle(new Point(), new Size()));
-            this.mPlayButton.Location = pos;
-            this.mPlayButton.Skin = this.mMiyagiMgr.Skins["Button"];
-            this.mGUI.Controls.Add(this.mPlayButton);
 
-            this.mExitButton = new Button();
-            this.mExitButton.Size = size;
-            this.mExitButton.Text = "Exit";
-            this.mExitButton.TextStyle = style;
-            this.mExitButton.Location = pos + new Point(0, (int)(size.Height * 1.3f));
-            this.mExitButton.Skin = this.mMiyagiMgr.Skins["Button"];
-            this.mGUI.Controls.Add(this.mExitButton);
+            this.mButtons = new Dictionary<string, Button>();
+            for (int i = 0; i < Enum.GetValues(typeof(Buttons)).Length; i++)
+            {
+                Button button = new Button();
+                button.Size = buttonSize;
+                button.Text = Enum.GetName(typeof(Buttons), (Buttons)i);
+                button.TextStyle = style;
+                button.Location = pos[i];
+                button.Skin = this.mMiyagiMgr.Skins["Button"];
+                this.mGUI.Controls.Add(button);
+                this.mButtons.Add(button.Text, button);
+            }
+        }
+
+        public void SetListener(Buttons button, EventHandler<MouseButtonEventArgs> del)
+        {
+            this.mButtons[Enum.GetName(typeof(Buttons), button)].MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(del);
         }
 	}
 }
