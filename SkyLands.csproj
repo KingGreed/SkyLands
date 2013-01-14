@@ -78,8 +78,10 @@
     <None Include="src\Media\materials\scripts\cube.material" />
     <None Include="src\Media\models\cube.mesh" />
     <None Include="src\Media\packs\CaelumPack.zip" />
+    <None Include="src\Media\packs\MiyagiPack.zip" />
     <None Include="src\Media\packs\OgreCore.zip" />
     <None Include="src\Media\packs\Sinbad.zip" />
+    <None Include="src\Media\skins\testSkin_map.skin" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="CaelumSharp, Version=0.4.4737.33521, Culture=neutral, processorArchitecture=x86">
@@ -99,6 +101,7 @@
       <HintPath>bin\Release\MOIS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
@@ -139,7 +142,7 @@
     <Compile Include="src\Main\Characters\NonPlayer.cs" />
     <Compile Include="src\Main\Characters\Player.cs" />
     <Compile Include="src\Main\GUI\LoadingBarGUI.cs" />
-    <Compile Include="src\Main\GUI\MiyagiManager.cs" />
+    <Compile Include="src\Main\GUI\MiyagiMgr.cs" />
     <Compile Include="src\Main\World\DebugMode.cs" />
     <Compile Include="src\Main\World\Display\GraphicBlock.cs" />
     <Compile Include="src\Main\World\Display\Materials.cs" />
@@ -270,6 +273,9 @@
     <Content Include="src\Media\materials\textures\water3.jpg" />
     <Content Include="src\Media\materials\textures\wood.jpg" />
     <Content Include="src\Media\materials\xml\textures.xml" />
+    <Content Include="src\Media\skins\background.bmp" />
+    <Content Include="src\Media\skins\BasicSkins.xml" />
+    <Content Include="src\Media\skins\cursorSkin.xml" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

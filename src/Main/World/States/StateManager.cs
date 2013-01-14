@@ -19,7 +19,7 @@ namespace Game.States
         public SceneManager SceneManager   { get { return this.mSceneMgr; } }
         public RenderWindow Window         { get { return this.mWindow; } }
         public MoisManager Input           { get { return this.mInput; } }
-        public MiyagiManager MiyagiManager { get { return this.mMiyagiMgr; } }
+        public MiyagiMgr MiyagiManager { get { return this.mMiyagiMgr; } }
         public Camera Camera               { get { return this.mCam; } }
         public Viewport Viewport           { get { return this.mViewport; } }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using Miyagi.Common.Events;
 
 using Game.World;
 using Game.States;
@@ -8,34 +9,39 @@ namespace Game
 {
     public class MainMenu : State
     {
-        MenuGUI mGUI;
+        private MenuGUI mMenuGUI;
 
-        public MainMenu(StateManager stateMgr) : base(stateMgr)
-        {
-            this.mGUI = new MenuGUI(stateMgr.MiyagiManager, "Menu GUI");
-            Mogre.LogManager.Singleton.DefaultLog.LogMessage("Menu Created");
-        }
+        public MainMenu(StateManager stateMgr) : base(stateMgr) { }
 
         public override bool Startup()
         {
             if (this.mIsStartedUp) { return false; }
 
             this.mIsStartedUp = true;
-            
+            this.mStateMgr.MiyagiManager.CursorVisibility = true;
+            this.mMenuGUI = new MenuGUI(this.mStateMgr.MiyagiManager, "Menu GUI");
+            this.mMenuGUI.MouseClickPlayButton = this.MouseClickPlayButton;
+
+            Mogre.LogManager.Singleton.DefaultLog.LogMessage("Menu Created");
             
             return true;
         }
 
-        public override void Hide() { this.mGUI.Hide(); }
+        private void MouseClickPlayButton(object obj, MouseButtonEventArgs arg)
+        {
+            this.mStateMgr.MiyagiManager.CursorVisibility = false;
+            this.mStateMgr.RequestStatePush(typeof(MainWorld));
+        }
 
-        public override void Show() { this.mGUI.Show(); }
+        public override void Hide() { this.mMenuGUI.Hide(); this.mStateMgr.MiyagiManager.CursorVisibility = false; }
+
+        public override void Show() { this.mMenuGUI.Show(); this.mStateMgr.MiyagiManager.CursorVisibility = true; }
 
         public override void Update(float frameTime)
         {
-            if (this.mStateMgr.Input.IsKeyDown(MOIS.KeyCode.KC_E)) { this.mStateMgr.RequestStatePush(typeof(MainWorld)); }
             if (this.mStateMgr.Input.IsKeyDown(MOIS.KeyCode.KC_ESCAPE)) { this.mStateMgr.RequestStatePop(); }
         }
 
-        public override void Shutdown() { mGUI.Dispose(); }
+        public override void Shutdown() { mMenuGUI.Dispose(); }
     }
 }

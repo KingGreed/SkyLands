@@ -16,7 +16,7 @@ namespace Game.BaseApp
         protected MoisManager   mInput;
         protected Camera        mCam;
         protected Viewport      mViewport;
-        protected MiyagiManager mMiyagiMgr;
+        protected MiyagiMgr mMiyagiMgr;
         protected bool          mIsShutDownRequested = false;
         private string          mPluginsCfg          = "plugins.cfg";
         private string          mResourcesCfg        = "resources.cfg";
@@ -26,13 +26,13 @@ namespace Game.BaseApp
 
         public void Go()
         {
-            try
+            //try
             {
                 if (!this.Setup()) { return; }
                 this.mRoot.StartRendering();
                 this.Shutdown();
             }
-            catch (System.Runtime.InteropServices.SEHException e)
+            /*catch (System.Runtime.InteropServices.SEHException e)
             {
                 Console.WriteLine(e);
 
@@ -41,7 +41,7 @@ namespace Game.BaseApp
                     System.Windows.Forms.MessageBoxButtons.OK,
                     System.Windows.Forms.MessageBoxIcon.Error);
             }
-            /*catch (Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e);
 
@@ -72,7 +72,7 @@ namespace Game.BaseApp
             mWindow.GetCustomAttribute("WINDOW", out windowHnd);
             mInput.Startup(windowHnd, mWindow.Width, mWindow.Height);
 
-            this.mMiyagiMgr = new MiyagiManager(this.mInput, new Mogre.Vector2(this.mWindow.Width, this.mWindow.Height));
+            this.mMiyagiMgr = new MiyagiMgr(this.mInput, new Mogre.Vector2(this.mWindow.Width, this.mWindow.Height));
             this.mDebugOverlay = new Overlay(mWindow);
             this.mDebugOverlay.AdditionalInfo = "Bilinear";
 

@@ -24,7 +24,7 @@ namespace Game.GUICreator
             }
         }
 
-        public LoadingBarGUI(MiyagiManager miyagiMgr, string name) : base(miyagiMgr, name) {}
+        public LoadingBarGUI(MiyagiMgr miyagiMgr, string name) : base(miyagiMgr, name) { }
 
         protected override void CreateGUI()
         {
@@ -32,8 +32,8 @@ namespace Game.GUICreator
             this.mLoadingValue = this.mProgress.Min;
             this.mProgress.Size = new Size(300, 50);
             this.mProgress.Skin = this.mMiyagiMgr.Skins["ProgressBar"];
-            this.mProgress.Location = new Point(this.Width / 2 - this.mProgress.Size.Width / 2,
-                                                this.Height / 2 - this.mProgress.Size.Height / 2);
+            this.mProgress.Location = new Point(this.WndSize.Width / 2 - this.mProgress.Size.Width / 2,
+                                                this.WndSize.Height / 2 - this.mProgress.Size.Height / 2);
             this.mGUI.Controls.Add(this.mProgress);
         }
     }

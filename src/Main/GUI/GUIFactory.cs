@@ -13,13 +13,12 @@ namespace Game.GUICreator
 {
 	public abstract class GUIFactory
     {
-        protected MiyagiManager mMiyagiMgr;
+        protected MiyagiMgr mMiyagiMgr;
         protected GUI mGUI;
 
-        protected int Width  { get { return (int) this.mMiyagiMgr.WindowSize.x; } }
-        protected int Height { get { return (int) this.mMiyagiMgr.WindowSize.y; } }
+        public Size WndSize { get { return this.mMiyagiMgr.WndSize; } }
 
-        public GUIFactory(MiyagiManager miyagiMgr, string name)
+        public GUIFactory(MiyagiMgr miyagiMgr, string name)
         {
             this.mMiyagiMgr = miyagiMgr;
             this.mGUI       = new GUI(name);

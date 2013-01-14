@@ -3,26 +3,39 @@ using System;
 using Miyagi.Common;
 using Miyagi.Common.Data;
 using Miyagi.Common.Resources;
-using Miyagi.UI;
 using Miyagi.UI.Controls;
 using Miyagi.UI.Controls.Layout;
+using Miyagi.Common.Events;
 
 namespace Game.GUICreator
 {
 	public class MenuGUI : GUIFactory
     {
-        public MenuGUI(MiyagiManager miyagiMgr, string name) : base(miyagiMgr, name) {}
+        private Button mPlayButton;
+        
+        public EventHandler<MouseButtonEventArgs> MouseClickPlayButton
+        {
+            set { this.mPlayButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(value); }
+        }
+
+        public MenuGUI(MiyagiMgr miyagiMgr, string name) : base(miyagiMgr, name) {}
 
         protected override void CreateGUI()
         {
-            /* A red label in the center of the screen */
-            Label label = new Label();
-            label.Size = new Size(150, 50);
-            label.Location = new Point(this.Width / 2 - label.Size.Width / 2,
-                                       this.Height / 2 - label.Size.Height / 2);
-            label.TextStyle.ForegroundColour = new ColourDefinition(new Colour(255, 255, 0, 0));
-            label.Text = "Press E to play";
-            this.mGUI.Controls.Add(label);
+            /* Backgroung image */
+            PictureBox backgroung = new PictureBox();
+            backgroung.AlwaysOnBottom = true;
+            backgroung.Bitmap = new System.Drawing.Bitmap(@"../../src/Media/skins/background.bmp");
+            backgroung.Size = this.WndSize;
+            this.mGUI.Controls.Add(backgroung);
+            
+            /* Buttons */
+            this.mPlayButton = new Button();
+            this.mPlayButton.Size = new Size(90, 60);
+            this.mPlayButton.Text = "Play";
+            this.mPlayButton.Location = new Point(this.WndSize.Width / 10, this.WndSize.Height / 4);
+            this.mPlayButton.Skin = this.mMiyagiMgr.Skins["Button"];
+            this.mGUI.Controls.Add(this.mPlayButton);
         }
 	}
 }
