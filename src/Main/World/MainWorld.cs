@@ -49,12 +49,9 @@ namespace Game.World
 
         }
 
-        public override bool Startup(){
-            if (this.mIsStartedUp) { return false; }
-
-            this.mIsStartedUp = true;
-
-            this.mIslandList.Add(new Vector3(0, 0, 0), new DomeIsland(new Vector3(0, 0, 0), new Vector2(6, 6)));
+        protected override void StartUp()
+        {
+            this.mIslandList.Add(new Vector3(0, 0, 0), new RandomIsland(new Vector3(0, 0, 0), new Vector2(6, 6)));
             this.mIslandList[new Vector3(0, 0, 0)].display(this.mStateMgr.SceneManager);
 
             this.setSafeSpawnPoint(new Vector3(0, 0, 0));
@@ -66,8 +63,6 @@ namespace Game.World
                                       this.mStateMgr.Input, this);
             this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr);
             this.mSkyMgr.AddListeners();
-
-            return true;
         }
 
         //get

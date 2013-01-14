@@ -9,6 +9,7 @@ Projet de Sup Epita 2017
 * **F5** .................. Reload all textures
 * **Impr ecran** .... Take a screenshot (saved next to the .exe)
 * **F1** .................. Switch from *debug mode* to *player mode* or vice-versa
+* **F2** .................. Hide or show the debug overlay
 * **MouseWheel**... *Up* to increase time speed and *down* to decrease it
 
 #### *Debug Mode*

@@ -4,26 +4,37 @@ using Mogre;
 
 namespace Game.BaseApp
 {
-    public class Overlay
+    public class MyOverlay
     {
-        protected RenderWindow   mWindow;
-        protected float          timeSinceLastDebugUpdate = 1;
-        protected OverlayElement mGuiAvg;
-        protected OverlayElement mGuiCurr;
-        protected OverlayElement mGuiBest;
-        protected OverlayElement mGuiWorst;
-        protected OverlayElement mGuiTris;
-        protected OverlayElement mModesText;
-        protected string         mAdditionalInfo = "";
+        private RenderWindow   mWindow;
+        private Overlay        mOverlay;
+        private float          mTimeSinceLastDebugUpdate = 1;
+        private OverlayElement mGuiAvg;
+        private OverlayElement mGuiCurr;
+        private OverlayElement mGuiBest;
+        private OverlayElement mGuiWorst;
+        private OverlayElement mGuiTris;
+        private OverlayElement mModesText;
+        private string         mAdditionalInfo = "";
+        private bool           mIsVisible;
 
+        public bool Visibility
+        { 
+            get { return this.mIsVisible; } 
+            set
+            { 
+                this.mIsVisible = value;
+                if (this.mIsVisible) { this.mOverlay.Show(); }
+                else                 { this.mOverlay.Hide(); }
+            }
+        }
 
-
-        public Overlay(RenderWindow window)
+        public MyOverlay(RenderWindow window)
         {
             this.mWindow = window;
 
-            var debugOverlay = OverlayManager.Singleton.GetByName("Core/DebugOverlay");
-            debugOverlay.Show();
+            this.mOverlay = OverlayManager.Singleton.GetByName("Core/DebugOverlay");
+            this.Visibility = false;
 
             this.mGuiAvg    = OverlayManager.Singleton.GetOverlayElement("Core/AverageFps");
             this.mGuiCurr   = OverlayManager.Singleton.GetOverlayElement("Core/CurrFps");
@@ -37,7 +48,7 @@ namespace Game.BaseApp
 
         public void Update(float timeFragment)
         {
-            if (timeSinceLastDebugUpdate > 0.5f)
+            if (mTimeSinceLastDebugUpdate > 0.5f)
             {
                 var stats = mWindow.GetStatistics();
 
@@ -48,11 +59,11 @@ namespace Game.BaseApp
                 this.mGuiTris.Caption   = "Triangle Count: " + stats.TriangleCount;
                 mModesText.Caption = mAdditionalInfo;
 
-                timeSinceLastDebugUpdate = 0;
+                mTimeSinceLastDebugUpdate = 0;
             }
             else
             {
-                timeSinceLastDebugUpdate += timeFragment;
+                mTimeSinceLastDebugUpdate += timeFragment;
             }
         }
     }

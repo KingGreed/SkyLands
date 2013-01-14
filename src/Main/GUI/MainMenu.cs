@@ -13,29 +13,37 @@ namespace Game
 
         public MainMenu(StateManager stateMgr) : base(stateMgr) { }
 
-        public override bool Startup()
+        protected override void StartUp()
         {
-            if (this.mIsStartedUp) { return false; }
-
-            this.mIsStartedUp = true;
-            this.mStateMgr.MiyagiManager.CursorVisibility = true;
             this.mMenuGUI = new MenuGUI(this.mStateMgr.MiyagiManager, "Menu GUI");
             this.mMenuGUI.MouseClickPlayButton = this.MouseClickPlayButton;
+            this.mMenuGUI.MouseClickExitButton = this.MouseClickExitButton;
 
             Mogre.LogManager.Singleton.DefaultLog.LogMessage("Menu Created");
-            
-            return true;
         }
 
         private void MouseClickPlayButton(object obj, MouseButtonEventArgs arg)
         {
+            this.mStateMgr.OverlayVisibility = false;
             this.mStateMgr.MiyagiManager.CursorVisibility = false;
             this.mStateMgr.RequestStatePush(typeof(MainWorld));
         }
 
-        public override void Hide() { this.mMenuGUI.Hide(); this.mStateMgr.MiyagiManager.CursorVisibility = false; }
+        private void MouseClickExitButton(object obj, MouseButtonEventArgs arg) { this.mStateMgr.RequestStatePop(); }
 
-        public override void Show() { this.mMenuGUI.Show(); this.mStateMgr.MiyagiManager.CursorVisibility = true; }
+        public override void Hide()
+        { 
+            this.mMenuGUI.Hide();
+            this.mStateMgr.MiyagiManager.CursorVisibility = false;
+            this.mStateMgr.OverlayVisibility = true;
+        }
+
+        public override void Show()
+        { 
+            this.mMenuGUI.Show();
+            this.mStateMgr.MiyagiManager.CursorVisibility = true;
+            this.mStateMgr.OverlayVisibility = false;
+        }
 
         public override void Update(float frameTime)
         {

@@ -16,23 +16,24 @@ namespace Game.BaseApp
         protected MoisManager   mInput;
         protected Camera        mCam;
         protected Viewport      mViewport;
-        protected MiyagiMgr mMiyagiMgr;
         protected bool          mIsShutDownRequested = false;
         private string          mPluginsCfg          = "plugins.cfg";
         private string          mResourcesCfg        = "resources.cfg";
         private int             mTextureMode         = 0;
         private int             mRenderMode          = 0;
-        private Overlay         mDebugOverlay;
+        private MyOverlay       mDebugOverlay;
+
+        public bool OverlayVisibility { get { return this.mDebugOverlay.Visibility; } set { this.mDebugOverlay.Visibility = value; } }
 
         public void Go()
         {
-            //try
+            try
             {
                 if (!this.Setup()) { return; }
                 this.mRoot.StartRendering();
                 this.Shutdown();
             }
-            /*catch (System.Runtime.InteropServices.SEHException e)
+            catch (System.Runtime.InteropServices.SEHException e)
             {
                 Console.WriteLine(e);
 
@@ -49,7 +50,7 @@ namespace Game.BaseApp
                     e.Message, "Error",
                     System.Windows.Forms.MessageBoxButtons.OK,
                     System.Windows.Forms.MessageBoxIcon.Error);
-            }*/
+            }
         }
 
         private bool Setup()
@@ -72,8 +73,7 @@ namespace Game.BaseApp
             mWindow.GetCustomAttribute("WINDOW", out windowHnd);
             mInput.Startup(windowHnd, mWindow.Width, mWindow.Height);
 
-            this.mMiyagiMgr = new MiyagiMgr(this.mInput, new Mogre.Vector2(this.mWindow.Width, this.mWindow.Height));
-            this.mDebugOverlay = new Overlay(mWindow);
+            this.mDebugOverlay = new MyOverlay(mWindow);
             this.mDebugOverlay.AdditionalInfo = "Bilinear";
 
             this.Create();
@@ -190,7 +190,6 @@ namespace Game.BaseApp
             try
             {
                 this.ProcessInput();
-                this.mMiyagiMgr.Update();
                 this.Update(evt);
 
                 this.mDebugOverlay.Update(evt.timeSinceLastFrame);
@@ -203,9 +202,8 @@ namespace Game.BaseApp
             }
         }
 
-        protected virtual void Shutdown()
+        private void Shutdown()
         {
-            this.mMiyagiMgr.ShutDown();
             this.mInput.Shutdown();
             this.mRoot.Dispose();
         }
