@@ -16,20 +16,21 @@ namespace Game
         protected override void StartUp()
         {
             this.mMenuGUI = new MenuGUI(this.mStateMgr.MiyagiManager, "Menu GUI");
-            this.mMenuGUI.MouseClickPlayButton = this.MouseClickPlayButton;
-            this.mMenuGUI.MouseClickExitButton = this.MouseClickExitButton;
+            this.mMenuGUI.SetListener(MenuGUI.Buttons.Play, this.ClickPlayButton);
+            this.mMenuGUI.SetListener(MenuGUI.Buttons.Exit, this.ClickExitButton);
 
             Mogre.LogManager.Singleton.DefaultLog.LogMessage("Menu Created");
         }
 
-        private void MouseClickPlayButton(object obj, MouseButtonEventArgs arg)
+        private void ClickPlayButton(object obj, MouseButtonEventArgs arg)
         {
-            this.mStateMgr.OverlayVisibility = false;
-            this.mStateMgr.MiyagiManager.CursorVisibility = false;
+            //this.mStateMgr.OverlayVisibility = false;
+            //this.mStateMgr.MiyagiManager.CursorVisibility = false;
+            this.Hide();
             this.mStateMgr.RequestStatePush(typeof(MainWorld));
         }
 
-        private void MouseClickExitButton(object obj, MouseButtonEventArgs arg) { this.mStateMgr.RequestStatePop(); }
+        private void ClickExitButton(object obj, MouseButtonEventArgs arg) { this.mStateMgr.RequestStatePop(); }
 
         public override void Hide()
         { 
