@@ -87,10 +87,29 @@
   		\newpage
 		
 		\chapter{\textcolor{blue}{Introduction}}
- 								
+ 			An ambitious 3d game such as ours requires a lot of work, to give you an example we spent not less than 100 hours each on the project since october also our project actually counts 120 000 characters and 15 000 lines of codes with not less than a 100 files.
+
+ 			Of course this would be meaningless if we wrote bad code however while not having the pretention to say that we write good code we have the pretention to say that 
+ 			we do note write bad code.
+
+ 			Throughout this report we will try hilight the fact that our work has payed and we already have good base to proceed without worries the developpement of our game.
+
+ 			%Logo Skylands Ici
+
+
 								
   		\chapter{\textcolor{blue}{Gameplay}}
 			\section{RTS, FPS \& minecraft-like}
+
+			\section{Scenario}
+				As time went on, we thought of a better scenario than the one elaborated for the book of specifications. 
+				And we came up with two scenarios of our own : 
+
+				\begin{description}
+					\item In the second part of the 24th century, human race is at war, you are a soldier, sent to unknown planet which seems to be only composed
+						with flying islands and your goal is to take the island right under the ennemy's nose !
+					\item Un 2nd scénario ici
+				\end{description} 
 
 		\chapter{\textcolor{blue}{Character}}
 			\section{Mesh}
@@ -133,6 +152,8 @@ An issue Erwan encountered is the rotation of the player because we have a 3D wo
 					\includegraphics[width=18cm]{Images/WorldHierarchy.png}
 					\begin{center}\it test \end{center}
 				\end{figure}
+
+				The terrain itself is generated when we create the island, using a perlin 3d algorith we go through all the blocks in the islands (3 simple for) and for each block, we compute it's perlin noise value and check if it is superior to 0 to display it.
 				
 			\section{Terrain Display}
 
