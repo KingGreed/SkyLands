@@ -63,6 +63,11 @@ namespace Game.World.Generator
             return -1;
         }
 
+        public override Chunk getChunkFromBlock(int x, int y, int z) { throw new NotImplementedException(); }
+        public override bool hasBlock(int x, int y, int z)           { throw new NotImplementedException(); }
+        public override API.Generic.Material getBlockMaterial(int x, int y, int z) { throw new NotImplementedException(); }
+
+
         public override void display(SceneManager sceneMgr) {
             for(int x = 0; x < this.mIslandSize.x * MainWorld.CHUNK_SIDE; x++) {
                 for(int y = 0; y < this.mIslandSize.y * MainWorld.CHUNK_SIDE; y++) {
@@ -139,7 +144,14 @@ namespace Game.World.Generator
                                loc.y * MainWorld.CUBE_SIDE + this.mIslandCoord.y * MainWorld.CHUNK_SIDE,
                                loc.z * MainWorld.CUBE_SIDE + this.mIslandCoord.z * MainWorld.CHUNK_SIDE);
         }
-
+        public void checkAndUpdate(Vector3 loc) {
+            if(!this.hasChunk(loc)) {
+                this.mChunkList.Add(loc, new VanillaChunk(new Vector3(16,16,16), loc, this));
+                if(loc.y > this.mIslandSize.y) {
+                    this.mIslandSize.y = loc.y;
+                }
+            }
+        }
 
     }
 }

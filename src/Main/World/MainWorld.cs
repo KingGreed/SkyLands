@@ -40,7 +40,7 @@ namespace Game.World
             this.mSeed       = 42;
 
             this.mIslandList = new Dictionary<Vector3, Island>();
-            this.mIslandList.Add(new Vector3(0, 0, 0), new RandomIsland(new Vector3(0, 0, 0), new Vector2(6, 6)));
+            this.mIslandList.Add(new Vector3(0, 0, 0), new SinusIsland(new Vector3(0, 0, 0), new Vector2(3, 3)));
             this.mIslandList[new Vector3(0, 0, 0)].display(stateMgr.SceneManager);
 
             this.mSpawnPoint = Vector3.ZERO;

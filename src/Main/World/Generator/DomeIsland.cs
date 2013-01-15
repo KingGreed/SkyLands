@@ -31,12 +31,12 @@ namespace Game.World.Generator
 		    ELEVATION.setPersistence(0.7);
 		    ELEVATION.setOctaveCount(1);
 
-            this.generate();
+            this.generate(42);
 
             this.trees();
         }
 
-        public override void generate() {
+        public override void generate(int seed) {
             Vector3 chunkTempPosition = new Vector3(0, 0, 0);
 
             for (int xx = 0; xx < this.mIslandSize.x * MainWorld.CHUNK_SIDE; xx++) {
@@ -63,14 +63,6 @@ namespace Game.World.Generator
             }
         }
 
-        public void checkAndUpdate(Vector3 loc) {
-            if(!this.hasChunk(loc)) {
-                this.mChunkList.Add(loc, new VanillaChunk(new Vector3(16,16,16), loc, this));
-                if(loc.y > this.mIslandSize.y) {
-                    this.mIslandSize.y = loc.y;
-                }
-            }
-        }
         public void trees() {
             Random rd = new Random();
             int amount = rd.Next(10, 26);

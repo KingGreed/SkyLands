@@ -69,12 +69,10 @@ namespace Game.World.Generator
 		    FINAL.setLowerBound(-1);
 		    FINAL.setUpperBound(1);
 
-            this.generate();
+            this.generate(42);
         }
 
-        public override void generate() {
-
-            int seed = 42;
+        public override void generate(int seed) {
 
             Vector3 chunkCoord = new Vector3(0, 0, 0),
                     blockCoord = new Vector3(0, 0, 0);

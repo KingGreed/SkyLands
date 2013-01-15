@@ -43,15 +43,15 @@ namespace API.Geo.Cuboid
         public Chunk getChunk  (int x, int y, int z)                  { return this.mChunkList[new Vector3(x,y,z)]; }
 	    public Chunk getChunkAt(Vector3 relativePosition)             { return this.mChunkList[relativePosition];   }
 
-        public Chunk getChunkFromBlock(int x, int y, int z)           { throw new NotImplementedException(); }
-        public Chunk getChunkFromBlock(Vector3 position)              { throw new NotImplementedException(); }
+        public abstract Chunk getChunkFromBlock(int x, int y, int z);
+        public Chunk getChunkFromBlock(Vector3 loc)              { return this.getChunkFromBlock((int) loc.x, (int) loc.y, (int) loc.z); }
 
         public abstract int getSurfaceHeight(int x, int z);
 
         public Block getBlock(Vector3 loc)                            { return this.getBlock((int) loc.x, (int) loc.y, (int) loc.z); }
         public abstract Block getBlock(int x, int y, int z);
         
-        public virtual Material getBlockMaterial(int x, int y, int z) { throw new NotImplementedException(); }
+        public abstract Material getBlockMaterial(int x, int y, int z);
 
         public virtual List<Character> getPlayers() { throw new NotImplementedException(); }
 
@@ -63,7 +63,7 @@ namespace API.Geo.Cuboid
         //Has
 
         //Coord are absolute postion
-	    public bool hasBlock(int x, int y, int z) { throw new NotImplementedException(); }
+	    public abstract bool hasBlock(int x, int y, int z);
         public bool hasBlock(Vector3 position)    { return this.hasBlock((int)position.x, (int)position.y, (int)position.z); }
         
         public bool hasChunk(int x, int y, int z) { return this.mChunkList.ContainsKey(new Vector3(x, y, z)); }
@@ -72,12 +72,12 @@ namespace API.Geo.Cuboid
         /**
 	     * Generate the Island's terrain
 	     */
-        public virtual void generate() { throw new NotImplementedException(); }
+        public abstract void generate(int seed);
 
         /**
 	     * Displays the Island's terrain
 	     */
-        public virtual void display(SceneManager sceneMgr) { throw new NotImplementedException(); }
+        public abstract void display(SceneManager sceneMgr);
 
 	    /**
 	     * Queues all chunks for saving at the next available opportunity.
