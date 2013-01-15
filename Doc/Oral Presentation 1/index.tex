@@ -87,12 +87,12 @@
   		\newpage
 		
 		\chapter{\textcolor{blue}{Introduction}}
- 			An ambitious 3d game such as ours requires a lot of work, to give you an example we spent not less than 100 hours each on the project since october also our project actually counts 120 000 characters and 15 000 lines of codes with not less than a 100 files.
+ 			An ambitious 3d game such as ours requires a lot of work, to give you an example we spent not less than 100 hours each on the project since October also our project actually counts 120 000 characters and 15 000 lines of codes with not less than a 100 files.
 
- 			Of course this would be meaningless if we wrote bad code however while not having the pretention to say that we write good code we have the pretention to say that 
+ 			Of course this would be meaningless if we wrote bad code however while not having the pretension to say that we write good code we have the pretension to say that 
  			we do note write bad code.
 
- 			Throughout this report we will try hilight the fact that our work has payed and we already have good base to proceed without worries the developpement of our game.
+ 			Throughout this report we will try hilight the fact that our work has payed and we already have good base to proceed without worries the development of our game.
 
  			%Logo Skylands Ici
 
@@ -114,13 +114,13 @@
 		\chapter{\textcolor{blue}{Character}}
 			\section{Mesh}
 \paragraph
-				At the beginning we were using the mogre mascot called Sinbad. It was useful since it has predefined animations; the drawback is that he doesn't have the right size, and it isn't made for being integrated in a cubic world. After that Aenora and Erwan made a few different characters in blender, a 3d software. We encountered difficulties while trying to implement the new mesh file and its animations into the mogre engine. Some of the character textures were made with the UV mapping technique.
+				At the beginning we were using the Mogre mascot called Sinbad. It was useful since it has predefined animations; the drawback is that he doesn't have the right size, and it isn't made for being integrated in a cubic world. After that Aenora and Erwan made a few different characters in blender, a 3d software. We encountered difficulties while trying to implement the new mesh file and its animations into the Mogre engine. Some of the character textures were made with the UV mapping technique.
 			\section{Move}
 				We can move our character with the directional arrows or the WASD keys. Animations start by pressing one of these keys. There are four animations; two for the walking loop and two for the idle loop. Erwan integrated the keys manager, inspiring himself from the MOIS manager provided by mogre.\\
 
-An issue Erwan encountered is the rotation of the player because we have a 3D world. If we needed some advanced rotations we would had to use quaternions, a powerful but non-intuitive mathematical tool similar to matrice in 4 dimensions. Fortunately an easier way is to decompose the rotation within the 3 axes (x, y, z). This is way simpler since we only need to rotations : yawing the player (around the y-axis) switch the horizontal movement of the mouse and pitching the camera (around the x-axis) switch the vertical movement of the mouse. Erwan implemented the rotation as well.
+An issue Erwan encountered is the rotation of the player because we have a 3D world. If we needed some advanced rotations we would had to use quaternions, a powerful but non-intuitive mathematical tool similar to matrix in 4 dimensions. Fortunately an easier way is to decompose the rotation within the 3 axes (x, y, z). This is way simpler since we only need to rotations : yawing the player (around the y-axis) switch the horizontal movement of the mouse and pitching the camera (around the x-axis) switch the vertical movement of the mouse. Erwan implemented the rotation as well.
 			\section{Animation}
-				Romain intergrated a fade for the transitions of animation. Basicaly, animations have a weight between 0 and 1, 0 is no animation and 1 is the full animation, 0.5 would be that animation, but with a lower amplitude. The fade is made by downcreasing the old animation's weight to 0, while increasing the new one to 1. This method garantees a smooth transition between all the animations even if they are stopped before their end in game.
+				Romain integrated a fade for the transitions of animation. Basically, animations have a weight between 0 and 1, 0 is no animation and 1 is the full animation, 0.5 would be that animation, but with a lower amplitude. The fade is made by decreasing the old animation's weight to 0, while increasing the new one to 1. This method guarantees a smooth transition between all the animations even if they are stopped before their end in game.
 
 			\section{Collision}
 				The hit-box of the character is represented by the 8 points of a parallelepiped rectangle. To test collision we look at the type of block around the character. For instance if we want to test the feet collisions, we get the type of the block under the character, using the 4 lowest points. For the next presentation, Romain will have to finish all the collisions test.
