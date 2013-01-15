@@ -28,10 +28,12 @@ namespace Game.GUICreator
             this.mGUI.Controls.Add(backgroung);
             
             /* Buttons */
-            //Size originalImgSize = new Size(1600, 900);
-            Point[] pos = new Point[] { new Point(688, 372), new Point(685, 491), new Point(686, 626) };
-            //Point relativePos = new Point(originalPos.X / originalImgSize.Width * backgroung.Size.Width, originalPos.Y / originalImgSize.Height * backgroung.Size.Height);
-            Size buttonSize = new Size(188, 76);
+            Size originalImgSize = new Size(1600, 900);
+            Size originalButtonSize = new Size(188, 76);
+            Point[] originalpos = new Point[] { new Point(688, 372), new Point(685, 491), new Point(686, 626) };
+            float ratioX = (float)this.WndSize.Width / (float)originalImgSize.Width;
+            float ratioY = (float)this.WndSize.Height / (float)originalImgSize.Height;
+            Size actualButtonSize = new Size((int)(originalButtonSize.Width * ratioX), (int)(originalButtonSize.Height * ratioY));
             TextStyle style = new TextStyle();
             style.Alignment = Alignment.MiddleCenter;
 
@@ -39,10 +41,23 @@ namespace Game.GUICreator
             for (int i = 0; i < Enum.GetValues(typeof(Buttons)).Length; i++)
             {
                 Button button = new Button();
-                button.Size = buttonSize;
+                button.Size = actualButtonSize;
                 button.Text = Enum.GetName(typeof(Buttons), (Buttons)i);
                 button.TextStyle = style;
-                button.Location = pos[i];
+                button.Location = new Point((int)(originalpos[i].X * ratioX), (int)(originalpos[i].Y * ratioY));
+                button.Skin = this.mMiyagiMgr.Skins["Button"];
+                this.mGUI.Controls.Add(button);
+                this.mButtons.Add(button.Text, button);
+            }
+
+            this.mButtons = new Dictionary<string, Button>();
+            for (int i = 0; i < Enum.GetValues(typeof(Buttons)).Length; i++)
+            {
+                Button button = new Button();
+                button.Size = actualButtonSize;
+                button.Text = Enum.GetName(typeof(Buttons), (Buttons)i);
+                button.TextStyle = style;
+                button.Location = new Point((int)(originalpos[i].X * ratioX), (int)(originalpos[i].Y * ratioY));
                 button.Skin = this.mMiyagiMgr.Skins["Button"];
                 this.mGUI.Controls.Add(button);
                 this.mButtons.Add(button.Text, button);
