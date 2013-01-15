@@ -84,8 +84,21 @@ namespace Game.BaseApp
 
         private bool Configure()
         {
-            if (this.mRoot.ShowConfigDialog()) { this.mWindow = this.mRoot.Initialise(true, "SkyLands"); return true; }
-            else { return false; }
+            RenderSystem renderSys = mRoot.GetRenderSystemByName("OpenGL Rendering Subsystem");
+            renderSys.SetConfigOption("Colour Depth", "16");
+            renderSys.SetConfigOption("Display Frequency", "40");
+            renderSys.SetConfigOption("FSAA", "0");
+            renderSys.SetConfigOption("Full Screen", "Yes");
+            renderSys.SetConfigOption("RTT Preferred Mode", "FBO");
+            renderSys.SetConfigOption("VSync", "Yes");
+            renderSys.SetConfigOption("VSync Interval", "1");
+            renderSys.SetConfigOption("Video Mode", "1024 x 768");
+            renderSys.SetConfigOption("sRGB Gamma Conversion", "No");
+
+            mRoot.RenderSystem = renderSys;
+            this.mWindow = this.mRoot.Initialise(true, "SkyLands");
+            return true;
+            //else { return false; }
         }
 
         private void ChooseSceneManager() { this.mSceneMgr = this.mRoot.CreateSceneManager(SceneType.ST_GENERIC); }
