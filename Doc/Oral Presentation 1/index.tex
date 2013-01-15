@@ -110,10 +110,19 @@
 						with flying islands and your goal is to take the island right under the ennemy's nose !
 					\item Un 2nd scénario ici
 				\end{description} 
+				
+											
+  		\chapter{\textcolor{blue}{State management}}
+  			\section{What have been done}
+  				The state management system has been implemented by Romain. The idea is simple and powerful. There is an abstract class State which can basically be started up, updated and shutted down. Then two classes inehrit State : MenuState and GameState with their own attributes. The most important class is the StateManager, it has a stack of State which can be easily poped and pushed from other classes using reflexion - we just have to specify the type of the state to the StateManager in order to push a state. Each frames, the StateManager updates only the first State of the stack so that the other States aren't destroyed but are liked paused since not updated.\\
+
+This sytem has the advantage to structure the code. Besides, it makes the change from one State to another very easy.
+			\section{What must be done}
+				There isn't much work anymore fot the state management. All we need now is to implement some other States such as an OptionState. Then it could be launched from any other existing State.
+				
 
 		\chapter{\textcolor{blue}{Character}}
 			\section{Mesh}
-\paragraph
 				At the beginning we were using the mogre mascot called Sinbad. It was useful since it has predefined animations; the drawback is that he doesn't have the right size, and it isn't made for being integrated in a cubic world. After that Aenora and Erwan made a few different characters in blender, a 3d software. We encountered difficulties while trying to implement the new mesh file and its animations into the mogre engine. Some of the character textures were made with the UV mapping technique.
 			\section{Move}
 				We can move our character with the directional arrows or the WASD keys. Animations start by pressing one of these keys. There are four animations; two for the walking loop and two for the idle loop. Erwan integrated the keys manager, inspiring himself from the MOIS manager provided by mogre.\\
