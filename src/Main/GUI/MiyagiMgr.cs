@@ -38,10 +38,14 @@ namespace Game.GUICreator
 
             foreach (Font font in TrueTypeFont.CreateFromXml("../../src/Media/fonts/TrueTypeFonts.xml", this.mSystem))
                 this.mFonts.Add(font.Name, font);
-            Font.Default = this.mFonts["BlueHighway"];
+            Font.Default = this.mFonts["Medium_BlueHighway"];
 
             this.mCursor = new Cursor(this.mSkins["cursorSkin"], new Size(30, 30), new Point(0, 0), true);
             this.mSystem.GUIManager.Cursor = this.mCursor;
+        }
+        public void AllGuisVisibility(bool isVisible)
+        {
+            foreach (GUI gui in this.mSystem.GUIManager.GUIs) { gui.Visible = isVisible; }
         }
 
         public void Add(GUI gui) { this.mSystem.GUIManager.GUIs.Add(gui); }

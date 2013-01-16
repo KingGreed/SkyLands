@@ -55,6 +55,10 @@ namespace Game.CharacSystem
             /* Create entity and node */
             Entity playerEnt = sceneMgr.CreateEntity("CharacterEnt_" + this.mCharInfo.Id, meshName);
             playerEnt.Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
+            Entity swordL = sceneMgr.CreateEntity("Sword.mesh");
+            playerEnt.AttachObjectToBone("Sheath.L", swordL);
+            Entity swordR = sceneMgr.CreateEntity("Sword.mesh");
+            playerEnt.AttachObjectToBone("Sheath.R", swordR);
 
             this.mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id);
             this.mNode.AttachObject(playerEnt);
@@ -62,6 +66,13 @@ namespace Game.CharacSystem
 
             this.mBoundingBoxSize = playerEnt.BoundingBox.Size * SCALE_CHARAC;
             this.FeetPosition = this.mCharInfo.SpawnPoint;
+
+            /* Temp */
+            /*Entity ent = sceneMgr.CreateEntity("cube.mesh");
+            SceneNode node = mNode.CreateChildSceneNode();//sceneMgr.RootSceneNode.CreateChildSceneNode();
+            node.InheritScale = false;
+            node.Scale(new Vector3(0.1f, 0.1f, 0.1f));
+            node.AttachObject(ent);*/
 
             /* Create Animations */
             this.mIdleAnims = new Anim[] { Anim.IdleBase, Anim.IdleTop };

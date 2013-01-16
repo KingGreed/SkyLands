@@ -84,7 +84,7 @@ material cube/leaves
             ambient 1.0 1.0 1.0
             diffuse 1.0 1.0 1.0
 
-            texture_unit { texture leaves.jpg }
+            texture_unit { texture leaves.png }
         }
     }
 }

@@ -78,7 +78,7 @@ namespace Game.BaseApp
 
             this.Create();
             this.AddFrameLstn(new RootLstn(RootLstn.TypeLstn.FrameRendering, this.OnFrameRendering));
-
+            MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_NONE);
             return true;
         }
 
@@ -97,8 +97,10 @@ namespace Game.BaseApp
 
             mRoot.RenderSystem = renderSys;
             this.mWindow = this.mRoot.Initialise(true, "SkyLands");
+
+            //if (!this.mRoot.ShowConfigDialog()) { return false; }
+            //this.mWindow = this.mRoot.Initialise(true, "SkyLands");
             return true;
-            //else { return false; }
         }
 
         private void ChooseSceneManager() { this.mSceneMgr = this.mRoot.CreateSceneManager(SceneType.ST_GENERIC); }

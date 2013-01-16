@@ -49,24 +49,16 @@ namespace Game.GUICreator
                 this.mGUI.Controls.Add(button);
                 this.mButtons.Add(button.Text, button);
             }
-
-            this.mButtons = new Dictionary<string, Button>();
-            for (int i = 0; i < Enum.GetValues(typeof(Buttons)).Length; i++)
-            {
-                Button button = new Button();
-                button.Size = actualButtonSize;
-                button.Text = Enum.GetName(typeof(Buttons), (Buttons)i);
-                button.TextStyle = style;
-                button.Location = new Point((int)(originalpos[i].X * ratioX), (int)(originalpos[i].Y * ratioY));
-                button.Skin = this.mMiyagiMgr.Skins["Button"];
-                this.mGUI.Controls.Add(button);
-                this.mButtons.Add(button.Text, button);
-            }
         }
 
         public void SetListener(Buttons button, EventHandler<MouseButtonEventArgs> del)
         {
             this.mButtons[Enum.GetName(typeof(Buttons), button)].MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(del);
+        }
+
+        public void EnableButtons(bool isEnable)
+        {
+            foreach (Button button in this.mButtons.Values) { button.Enabled = isEnable; }
         }
 	}
 }

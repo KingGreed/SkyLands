@@ -28,12 +28,13 @@ namespace Game.World.Generator
 	    private Turbulence TURBULENCE = new Turbulence();
 	    private ScalePoint SCALE      = new ScalePoint();
 	    private Clamp      FINAL      = new Clamp();
+        private Vector2    mMinMax;
 	    // smoothing stuff
 	    //private  int SMOOTH_SIZE = 4;
 
-        public RandomIsland(Vector3 islandCoord, Vector2 size) : base(islandCoord, size) {
+        public RandomIsland(Vector3 islandCoord, Vector2 size, Vector2 minMax) : base(islandCoord, size) {
 
-            if(size.x != size.y) { throw new ArgumentException("Dome Islands can't be non square Islands"); }
+            this.mMinMax = minMax;
 
             ELEVATION.setFrequency(0.2);
 		    ELEVATION.setLacunarity(1);
@@ -98,8 +99,8 @@ namespace Game.World.Generator
                     chunkTempPosition.x = xx / MainWorld.CHUNK_SIDE;
                     chunkTempPosition.z = zz / MainWorld.CHUNK_SIDE;
 
-				    maxSum = 53;
-				    minSum = 90;
+                    maxSum = this.mMinMax.y;
+                    minSum = this.mMinMax.x;
 				    
 				    minElevation = minSum;
 				    smoothHeight = (maxSum - minElevation) / 2d;

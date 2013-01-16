@@ -142,8 +142,12 @@
     <Compile Include="src\Main\Characters\NonPlayer.cs" />
     <Compile Include="src\Main\Characters\Player.cs" />
     <Compile Include="src\Main\GUI\LoadingBarGUI.cs" />
+    <Compile Include="src\Main\GUI\LoadingGUI.cs" />
     <Compile Include="src\Main\GUI\MiyagiMgr.cs" />
+    <Compile Include="src\Main\GUI\TempMenuGUI.cs" />
     <Compile Include="src\Main\States\DebugMode.cs" />
+    <Compile Include="src\Main\States\LoadingState.cs" />
+    <Compile Include="src\Main\States\TempMenuState.cs" />
     <Compile Include="src\Main\World\Display\GraphicBlock.cs" />
     <Compile Include="src\Main\World\Display\Materials.cs" />
     <Compile Include="src\Main\World\Generator\RandomIsland.cs" />

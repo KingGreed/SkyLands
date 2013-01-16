@@ -1,11 +1,9 @@
 ﻿using System;
 using Miyagi.Common.Events;
 
-using Game.World;
-using Game.States;
 using Game.GUICreator;
 
-namespace Game
+namespace Game.States
 {
     public class MainMenu : State
     {
@@ -18,31 +16,11 @@ namespace Game
             this.mMenuGUI = new MenuGUI(this.mStateMgr.MiyagiManager, "Menu GUI");
             this.mMenuGUI.SetListener(MenuGUI.Buttons.Play, this.ClickPlayButton);
             this.mMenuGUI.SetListener(MenuGUI.Buttons.Exit, this.ClickExitButton);
-
             Mogre.LogManager.Singleton.DefaultLog.LogMessage("Menu Created");
         }
 
-        private void ClickPlayButton(object obj, MouseButtonEventArgs arg)
-        {
-            this.mStateMgr.MiyagiManager.CursorVisibility = false;
-            this.mStateMgr.RequestStatePush(typeof(GameState));
-        }
-
+        private void ClickPlayButton(object obj, MouseButtonEventArgs arg) { this.mStateMgr.RequestStatePush(typeof(TempMenuState)); }
         private void ClickExitButton(object obj, MouseButtonEventArgs arg) { this.mStateMgr.RequestStatePop(); }
-
-        public override void Hide()
-        { 
-            this.mMenuGUI.Hide();
-            this.mStateMgr.MiyagiManager.CursorVisibility = false;
-            this.mStateMgr.OverlayVisibility = true;
-        }
-
-        public override void Show()
-        { 
-            this.mMenuGUI.Show();
-            this.mStateMgr.MiyagiManager.CursorVisibility = true;
-            this.mStateMgr.OverlayVisibility = false;
-        }
 
         public override void Update(float frameTime)
         {
@@ -50,5 +28,18 @@ namespace Game
         }
 
         protected override void Shutdown() { mMenuGUI.Dispose(); }
+
+        public override void Hide()
+        { 
+            //this.mMenuGUI.Hide();
+            this.mMenuGUI.EnableButtons(false);
+        }
+
+        public override void Show()
+        { 
+            this.mMenuGUI.Show();
+            this.mMenuGUI.EnableButtons(true);
+            this.mStateMgr.MiyagiManager.CursorVisibility = true;
+        }
     }
 }

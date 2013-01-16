@@ -11,11 +11,14 @@ namespace Game.States
 {
     public abstract class StateManager : BaseApplication
     {
+        public enum TypeWorld { Sinus, Dome, Plain, Mountain }
+
         private MiyagiMgr mMiyagiMgr;        
         private Stack<State> mStateStack;
         private Type mNewState;
-        private bool mIsPopRequested;
+        private int mPopRequested;
         private bool mWaitOneFrame; // Wait one frame before pushing a state to display some info
+        private TypeWorld mChosenWorld;
 
         public Root Root                 { get { return this.mRoot; } }
         public SceneManager SceneManager { get { return this.mSceneMgr; } }
@@ -24,6 +27,7 @@ namespace Game.States
         public MiyagiMgr MiyagiManager   { get { return this.mMiyagiMgr; } }
         public Camera Camera             { get { return this.mCam; } }
         public Viewport Viewport         { get { return this.mViewport; } }
+        public TypeWorld ChosenWorld     { get { return this.mChosenWorld; } set { this.mChosenWorld = value; } }
 
         protected override void Create()
         {
@@ -32,8 +36,9 @@ namespace Game.States
             this.mMiyagiMgr = new MiyagiMgr(this.mInput, new Vector2(this.mWindow.Width, this.mWindow.Height));
             this.mStateStack = new Stack<State>();
             this.mNewState = null;
-            this.mIsPopRequested = false;
+            this.mPopRequested = 0;
             this.mWaitOneFrame = false;
+            this.mChosenWorld = TypeWorld.Plain;
             this.RequestStatePush(typeof(MainMenu));
         }
 
@@ -45,8 +50,9 @@ namespace Game.States
 
             this.mMiyagiMgr.Update();
 
-            if (this.mWaitOneFrame) { this.mWaitOneFrame = false; }
-            else if (this.mNewState != null)  // A pushState was requested
+            while(this.mPopRequested > 0) { this.PopState(); }
+
+            if (this.mNewState != null)  // A pushState was requested
             {
                 State newState = null;
                 
@@ -65,11 +71,9 @@ namespace Game.States
 
             if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F2)) { this.OverlayVisibility = !this.OverlayVisibility; }
 
-            if (this.mStateStack.Count > 0)
-                this.mStateStack.Peek().Update(floatTime);
+            if      (this.mWaitOneFrame)         { this.mWaitOneFrame = false; }
+            else if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Update(floatTime); }
 
-            if (this.mIsPopRequested)
-                this.PopState();
         }
 
         /* Add a State to the stack and start it up */
@@ -87,7 +91,8 @@ namespace Game.States
                 }
 
                 if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Hide(); }
-                this.mStateStack.Push(newState);
+                    this.mStateStack.Push(newState);
+                this.mStateStack.Peek().Show();
 
                 this.mInput.Clear();
 
@@ -107,12 +112,12 @@ namespace Game.States
                 LogManager.Singleton.DefaultLog.LogMessage("Popped state : " + stateName);
             }
 
-            this.mIsPopRequested = false;
+            this.mPopRequested--;
         }
 
-        public void RequestStatePop()
+        public void RequestStatePop(int pop = 1)
         {
-            if (this.mStateStack.Count > 1) { this.mIsPopRequested = true; } // Will pop the state in Update()
+            if (this.mStateStack.Count > 1) { this.mPopRequested = pop; } // Will pop the state in Update()
             else                            { this.mIsShutDownRequested = true; }   // Will ShutDown in Update()
         }
 

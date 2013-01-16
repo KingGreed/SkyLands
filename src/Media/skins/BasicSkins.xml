@@ -9,10 +9,10 @@
             <FileName>SheetSprite.png</FileName>
             <Duration>0</Duration>
             <UV>
-              <X>0</X>
-              <Y>0.4520547945</Y>
-              <Width>1</Width>
-              <Height>0.1369863014</Height>
+              <X>0.005</X>
+              <Y>0.5958904109589041</Y>
+              <Width>0.99</Width>
+              <Height>0.1232876712328767</Height>
             </UV>
           </Frame>
         </Frames>
@@ -29,10 +29,10 @@
             <FileName>SheetSprite.png</FileName>
             <Duration>0</Duration>
             <UV>
-              <X>0</X>
-              <Y>0.4520547945</Y>
-              <Width>1</Width>
-              <Height>0.1369863014</Height>
+              <X>0.005</X>
+              <Y>0.5958904109589041</Y>
+              <Width>0.99</Width>
+              <Height>0.1232876712328767</Height>
             </UV>
           </Frame>
         </Frames>
@@ -49,10 +49,10 @@
             <FileName>SheetSprite.png</FileName>
             <Duration>0</Duration>
             <UV>
-              <X>0</X>
-              <Y>0.4520547945</Y>
-              <Width>1</Width>
-              <Height>0.1369863014</Height>
+              <X>0.005</X>
+              <Y>0.4589041095890411</Y>
+              <Width>0.99</Width>
+              <Height>0.1232876712328767</Height>
             </UV>
           </Frame>
         </Frames>
@@ -97,6 +97,30 @@
               <Y>0.859030843</Y>
               <Width>0.124513619</Width>
               <Height>0.140969157</Height>
+            </UV>
+          </Frame>
+        </Frames>
+        <GpuPrograms />
+        <FrameAnimationMode>ForwardOnce</FrameAnimationMode>
+        <ScrollVector>
+          <X>0</X>
+          <Y>0</Y>
+        </ScrollVector>
+      </SubSkin>
+    </SubSkins>
+  </Skin>
+  <Skin Name="PanelSkin">
+    <SubSkins>
+      <SubSkin Name="PanelSkin">
+        <Frames>
+          <Frame>
+            <FileName>SheetSprite.png</FileName>
+            <Duration>0</Duration>
+            <UV>
+              <X>0.005</X>
+              <Y>0.3219178082191781</Y>
+              <Width>0.99</Width>
+              <Height>0.1232876712328767</Height>
             </UV>
           </Frame>
         </Frames>

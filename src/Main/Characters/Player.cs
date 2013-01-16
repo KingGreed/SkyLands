@@ -8,7 +8,7 @@ namespace Game.CharacSystem
 {
     public class Player : Character
     {
-        private struct Emote
+        /*private struct Emote
         {
             private Anim mAnim;
             private MOIS.KeyCode mKey;
@@ -17,10 +17,10 @@ namespace Game.CharacSystem
             public MOIS.KeyCode Key { get { return this.mKey; } }
 
             public Emote(MOIS.KeyCode key, Anim anim) { this.mKey = key; this.mAnim = anim; }
-        }
+        }*/
         
         private MoisManager mInput;
-        private Emote[] mEmotes;
+        //private Emote[] mEmotes;
         private float mYawCamValue;
         private float mPitchCamValue;
         private bool mIsFirstView;
@@ -45,10 +45,10 @@ namespace Game.CharacSystem
             this.mInput = input;
             this.mIsFirstView = true;
 
-            this.mEmotes = new Emote[]
+            /*this.mEmotes = new Emote[]
             {
                 new Emote(MOIS.KeyCode.KC_1, Anim.Dance)
-            };
+            };*/
         }
 
         public new void Update(float frameTime)
@@ -69,7 +69,9 @@ namespace Game.CharacSystem
                 if (this.mInput.IsOneKeyEventTrue(this.mInput.WasKeyPressed, MOIS.KeyCode.KC_W, MOIS.KeyCode.KC_UP))  { this.mAnimMgr.SetAnims(this.mRunAnims); }
                 if (this.mInput.IsOneKeyEventTrue(this.mInput.WasKeyReleased, MOIS.KeyCode.KC_W, MOIS.KeyCode.KC_UP)) { this.mAnimMgr.DeleteAnims(this.mRunAnims); }
 
-                if (!this.mAnimMgr.AreAnimationsPlaying(Anim.JumpStart, Anim.JumpLoop, Anim.JumpEnd, Anim.RunBase, Anim.RunTop))
+                if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_NUMPAD1)) 
+                { this.mAnimMgr.SetAnims(Anim.Dance); }
+                /*if (!this.mAnimMgr.AreAnimationsPlaying(Anim.JumpStart, Anim.JumpLoop, Anim.JumpEnd, Anim.RunBase, Anim.RunTop))
                 {
                     foreach (Emote emote in this.mEmotes)
                     {
@@ -79,7 +81,13 @@ namespace Game.CharacSystem
                             else                                                 { this.mAnimMgr.DeleteAnims(emote.Anim); }
                         }
                     }
-                }
+                    //if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_SPACE))
+                    if(this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left))
+                    {
+                        if (!this.mAnimMgr.AreAnimationsPlaying(Anim.Dance)) { this.mAnimMgr.SetAnims(Anim.Dance); }
+                        else { this.mAnimMgr.DeleteAnims(Anim.Dance); }
+                    }
+                }*/
             }
         }
 

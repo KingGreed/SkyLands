@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using Mogre;
-using CaelumSharp;
 
 using Game.CharacSystem;
-using Game.BaseApp;
 using Game.World;
 
-namespace Game.States {
-
+namespace Game.States
+{
     public class GameState : State
     {
         private DebugMode mDebugMode;
@@ -25,17 +21,22 @@ namespace Game.States {
                                       new CharacterInfo("Sinbad", this.mWorld.getSpawnPoint()),
                                       this.mStateMgr.Input, this.mWorld);
             this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr);
+            this.Show();
         }
 
         public override void Hide() { }
-        public override void Show() { }
+        public override void Show()
+        {
+            this.mStateMgr.MiyagiManager.AllGuisVisibility(false);
+            this.mStateMgr.MiyagiManager.CursorVisibility = false;
+        }
 
         public override void Update(float frameTime)
         {
             this.mDebugMode.Update(frameTime);
             this.mWorld.Update();
 
-            if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_ESCAPE)) { this.mStateMgr.RequestStatePop(); }    // Return to the MenuState
+            if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_ESCAPE)) { this.mStateMgr.RequestStatePop(2); }    // Return to the MenuState
         }
 
         protected override void Shutdown() {
