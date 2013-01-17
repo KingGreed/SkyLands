@@ -25,20 +25,20 @@ namespace Game.CharacSystem
         private const float GRAVITY_CONST_B = T_MAX * (GRAVITY_ACCEL_TMAX - 1) / (GRAVITY_ACCEL_T0 - GRAVITY_ACCEL_TMAX);
         private const float GRAVITY_CONST_A = GRAVITY_ACCEL_T0 * GRAVITY_CONST_B;
 
-        protected SceneNode mNode;
-        protected AnimationMgr mAnimMgr;
+        protected SceneNode     mNode;
+        protected AnimationMgr  mAnimMgr;
         protected CharacterInfo mCharInfo;
-        protected MovementInfo mMovementInfo;
-        protected Anim[] mRunAnims;
-        private Anim[] mIdleAnims;
-        private Vector3 mBoundingBoxSize;
-        private Timer mTimeOfFall;
-        private bool mIsPlayer;
+        protected MovementInfo  mMovementInfo;
+        protected Anim[]        mRunAnims;
+        private Anim[]          mIdleAnims;
+        private Vector3         mBoundingBoxSize;
+        private Timer           mTimeOfFall;
+        private bool            mIsPlayer;
 
-        public SceneNode Node { get { return this.mNode; } }
-        public float Height   { get { return this.mBoundingBoxSize.y; } }
-        public bool IsMoving  { get { return this.mMovementInfo.IsMoving; } }
-        public Vector3 FeetPosition
+        public SceneNode Node         { get { return this.mNode; } }
+        public float     Height       { get { return this.mBoundingBoxSize.y; } }
+        public bool      IsMoving     { get { return this.mMovementInfo.IsMoving; } }
+        public Vector3   FeetPosition
         {
             get { return this.mNode.Position - new Vector3(0, this.Height / 2 + 5, 0); }
             set { this.mNode.SetPosition(value.x, value.y + this.Height / 2 + 5, value.z); }

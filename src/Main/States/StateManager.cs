@@ -13,21 +13,22 @@ namespace Game.States
     {
         public enum TypeWorld { Sinus, Dome, Plain, Mountain }
 
-        private MiyagiMgr mMiyagiMgr;        
+        private MiyagiMgr    mMiyagiMgr;        
         private Stack<State> mStateStack;
-        private Type mNewState;
-        private int mPopRequested;
-        private bool mWaitOneFrame; // Wait one frame before pushing a state to display some info
-        private TypeWorld mChosenWorld;
+        private Stack<Type>  mNewStates;
+        private int          mPopRequested;
+        private TypeWorld    mChosenWorld;
+        private bool         mWaitOneFrame;
 
-        public Root Root                 { get { return this.mRoot; } }
-        public SceneManager SceneManager { get { return this.mSceneMgr; } }
-        public RenderWindow Window       { get { return this.mWindow; } }
-        public MoisManager Input         { get { return this.mInput; } }
-        public MiyagiMgr MiyagiManager   { get { return this.mMiyagiMgr; } }
-        public Camera Camera             { get { return this.mCam; } }
-        public Viewport Viewport         { get { return this.mViewport; } }
-        public TypeWorld ChosenWorld     { get { return this.mChosenWorld; } set { this.mChosenWorld = value; } }
+        public Root         Root          { get { return this.mRoot; } }
+        public SceneManager SceneManager  { get { return this.mSceneMgr; } }
+        public RenderWindow Window        { get { return this.mWindow; } }
+        public MoisManager  Input         { get { return this.mInput; } }
+        public MiyagiMgr    MiyagiManager { get { return this.mMiyagiMgr; } }
+        public Camera       Camera        { get { return this.mCam; } }
+        public Viewport     Viewport      { get { return this.mViewport; } }
+        public TypeWorld    ChosenWorld   { get { return this.mChosenWorld; } set { this.mChosenWorld = value; } }
+        public int          NumberState   { get { return this.mStateStack.Count; } }
 
         protected override void Create()
         {
@@ -35,10 +36,10 @@ namespace Game.States
             LogManager.Singleton.DefaultLog.LogMessage("***********************Program\'s Log***********************");
             this.mMiyagiMgr = new MiyagiMgr(this.mInput, new Vector2(this.mWindow.Width, this.mWindow.Height));
             this.mStateStack = new Stack<State>();
-            this.mNewState = null;
+            this.mNewStates = new Stack<Type>();
             this.mPopRequested = 0;
-            this.mWaitOneFrame = false;
             this.mChosenWorld = TypeWorld.Plain;
+            this.mWaitOneFrame = false;
             this.RequestStatePush(typeof(MainMenu));
         }
 
@@ -52,28 +53,22 @@ namespace Game.States
 
             while(this.mPopRequested > 0) { this.PopState(); }
 
-            if (this.mNewState != null)  // A pushState was requested
+            for (int i = 0; i < this.mNewStates.Count; i++)
             {
                 State newState = null;
-                
+
                 // Use reflection to get new state class default constructor
-                ConstructorInfo constructor = this.mNewState.GetConstructor(new Type[] {typeof(StateManager)});
+                ConstructorInfo constructor = this.mNewStates.Pop().GetConstructor(new Type[] { typeof(StateManager) });
 
                 // Try to create an object from the requested state class
-                if (constructor != null)
-                    newState = (State)constructor.Invoke(new StateManager[] {this});
-
-                if (newState != null)
-                    this.PushState(newState);
-
-                this.mNewState = null;
+                if (constructor != null) { newState = (State)constructor.Invoke(new StateManager[] { this }); }
+                if (newState != null)    { this.PushState(newState); }
             }
 
             if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F2)) { this.OverlayVisibility = !this.OverlayVisibility; }
 
             if      (this.mWaitOneFrame)         { this.mWaitOneFrame = false; }
             else if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Update(floatTime); }
-
         }
 
         /* Add a State to the stack and start it up */
@@ -83,7 +78,7 @@ namespace Game.States
                 return false;
             else
             {
-                LogManager.Singleton.DefaultLog.LogMessage("Try to start up state : " + newState.ToString());
+                LogManager.Singleton.DefaultLog.LogMessage("--- Try to start up state : " + newState.ToString());
                 if (!newState.StartupState())
                 {
                     LogManager.Singleton.DefaultLog.LogMessage("ERROR : Failed to start up state : " + newState.ToString());
@@ -109,7 +104,7 @@ namespace Game.States
                 this.mStateStack.Pop();
                 this.mInput.Clear();
                 if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Show(); }
-                LogManager.Singleton.DefaultLog.LogMessage("Popped state : " + stateName);
+                LogManager.Singleton.DefaultLog.LogMessage("--- Popped state : " + stateName);
             }
 
             this.mPopRequested--;
@@ -121,22 +116,18 @@ namespace Game.States
             else                            { this.mIsShutDownRequested = true; }   // Will ShutDown in Update()
         }
 
-        public bool RequestStatePush(Type newState)
+        public void RequestStatePush(params Type[] newStates)
         {
-            // new state class must be derived from base class "State"
-            if (newState == null || !newState.IsSubclassOf(typeof(State))) { return false; }
-
-            this.mNewState = newState;   // Will push the state in Update()
+            foreach (Type newState in newStates)
+                if (newState != null && newState.IsSubclassOf(typeof(State))) { this.mNewStates.Push(newState); }
             this.mWaitOneFrame = true;
-            return true;
         }
 
         protected override void Shutdown()
         {
-            LogManager.Singleton.DefaultLog.LogMessage("Shutting down state manager");
+            LogManager.Singleton.DefaultLog.LogMessage("***********************End of Program\'s Log***********************");
             while (this.mStateStack.Count > 0) { this.PopState(); }
             this.mMiyagiMgr.ShutDown();
-            LogManager.Singleton.DefaultLog.LogMessage("***********************End of Program\'s Log***********************");
             this.mInput.Shutdown(); 
             this.mRoot.Dispose();
         }

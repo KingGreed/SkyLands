@@ -71,24 +71,23 @@ namespace Game.BaseApp
             this.mInput = new MoisManager();
             int windowHnd;
             this.mWindow.GetCustomAttribute("WINDOW", out windowHnd);
-            mInput.Startup(windowHnd, this.mWindow.Width, this.mWindow.Height);
+            this.mInput.Startup(windowHnd, this.mWindow.Width, this.mWindow.Height);
 
             this.mDebugOverlay = new MyOverlay(this.mWindow);
-            this.mDebugOverlay.AdditionalInfo = "Bilinear";
+            this.CycleTextureFilteringMode(3);
 
             this.Create();
             this.AddFrameLstn(new RootLstn(RootLstn.TypeLstn.FrameRendering, this.OnFrameRendering));
-            MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_NONE);
             return true;
         }
 
         private bool Configure()
         {
-            RenderSystem renderSys = mRoot.GetRenderSystemByName("OpenGL Rendering Subsystem");
+            /*RenderSystem renderSys = mRoot.GetRenderSystemByName("OpenGL Rendering Subsystem");
             renderSys.SetConfigOption("Colour Depth", "16");
             renderSys.SetConfigOption("Display Frequency", "40");
             renderSys.SetConfigOption("FSAA", "0");
-            renderSys.SetConfigOption("Full Screen", "Yes");
+            renderSys.SetConfigOption("Full Screen", "No");
             renderSys.SetConfigOption("RTT Preferred Mode", "FBO");
             renderSys.SetConfigOption("VSync", "Yes");
             renderSys.SetConfigOption("VSync Interval", "1");
@@ -98,8 +97,9 @@ namespace Game.BaseApp
             mRoot.RenderSystem = renderSys;
             this.mWindow = this.mRoot.Initialise(true, "SkyLands");
 
-            //if (!this.mRoot.ShowConfigDialog()) { return false; }
-            //this.mWindow = this.mRoot.Initialise(true, "SkyLands");
+            return true;*/
+            if (!this.mRoot.ShowConfigDialog()) { return false; }
+            this.mWindow = this.mRoot.Initialise(true, "SkyLands");
             return true;
         }
 
@@ -149,12 +149,13 @@ namespace Game.BaseApp
         {
             this.mInput.Update();
 
-            if (mInput.WasKeyPressed(MOIS.KeyCode.KC_R))     { this.CycleTextureFilteringMode(); }
+            if (mInput.WasKeyPressed(MOIS.KeyCode.KC_F11))   { this.CycleTextureFilteringMode(); }
+            if (mInput.WasKeyPressed(MOIS.KeyCode.KC_F12))   { this.CyclePolygonMode(); }
             if (mInput.WasKeyPressed(MOIS.KeyCode.KC_F5))    { this.ReloadAllTextures(); }
             if (mInput.WasKeyPressed(MOIS.KeyCode.KC_SYSRQ)) { this.TakeScreenshot(); }
         }
 
-        private void CycleTextureFilteringMode()
+        private void CycleTextureFilteringMode(int cycle = 1)
         {
             this.mTextureMode = (this.mTextureMode + 1) % 4;
             switch (this.mTextureMode)
