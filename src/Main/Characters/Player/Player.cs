@@ -40,7 +40,7 @@ namespace Game.CharacSystem
             }
         }
 
-        public Player(SceneManager sceneMgr, string meshName, CharacterInfo info, MoisManager input, MainWorld world) : base(sceneMgr, meshName, info, true, world)
+        public Player(CharacMgr characMgr, string meshName, CharacterInfo info, MoisManager input) : base(characMgr, meshName, info)
         {
             this.mInput = input;
             this.mIsFirstView = true;

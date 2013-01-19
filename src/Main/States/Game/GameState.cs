@@ -7,9 +7,9 @@ namespace Game.States
 {
     public class GameState : State
     {
-        private DebugMode mDebugMode;
         private MainWorld mWorld;
         private CharacMgr mCharacMgr;
+        private DebugMode mDebugMode;
 
         public GameState(StateManager stateMgr) : base(stateMgr) { }
 
@@ -17,7 +17,7 @@ namespace Game.States
         {
             this.mWorld = new MainWorld(this.mStateMgr);
             this.mCharacMgr = new CharacMgr(this.mStateMgr.SceneManager, this.mStateMgr.Input, this.mWorld, this.mStateMgr.Camera);
-            this.mCharacMgr.AddPlayer("Sinbad.mesh", new CharacterInfo("Sinbad", this.mWorld.getSpawnPoint()));
+            this.mCharacMgr.AddCharacter(new CharacterInfo("Sinbad", this.mWorld.getSpawnPoint(), true));
             this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr);
             this.Show();
             Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop begin");
@@ -32,8 +32,8 @@ namespace Game.States
 
         public override void Update(float frameTime)
         {
-            this.mDebugMode.Update(frameTime);
             this.mWorld.Update();
+            this.mDebugMode.Update(frameTime);
 
             if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_ESCAPE)) { this.mStateMgr.RequestStatePop(this.mStateMgr.NumberState - 1); }
         }

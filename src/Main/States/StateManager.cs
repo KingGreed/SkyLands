@@ -47,7 +47,7 @@ namespace Game.States
         {
             if (this.mIsShutDownRequested) { return; }
 
-            float floatTime = ((FrameEvent)evt).timeSinceLastFrame;            
+            float floatTime = evt.timeSinceLastFrame;            
 
             this.mMiyagiMgr.Update();
 
@@ -61,7 +61,7 @@ namespace Game.States
                 ConstructorInfo constructor = this.mNewStates.Pop().GetConstructor(new Type[] { typeof(StateManager) });
 
                 // Try to create an object from the requested state class
-                if (constructor != null) { newState = (State)constructor.Invoke(new StateManager[] { this }); }
+                if (constructor != null) { newState = (State)constructor.Invoke(new StateManager[] {this}); }
                 if (newState != null)    { this.PushState(newState); }
             }
 

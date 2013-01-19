@@ -17,8 +17,8 @@ namespace Game.CharacSystem
 
         public MainPlayerCamera(Camera cam)
         {
-            this.mPlayer       = null;
-            this.mCam          = cam;
+            this.mPlayer            = null;
+            this.mCam               = cam;
             this.mIsCameraFirstView = true;
         }
 
@@ -72,5 +72,7 @@ namespace Game.CharacSystem
             }
             else { }
         }
+
+        public void Dispose() { this.mCam.Dispose();}
     }
 }

@@ -52,5 +52,10 @@ namespace Game
                 this.mCameraMan.UpdateCamera(frameTime, this.mInput);
             }
         }
+
+        public void Dispose()
+        {
+            this.mCharacMgr.Dispose();
+        }
     }
 }

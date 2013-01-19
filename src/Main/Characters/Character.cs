@@ -15,8 +15,6 @@ namespace Game.CharacSystem
             upFrontLeft, upFrontRight, upBackLeft, upBackRight,
         }
 
-        private MainWorld mWorld;
-
         private readonly Vector3 SCALE_CHARAC = new Vector3(9, 10, 9);
         private const float WALK_SPEED = 300.0f;
         private const float GRAVITY_ACCEL_T0 = -750;
@@ -25,6 +23,7 @@ namespace Game.CharacSystem
         private const float GRAVITY_CONST_B = T_MAX * (GRAVITY_ACCEL_TMAX - 1) / (GRAVITY_ACCEL_T0 - GRAVITY_ACCEL_TMAX);
         private const float GRAVITY_CONST_A = GRAVITY_ACCEL_T0 * GRAVITY_CONST_B;
 
+        protected CharacMgr     mCharacMgr;
         protected SceneNode     mNode;
         protected AnimationMgr  mAnimMgr;
         protected CharacterInfo mCharInfo;
@@ -33,7 +32,6 @@ namespace Game.CharacSystem
         private Anim[]          mIdleAnims;
         private Vector3         mBoundingBoxSize;
         private Timer           mTimeOfFall;
-        private bool            mIsPlayer;
 
         public SceneNode Node         { get { return this.mNode; } }
         public float     Height       { get { return this.mBoundingBoxSize.y; } }
@@ -44,15 +42,15 @@ namespace Game.CharacSystem
             set { this.mNode.SetPosition(value.x, value.y + this.Height / 2 + 5, value.z); }
         }
 
-        protected Character(SceneManager sceneMgr, string meshName, CharacterInfo charInfo, bool isPlayer, MainWorld world)
+        protected Character(CharacMgr characMgr, string meshName, CharacterInfo charInfo)
         {
-            this.mWorld = world;
-            this.mIsPlayer = isPlayer;
+            this.mCharacMgr = characMgr;
             this.mCharInfo = charInfo;
             this.mMovementInfo = new MovementInfo();
             this.mTimeOfFall = new Timer();
             
             /* Create entity and node */
+            SceneManager sceneMgr = characMgr.SceneMgr;
             Entity playerEnt = sceneMgr.CreateEntity("CharacterEnt_" + this.mCharInfo.Id, meshName);
             playerEnt.Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
             Entity swordL = sceneMgr.CreateEntity("Sword.mesh");
@@ -63,7 +61,7 @@ namespace Game.CharacSystem
             this.mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id);
             this.mNode.AttachObject(playerEnt);
             this.mNode.Scale(SCALE_CHARAC);
-
+            
             this.mBoundingBoxSize = playerEnt.BoundingBox.Size * SCALE_CHARAC;
             this.FeetPosition = this.mCharInfo.SpawnPoint;
 
@@ -112,8 +110,8 @@ namespace Game.CharacSystem
             }
 
             /* Actualise mMovementInfo */
-            if (this.mIsPlayer) { ((Player)this).Update(frameTime); }
-            else                { ((NonPlayer)this).Update(frameTime); }
+            if (this.mCharInfo.IsPlayer) { (this as Player).Update(frameTime); }
+            else                         { (this as NonPlayer).Update(frameTime); }
 
             /* Apply mMovementInfo */
             if (this.mMovementInfo.IsMoving)
@@ -133,7 +131,7 @@ namespace Game.CharacSystem
             Vector3[] coordsToTest = this.GetFacesPoints(face);
 
             foreach(Vector3 coord in coordsToTest)
-                if (this.mWorld.hasCollision(coord, face)) { return true; }
+                if (this.mCharacMgr.World.hasCollision(coord, face)) { return true; }
 
             return false;
         }
