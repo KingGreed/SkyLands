@@ -19,5 +19,7 @@ namespace API.Geo.Cuboid
 
         List<Vector3> getBlockList();
         Material      getMaterial ();
+
+        void display(SceneManager sceneMgr, Island currentIsland);
     }
 }

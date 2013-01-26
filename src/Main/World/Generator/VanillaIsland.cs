@@ -86,6 +86,10 @@ namespace Game.World.Generator
                     }
                 }
             }
+
+            foreach(MultiBlock multi in multiList) {
+                multi.display(sceneMgr, this);
+            }
         }
 
         public bool isMultiBlockBegin(int x, int y, int z, API.Generic.Material mat) {
@@ -106,6 +110,8 @@ namespace Game.World.Generator
             Vector3[]      adjCoords;
 
             Block          adjBlock;
+
+            adjacent.Push(new Vector3(x, y, z));
 
             while(adjacent.Count != 0) {
                 curr = adjacent.Pop();
