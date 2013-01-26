@@ -123,7 +123,7 @@ namespace Game.World
 
 
             Block block = this.mIslandList[new Vector3(0, 0, 0)].getBlock(blockPos);
-            if (block != null && !block.IsAir()) { return true; }
+            if (block != null && !block.isAir()) { return true; }
 
             return false;
         }

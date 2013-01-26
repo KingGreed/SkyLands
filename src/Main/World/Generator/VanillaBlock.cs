@@ -33,7 +33,10 @@ namespace Game.World.Generator
 	    public Material getMaterial()                  { return this.mType;     }
 	    public void     setMaterial(Material material) { this.mType = material; }
 
-        public bool IsAir() { return (this.mType == Material.AIR); }
+        public bool isAir()    { return (this.mType == Material.AIR); }
+        public bool isNotAir() { return (this.mType != Material.AIR); }
+
+        public bool hasSameMaterialThan(Material that) { return this.mType == that; }
 
     }
 }

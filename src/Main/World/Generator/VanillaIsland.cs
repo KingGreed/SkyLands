@@ -56,7 +56,7 @@ namespace Game.World.Generator
 
         public override int getSurfaceHeight(int x, int z) {
             for(int y = (int)this.mIslandSize.y * MainWorld.CHUNK_SIDE; y != 0 ; y--) { 
-                if(!this.getBlock(x, y, z).IsAir()) {
+                if(!this.getBlock(x, y, z).isAir()) {
                     return y + 1; 
                 }
             }
@@ -69,13 +69,17 @@ namespace Game.World.Generator
 
 
         public override void display(SceneManager sceneMgr) {
+
+            List<MultiBlock> multiList = new List<MultiBlock>();
+            Block curr;
+
             for(int x = 0; x < this.mIslandSize.x * MainWorld.CHUNK_SIDE; x++) {
                 for(int y = 0; y < this.mIslandSize.y * MainWorld.CHUNK_SIDE; y++) {
                     for(int z = 0; z < this.mIslandSize.z * MainWorld.CHUNK_SIDE; z++) {
-                        List<CubeFace> displayable = this.getDisplayableFacesAt(new Vector3(x, y, z));
+                        curr = this.getBlock(x, y, z);
 
-                        if(displayable.Count != 0) {
-                            displayFaces(new Vector3(x, y, z), displayable, sceneMgr);
+                        if(!curr.isAir() && this.isMultiBlockBegin(x, y, z, curr.getMaterial())) {
+                            multiList.Add(this.getMultiBlockAt(x, y, z, curr.getMaterial()));
                         }
 
                     }
@@ -83,12 +87,52 @@ namespace Game.World.Generator
             }
         }
 
+        public bool isMultiBlockBegin(int x, int y, int z, API.Generic.Material mat) {
+            return this.getBlock(x-1, y, z).hasSameMaterialThan(mat)
+                && this.getBlock(x, y-1, z).hasSameMaterialThan(mat)
+                && this.getBlock(x, y, z-1).hasSameMaterialThan(mat);
+        }
+
+        public bool isMultiBlockBegin(Vector3 coord, API.Generic.Material mat) {
+            return this.isMultiBlockBegin((int) coord.x, (int) coord.y, (int) coord.z, mat);
+        }
+
+        public MultiBlock getMultiBlockAt(int x, int y, int z, API.Generic.Material mat) {
+
+            Stack<Vector3> adjacent  = new Stack<Vector3>();
+            MultiBlock     result    = new VanillaMultiBlock(mat);
+            Vector3        curr      = Vector3.ZERO;
+            Vector3[]      adjCoords;
+
+            Block          adjBlock;
+
+            while(adjacent.Count != 0) {
+                curr = adjacent.Pop();
+                result.addBlock(curr);
+                
+                adjCoords = new Vector3[] {
+                            new Vector3(curr.x + 1, curr.y, curr.z),
+                            new Vector3(curr.x, curr.y + 1, curr.z),
+                            new Vector3(curr.x, curr.y, curr.z + 1)
+                };
+
+                foreach(Vector3 loc in adjCoords) {
+                    adjBlock = this.getBlock(loc);
+                    if(adjBlock.isNotAir() && adjBlock.hasSameMaterialThan(mat)) {
+                        adjacent.Push(loc);
+                    }
+                }
+
+            }
+            return result;
+        }
+
         public List<CubeFace> getDisplayableFacesAt(Vector3 blockCoord)
         {
 
             List<CubeFace> returnList = new List<CubeFace>();
             Block block = this.getBlock(blockCoord);
-            if (block != null && block.IsAir()) { return returnList; }
+            if (block != null && block.isAir()) { return returnList; }
 
             Dictionary<CubeFace, Vector3> coordToCheck = new Dictionary<CubeFace,Vector3>();
 
@@ -102,7 +146,7 @@ namespace Game.World.Generator
 
             foreach (KeyValuePair<CubeFace, Vector3> keyVal in coordToCheck)
             {
-                if (this.getBlock(keyVal.Value).IsAir()) { returnList.Add(keyVal.Key); }
+                if (this.getBlock(keyVal.Value).isAir()) { returnList.Add(keyVal.Key); }
             }
             return returnList;
         }

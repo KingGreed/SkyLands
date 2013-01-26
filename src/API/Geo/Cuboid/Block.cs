@@ -51,6 +51,16 @@ namespace API.Geo.Cuboid
         /**
 	     * @return whether the material is air or not
 	     */
-        bool IsAir();
+        bool isAir();
+
+        /**
+	     * @return whether the material is not air or is
+	     */
+        bool isNotAir();
+
+        /**
+	     * @return whether the material is the same as that or not
+	     */
+        bool hasSameMaterialThan(Material that);
     }
 }

@@ -126,6 +126,7 @@
     <Compile Include="src\API\Geo\Cuboid\Block.cs" />
     <Compile Include="src\API\Geo\Cuboid\Chunk.cs" />
     <Compile Include="src\API\Geo\Cuboid\Island.cs" />
+    <Compile Include="src\API\Geo\Cuboid\MultiBlock.cs" />
     <Compile Include="src\API\Geo\World.cs" />
     <Compile Include="src\API\Math\Point.cs" />
     <Compile Include="src\Main\Base Ogre\BaseApplication.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="src\Main\World\Generator\VanillaBlock.cs" />
     <Compile Include="src\Main\World\Generator\VanillaChunk.cs" />
     <Compile Include="src\Main\World\Generator\VanillaIsland.cs" />
+    <Compile Include="src\Main\World\Generator\VanillaMultiBlock.cs" />
     <Compile Include="src\Main\World\MainWorld.cs" />
     <Compile Include="src\Main\States\Game\GameState.cs" />
     <Compile Include="src\Main\GUIs\GUIFactory.cs" />
