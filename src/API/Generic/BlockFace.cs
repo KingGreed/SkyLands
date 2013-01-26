@@ -4,7 +4,7 @@ namespace API.Generic
 {
     public enum BlockFace
     {
-            frontFace,
+            frontFace = 0,
             backFace,
             upperFace,
             underFace,

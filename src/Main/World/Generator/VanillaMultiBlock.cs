@@ -14,7 +14,7 @@ using Material = API.Generic.Material;
 
 namespace Game.World.Generator
 {
-    class VanillaMultiBlock : MultiBlock
+    public class VanillaMultiBlock : MultiBlock
     {
         private List<Vector3> mList;
         private Material      mMaterial;

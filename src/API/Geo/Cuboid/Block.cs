@@ -62,5 +62,8 @@ namespace API.Geo.Cuboid
 	     * @return whether the material is the same as that or not
 	     */
         bool hasSameMaterialThan(Material that);
+
+        bool hasVisibleFaceAt(BlockFace face);
+        void setVisibleFaceAt(BlockFace face, bool val);
     }
 }

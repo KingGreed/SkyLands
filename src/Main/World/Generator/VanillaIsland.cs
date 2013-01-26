@@ -5,6 +5,7 @@ using System.Text;
 
 using API.Geo.Cuboid;
 using API.Generator;
+using API.Generic;
 
 using Mogre;
 
@@ -127,28 +128,25 @@ namespace Game.World.Generator
             return result;
         }
 
-        public List<CubeFace> getDisplayableFacesAt(Vector3 blockCoord)
+        public void setVisibleFaces(Vector3 blockCoord, Block curr)
         {
 
-            List<CubeFace> returnList = new List<CubeFace>();
-            Block block = this.getBlock(blockCoord);
-            if (block != null && block.isAir()) { return returnList; }
+            if (curr.isAir()) { return; }
 
-            Dictionary<CubeFace, Vector3> coordToCheck = new Dictionary<CubeFace,Vector3>();
+            Dictionary<BlockFace, Vector3> coordToCheck = new Dictionary<BlockFace,Vector3>();
 
-            coordToCheck.Add(CubeFace.rightFace, new Vector3(blockCoord.x + 1, blockCoord.y,     blockCoord.z));
-            coordToCheck.Add(CubeFace.leftFace,  new Vector3(blockCoord.x - 1, blockCoord.y,     blockCoord.z));
-            coordToCheck.Add(CubeFace.upperFace, new Vector3(blockCoord.x,     blockCoord.y + 1, blockCoord.z));
-            coordToCheck.Add(CubeFace.underFace, new Vector3(blockCoord.x,     blockCoord.y - 1, blockCoord.z));
-            coordToCheck.Add(CubeFace.frontFace, new Vector3(blockCoord.x,     blockCoord.y,     blockCoord.z + 1));
-            coordToCheck.Add(CubeFace.backFace,  new Vector3(blockCoord.x,     blockCoord.y,     blockCoord.z - 1));
+            coordToCheck.Add(BlockFace.rightFace, new Vector3(blockCoord.x + 1, blockCoord.y,     blockCoord.z));
+            coordToCheck.Add(BlockFace.leftFace,  new Vector3(blockCoord.x - 1, blockCoord.y,     blockCoord.z));
+            coordToCheck.Add(BlockFace.upperFace, new Vector3(blockCoord.x,     blockCoord.y + 1, blockCoord.z));
+            coordToCheck.Add(BlockFace.underFace, new Vector3(blockCoord.x,     blockCoord.y - 1, blockCoord.z));
+            coordToCheck.Add(BlockFace.frontFace, new Vector3(blockCoord.x,     blockCoord.y,     blockCoord.z + 1));
+            coordToCheck.Add(BlockFace.backFace,  new Vector3(blockCoord.x,     blockCoord.y,     blockCoord.z - 1));
 
 
-            foreach (KeyValuePair<CubeFace, Vector3> keyVal in coordToCheck)
+            foreach (KeyValuePair<BlockFace, Vector3> keyVal in coordToCheck)
             {
-                if (this.getBlock(keyVal.Value).isAir()) { returnList.Add(keyVal.Key); }
+                if (this.getBlock(keyVal.Value).isAir()) { curr.setVisibleFaceAt(keyVal.Key, true); }
             }
-            return returnList;
         }
         
         public void displayFaces(Vector3 blockCoord, List<CubeFace> faceToDisplay, SceneManager sceneMgr) {
