@@ -143,9 +143,11 @@
     <Compile Include="src\Main\Characters\Player\Player.cs" />
     <Compile Include="src\Main\GUIs\LoadingGUI.cs" />
     <Compile Include="src\Main\GUIs\MiyagiMgr.cs" />
+    <Compile Include="src\Main\GUIs\OptionsGUI.cs" />
     <Compile Include="src\Main\GUIs\SecondMenuGUI.cs" />
     <Compile Include="src\Main\States\Game\DebugMode.cs" />
     <Compile Include="src\Main\States\Menu\LoadingState.cs" />
+    <Compile Include="src\Main\States\Menu\OptionsState.cs" />
     <Compile Include="src\Main\States\Menu\SecondMenuState.cs" />
     <Compile Include="src\Main\World\Display\GraphicBlock.cs" />
     <Compile Include="src\Main\World\Display\Materials.cs" />
