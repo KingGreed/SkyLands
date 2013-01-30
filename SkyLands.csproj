@@ -135,12 +135,12 @@
     <Compile Include="src\Main\Base Ogre\Overlay.cs" />
     <Compile Include="src\Main\Characters\AnimationMgr.cs" />
     <Compile Include="src\Main\Characters\CharacMgr.cs" />
-    <Compile Include="src\Main\Characters\Character.cs" />
     <Compile Include="src\Main\Characters\Info\CharacterInfo.cs" />
     <Compile Include="src\Main\Characters\Info\MovementInfo.cs" />
     <Compile Include="src\Main\Characters\Player\MainPlayerCamera.cs" />
-    <Compile Include="src\Main\Characters\NonPlayer\NonPlayer.cs" />
-    <Compile Include="src\Main\Characters\Player\Player.cs" />
+    <Compile Include="src\Main\Characters\NonPlayer\VanillaNonPlayer.cs" />
+    <Compile Include="src\Main\Characters\Player\VanillaPlayer.cs" />
+    <Compile Include="src\Main\Characters\VanillaCharacter.cs" />
     <Compile Include="src\Main\GUIs\LoadingGUI.cs" />
     <Compile Include="src\Main\GUIs\MiyagiMgr.cs" />
     <Compile Include="src\Main\GUIs\OptionsGUI.cs" />

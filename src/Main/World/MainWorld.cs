@@ -12,6 +12,7 @@ using Character = API.Ent.Character;
 using Game.World.Generator;
 using Game.States;
 using Game.Sky;
+using Game.CharacSystem;
 
 using Mogre;
 
@@ -107,28 +108,42 @@ namespace Game.World
 	    public void unload(bool save) { throw new NotImplementedException(); }
 	    public void save() { throw new NotImplementedException(); }
 
-        public bool hasCollision(Vector3 blockPos, CubeFace collisionSide)
+        public bool HasCharacCollision(Vector3[] hitBlocks, CubeFace collisionSide)
         {
+            List<Vector3> coordsToTest = new List<Vector3>();
+            if (collisionSide != CubeFace.upperFace) { coordsToTest.Add(hitBlocks[0]); }
+            if (collisionSide != CubeFace.underFace) { coordsToTest.Add(hitBlocks[1]); }
 
-            blockPos -= this.mIslandList[new Vector3(0, 0, 0)].getPosition();
-
-            blockPos /= CUBE_SIDE;
-
-            if      (collisionSide == CubeFace.leftFace)    { blockPos.x--; }
-            else if (collisionSide == CubeFace.rightFace)   { blockPos.x++; }
-            else if (collisionSide == CubeFace.frontFace)   { blockPos.z++; }
-            else if (collisionSide == CubeFace.backFace)    { blockPos.z--; }
-            else if (collisionSide == CubeFace.underFace)   { blockPos.y--; }
-            else  /*(collisionSide == CubeFace.upperFace)*/ { blockPos.y++; }
-
-
-            Block block = this.mIslandList[new Vector3(0, 0, 0)].getBlock(blockPos);
-            if (block != null && !block.IsAir()) { return true; }
+            foreach (Vector3 blockPos in coordsToTest)
+                if (this.hasBlockCollision(blockPos, collisionSide)) 
+                    return true;
 
             return false;
         }
 
-        public void Update() { this.mSkyMgr.Update(); }
+        private bool hasBlockCollision(Vector3 absBlockPos, CubeFace collisionSide)
+        {
+            absBlockPos += this.mIslandList[new Vector3(0, 0, 0)].getPosition();
+
+            if      (collisionSide == CubeFace.rightFace)  { absBlockPos.x++; }
+            else if (collisionSide == CubeFace.leftFace)   { absBlockPos.x--; }
+            else if (collisionSide == CubeFace.upperFace)  { absBlockPos.y++; }
+            else if (collisionSide == CubeFace.underFace)  { absBlockPos.y--; }
+            else if (collisionSide == CubeFace.frontFace)  { absBlockPos.z++; }
+            else  /*(collisionSide == CubeFace.backFace)*/ { absBlockPos.z--; }
+
+            Block block = this.mIslandList[new Vector3(0, 0, 0)].getBlock(absBlockPos);
+            return !(block == null || block.IsAir());
+        }
+
+        public Vector3 GetBlockAbsPosFromAbs(Vector3 absCoord)
+        {
+            Block block = this.mIslandList[new Vector3(0, 0, 0)].getBlock(absCoord / CUBE_SIDE);
+            if (block != null) { return block.getPosition() * CUBE_SIDE; } // Returns the down back left corner
+            else               { return -Vector3.UNIT_SCALE; }
+        }
+
+        public void Update()   { this.mSkyMgr.Update(); }
         public void Shutdown() { this.mSkyMgr.Shutdown(); }
     }
 }

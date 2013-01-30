@@ -28,12 +28,7 @@ namespace Game.World.Generator
             }
         }
 
-
         public override Block getBlock(int x, int y, int z) {
-
-            if(x >= this.mIslandSize.x * MainWorld.CHUNK_SIDE || y >= this.mIslandSize.y * MainWorld.CHUNK_SIDE || z >= this.mIslandSize.z * MainWorld.CHUNK_SIDE || y < 0) {
-                return new VanillaBlock(new Vector3(0,0,0), new Vector3(0,0,0));
-            }
 
             Vector3 chunkLocation = new Vector3(0, 0, 0),
                     blockLocation = new Vector3(0, 0, 0);
@@ -46,19 +41,19 @@ namespace Game.World.Generator
             blockLocation.y = y % MainWorld.CHUNK_SIDE;
             blockLocation.z = z % MainWorld.CHUNK_SIDE;
 
-            if(blockLocation.x < 0) { chunkLocation.x--; blockLocation.x += 16;}
+            /*if(blockLocation.x < 0) { chunkLocation.x--; blockLocation.x += 16;}
             if(blockLocation.y < 0) { chunkLocation.y--; blockLocation.y += 16; }
-            if(blockLocation.z < 0) { chunkLocation.z--; blockLocation.z += 16;}
+            if(blockLocation.z < 0) { chunkLocation.z--; blockLocation.z += 16;}*/
 
             if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation].getBlock(blockLocation); }
-            else { return new VanillaBlock(new Vector3(0,0,0), new Vector3(0,0,0)); }
+            else { return null; }
         }
 
         public override int getSurfaceHeight(int x, int z) {
-            for(int y = (int)this.mIslandSize.y * MainWorld.CHUNK_SIDE; y != 0 ; y--) { 
-                if(!this.getBlock(x, y, z).IsAir()) {
-                    return y + 1; 
-                }
+            for(int y = (int)this.mIslandSize.y * MainWorld.CHUNK_SIDE; y != 0 ; y--)
+            { 
+                Block block = this.getBlock(x, y, z);
+                if (block != null && !block.IsAir()) { return y + 1; }
             }
             return -1;
         }
@@ -85,10 +80,9 @@ namespace Game.World.Generator
 
         public List<CubeFace> getDisplayableFacesAt(Vector3 blockCoord)
         {
-
             List<CubeFace> returnList = new List<CubeFace>();
-            Block block = this.getBlock(blockCoord);
-            if (block != null && block.IsAir()) { return returnList; }
+            Block actblock = this.getBlock(blockCoord);
+            if (actblock != null && actblock.IsAir()) { return returnList; }
 
             Dictionary<CubeFace, Vector3> coordToCheck = new Dictionary<CubeFace,Vector3>();
 
@@ -102,7 +96,8 @@ namespace Game.World.Generator
 
             foreach (KeyValuePair<CubeFace, Vector3> keyVal in coordToCheck)
             {
-                if (this.getBlock(keyVal.Value).IsAir()) { returnList.Add(keyVal.Key); }
+                Block block = this.getBlock(keyVal.Value);
+                if (block == null || block.IsAir()) { returnList.Add(keyVal.Key); }
             }
             return returnList;
         }

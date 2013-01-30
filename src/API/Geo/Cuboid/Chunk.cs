@@ -52,8 +52,14 @@ namespace API.Geo.Cuboid
 	    public virtual List<Entity> getLiveEntities() { throw new NotImplementedException(); }
 
 
-        public Block getBlock(int x, int y, int z)                    { return this.mBlockList[x, y, z];                            }
-        public Block getBlock(Vector3 loc)                            { return this.mBlockList[(int)loc.x, (int)loc.y, (int)loc.z]; }
+        public Block getBlock(int x, int y, int z) 
+        {
+            if (x >= 0 && y >= 0 && z >= 0 && x < this.mBlockList.GetLength(0) && y < this.mBlockList.GetLength(1) && z < this.mBlockList.GetLength(2))
+                return this.mBlockList[x, y, z];
+            else
+                return null;
+        }
+        public Block getBlock(Vector3 loc)         { return this.getBlock((int)loc.x, (int)loc.y, (int)loc.z); }
 
         public virtual Material getBlockMaterial(int x, int y, int z) { throw new NotImplementedException(); }
 

@@ -7,7 +7,7 @@ namespace Game.CharacSystem
 {
     public class MainPlayerCamera
     {
-        private Player      mPlayer;
+        private VanillaPlayer      mPlayer;
         private Camera      mCam;
         private SceneNode   mCamYawNode;
         private SceneNode   mCamPitchNode;
@@ -22,7 +22,7 @@ namespace Game.CharacSystem
             this.mIsCameraFirstView = true;
         }
 
-        public void AttachToPlayer(Player player)
+        public void AttachToPlayer(VanillaPlayer player)
         {
             this.mPlayer = player;
             this.InitCamera();

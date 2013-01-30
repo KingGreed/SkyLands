@@ -6,7 +6,7 @@ using Game.World;
 
 namespace Game.CharacSystem
 {
-    public class Player : Character
+    public class VanillaPlayer : VanillaCharacter
     {
         /*private struct Emote
         {
@@ -40,7 +40,7 @@ namespace Game.CharacSystem
             }
         }
 
-        public Player(CharacMgr characMgr, string meshName, CharacterInfo info, MoisManager input) : base(characMgr, meshName, info)
+        public VanillaPlayer(CharacMgr characMgr, string meshName, CharacterInfo info, MoisManager input) : base(characMgr, meshName, info)
         {
             this.mInput = input;
             this.mIsFirstView = true;
