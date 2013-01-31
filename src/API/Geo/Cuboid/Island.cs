@@ -21,16 +21,18 @@ namespace API.Geo.Cuboid
 
         protected Vector3 mIslandSize;
         protected Vector3 mIslandCoord;
+        protected World   mWorld;
         
         protected Dictionary<Vector3, Chunk> mChunkList;
         
 
-	    public Island(Vector3 islandCoord, Vector2 size) {
+	    public Island(Vector3 islandCoord, Vector2 size, World currentWorld) {
             this.mChunkList = new Dictionary<Vector3,Chunk>();
             this.initChunks(size);
 
             this.mIslandCoord = islandCoord;
             this.mIslandSize  = new Vector3(size.x, 0, size.y);
+            this.mWorld = currentWorld;
         }
 
         //Init

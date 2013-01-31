@@ -11,15 +11,15 @@ using Mogre;
 
 using Game.Display;
 
+using Material = API.Generic.Material;
+
+
 namespace Game.World.Generator
 {
     public abstract class VanillaIsland : Island
     {
-        private Materials mtr;
 
-        public VanillaIsland(Vector3 islandCoord, Vector2 size) : base(islandCoord, size) {
-            this.mtr = new Materials();
-        }
+        public VanillaIsland(Vector3 islandCoord, Vector2 size, MainWorld currentWorld) : base(islandCoord, size, currentWorld) {}
        
         public override void initChunks(Vector2 size) {
             for(int x = 0; x < size.x; x++) {
@@ -33,7 +33,7 @@ namespace Game.World.Generator
         public override Block getBlock(int x, int y, int z) {
 
             if(x >= this.mIslandSize.x * MainWorld.CHUNK_SIDE || y >= this.mIslandSize.y * MainWorld.CHUNK_SIDE || z >= this.mIslandSize.z * MainWorld.CHUNK_SIDE || y < 0) {
-                return new VanillaBlock(new Vector3(0,0,0), new Vector3(0,0,0));
+                return new VanillaBlock(new Vector3(0,0,0));
             }
 
             Vector3 chunkLocation = new Vector3(0, 0, 0),
@@ -52,7 +52,7 @@ namespace Game.World.Generator
             if(blockLocation.z < 0) { chunkLocation.z--; blockLocation.z += 16;}
 
             if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation].getBlock(blockLocation); }
-            else { return new VanillaBlock(new Vector3(0,0,0), new Vector3(0,0,0)); }
+            else { return new VanillaBlock(new Vector3(0,0,0)); }
         }
 
         public override int getSurfaceHeight(int x, int z) {
@@ -71,74 +71,48 @@ namespace Game.World.Generator
 
         public override void display(SceneManager sceneMgr) {
 
-            List<MultiBlock> multiList = new List<MultiBlock>();
+            Dictionary<Material, MultiBlock> multiList = new Dictionary<Material, MultiBlock>();
             Block curr;
+
+            foreach (Material mat in Enum.GetValues(typeof(Material))) {
+                if(mat != Material.AIR) {
+                    multiList.Add(mat, new VanillaMultiBlock(mat));
+                }
+            }
+            int i = 0;
+
+            LogManager.Singleton.DefaultLog.LogMessage("xsize : " + this.mIslandSize.x);
+            LogManager.Singleton.DefaultLog.LogMessage("ysize : " + this.mIslandSize.y);
+            LogManager.Singleton.DefaultLog.LogMessage("Zsize : " + this.mIslandSize.z);
+
 
             for(int x = 0; x < this.mIslandSize.x * MainWorld.CHUNK_SIDE; x++) {
                 for(int y = 0; y < this.mIslandSize.y * MainWorld.CHUNK_SIDE; y++) {
                     for(int z = 0; z < this.mIslandSize.z * MainWorld.CHUNK_SIDE; z++) {
                         curr = this.getBlock(x, y, z);
-
-                        if(!curr.isAir() && this.isMultiBlockBegin(x, y, z, curr.getMaterial())) {
-                            multiList.Add(this.getMultiBlockAt(x, y, z, curr.getMaterial()));
+                        i++;
+                        if(!curr.isAir() && this.setVisibleFaces(new Vector3(x, y, z), curr)) {
+                            multiList[curr.getMaterial()].addBlock(new Vector3(x, y, z));
                         }
-
+                        if(i % 1000 == 0) {
+                            //LogManager.Singleton.DefaultLog.LogMessage( i + " blocks done !");
+                        }
                     }
                 }
             }
-
-            foreach(MultiBlock multi in multiList) {
-                multi.display(sceneMgr, this);
+            LogManager.Singleton.DefaultLog.LogMessage("MultiBlock done !");
+            foreach(KeyValuePair<Material, MultiBlock> pair in multiList) {
+                pair.Value.display(sceneMgr, this, this.mWorld);
             }
         }
 
-        public bool isMultiBlockBegin(int x, int y, int z, API.Generic.Material mat) {
-            return this.getBlock(x-1, y, z).hasSameMaterialThan(mat)
-                && this.getBlock(x, y-1, z).hasSameMaterialThan(mat)
-                && this.getBlock(x, y, z-1).hasSameMaterialThan(mat);
-        }
 
-        public bool isMultiBlockBegin(Vector3 coord, API.Generic.Material mat) {
-            return this.isMultiBlockBegin((int) coord.x, (int) coord.y, (int) coord.z, mat);
-        }
-
-        public MultiBlock getMultiBlockAt(int x, int y, int z, API.Generic.Material mat) {
-
-            Stack<Vector3> adjacent  = new Stack<Vector3>();
-            MultiBlock     result    = new VanillaMultiBlock(mat);
-            Vector3        curr      = Vector3.ZERO;
-            Vector3[]      adjCoords;
-
-            Block          adjBlock;
-
-            adjacent.Push(new Vector3(x, y, z));
-
-            while(adjacent.Count != 0) {
-                curr = adjacent.Pop();
-                result.addBlock(curr);
-                
-                adjCoords = new Vector3[] {
-                            new Vector3(curr.x + 1, curr.y, curr.z),
-                            new Vector3(curr.x, curr.y + 1, curr.z),
-                            new Vector3(curr.x, curr.y, curr.z + 1)
-                };
-
-                foreach(Vector3 loc in adjCoords) {
-                    adjBlock = this.getBlock(loc);
-                    if(adjBlock.isNotAir() && adjBlock.hasSameMaterialThan(mat)) {
-                        adjacent.Push(loc);
-                    }
-                }
-
-            }
-            return result;
-        }
-
-        public void setVisibleFaces(Vector3 blockCoord, Block curr)
+        //For optimization purpose returns wether the block has visible faces
+        public bool setVisibleFaces(Vector3 blockCoord, Block curr)
         {
 
-            if (curr.isAir()) { return; }
-
+            if (curr.isAir()) { return false; }
+            bool hasVisiblefaces = false;
             Dictionary<BlockFace, Vector3> coordToCheck = new Dictionary<BlockFace,Vector3>();
 
             coordToCheck.Add(BlockFace.rightFace, new Vector3(blockCoord.x + 1, blockCoord.y,     blockCoord.z));
@@ -151,40 +125,9 @@ namespace Game.World.Generator
 
             foreach (KeyValuePair<BlockFace, Vector3> keyVal in coordToCheck)
             {
-                if (this.getBlock(keyVal.Value).isAir()) { curr.setVisibleFaceAt(keyVal.Key, true); }
+                if (this.getBlock(keyVal.Value).isAir()) { curr.setVisibleFaceAt(keyVal.Key, true); hasVisiblefaces = true; }
             }
-        }
-        
-        public void displayFaces(Vector3 blockCoord, List<CubeFace> faceToDisplay, SceneManager sceneMgr) {
-            if(faceToDisplay.Count == 0) { return; }
-
-            Block block = this.getBlock(blockCoord);
-            if (block == null) { return; }
-            
-            Vector3 absCoord = this.getAbsoluteCoordAt(blockCoord);
-            string faceName, faceEntName, cubeNodeName = "cubeNode-" + absCoord.x + "-" + absCoord.y + "-" + absCoord.z;
-            SceneNode blockNode;
-            Entity ent;
-            string type = ((int)block.getMaterial()).ToString();
-
-            if(sceneMgr.HasSceneNode(cubeNodeName)) {
-                blockNode = sceneMgr.GetSceneNode(cubeNodeName);
-            } else {
-                blockNode = sceneMgr.RootSceneNode.CreateChildSceneNode(cubeNodeName, absCoord);
-            }
-
-            foreach(var face in faceToDisplay) {
-                faceName = GraphicBlock.getFaceName(face);
-                faceEntName = "face-" + absCoord.x + "-" + absCoord.y + "-" + absCoord.z + "-" + faceName;
-
-                ent = sceneMgr.CreateEntity(faceEntName, faceName);
-
-                ent.SetMaterialName(this.mtr.getMaterial(type, face));
-
-                blockNode.AttachObject(ent);
-
-            }
-
+            return hasVisiblefaces;
         }
 
         public Vector3 getAbsoluteCoordAt(Vector3 loc) {

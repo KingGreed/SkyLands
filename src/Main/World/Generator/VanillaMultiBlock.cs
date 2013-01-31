@@ -12,7 +12,6 @@ using Mogre;
 using Game.Display;
 using Material = API.Generic.Material;
 
-
 namespace Game.World.Generator
 {
     public class VanillaMultiBlock : MultiBlock
@@ -21,14 +20,16 @@ namespace Game.World.Generator
         private Material      mMaterial;
 
         public static int CUBE_SIDE = MainWorld.CUBE_SIDE;
+
+        //see API.generic.BlockFace
         public static Vector3[] blockPointCoords = 
             new Vector3[] {
                 new Vector3(0, CUBE_SIDE, 0),         new Vector3(0, 0, 0),                          new Vector3(CUBE_SIDE, 0, 0),                  new Vector3(CUBE_SIDE, CUBE_SIDE, 0),
                 new Vector3(0, 0, -CUBE_SIDE),        new Vector3(0, CUBE_SIDE, -CUBE_SIDE),         new Vector3(CUBE_SIDE, CUBE_SIDE, -CUBE_SIDE), new Vector3(CUBE_SIDE, 0, -CUBE_SIDE),
                 new Vector3(CUBE_SIDE, CUBE_SIDE, 0), new Vector3(CUBE_SIDE, CUBE_SIDE, -CUBE_SIDE), new Vector3(0, CUBE_SIDE, -CUBE_SIDE),         new Vector3(0, CUBE_SIDE, 0),
                 new Vector3(0, 0, 0),                 new Vector3(0, 0, -CUBE_SIDE),                 new Vector3(CUBE_SIDE, 0, -CUBE_SIDE),         new Vector3(CUBE_SIDE, 0, 0),
-                new Vector3(CUBE_SIDE, 0, 0),         new Vector3(CUBE_SIDE, 0, -CUBE_SIDE),         new Vector3(CUBE_SIDE, CUBE_SIDE, -CUBE_SIDE), new Vector3(CUBE_SIDE, CUBE_SIDE, 0),
                 new Vector3(0, 0, 0),                 new Vector3(0, CUBE_SIDE, 0),                  new Vector3(0, CUBE_SIDE, -CUBE_SIDE),         new Vector3(0, 0, -CUBE_SIDE),
+                new Vector3(CUBE_SIDE, 0, 0),         new Vector3(CUBE_SIDE, 0, -CUBE_SIDE),         new Vector3(CUBE_SIDE, CUBE_SIDE, -CUBE_SIDE), new Vector3(CUBE_SIDE, CUBE_SIDE, 0),
             };
 
         public VanillaMultiBlock(Material mat) {
@@ -37,14 +38,18 @@ namespace Game.World.Generator
         }
 
         public void addBlock(Vector3 loc) { this.mList.Add(loc); }
+        public bool Contains(Vector3 loc) { return this.mList.Contains(loc); }
 
         public List<Vector3> getBlockList() { return this.mList; }
 
         public Material getMaterial() { return this.mMaterial; }
 
-        public void display(SceneManager sceneMgr, Island currentIsland) {
+        public void display(SceneManager sceneMgr, Island currentIsland, API.Geo.World currentWorld) {
+            if(mList.Count == 0) { return; }
             
-            string material = "cube/grass/top";
+            Materials mtr = new Materials();
+            string material = mtr.getMaterial(((int)currentIsland.getBlock(this.mList[0]).getMaterial()).ToString());
+            LogManager.Singleton.DefaultLog.LogMessage("Material : " + material);
             int faceNumber = 0;
             Block curr;
             var values = Enum.GetValues(typeof(BlockFace));
@@ -56,15 +61,18 @@ namespace Game.World.Generator
                     new Vector2(0, 1)
 
                 };
+            Vector3 displayCoord;
+
             ManualObject block = new ManualObject("MultiBlock-" + mList[0].x + "-" + mList[0].y + "-" + mList[0].z);
             block.Begin(material, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
                 foreach(Vector3 loc in this.mList) {
                     curr = currentIsland.getBlock(loc);
-            
+                    displayCoord = currentWorld.getDisplayCoords(currentIsland.getPosition(), loc);
+
                     foreach(BlockFace face in values) {
                         if(curr.hasVisibleFaceAt(face)) {
                             for(int i = 0; i < 4; i++) {
-                                block.Position(blockPointCoords[(int)face * 4 + i]); block.TextureCoord(textureCoord[i]);
+                                block.Position(displayCoord + blockPointCoords[(int)face * 4 + i]); block.TextureCoord(textureCoord[i]);
                                 faceNumber++;
                             }
                             block.Quad((uint)faceNumber-4, (uint)faceNumber-3, (uint)faceNumber-2, (uint)faceNumber-1);
@@ -75,7 +83,7 @@ namespace Game.World.Generator
             block.End();
             block.ConvertToMesh("MultiBlock-" + mList[0].x + "-" + mList[0].y + "-" + mList[0].z);
 
-            SceneNode node = sceneMgr.RootSceneNode.CreateChildSceneNode("HeadNode", this.mList[0]);
+            SceneNode node = sceneMgr.RootSceneNode.CreateChildSceneNode("MultiBlockNode-" + mList[0].x + "-" + mList[0].y + "-" + mList[0].z);
             node.AttachObject(block);
         }
     }

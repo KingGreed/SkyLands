@@ -16,12 +16,6 @@ namespace API.Geo.Cuboid
 
     public interface Block {
 
-	    /**
-	     * Gets the {@link Point} position of this block in the world
-	     * 
-	     * @return the position
-	     */
-	    Vector3 getPosition();
 
 	    /**
 	     * Gets the {@link Chunk} this block is in
