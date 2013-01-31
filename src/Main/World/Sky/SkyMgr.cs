@@ -35,15 +35,15 @@ namespace Game.Sky
             this.mCaelumSystem.ManageAmbientLight = true;
             this.mCaelumSystem.MinimumAmbientLight = new ColourValue(0.2f, 0.2f, 0.3f);
             this.mCaelumSystem.Sun = new SpriteSun(this.mStateMgr.SceneManager, this.mCaelumSystem.GetCaelumCameraNode(), "Custom_sun_disc.png", 4);
-            this.mCaelumSystem.Sun.AmbientMultiplier = new ColourValue(0.8f, 0.8f, 0.8f);
-            this.mCaelumSystem.Sun.DiffuseMultiplier = new ColourValue(3, 3, 2.7f);
+            this.mCaelumSystem.Sun.AmbientMultiplier  = new ColourValue(0.8f, 0.8f, 0.8f);
+            this.mCaelumSystem.Sun.DiffuseMultiplier  = new ColourValue(3, 3, 2.7f);
             this.mCaelumSystem.Sun.SpecularMultiplier = new ColourValue(5, 5, 5);
             this.mCaelumSystem.Sun.AutoDisable = true;
             this.mCaelumSystem.Sun.AutoDisableThreshold = 0.05f;
 
             /* Moon */
             this.mCaelumSystem.Moon = new Moon(this.mStateMgr.SceneManager, this.mCaelumSystem.GetCaelumCameraNode());
-            this.mCaelumSystem.Moon.DiffuseMultiplier = new ColourValue(2, 2, 1.7f);
+            this.mCaelumSystem.Moon.DiffuseMultiplier  = new ColourValue(2, 2, 1.7f);
             this.mCaelumSystem.Moon.SpecularMultiplier = new ColourValue(4, 4, 4);
 
             /* Stars */
@@ -52,7 +52,7 @@ namespace Game.Sky
 
             /* Fog */
             this.mCaelumSystem.SceneFogDensityMultiplier = 0.0006f;
-            this.mCaelumSystem.SceneFogColourMultiplier = new ColourValue(0.3f, 0.3f, 0.3f);
+            this.mCaelumSystem.SceneFogColourMultiplier  = new ColourValue(0.3f, 0.3f, 0.3f);
             this.mCaelumSystem.ManageSceneFog = true;
         }
 

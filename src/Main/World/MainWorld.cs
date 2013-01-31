@@ -48,6 +48,8 @@ namespace Game.World
             this.mSpawnPoint = Vector3.ZERO;
             this.setSafeSpawnPoint(new Vector3(0, 0, 0));
             this.mSkyMgr = new SkyMgr(stateMgr); LogManager.Singleton.DefaultLog.LogMessage("Sky Created");
+
+            stateMgr.SceneManager.ShadowTechnique = ShadowTechnique.SHADOWTYPE_TEXTURE_MODULATIVE;
         }
 
 

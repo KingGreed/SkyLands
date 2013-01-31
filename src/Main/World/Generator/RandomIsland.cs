@@ -115,7 +115,7 @@ namespace Game.World.Generator
                             }
                         }
 					    
-                        double noiseValue = noise[xx, yy, zz] * noise[xx, yy, zz] - System.Math.Abs(1 / smoothHeight * (yy - smoothHeight - minElevation));
+                        double noiseValue = noise[xx, yy, zz] * noise[xx, yy, zz] + noise[xx, yy, zz] - System.Math.Abs(1 / smoothHeight * (yy - smoothHeight - minElevation));
 
 					    Block block = this.getBlock(new Vector3(xx, yy, zz));
                         if(block == null) { continue; }
