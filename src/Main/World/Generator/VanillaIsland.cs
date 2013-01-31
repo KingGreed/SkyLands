@@ -29,13 +29,11 @@ namespace Game.World.Generator
             }
         }
 
-
         public override Block getBlock(int x, int y, int z) {
 
-            if(x >= this.mIslandSize.x * MainWorld.CHUNK_SIDE || y >= this.mIslandSize.y * MainWorld.CHUNK_SIDE || z >= this.mIslandSize.z * MainWorld.CHUNK_SIDE || y < 0) {
+            if(x >= this.mIslandSize.x * MainWorld.CHUNK_SIDE || y >= this.mIslandSize.y * MainWorld.CHUNK_SIDE || z >= this.mIslandSize.z * MainWorld.CHUNK_SIDE || y < 0 || x < 0 || z < 0) {
                 return new VanillaBlock(new Vector3(0,0,0));
             }
-
             Vector3 chunkLocation = new Vector3(0, 0, 0),
                     blockLocation = new Vector3(0, 0, 0);
             
@@ -47,12 +45,31 @@ namespace Game.World.Generator
             blockLocation.y = y % MainWorld.CHUNK_SIDE;
             blockLocation.z = z % MainWorld.CHUNK_SIDE;
 
-            if(blockLocation.x < 0) { chunkLocation.x--; blockLocation.x += 16;}
+            /*if(blockLocation.x < 0) { chunkLocation.x--; blockLocation.x += 16;}
             if(blockLocation.y < 0) { chunkLocation.y--; blockLocation.y += 16; }
-            if(blockLocation.z < 0) { chunkLocation.z--; blockLocation.z += 16;}
+            if(blockLocation.z < 0) { chunkLocation.z--; blockLocation.z += 16;}*/
 
             if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation].getBlock(blockLocation); }
             else { return new VanillaBlock(new Vector3(0,0,0)); }
+        }
+
+        public override Vector3 getBlockCoord(int x, int y, int z) {
+            if(x >= this.mIslandSize.x * MainWorld.CHUNK_SIDE || y >= this.mIslandSize.y * MainWorld.CHUNK_SIDE || z >= this.mIslandSize.z * MainWorld.CHUNK_SIDE || y < 0) {
+                return -Vector3.UNIT_SCALE;
+            }
+            Vector3 chunkLocation = new Vector3(0, 0, 0),
+                    blockLocation = new Vector3(0, 0, 0);
+            
+            chunkLocation.x = x / MainWorld.CHUNK_SIDE;
+            chunkLocation.y = y / MainWorld.CHUNK_SIDE;
+            chunkLocation.z = z / MainWorld.CHUNK_SIDE;
+
+            blockLocation.x = x % MainWorld.CHUNK_SIDE;
+            blockLocation.y = y % MainWorld.CHUNK_SIDE;
+            blockLocation.z = z % MainWorld.CHUNK_SIDE;
+
+            if(this.hasChunk(chunkLocation)) { return blockLocation; }
+            else { return -Vector3.UNIT_SCALE; }
         }
 
         public override int getSurfaceHeight(int x, int z) {
@@ -79,23 +96,13 @@ namespace Game.World.Generator
                     multiList.Add(mat, new VanillaMultiBlock(mat));
                 }
             }
-            int i = 0;
-
-            LogManager.Singleton.DefaultLog.LogMessage("xsize : " + this.mIslandSize.x);
-            LogManager.Singleton.DefaultLog.LogMessage("ysize : " + this.mIslandSize.y);
-            LogManager.Singleton.DefaultLog.LogMessage("Zsize : " + this.mIslandSize.z);
-
 
             for(int x = 0; x < this.mIslandSize.x * MainWorld.CHUNK_SIDE; x++) {
                 for(int y = 0; y < this.mIslandSize.y * MainWorld.CHUNK_SIDE; y++) {
                     for(int z = 0; z < this.mIslandSize.z * MainWorld.CHUNK_SIDE; z++) {
                         curr = this.getBlock(x, y, z);
-                        i++;
                         if(!curr.isAir() && this.setVisibleFaces(new Vector3(x, y, z), curr)) {
                             multiList[curr.getMaterial()].addBlock(new Vector3(x, y, z));
-                        }
-                        if(i % 1000 == 0) {
-                            //LogManager.Singleton.DefaultLog.LogMessage( i + " blocks done !");
                         }
                     }
                 }

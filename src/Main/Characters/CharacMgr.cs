@@ -11,7 +11,7 @@ namespace Game.CharacSystem
         public static float YAW_SENSIVITY = 0.15f;   // Temp
         public static float PITCH_SENSIVITY = 0.15f;   // Temp
 
-        private List<Character>  mCharacList;
+        private List<VanillaCharacter>  mCharacList;
         private MainPlayerCamera mMainPlayerCam;
         private SceneManager     mSceneMgr;
         private MoisManager      mInput;
@@ -29,7 +29,7 @@ namespace Game.CharacSystem
             this.mInput = input;
             this.mWorld = world;
             this.mMainPlayerCam = new MainPlayerCamera(cam);
-            this.mCharacList = new List<Character>();
+            this.mCharacList = new List<VanillaCharacter>();
         }
 
         public void AddCharacter(CharacterInfo info)
@@ -39,23 +39,23 @@ namespace Game.CharacSystem
             if (this.mCharacList.Count == 0 || info.IsPlayer)
             {
                 type = "Player";
-                this.mCharacList.Add(new Player(this, this.mMeshName, info, this.mInput));
-                if (this.mCharacList.Count == 1) { this.mMainPlayerCam.AttachToPlayer(this.mCharacList[0] as Player); }
+                this.mCharacList.Add(new VanillaPlayer(this, this.mMeshName, info, this.mInput));
+                if (this.mCharacList.Count == 1) { this.mMainPlayerCam.AttachToPlayer(this.mCharacList[0] as VanillaPlayer); }
             }
             else
             {
                 type = "NonPlayer";
-                this.mCharacList.Add(new NonPlayer(this, this.mMeshName, info));
+                this.mCharacList.Add(new VanillaNonPlayer(this, this.mMeshName, info));
             }
 
             LogManager.Singleton.DefaultLog.LogMessage(type + " " + info.Name + " added");
         }
 
-        public Character GetCharacter(int index = 0) { return this.mCharacList[index]; }    // By default return the main player
+        public VanillaCharacter GetCharacter(int index = 0) { return this.mCharacList[index]; }    // By default return the main player
 
         public void Update(float frameTime)
         {
-            foreach (Character charac in this.mCharacList)
+            foreach (VanillaCharacter charac in this.mCharacList)
                 charac.Update(frameTime);
 
             this.mMainPlayerCam.Update();

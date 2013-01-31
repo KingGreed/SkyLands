@@ -6,9 +6,9 @@ using Game.World;
 namespace Game.CharacSystem
 {
     /* Known as NPC : call it NPC then! Everyybody knows what an NPC is. */
-    class NonPlayer : Character
+    class VanillaNonPlayer : VanillaCharacter
     {
-        public NonPlayer(CharacMgr characMgr, string meshName, CharacterInfo info) : base(characMgr, meshName, info)
+        public VanillaNonPlayer(CharacMgr characMgr, string meshName, CharacterInfo info) : base(characMgr, meshName, info)
         {
 
         }

@@ -47,7 +47,8 @@ namespace Game.States
         {
             if (this.mIsShutDownRequested) { return; }
 
-            float floatTime = evt.timeSinceLastFrame;            
+            float frameTime = evt.timeSinceLastFrame;
+            if (frameTime > 0.1) { return; }
 
             this.mMiyagiMgr.Update();
 
@@ -68,7 +69,7 @@ namespace Game.States
             if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F2)) { this.OverlayVisibility = !this.OverlayVisibility; }
 
             if      (this.mWaitOneFrame)         { this.mWaitOneFrame = false; }
-            else if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Update(floatTime); }
+            else if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Update(frameTime); }
         }
 
         /* Add a State to the stack and start it up */

@@ -27,7 +27,7 @@ namespace Game
             {
                 this.mIsDebugMode = !this.mIsDebugMode;
 
-                ((Player)this.mCharacMgr.GetCharacter()).IsDebugMode = this.mIsDebugMode;
+                ((VanillaPlayer)this.mCharacMgr.GetCharacter()).IsDebugMode = this.mIsDebugMode;
 
                 if (this.mIsDebugMode)
                 {
