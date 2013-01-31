@@ -90,6 +90,13 @@ namespace API.Geo
 	     */
 	    int getHeight();
 
+        /**
+         * @param absolute coord of the Island
+         * @param relative coords in the Island
+	     * @return the display coords of an relative position
+	     */
+	    Vector3 getDisplayCoords(Vector3 island, Vector3 relativeLocation);
+
 
 	    /**
 	     * Gets a set of all players on active on this world

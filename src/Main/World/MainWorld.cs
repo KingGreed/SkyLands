@@ -40,10 +40,9 @@ namespace Game.World
             this.mSeed       = 42;
 
             this.mIslandList = new Dictionary<Vector3, Island>();
-            if      (stateMgr.ChosenWorld == StateManager.TypeWorld.Sinus)      { this.mIslandList.Add(new Vector3(0, 0, 0), new SinusIsland (new Vector3(0, 0, 0), new Vector2(3, 3))); }
-            else if (stateMgr.ChosenWorld == StateManager.TypeWorld.Dome)       { this.mIslandList.Add(new Vector3(0, 0, 0), new DomeIsland  (new Vector3(0, 0, 0), new Vector2(6, 6))); }
-            else if (stateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { this.mIslandList.Add(new Vector3(0, 0, 0), new RandomIsland(new Vector3(0, 0, 0), new Vector2(6, 6), new Vector2(90, 53))); }
-            else  /*(stateMgr.ChosenWorld == StateManager.TypeWorld.Mountain)*/ { this.mIslandList.Add(new Vector3(0, 0, 0), new RandomIsland(new Vector3(0, 0, 0), new Vector2(6, 6), new Vector2(32.5f, 256))); }
+            if (stateMgr.ChosenWorld == StateManager.TypeWorld.Dome)       { this.mIslandList.Add(new Vector3(0, 0, 0), new DomeIsland  (new Vector3(0, 0, 0), new Vector2(3, 3), this)); }
+            else if (stateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { this.mIslandList.Add(new Vector3(0, 0, 0), new RandomIsland(new Vector3(0, 0, 0), new Vector2(6, 6), new Vector2(90, 53),     this)); }
+            else  /*(stateMgr.ChosenWorld == StateManager.TypeWorld.Mountain)*/ { this.mIslandList.Add(new Vector3(0, 0, 0), new RandomIsland(new Vector3(0, 0, 0), new Vector2(6, 6), new Vector2(32.5f, 256), this)); }
             this.mIslandList[new Vector3(0, 0, 0)].display(stateMgr.SceneManager);
 
             this.mSpawnPoint = Vector3.ZERO;
@@ -60,9 +59,8 @@ namespace Game.World
         public Vector3 getSpawnPoint() { return this.mSpawnPoint; }
         public int     getHeight()     { return MaxHeight;        }
         
-        public int getSurfaceHeight(int x, int z, Vector3 islandLoc) {
-            return this.mIslandList[islandLoc].getSurfaceHeight(x, z);
-        }
+        public int     getSurfaceHeight(int x, int z, Vector3 islandLoc)                       { return this.mIslandList[islandLoc].getSurfaceHeight(x, z); }
+        public Vector3 getDisplayCoords(Vector3 island, Vector3 relativeLocation)              { return (relativeLocation * CUBE_SIDE) + island; }
 
 	    public List<Entity> getNearbyEntities(Vector3 position, Entity ignore, int range)      { throw new NotImplementedException(); }
 	    public List<Entity> getNearbyEntities(Vector3 position, int range)                     { throw new NotImplementedException(); }

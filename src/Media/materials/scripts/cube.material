@@ -16,7 +16,7 @@ material cube/grass/side{
         }
     }
 }
-material cube/grass/top {
+material cube/grass {
 	technique {
 		pass {
 			ambient 1.0 1.0 1.0

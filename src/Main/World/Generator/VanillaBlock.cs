@@ -19,19 +19,16 @@ namespace Game.World.Generator
 {
     class VanillaBlock : Block
     {
-        private Vector3 mLoc;
         private Vector3 mchunkLoc;
         private bool[]  mVisible = new bool[6];
 
         private Material mType;
 
-        public VanillaBlock(Vector3 location, Vector3 chunkPosition) {
-            this.mLoc      = location;
+        public VanillaBlock(Vector3 chunkPosition) {
             this.mchunkLoc = chunkPosition;
             this.mType     = Material.AIR;
         }
 
-        public Vector3  getPosition()                  { return this.mLoc;      }
 	    public Vector3  getChunkLocation()             { return this.mchunkLoc; }
 	    public Material getMaterial()                  { return this.mType;     }
 	    public void     setMaterial(Material material) { this.mType = material; }

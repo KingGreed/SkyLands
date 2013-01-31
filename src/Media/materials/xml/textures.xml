@@ -1,34 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <cube>
-	<texture id="1"><!-- grass -->
-		<side>cube/grass/side</side>
-		<top>cube/grass/top</top>
-		<bottom>cube/grass/bottom</bottom>
-	</texture>
+	<texture id="1">cube/grass</texture>
 	<texture id="2">
 		<side>cube/metal</side>
 		<top>cube/metal</top>
 		<bottom>cube/metal</bottom>
 	</texture>
-	<texture id="3">
-		<side>cube/stone</side>
-		<top>cube/stone</top>
-		<bottom>cube/stone</bottom>
-	</texture>
-	<texture id="4">
-		<side>cube/wood/side</side>
-		<top>cube/wood/side</top>
-		<bottom>cube/wood/side</bottom>
-	</texture>
-	<texture id="5">
-		<side>cube/leaves</side>
-		<top>cube/leaves</top>
-		<bottom>cube/leaves</bottom>
-	</texture>
-	<texture id="7"><!-- dirt -->
-		<side>cube/grass/bottom</side>
-		<top>cube/grass/bottom</top>
-		<bottom>cube/grass/bottom</bottom>
-	</texture>
+	<texture id="3">cube/stone</texture>
+	<texture id="4">cube/wood</texture>
+	<texture id="5">cube/leaves</texture>
+	<texture id="7">cube/dirt</texture>
 
 </cube>

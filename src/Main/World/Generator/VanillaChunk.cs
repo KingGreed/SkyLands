@@ -20,7 +20,7 @@ namespace Game.World.Generator
             for(int x = 0; x < mChunkSize.x; x++) {
                 for(int y = 0; y < mChunkSize.y; y++) {
                     for(int z = 0; z < mChunkSize.z; z++) {
-                        this.mBlockList[x, y, z] = new VanillaBlock(new Vector3(x, y, z), location);
+                        this.mBlockList[x, y, z] = new VanillaBlock(location);
                     }
                 }
             }

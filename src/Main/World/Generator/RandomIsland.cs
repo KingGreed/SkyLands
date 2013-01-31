@@ -32,7 +32,7 @@ namespace Game.World.Generator
 	    // smoothing stuff
 	    //private  int SMOOTH_SIZE = 4;
 
-        public RandomIsland(Vector3 islandCoord, Vector2 size, Vector2 minMax) : base(islandCoord, size) {
+        public RandomIsland(Vector3 islandCoord, Vector2 size, Vector2 minMax, MainWorld currentWorld) : base(islandCoord, size, currentWorld) {
 
             this.mMinMax = minMax;
 
