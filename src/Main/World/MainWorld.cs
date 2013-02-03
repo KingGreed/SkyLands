@@ -12,6 +12,7 @@ using Character = API.Ent.Character;
 using Game.World.Generator;
 using Game.States;
 using Game.Sky;
+using Game.World.Blocks;
 
 using Mogre;
 
@@ -130,7 +131,7 @@ namespace Game.World
             else  /*(collisionSide == CubeFace.backFace)*/ { absBlockPos.z--; }
 
             Block block = this.mIslandList[new Vector3(0, 0, 0)].getBlock(absBlockPos, false);
-            return !(block == null || block.isAir());
+            return !(block == null || block is AirBlock);
         }
 
         public Vector3 GetBlockAbsPosFromAbs(Vector3 absCoord, Vector3 islandLoc) { return this.mIslandList[islandLoc].getBlockCoord(absCoord / CUBE_SIDE) * CUBE_SIDE; }

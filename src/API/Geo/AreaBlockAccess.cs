@@ -11,16 +11,7 @@ using Material = API.Generic.Material;
 
 namespace API.Geo
 {
-    public interface AreaBlockAccess : AreaBlockSource {
-
-	    /**
-	     * Sets the material and data for the block at (x, y, z) to the given material and data.
-	     *
-	     * @param x coordinate of the block
-	     * @param y coordinate of the block
-	     * @param z coordinate of the block
-	     */
-	    void setBlockMaterial(int x, int y, int z, Material material);
+    public interface AreaBlockAccess {
 
         /**
 	     * Gets if a block is contained in this area

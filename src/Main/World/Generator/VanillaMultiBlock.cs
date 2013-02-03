@@ -17,7 +17,7 @@ namespace Game.World.Generator
     public class VanillaMultiBlock : MultiBlock
     {
         private List<Vector3> mList;
-        private Material      mMaterial;
+        private string        mMaterial;
 
         public static int CUBE_SIDE = MainWorld.CUBE_SIDE;
 
@@ -32,7 +32,7 @@ namespace Game.World.Generator
                 new Vector3(CUBE_SIDE, 0, 0),         new Vector3(CUBE_SIDE, 0, -CUBE_SIDE),         new Vector3(CUBE_SIDE, CUBE_SIDE, -CUBE_SIDE), new Vector3(CUBE_SIDE, CUBE_SIDE, 0),
             };
 
-        public VanillaMultiBlock(Material mat) {
+        public VanillaMultiBlock(string mat) {
             this.mList     = new List<Vector3>();
             this.mMaterial = mat;
         }
@@ -42,16 +42,19 @@ namespace Game.World.Generator
 
         public List<Vector3> getBlockList() { return this.mList; }
 
-        public Material getMaterial() { return this.mMaterial; }
+        public string getMaterial() { return this.mMaterial; }
 
         public void display(SceneManager sceneMgr, Island currentIsland, API.Geo.World currentWorld) {
             if(mList.Count == 0) { return; }
             
-            Materials mtr = new Materials();
-            string material = mtr.getMaterial(((int)currentIsland.getBlock(this.mList[0], false).getMaterial()).ToString());
+
+            string name = this.mMaterial + "-" + mList[0].x + "-" + mList[0].y + "-" + mList[0].z;
+            string material = currentIsland.getMaterialFromName(this.mMaterial);
             LogManager.Singleton.DefaultLog.LogMessage("Material : " + material);
             int faceNumber = 0;
-            Block curr;
+            Block curr = VanillaChunk.staticBlock[this.mMaterial];
+            BlockFace[] test = currentIsland.getBlock(this.mList[0], false).getFaces();
+
             var values = Enum.GetValues(typeof(BlockFace));
             Vector2[] textureCoord = 
                 new Vector2[] {
@@ -60,17 +63,17 @@ namespace Game.World.Generator
                     new Vector2(0, 0),
                     new Vector2(0, 1)
 
+
                 };
             Vector3 displayCoord;
 
-            ManualObject block = new ManualObject("MultiBlock-" + mList[0].x + "-" + mList[0].y + "-" + mList[0].z);
+            ManualObject block = new ManualObject("MultiBlock-" + name);
             block.Begin(material, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
                 foreach(Vector3 loc in this.mList) {
-                    curr = currentIsland.getBlock(loc, false);
                     displayCoord = currentWorld.getDisplayCoords(currentIsland.getPosition(), loc);
 
-                    foreach(BlockFace face in values) {
-                        if(curr.hasVisibleFaceAt(face)) {
+                    foreach(BlockFace face in curr.getFaces()) {
+                        if(currentIsland.hasVisiblefaceAt((int) loc.x, (int) loc.y, (int) loc.z, face)) {
                             for(int i = 0; i < 4; i++) {
                                 block.Position(displayCoord + blockPointCoords[(int)face * 4 + i]); block.TextureCoord(textureCoord[i]);
                                 faceNumber++;
@@ -81,9 +84,9 @@ namespace Game.World.Generator
                 }
 
             block.End();
-            block.ConvertToMesh("MultiBlock-" + mList[0].x + "-" + mList[0].y + "-" + mList[0].z);
+            block.ConvertToMesh("MultiBlock-" + name);
 
-            SceneNode node = sceneMgr.RootSceneNode.CreateChildSceneNode("MultiBlockNode-" + mList[0].x + "-" + mList[0].y + "-" + mList[0].z);
+            SceneNode node = sceneMgr.RootSceneNode.CreateChildSceneNode("MultiBlockNode-" + name);
             node.AttachObject(block);
         }
     }

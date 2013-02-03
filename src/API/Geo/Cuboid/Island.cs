@@ -6,6 +6,7 @@ using System.Text;
 using API.Ent;
 using API.Geo;
 using API.Generator;
+using API.Generic;
 
 using Entity   = API.Ent.Entity;
 using Material = API.Generic.Material;
@@ -60,9 +61,13 @@ namespace API.Geo.Cuboid
 
         public virtual List<Character> getPlayers() { throw new NotImplementedException(); }
 
+        public abstract bool hasVisiblefaceAt(int x, int y, int z, BlockFace face);
+        public abstract void setVisibleFaceAt(int x, int y, int z, BlockFace face, bool val);
 
         //set
-        public virtual void     setBlockMaterial(int x, int y, int z, Material material) { throw new NotImplementedException(); }
+        public virtual  void setBlockMaterial(int x, int y, int z, Material material) { throw new NotImplementedException(); }
+        public abstract void setBlockAt(int x, int y, int z, string material, bool force);
+        public abstract string getMaterialFromName(string name);
 
 
         //Has

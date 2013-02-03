@@ -18,7 +18,7 @@ namespace API.Geo.Cuboid
         void addBlock(Vector3 loc);
 
         List<Vector3> getBlockList();
-        Material      getMaterial ();
+        string        getMaterial ();
         bool          Contains    (Vector3 loc);
 
         void display(SceneManager sceneMgr, Island currentIsland, World currentWorld);

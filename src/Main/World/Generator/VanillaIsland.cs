@@ -10,6 +10,7 @@ using API.Generic;
 using Mogre;
 
 using Game.Display;
+using Game.World.Blocks;
 
 using Material = API.Generic.Material;
 
@@ -29,77 +30,27 @@ namespace Game.World.Generator
             }
         }
 
-        public override Block getBlock(int x, int y, int z, bool force) {
-            if(force && y > this.mIslandSize.y * MainWorld.CHUNK_SIDE) {
-                this.mIslandSize.y = (int) System.Math.Ceiling((float)y / 16f);
-            }
-            if(x >= this.mIslandSize.x * MainWorld.CHUNK_SIDE || y >= this.mIslandSize.y * MainWorld.CHUNK_SIDE || z >= this.mIslandSize.z * MainWorld.CHUNK_SIDE || y < 0 || x < 0 || z < 0) {
-                return new VanillaBlock(new Vector3(0,0,0));
-            }
-
-            Vector3 chunkLocation = new Vector3(0, 0, 0),
-                    blockLocation = new Vector3(0, 0, 0);
-            
-            chunkLocation.x = x / MainWorld.CHUNK_SIDE;
-            chunkLocation.y = y / MainWorld.CHUNK_SIDE;
-            chunkLocation.z = z / MainWorld.CHUNK_SIDE;
-
-            blockLocation.x = x % MainWorld.CHUNK_SIDE;
-            blockLocation.y = y % MainWorld.CHUNK_SIDE;
-            blockLocation.z = z % MainWorld.CHUNK_SIDE;
-
-            /*if(blockLocation.x < 0) { chunkLocation.x--; blockLocation.x += 16;}
-            if(blockLocation.y < 0) { chunkLocation.y--; blockLocation.y += 16; }
-            if(blockLocation.z < 0) { chunkLocation.z--; blockLocation.z += 16;}*/
-
-            if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation].getBlock(blockLocation); }
-            else if(force) {
-                this.mChunkList.Add(chunkLocation, new VanillaChunk(new Vector3(16,16,16), chunkLocation, this));
-                return this.mChunkList[chunkLocation].getBlock(blockLocation);
-            } 
-            else { return new VanillaBlock(new Vector3(0,0,0)); }        }
-
-        public override Vector3 getBlockCoord(int x, int y, int z) {
-            if(x >= this.mIslandSize.x * MainWorld.CHUNK_SIDE || y >= this.mIslandSize.y * MainWorld.CHUNK_SIDE || z >= this.mIslandSize.z * MainWorld.CHUNK_SIDE || y < 0) {
-                return -Vector3.UNIT_SCALE;
-            }
-            Vector3 chunkLocation = new Vector3(0, 0, 0),
-                    blockLocation = new Vector3(0, 0, 0);
-            
-            chunkLocation.x = x / MainWorld.CHUNK_SIDE;
-            chunkLocation.y = y / MainWorld.CHUNK_SIDE;
-            chunkLocation.z = z / MainWorld.CHUNK_SIDE;
-
-            blockLocation.x = x % MainWorld.CHUNK_SIDE;
-            blockLocation.y = y % MainWorld.CHUNK_SIDE;
-            blockLocation.z = z % MainWorld.CHUNK_SIDE;
-
-            if(this.hasChunk(chunkLocation)) { return blockLocation; }
-            else { return -Vector3.UNIT_SCALE; }
-        }
-
         public override int getSurfaceHeight(int x, int z) {
             for(int y = (int)this.mIslandSize.y * MainWorld.CHUNK_SIDE; y != 0 ; y--) { 
-                if(!this.getBlock(x, y, z, false).isAir()) {
+                if(!(this.getBlock(x, y, z, false) is AirBlock)) {
                     return y + 1; 
                 }
             }
             return -1;
         }
 
-        public override Chunk getChunkFromBlock(int x, int y, int z) { throw new NotImplementedException(); }
         public override bool hasBlock(int x, int y, int z)           { throw new NotImplementedException(); }
         public override API.Generic.Material getBlockMaterial(int x, int y, int z) { throw new NotImplementedException(); }
 
 
         public override void display(SceneManager sceneMgr) {
 
-            Dictionary<Material, MultiBlock> multiList = new Dictionary<Material, MultiBlock>();
+            Dictionary<string, MultiBlock> multiList = new Dictionary<string, MultiBlock>();
             Block curr;
 
-            foreach (Material mat in Enum.GetValues(typeof(Material))) {
-                if(mat != Material.AIR) {
-                    multiList.Add(mat, new VanillaMultiBlock(mat));
+            foreach (KeyValuePair<string, Block> pair in VanillaChunk.staticBlock) {
+                if(!(pair.Value is AirBlock)) {
+                    multiList.Add(pair.Key, new VanillaMultiBlock(pair.Key));
                 }
             }
 
@@ -107,14 +58,17 @@ namespace Game.World.Generator
                 for(int y = 0; y < this.mIslandSize.y * MainWorld.CHUNK_SIDE; y++) {
                     for(int z = 0; z < this.mIslandSize.z * MainWorld.CHUNK_SIDE; z++) {
                         curr = this.getBlock(x, y, z, false);
-                        if(!curr.isAir() && this.setVisibleFaces(new Vector3(x, y, z), curr)) {
-                            multiList[curr.getMaterial()].addBlock(new Vector3(x, y, z));
+                        if(!(curr is AirBlock) && this.setVisibleFaces(new Vector3(x, y, z), curr)) {
+                            string[] key = curr.getComposingFaces();
+                            for(int i = 0; i < curr.getComposingFaces().Length; i++) {
+                                multiList[key[i]].addBlock(new Vector3(x, y, z));
+                            }
                         }
                     }
                 }
             }
             LogManager.Singleton.DefaultLog.LogMessage("MultiBlock done !");
-            foreach(KeyValuePair<Material, MultiBlock> pair in multiList) {
+            foreach(KeyValuePair<string, MultiBlock> pair in multiList) {
                 pair.Value.display(sceneMgr, this, this.mWorld);
             }
         }
@@ -124,7 +78,7 @@ namespace Game.World.Generator
         public bool setVisibleFaces(Vector3 blockCoord, Block curr)
         {
 
-            if (curr.isAir()) { return false; }
+            if (curr is AirBlock) { return false; }
             bool hasVisiblefaces = false;
             Dictionary<BlockFace, Vector3> coordToCheck = new Dictionary<BlockFace,Vector3>();
 
@@ -138,16 +92,98 @@ namespace Game.World.Generator
 
             foreach (KeyValuePair<BlockFace, Vector3> keyVal in coordToCheck)
             {
-                if (this.getBlock(keyVal.Value, false).isAir()) { curr.setVisibleFaceAt(keyVal.Key, true); hasVisiblefaces = true; }
+                if (this.getBlock(keyVal.Value, false) is AirBlock) { 
+                    this.setVisibleFaceAt(blockCoord, keyVal.Key, true); hasVisiblefaces = true; 
+                }
             }
             return hasVisiblefaces;
         }
 
-        public Vector3 getAbsoluteCoordAt(Vector3 loc) {
-            return new Vector3(loc.x * MainWorld.CUBE_SIDE + this.mIslandCoord.x * MainWorld.CHUNK_SIDE, 
-                               loc.y * MainWorld.CUBE_SIDE + this.mIslandCoord.y * MainWorld.CHUNK_SIDE,
-                               loc.z * MainWorld.CUBE_SIDE + this.mIslandCoord.z * MainWorld.CHUNK_SIDE);
+        private void setVisibleFaceAt(Vector3 loc, BlockFace face, bool val) {
+            this.setVisibleFaceAt((int)loc.x, (int)loc.y, (int)loc.z, face, val); 
         }
+
+        public override void setVisibleFaceAt(int x, int y, int z, BlockFace face, bool val) {
+            Chunk blockChunk = this.getChunkFromBlock(x, y, z);
+            if(blockChunk != null) {
+                blockChunk.setVisibleFaceAt(x % 16, y % 16, z % 16, face, val);
+            }
+        }
+
+        public override bool hasVisiblefaceAt(int x, int y, int z, BlockFace face) {
+            Chunk blockChunk = this.getChunkFromBlock(x, y, z);
+            if(blockChunk != null) {
+                return blockChunk.hasVisibleFaceAt(x % 16, y % 16, z % 16, face);
+            }
+            return false;
+        }
+
+        public override Block getBlock(int x, int y, int z, bool force) {
+            if(x < 0 || y < 0 || z < 0) { return new AirBlock(); }
+
+            if(force && y > this.mIslandSize.y * MainWorld.CHUNK_SIDE) {
+                this.mIslandSize.y = (int) System.Math.Ceiling((float)y / 16f);
+            }
+
+            Vector3 chunkLocation = getChunkCoordFromRelative(x, y, z), 
+                    blockLocation = getBlockCoordFromRelative(x, y, z);
+
+
+            if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation].getBlock(blockLocation); }
+            else if(force) {
+                this.mChunkList.Add(chunkLocation, new VanillaChunk(new Vector3(16,16,16), chunkLocation, this));
+                return this.mChunkList[chunkLocation].getBlock(blockLocation);
+            } 
+            else { return new AirBlock(); }        }
+
+        public override Vector3 getBlockCoord(int x, int y, int z) {
+            if(x < 0 || y < 0 || z < 0) { return -Vector3.UNIT_SCALE; }
+            
+            Vector3 chunkLocation = getChunkCoordFromRelative(x, y, z), 
+                    blockLocation = getBlockCoordFromRelative(x, y, z);
+
+            if(this.hasChunk(chunkLocation)) { return blockLocation; }
+            else                             { return -Vector3.UNIT_SCALE; }
+        }
+
+        public override Chunk getChunkFromBlock(int x, int y, int z) {
+            if(x < 0 || y < 0 || z < 0) { return null; }
+
+
+            Vector3 chunkLocation = getChunkCoordFromRelative(x, y, z);
+
+            if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation]; }
+            else                             { return null; }
+
+
+        }
+
+        private Vector3 getBlockCoordFromRelative(int x, int y, int z) { return new Vector3(x % 16, y % 16, z % 16); }
+        private Vector3 getChunkCoordFromRelative(int x, int y, int z) { return new Vector3(x / 16, y / 16, z / 16); }
+
+        public override void setBlockAt(int x, int y, int z, string material, bool force) {
+            if(x < 0 || y < 0 || z < 0) { return; }
+
+            if(force && y > this.mIslandSize.y * MainWorld.CHUNK_SIDE) {
+                this.mIslandSize.y = (int) System.Math.Ceiling((float)y / 16f);
+            }
+
+            Vector3 chunkLocation = getChunkCoordFromRelative(x, y, z), 
+                    blockLocation = getBlockCoordFromRelative(x, y, z);
+
+
+            if(this.hasChunk(chunkLocation)) { this.mChunkList[chunkLocation].setBlock(x % 16, y % 16, z % 16, material); }
+            else if(force) {
+                this.mChunkList.Add(chunkLocation, new VanillaChunk(new Vector3(16,16,16), chunkLocation, this));
+                this.mChunkList[chunkLocation].setBlock(x % 16, y % 16, z % 16, material);
+            } 
+            else { return; }
+        }
+
+        public override string getMaterialFromName(string name) {
+            return VanillaChunk.staticBlock[name].getMaterial();
+        }
+
 
     }
 }

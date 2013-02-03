@@ -13,6 +13,8 @@ using LibNoise.Modules.Combiner;
 using API.Geo.Cuboid;
 using API.Generator;
 
+using Game.World.Blocks;
+
 using Mogre;
 
 namespace Game.World.Generator
@@ -48,7 +50,7 @@ namespace Game.World.Generator
                         
                         if(yy <= 100) {
                             if(this.isInSphere(xx, yy, zz)) {
-                                this.getBlock(xx, yy, zz, true).setMaterial(API.Generic.Material.GRASS);
+                                this.setBlockAt(xx, yy, zz, "Grass", true);
                             }
                         }
 
@@ -71,7 +73,7 @@ namespace Game.World.Generator
                 chunkTempPosition.x = x / MainWorld.CHUNK_SIDE;
                 chunkTempPosition.z = z / MainWorld.CHUNK_SIDE;
 
-                if(this.getBlock(x, 101, z, true).getMaterial() != API.Generic.Material.WOOD) {
+                if(!(this.getBlock(x, 101, z, true) is WoodBlock)) {
                     while(this.getSurfaceHeight(x, z) == -1) {
                         x = rd.Next(16*(int)this.mIslandSize.x);
         			    z = rd.Next(16*(int)this.mIslandSize.z);
@@ -82,17 +84,17 @@ namespace Game.World.Generator
                     }
                     for(int j = 0; j < height; j++) {
                         chunkTempPosition.y = (j + 101) / MainWorld.CHUNK_SIDE;
-                        this.getBlock(x, 101 + j, z, true).setMaterial(API.Generic.Material.WOOD);
+                        this.setBlockAt(x, 101 + j, z, "Wood", true);
 
                         if(height - j <= 3) {
                             for(int k = -2; k < 3; k++) {
                                 for(int l = -2; l < 3; l++) {
                                     if(k != 0 || l != 0) {
-                                        this.getBlock(x + k, 101 + j, z + l, true).setMaterial(API.Generic.Material.LEAVES);
+                                        this.setBlockAt(x + k, 101 + j, z + l, "Leaves", true);
                                     }
 
                                     if(height - j == 1 && (k == -2 || k == 2) && (l == -2 || l ==2)) {
-                                        this.getBlock(x + k, 101 + j, z + l, true).setMaterial(API.Generic.Material.AIR);
+                                        this.setBlockAt(x + k, 101 + j, z + l, "Air", true);
                                     }
                                 }
                             }

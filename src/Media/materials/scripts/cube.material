@@ -16,7 +16,7 @@ material cube/grass/side{
         }
     }
 }
-material cube/grass {
+material cube/grass/top {
 	technique {
 		pass {
 			ambient 1.0 1.0 1.0
@@ -45,7 +45,7 @@ material cube/stone
             ambient 1.0 1.0 1.0
             diffuse 1.0 1.0 1.0
             
-            texture_unit { texture stone.png }
+            texture_unit { texture stone.jpg }
         }
     }
 }
@@ -62,7 +62,7 @@ material cube/metal
         }
     }
 }
-material cube/wood/side
+material cube/wood
 {
 	technique
 	{

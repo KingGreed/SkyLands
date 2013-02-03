@@ -114,8 +114,8 @@ namespace Game.World.Generator
 					    Block block = this.getBlock(new Vector3(xx, yy, zz), true);
                         if(block == null) { continue; }
 
-                        if (noiseValue >= 0) { block.setMaterial(Material.GRASS); }
-                        else                 { block.setMaterial(Material.AIR); }
+                        if (noiseValue >= 0) { this.setBlockAt(xx, yy, zz, "Stone", true); }
+                        //else                 { block.setMaterial(Material.AIR); } // Not needed
 				    }
 			    }
             }
