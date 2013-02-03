@@ -50,8 +50,8 @@ namespace API.Geo.Cuboid
 
         public abstract int getSurfaceHeight(int x, int z);
 
-        public Block getBlock(Vector3 loc)                        { return this.getBlock((int) loc.x, (int) loc.y, (int) loc.z); }
-        public abstract Block getBlock(int x, int y, int z);
+        public Block getBlock(Vector3 loc, bool force)                        { return this.getBlock((int) loc.x, (int) loc.y, (int) loc.z, force); }
+        public abstract Block getBlock(int x, int y, int z, bool force);
         
         public Vector3 getBlockCoord(Vector3 loc) { return this.getBlockCoord((int) loc.x, (int) loc.y, (int) loc.z); }
         public abstract Vector3 getBlockCoord(int x, int y, int z);

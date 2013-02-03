@@ -48,7 +48,7 @@ namespace Game.World.Generator
             if(mList.Count == 0) { return; }
             
             Materials mtr = new Materials();
-            string material = mtr.getMaterial(((int)currentIsland.getBlock(this.mList[0]).getMaterial()).ToString());
+            string material = mtr.getMaterial(((int)currentIsland.getBlock(this.mList[0], false).getMaterial()).ToString());
             LogManager.Singleton.DefaultLog.LogMessage("Material : " + material);
             int faceNumber = 0;
             Block curr;
@@ -66,7 +66,7 @@ namespace Game.World.Generator
             ManualObject block = new ManualObject("MultiBlock-" + mList[0].x + "-" + mList[0].y + "-" + mList[0].z);
             block.Begin(material, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
                 foreach(Vector3 loc in this.mList) {
-                    curr = currentIsland.getBlock(loc);
+                    curr = currentIsland.getBlock(loc, false);
                     displayCoord = currentWorld.getDisplayCoords(currentIsland.getPosition(), loc);
 
                     foreach(BlockFace face in values) {

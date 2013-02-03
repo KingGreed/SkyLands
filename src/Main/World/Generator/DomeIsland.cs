@@ -48,14 +48,8 @@ namespace Game.World.Generator
                         
                         if(yy <= 100) {
                             if(this.isInSphere(xx, yy, zz)) {
-
-                                this.checkAndUpdate(chunkTempPosition);
-                                
-                                this.getBlock(xx, yy, zz).setMaterial(API.Generic.Material.GRASS);
+                                this.getBlock(xx, yy, zz, true).setMaterial(API.Generic.Material.GRASS);
                             }
-                        } else if(yy == 112) {
-                            this.checkAndUpdate(chunkTempPosition);
-                            this.getBlock(xx, yy, zz).setMaterial(API.Generic.Material.WOOD);
                         }
 
 				    }
@@ -77,7 +71,7 @@ namespace Game.World.Generator
                 chunkTempPosition.x = x / MainWorld.CHUNK_SIDE;
                 chunkTempPosition.z = z / MainWorld.CHUNK_SIDE;
 
-                if(this.getBlock(x, 101, z).getMaterial() != API.Generic.Material.WOOD) {
+                if(this.getBlock(x, 101, z, true).getMaterial() != API.Generic.Material.WOOD) {
                     while(this.getSurfaceHeight(x, z) == -1) {
                         x = rd.Next(16*(int)this.mIslandSize.x);
         			    z = rd.Next(16*(int)this.mIslandSize.z);
@@ -88,24 +82,17 @@ namespace Game.World.Generator
                     }
                     for(int j = 0; j < height; j++) {
                         chunkTempPosition.y = (j + 101) / MainWorld.CHUNK_SIDE;
-
-                        if(!this.hasChunk(chunkTempPosition)) {
-                            this.mChunkList.Add(chunkTempPosition, new VanillaChunk(new Vector3(16,16,16), chunkTempPosition, this));
-                            if(chunkTempPosition.y > this.mIslandSize.y) {
-                                this.mIslandSize.y = chunkTempPosition.y;
-                            }
-                        }
-                        this.getBlock(x, 101 + j, z).setMaterial(API.Generic.Material.WOOD);
+                        this.getBlock(x, 101 + j, z, true).setMaterial(API.Generic.Material.WOOD);
 
                         if(height - j <= 3) {
                             for(int k = -2; k < 3; k++) {
                                 for(int l = -2; l < 3; l++) {
                                     if(k != 0 || l != 0) {
-                                        this.getBlock(x + k, 101 + j, z + l).setMaterial(API.Generic.Material.LEAVES);
+                                        this.getBlock(x + k, 101 + j, z + l, true).setMaterial(API.Generic.Material.LEAVES);
                                     }
 
                                     if(height - j == 1 && (k == -2 || k == 2) && (l == -2 || l ==2)) {
-                                        this.getBlock(x + k, 101 + j, z + l).setMaterial(API.Generic.Material.AIR);
+                                        this.getBlock(x + k, 101 + j, z + l, true).setMaterial(API.Generic.Material.AIR);
                                     }
                                 }
                             }

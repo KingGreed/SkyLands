@@ -40,7 +40,7 @@ namespace API.Geo
 	     * @param z coordinate of the block
 	     * @return the Block
 	     */
-	    Block getBlock(int x, int y, int z);
+	    Block getBlock(int x, int y, int z, bool force);
 
 	    /**
 	     * Gets a {@link Block} representing the block at the position given
@@ -48,7 +48,7 @@ namespace API.Geo
 	     * @param position of the block
 	     * @return the Block
 	     */
-	    Block getBlock(Vector3 position);
+	    Block getBlock(Vector3 position, bool force);
 
     }
 }

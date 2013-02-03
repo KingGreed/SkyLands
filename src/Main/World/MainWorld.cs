@@ -129,7 +129,7 @@ namespace Game.World
             else if (collisionSide == CubeFace.frontFace)  { absBlockPos.z++; }
             else  /*(collisionSide == CubeFace.backFace)*/ { absBlockPos.z--; }
 
-            Block block = this.mIslandList[new Vector3(0, 0, 0)].getBlock(absBlockPos);
+            Block block = this.mIslandList[new Vector3(0, 0, 0)].getBlock(absBlockPos, false);
             return !(block == null || block.isAir());
         }
 

@@ -108,16 +108,10 @@ namespace Game.World.Generator
                         
                         chunkTempPosition.y = yy / MainWorld.CHUNK_SIDE;
 
-                        if(!this.hasChunk(chunkTempPosition)) {
-                            this.mChunkList.Add(chunkTempPosition, new VanillaChunk(new Vector3(16,16,16), chunkTempPosition, this));
-                            if(chunkTempPosition.y > this.mIslandSize.y) {
-                                this.mIslandSize.y = chunkTempPosition.y;
-                            }
-                        }
 					    
                         double noiseValue = noise[xx, yy, zz] * noise[xx, yy, zz] + noise[xx, yy, zz] - System.Math.Abs(1 / smoothHeight * (yy - smoothHeight - minElevation));
 
-					    Block block = this.getBlock(new Vector3(xx, yy, zz));
+					    Block block = this.getBlock(new Vector3(xx, yy, zz), true);
                         if(block == null) { continue; }
 
                         if (noiseValue >= 0) { block.setMaterial(Material.GRASS); }
