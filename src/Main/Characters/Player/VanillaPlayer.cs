@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mogre;
+using MogreNewt;
 
 using Game.World;
 
@@ -40,7 +41,7 @@ namespace Game.CharacSystem
             }
         }
 
-        public VanillaPlayer(CharacMgr characMgr, string meshName, CharacterInfo info, MoisManager input) : base(characMgr, meshName, info)
+        public VanillaPlayer(CharacMgr characMgr, string meshName, CharacterInfo info, MoisManager input, Collision col) : base(characMgr, meshName, info, col)
         {
             this.mInput = input;
             this.mIsFirstView = true;

@@ -119,7 +119,7 @@ namespace Game.World.Generator
 				    }
 			    }
             }
-
+            this.updateTerrain();
         }
 
 

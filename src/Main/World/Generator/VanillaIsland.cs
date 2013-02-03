@@ -8,6 +8,8 @@ using API.Generator;
 using API.Generic;
 
 using Mogre;
+using MogreNewt;
+using MogreNewt.CollisionPrimitives;
 
 using Game.Display;
 using Game.World.Blocks;
@@ -19,8 +21,17 @@ namespace Game.World.Generator
 {
     public abstract class VanillaIsland : Island
     {
+        private CompoundCollision mTerrain;
+        private Dictionary<Vector3, Collision> mCollisions;
+        private bool mIsTerainUpdated;
 
-        public VanillaIsland(Vector3 islandCoord, Vector2 size, MainWorld currentWorld) : base(islandCoord, size, currentWorld) {}
+        public bool IsTerrainUpdated { get { return this.mIsTerainUpdated; } }
+
+        public VanillaIsland(Vector3 islandCoord, Vector2 size, MainWorld currentWorld) : base(islandCoord, size, currentWorld)
+        {
+            this.mCollisions = new Dictionary<Vector3, Collision>();
+            this.mIsTerainUpdated = true;
+        }
        
         public override void initChunks(Vector2 size) {
             for(int x = 0; x < size.x; x++) {
@@ -172,18 +183,52 @@ namespace Game.World.Generator
                     blockLocation = getBlockCoordFromRelative(x, y, z);
 
 
-            if(this.hasChunk(chunkLocation)) { this.mChunkList[chunkLocation].setBlock(x % 16, y % 16, z % 16, material); }
+            Vector3 loc = new Vector3(x % MainWorld.CHUNK_SIDE, y % MainWorld.CHUNK_SIDE, z % MainWorld.CHUNK_SIDE);
+            if (this.hasChunk(chunkLocation)) { 
+                this.mChunkList[chunkLocation].setBlock(loc, material);
+                this.AddCollisionBlock(loc * MainWorld.CUBE_SIDE, material);
+            }
             else if(force) {
-                this.mChunkList.Add(chunkLocation, new VanillaChunk(new Vector3(16,16,16), chunkLocation, this));
-                this.mChunkList[chunkLocation].setBlock(x % 16, y % 16, z % 16, material);
+                this.mChunkList.Add(chunkLocation, new VanillaChunk(MainWorld.CHUNK_SIDE * Vector3.UNIT_SCALE, chunkLocation, this));
+                this.mChunkList[chunkLocation].setBlock(loc, material);
+                this.AddCollisionBlock(loc * MainWorld.CUBE_SIDE, material);
             } 
-            else { return; }
+        }
+
+        private void AddCollisionBlock(Vector3 absLoc, string material)
+        {
+            if (material == "Air")
+            {
+                this.mCollisions.Remove(absLoc);
+                this.mIsTerainUpdated = false;
+            }
+            else if (!this.mCollisions.ContainsKey(absLoc))
+            {
+                this.mCollisions.Add(absLoc, new MogreNewt.CollisionPrimitives.Box(this.mWorld.NwtWorld, MainWorld.CUBE_SIDE * Vector3.UNIT_SCALE, absLoc, 0));
+                this.mIsTerainUpdated = false;
+            }
+        }
+
+        public void updateTerrain()
+        {
+            if (this.mCollisions.Count > 0)
+            {
+                this.mTerrain = new CompoundCollision(this.mWorld.NwtWorld, this.mCollisions.Values.ToArray(), 0);
+                Body body = new Body(this.mWorld.NwtWorld, this.mTerrain, false);
+            }
+            else { this.mTerrain.Dispose(); }
+            
+            this.mIsTerainUpdated = true;
         }
 
         public override string getMaterialFromName(string name) {
             return VanillaChunk.staticBlock[name].getMaterial();
         }
 
-
+        public void Dispose() 
+        {
+            this.mTerrain.Dispose();
+            this.mCollisions.Clear();
+        }
     }
 }
