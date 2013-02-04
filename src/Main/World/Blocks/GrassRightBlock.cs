@@ -9,17 +9,16 @@ using Mogre;
 
 namespace Game.World.Blocks
 {
-    class GrassSideBlock : VanillaBlock
+    class GrassRightBlock : VanillaBlock
     {
-        public GrassSideBlock() {
-            this.mName = "Grass side";
+        public GrassRightBlock() {
+            this.mName = "Grass right";
             this.mMaterial = "cube/grass/side";
         }
 
         public override BlockFace[] getFaces() { 
             return new BlockFace[] {
-                BlockFace.frontFace, BlockFace.backFace,
-                BlockFace.leftFace,  BlockFace.rightFace
+                BlockFace.rightFace
             };
         }
     }

@@ -50,7 +50,6 @@ namespace Game.World.Generator
 
             string name = this.mMaterial + "-" + mList[0].x + "-" + mList[0].y + "-" + mList[0].z;
             string material = currentIsland.getMaterialFromName(this.mMaterial);
-            LogManager.Singleton.DefaultLog.LogMessage("Material : " + material);
             int faceNumber = 0;
             Block curr = VanillaChunk.staticBlock[this.mMaterial];
             BlockFace[] test = currentIsland.getBlock(this.mList[0], false).getFaces();
@@ -58,12 +57,12 @@ namespace Game.World.Generator
             var values = Enum.GetValues(typeof(BlockFace));
             Vector2[] textureCoord = 
                 new Vector2[] {
-                    new Vector2(1, 1),
-                    new Vector2(1, 0),
-                    new Vector2(0, 0),
-                    new Vector2(0, 1)
-
-
+                    new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0),
+                    new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 0), new Vector2(0, 1),
+                    new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0),
+                    new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0),
+                    new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 0), new Vector2(0, 1),
+                    new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 0)
                 };
             Vector3 displayCoord;
 
@@ -75,7 +74,7 @@ namespace Game.World.Generator
                     foreach(BlockFace face in curr.getFaces()) {
                         if(currentIsland.hasVisiblefaceAt((int) loc.x, (int) loc.y, (int) loc.z, face)) {
                             for(int i = 0; i < 4; i++) {
-                                block.Position(displayCoord + blockPointCoords[(int)face * 4 + i]); block.TextureCoord(textureCoord[i]);
+                                block.Position(displayCoord + blockPointCoords[(int)face * 4 + i]); block.TextureCoord(textureCoord[(int)face * 4 + i]);
                                 faceNumber++;
                             }
                             block.Quad((uint)faceNumber-4, (uint)faceNumber-3, (uint)faceNumber-2, (uint)faceNumber-1);

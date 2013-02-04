@@ -150,10 +150,13 @@
     <Compile Include="src\Main\States\Menu\OptionsState.cs" />
     <Compile Include="src\Main\States\Menu\SecondMenuState.cs" />
     <Compile Include="src\Main\World\Blocks\AirBlock.cs" />
+    <Compile Include="src\Main\World\Blocks\GrassLeftBlock.cs" />
+    <Compile Include="src\Main\World\Blocks\GrassFrontBlock.cs" />
+    <Compile Include="src\Main\World\Blocks\GrassBackBlock.cs" />
     <Compile Include="src\Main\World\Blocks\LeavesBlock.cs" />
     <Compile Include="src\Main\World\Blocks\GrassBlock.cs" />
     <Compile Include="src\Main\World\Blocks\GrassBottomBlock.cs" />
-    <Compile Include="src\Main\World\Blocks\GrassSideBlock.cs" />
+    <Compile Include="src\Main\World\Blocks\GrassRightBlock.cs" />
     <Compile Include="src\Main\World\Blocks\GrassTopBlock.cs" />
     <Compile Include="src\Main\World\Blocks\StoneBlock.cs" />
     <Compile Include="src\Main\World\Blocks\VanillaBlock.cs" />

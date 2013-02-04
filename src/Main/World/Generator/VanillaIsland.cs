@@ -19,6 +19,7 @@ namespace Game.World.Generator
 {
     public abstract class VanillaIsland : Island
     {
+        static Block defaultBlock = new AirBlock();
 
         public VanillaIsland(Vector3 islandCoord, Vector2 size, MainWorld currentWorld) : base(islandCoord, size, currentWorld) {}
        
@@ -67,7 +68,6 @@ namespace Game.World.Generator
                     }
                 }
             }
-            LogManager.Singleton.DefaultLog.LogMessage("MultiBlock done !");
             foreach(KeyValuePair<string, MultiBlock> pair in multiList) {
                 pair.Value.display(sceneMgr, this, this.mWorld);
             }
@@ -115,11 +115,11 @@ namespace Game.World.Generator
             if(blockChunk != null) {
                 return blockChunk.hasVisibleFaceAt(x % 16, y % 16, z % 16, face);
             }
-            return false;
+            return true;
         }
 
         public override Block getBlock(int x, int y, int z, bool force) {
-            if(x < 0 || y < 0 || z < 0) { return new AirBlock(); }
+            if(x < 0 || y < 0 || z < 0) { return defaultBlock; }
 
             if(force && y > this.mIslandSize.y * MainWorld.CHUNK_SIDE) {
                 this.mIslandSize.y = (int) System.Math.Ceiling((float)y / 16f);
@@ -134,7 +134,8 @@ namespace Game.World.Generator
                 this.mChunkList.Add(chunkLocation, new VanillaChunk(new Vector3(16,16,16), chunkLocation, this));
                 return this.mChunkList[chunkLocation].getBlock(blockLocation);
             } 
-            else { return new AirBlock(); }        }
+            else { return defaultBlock; }
+        }
 
         public override Vector3 getBlockCoord(int x, int y, int z) {
             if(x < 0 || y < 0 || z < 0) { return -Vector3.UNIT_SCALE; }

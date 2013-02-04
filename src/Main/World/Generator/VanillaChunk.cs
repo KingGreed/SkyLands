@@ -32,8 +32,6 @@ namespace Game.World.Generator
                     } else {
                         throw new Exception("Block : " + blockList[i].Name + " has a name (" + test.getName() + ") which already exists"); 
                     }
-                    LogManager.Singleton.DefaultLog.LogMessage("New Block type : " + blockList[i].Name);
-                    LogManager.Singleton.DefaultLog.LogMessage("    New Block has texture : " + test.getMaterial());
                 }
             }
         }
@@ -48,7 +46,7 @@ namespace Game.World.Generator
             for(int x = 0; x < mChunkSize.x; x++) {
                 for(int y = 0; y < mChunkSize.y; y++) {
                     for(int z = 0; z < mChunkSize.z; z++) {
-                        this.mBlockList[x, y, z] = new AirBlock();
+                        this.mBlockList[x, y, z] = staticBlock["Air"];
                     }
                 }
             }

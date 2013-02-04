@@ -13,7 +13,7 @@ namespace Game.World.Blocks
         }
 
         public override string[] getComposingFaces() {
-            return new string[3] { "Grass side", "Grass bottom", "Grass top" };
+            return new string[6] { "Grass left", "Grass right", "Grass back", "Grass front", "Grass bottom", "Grass top" };
         }
     }
 }
