@@ -21,17 +21,7 @@ namespace Game.World.Generator
 {
     public abstract class VanillaIsland : Island
     {
-        private CompoundCollision mTerrain;
-        private Dictionary<Vector3, Collision> mCollisions;
-        private bool mIsTerainUpdated;
-
-        public bool IsTerrainUpdated { get { return this.mIsTerainUpdated; } }
-
-        public VanillaIsland(Vector3 islandCoord, Vector2 size, MainWorld currentWorld) : base(islandCoord, size, currentWorld)
-        {
-            this.mCollisions = new Dictionary<Vector3, Collision>();
-            this.mIsTerainUpdated = true;
-        }
+        public VanillaIsland(SceneNode node, Vector2 size, MainWorld currentWorld) : base(node, size, currentWorld) { }
        
         public override void initChunks(Vector2 size) {
             for(int x = 0; x < size.x; x++) {
@@ -80,7 +70,7 @@ namespace Game.World.Generator
             }
             LogManager.Singleton.DefaultLog.LogMessage("MultiBlock done !");
             foreach(KeyValuePair<string, MultiBlock> pair in multiList) {
-                pair.Value.display(sceneMgr, this, this.mWorld);
+                pair.Value.display(this, this.mWorld);
             }
         }
 
@@ -165,8 +155,6 @@ namespace Game.World.Generator
 
             if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation]; }
             else                             { return null; }
-
-
         }
 
         private Vector3 getBlockCoordFromRelative(int x, int y, int z) { return new Vector3(x % 16, y % 16, z % 16); }
@@ -200,12 +188,12 @@ namespace Game.World.Generator
             if (material == "Air")
             {
                 this.mCollisions.Remove(absLoc);
-                this.mIsTerainUpdated = false;
+                this.mIsTerrainUpdated = false;
             }
             else if (!this.mCollisions.ContainsKey(absLoc))
             {
-                this.mCollisions.Add(absLoc, new MogreNewt.CollisionPrimitives.Box(this.mWorld.NwtWorld, MainWorld.CUBE_SIDE * Vector3.UNIT_SCALE, absLoc, 0));
-                this.mIsTerainUpdated = false;
+                this.mCollisions.Add(absLoc, new MogreNewt.CollisionPrimitives.Box(this.mWorld.NwtWorld, MainWorld.CUBE_SIDE * Vector3.UNIT_SCALE, 0));
+                this.mIsTerrainUpdated = false;
             }
         }
 
@@ -213,22 +201,27 @@ namespace Game.World.Generator
         {
             if (this.mCollisions.Count > 0)
             {
-                this.mTerrain = new CompoundCollision(this.mWorld.NwtWorld, this.mCollisions.Values.ToArray(), 0);
+                this.mTerrain.ParseScene(this.mNode, true, 0);
                 Body body = new Body(this.mWorld.NwtWorld, this.mTerrain, false);
+                body.AttachNode(this.mNode);
+                body.AutoSleep = true;
+                //body.SetPositionOrientation(this.getPosition(), Quaternion.IDENTITY);
             }
-            else { this.mTerrain.Dispose(); }
-            
-            this.mIsTerainUpdated = true;
+
+            this.mIsTerrainUpdated = true;
         }
 
         public override string getMaterialFromName(string name) {
             return VanillaChunk.staticBlock[name].getMaterial();
         }
 
-        public void Dispose() 
+        public void dispose()
         {
-            this.mTerrain.Dispose();
+            foreach (Collision col in this.mCollisions.Values)
+                col.Dispose();
             this.mCollisions.Clear();
+
+            this.mTerrain.Dispose();
         }
     }
 }

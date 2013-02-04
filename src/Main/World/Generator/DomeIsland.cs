@@ -23,7 +23,7 @@ namespace Game.World.Generator
     {
         private Perlin ELEVATION  = new Perlin();
 
-        public DomeIsland(Vector3 islandCoord, Vector2 size, MainWorld currentWorld) : base(islandCoord, size, currentWorld) {
+        public DomeIsland(SceneNode node, Vector2 size, MainWorld currentWorld) : base(node, size, currentWorld) {
 
             if(size.x != size.y) { throw new ArgumentException("Dome Islands can't be non square Islands"); }
 

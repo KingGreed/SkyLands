@@ -13,7 +13,6 @@ namespace Game.CharacSystem
         public static float YAW_SENSIVITY = 0.15f;   // Temp
         public static float PITCH_SENSIVITY = 0.15f;   // Temp
 
-        private readonly Vector3       CHARAC_SIZE = new Vector3(50, 120, 50);
         private List<VanillaCharacter> mCharacList;
         private MainPlayerCamera       mMainPlayerCam;
         private SceneManager           mSceneMgr;
@@ -39,18 +38,16 @@ namespace Game.CharacSystem
         {
             string type;
 
-            Collision col = new MogreNewt.CollisionPrimitives.Cylinder(this.mWorld.NwtWorld, (float)MathHelper.SQRTOFTWO * CHARAC_SIZE.x, CHARAC_SIZE.y, info.SpawnPoint, info.Id);
-            
             if (this.mCharacList.Count == 0 || info.IsPlayer)
             {
                 type = "Player";
-                this.mCharacList.Add(new VanillaPlayer(this, this.mMeshName, info, this.mInput, col));
+                this.mCharacList.Add(new VanillaPlayer(this, this.mMeshName, info, this.mInput));
                 if (this.mCharacList.Count == 1) { this.mMainPlayerCam.AttachToPlayer(this.mCharacList[0] as VanillaPlayer); }
             }
             else
             {
                 type = "NonPlayer";
-                this.mCharacList.Add(new VanillaNonPlayer(this, this.mMeshName, info, col));
+                this.mCharacList.Add(new VanillaNonPlayer(this, this.mMeshName, info));
             }
 
             LogManager.Singleton.DefaultLog.LogMessage(type + " " + info.Name + " added");

@@ -41,7 +41,7 @@ namespace Game.CharacSystem
             }
         }
 
-        public VanillaPlayer(CharacMgr characMgr, string meshName, CharacterInfo info, MoisManager input, Collision col) : base(characMgr, meshName, info, col)
+        public VanillaPlayer(CharacMgr characMgr, string meshName, CharacterInfo info, MoisManager input) : base(characMgr, meshName, info)
         {
             this.mInput = input;
             this.mIsFirstView = true;
