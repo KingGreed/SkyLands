@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,7 +44,7 @@ namespace Game.World.Generator
 
         public string getMaterial() { return this.mMaterial; }
 
-        public void display(SceneManager sceneMgr, Island currentIsland, API.Geo.World currentWorld) {
+        public void display(Island currentIsland, API.Geo.World currentWorld) {
             if(mList.Count == 0) { return; }
             
 
@@ -85,8 +85,7 @@ namespace Game.World.Generator
             block.End();
             block.ConvertToMesh("MultiBlock-" + name);
 
-            SceneNode node = sceneMgr.RootSceneNode.CreateChildSceneNode("MultiBlockNode-" + name);
-            node.AttachObject(block);
+            currentIsland.Node.CreateChildSceneNode("MultiBlockNode-" + name).AttachObject(block);
         }
     }
 }

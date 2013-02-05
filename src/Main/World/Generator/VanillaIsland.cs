@@ -8,6 +8,8 @@ using API.Generator;
 using API.Generic;
 
 using Mogre;
+using MogreNewt;
+using MogreNewt.CollisionPrimitives;
 
 using Game.Display;
 using Game.World.Blocks;
@@ -21,7 +23,7 @@ namespace Game.World.Generator
     {
         static Block defaultBlock = new AirBlock();
 
-        public VanillaIsland(Vector3 islandCoord, Vector2 size, MainWorld currentWorld) : base(islandCoord, size, currentWorld) {}
+        public VanillaIsland(SceneNode node, Vector2 size, MainWorld currentWorld) : base(node, size, currentWorld) { }
        
         public override void initChunks(Vector2 size) {
             for(int x = 0; x < size.x; x++) {
@@ -69,7 +71,7 @@ namespace Game.World.Generator
                 }
             }
             foreach(KeyValuePair<string, MultiBlock> pair in multiList) {
-                pair.Value.display(sceneMgr, this, this.mWorld);
+                pair.Value.display(this, this.mWorld);
             }
         }
 
@@ -128,7 +130,6 @@ namespace Game.World.Generator
             Vector3 chunkLocation = getChunkCoordFromRelative(x, y, z), 
                     blockLocation = getBlockCoordFromRelative(x, y, z);
 
-
             if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation].getBlock(blockLocation); }
             else if(force) {
                 this.mChunkList.Add(chunkLocation, new VanillaChunk(new Vector3(16,16,16), chunkLocation, this));
@@ -155,8 +156,6 @@ namespace Game.World.Generator
 
             if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation]; }
             else                             { return null; }
-
-
         }
 
         private Vector3 getBlockCoordFromRelative(int x, int y, int z) { return new Vector3(x % 16, y % 16, z % 16); }
@@ -173,18 +172,57 @@ namespace Game.World.Generator
                     blockLocation = getBlockCoordFromRelative(x, y, z);
 
 
-            if(this.hasChunk(chunkLocation)) { this.mChunkList[chunkLocation].setBlock(x % 16, y % 16, z % 16, material); }
+            Vector3 loc = new Vector3(x % MainWorld.CHUNK_SIDE, y % MainWorld.CHUNK_SIDE, z % MainWorld.CHUNK_SIDE);
+            if (this.hasChunk(chunkLocation)) { 
+                this.mChunkList[chunkLocation].setBlock(loc, material);
+                this.AddCollisionBlock(loc * MainWorld.CUBE_SIDE, material);
+            }
             else if(force) {
-                this.mChunkList.Add(chunkLocation, new VanillaChunk(new Vector3(16,16,16), chunkLocation, this));
-                this.mChunkList[chunkLocation].setBlock(x % 16, y % 16, z % 16, material);
+                this.mChunkList.Add(chunkLocation, new VanillaChunk(MainWorld.CHUNK_SIDE * Vector3.UNIT_SCALE, chunkLocation, this));
+                this.mChunkList[chunkLocation].setBlock(loc, material);
+                this.AddCollisionBlock(loc * MainWorld.CUBE_SIDE, material);
             } 
-            else { return; }
+        }
+
+        private void AddCollisionBlock(Vector3 absLoc, string material)
+        {
+            if (material == "Air")
+            {
+                this.mCollisions.Remove(absLoc);
+                this.mIsTerrainUpdated = false;
+            }
+            else if (!this.mCollisions.ContainsKey(absLoc))
+            {
+                this.mCollisions.Add(absLoc, new MogreNewt.CollisionPrimitives.Box(this.mWorld.NwtWorld, MainWorld.CUBE_SIDE * Vector3.UNIT_SCALE, 0));
+                this.mIsTerrainUpdated = false;
+            }
+        }
+
+        public void updateTerrain()
+        {
+            if (this.mCollisions.Count > 0)
+            {
+                this.mTerrain.ParseScene(this.mNode, true, 0);
+                Body body = new Body(this.mWorld.NwtWorld, this.mTerrain, false);
+                body.AttachNode(this.mNode);
+                body.AutoSleep = true;
+                //body.SetPositionOrientation(this.getPosition(), Quaternion.IDENTITY);
+            }
+
+            this.mIsTerrainUpdated = true;
         }
 
         public override string getMaterialFromName(string name) {
             return VanillaChunk.staticBlock[name].getMaterial();
         }
 
+        public void dispose()
+        {
+            foreach (Collision col in this.mCollisions.Values)
+                col.Dispose();
+            this.mCollisions.Clear();
 
+            this.mTerrain.Dispose();
+        }
     }
 }

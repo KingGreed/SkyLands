@@ -31,8 +31,12 @@ namespace Game.World
 
         private List<Entity> mEntityList;
         private Dictionary<Vector3, Island> mIslandList;
-        
-        private SkyMgr mSkyMgr;
+
+        private StateManager    mStateMgr;
+        private SkyMgr          mSkyMgr;
+        private MogreNewt.World mNewtonWorld;
+
+        public MogreNewt.World NwtWorld { get { return this.mNewtonWorld; } }
 
         public MainWorld(StateManager stateMgr)
         {
@@ -40,15 +44,24 @@ namespace Game.World
             this.mAge        = 0;
             this.mSeed       = 42;
 
-            this.mIslandList = new Dictionary<Vector3, Island>();
-            if (stateMgr.ChosenWorld == StateManager.TypeWorld.Dome)       { this.mIslandList.Add(new Vector3(0, 0, 0), new DomeIsland  (new Vector3(0, 0, 0), new Vector2(3, 3), this)); }
-            else if (stateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { this.mIslandList.Add(new Vector3(0, 0, 0), new RandomIsland(new Vector3(0, 0, 0), new Vector2(10, 10), new Vector2(90, 53),     this)); }
-            else  /*(stateMgr.ChosenWorld == StateManager.TypeWorld.Mountain)*/ { this.mIslandList.Add(new Vector3(0, 0, 0), new RandomIsland(new Vector3(0, 0, 0), new Vector2(6, 6), new Vector2(32.5f, 256), this)); }
-            this.mIslandList[new Vector3(0, 0, 0)].display(stateMgr.SceneManager);
+            this.mStateMgr = stateMgr;
+            this.mNewtonWorld = new MogreNewt.World();
+            this.mNewtonWorld.SetFrictionModel(MogreNewt.World.FrictionModelMode.FM_ADAPTIVE);
+            this.mNewtonWorld.SetMinimumFrameRate(45);
+            //this.mNewtonWorld.
 
-            this.mSpawnPoint = Vector3.ZERO;
-            this.setSafeSpawnPoint(new Vector3(0, 0, 0));
-            this.mSkyMgr = new SkyMgr(stateMgr); LogManager.Singleton.DefaultLog.LogMessage("Sky Created");
+            this.mIslandList = new Dictionary<Vector3, Island>();
+            SceneNode node = this.mStateMgr.SceneManager.RootSceneNode.CreateChildSceneNode();
+            Island island;
+            if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Dome)            { island = new DomeIsland(node, new Vector2(3, 3), this); }
+            else if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { island = new RandomIsland(node, new Vector2(6, 6), new Vector2(90, 53), this); }
+            else  /*(this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Mountain)*/ { island = new RandomIsland(node, new Vector2(6, 6), new Vector2(32.5f, 256), this); }
+            this.mIslandList.Add(Vector3.ZERO, island);
+            this.mIslandList[Vector3.ZERO].display(this.mStateMgr.SceneManager);
+
+            this.mSkyMgr = new SkyMgr(this.mStateMgr);
+
+            this.setSafeSpawnPoint(Vector3.ZERO);
         }
 
 
@@ -106,37 +119,17 @@ namespace Game.World
 	    public void unload(bool save) { throw new NotImplementedException(); }
 	    public void save() { throw new NotImplementedException(); }
 
-                public bool HasCharacCollision(Vector3[] hitBlocks, CubeFace collisionSide)
+        public void Update(float frameTime)
         {
-            List<Vector3> coordsToTest = new List<Vector3>();
-            if (collisionSide != CubeFace.upperFace) { coordsToTest.Add(hitBlocks[0]); }
-            if (collisionSide != CubeFace.underFace) { coordsToTest.Add(hitBlocks[1]); }
-
-            foreach (Vector3 blockPos in coordsToTest)
-                if (this.hasBlockCollision(blockPos, collisionSide)) 
-                    return true;
-
-            return false;
+            this.mNewtonWorld.Update(frameTime);
+            this.mSkyMgr.Update();
         }
 
-        private bool hasBlockCollision(Vector3 absBlockPos, CubeFace collisionSide)
+        public void Shutdown()
         {
-            absBlockPos += this.mIslandList[new Vector3(0, 0, 0)].getPosition();
-
-            if      (collisionSide == CubeFace.rightFace)  { absBlockPos.x++; }
-            else if (collisionSide == CubeFace.leftFace)   { absBlockPos.x--; }
-            else if (collisionSide == CubeFace.upperFace)  { absBlockPos.y++; }
-            else if (collisionSide == CubeFace.underFace)  { absBlockPos.y--; }
-            else if (collisionSide == CubeFace.frontFace)  { absBlockPos.z++; }
-            else  /*(collisionSide == CubeFace.backFace)*/ { absBlockPos.z--; }
-
-            Block block = this.mIslandList[new Vector3(0, 0, 0)].getBlock(absBlockPos, false);
-            return !(block == null || block is AirBlock);
+            this.mNewtonWorld.Dispose();
+            this.mSkyMgr.Shutdown();
+            this.mStateMgr.SceneManager.ClearScene();
         }
-
-        public Vector3 GetBlockAbsPosFromAbs(Vector3 absCoord, Vector3 islandLoc) { return this.mIslandList[islandLoc].getBlockCoord(absCoord / CUBE_SIDE) * CUBE_SIDE; }
-
-        public void Update()   { this.mSkyMgr.Update(); }
-        public void Shutdown() { this.mSkyMgr.Shutdown(); }
     }
 }

@@ -70,6 +70,7 @@ namespace API.Geo.Cuboid
         public abstract string getBlockMaterial(int x, int y, int z);
 
         //set
+        public void setBlock(Vector3 loc, string material) { this.setBlock((int)loc.x, (int)loc.y, (int)loc.z, material); }
         public abstract void setBlock(int x, int y, int z, string material);
         public virtual void setBiome(Biome type) { this.mBiomeType = type; }
         

@@ -32,7 +32,7 @@ namespace Game.World.Generator
 	    // smoothing stuff
 	    //private  int SMOOTH_SIZE = 4;
 
-        public RandomIsland(Vector3 islandCoord, Vector2 size, Vector2 minMax, MainWorld currentWorld) : base(islandCoord, size, currentWorld) {
+        public RandomIsland(SceneNode node, Vector2 size, Vector2 minMax, MainWorld currentWorld) : base(node, size, currentWorld) {
 
             this.mMinMax = minMax;
 
@@ -110,14 +110,15 @@ namespace Game.World.Generator
 
 					    
                         //double noiseValue = noise[xx, yy, zz] * noise[xx, yy, zz] + noise[xx, yy, zz] - System.Math.Abs(1 / smoothHeight * (yy - smoothHeight - minElevation));
-                        double noiseValue = (noise[xx, yy, zz] / 4d) - ((System.Math.Abs(yy - 64 - 32)) - 2 * noise2[xx, 255 - yy, zz] )/ 128.0;
+                        //double noiseValue = (noise[xx, yy, zz] / 4d) - ((System.Math.Abs(yy - 64 - 32)) - 2 * noise2[xx, 255 - yy, zz] )/ 128.0;
+                        double noiseValue = (noise[xx, yy, zz]) * noise2[xx, 255 - yy, zz] + noise[xx, yy, zz] - System.Math.Abs(1 / smoothHeight * (yy - smoothHeight - minElevation + 20));
 
                         if (noiseValue >= 0) { this.setBlockAt(xx, yy, zz, "Grass", true); }
                         //else                 { block.setMaterial(Material.AIR); } // Not needed
 				    }
 			    }
             }
-
+            this.updateTerrain();
         }
 
 

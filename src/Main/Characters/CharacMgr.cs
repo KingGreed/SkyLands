@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mogre;
+using MogreNewt;
 
 using Game.World;
+using Game.States;
 
 namespace Game.CharacSystem
 {
@@ -11,24 +13,24 @@ namespace Game.CharacSystem
         public static float YAW_SENSIVITY = 0.15f;   // Temp
         public static float PITCH_SENSIVITY = 0.15f;   // Temp
 
-        private List<VanillaCharacter>  mCharacList;
-        private MainPlayerCamera mMainPlayerCam;
-        private SceneManager     mSceneMgr;
-        private MoisManager      mInput;
-        private MainWorld        mWorld;
-        private string           mMeshName = "Sinbad.mesh";
+        private List<VanillaCharacter> mCharacList;
+        private MainPlayerCamera       mMainPlayerCam;
+        private SceneManager           mSceneMgr;
+        private MoisManager            mInput;
+        private MainWorld              mWorld;
+        private string                 mMeshName = "Sinbad.mesh";
 
         public SceneManager     SceneMgr      { get { return this.mSceneMgr; } }
         public MoisManager      Input         { get { return this.mInput; } }
         public MainWorld        World         { get { return this.mWorld; } }
         public MainPlayerCamera MainPlayerCam { get { return this.mMainPlayerCam; } }
 
-        public CharacMgr(SceneManager sceneMgr, MoisManager input, MainWorld world, Camera cam)
+        public CharacMgr(StateManager stateMgr, MainWorld world)
         {
-            this.mSceneMgr = sceneMgr;
-            this.mInput = input;
+            this.mSceneMgr = stateMgr.SceneManager;
+            this.mInput = stateMgr.Input;
             this.mWorld = world;
-            this.mMainPlayerCam = new MainPlayerCamera(cam);
+            this.mMainPlayerCam = new MainPlayerCamera(stateMgr.Camera);
             this.mCharacList = new List<VanillaCharacter>();
         }
 

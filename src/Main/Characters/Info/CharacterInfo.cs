@@ -18,10 +18,10 @@ namespace Game.CharacSystem
         public float   Life       { get { return this.mLife; }       set { this.mLife = value; } }
         public bool    IsPlayer   { get { return this.mIsPlayer; } }
 
-        public CharacterInfo(string name, Vector3 spawnPoint, bool isPlayer, float life = 100)
+        public CharacterInfo(string name, Vector3 spawnPoint, bool isPlayer = false, float life = 100)
         {
-            lastPlayerId++;
             this.mId = lastPlayerId;
+            lastPlayerId++;
             this.mName = name;
             this.mSpawnPoint = spawnPoint;
             this.mIsPlayer = isPlayer;

@@ -1,5 +1,6 @@
 ﻿using System;
 using Mogre;
+using MogreNewt;
 
 using Game.World;
 
@@ -10,7 +11,7 @@ namespace Game.CharacSystem
     {
         public VanillaNonPlayer(CharacMgr characMgr, string meshName, CharacterInfo info) : base(characMgr, meshName, info)
         {
-
+            
         }
 
         public new void Update(float frameTime)

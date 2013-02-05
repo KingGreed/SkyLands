@@ -54,8 +54,6 @@ namespace Game.Sky
             this.mCaelumSystem.SceneFogDensityMultiplier = 0.0006f;
             this.mCaelumSystem.SceneFogColourMultiplier  = new ColourValue(0.3f, 0.3f, 0.3f);
             this.mCaelumSystem.ManageSceneFog = true;
-
-            this.mCaelumSystem.EnsureSingleLightSource = true;
         }
 
         public void Update() { this.mCaelumSystem.TimeScale += this.mStateMgr.Input.MouseMoveZ; }

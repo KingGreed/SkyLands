@@ -21,6 +21,6 @@ namespace API.Geo.Cuboid
         string        getMaterial ();
         bool          Contains    (Vector3 loc);
 
-        void display(SceneManager sceneMgr, Island currentIsland, World currentWorld);
+        void display(Island currentIsland, World currentWorld);
     }
 }

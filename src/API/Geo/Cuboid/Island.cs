@@ -12,6 +12,8 @@ using Entity   = API.Ent.Entity;
 using Material = API.Generic.Material;
 
 using Mogre;
+using MogreNewt;
+using MogreNewt.CollisionPrimitives;
 
 namespace API.Geo.Cuboid
 {
@@ -20,27 +22,35 @@ namespace API.Geo.Cuboid
      */
     public abstract class Island : AreaChunkAccess {
 
-        protected Vector3 mIslandSize;
-        protected Vector3 mIslandCoord;
-        protected World   mWorld;
+        protected Vector3                        mIslandSize;
+        protected Game.World.MainWorld           mWorld;
+        protected SceneNode                      mNode;
+        protected TreeCollisionSceneParser       mTerrain;
+        protected Dictionary<Vector3, Collision> mCollisions;
+        protected bool                           mIsTerrainUpdated;
         
         protected Dictionary<Vector3, Chunk> mChunkList;
-        
 
-	    public Island(Vector3 islandCoord, Vector2 size, World currentWorld) {
+        public SceneNode Node        { get { return this.mNode; } }
+        public bool IsTerrainUpdated { get { return this.mIsTerrainUpdated; } }
+
+	    public Island(SceneNode node, Vector2 size, Game.World.MainWorld currentWorld) {
             this.mChunkList = new Dictionary<Vector3,Chunk>();
             this.initChunks(size);
 
-            this.mIslandCoord = islandCoord;
+            this.mNode = node;
             this.mIslandSize  = new Vector3(size.x, 0, size.y);
             this.mWorld = currentWorld;
+
+            this.mTerrain = new TreeCollisionSceneParser(this.mWorld.NwtWorld);
+            this.mCollisions = new Dictionary<Vector3, Collision>();
         }
 
         //Init
         public abstract void initChunks(Vector2 size);
         //get
 	    public Vector3 getSize()       { return this.mIslandSize;  }
-        public Vector3 getPosition()   { return this.mIslandCoord; }
+        public Vector3 getPosition()   { return this.mNode.Position; }
         public Vector3 getSpawnPoint() { throw new NotImplementedException(); }
 
         public Chunk getChunk  (int x, int y, int z)                  { return this.mChunkList[new Vector3(x,y,z)]; }

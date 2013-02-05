@@ -53,9 +53,6 @@ namespace Game
             }
         }
 
-        public void Dispose()
-        {
-            this.mCharacMgr.Dispose();
-        }
+        public void Dispose() { this.mCharacMgr.Dispose(); }
     }
 }
