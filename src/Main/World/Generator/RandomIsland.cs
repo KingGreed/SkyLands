@@ -86,7 +86,7 @@ namespace Game.World.Generator
 		    TURBULENCE.setSeed((int) seed * 53);
 
 		    double[, ,] noise  = WorldGeneratorUtils.fastNoise(FINAL, 16*(int)this.mIslandSize.x, 256, 16*(int)this.mIslandSize.z, 4, 0, 0, 0);
-
+            double[, ,] noise2 = WorldGeneratorUtils.fastNoise(FINAL, 16*(int)this.mIslandSize.x, 256, 16*(int)this.mIslandSize.z, 4, 0, 10, 0);
 
             LogManager.Singleton.DefaultLog.LogMessage("Perlin set");
 
@@ -104,17 +104,15 @@ namespace Game.World.Generator
 				    
 				    minElevation = minSum;
 				    smoothHeight = (maxSum - minElevation) / 2d;
-				    for (int yy = 0; yy < 256; yy++) {
+				    for (int yy = 0; yy < 250; yy++) {
                         
                         chunkTempPosition.y = yy / MainWorld.CHUNK_SIDE;
 
 					    
-                        double noiseValue = noise[xx, yy, zz] * noise[xx, yy, zz] + noise[xx, yy, zz] - System.Math.Abs(1 / smoothHeight * (yy - smoothHeight - minElevation));
+                        //double noiseValue = noise[xx, yy, zz] * noise[xx, yy, zz] + noise[xx, yy, zz] - System.Math.Abs(1 / smoothHeight * (yy - smoothHeight - minElevation));
+                        double noiseValue = (noise[xx, yy, zz] / 4d) - ((System.Math.Abs(yy - 64 - 32)) - 2 * noise2[xx, 255 - yy, zz] )/ 128.0;
 
-					    Block block = this.getBlock(new Vector3(xx, yy, zz), true);
-                        if(block == null) { continue; }
-
-                        if (noiseValue >= 0) { this.setBlockAt(xx, yy, zz, "Stone", true); }
+                        if (noiseValue >= 0) { this.setBlockAt(xx, yy, zz, "Grass", true); }
                         //else                 { block.setMaterial(Material.AIR); } // Not needed
 				    }
 			    }

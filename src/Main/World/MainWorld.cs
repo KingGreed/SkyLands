@@ -42,7 +42,7 @@ namespace Game.World
 
             this.mIslandList = new Dictionary<Vector3, Island>();
             if (stateMgr.ChosenWorld == StateManager.TypeWorld.Dome)       { this.mIslandList.Add(new Vector3(0, 0, 0), new DomeIsland  (new Vector3(0, 0, 0), new Vector2(3, 3), this)); }
-            else if (stateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { this.mIslandList.Add(new Vector3(0, 0, 0), new RandomIsland(new Vector3(0, 0, 0), new Vector2(6, 6), new Vector2(90, 53),     this)); }
+            else if (stateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { this.mIslandList.Add(new Vector3(0, 0, 0), new RandomIsland(new Vector3(0, 0, 0), new Vector2(10, 10), new Vector2(90, 53),     this)); }
             else  /*(stateMgr.ChosenWorld == StateManager.TypeWorld.Mountain)*/ { this.mIslandList.Add(new Vector3(0, 0, 0), new RandomIsland(new Vector3(0, 0, 0), new Vector2(6, 6), new Vector2(32.5f, 256), this)); }
             this.mIslandList[new Vector3(0, 0, 0)].display(stateMgr.SceneManager);
 
