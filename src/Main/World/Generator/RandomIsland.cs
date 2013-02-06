@@ -29,8 +29,6 @@ namespace Game.World.Generator
 	    private ScalePoint SCALE      = new ScalePoint();
 	    private Clamp      FINAL      = new Clamp();
         private Vector2    mMinMax;
-	    // smoothing stuff
-	    //private  int SMOOTH_SIZE = 4;
 
         public RandomIsland(SceneNode node, Vector2 size, Vector2 minMax, MainWorld currentWorld) : base(node, size, currentWorld) {
 
@@ -106,21 +104,28 @@ namespace Game.World.Generator
 				    smoothHeight = (maxSum - minElevation) / 2d;
 				    for (int yy = 0; yy < 250; yy++) {
                         
-                        chunkTempPosition.y = yy / MainWorld.CHUNK_SIDE;
-
-					    
                         //double noiseValue = noise[xx, yy, zz] * noise[xx, yy, zz] + noise[xx, yy, zz] - System.Math.Abs(1 / smoothHeight * (yy - smoothHeight - minElevation));
                         //double noiseValue = (noise[xx, yy, zz] / 4d) - ((System.Math.Abs(yy - 64 - 32)) - 2 * noise2[xx, 255 - yy, zz] )/ 128.0;
                         double noiseValue = (noise[xx, yy, zz]) * noise2[xx, 255 - yy, zz] + noise[xx, yy, zz] - System.Math.Abs(1 / smoothHeight * (yy - smoothHeight - minElevation + 20));
 
-                        if (noiseValue >= 0) { this.setBlockAt(xx, yy, zz, "Grass", true); }
+                        if (noiseValue >= 0) {
+
+                        	this.setBlockAt(xx, yy, zz, "Grass", true);
+                    	}
                         //else                 { block.setMaterial(Material.AIR); } // Not needed
 				    }
 			    }
             }
             this.updateTerrain();
         }
+        private bool isValid(int x, int y, int z) {
+        	Vector3 center    = new Vector3(this.mIslandSize.x / 2, 256 / 2, this.mIslandSize.z / 2);
+            Vector3 distance  = new Vector3(x, y, z) - center;
+            Vector3 zeroPoint = new Vector3(this.mIslandSize.x, 256 / 2, this.mIslandSize.z / 2);
+            
 
-
+            
+            return true;
+        }
     }
 }

@@ -54,7 +54,8 @@ namespace Game.World
             SceneNode node = this.mStateMgr.SceneManager.RootSceneNode.CreateChildSceneNode();
             Island island;
             if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Dome)            { island = new DomeIsland(node, new Vector2(3, 3), this); }
-            else if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { island = new RandomIsland(node, new Vector2(6, 6), new Vector2(90, 53), this); }
+            else if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { island = new RandomIsland(node, new Vector2(13, 13), new Vector2(71, 90), this); }
+            else if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { island = new RandomIsland(node, new Vector2(13, 13), new Vector2(90, 53), this); }
             else  /*(this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Mountain)*/ { island = new RandomIsland(node, new Vector2(6, 6), new Vector2(32.5f, 256), this); }
             this.mIslandList.Add(Vector3.ZERO, island);
             this.mIslandList[Vector3.ZERO].display(this.mStateMgr.SceneManager);
