@@ -23,12 +23,13 @@ namespace API.Geo.Cuboid
     public abstract class Island : AreaChunkAccess {
 
         protected Vector3                        mIslandSize;
-        protected Game.World.MainWorld           mWorld;
+        protected World                          mWorld;
         protected SceneNode                      mNode;
         protected TreeCollisionSceneParser       mTerrain;
         protected Dictionary<Vector3, Collision> mCollisions;
         protected bool                           mIsTerrainUpdated;
-        
+        protected Biome                          mBiome;
+
         protected Dictionary<Vector3, Chunk> mChunkList;
 
         public SceneNode Node        { get { return this.mNode; } }
@@ -41,9 +42,6 @@ namespace API.Geo.Cuboid
             this.mNode = node;
             this.mIslandSize  = new Vector3(size.x, 0, size.y);
             this.mWorld = currentWorld;
-
-            this.mTerrain = new TreeCollisionSceneParser(this.mWorld.NwtWorld);
-            this.mCollisions = new Dictionary<Vector3, Collision>();
         }
 
         //Init

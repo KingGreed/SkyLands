@@ -56,9 +56,9 @@ namespace Game.CharacSystem
             this.mNode.Scale(CHARAC_SIZE / ent.BoundingBox.Size);
 
             /* Collisions */
-            TreeCollisionSceneParser col = new TreeCollisionSceneParser(this.mCharacMgr.World.NwtWorld);
+            TreeCollisionSceneParser col = new TreeCollisionSceneParser(this.mCharacMgr.World.getNewtWorld());
             col.ParseScene(this.mNode, true, this.mCharInfo.Id);
-            this.mBody = new Body(characMgr.World.NwtWorld, col, 0, false);
+            this.mBody = new Body(this.mCharacMgr.World.getNewtWorld(), col, 0, false);
             col.Dispose();
             this.mBody.AttachNode(this.mNode);
             this.mBody.AutoSleep = true;

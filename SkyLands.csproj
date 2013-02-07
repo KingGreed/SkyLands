@@ -114,10 +114,7 @@
     <Compile Include="src\API\Ent\Character.cs" />
     <Compile Include="src\API\Ent\Entity.cs" />
     <Compile Include="src\API\Generator\biome\Biome.cs" />
-    <Compile Include="src\API\Generator\biome\BiomePopulator.cs" />
     <Compile Include="src\API\Generator\biome\Decorator.cs" />
-    <Compile Include="src\API\Generator\EmptyWorldGenerator.cs" />
-    <Compile Include="src\API\Generator\FlatWorldGenerator.cs" />
     <Compile Include="src\API\Generator\Populator.cs" />
     <Compile Include="src\API\Generator\WorldGeneratorUtils.cs" />
     <Compile Include="src\API\Generic\BlockFace.cs" />
@@ -154,6 +151,7 @@
     <Compile Include="src\Main\States\Menu\OptionsState.cs" />
     <Compile Include="src\Main\States\Menu\SecondMenuState.cs" />
     <Compile Include="src\Main\World\Blocks\AirBlock.cs" />
+    <Compile Include="src\Main\World\Blocks\DirtBlock.cs" />
     <Compile Include="src\Main\World\Blocks\GrassLeftBlock.cs" />
     <Compile Include="src\Main\World\Blocks\GrassFrontBlock.cs" />
     <Compile Include="src\Main\World\Blocks\GrassBackBlock.cs" />
@@ -167,6 +165,9 @@
     <Compile Include="src\Main\World\Blocks\WoodBlock.cs" />
     <Compile Include="src\Main\World\Display\GraphicBlock.cs" />
     <Compile Include="src\Main\World\Display\Materials.cs" />
+    <Compile Include="src\Main\World\Generator\Biomes\Mountains.cs" />
+    <Compile Include="src\Main\World\Generator\Biomes\Hills.cs" />
+    <Compile Include="src\Main\World\Generator\Biomes\Plains.cs" />
     <Compile Include="src\Main\World\Generator\RandomIsland.cs" />
     <Compile Include="src\Main\World\Generator\DomeIsland.cs" />
     <Compile Include="src\Main\World\Generator\VanillaChunk.cs" />

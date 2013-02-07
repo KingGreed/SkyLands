@@ -10,7 +10,6 @@ using Mogre;
 namespace API.Geo
 {
     public interface World {
-
 	    /**
 	     * Gets the name of the world
 	     * @return the name of the world
@@ -222,5 +221,7 @@ namespace API.Geo
 	     * </p>
 	     */
 	    void save();
+
+        MogreNewt.World getNewtWorld();
     }
 }

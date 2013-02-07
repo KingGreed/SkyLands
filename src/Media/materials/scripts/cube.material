@@ -97,7 +97,20 @@ material cube/sand
 			ambient 1.0 1.0 1.0
             diffuse 1.0 1.0 1.0
 
-			texture_unit { texture sand3.jpg 2d }
+			texture_unit { texture sand3.jpg }
 		}
 	}
+}
+material cube/dirt
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture dirt.jpg }
+        }
+    }
 }

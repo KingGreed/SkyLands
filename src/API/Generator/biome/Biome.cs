@@ -17,35 +17,32 @@ namespace API.Generator
      * Defines an abstract biome.
      */
     public abstract class Biome {
-	    private int id;
-	    private bool registered = false;
+	    protected byte id;
 
-        private float min, max;
+        protected double min, max;
 
-	    List<Decorator> decorators = new List<Decorator>();
+	    protected List<Decorator> mDecorators  = new List<Decorator>();
+        protected List<string>    mGroundCover = new List<string>();
 
-	    public Biome(params Decorator[] decorators) {
-		    this.decorators.AddRange(decorators.OfType<Decorator>().ToList());
+	    public Biome(byte id, params Decorator[] decorators) {
+		    this.mDecorators.AddRange(decorators.OfType<Decorator>().ToList());
+            this.id = id;
 	    }
 
 	    public void decorate(Chunk chunk, Random random) {
-		    foreach(Decorator b in this.decorators) {
+		    foreach(Decorator b in this.mDecorators) {
 			    b.populate(chunk, random);
 		    }
 	    }
 
-	    protected void setId(int id) {
-		    if (!registered) {
-			    this.id = id;
-			    registered = true;
-		    }
-	    }
-
-        protected void setMinMax(float min, float max) {
+        protected void setMinMax(double min, double max) {
 		    this.min = min;
 		    this.max = max;
 	    }
-        
-	    public abstract String getName();
+
+        public double getMin() { return this.min; }
+        public double getMax() { return this.max; }
+
+        public List<string> getGroundCover() { return this.mGroundCover; }
     }
 }

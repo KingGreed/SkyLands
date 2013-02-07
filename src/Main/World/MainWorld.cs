@@ -13,6 +13,7 @@ using Game.World.Generator;
 using Game.States;
 using Game.Sky;
 using Game.World.Blocks;
+using Game.World.Generator.Biomes;
 
 using Mogre;
 
@@ -36,7 +37,7 @@ namespace Game.World
         private SkyMgr          mSkyMgr;
         private MogreNewt.World mNewtonWorld;
 
-        public MogreNewt.World NwtWorld { get { return this.mNewtonWorld; } }
+        public MogreNewt.World NwtWorld;
 
         public MainWorld(StateManager stateMgr)
         {
@@ -54,9 +55,9 @@ namespace Game.World
             SceneNode node = this.mStateMgr.SceneManager.RootSceneNode.CreateChildSceneNode();
             Island island;
             if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Dome)            { island = new DomeIsland(node, new Vector2(3, 3), this); }
-            else if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { island = new RandomIsland(node, new Vector2(13, 13), new Vector2(71, 90), this); }
-            else if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { island = new RandomIsland(node, new Vector2(13, 13), new Vector2(90, 53), this); }
-            else  /*(this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Mountain)*/ { island = new RandomIsland(node, new Vector2(6, 6), new Vector2(32.5f, 256), this); }
+            else if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { island = new RandomIsland(node, new Vector2(13, 13), new Plains(),    this); }
+            else if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { island = new RandomIsland(node, new Vector2(13, 13), new Hills(),     this); }
+            else  /*(this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Mountain)*/ { island = new RandomIsland(node, new Vector2(6, 6),   new Mountains(), this); }
             this.mIslandList.Add(Vector3.ZERO, island);
             this.mIslandList[Vector3.ZERO].display(this.mStateMgr.SceneManager);
 
@@ -73,6 +74,8 @@ namespace Game.World
         public long    getSeed()       { return this.mSeed;       }
         public Vector3 getSpawnPoint() { return this.mSpawnPoint; }
         public int     getHeight()     { return MaxHeight;        }
+        
+        public MogreNewt.World getNewtWorld() { return this.mNewtonWorld; }
         
         public int     getSurfaceHeight(int x, int z, Vector3 islandLoc)                       { return this.mIslandList[islandLoc].getSurfaceHeight(x, z); }
         public Vector3 getDisplayCoords(Vector3 island, Vector3 relativeLocation)              { return (relativeLocation * CUBE_SIDE) + island; }

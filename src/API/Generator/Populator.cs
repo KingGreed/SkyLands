@@ -25,13 +25,7 @@ namespace API.Generator
 	     *
 	     * This method may make full use of the block modifying methods of the API.
 	     *
-	     * This method will be called once per chunk and it is guaranteed that a
-	     * 2x2x2 cube of chunks containing the chunk will be loaded.
-	     *
-	     * The chunk to populate is the chunk with the lowest x, y and z coordinates
-	     * of the cube.
-	     *
-	     * This allows the populator to create features that cross chunk boundaries.
+	     * This method will be called once per chunk
 	     *
 	     * @param chunk the chunk to populate
 	     * @param random The RNG for this chunk

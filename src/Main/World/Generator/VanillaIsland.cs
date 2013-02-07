@@ -23,7 +23,10 @@ namespace Game.World.Generator
     {
         static Block defaultBlock = new AirBlock();
 
-        public VanillaIsland(SceneNode node, Vector2 size, MainWorld currentWorld) : base(node, size, currentWorld) { }
+        public VanillaIsland(SceneNode node, Vector2 size, MainWorld currentWorld) : base(node, size, currentWorld) {
+            this.mTerrain = new TreeCollisionSceneParser(currentWorld.getNewtWorld());
+            this.mCollisions = new Dictionary<Vector3, Collision>();
+        }
        
         public override void initChunks(Vector2 size) {
             for(int x = 0; x < size.x; x++) {
@@ -193,7 +196,7 @@ namespace Game.World.Generator
             }
             else if (!this.mCollisions.ContainsKey(absLoc))
             {
-                this.mCollisions.Add(absLoc, new MogreNewt.CollisionPrimitives.Box(this.mWorld.NwtWorld, MainWorld.CUBE_SIDE * Vector3.UNIT_SCALE, 0));
+                this.mCollisions.Add(absLoc, new MogreNewt.CollisionPrimitives.Box(this.mWorld.getNewtWorld(), MainWorld.CUBE_SIDE * Vector3.UNIT_SCALE, 0));
                 this.mIsTerrainUpdated = false;
             }
         }
@@ -203,7 +206,7 @@ namespace Game.World.Generator
             if (this.mCollisions.Count > 0)
             {
                 this.mTerrain.ParseScene(this.mNode, true, 0);
-                Body body = new Body(this.mWorld.NwtWorld, this.mTerrain, false);
+                Body body = new Body(this.mWorld.getNewtWorld(), this.mTerrain, false);
                 body.AttachNode(this.mNode);
                 body.AutoSleep = true;
                 //body.SetPositionOrientation(this.getPosition(), Quaternion.IDENTITY);
