@@ -19,7 +19,8 @@ namespace API.Geo.Cuboid
 
         List<Vector3> getBlockList();
         string        getMaterial ();
-        bool          Contains    (Vector3 loc);
+        bool          contains    (Vector3 loc);
+        void          remove(Vector3 item);
 
         void display(Island currentIsland, World currentWorld);
     }

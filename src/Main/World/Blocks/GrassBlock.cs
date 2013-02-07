@@ -10,6 +10,7 @@ namespace Game.World.Blocks
         public GrassBlock() {
             this.mName = "Grass";
             this.mMaterial = "cube/wood";
+            this.mId = 1;
         }
 
         public override string[] getComposingFaces() {

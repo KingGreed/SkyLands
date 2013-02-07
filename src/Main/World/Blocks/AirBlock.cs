@@ -12,6 +12,7 @@ namespace Game.World.Blocks
         public AirBlock() {
             this.mName = "Air";
             this.mMaterial = null;
+            this.mId = 0;
         }
     }
 }

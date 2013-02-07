@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
+
 
 using API.Geo.Cuboid;
 using API.Generator;
@@ -26,6 +28,14 @@ namespace Game.World.Generator
         public VanillaIsland(SceneNode node, Vector2 size, MainWorld currentWorld) : base(node, size, currentWorld) {
             this.mTerrain = new TreeCollisionSceneParser(currentWorld.getNewtWorld());
             this.mCollisions = new Dictionary<Vector3, Collision>();
+
+            foreach (KeyValuePair<string, Block> pair in VanillaChunk.staticBlock) {
+                if(!(pair.Value is AirBlock)) {
+                    this.multiList.Add(pair.Key, new VanillaMultiBlock(pair.Key));
+                }
+            }
+
+
         }
        
         public override void initChunks(Vector2 size) {
@@ -45,37 +55,36 @@ namespace Game.World.Generator
             return -1;
         }
 
-        public override bool hasBlock(int x, int y, int z)           { throw new NotImplementedException(); }
-        public override API.Generic.Material getBlockMaterial(int x, int y, int z) { throw new NotImplementedException(); }
+        public override bool hasBlock(int x, int y, int z)                         { throw new NotImplementedException(); }
 
 
-        public override void display(SceneManager sceneMgr) {
+        public override void display() {
 
-            Dictionary<string, MultiBlock> multiList = new Dictionary<string, MultiBlock>();
             Block curr;
-
-            foreach (KeyValuePair<string, Block> pair in VanillaChunk.staticBlock) {
-                if(!(pair.Value is AirBlock)) {
-                    multiList.Add(pair.Key, new VanillaMultiBlock(pair.Key));
-                }
-            }
 
             for(int x = 0; x < this.mIslandSize.x * MainWorld.CHUNK_SIDE; x++) {
                 for(int y = 0; y < this.mIslandSize.y * MainWorld.CHUNK_SIDE; y++) {
                     for(int z = 0; z < this.mIslandSize.z * MainWorld.CHUNK_SIDE; z++) {
                         curr = this.getBlock(x, y, z, false);
                         if(!(curr is AirBlock) && this.setVisibleFaces(new Vector3(x, y, z), curr)) {
+
                             string[] key = curr.getComposingFaces();
-                            for(int i = 0; i < curr.getComposingFaces().Length; i++) {
-                                multiList[key[i]].addBlock(new Vector3(x, y, z));
-                            }
+
+                            for(int i = 0; i < curr.getComposingFaces().Length; i++) { this.multiList[key[i]].addBlock(new Vector3(x, y, z)); }
+
                         }
                     }
                 }
             }
-            foreach(KeyValuePair<string, MultiBlock> pair in multiList) {
+            foreach(KeyValuePair<string, MultiBlock> pair in this.multiList) {
                 pair.Value.display(this, this.mWorld);
             }
+        }
+        public override void RechargeMulti(MultiBlock multi) {
+            if(this.mWorld.getSceneMgr().HasSceneNode("MultiBlockNode-" + multi.getMaterial())) {
+                this.mWorld.getSceneMgr().DestroySceneNode("MultiBlockNode-" + multi.getMaterial());
+            }
+            multi.display(this, this.mWorld);
         }
 
 
@@ -186,6 +195,7 @@ namespace Game.World.Generator
                 this.AddCollisionBlock(loc * MainWorld.CUBE_SIDE, material);
             } 
         }
+        public override void setBlockAt(int x, int y, int z, byte material, bool force) { this.setBlockAt(x, y, z, VanillaChunk.byteToString[material], force); }
 
         private void AddCollisionBlock(Vector3 absLoc, string material)
         {
@@ -198,6 +208,51 @@ namespace Game.World.Generator
             {
                 this.mCollisions.Add(absLoc, new MogreNewt.CollisionPrimitives.Box(this.mWorld.getNewtWorld(), MainWorld.CUBE_SIDE * Vector3.UNIT_SCALE, 0));
                 this.mIsTerrainUpdated = false;
+            }
+        }
+        public override void save() {
+            var fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Roaming/SkyLands/",
+                this.mWorld.getName(), "Island-", this.mNode.Position.x.ToString(), "-",
+                this.mNode.Position.y.ToString(), "-", this.mNode.Position.z.ToString());
+
+            Stream writer;
+
+            try { writer = new FileStream(fileName, FileMode.Create, FileAccess.Write); }
+            catch { throw new Exception("Could not read file : " + fileName); }
+
+            writer.WriteByte((byte)this.mIslandSize.x);
+            writer.WriteByte((byte)this.mIslandSize.z);
+            writer.WriteByte((byte)this.mIslandSize.y);
+
+            for(int x = 0; x < this.mIslandSize.x; x++) {
+                for(int z = 0; z < this.mIslandSize.z; z++) {
+                    for(int y = 0; y < this.mIslandSize.y; y++) {
+                        writer.WriteByte(this.getBlock(new Vector3(x, y, z), false).getId());
+                    }
+                }
+            }
+        }
+
+        public void load() {
+            var fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Roaming/SkyLands/",
+                this.mWorld.getName(), "Island-", this.mNode.Position.x.ToString(), "-",
+                this.mNode.Position.y.ToString(), "-", this.mNode.Position.z.ToString());
+
+            FileStream reader;
+            
+            try { reader = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.None); }
+            catch { throw new Exception("Could not read file : " + fileName); }
+
+            this.mIslandSize.x = reader.ReadByte();
+            this.mIslandSize.z = reader.ReadByte();
+            this.mIslandSize.y = reader.ReadByte();
+
+            for(int x = 0; x < this.mIslandSize.x; x++) {
+                for(int z = 0; z < this.mIslandSize.z; z++) {
+                    for(int y = 0; y < this.mIslandSize.y; y++) {
+                        this.setBlockAt(x, y, z, (byte)reader.ReadByte(), true);
+                    }
+                }
             }
         }
 

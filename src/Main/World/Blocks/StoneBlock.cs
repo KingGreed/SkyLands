@@ -12,6 +12,7 @@ namespace Game.World.Blocks
         public StoneBlock() {
             this.mName = "Stone";
             this.mMaterial = "cube/stone";
+            this.mId = 3;
         }
     }
 }

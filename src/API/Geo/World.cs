@@ -65,6 +65,8 @@ namespace API.Geo
 	    void spawnEntity(Entity e);
 
 
+        SceneManager getSceneMgr();
+
 	    /**
 	     * Gets the world's spawn point
 	     * @return the spawn point

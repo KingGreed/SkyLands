@@ -21,7 +21,7 @@ namespace Game.World.Blocks
     {
         protected string mName;
         protected string mMaterial;
-        private bool[]  mVisible = new bool[6];
+        protected byte   mId = 255;//Warning do not set 255 as a value
 
         protected static int CUBE_SIDE = MainWorld.CUBE_SIDE;
 
@@ -34,10 +34,8 @@ namespace Game.World.Blocks
 
         public string getName    () { return this.mName;     }
         public string getMaterial() { return this.mMaterial; }
+        public byte   getId      () { return this.mId;       }
 
-
-        public bool hasVisibleFaceAt(BlockFace face)             { return this.mVisible[(int)face]; }
-        public void setVisibleFaceAt(BlockFace face, bool val)   { this.mVisible[(int)face] = val;  }
 
         public virtual string[] getComposingFaces() { return new string[1] { this.mName }; }
         public virtual BlockFace[] getFaces() { return this.CubeFaces; }

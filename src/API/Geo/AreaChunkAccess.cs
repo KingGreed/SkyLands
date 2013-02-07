@@ -55,15 +55,6 @@ namespace API.Geo
 	    bool hasChunk(int x, int y, int z);
 
 	    /**
-	     * Queues a chunk for saving at the next available opportunity.
-	     *
-	     * @param x coordinate of the chunk
-	     * @param y coordinate of the chunk
-	     * @param z coordinate of the chunk
-	     */
-	    void saveChunk(int x, int y, int z);
-
-	    /**
 	     * Unloads a chunk, and queues it for saving, if requested.
 	     *
 	     * @param x coordinate of the chunk

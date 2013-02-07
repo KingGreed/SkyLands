@@ -44,6 +44,10 @@ namespace Game
                     this.mCharacMgr.MainPlayerCam.InitCamera();
             }
 
+            if(this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F3)) {
+                this.mCharacMgr.World.getIslandAt(new Vector3(0, 0, 0)).multiList["Stone"].remove(new Vector3(0, 0, 0));
+                this.mCharacMgr.World.getIslandAt(new Vector3(0, 0, 0)).RechargeMulti(this.mCharacMgr.World.getIslandAt(new Vector3(0, 0, 0)).multiList["Stone"]);
+            }
             this.mCharacMgr.Update(frameTime);
 
             if (!this.mCharacMgr.GetCharacter().IsMoving)

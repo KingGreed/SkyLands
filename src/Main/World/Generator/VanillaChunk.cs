@@ -16,9 +16,12 @@ namespace Game.World.Generator
     class VanillaChunk : Chunk
     {
         public static Dictionary<string, Block> staticBlock;
+        public static Dictionary<byte, string>  byteToString;
 
         static VanillaChunk() {
-            staticBlock = new Dictionary<string, Block>();
+            staticBlock  = new Dictionary<string, Block>();
+            byteToString = new Dictionary<byte,string>  ();
+
             Type[] blockList = GetTypesInNamespace(Assembly.GetExecutingAssembly(), "Game.World.Blocks");
             for (int i = 0; i < blockList.Length; i++) {
 
@@ -29,6 +32,8 @@ namespace Game.World.Generator
 
                     if(!staticBlock.ContainsKey(test.getName())) {
                         staticBlock.Add(test.getName(), test);
+                        if(test.getId() != 255 && !byteToString.ContainsKey(test.getId())) { byteToString.Add(test.getId() , test.getName()); }
+                        else if(test.getId() != 255) { throw new Exception(test.getName() + " has the same Id as " +  byteToString[test.getId()]); }
                     } else {
                         throw new Exception("Block : " + blockList[i].Name + " has a name (" + test.getName() + ") which already exists"); 
                     }
@@ -53,6 +58,7 @@ namespace Game.World.Generator
         }
 
         public override void   setBlock(int x, int y, int z, string material) { this.mBlockList[x, y, z] = staticBlock[material]; }
+        public override void   setBlock(int x, int y, int z, byte material)   { this.mBlockList[x, y, z] = staticBlock[byteToString[material]]; }
         public override string getBlockMaterial(int x, int y, int z)          { return this.mBlockList[x, y, z].getMaterial();    }
 
     }

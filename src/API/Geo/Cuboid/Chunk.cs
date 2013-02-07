@@ -25,8 +25,6 @@ namespace API.Geo.Cuboid
         protected Island      mIsland;
         protected bool[, , ,] mVisible;
 
-        private Biome mBiomeType;
-
 	    public Chunk(Vector3 chunkSize, Vector3 location, Island island) {
             this.mChunkSize = chunkSize;
             this.mChunkLocation = location;
@@ -43,13 +41,7 @@ namespace API.Geo.Cuboid
 	     */
 	    public virtual Island getIsland() { return this.mIsland; }
 
-        /**
-	     * Gets the biome that this chunk is located in
-	     *
-	     * @return region
-	     */
-	    public virtual Biome getBiome() { throw new NotImplementedException(); }
-        
+    
 	    /**
 	     * Gets the entities currently in the chunk
 	     *
@@ -72,8 +64,10 @@ namespace API.Geo.Cuboid
         //set
         public void setBlock(Vector3 loc, string material) { this.setBlock((int)loc.x, (int)loc.y, (int)loc.z, material); }
         public abstract void setBlock(int x, int y, int z, string material);
-        public virtual void setBiome(Biome type) { this.mBiomeType = type; }
         
+        public void setBlock(Vector3 loc, byte material) { this.setBlock((int)loc.x, (int)loc.y, (int)loc.z, material); }
+        public abstract void setBlock(int x, int y, int z, byte material);
+                
         
         /**
 	     * Tests if the chunk is currently loaded

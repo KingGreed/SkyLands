@@ -12,6 +12,7 @@ namespace Game.World.Blocks
         public LeavesBlock() {
             this.mName = "Leaves";
             this.mMaterial = "cube/leaves";
+            this.mId = 5;
         }
     }
 }

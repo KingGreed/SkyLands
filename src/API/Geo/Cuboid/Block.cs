@@ -17,12 +17,12 @@ namespace API.Geo.Cuboid
     public interface Block {
         string getName    ();
         string getMaterial();
-
-        bool hasVisibleFaceAt(BlockFace face);
-        void setVisibleFaceAt(BlockFace face, bool val);
+        byte   getId      ();
 
         BlockFace[] getFaces();
-        string[] getComposingFaces();
+        string[]    getComposingFaces();
+
+
 
 
     }

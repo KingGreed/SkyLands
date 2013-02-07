@@ -29,6 +29,7 @@ namespace API.Geo.Cuboid
         protected Dictionary<Vector3, Collision> mCollisions;
         protected bool                           mIsTerrainUpdated;
         protected Biome                          mBiome;
+        public Dictionary<string, MultiBlock>    multiList = new Dictionary<string, MultiBlock>();
 
         protected Dictionary<Vector3, Chunk> mChunkList;
 
@@ -65,16 +66,14 @@ namespace API.Geo.Cuboid
         public Vector3 getBlockCoord(Vector3 loc) { return this.getBlockCoord((int) loc.x, (int) loc.y, (int) loc.z); }
         public abstract Vector3 getBlockCoord(int x, int y, int z);
 
-        public abstract Material getBlockMaterial(int x, int y, int z);
-
         public virtual List<Character> getPlayers() { throw new NotImplementedException(); }
 
         public abstract bool hasVisiblefaceAt(int x, int y, int z, BlockFace face);
         public abstract void setVisibleFaceAt(int x, int y, int z, BlockFace face, bool val);
 
         //set
-        public virtual  void setBlockMaterial(int x, int y, int z, Material material) { throw new NotImplementedException(); }
         public abstract void setBlockAt(int x, int y, int z, string material, bool force);
+        public abstract void setBlockAt(int x, int y, int z, byte material, bool force);
         public abstract string getMaterialFromName(string name);
 
 
@@ -95,7 +94,9 @@ namespace API.Geo.Cuboid
         /**
 	     * Displays the Island's terrain
 	     */
-        public abstract void display(SceneManager sceneMgr);
+        public abstract void display();
+
+        public abstract void RechargeMulti(MultiBlock multi);
 
 	    /**
 	     * Queues all chunks for saving at the next available opportunity.
@@ -108,9 +109,6 @@ namespace API.Geo.Cuboid
 	     * @param save whether to save the region and associated data.
 	     */
 	    public virtual void unload(bool save) { throw new NotImplementedException(); }
-
-        public void saveChunk(int x, int y, int z) { throw new NotImplementedException(); }
-        public void saveChunk(Vector3 position)    { this.saveChunk((int)position.x, (int)position.y, (int)position.z); }
 
         public void unloadChunk(int x, int y, int z, bool save) { throw new NotImplementedException(); }
         public void unloadChunk(Vector3 position, bool save)    { this.unloadChunk((int)position.x, (int)position.y, (int)position.z, save); }

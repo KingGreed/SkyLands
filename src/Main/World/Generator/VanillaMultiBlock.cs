@@ -38,7 +38,9 @@ namespace Game.World.Generator
         }
 
         public void addBlock(Vector3 loc) { this.mList.Add(loc); }
-        public bool Contains(Vector3 loc) { return this.mList.Contains(loc); }
+        public bool contains(Vector3 loc) { return this.mList.Contains(loc); }
+
+        public void remove(Vector3 item) { this.mList.Remove(this.mList[0]); }
 
         public List<Vector3> getBlockList() { return this.mList; }
 
@@ -48,7 +50,6 @@ namespace Game.World.Generator
             if(mList.Count == 0) { return; }
             
 
-            string name = this.mMaterial + "-" + mList[0].x + "-" + mList[0].y + "-" + mList[0].z;
             string material = currentIsland.getMaterialFromName(this.mMaterial);
             int faceNumber = 0;
             Block curr = VanillaChunk.staticBlock[this.mMaterial];
@@ -66,7 +67,7 @@ namespace Game.World.Generator
                 };
             Vector3 displayCoord;
 
-            ManualObject block = new ManualObject("MultiBlock-" + name);
+            ManualObject block = new ManualObject("MultiBlock-" + this.mMaterial);
             block.Begin(material, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
                 foreach(Vector3 loc in this.mList) {
                     displayCoord = currentWorld.getDisplayCoords(currentIsland.getPosition(), loc);
@@ -83,9 +84,8 @@ namespace Game.World.Generator
                 }
 
             block.End();
-            block.ConvertToMesh("MultiBlock-" + name);
 
-            currentIsland.Node.CreateChildSceneNode("MultiBlockNode-" + name).AttachObject(block);
+            currentIsland.Node.CreateChildSceneNode("MultiBlockNode-" + this.mMaterial).AttachObject(block);
         }
     }
 }
