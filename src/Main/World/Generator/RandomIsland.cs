@@ -136,7 +136,7 @@ namespace Game.World.Generator
                 }
             }
             return -1;
-
+            
         }
         private bool isValid(int x, int y, int z) {
         	Vector3 center    = new Vector3(this.mIslandSize.x / 2, 256 / 2, this.mIslandSize.z / 2);
