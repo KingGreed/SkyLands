@@ -231,6 +231,8 @@ namespace Game.World.Generator
                     }
                 }
             }
+
+            writer.Close();
         }
 
         public void load() {
@@ -254,6 +256,8 @@ namespace Game.World.Generator
                     }
                 }
             }
+
+            reader.Close();
         }
 
         public void updateTerrain()
