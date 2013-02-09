@@ -88,6 +88,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Release\CaelumSharp.dll</HintPath>
     </Reference>
+    <Reference Include="LibNoise, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\LibNoise.dll</HintPath>
+    </Reference>
     <Reference Include="Miyagi, Version=1.2.1.40980, Culture=neutral, PublicKeyToken=418dc626d1eb4589, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Release\Miyagi.dll</HintPath>
@@ -185,45 +189,6 @@
     <Compile Include="src\Main\States\StateManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\LibNoise\exception\NoiseException.cs" />
-    <Compile Include="src\LibNoise\exception\NoModuleException.cs" />
-    <Compile Include="src\LibNoise\MathHelper.cs" />
-    <Compile Include="src\LibNoise\model\Cylinder.cs" />
-    <Compile Include="src\LibNoise\model\Line.cs" />
-    <Compile Include="src\LibNoise\model\Plane.cs" />
-    <Compile Include="src\LibNoise\model\Sphere.cs" />
-    <Compile Include="src\LibNoise\module\Cache.cs" />
-    <Compile Include="src\LibNoise\module\combiner\Add.cs" />
-    <Compile Include="src\LibNoise\module\combiner\Blend.cs" />
-    <Compile Include="src\LibNoise\module\combiner\Displace.cs" />
-    <Compile Include="src\LibNoise\module\combiner\Max.cs" />
-    <Compile Include="src\LibNoise\module\combiner\Min.cs" />
-    <Compile Include="src\LibNoise\module\combiner\Multiply.cs" />
-    <Compile Include="src\LibNoise\module\combiner\Power.cs" />
-    <Compile Include="src\LibNoise\module\combiner\Select.cs" />
-    <Compile Include="src\LibNoise\module\modifier\Abs.cs" />
-    <Compile Include="src\LibNoise\module\modifier\Clamp.cs" />
-    <Compile Include="src\LibNoise\module\modifier\Curve.cs" />
-    <Compile Include="src\LibNoise\module\modifier\Exponent.cs" />
-    <Compile Include="src\LibNoise\module\modifier\Invert.cs" />
-    <Compile Include="src\LibNoise\module\modifier\RotatePoint.cs" />
-    <Compile Include="src\LibNoise\module\modifier\ScaleBias.cs" />
-    <Compile Include="src\LibNoise\module\modifier\ScalePoint.cs" />
-    <Compile Include="src\LibNoise\module\modifier\Terrace.cs" />
-    <Compile Include="src\LibNoise\module\modifier\TranslatePoint.cs" />
-    <Compile Include="src\LibNoise\module\modifier\Turbulence.cs" />
-    <Compile Include="src\LibNoise\module\Module.cs" />
-    <Compile Include="src\LibNoise\module\source\Billow.cs" />
-    <Compile Include="src\LibNoise\module\source\Checkerboard.cs" />
-    <Compile Include="src\LibNoise\module\source\Const.cs" />
-    <Compile Include="src\LibNoise\module\source\Cylinders.cs" />
-    <Compile Include="src\LibNoise\module\source\Perlin.cs" />
-    <Compile Include="src\LibNoise\module\source\RidgedMulti.cs" />
-    <Compile Include="src\LibNoise\module\source\Spheres.cs" />
-    <Compile Include="src\LibNoise\module\source\Voronoi.cs" />
-    <Compile Include="src\LibNoise\Noise.cs" />
-    <Compile Include="src\LibNoise\NoiseQuality.cs" />
-    <Compile Include="src\LibNoise\Utils.cs" />
     <Content Include="src\Media\fonts\TrueTypeFonts.xml" />
     <Content Include="src\Media\materials\textures\aquawood1.jpg" />
     <Content Include="src\Media\materials\textures\aquawood2.jpg" />
