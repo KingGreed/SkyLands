@@ -203,20 +203,93 @@ namespace Game.World.Generator
                 LogManager.Singleton.DefaultLog.LogMessage("Not removing air block at : " + item.ToString());
                 return;
             }
+            this.setBlockAt((int) item.x, (int) item.y, (int) item.z, "Air", false);
 
             string[] key = curr.getComposingFaces();
 
-            for(int i = 0; i < curr.getComposingFaces().Length; i++) { 
-                this.multiList[key[i]].removeFromScene(item, this);
+            if(key.Length == 1) {
+                this.multiList[key[0]].removeFromScene(item, this);
+            } else {
+                for(int i = 0; i < 6; i++) {
+                    if(this.hasVisiblefaceAt((int) item.x, (int) item.y, (int) item.z, (BlockFace) i)) {
+                        this.multiList[key[i]].removeFromScene(item, this);
+                    }
+                }
             }
-
-
-
-            //if(!(curr is AirBlock) && this.setVisibleFaces(new Vector3(x, y, z), curr)) {}
+            item.y -= 1;
+            refreshBlock(item);
 
         }
 
+        public void refreshBlock(Vector3 relativePos) {
+            bool[] currentvisibleFaces = new bool[6];
+            int i = 0;
+            Block curr = this.getBlock(relativePos, false);
 
+            this.setVisibleFaces(relativePos, curr);
+            foreach (BlockFace face in Enum.GetValues(typeof(BlockFace))) {
+                currentvisibleFaces[i] = this.hasVisiblefaceAt((int) relativePos.x, (int) relativePos.y, (int) relativePos.z, face);
+                i++;
+            }
+            this.setVisibleFaces(relativePos, curr);
+
+            bool visible;
+            i = 0;
+            foreach (BlockFace face in Enum.GetValues(typeof(BlockFace))) {
+                visible = this.hasVisiblefaceAt((int) relativePos.x, (int) relativePos.y, (int) relativePos.z, face);
+
+                if(visible && visible != currentvisibleFaces[i]){
+                    if(curr.getFaces().Length == 1) {
+                        this.addFaceToScene(face, relativePos, curr.getMaterial());
+                    } else {
+                        this.addFaceToScene(face, relativePos, VanillaChunk.staticBlock[curr.getComposingFaces()[i]].getMaterial());
+                    }
+                }
+
+                i++;
+            }
+
+        }
+
+        public void addBlockToScene(Vector3 relativePos, string material) {
+            this.setBlockAt((int)relativePos.x, (int)relativePos.y, (int)relativePos.z, material, true);
+            
+            Block curr = this.getBlock(relativePos, false);
+
+            if(this.setVisibleFaces(relativePos, curr)) {
+                foreach(BlockFace face in curr.getFaces()) {
+                    if(this.hasVisiblefaceAt((int) relativePos.x, (int) relativePos.y, (int) relativePos.z, face)) {
+                        this.addBlockToScene(relativePos, material);
+                    }
+                }
+            }
+
+        }
+
+        public void addFaceToScene(BlockFace face, Vector3 relativePos, string material) {
+            
+            relativePos += this.getPosition();
+            relativePos *= MainWorld.CUBE_SIDE;
+
+            string cubeNodeName = "Node-" + relativePos.x + "-" + relativePos.y + "-" + relativePos.z;
+            SceneNode blockNode;
+            string faceName, faceEntName;
+            Entity ent;
+
+            if(this.mWorld.getSceneMgr().HasSceneNode(cubeNodeName)) {
+                blockNode = this.mWorld.getSceneMgr().GetSceneNode(cubeNodeName);
+            } else {
+                blockNode = this.mWorld.getSceneMgr().RootSceneNode.CreateChildSceneNode(cubeNodeName, relativePos);
+            }
+            
+            faceName = GraphicBlock.getFaceName(face);
+            faceEntName = "face-" + relativePos.x + "-" + relativePos.y + "-" + relativePos.z + "-" + faceName;
+
+            ent = this.mWorld.getSceneMgr().CreateEntity(faceEntName, faceName);
+            ent.SetMaterialName(material);
+            blockNode.AttachObject(ent);
+
+        }
 
 
         private void AddCollisionBlock(Vector3 absLoc, string material)
@@ -247,9 +320,9 @@ namespace Game.World.Generator
             writer.WriteByte((byte)this.mIslandSize.z);
             writer.WriteByte((byte)this.mIslandSize.y);
 
-            for(int x = 0; x < this.mIslandSize.x; x++) {
-                for(int z = 0; z < this.mIslandSize.z; z++) {
-                    for(int y = 0; y < this.mIslandSize.y; y++) {
+            for(int x = 0; x < this.mIslandSize.x * MainWorld.CHUNK_SIDE; x++) {
+                for(int z = 0; z < this.mIslandSize.z * MainWorld.CHUNK_SIDE; z++) {
+                    for(int y = 0; y < this.mIslandSize.y * MainWorld.CHUNK_SIDE; y++) {
                         writer.WriteByte(this.getBlock(new Vector3(x, y, z), false).getId());
                     }
                 }
@@ -272,9 +345,9 @@ namespace Game.World.Generator
             this.mIslandSize.z = reader.ReadByte();
             this.mIslandSize.y = reader.ReadByte();
 
-            for(int x = 0; x < this.mIslandSize.x; x++) {
-                for(int z = 0; z < this.mIslandSize.z; z++) {
-                    for(int y = 0; y < this.mIslandSize.y; y++) {
+            for(int x = 0; x < this.mIslandSize.x * MainWorld.CHUNK_SIDE; x++) {
+                for(int z = 0; z < this.mIslandSize.z * MainWorld.CHUNK_SIDE; z++) {
+                    for(int y = 0; y < this.mIslandSize.y * MainWorld.CHUNK_SIDE; y++) {
                         this.setBlockAt(x, y, z, (byte)reader.ReadByte(), true);
                     }
                 }

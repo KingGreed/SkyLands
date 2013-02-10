@@ -7,9 +7,10 @@ Projet de Sup Epita 2017
 
 * **F1** ................... Switch from *debug mode* to *player mode* or vice-versa
 * **F2** ................... Hide or show the debug overlay
+* **F3** ................... Delete the Block at spawn point (test purposes)
 * **F5** ................... Reload all textures
-* **F11** ................. Change texture filtering mode
-* **F12** ................. Change polygon mode
+* **F11** .................. Change texture filtering mode
+* **F12** .................. Change polygon mode
 * **Impr ecran** ..... Take a screenshot (saved next to the .exe)
 * **MouseWheel**... *Up* to increase time speed and *down* to decrease it
 

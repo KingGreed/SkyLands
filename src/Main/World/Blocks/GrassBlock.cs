@@ -13,8 +13,8 @@ namespace Game.World.Blocks
             this.mId = 1;
         }
 
-        public override string[] getComposingFaces() {
-            return new string[6] { "Grass left", "Grass right", "Grass back", "Grass front", "Grass bottom", "Grass top" };
+        public override string[] getComposingFaces() { //Must be placed in the blockFace order
+            return new string[6] { "Grass front", "Grass back", "Grass top", "Grass bottom" , "Grass left", "Grass right"};
         }
     }
 }

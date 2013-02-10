@@ -5,19 +5,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using API.Generic;
 using Game.World;
 
 namespace Game.Display
 {
     public static class GraphicBlock
     {
-        public static string getFaceName(CubeFace name) {
-            if(name == CubeFace.frontFace)      { return "frontFace"; }
-            else if(name == CubeFace.backFace)  { return "backFace" ; }
-            else if(name == CubeFace.rightFace) { return "rightFace"; } 
-            else if(name == CubeFace.leftFace)  { return "leftFace" ; }
-            else if(name == CubeFace.underFace) { return "underFace"; }
-            else /*name == CubeFace.upperFace*/ { return "upperFace"; }
+        public static string getFaceName(BlockFace name) {
+            if(name == BlockFace.frontFace)      { return "frontFace"; }
+            else if(name == BlockFace.backFace)  { return "backFace" ; }
+            else if(name == BlockFace.rightFace) { return "rightFace"; } 
+            else if(name == BlockFace.leftFace)  { return "leftFace" ; }
+            else if(name == BlockFace.underFace) { return "underFace"; }
+            else /*name == CubeFace.upperFace*/  { return "upperFace"; }
         }
 
         public static void generateFace()

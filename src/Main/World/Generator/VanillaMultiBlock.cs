@@ -69,16 +69,28 @@ namespace Game.World.Generator
             byte*  pVertex = (byte*)vBuff.Lock(HardwareBuffer.LockOptions.HBL_NORMAL) + vBuff.VertexSize * this.mIndexInVertexBuffer[elemPosition];
             float* pReal;
             
+            Block curr = currIsland.getBlock(item, false);
 
-            foreach(BlockFace face in currIsland.getBlock(item, false).getFaces()) {
-                if(currIsland.hasVisiblefaceAt((int)item.x, (int)item.y, (int)item.z, face)) {
+            if(curr.getComposingFaces().Length > 1) {
+                for(int i = 0; i < 4; i++) {
                     posEl.BaseVertexPointerToElement(pVertex, &pReal);
                     
                     pReal[0] = 0; pReal[1] = 0; pReal[2] = 0;
                     pVertex += vBuff.VertexSize;
                 }
+            } else { 
+                foreach(BlockFace face in Enum.GetValues(typeof(BlockFace))) {
+                    if(currIsland.hasVisiblefaceAt((int)item.x, (int)item.y, (int)item.z, face)) {
+                        for(int i = 0; i < 4; i++) { 
+                            posEl.BaseVertexPointerToElement(pVertex, &pReal);
+                    
+                            pReal[0] = 0; pReal[1] = 0; pReal[2] = 0;
+                            pVertex += vBuff.VertexSize;
+                        }
+                    }
+                }
             }
-
+            
             vBuff.Unlock();
         }
 

@@ -53,8 +53,6 @@ namespace Game
                 this.mCharacMgr.World.getIslandAt(new Vector3(0, 0, 0)).removeFromScene(spawn);
             }
 
-            if(this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F4)) { LogManager.Singleton.DefaultLog.LogMessage("You are at : " + this.mCharacMgr.MainPlayerCam.Camera.Position); }
-
             this.mCharacMgr.Update(frameTime);
 
             if (!this.mCharacMgr.GetCharacter().IsMoving)

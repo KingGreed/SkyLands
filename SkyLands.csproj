@@ -168,7 +168,6 @@
     <Compile Include="src\Main\World\Blocks\VanillaBlock.cs" />
     <Compile Include="src\Main\World\Blocks\WoodBlock.cs" />
     <Compile Include="src\Main\World\Display\GraphicBlock.cs" />
-    <Compile Include="src\Main\World\Display\Materials.cs" />
     <Compile Include="src\Main\World\Generator\Biomes\Mountains.cs" />
     <Compile Include="src\Main\World\Generator\Biomes\Hills.cs" />
     <Compile Include="src\Main\World\Generator\Biomes\Plains.cs" />
