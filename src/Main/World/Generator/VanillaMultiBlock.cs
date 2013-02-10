@@ -10,6 +10,7 @@ using API.Generic;
 using Mogre;
 
 using Game.Display;
+using Game.World.Blocks;
 using Material = API.Generic.Material;
 
 namespace Game.World.Generator
@@ -55,6 +56,10 @@ namespace Game.World.Generator
         }
 
         public unsafe void removeFromScene(Vector3 item, Island currIsland) {
+
+            Block curr = currIsland.getBlock(item, false);
+            if(curr is AirBlock) { return; }
+
             RenderOperation moData = new RenderOperation();
             this.block.GetSection(0).GetRenderOperation(moData);
 
@@ -68,8 +73,6 @@ namespace Game.World.Generator
  
             byte*  pVertex = (byte*)vBuff.Lock(HardwareBuffer.LockOptions.HBL_NORMAL) + vBuff.VertexSize * this.mIndexInVertexBuffer[elemPosition];
             float* pReal;
-            
-            Block curr = currIsland.getBlock(item, false);
 
             if(curr.getComposingFaces().Length > 1) {
                 for(int i = 0; i < 4; i++) {

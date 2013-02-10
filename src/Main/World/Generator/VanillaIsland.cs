@@ -199,11 +199,7 @@ namespace Game.World.Generator
         public override void removeFromScene(Vector3 item) {
             Block curr = this.getBlock(item, false);
 
-            if (curr is AirBlock) {
-                LogManager.Singleton.DefaultLog.LogMessage("Not removing air block at : " + item.ToString());
-                return;
-            }
-            this.setBlockAt((int) item.x, (int) item.y, (int) item.z, "Air", false);
+            if (curr is AirBlock) { return; }
 
             string[] key = curr.getComposingFaces();
 
@@ -216,36 +212,41 @@ namespace Game.World.Generator
                     }
                 }
             }
-            item.y -= 1;
-            refreshBlock(item);
+            this.setBlockAt((int) item.x, (int) item.y, (int) item.z, "Air", false);
+
+            refreshBlock(new Vector3(item.x, item.y-1, item.z));
+            refreshBlock(new Vector3(item.x, item.y+1, item.z));
+            refreshBlock(new Vector3(item.x+1, item.y, item.z));
+            refreshBlock(new Vector3(item.x-1, item.y, item.z));
+            refreshBlock(new Vector3(item.x, item.y, item.z+1));
+            refreshBlock(new Vector3(item.x, item.y, item.z-1));
 
         }
 
         public void refreshBlock(Vector3 relativePos) {
-            bool[] currentvisibleFaces = new bool[6];
-            int i = 0;
-            Block curr = this.getBlock(relativePos, false);
 
-            this.setVisibleFaces(relativePos, curr);
+            Block curr = this.getBlock(relativePos, false);
+            bool[] currentvisibleFaces = new bool[6];
+            bool isVisible;
+            int i = 0;
+
             foreach (BlockFace face in Enum.GetValues(typeof(BlockFace))) {
                 currentvisibleFaces[i] = this.hasVisiblefaceAt((int) relativePos.x, (int) relativePos.y, (int) relativePos.z, face);
                 i++;
             }
+            
+            i = 0;
             this.setVisibleFaces(relativePos, curr);
 
-            bool visible;
-            i = 0;
-            foreach (BlockFace face in Enum.GetValues(typeof(BlockFace))) {
-                visible = this.hasVisiblefaceAt((int) relativePos.x, (int) relativePos.y, (int) relativePos.z, face);
-
-                if(visible && visible != currentvisibleFaces[i]){
-                    if(curr.getFaces().Length == 1) {
+            foreach(BlockFace face in Enum.GetValues(typeof(BlockFace))) {
+                isVisible = this.hasVisiblefaceAt((int) relativePos.x, (int) relativePos.y, (int) relativePos.z, face);
+                if(isVisible && isVisible != currentvisibleFaces[i]) {
+                    if(curr.getComposingFaces().Length == 1) {
                         this.addFaceToScene(face, relativePos, curr.getMaterial());
                     } else {
-                        this.addFaceToScene(face, relativePos, VanillaChunk.staticBlock[curr.getComposingFaces()[i]].getMaterial());
+                        this.addFaceToScene(face, relativePos, VanillaChunk.staticBlock[curr.getComposingFaces()[(int)face]].getMaterial());
                     }
                 }
-
                 i++;
             }
 
