@@ -17,7 +17,10 @@ namespace Game.World.Generator
     public class VanillaMultiBlock : MultiBlock
     {
         private List<Vector3> mList;
+        private List<int>     mIndexInVertexBuffer;
+
         private string        mMaterial;
+        ManualObject block;
 
         public static int CUBE_SIDE = MainWorld.CUBE_SIDE;
 
@@ -33,16 +36,51 @@ namespace Game.World.Generator
             };
 
         public VanillaMultiBlock(string mat) {
-            this.mList     = new List<Vector3>();
+            this.mList                = new List<Vector3>();
+            this.mIndexInVertexBuffer = new List<int>    ();
             this.mMaterial = mat;
         }
 
         public void addBlock(Vector3 loc) { this.mList.Add(loc); }
-        public bool contains(Vector3 loc) { return this.mList.Contains(loc); }
 
-        public void remove(Vector3 item) { this.mList.Remove(this.mList[0]); }
+        private int find(Vector3 item) {
+            int i = 0;
+            while(i < this.mList.Count) {
+                if(this.mList[i] == item) { 
+                    return i;
+                }
+                i++;
+            }
+            throw new ArgumentException("Could not find item");
+        }
 
-        public List<Vector3> getBlockList() { return this.mList; }
+        public unsafe void removeFromScene(Vector3 item, Island currIsland) {
+            RenderOperation moData = new RenderOperation();
+            this.block.GetSection(0).GetRenderOperation(moData);
+
+            int elemPosition = this.find(item);
+            
+
+            VertexElement posEl = moData.vertexData.vertexDeclaration.FindElementBySemantic(VertexElementSemantic.VES_POSITION);
+            HardwareVertexBufferSharedPtr vBuff = moData.vertexData.vertexBufferBinding.GetBuffer(posEl.Source);
+            
+            uint size = VertexElement.GetTypeSize(VertexElementType.VET_FLOAT3);
+ 
+            byte*  pVertex = (byte*)vBuff.Lock(HardwareBuffer.LockOptions.HBL_NORMAL) + vBuff.VertexSize * this.mIndexInVertexBuffer[elemPosition];
+            float* pReal;
+            
+
+            foreach(BlockFace face in currIsland.getBlock(item, false).getFaces()) {
+                if(currIsland.hasVisiblefaceAt((int)item.x, (int)item.y, (int)item.z, face)) {
+                    posEl.BaseVertexPointerToElement(pVertex, &pReal);
+                    
+                    pReal[0] = 0; pReal[1] = 0; pReal[2] = 0;
+                    pVertex += vBuff.VertexSize;
+                }
+            }
+
+            vBuff.Unlock();
+        }
 
         public string getMaterial() { return this.mMaterial; }
 
@@ -53,9 +91,7 @@ namespace Game.World.Generator
             string material = currentIsland.getMaterialFromName(this.mMaterial);
             int faceNumber = 0;
             Block curr = VanillaChunk.staticBlock[this.mMaterial];
-            BlockFace[] test = currentIsland.getBlock(this.mList[0], false).getFaces();
 
-            var values = Enum.GetValues(typeof(BlockFace));
             Vector2[] textureCoord = 
                 new Vector2[] {
                     new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0),
@@ -67,10 +103,11 @@ namespace Game.World.Generator
                 };
             Vector3 displayCoord;
 
-            ManualObject block = new ManualObject("MultiBlock-" + this.mMaterial);
+            block = new ManualObject("MultiBlock-" + this.mMaterial);
             block.Begin(material, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
                 foreach(Vector3 loc in this.mList) {
                     displayCoord = currentWorld.getDisplayCoords(currentIsland.getPosition(), loc);
+                    this.mIndexInVertexBuffer.Add(faceNumber);
 
                     foreach(BlockFace face in curr.getFaces()) {
                         if(currentIsland.hasVisiblefaceAt((int) loc.x, (int) loc.y, (int) loc.z, face)) {

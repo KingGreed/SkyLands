@@ -184,18 +184,40 @@ namespace Game.World.Generator
                     blockLocation = getBlockCoordFromRelative(x, y, z);
 
 
-            Vector3 loc = new Vector3(x % MainWorld.CHUNK_SIDE, y % MainWorld.CHUNK_SIDE, z % MainWorld.CHUNK_SIDE);
-            if (this.hasChunk(chunkLocation)) { 
-                this.mChunkList[chunkLocation].setBlock(loc, material);
-                this.AddCollisionBlock(loc * MainWorld.CUBE_SIDE, material);
+            if (this.hasChunk(chunkLocation)) {
+                this.mChunkList[chunkLocation].setBlock(blockLocation, material);
+                this.AddCollisionBlock(blockLocation * MainWorld.CUBE_SIDE, material);
             }
             else if(force) {
                 this.mChunkList.Add(chunkLocation, new VanillaChunk(MainWorld.CHUNK_SIDE * Vector3.UNIT_SCALE, chunkLocation, this));
-                this.mChunkList[chunkLocation].setBlock(loc, material);
-                this.AddCollisionBlock(loc * MainWorld.CUBE_SIDE, material);
+                this.mChunkList[chunkLocation].setBlock(blockLocation, material);
+                this.AddCollisionBlock(blockLocation * MainWorld.CUBE_SIDE, material);
             } 
         }
         public override void setBlockAt(int x, int y, int z, byte material, bool force) { this.setBlockAt(x, y, z, VanillaChunk.byteToString[material], force); }
+
+        public override void removeFromScene(Vector3 item) {
+            Block curr = this.getBlock(item, false);
+
+            if (curr is AirBlock) {
+                LogManager.Singleton.DefaultLog.LogMessage("Not removing air block at : " + item.ToString());
+                return;
+            }
+
+            string[] key = curr.getComposingFaces();
+
+            for(int i = 0; i < curr.getComposingFaces().Length; i++) { 
+                this.multiList[key[i]].removeFromScene(item, this);
+            }
+
+
+
+            //if(!(curr is AirBlock) && this.setVisibleFaces(new Vector3(x, y, z), curr)) {}
+
+        }
+
+
+
 
         private void AddCollisionBlock(Vector3 absLoc, string material)
         {
@@ -210,6 +232,7 @@ namespace Game.World.Generator
                 this.mIsTerrainUpdated = false;
             }
         }
+
         public override void save() {
             var fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Roaming/SkyLands/",
                 this.mWorld.getName(), "Island-", this.mNode.Position.x.ToString(), "-",

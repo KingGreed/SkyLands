@@ -67,7 +67,14 @@ namespace API.Geo.Cuboid
         
         public void setBlock(Vector3 loc, byte material) { this.setBlock((int)loc.x, (int)loc.y, (int)loc.z, material); }
         public abstract void setBlock(int x, int y, int z, byte material);
-                
+
+        public int getNumOfVisibleFaces(int x, int y, int z) { 
+            int num = 0;
+            for(int i = 0; i < 6; i++) { if(this.mVisible[x, y, z, i]) { num++; } }
+
+            return num;
+        }
+
         
         /**
 	     * Tests if the chunk is currently loaded

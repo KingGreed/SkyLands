@@ -60,7 +60,7 @@ namespace API.Geo.Cuboid
 
         public abstract int getSurfaceHeight(int x, int z);
 
-        public Block getBlock(Vector3 loc, bool force)                        { return this.getBlock((int) loc.x, (int) loc.y, (int) loc.z, force); }
+        public Block getBlock(Vector3 loc, bool force) { return this.getBlock((int) loc.x, (int) loc.y, (int) loc.z, force); }
         public abstract Block getBlock(int x, int y, int z, bool force);
         
         public Vector3 getBlockCoord(Vector3 loc) { return this.getBlockCoord((int) loc.x, (int) loc.y, (int) loc.z); }
@@ -96,10 +96,14 @@ namespace API.Geo.Cuboid
 	     */
         public abstract void display();
 
+        public abstract void removeFromScene(Vector3 item);
+
         public abstract void RechargeMulti(MultiBlock multi);
 
+
 	    /**
-	     * Queues all chunks for saving at the next available opportunity.
+	     * Save the Island
+         * Warning this function does not create a thread
 	     */
 	    public virtual void save() { throw new NotImplementedException(); }
 

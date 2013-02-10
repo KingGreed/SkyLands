@@ -45,9 +45,16 @@ namespace Game
             }
 
             if(this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F3)) {
-                this.mCharacMgr.World.getIslandAt(new Vector3(0, 0, 0)).multiList["Stone"].remove(new Vector3(0, 0, 0));
-                this.mCharacMgr.World.getIslandAt(new Vector3(0, 0, 0)).RechargeMulti(this.mCharacMgr.World.getIslandAt(new Vector3(0, 0, 0)).multiList["Stone"]);
+
+                Vector3 spawn = this.mCharacMgr.World.getSpawnPoint();
+                spawn /= World.MainWorld.CUBE_SIDE;
+                spawn.y -= 1;
+
+                this.mCharacMgr.World.getIslandAt(new Vector3(0, 0, 0)).removeFromScene(spawn);
             }
+
+            if(this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F4)) { LogManager.Singleton.DefaultLog.LogMessage("You are at : " + this.mCharacMgr.MainPlayerCam.Camera.Position); }
+
             this.mCharacMgr.Update(frameTime);
 
             if (!this.mCharacMgr.GetCharacter().IsMoving)

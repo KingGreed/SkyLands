@@ -17,10 +17,12 @@ namespace API.Geo.Cuboid
          */
         void addBlock(Vector3 loc);
 
-        List<Vector3> getBlockList();
-        string        getMaterial ();
-        bool          contains    (Vector3 loc);
-        void          remove(Vector3 item);
+        string getMaterial ();
+
+        /*
+         * Warning does not remove item from List, only from Scene
+         * */
+        void removeFromScene(Vector3 item, Island currIsland);
 
         void display(Island currentIsland, World currentWorld);
     }

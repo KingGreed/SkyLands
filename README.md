@@ -18,3 +18,6 @@ Move the camera freely in the 3 dimensions. Press **Ctrl** to move the character
 
 #### *Player Mode*
 Mode by default at the first person view.
+
+#### *LibNoise*
+We are using a self made port of @RoyAwesome's port of LibNoise which we compiled in a dll (source will be out soon on GitHub).
