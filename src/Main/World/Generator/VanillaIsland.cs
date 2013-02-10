@@ -10,8 +10,6 @@ using API.Generator;
 using API.Generic;
 
 using Mogre;
-using MogreNewt;
-using MogreNewt.CollisionPrimitives;
 
 using Game.Display;
 using Game.World.Blocks;
@@ -26,9 +24,6 @@ namespace Game.World.Generator
         static Block defaultBlock = new AirBlock();
 
         public VanillaIsland(SceneNode node, Vector2 size, MainWorld currentWorld) : base(node, size, currentWorld) {
-            this.mTerrain = new TreeCollisionSceneParser(currentWorld.getNewtWorld());
-            this.mCollisions = new Dictionary<Vector3, Collision>();
-
             foreach (KeyValuePair<string, Block> pair in VanillaChunk.staticBlock) {
                 if(!(pair.Value is AirBlock)) {
                     this.multiList.Add(pair.Key, new VanillaMultiBlock(pair.Key));
@@ -55,7 +50,7 @@ namespace Game.World.Generator
             return -1;
         }
 
-        public override bool hasBlock(int x, int y, int z)                         { throw new NotImplementedException(); }
+        public override bool hasBlock(int x, int y, int z) { throw new NotImplementedException(); }
 
 
         public override void display() {
@@ -150,6 +145,18 @@ namespace Game.World.Generator
             else { return defaultBlock; }
         }
 
+        public override void getBlockCoord(Vector3 pos, out Vector3 blockPos, out Vector3 chunkPos)
+        {
+            chunkPos = getChunkCoordFromRelative((int)pos.x, (int)pos.y, (int)pos.z);
+            blockPos = getBlockCoordFromRelative((int)pos.x, (int)pos.y, (int)pos.z);
+
+            if (!this.hasChunk(chunkPos) || pos.x < 0 || pos.y < 0 || pos.z <0)
+            {
+                chunkPos = -Vector3.UNIT_SCALE;
+                blockPos = -Vector3.UNIT_SCALE;
+            }
+        }
+
         public override Vector3 getBlockCoord(int x, int y, int z) {
             if(x < 0 || y < 0 || z < 0) { return -Vector3.UNIT_SCALE; }
             
@@ -183,15 +190,10 @@ namespace Game.World.Generator
             Vector3 chunkLocation = getChunkCoordFromRelative(x, y, z), 
                     blockLocation = getBlockCoordFromRelative(x, y, z);
 
-
-            if (this.hasChunk(chunkLocation)) {
-                this.mChunkList[chunkLocation].setBlock(blockLocation, material);
-                this.AddCollisionBlock(blockLocation * MainWorld.CUBE_SIDE, material);
-            }
+            if (this.hasChunk(chunkLocation)) { this.mChunkList[chunkLocation].setBlock(blockLocation, material); }
             else if(force) {
                 this.mChunkList.Add(chunkLocation, new VanillaChunk(MainWorld.CHUNK_SIDE * Vector3.UNIT_SCALE, chunkLocation, this));
                 this.mChunkList[chunkLocation].setBlock(blockLocation, material);
-                this.AddCollisionBlock(blockLocation * MainWorld.CUBE_SIDE, material);
             } 
         }
         public override void setBlockAt(int x, int y, int z, byte material, bool force) { this.setBlockAt(x, y, z, VanillaChunk.byteToString[material], force); }
@@ -293,19 +295,6 @@ namespace Game.World.Generator
         }
 
 
-        private void AddCollisionBlock(Vector3 absLoc, string material)
-        {
-            if (material == "Air")
-            {
-                this.mCollisions.Remove(absLoc);
-                this.mIsTerrainUpdated = false;
-            }
-            else if (!this.mCollisions.ContainsKey(absLoc))
-            {
-                this.mCollisions.Add(absLoc, new MogreNewt.CollisionPrimitives.Box(this.mWorld.getNewtWorld(), MainWorld.CUBE_SIDE * Vector3.UNIT_SCALE, 0));
-                this.mIsTerrainUpdated = false;
-            }
-        }
 
         public override void save() {
             var fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Roaming/SkyLands/",
@@ -357,31 +346,8 @@ namespace Game.World.Generator
             reader.Close();
         }
 
-        public void updateTerrain()
-        {
-            if (this.mCollisions.Count > 0)
-            {
-                this.mTerrain.ParseScene(this.mNode, true, 0);
-                Body body = new Body(this.mWorld.getNewtWorld(), this.mTerrain, false);
-                body.AttachNode(this.mNode);
-                body.AutoSleep = true;
-                //body.SetPositionOrientation(this.getPosition(), Quaternion.IDENTITY);
-            }
-
-            this.mIsTerrainUpdated = true;
-        }
-
         public override string getMaterialFromName(string name) {
             return VanillaChunk.staticBlock[name].getMaterial();
-        }
-
-        public void dispose()
-        {
-            foreach (Collision col in this.mCollisions.Values)
-                col.Dispose();
-            this.mCollisions.Clear();
-
-            this.mTerrain.Dispose();
         }
     }
 }

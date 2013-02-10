@@ -1,6 +1,5 @@
 ﻿using System;
 using Mogre;
-using MogreNewt;
 
 using Game.World;
 

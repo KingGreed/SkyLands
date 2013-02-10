@@ -14,6 +14,7 @@ using Game.States;
 using Game.Sky;
 using Game.World.Blocks;
 using Game.World.Generator.Biomes;
+using Game.CharacSystem;
 
 using Mogre;
 
@@ -35,9 +36,6 @@ namespace Game.World
 
         private StateManager    mStateMgr;
         private SkyMgr          mSkyMgr;
-        private MogreNewt.World mNewtonWorld;
-
-        public MogreNewt.World NwtWorld;
 
         public MainWorld(StateManager stateMgr)
         {
@@ -46,10 +44,6 @@ namespace Game.World
             this.mSeed       = 42;
 
             this.mStateMgr = stateMgr;
-            this.mNewtonWorld = new MogreNewt.World();
-            this.mNewtonWorld.SetFrictionModel(MogreNewt.World.FrictionModelMode.FM_ADAPTIVE);
-            this.mNewtonWorld.SetMinimumFrameRate(45);
-            //this.mNewtonWorld.
 
             this.mIslandList = new Dictionary<Vector3, Island>();
             SceneNode node = this.mStateMgr.SceneManager.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
@@ -77,7 +71,6 @@ namespace Game.World
         
         public SceneManager getSceneMgr()        { return this.mStateMgr.SceneManager; }
         public Island getIslandAt(Vector3 loc)   { return this.mIslandList[loc]; }
-        public MogreNewt.World getNewtWorld()    { return this.mNewtonWorld; }
         
         public int     getSurfaceHeight(int x, int z, Vector3 islandLoc)                       { return this.mIslandList[islandLoc].getSurfaceHeight(x, z); }
         public Vector3 getDisplayCoords(Vector3 island, Vector3 relativeLocation)              { return (relativeLocation * CUBE_SIDE) + island; }
@@ -125,15 +118,52 @@ namespace Game.World
 	    public void unload(bool save) { throw new NotImplementedException(); }
 	    public void save() { throw new NotImplementedException(); }
 
+        public bool HasCharacCollision(Vector3[] hitBlocks, Vector3 islandLoc, CubeFace collisionSide)
+        {
+            int[] indexToTest;
+            if      (collisionSide == CubeFace.underFace)   { indexToTest = new int[] { 0, 1, 2, 3 }; }
+            else if (collisionSide == CubeFace.upperFace)   { indexToTest = new int[] { 4, 5, 6, 7 }; }
+            else if (collisionSide == CubeFace.leftFace)    { indexToTest = new int[] { 0, 3, 4, 7 }; }
+            else if (collisionSide == CubeFace.rightFace)   { indexToTest = new int[] { 1, 2, 5, 6 }; }
+            else if (collisionSide == CubeFace.backFace)    { indexToTest = new int[] { 2, 3, 6, 7 }; }
+            else  /*(collisionSide == CubeFace.frontFace)*/ { indexToTest = new int[] { 0, 1, 4, 5 }; }
+
+            Vector3[] coordsToTest = new Vector3[4];
+            for (int i = 0; i < coordsToTest.Length; i++)
+                coordsToTest[i] = hitBlocks[indexToTest[i]];
+
+            foreach (Vector3 blockPos in hitBlocks)
+                if (this.hasBlockCollision(blockPos, islandLoc)) 
+                    return true;
+
+            return false;
+        }
+
+        private bool hasBlockCollision(Vector3 blockPos, Vector3 islandLoc)
+        {
+            blockPos += this.mIslandList[islandLoc].getPosition();
+            blockPos /= CUBE_SIDE;
+
+            Block block = this.mIslandList[islandLoc].getBlock(blockPos, false);
+            return !(block == null || block is AirBlock);
+        }
+
+        public Vector3 GetBlockAbsPosFromAbs(VanillaCharacter charac)             { return this.GetBlockAbsPosFromAbs(charac.FeetPosition, charac.Info.IslandLoc); }
+        public Vector3 GetBlockAbsPosFromAbs(Vector3 absCoord, Vector3 islandLoc)
+        {
+            Vector3 blockPos, chunkPos;
+            this.mIslandList[islandLoc].getBlockCoord(absCoord / CUBE_SIDE, out blockPos, out chunkPos);
+            if (blockPos == -Vector3.UNIT_SCALE || chunkPos == -Vector3.UNIT_SCALE) { return -Vector3.UNIT_SCALE;}
+            else { return (chunkPos * CHUNK_SIDE + blockPos) * CUBE_SIDE; }
+        }
+
         public void Update(float frameTime)
         {
-            this.mNewtonWorld.Update(frameTime);
             this.mSkyMgr.Update();
         }
 
         public void Shutdown()
         {
-            this.mNewtonWorld.Dispose();
             this.mSkyMgr.Shutdown();
             this.mStateMgr.SceneManager.ClearScene();
         }

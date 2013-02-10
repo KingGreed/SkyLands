@@ -18,8 +18,10 @@ namespace Game.States
             this.mWorld = new MainWorld(this.mStateMgr);
 
             this.mCharacMgr = new CharacMgr(this.mStateMgr, this.mWorld);
-            this.mCharacMgr.AddCharacter(new CharacterInfo("Sinbad", this.mWorld.getSpawnPoint(), true));
-            //this.mCharacMgr.AddCharacter(new CharacterInfo("Sinbad", this.mWorld.getSpawnPoint()));   // Add a NPC at the same point (!)
+            CharacterInfo info = new CharacterInfo("Sinbad", true);
+            info.SpawnPoint = this.mWorld.getSpawnPoint();
+            this.mCharacMgr.AddCharacter(info);
+            //this.mCharacMgr.AddCharacter(new CharacterInfo("Sinbad", this.mWorld.getSpawnPoint()));   // Add a NPC at the same point
             this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr);
             this.Show();
             Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop begin");
