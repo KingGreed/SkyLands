@@ -2,24 +2,8 @@
 using System.Collections.Generic;
 using Mogre;
 
-namespace Game.CharacSystem
+namespace Game.Animation
 {
-    public class Anim
-    {
-        private AnimName mName;
-        private float mTimeFactor;
-
-        public AnimName Name { get { return this.mName; } }
-
-        public Anim(AnimName name, float timeFactor = 1)
-        {
-            this.mName = name;
-            this.mTimeFactor = timeFactor;
-        }
-    }
-
-    public enum AnimName : byte { IdleBase, IdleTop, RunBase, RunTop, JumpStart, JumpLoop, JumpEnd, Dance }
-
     public class AnimationMgr
     {
         private const float FADE_SPEED = 7.5f;

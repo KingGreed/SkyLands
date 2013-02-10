@@ -144,7 +144,11 @@ namespace Game.CharacSystem
                 if (translation.z == 0 && this.mPreviousTranslation.z != 0) { this.mAnimMgr.DeleteAnims(this.mRunAnims); }
             }
             this.mPreviousTranslation = translation;
-            if (this.mAnimMgr.CurrentAnims.Count == 0) { this.mAnimMgr.AddAnims(this.mIdleAnims); } // By default apply idle anim
+            if (this.mAnimMgr.CurrentAnims.Count == 0) // By default apply idle anim
+            { 
+                this.mAnimMgr.AddAnims(this.mIdleAnims);
+                this.mPreviousTranslation = Vector3.ZERO;
+            }
             this.mAnimMgr.Update(frameTime);
             this.mMovementInfo.ClearInfo();
         }
