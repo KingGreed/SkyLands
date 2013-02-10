@@ -1,27 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mogre;
-using MogreNewt;
 
 using Game.World;
+using Game.Animation;
 
 namespace Game.CharacSystem
 {
     public class VanillaPlayer : VanillaCharacter
     {
-        /*private struct Emote
+        private struct Emote
         {
-            private Anim mAnim;
+            private AnimName mAnim;
             private MOIS.KeyCode mKey;
 
-            public Anim Anim        { get { return this.mAnim; } }
+            public AnimName Anim        { get { return this.mAnim; } }
             public MOIS.KeyCode Key { get { return this.mKey; } }
 
-            public Emote(MOIS.KeyCode key, Anim anim) { this.mKey = key; this.mAnim = anim; }
-        }*/
+            public Emote(MOIS.KeyCode key, AnimName anim) { this.mKey = key; this.mAnim = anim; }
+        }
         
         private MoisManager mInput;
-        //private Emote[]   mEmotes;
+        private Emote[]     mEmotes;
+        private AnimName[]  mEmotesNames;
         private float       mYawCamValue;
         private float       mPitchCamValue;
         private bool        mIsFirstView;
@@ -46,16 +47,20 @@ namespace Game.CharacSystem
             this.mInput = input;
             this.mIsFirstView = true;
 
-            /*this.mEmotes = new Emote[]
+            this.mEmotes = new Emote[]
             {
-                new Emote(MOIS.KeyCode.KC_1, Anim.Dance)
-            };*/
+                new Emote(MOIS.KeyCode.KC_1, AnimName.Dance)
+            };
+            this.mEmotesNames = new AnimName[this.mEmotes.Length];
+            for (int i = 0; i < this.mEmotes.Length; i++)
+                this.mEmotesNames[i] = this.mEmotes[i].Anim;
         }
 
         public new void Update(float frameTime)
         {
             bool isNowMoving = !this.mIsDebugMode || this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_LCONTROL, MOIS.KeyCode.KC_RCONTROL);
-            if (this.mMovementInfo.IsMoving && !isNowMoving) { this.mAnimMgr.DeleteAllAnims(); }
+            if (this.mMovementInfo.IsMoving && !isNowMoving)
+                this.mAnimMgr.DeleteAllExcept<AnimName[]>(this.mEmotesNames, this.mIdleAnims, this.mJumpAnims);
             this.mMovementInfo.IsMoving = isNowMoving;
 
             if (this.mMovementInfo.IsMoving)
@@ -66,13 +71,8 @@ namespace Game.CharacSystem
                 if (this.mIsFirstView) { this.FirstPersonUpdate(yawValue, pitchValue); }
                 else { this.ThirdPersonUpdate(yawValue, pitchValue); }
 
-                if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_SPACE))                                                 { this.mAnimMgr.SetAnims(Anim.JumpStart); }
-                if (this.mInput.IsOneKeyEventTrue(this.mInput.WasKeyPressed, MOIS.KeyCode.KC_W, MOIS.KeyCode.KC_UP))  { this.mAnimMgr.SetAnims(this.mRunAnims); }
-                if (this.mInput.IsOneKeyEventTrue(this.mInput.WasKeyReleased, MOIS.KeyCode.KC_W, MOIS.KeyCode.KC_UP)) { this.mAnimMgr.DeleteAnims(this.mRunAnims); }
-
-                if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_NUMPAD1)) 
-                { this.mAnimMgr.SetAnims(Anim.Dance); }
-                /*if (!this.mAnimMgr.AreAnimationsPlaying(Anim.JumpStart, Anim.JumpLoop, Anim.JumpEnd, Anim.RunBase, Anim.RunTop))
+                /* Update emotes animations */
+                if (!this.mAnimMgr.AreAnimationsPlaying(AnimName.JumpStart, AnimName.JumpLoop, AnimName.JumpEnd, AnimName.RunBase, AnimName.RunTop))
                 {
                     foreach (Emote emote in this.mEmotes)
                     {
@@ -82,13 +82,7 @@ namespace Game.CharacSystem
                             else                                                 { this.mAnimMgr.DeleteAnims(emote.Anim); }
                         }
                     }
-                    //if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_SPACE))
-                    if(this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left))
-                    {
-                        if (!this.mAnimMgr.AreAnimationsPlaying(Anim.Dance)) { this.mAnimMgr.SetAnims(Anim.Dance); }
-                        else { this.mAnimMgr.DeleteAnims(Anim.Dance); }
-                    }
-                }*/
+                }
             }
         }
 

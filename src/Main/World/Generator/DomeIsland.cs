@@ -57,7 +57,6 @@ namespace Game.World.Generator
 				    }
                 }
             }
-            this.updateTerrain();
         }
 
         public void trees() {

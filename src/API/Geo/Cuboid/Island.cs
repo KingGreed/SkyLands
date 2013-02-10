@@ -12,8 +12,6 @@ using Entity   = API.Ent.Entity;
 using Material = API.Generic.Material;
 
 using Mogre;
-using MogreNewt;
-using MogreNewt.CollisionPrimitives;
 
 namespace API.Geo.Cuboid
 {
@@ -25,8 +23,6 @@ namespace API.Geo.Cuboid
         protected Vector3                        mIslandSize;
         protected World                          mWorld;
         protected SceneNode                      mNode;
-        protected TreeCollisionSceneParser       mTerrain;
-        protected Dictionary<Vector3, Collision> mCollisions;
         protected bool                           mIsTerrainUpdated;
         protected Biome                          mBiome;
         public Dictionary<string, MultiBlock>    multiList = new Dictionary<string, MultiBlock>();
@@ -65,6 +61,7 @@ namespace API.Geo.Cuboid
         
         public Vector3 getBlockCoord(Vector3 loc) { return this.getBlockCoord((int) loc.x, (int) loc.y, (int) loc.z); }
         public abstract Vector3 getBlockCoord(int x, int y, int z);
+        public abstract void getBlockCoord(Vector3 pos, out Vector3 blockPos, out Vector3 chunkPos);
 
         public virtual List<Character> getPlayers() { throw new NotImplementedException(); }
 

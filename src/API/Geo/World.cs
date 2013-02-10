@@ -223,7 +223,5 @@ namespace API.Geo
 	     * </p>
 	     */
 	    void save();
-
-        MogreNewt.World getNewtWorld();
     }
 }

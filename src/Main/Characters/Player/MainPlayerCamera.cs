@@ -67,7 +67,7 @@ namespace Game.CharacSystem
                 this.mCamPitchNode = this.mCamYawNode.CreateChildSceneNode();
                 this.mCamPitchNode.AttachObject(this.mCam);
 
-                this.mCam.SetPosition(0, this.mPlayer.Height / 2 - 10, 0);  // Camera is set at eyes level
+                this.mCam.SetPosition(0, this.mPlayer.Height / 2 - 13, 0);  // Camera is set at eyes level
                 this.mCam.Orientation = new Quaternion(1, 0, 0, 0);
             }
             else { }

@@ -126,7 +126,6 @@ namespace Game.World.Generator
 				    }
 			    }
             }
-            this.updateTerrain();
         }
         //@return -1 if isFalse else : num between 0 and near
         private int isNearSurface(int near, Vector3 loc) {
