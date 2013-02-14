@@ -203,29 +203,35 @@ namespace Game.World.Generator
 
             if (curr is AirBlock) { return; }
 
-            string[] key = curr.getComposingFaces();
-
-            if(key.Length == 1) {
-                this.multiList[key[0]].removeFromScene(item, this);
+            if(this.isinBlocksAdded(item)) {
+                string cubeNodeName = "Node-" + item.x + "-" + item.y + "-" + item.z;
+                this.mWorld.getSceneMgr().RootSceneNode.RemoveChild(cubeNodeName);
             } else {
-                for(int i = 0; i < 6; i++) {
-                    if(this.hasVisiblefaceAt((int) item.x, (int) item.y, (int) item.z, (BlockFace) i)) {
-                        this.multiList[key[i]].removeFromScene(item, this);
+                string[] key = curr.getComposingFaces();
+                this.blocksDeleted.Add(new Pair<string, Vector3>(curr.getName(), item));
+
+                if(key.Length == 1) {
+                    this.multiList[key[0]].removeFromScene(item, this);
+                } else {
+                    for(int i = 0; i < 6; i++) {
+                        if(this.hasVisiblefaceAt((int) item.x, (int) item.y, (int) item.z, (BlockFace) i)) {
+                            this.multiList[key[i]].removeFromScene(item, this);
+                        }
                     }
                 }
             }
             this.setBlockAt((int) item.x, (int) item.y, (int) item.z, "Air", false);
 
-            refreshBlock(new Vector3(item.x, item.y-1, item.z));
-            refreshBlock(new Vector3(item.x, item.y+1, item.z));
-            refreshBlock(new Vector3(item.x+1, item.y, item.z));
-            refreshBlock(new Vector3(item.x-1, item.y, item.z));
-            refreshBlock(new Vector3(item.x, item.y, item.z+1));
-            refreshBlock(new Vector3(item.x, item.y, item.z-1));
+            refreshBlock(new Vector3(item.x,   item.y-1, item.z));
+            refreshBlock(new Vector3(item.x,   item.y+1, item.z));
+            refreshBlock(new Vector3(item.x+1, item.y,   item.z));
+            refreshBlock(new Vector3(item.x-1, item.y,   item.z));
+            refreshBlock(new Vector3(item.x,   item.y,   item.z+1));
+            refreshBlock(new Vector3(item.x,   item.y,   item.z-1));
 
         }
 
-        public void refreshBlock(Vector3 relativePos) {
+        public override void refreshBlock(Vector3 relativePos) {
 
             Block curr = this.getBlock(relativePos, false);
             bool[] currentvisibleFaces = new bool[6];
@@ -254,10 +260,11 @@ namespace Game.World.Generator
 
         }
 
-        public void addBlockToScene(Vector3 relativePos, string material) {
+        public override void addBlockToScene(Vector3 relativePos, string material) {
             this.setBlockAt((int)relativePos.x, (int)relativePos.y, (int)relativePos.z, material, true);
             
             Block curr = this.getBlock(relativePos, false);
+            this.blocksAdded.Add(new Pair<string, Vector3>(material, relativePos));
 
             if(this.setVisibleFaces(relativePos, curr)) {
                 foreach(BlockFace face in curr.getFaces()) {
@@ -269,7 +276,7 @@ namespace Game.World.Generator
 
         }
 
-        public void addFaceToScene(BlockFace face, Vector3 relativePos, string material) {
+        public override void addFaceToScene(BlockFace face, Vector3 relativePos, string material) {
             
             relativePos += this.getPosition();
             relativePos *= MainWorld.CUBE_SIDE;
@@ -282,7 +289,7 @@ namespace Game.World.Generator
             if(this.mWorld.getSceneMgr().HasSceneNode(cubeNodeName)) {
                 blockNode = this.mWorld.getSceneMgr().GetSceneNode(cubeNodeName);
             } else {
-                blockNode = this.mWorld.getSceneMgr().RootSceneNode.CreateChildSceneNode(cubeNodeName, relativePos);
+                blockNode = this.mFaceNode.CreateChildSceneNode(cubeNodeName, relativePos);
             }
             
             faceName = GraphicBlock.getFaceName(face);

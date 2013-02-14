@@ -9,7 +9,8 @@ using API.Generator;
 using API.Generic;
 
 using Entity   = API.Ent.Entity;
-using Material = API.Generic.Material;
+using MaterialAndCoord = Mogre.Pair<string, Mogre.Vector3>;
+
 
 using Mogre;
 
@@ -23,9 +24,13 @@ namespace API.Geo.Cuboid
         protected Vector3                        mIslandSize;
         protected World                          mWorld;
         protected SceneNode                      mNode;
+        protected SceneNode                      mFaceNode;
         protected bool                           mIsTerrainUpdated;
         protected Biome                          mBiome;
         public Dictionary<string, MultiBlock>    multiList = new Dictionary<string, MultiBlock>();
+        public List<MaterialAndCoord>            blocksAdded;
+        public List<MaterialAndCoord>            blocksDeleted;
+
 
         protected Dictionary<Vector3, Chunk> mChunkList;
 
@@ -39,6 +44,11 @@ namespace API.Geo.Cuboid
             this.mNode = node;
             this.mIslandSize  = new Vector3(size.x, 0, size.y);
             this.mWorld = currentWorld;
+            
+            this.blocksAdded   = new List<MaterialAndCoord>();
+            this.blocksDeleted = new List<MaterialAndCoord>();
+
+            this.mFaceNode = node.CreateChildSceneNode("faces");
         }
 
         //Init
@@ -94,6 +104,9 @@ namespace API.Geo.Cuboid
         public abstract void display();
 
         public abstract void removeFromScene(Vector3 item);
+        public abstract void refreshBlock   (Vector3 relativePos);
+        public abstract void addBlockToScene(Vector3 relativePos, string material);
+        public abstract void addFaceToScene(BlockFace face, Vector3 relativePos, string material);
 
         public abstract void RechargeMulti(MultiBlock multi);
 
@@ -113,6 +126,29 @@ namespace API.Geo.Cuboid
 
         public void unloadChunk(int x, int y, int z, bool save) { throw new NotImplementedException(); }
         public void unloadChunk(Vector3 position, bool save)    { this.unloadChunk((int)position.x, (int)position.y, (int)position.z, save); }
+
+
+        /*
+         * Returns position of item -1 if item does not exist
+         */
+        public bool isinBlocksAdded(Vector3 item) {
+            for(int i = 0; i < this.blocksAdded.Count; i++) {
+                if(this.blocksAdded[i].second == item) { return true; }
+            }
+            return false;
+        }
+        public bool isinBlocksDeleted(Vector3 item) {
+            for(int i = 0; i < this.blocksDeleted.Count; i++) {
+                if(this.blocksDeleted[i].second == item) { return true; }
+            }
+            return false;
+        }
+
+
+        public void removeFromBlocksAdded(int pos)   { this.blocksAdded.RemoveAt  (pos); }
+        public void removeFromBlocksDeleted(int pos) { this.blocksDeleted.RemoveAt(pos); }
+        public int  getNumOfBlocksAddedAndRemoved()  { return this.blocksAdded.Count + this.blocksDeleted.Count; }
+
 
     }
 }

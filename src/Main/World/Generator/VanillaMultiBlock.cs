@@ -81,7 +81,7 @@ namespace Game.World.Generator
                     pReal[0] = 0; pReal[1] = 0; pReal[2] = 0;
                     pVertex += vBuff.VertexSize;
                 }
-            } else { 
+            } else {
                 foreach(BlockFace face in Enum.GetValues(typeof(BlockFace))) {
                     if(currIsland.hasVisiblefaceAt((int)item.x, (int)item.y, (int)item.z, face)) {
                         for(int i = 0; i < 4; i++) { 

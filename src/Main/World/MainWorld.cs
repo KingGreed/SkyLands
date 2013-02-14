@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 
 using API.Ent;
 using API.Geo;
@@ -34,8 +35,9 @@ namespace Game.World
         private List<Entity> mEntityList;
         private Dictionary<Vector3, Island> mIslandList;
 
-        private StateManager    mStateMgr;
-        private SkyMgr          mSkyMgr;
+        private StateManager  mStateMgr;
+        private SkyMgr        mSkyMgr;
+        private Thread        mTerrainThread; 
 
         public MainWorld(StateManager stateMgr)
         {
@@ -149,21 +151,24 @@ namespace Game.World
         }
 
         public Vector3 GetBlockAbsPosFromAbs(VanillaCharacter charac)             { return this.GetBlockAbsPosFromAbs(charac.FeetPosition, charac.Info.IslandLoc); }
-        public Vector3 GetBlockAbsPosFromAbs(Vector3 absCoord, Vector3 islandLoc)
-        {
+        public Vector3 GetBlockAbsPosFromAbs(Vector3 absCoord, Vector3 islandLoc) {
             Vector3 blockPos, chunkPos;
             this.mIslandList[islandLoc].getBlockCoord(absCoord / CUBE_SIDE, out blockPos, out chunkPos);
             if (blockPos == -Vector3.UNIT_SCALE || chunkPos == -Vector3.UNIT_SCALE) { return -Vector3.UNIT_SCALE;}
             else { return (chunkPos * CHUNK_SIDE + blockPos) * CUBE_SIDE; }
         }
 
-        public void Update(float frameTime)
-        {
+        public void Update(float frameTime) {
             this.mSkyMgr.Update();
+
+            foreach (KeyValuePair<Vector3, Island> pair in this.mIslandList) {
+                if(pair.Value.getNumOfBlocksAddedAndRemoved() > 20) {
+
+                }
+            }
         }
 
-        public void Shutdown()
-        {
+        public void Shutdown() {
             this.mSkyMgr.Shutdown();
             this.mStateMgr.SceneManager.ClearScene();
         }

@@ -29,9 +29,9 @@ namespace API.Generator
             this.id = id;
 	    }
 
-	    public void decorate(Chunk chunk, Random random) {
+	    public void decorate(Island curr, Random random) {
 		    foreach(Decorator b in this.mDecorators) {
-			    b.populate(chunk, random);
+			    b.populate(curr, random);
 		    }
 	    }
 

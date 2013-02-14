@@ -22,14 +22,11 @@ namespace API.Generator
 
 	    /**
 	     * Populates the chunk.
-	     *
-	     * This method may make full use of the block modifying methods of the API.
-	     *
 	     * This method will be called once per chunk
 	     *
 	     * @param chunk the chunk to populate
 	     * @param random The RNG for this chunk
 	     */
-	    public abstract void populate(Chunk chunk, Random random);
+	    public abstract void populate(Island chunk, Random random);
     }
 }
