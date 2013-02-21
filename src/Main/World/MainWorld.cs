@@ -120,7 +120,7 @@ namespace Game.World
 	    public void unload(bool save) { throw new NotImplementedException(); }
 	    public void save() { throw new NotImplementedException(); }
 
-        public bool HasCharacCollision(Vector3[] hitBlocks, Vector3 islandLoc, CubeFace collisionSide)
+        public bool HasCharacCollision(Vector3[] hitBlocks, Vector3 islandLoc, CubeFace collisionSide)  // hitBlocks should be of size 4
         {
             int[] indexToTest;
             if      (collisionSide == CubeFace.underFace)   { indexToTest = new int[] { 0, 1, 2, 3 }; }
@@ -130,13 +130,15 @@ namespace Game.World
             else if (collisionSide == CubeFace.backFace)    { indexToTest = new int[] { 2, 3, 6, 7 }; }
             else  /*(collisionSide == CubeFace.frontFace)*/ { indexToTest = new int[] { 0, 1, 4, 5 }; }
 
-            Vector3[] coordsToTest = new Vector3[4];
-            for (int i = 0; i < coordsToTest.Length; i++)
-                coordsToTest[i] = hitBlocks[indexToTest[i]];
-
+            bool hasOneCollision = false;
             foreach (Vector3 blockPos in hitBlocks)
-                if (this.hasBlockCollision(blockPos, islandLoc)) 
-                    return true;
+            {
+                if (this.hasBlockCollision(blockPos, islandLoc))
+                {
+                    if (hasOneCollision) { return true; }
+                    else                 { hasOneCollision = true; }
+                }
+            }
 
             return false;
         }

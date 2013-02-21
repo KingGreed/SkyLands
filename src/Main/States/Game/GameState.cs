@@ -16,12 +16,16 @@ namespace Game.States
         protected override void Startup()
         {
             this.mWorld = new MainWorld(this.mStateMgr);
-
             this.mCharacMgr = new CharacMgr(this.mStateMgr, this.mWorld);
-            CharacterInfo info = new CharacterInfo("Sinbad", true);
-            info.SpawnPoint = this.mWorld.getSpawnPoint();
-            this.mCharacMgr.AddCharacter(info);
-            //this.mCharacMgr.AddCharacter(new CharacterInfo("Sinbad", this.mWorld.getSpawnPoint()));   // Add a NPC at the same point
+
+            CharacterInfo playerInfo = new CharacterInfo("Sinbad", true);
+            playerInfo.SpawnPoint = this.mWorld.getSpawnPoint();
+            this.mCharacMgr.AddCharacter(playerInfo);
+
+            CharacterInfo iaInfo = new CharacterInfo("NPC_01", false);
+            iaInfo.SpawnPoint = playerInfo.SpawnPoint;
+            this.mCharacMgr.AddCharacter(iaInfo);
+
             this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr);
             this.Show();
             Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop begin");

@@ -11,11 +11,8 @@ namespace Game.CharacSystem
     {
         private readonly Vector3 CHARAC_SIZE = new Vector3(80, 110, 80);
         private const float WALK_SPEED = 300.0f;
-        private const float GRAVITY_ACCEL_T0 = -650;
-        private const float GRAVITY_ACCEL_TMAX = -800;
-        private const float T_MAX = 4;  // Time until the character reach its max speed fall
-        private const float GRAVITY_CONST_B = T_MAX * (GRAVITY_ACCEL_TMAX - 1) / (GRAVITY_ACCEL_T0 - GRAVITY_ACCEL_TMAX);
-        private const float GRAVITY_CONST_A = GRAVITY_ACCEL_T0 * GRAVITY_CONST_B;
+        private const float COL_HEIGHT_MARGE = 0.93f;
+        private const float COL_SIDE_MARGE = 0.8f;
 
         protected CharacMgr     mCharacMgr;
         protected SceneNode     mNode;
@@ -25,48 +22,29 @@ namespace Game.CharacSystem
         protected AnimName[]    mRunAnims;
         protected AnimName[]    mJumpAnims;
         protected AnimName[]    mIdleAnims;
-        private Timer           mTimeOfFall;
-        private SceneNode[]     mHitPoints;
-        private bool            mIsFalling;
-        private bool            mEnableGravity = true; // temp
+        private SceneNode[]     mHitPoints, mPoints;    // mPoints is used to show the cube of collision
         private Vector3         mPreviousTranslation;
+        private GravitySpeed    mGravitySpeed;
+        private JumpSpeed       mJumpSpeed;
 
         public SceneNode     Node     { get { return this.mNode; } }
         public bool          IsMoving { get { return this.mMovementInfo.IsMoving; } }
         public float         Height   { get { return this.CHARAC_SIZE.y; } }
         public CharacterInfo Info     { get { return this.mCharInfo; } }
-        public Vector3 FeetPosition
+        public Vector3       FeetPosition
         {
-            get { return this.mNode.Position - new Vector3(0, this.Height / 2 + 5, 0); }
+            get         { return this.mNode.Position - new Vector3(0, this.Height / 2 + 5, 0); }
             private set { this.mNode.SetPosition(value.x, value.y + this.Height / 2 + 5, value.z); }
-        }
-        public bool IsFalling
-        {
-            get { return this.mIsFalling; }
-            private set
-            {
-                if (this.mIsFalling != value)
-                {
-                    this.mIsFalling = value;
-                    if (this.mIsFalling)
-                    {
-                        this.mAnimMgr.SetAnims(AnimName.JumpLoop);
-                        this.mTimeOfFall.Reset();
-                    }
-                    else
-                        this.mAnimMgr.SetAnims(AnimName.JumpEnd);
-                }
-            }
         }
 
         protected VanillaCharacter(CharacMgr characMgr, string meshName, CharacterInfo charInfo)
         {
             this.mCharacMgr = characMgr;
             this.mCharInfo = charInfo;
-            this.mMovementInfo = new MovementInfo();
-            this.mTimeOfFall = new Timer();
-            this.mIsFalling = false;
+            this.mMovementInfo = new MovementInfo(OnFall, OnJump);
             this.mPreviousTranslation = Vector3.ZERO;
+            this.mGravitySpeed = new GravitySpeed();
+            this.mJumpSpeed = new JumpSpeed();
 
             /* Create entity and node */
             SceneManager sceneMgr = characMgr.SceneMgr;
@@ -84,10 +62,17 @@ namespace Game.CharacSystem
 
             /* Collisions */
             this.mHitPoints = new SceneNode[8];
+            this.mPoints = new SceneNode[this.mHitPoints.Length];
             for(int i = 0; i < this.mHitPoints.Length; i++)
             {
                 this.mHitPoints[i] = this.mNode.CreateChildSceneNode(this.GetTranslation(i));
                 this.mHitPoints[i].InheritScale = false;
+
+                Entity cube = sceneMgr.CreateEntity("cube.mesh");
+                this.mPoints[i] = sceneMgr.RootSceneNode.CreateChildSceneNode();
+                this.mPoints[i].AttachObject(cube);
+                this.mPoints[i].Scale(0.02f * Vector3.UNIT_SCALE);
+                this.mPoints[i].SetVisible(false);
             }
 
             /* Create Animations */
@@ -100,8 +85,8 @@ namespace Game.CharacSystem
 
         private Vector3 GetTranslation(int i)
         {
-            Vector3 translation = CHARAC_SIZE / 2;
-            translation.y += 5;
+            Vector3 translation = CHARAC_SIZE / 2 * COL_SIDE_MARGE;
+            translation.y = this.mNode.Position.y - this.FeetPosition.y;
             if (i == 0 || i == 3 || i == 4 || i == 7) { translation.x *= -1; }
             if (i < 4)                                { translation.y *= -1; }
             if (i == 2 || i == 3 || i == 6 || i == 7) { translation.z *= -1; }
@@ -109,35 +94,55 @@ namespace Game.CharacSystem
             return translation;
         }
 
+        private void OnFall(bool isFalling)
+        {
+            if (isFalling)
+            {
+                this.mAnimMgr.SetAnims(AnimName.JumpLoop);
+                this.mGravitySpeed.Reset();
+            }
+            else { this.mAnimMgr.SetAnims(AnimName.JumpEnd); }
+        }
+
+        private void OnJump(bool isJumping)
+        {
+            if (isJumping)
+            {
+                this.mAnimMgr.SetAnims(AnimName.JumpStart, AnimName.JumpLoop);
+                this.mJumpSpeed.Jump();
+            }
+        }
+
         public void Update(float frameTime)
         {
-            /* Apply gravity */
-            Vector3 translation = Vector3.ZERO;
-
-            if ((this as VanillaPlayer).Input.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Middle)) { mEnableGravity = !mEnableGravity; }
-            if (mEnableGravity)
-            {
-                float sec = (float)this.mTimeOfFall.Milliseconds / 1000;
-                if (sec >= T_MAX) { translation.y += GRAVITY_ACCEL_TMAX; }
-                else { translation.y += (sec + GRAVITY_CONST_A) / (sec + GRAVITY_CONST_B);}
-            }
-
             /* Actualise mMovementInfo */
             if (this.mCharInfo.IsPlayer) { (this as VanillaPlayer).Update(frameTime); }
             else                         { (this as VanillaNonPlayer).Update(frameTime); }
 
             /* Apply mMovementInfo */
+            Vector3 translation = Vector3.ZERO;
+            if (this.mMovementInfo.IsJumping)
+                translation.y = this.mJumpSpeed.GetSpeed();
+            else
+                translation.y = this.mGravitySpeed.GetSpeed();
+
             if (this.mMovementInfo.IsMoving)
             {
-                translation += WALK_SPEED * this.mMovementInfo.MoveDirection;
+                translation += WALK_SPEED * this.mMovementInfo.MoveDirection * new Vector3(1, 0, 1);    // Ignores the y axis translation here
                 this.mNode.Yaw(this.mMovementInfo.YawValue * frameTime);
             }
             
             this.Translate(translation * frameTime);
 
+            /* Temp - Show Points */
+            if (this.mCharInfo.IsPlayer && (this as VanillaPlayer).Input.WasKeyPressed(MOIS.KeyCode.KC_F4))
+                foreach (SceneNode node in this.mPoints) { node.FlipVisibility(); }
+            Vector3[] points = this.GetHitPoints();
+            for (int i = 0; i < this.mPoints.Length; i++)
+                this.mPoints[i].Position = points[i];
+
             /* Update animations */
-            if (translation.y > 0 && this.mPreviousTranslation.y <= 0) { this.mAnimMgr.SetAnims(AnimName.JumpStart); }
-            else
+            if (!this.mMovementInfo.IsJumping && !this.mMovementInfo.IsFalling)
             {
                 if (translation.z > 0 && this.mPreviousTranslation.z <= 0)  { this.mAnimMgr.SetAnims(this.mRunAnims); }
                 if (translation.z < 0 && this.mPreviousTranslation.z >= 0)  { this.mAnimMgr.SetAnims(this.mRunAnims); }
@@ -157,6 +162,7 @@ namespace Game.CharacSystem
         private Vector3[] GetHitPoints(Vector3 translation)
         {
             Vector3[] hitPoints = new Vector3[this.mHitPoints.Length];
+
             for (int i = 0; i < hitPoints.Length; i++)
                 hitPoints[i] = this.mHitPoints[i].Parent.Position + this.mHitPoints[i].Position + translation;
 
@@ -168,12 +174,24 @@ namespace Game.CharacSystem
             Vector3 actualBlock = this.mCharacMgr.World.GetBlockAbsPosFromAbs(this);
             if (actualBlock != -Vector3.UNIT_SCALE)
             {
-                if (translation.y < 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.underFace))
-                    translation.y = actualBlock.y - this.FeetPosition.y;
+                /*if (translation.x < 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.rightFace))
+                    translation.x = actualBlock.x - this.FeetPosition.x;
+                if (translation.x > 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.leftFace))
+                    translation.x = this.FeetPosition.x - actualBlock.x;*/
+
+                this.mMovementInfo.IsFalling = !this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.underFace);
+                if (translation.y < 0 && !this.mMovementInfo.IsFalling)  { translation.y = actualBlock.y - this.FeetPosition.y; }
+                if (translation.y > 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.upperFace))
+                    translation.y = this.FeetPosition.y - actualBlock.y;
+
+                /*if (translation.z < 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.backFace))
+                    translation.z = actualBlock.z - this.FeetPosition.z;
+                if (translation.z > 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.frontFace))
+                    translation.z = this.FeetPosition.z - actualBlock.z;*/
             }
 
             /* Here translate has been modified to avoid collisions */
-            this.IsFalling = translation.y < 0;
+            this.mMovementInfo.IsJumping = translation.y > 0 && this.mJumpSpeed.IsJumping;
             this.mNode.Translate(translation, Mogre.Node.TransformSpace.TS_LOCAL);
         }
     }
