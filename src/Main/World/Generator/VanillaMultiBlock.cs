@@ -95,6 +95,7 @@ namespace Game.World.Generator
             }
             
             vBuff.Unlock();
+            vBuff.Dispose();
         }
 
         public string getMaterial() { return this.mMaterial; }

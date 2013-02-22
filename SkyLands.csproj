@@ -145,6 +145,7 @@
     <Compile Include="src\Main\Characters\Player\MainPlayerCamera.cs" />
     <Compile Include="src\Main\Characters\Player\VanillaPlayer.cs" />
     <Compile Include="src\Main\Characters\VanillaCharacter.cs" />
+    <Compile Include="src\Main\GUIs\GameGUI.cs" />
     <Compile Include="src\Main\GUIs\LoadingGUI.cs" />
     <Compile Include="src\Main\GUIs\MiyagiMgr.cs" />
     <Compile Include="src\Main\GUIs\OptionsGUI.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="src\Main\States\Menu\OptionsState.cs" />
     <Compile Include="src\Main\States\Menu\SecondMenuState.cs" />
     <Compile Include="src\Main\World\Blocks\AirBlock.cs" />
+    <Compile Include="src\Main\World\Blocks\SandBlock.cs" />
     <Compile Include="src\Main\World\Blocks\DirtBlock.cs" />
     <Compile Include="src\Main\World\Blocks\GrassLeftBlock.cs" />
     <Compile Include="src\Main\World\Blocks\GrassFrontBlock.cs" />

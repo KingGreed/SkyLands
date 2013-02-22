@@ -2,14 +2,16 @@
 
 using Game.CharacSystem;
 using Game.World;
+using Game.GUICreator;
 
 namespace Game.States
 {
     public class GameState : State
     {
-        private MainWorld    mWorld;
-        private CharacMgr    mCharacMgr;
-        private DebugMode    mDebugMode;
+        private MainWorld mWorld;
+        private CharacMgr mCharacMgr;
+        private DebugMode mDebugMode;
+        private GameGUI   mGUI;
 
         public GameState(StateManager stateMgr) : base(stateMgr) { }
 
@@ -17,25 +19,27 @@ namespace Game.States
         {
             this.mWorld = new MainWorld(this.mStateMgr);
             this.mCharacMgr = new CharacMgr(this.mStateMgr, this.mWorld);
+            this.mGUI = new GameGUI(this.mStateMgr.MiyagiManager, "Game GUI");
 
             CharacterInfo playerInfo = new CharacterInfo("Sinbad", true);
             playerInfo.SpawnPoint = this.mWorld.getSpawnPoint();
             this.mCharacMgr.AddCharacter(playerInfo);
 
-            CharacterInfo iaInfo = new CharacterInfo("NPC_01", false);
+            /*CharacterInfo iaInfo = new CharacterInfo("NPC_01", false);
             iaInfo.SpawnPoint = playerInfo.SpawnPoint;
-            this.mCharacMgr.AddCharacter(iaInfo);
+            this.mCharacMgr.AddCharacter(iaInfo);*/
 
             this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr);
             this.Show();
             Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop begin");
         }
 
-        public override void Hide() { }
+        public override void Hide() { this.mGUI.Hide(); }
         public override void Show()
         {
             this.mStateMgr.MiyagiManager.AllGuisVisibility(false);
             this.mStateMgr.MiyagiManager.CursorVisibility = false;
+            this.mGUI.Show();
         }
 
         public override void Update(float frameTime)
@@ -51,6 +55,7 @@ namespace Game.States
             Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop end");
             this.mWorld.Shutdown();
             this.mDebugMode.Dispose();
+            this.mGUI.Dispose();
         }
     }
 }

@@ -11,8 +11,8 @@ namespace Game.CharacSystem
     {
         private readonly Vector3 CHARAC_SIZE = new Vector3(80, 110, 80);
         private const float WALK_SPEED = 300.0f;
-        private const float COL_HEIGHT_MARGE = 0.93f;
-        private const float COL_SIDE_MARGE = 0.8f;
+        private const float COL_HEIGHT_MARGE = 0.86f;
+        private const float COL_SIDE_MARGE = 0.47f;
 
         protected CharacMgr     mCharacMgr;
         protected SceneNode     mNode;
@@ -56,11 +56,15 @@ namespace Game.CharacSystem
             ent.AttachObjectToBone("Sheath.R", swordR);
 
             this.mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id);
+
+            //Entity cube2 = sceneMgr.CreateEntity("cube.mesh");
+            //this.mNode.AttachObject(cube2);
+
             this.mNode.AttachObject(ent);
-            this.mNode.Scale(CHARAC_SIZE / ent.BoundingBox.Size);
             this.FeetPosition = this.mCharInfo.SpawnPoint + new Vector3(0, 300, 0);
 
             /* Collisions */
+            Console.WriteLine(this.mNode.Position);
             this.mHitPoints = new SceneNode[8];
             this.mPoints = new SceneNode[this.mHitPoints.Length];
             for(int i = 0; i < this.mHitPoints.Length; i++)
@@ -73,6 +77,7 @@ namespace Game.CharacSystem
                 this.mPoints[i].AttachObject(cube);
                 this.mPoints[i].Scale(0.02f * Vector3.UNIT_SCALE);
                 this.mPoints[i].SetVisible(false);
+                this.mPoints[i].SetVisible(false);
             }
 
             /* Create Animations */
@@ -81,6 +86,8 @@ namespace Game.CharacSystem
             this.mJumpAnims = new AnimName[] { AnimName.JumpStart, AnimName.JumpLoop, AnimName.JumpEnd };
             this.mAnimMgr   = new AnimationMgr(ent.AllAnimationStates);
             this.mAnimMgr.SetAnims(this.mIdleAnims);
+
+            this.mNode.Scale(CHARAC_SIZE / ent.BoundingBox.Size);
         }
 
         private Vector3 GetTranslation(int i)
@@ -88,7 +95,8 @@ namespace Game.CharacSystem
             Vector3 translation = CHARAC_SIZE / 2 * COL_SIDE_MARGE;
             translation.y = this.mNode.Position.y - this.FeetPosition.y;
             if (i == 0 || i == 3 || i == 4 || i == 7) { translation.x *= -1; }
-            if (i < 4)                                { translation.y *= -1; }
+            if (i < 4) { translation.y *= -1; }
+            else       { translation.y *= COL_HEIGHT_MARGE; }
             if (i == 2 || i == 3 || i == 6 || i == 7) { translation.z *= -1; }
 
             return translation;
@@ -131,7 +139,10 @@ namespace Game.CharacSystem
                 translation += WALK_SPEED * this.mMovementInfo.MoveDirection * new Vector3(1, 0, 1);    // Ignores the y axis translation here
                 this.mNode.Yaw(this.mMovementInfo.YawValue * frameTime);
             }
-            
+
+            if ((this as VanillaPlayer).Input.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left))
+                this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addFaceToScene(API.Generic.BlockFace.upperFace, this.FeetPosition / MainWorld.CUBE_SIDE, "cube/sand");
+
             this.Translate(translation * frameTime);
 
             /* Temp - Show Points */
@@ -144,9 +155,9 @@ namespace Game.CharacSystem
             /* Update animations */
             if (!this.mMovementInfo.IsJumping && !this.mMovementInfo.IsFalling)
             {
-                if (translation.z > 0 && this.mPreviousTranslation.z <= 0)  { this.mAnimMgr.SetAnims(this.mRunAnims); }
-                if (translation.z < 0 && this.mPreviousTranslation.z >= 0)  { this.mAnimMgr.SetAnims(this.mRunAnims); }
-                if (translation.z == 0 && this.mPreviousTranslation.z != 0) { this.mAnimMgr.DeleteAnims(this.mRunAnims); }
+                if ((translation.z > 0 && this.mPreviousTranslation.z <= 0) || 
+                    (translation.z < 0 && this.mPreviousTranslation.z >= 0))  { this.mAnimMgr.SetAnims(this.mRunAnims); }
+                if (translation.z == 0 && this.mPreviousTranslation.z != 0)   { this.mAnimMgr.DeleteAnims(this.mRunAnims); }
             }
             this.mPreviousTranslation = translation;
             if (this.mAnimMgr.CurrentAnims.Count == 0) // By default apply idle anim
@@ -192,6 +203,12 @@ namespace Game.CharacSystem
 
             /* Here translate has been modified to avoid collisions */
             this.mMovementInfo.IsJumping = translation.y > 0 && this.mJumpSpeed.IsJumping;
+
+            /* Temp */
+            /*API.Geo.Cuboid.Block block = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock((this.mNode.Position - 15 * Vector3.UNIT_Y) / Game.World.MainWorld.CUBE_SIDE, false);
+            if (!(block is Game.World.Blocks.AirBlock))
+                translation.y = Game.World.MainWorld.CUBE_SIDE + 100;*/
+
             this.mNode.Translate(translation, Mogre.Node.TransformSpace.TS_LOCAL);
         }
     }

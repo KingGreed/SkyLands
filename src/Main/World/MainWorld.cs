@@ -130,13 +130,13 @@ namespace Game.World
             else if (collisionSide == CubeFace.backFace)    { indexToTest = new int[] { 2, 3, 6, 7 }; }
             else  /*(collisionSide == CubeFace.frontFace)*/ { indexToTest = new int[] { 0, 1, 4, 5 }; }
 
-            bool hasOneCollision = false;
+            int nbCollision = 0;
             foreach (Vector3 blockPos in hitBlocks)
             {
                 if (this.hasBlockCollision(blockPos, islandLoc))
                 {
-                    if (hasOneCollision) { return true; }
-                    else                 { hasOneCollision = true; }
+                    if (nbCollision >= 3) { return true; }
+                    else                  { nbCollision++; }
                 }
             }
 
@@ -147,6 +147,10 @@ namespace Game.World
         {
             blockPos += this.mIslandList[islandLoc].getPosition();
             blockPos /= CUBE_SIDE;
+
+            blockPos.x = Mogre.Math.IFloor(blockPos.x);
+            blockPos.y = Mogre.Math.IFloor(blockPos.y);
+            blockPos.z = Mogre.Math.IFloor(blockPos.z);
 
             Block block = this.mIslandList[islandLoc].getBlock(blockPos, false);
             return !(block == null || block is AirBlock);

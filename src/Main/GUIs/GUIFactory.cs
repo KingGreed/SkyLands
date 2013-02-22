@@ -11,7 +11,7 @@ namespace Game.GUICreator
         protected GUI       mGUI;
         protected Size      mOriginalWndSize = new Size(1600, 900);
 
-        protected Size  WndSize { get { return this.mMiyagiMgr.WndSize; } }
+        protected Size WndSize  { get { return this.mMiyagiMgr.WndSize; } }
         private float RatioX    { get { return (float)this.WndSize.Width / (float)this.mOriginalWndSize.Width; } }
         private float RatioY    { get { return (float)this.WndSize.Height / (float)this.mOriginalWndSize.Height; } }
         

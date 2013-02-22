@@ -46,9 +46,13 @@ namespace Game
 
             if(this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F3)) {
 
-                Vector3 spawn = this.mCharacMgr.World.getSpawnPoint();
+                Vector3 spawn = this.mCharacMgr.GetCharacter().FeetPosition;
                 spawn /= World.MainWorld.CUBE_SIDE;
                 spawn.y -= 1;
+                spawn.x = Mogre.Math.IFloor(spawn.x);
+                spawn.y = Mogre.Math.IFloor(spawn.y);
+                spawn.z = Mogre.Math.IFloor(spawn.z);
+
 
                 this.mCharacMgr.World.getIslandAt(new Vector3(0, 0, 0)).removeFromScene(spawn);
             }
