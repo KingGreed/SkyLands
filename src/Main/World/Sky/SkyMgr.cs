@@ -16,7 +16,7 @@ namespace Game.Sky
         public SkyMgr(StateManager stateMgr)
         {
             this.mStateMgr = stateMgr;
-            this.mCaelumSystem = new CaelumSystem(this.mStateMgr.Root, this.mStateMgr.SceneManager, CaelumSystem.CaelumComponent.None);
+            this.mCaelumSystem = new CaelumSystem(this.mStateMgr.Root, this.mStateMgr.SceneMgr, CaelumSystem.CaelumComponent.None);
             this.mListener = new RootLstn(RootLstn.TypeLstn.FrameStarted, mCaelumSystem.FrameStarted);
             this.CreateSky(); this.AddListeners();
         }
@@ -29,12 +29,12 @@ namespace Game.Sky
             this.mCaelumSystem.TimeScale = 1;
 
             /* Sky */
-            this.mCaelumSystem.SkyDome = new SkyDome(this.mStateMgr.SceneManager, this.mCaelumSystem.GetCaelumCameraNode());
+            this.mCaelumSystem.SkyDome = new SkyDome(this.mStateMgr.SceneMgr, this.mCaelumSystem.GetCaelumCameraNode());
 
             /* Sun */
             this.mCaelumSystem.ManageAmbientLight = true;
             this.mCaelumSystem.MinimumAmbientLight = new ColourValue(0.2f, 0.2f, 0.3f);
-            this.mCaelumSystem.Sun = new SpriteSun(this.mStateMgr.SceneManager, this.mCaelumSystem.GetCaelumCameraNode(), "Custom_sun_disc.png", 4);
+            this.mCaelumSystem.Sun = new SpriteSun(this.mStateMgr.SceneMgr, this.mCaelumSystem.GetCaelumCameraNode(), "Custom_sun_disc.png", 4);
             this.mCaelumSystem.Sun.AmbientMultiplier  = new ColourValue(0.8f, 0.8f, 0.8f);
             this.mCaelumSystem.Sun.DiffuseMultiplier  = new ColourValue(3, 3, 2.7f);
             this.mCaelumSystem.Sun.SpecularMultiplier = new ColourValue(5, 5, 5);
@@ -42,12 +42,12 @@ namespace Game.Sky
             this.mCaelumSystem.Sun.AutoDisableThreshold = 0.05f;
 
             /* Moon */
-            this.mCaelumSystem.Moon = new Moon(this.mStateMgr.SceneManager, this.mCaelumSystem.GetCaelumCameraNode());
+            this.mCaelumSystem.Moon = new Moon(this.mStateMgr.SceneMgr, this.mCaelumSystem.GetCaelumCameraNode());
             this.mCaelumSystem.Moon.DiffuseMultiplier  = new ColourValue(2, 2, 1.7f);
             this.mCaelumSystem.Moon.SpecularMultiplier = new ColourValue(4, 4, 4);
 
             /* Stars */
-            this.mCaelumSystem.PointStarfield = new PointStarfield(this.mStateMgr.SceneManager, this.mCaelumSystem.GetCaelumCameraNode());
+            this.mCaelumSystem.PointStarfield = new PointStarfield(this.mStateMgr.SceneMgr, this.mCaelumSystem.GetCaelumCameraNode());
             this.mCaelumSystem.PointStarfield.MagnitudeScale = 1.05f;
 
             /* Fog */

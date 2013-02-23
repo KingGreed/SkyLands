@@ -19,7 +19,7 @@ namespace Game.GUICreator
         private Panel mPanel;
         private Label mLabel;
 
-        public SecondMenuGUI(MiyagiMgr miyagiMgr, string name) : base(miyagiMgr, name) { }
+        public SecondMenuGUI(StateManager stateMgr, string name) : base(stateMgr, name) { }
 
         protected override void CreateGUI()
         {

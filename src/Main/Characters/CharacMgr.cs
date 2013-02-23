@@ -4,7 +4,7 @@ using Mogre;
 
 using Game.World;
 using Game.States;
-using Game.Console;
+using Game.MyGameConsole;
 
 namespace Game.CharacSystem
 {
@@ -12,25 +12,22 @@ namespace Game.CharacSystem
     {
         private List<VanillaCharacter> mCharacList;
         private MainPlayerCamera       mMainPlayerCam;
-        private SceneManager           mSceneMgr;
+        private StateManager           mStateMgr;
         private MoisManager            mInput;
         private MainWorld              mWorld;
-        private GameConsole            mConsole;
         private string                 mMeshName = "Sinbad.mesh";
 
-        public SceneManager     SceneMgr      { get { return this.mSceneMgr; } }
+        public StateManager     StateMgr      { get { return this.mStateMgr; } }
+        public SceneManager     SceneMgr      { get { return this.mStateMgr.SceneMgr; } }
         public MoisManager      Input         { get { return this.mInput; } }
         public MainWorld        World         { get { return this.mWorld; } }
-        public GameConsole      GameConsole   { get { return this.mConsole; } }
         public MainPlayerCamera MainPlayerCam { get { return this.mMainPlayerCam; } }
 
-        public CharacMgr(StateManager stateMgr, MainWorld world, GameConsole console)
+        public CharacMgr(StateManager stateMgr, MainWorld world)
         {
-            this.mSceneMgr = stateMgr.SceneManager;
+            this.mStateMgr = stateMgr;
             this.mInput = stateMgr.Input;
             this.mWorld = world;
-            this.mConsole = console;
-            this.mMainPlayerCam = new MainPlayerCamera(stateMgr.Camera);
             this.mCharacList = new List<VanillaCharacter>();
         }
 
@@ -42,7 +39,11 @@ namespace Game.CharacSystem
             {
                 type = "Player";
                 this.mCharacList.Add(new VanillaPlayer(this, this.mMeshName, info, this.mInput));
-                if (this.mCharacList.Count == 1) { this.mMainPlayerCam.AttachToPlayer(this.mCharacList[0] as VanillaPlayer); }
+                if (this.mCharacList.Count == 1)
+                {
+                    this.mMainPlayerCam = new MainPlayerCamera(this.mStateMgr.Camera, (this.mCharacList[0] as VanillaPlayer), this.mStateMgr.Window.Width, this.mStateMgr.Window.Height);
+                    (this.GetCharacter() as VanillaPlayer).AttachCamera(this.mMainPlayerCam);
+                }
             }
             else
             {

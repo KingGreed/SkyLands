@@ -23,7 +23,7 @@ namespace Game.GUICreator
 
         public Dictionary<ButtonName, Button> Buttons { get { return this.mButtons; } }
 
-        public OptionsGUI(MiyagiMgr miyagiMgr, string name) : base(miyagiMgr, name) { }
+        public OptionsGUI(StateManager stateMgr, string name) : base(stateMgr, name) { }
         
         protected override void CreateGUI()
         {

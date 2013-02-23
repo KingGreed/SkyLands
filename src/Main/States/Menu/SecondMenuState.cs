@@ -13,7 +13,7 @@ namespace Game.States
 
         protected override void Startup()
         {
-            this.mTempMenuGUI = new SecondMenuGUI(this.mStateMgr.MiyagiManager, "TempMenu GUI");
+            this.mTempMenuGUI = new SecondMenuGUI(this.mStateMgr, "TempMenu GUI");
             this.mTempMenuGUI.SetListener(StateManager.TypeWorld.Sinus, this.ClickSinusButton);
             this.mTempMenuGUI.SetListener(StateManager.TypeWorld.Dome, this.ClickDomeButton);
             this.mTempMenuGUI.SetListener(StateManager.TypeWorld.Plain, this.ClickPlainButton);
@@ -22,13 +22,13 @@ namespace Game.States
 
         public override void Hide()
         {
-            this.mStateMgr.MiyagiManager.CursorVisibility = false;
+            this.mStateMgr.MiyagiMgr.CursorVisibility = false;
         }
 
         public override void Show()
         {
             this.mTempMenuGUI.Show();
-            this.mStateMgr.MiyagiManager.CursorVisibility = true;
+            this.mStateMgr.MiyagiMgr.CursorVisibility = true;
         }
 
         public override void Update(float frameTime)

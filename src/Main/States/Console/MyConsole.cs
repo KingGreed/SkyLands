@@ -11,19 +11,37 @@ using Miyagi.UI.Controls.Layout;
 using Miyagi.UI.Controls.Styles;
 
 using Game.GUICreator;
+using Game.States;
 
-namespace Game.Console
+namespace Game.MyGameConsole
 {
-    public class GameConsole : GUIFactory
+    public class MyConsole : GUIFactory
     {
-        public delegate void ConsoleEvent (string txtEntered);
-        private ConsoleEvent mCommandEntered;
-        private bool mIsEnable;
+        public delegate void ConsoleEvent(string command);
+        public event ConsoleEvent OnCommandEntered;
+
+        private bool mIsEnable, mKeepPanelOpen;
         private Panel mLog, mTextBox;
         private Label mNewLabel;
         private Queue<Label> mOldLabels;
         private MoisManager mInput;
         private Timer mTimer;
+
+        public Miyagi.UI.GUI GUI { get { return this.mGUI; } }
+        
+        public bool KeepPanelOpen
+        {
+            get { return this.mKeepPanelOpen; }
+            set
+            {
+                if (this.mKeepPanelOpen != value)
+                {
+                    this.mKeepPanelOpen = value;
+                    if (this.mKeepPanelOpen)  { this.PanelVisibility(true); }
+                    else                      { this.mTimer.Reset(); }
+                }
+            }
+        }
 
         public bool Enable
         {
@@ -47,12 +65,12 @@ namespace Game.Console
                 }
             }
         }
-        
-        public GameConsole(MiyagiMgr miyagiMgr, MoisManager input, ConsoleEvent del) : base(miyagiMgr, "Game GUI")
+
+        public MyConsole(StateManager stateMgr) : base(stateMgr, "Game GUI")
         {
-            this.mInput = input;
+            this.mInput = stateMgr.Input;
             this.mTimer = new Timer();
-            this.mCommandEntered = del;
+            this.mKeepPanelOpen = false;
         }
 
         protected override void CreateGUI()
@@ -132,6 +150,7 @@ namespace Game.Console
             this.mGUI.Controls.Add(this.mLog);
         }
 
+        public void WriteLine(object o) { this.WriteLine(o.ToString()); }
         public void WriteLine(string txt)
         {
             if (!this.Enable)
@@ -161,17 +180,21 @@ namespace Game.Console
             this.mLog.Controls.Add(newL);
             this.mOldLabels.Enqueue(newL);
             this.mNewLabel.Text = "";
+
+            if(this.OnCommandEntered != null)
+                this.OnCommandEntered(txt);
         }
 
         public void Update()
         {
             if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_RETURN)) { this.Enable = !this.Enable; }
+            if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_TAB))    { this.KeepPanelOpen = !this.KeepPanelOpen; }
 
             if (this.Enable)
             {
-                string command = this.mInput.GetText();
-                this.mNewLabel.Text += command;
-                this.mCommandEntered(command);
+                string txt = this.mInput.GetText();
+                if (txt != "")
+                    this.mNewLabel.Text += txt;
             }
             else
             {
@@ -179,6 +202,8 @@ namespace Game.Console
                     this.PanelVisibility(false);
             }
         }
+
+        public void UpdateZOder(int zOrder) { this.mGUI.ZOrder = zOrder; }
 
         private void TextBoxVisibility(bool vis)
         {
@@ -188,9 +213,12 @@ namespace Game.Console
 
         private void PanelVisibility(bool vis)
         {
-            this.mLog.Visible = vis;
-            foreach(Label l in this.mOldLabels)
-                l.Visible = vis;
+            if (vis || !this.mKeepPanelOpen)
+            {
+                this.mLog.Visible = vis;
+                foreach (Label l in this.mOldLabels)
+                    l.Visible = vis;
+            }
         }
     }
 }

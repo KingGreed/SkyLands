@@ -8,11 +8,13 @@ using Miyagi.UI.Controls;
 using Miyagi.UI.Controls.Layout;
 using Miyagi.UI.Controls.Styles;
 
+using Game.States;
+
 namespace Game.GUICreator
 {
     public class LoadingGUI : GUIFactory
     {
-        public LoadingGUI(MiyagiMgr miyagiMgr, string name) : base(miyagiMgr, name) { }
+        public LoadingGUI(StateManager stateMgr, string name) : base(stateMgr, name) { }
 
         protected override void CreateGUI()
         {

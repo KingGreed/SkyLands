@@ -13,7 +13,7 @@ namespace Game.States
 
         protected override void Startup()
         {
-            this.mMenuGUI = new MenuGUI(this.mStateMgr.MiyagiManager, "Menu GUI");
+            this.mMenuGUI = new MenuGUI(this.mStateMgr, "Menu GUI");
             this.mMenuGUI.SetListener(MenuGUI.Buttons.Play, this.ClickPlayButton);
             this.mMenuGUI.SetListener(MenuGUI.Buttons.Exit, this.ClickExitButton);
             this.mMenuGUI.SetListener(MenuGUI.Buttons.Options, this.ClickOptionButton);
@@ -40,7 +40,7 @@ namespace Game.States
         { 
             this.mMenuGUI.Show();
             this.mMenuGUI.EnableButtons(true);
-            this.mStateMgr.MiyagiManager.CursorVisibility = true;
+            this.mStateMgr.MiyagiMgr.CursorVisibility = true;
         }
     }
 }

@@ -7,25 +7,27 @@ namespace Game.CharacSystem
 {
     public class MainPlayerCamera
     {
-        private VanillaPlayer      mPlayer;
-        private Camera      mCam;
-        private SceneNode   mCamYawNode;
-        private SceneNode   mCamPitchNode;
-        private bool        mIsCameraFirstView;
+        private VanillaPlayer mPlayer;
+        private Camera        mCam;
+        private SceneNode     mCamYawNode, mCamPitchNode;
+        private bool          mIsCameraFirstView;
+        private uint          mWndWidth, mWndHeight;
 
         public Camera Camera { get { return this.mCam; } }
+        public uint WndWidth  { get { return this.mWndWidth; } }
+        public uint WndHeight { get { return this.mWndHeight; } }
 
-        public MainPlayerCamera(Camera cam)
+        public MainPlayerCamera(Camera cam, VanillaPlayer p, uint wndWidth, uint wndHeight)
         {
             this.mPlayer            = null;
             this.mCam               = cam;
             this.mIsCameraFirstView = true;
-        }
+            this.mWndWidth = wndWidth;
+            this.mWndHeight = wndHeight;
 
-        public void AttachToPlayer(VanillaPlayer player)
-        {
-            this.mPlayer = player;
+            this.mPlayer = p;
             this.InitCamera();
+
         }
 
         public void Update()

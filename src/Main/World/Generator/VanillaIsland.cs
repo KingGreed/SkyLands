@@ -265,7 +265,7 @@ namespace Game.World.Generator
             if(this.setVisibleFaces(relativePos, curr)) {
                 foreach(BlockFace face in curr.getFaces()) {
                     if(this.hasVisiblefaceAt((int) relativePos.x, (int) relativePos.y, (int) relativePos.z, face)) {
-                        this.addBlockToScene(relativePos, material);
+                        this.addFaceToScene(face, relativePos, material);
                     }
                 }
             }

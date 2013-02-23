@@ -195,7 +195,11 @@ namespace Game
             foreach (KeyCode code in Enum.GetValues(typeof(KeyCode)))
             {
                 if (this.WasKeyPressed(code))
-                    txt += this.GetKeyCodeChar(code);
+                {
+                    char c = this.GetKeyCodeChar(code);
+                    if(c != '\0')
+                        txt += c;
+                }
             }
 
             return txt;

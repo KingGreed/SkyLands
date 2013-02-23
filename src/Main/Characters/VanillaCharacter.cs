@@ -4,6 +4,7 @@ using Mogre;
 
 using Game.World;
 using Game.Animation;
+using Game.MyGameConsole;
 
 namespace Game.CharacSystem
 {
@@ -84,6 +85,8 @@ namespace Game.CharacSystem
             this.mAnimMgr.SetAnims(this.mIdleAnims);
 
             this.mNode.Scale(CHARAC_SIZE / ent.BoundingBox.Size);
+
+            //this.mCharacMgr.StateMgr.MyConsole.OnCommandEntered += new MyConsole.ConsoleEvent(this.OnCommandEntered);
         }
 
         private Vector3 GetTranslation(int i)
@@ -114,9 +117,14 @@ namespace Game.CharacSystem
             {
                 this.mAnimMgr.SetAnims(AnimName.JumpStart, AnimName.JumpLoop);
                 this.mJumpSpeed.Jump();
-                this.mCharacMgr.GameConsole.WriteLine("Jump !");
+                this.mCharacMgr.StateMgr.WriteOnConsole("Jump !");
             }
         }
+
+        /*private void OnCommandEntered(string command)
+        {
+            Console.WriteLine("ok");
+        }*/
 
         public void Update(float frameTime)
         {
@@ -140,8 +148,8 @@ namespace Game.CharacSystem
                 this.mNode.Yaw(this.mMovementInfo.YawValue * frameTime);
             }
 
-            if ((this as VanillaPlayer).Input.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left))
-                this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addFaceToScene(API.Generic.BlockFace.upperFace, this.FeetPosition / MainWorld.CUBE_SIDE, "cube/sand");
+            //if ((this as VanillaPlayer).Input.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left))
+                //this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addFaceToScene(API.Generic.BlockFace.upperFace, this.FeetPosition / MainWorld.CUBE_SIDE, "cube/sand");
 
             this.Translate(translation * frameTime);
 

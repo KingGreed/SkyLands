@@ -9,6 +9,8 @@ using Miyagi.UI.Controls.Layout;
 using Miyagi.Common.Events;
 using Miyagi.UI.Controls.Styles;
 
+using Game.States;
+
 namespace Game.GUICreator
 {
 	public class MenuGUI : GUIFactory
@@ -16,7 +18,7 @@ namespace Game.GUICreator
         public enum Buttons { Play, Options, Exit }
         private Dictionary<string, Button> mButtons;
 
-        public MenuGUI(MiyagiMgr miyagiMgr, string name) : base(miyagiMgr, name) {}
+        public MenuGUI(StateManager stateMgr, string name) : base(stateMgr, name) {}
 
         protected override void CreateGUI()
         {

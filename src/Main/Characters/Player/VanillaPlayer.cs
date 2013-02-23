@@ -23,13 +23,15 @@ namespace Game.CharacSystem
         private static float YAW_SENSIVITY = 1;
         private static float PITCH_SENSIVITY = 0.15f;
 
-        private MoisManager mInput;
-        private Emote[]     mEmotes;
-        private AnimName[]  mEmotesNames;
-        private float       mYawCamValue;
-        private float       mPitchCamValue;
-        private bool        mIsFirstView;
-        private bool        mIsDebugMode;
+        private MoisManager      mInput;
+        private Emote[]          mEmotes;
+        private AnimName[]       mEmotesNames;
+        private float            mYawCamValue;
+        private float            mPitchCamValue;
+        private bool             mIsFirstView;
+        private bool             mIsDebugMode;
+        private MainPlayerCamera mCam;
+        private RayCaster        mRayCaster;
 
         public MoisManager Input         { get { return this.mInput; } }
         public float       YawCamValue   { get { return this.mYawCamValue; } }
@@ -59,6 +61,12 @@ namespace Game.CharacSystem
                 this.mEmotesNames[i] = this.mEmotes[i].Anim;
         }
 
+        public void AttachCamera(MainPlayerCamera cam)
+        { 
+            this.mCam = cam;
+            this.mRayCaster = new RayCaster(this.mCharacMgr.SceneMgr, this.mCam.Camera, this.mCam.WndWidth, this.mCam.WndHeight);
+        }
+
         public new void Update(float frameTime)
         {
             bool isNowMoving = !this.mIsDebugMode || this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_LCONTROL, MOIS.KeyCode.KC_RCONTROL);
@@ -73,6 +81,8 @@ namespace Game.CharacSystem
 
                 if (this.mIsFirstView) { this.FirstPersonUpdate(yawValue, pitchValue); }
                 else { this.ThirdPersonUpdate(yawValue, pitchValue); }
+
+                if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left)) { this.OnClick(); }
 
                 /* Update emotes animations */
                 if (!this.mAnimMgr.AreAnimationsPlaying(AnimName.JumpStart, AnimName.JumpLoop, AnimName.JumpEnd, AnimName.RunBase, AnimName.RunTop))
@@ -106,5 +116,23 @@ namespace Game.CharacSystem
         }
 
         private void ThirdPersonUpdate(float yawValue, float pitchValue) { }
+
+        private void OnClick()
+        {
+            Vector3 blockPos = Vector3.ZERO, normal = Vector3.ZERO;
+            string msg = this.mRayCaster.RayCast(this.mNode, ref blockPos, ref normal).ToString();
+
+            blockPos /= MainWorld.CUBE_SIDE;
+            blockPos.x = Mogre.Math.IFloor(blockPos.x);
+            blockPos.y = Mogre.Math.IFloor(blockPos.y);
+            blockPos.z = Mogre.Math.IFloor(blockPos.z);
+
+            msg += blockPos.ToString();
+            msg += this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(blockPos, false).getName();
+
+            this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addBlockToScene(blockPos, "Grass");
+
+            //this.mCharacMgr.StateMgr.WriteOnConsole(msg);
+        }
     }
 }

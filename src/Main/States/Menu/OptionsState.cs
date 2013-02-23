@@ -14,7 +14,7 @@ namespace Game.States
 
         protected override void Startup()
         {
-            this.mOptionsGUI = new OptionsGUI(this.mStateMgr.MiyagiManager, "Options GUI");
+            this.mOptionsGUI = new OptionsGUI(this.mStateMgr, "Options GUI");
             this.mOptionsGUI.SetListener(OptionsGUI.ButtonName.FullScreen, this.ClickFullScreenButton);
             this.mOptionsGUI.SetListener(OptionsGUI.ButtonName.HighQuality, this.ClickQualityButton);
             this.mOptionsGUI.SetListener(OptionsGUI.ButtonName.Music, this.ClickMusicButton);
@@ -25,13 +25,13 @@ namespace Game.States
 
         public override void Hide()
         {
-            this.mStateMgr.MiyagiManager.CursorVisibility = false;
+            this.mStateMgr.MiyagiMgr.CursorVisibility = false;
         }
 
         public override void Show()
         {
             this.mOptionsGUI.Show();
-            this.mStateMgr.MiyagiManager.CursorVisibility = true;
+            this.mStateMgr.MiyagiMgr.CursorVisibility = true;
         }
 
         public override void Update(float frameTime)
