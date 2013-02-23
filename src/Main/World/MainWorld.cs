@@ -49,10 +49,10 @@ namespace Game.World
             this.mStateMgr = stateMgr;
 
             this.mIslandList = new Dictionary<Vector3, Island>();
-            SceneNode node = this.mStateMgr.SceneManager.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
+            SceneNode node = this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
             Island island;
             if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Dome)            { island = new DomeIsland(node, new Vector2(3, 3), this); }
-            else if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { island = new RandomIsland(node, new Vector2(13, 13), new Plains(),    this); }
+            else if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { island = new RandomIsland(node, new Vector2(15, 15), new Plains(),    this); }
             else if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { island = new RandomIsland(node, new Vector2(13, 13), new Hills(),     this); }
             else  /*(this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Mountain)*/ { island = new RandomIsland(node, new Vector2(6, 6),   new Mountains(), this); }
             this.mIslandList.Add(Vector3.ZERO, island);
@@ -83,7 +83,7 @@ namespace Game.World
         public Vector3 getSpawnPoint() { return this.mSpawnPoint; }
         public int     getHeight()     { return MaxHeight;        }
         
-        public SceneManager getSceneMgr()        { return this.mStateMgr.SceneManager; }
+        public SceneManager getSceneMgr()        { return this.mStateMgr.SceneMgr; }
         public Island getIslandAt(Vector3 loc)   { return this.mIslandList[loc]; }
         
         public int     getSurfaceHeight(int x, int z, Vector3 islandLoc)                       { return this.mIslandList[islandLoc].getSurfaceHeight(x, z); }
@@ -160,9 +160,7 @@ namespace Game.World
             blockPos += this.mIslandList[islandLoc].getPosition();
             blockPos /= CUBE_SIDE;
 
-            blockPos.x = Mogre.Math.IFloor(blockPos.x);
-            blockPos.y = Mogre.Math.IFloor(blockPos.y);
-            blockPos.z = Mogre.Math.IFloor(blockPos.z);
+            
 
             Block block = this.mIslandList[islandLoc].getBlock(blockPos, false);
             return !(block == null || block is AirBlock);
@@ -191,7 +189,7 @@ namespace Game.World
 
         public void Shutdown() {
             this.mSkyMgr.Shutdown();
-            this.mStateMgr.SceneManager.ClearScene();
+            this.mStateMgr.SceneMgr.ClearScene();
         }
     }
 }

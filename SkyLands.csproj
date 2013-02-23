@@ -38,7 +38,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -145,13 +144,16 @@
     <Compile Include="src\Main\Characters\Misc\JumpSpeed.cs" />
     <Compile Include="src\Main\Characters\NonPlayer\VanillaNonPlayer.cs" />
     <Compile Include="src\Main\Characters\Player\MainPlayerCamera.cs" />
+    <Compile Include="src\Main\Characters\Player\RayCaster.cs" />
     <Compile Include="src\Main\Characters\Player\VanillaPlayer.cs" />
     <Compile Include="src\Main\Characters\VanillaCharacter.cs" />
+    <Compile Include="src\Main\States\Console\MyConsole.cs" />
     <Compile Include="src\Main\GUIs\GameGUI.cs" />
     <Compile Include="src\Main\GUIs\LoadingGUI.cs" />
     <Compile Include="src\Main\GUIs\MiyagiMgr.cs" />
     <Compile Include="src\Main\GUIs\OptionsGUI.cs" />
     <Compile Include="src\Main\GUIs\SecondMenuGUI.cs" />
+    <Compile Include="src\Main\States\Console\GenerateTextEventArgs.cs" />
     <Compile Include="src\Main\States\Game\DebugMode.cs" />
     <Compile Include="src\Main\States\Menu\LoadingState.cs" />
     <Compile Include="src\Main\States\Menu\OptionsState.cs" />

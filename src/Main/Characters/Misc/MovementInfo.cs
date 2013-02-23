@@ -7,12 +7,12 @@ namespace Game.CharacSystem
     {
         public delegate void MovementEvent(bool actualState);
         private MovementEvent mOnFall, mOnJump;
-        private bool mIsMoving, mIsFalling, mIsJumping;
+        private bool mIsAllowedToMove, mIsFalling, mIsJumping;
         private Vector3 mMoveDirection;
         private float mYawValue;
 
-        public float   YawValue      { get { return this.mYawValue; } set { this.mYawValue = value; } }
-        public bool    IsMoving      { get { return this.mIsMoving; } set { this.mIsMoving = value; } }
+        public float   YawValue         { get { return this.mYawValue; } set { this.mYawValue = value; } }
+        public bool    IsAllowedToMoved { get { return this.mIsAllowedToMove; } set { this.mIsAllowedToMove = value; } }
         public bool    IsFalling
         {
             get { return mIsFalling; }
@@ -48,7 +48,7 @@ namespace Game.CharacSystem
         {
             this.mOnFall = onFall;
             this.mOnJump = onJump;
-            this.mIsMoving = true;
+            this.mIsAllowedToMove = true;
             this.mIsFalling = false;
             this.mIsJumping = false;
             this.mMoveDirection = new Vector3();

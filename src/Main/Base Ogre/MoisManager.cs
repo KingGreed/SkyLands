@@ -189,6 +189,49 @@ namespace Game
             return true;
         }
 
+        public string GetText()
+        {
+            string txt = "";
+            foreach (KeyCode code in Enum.GetValues(typeof(KeyCode)))
+            {
+                if (this.WasKeyPressed(code))
+                {
+                    char c = this.GetKeyCodeChar(code);
+                    if(c != '\0')
+                        txt += c;
+                }
+            }
+
+            return txt;
+        }
+
+        public char GetKeyCodeChar(KeyCode code)
+        {
+            char c = (char)0;
+            string txt;
+            if (code == KeyCode.KC_SPACE)
+                c = ' ';
+            else if (code == KeyCode.KC_LBRACKET)
+                c = '(';
+            else if (code == KeyCode.KC_RBRACKET)
+                c = ')';
+            else
+            {
+                txt = Enum.GetName(typeof(KeyCode), code);
+                txt = txt.Substring(3);
+
+                if (txt.Length == 1)    // Consider the letters and numbers
+                {
+                    char tmp = txt.ToLower()[0];
+
+                    if ((tmp >= 'a' && tmp <= 'z') || (tmp >= '0' && tmp <= '9'))
+                        c = tmp;
+                }
+            }
+
+            return c;
+        }
+
         private bool OnMouseMoved(MouseEvent arg)
         {
             this.mMouseMove.x = arg.state.X.rel;

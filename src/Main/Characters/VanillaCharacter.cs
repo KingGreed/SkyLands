@@ -4,6 +4,7 @@ using Mogre;
 
 using Game.World;
 using Game.Animation;
+using Game.MyGameConsole;
 
 namespace Game.CharacSystem
 {
@@ -27,10 +28,10 @@ namespace Game.CharacSystem
         private GravitySpeed    mGravitySpeed;
         private JumpSpeed       mJumpSpeed;
 
-        public SceneNode     Node     { get { return this.mNode; } }
-        public bool          IsMoving { get { return this.mMovementInfo.IsMoving; } }
-        public float         Height   { get { return this.CHARAC_SIZE.y; } }
-        public CharacterInfo Info     { get { return this.mCharInfo; } }
+        public SceneNode     Node            { get { return this.mNode; } }
+        public bool          IsAllowedToMove { get { return this.mMovementInfo.IsAllowedToMoved; } set { this.mMovementInfo.IsAllowedToMoved = value; } }
+        public float         Height          { get { return this.CHARAC_SIZE.y; } }
+        public CharacterInfo Info            { get { return this.mCharInfo; } }
         public Vector3       FeetPosition
         {
             get         { return this.mNode.Position - new Vector3(0, this.Height / 2 + 5, 0); }
@@ -57,14 +58,10 @@ namespace Game.CharacSystem
 
             this.mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id);
 
-            //Entity cube2 = sceneMgr.CreateEntity("cube.mesh");
-            //this.mNode.AttachObject(cube2);
-
             this.mNode.AttachObject(ent);
             this.FeetPosition = this.mCharInfo.SpawnPoint + new Vector3(0, 300, 0);
 
             /* Collisions */
-            Console.WriteLine(this.mNode.Position);
             this.mHitPoints = new SceneNode[8];
             this.mPoints = new SceneNode[this.mHitPoints.Length];
             for(int i = 0; i < this.mHitPoints.Length; i++)
@@ -88,6 +85,8 @@ namespace Game.CharacSystem
             this.mAnimMgr.SetAnims(this.mIdleAnims);
 
             this.mNode.Scale(CHARAC_SIZE / ent.BoundingBox.Size);
+
+            //this.mCharacMgr.StateMgr.MyConsole.OnCommandEntered += new MyConsole.ConsoleEvent(this.OnCommandEntered);
         }
 
         private Vector3 GetTranslation(int i)
@@ -118,14 +117,23 @@ namespace Game.CharacSystem
             {
                 this.mAnimMgr.SetAnims(AnimName.JumpStart, AnimName.JumpLoop);
                 this.mJumpSpeed.Jump();
+                this.mCharacMgr.StateMgr.WriteOnConsole("Jump !");
             }
         }
+
+        /*private void OnCommandEntered(string command)
+        {
+            Console.WriteLine("ok");
+        }*/
 
         public void Update(float frameTime)
         {
             /* Actualise mMovementInfo */
-            if (this.mCharInfo.IsPlayer) { (this as VanillaPlayer).Update(frameTime); }
-            else                         { (this as VanillaNonPlayer).Update(frameTime); }
+            if (this.mMovementInfo.IsAllowedToMoved)
+            {
+                if (this.mCharInfo.IsPlayer) { (this as VanillaPlayer).Update(frameTime); }
+                else { (this as VanillaNonPlayer).Update(frameTime); }
+            }
 
             /* Apply mMovementInfo */
             Vector3 translation = Vector3.ZERO;
@@ -134,14 +142,14 @@ namespace Game.CharacSystem
             else
                 translation.y = this.mGravitySpeed.GetSpeed();
 
-            if (this.mMovementInfo.IsMoving)
+            if (this.mMovementInfo.IsAllowedToMoved)
             {
                 translation += WALK_SPEED * this.mMovementInfo.MoveDirection * new Vector3(1, 0, 1);    // Ignores the y axis translation here
                 this.mNode.Yaw(this.mMovementInfo.YawValue * frameTime);
             }
 
-            if ((this as VanillaPlayer).Input.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left))
-                this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addFaceToScene(API.Generic.BlockFace.upperFace, this.FeetPosition / MainWorld.CUBE_SIDE, "cube/sand");
+            //if ((this as VanillaPlayer).Input.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left))
+                //this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addFaceToScene(API.Generic.BlockFace.upperFace, this.FeetPosition / MainWorld.CUBE_SIDE, "cube/sand");
 
             this.Translate(translation * frameTime);
 

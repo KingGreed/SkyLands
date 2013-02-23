@@ -19,6 +19,7 @@ namespace Game.States
             if (this.mIsStartedUp) { return false; }
             this.mIsStartedUp = true;
             this.Startup();
+            //this.mStateMgr.MyConsole.GUI.ForceRedraw();
             return true;
         }
 

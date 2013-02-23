@@ -15,19 +15,19 @@ namespace Game.States
         protected override void Startup()
         {
             this.mWaitOneFrame = true;
-            this.mLoadingGUI = new LoadingGUI(this.mStateMgr.MiyagiManager, "Loading GUI");
+            this.mLoadingGUI = new LoadingGUI(this.mStateMgr, "Loading GUI");
         }
 
         public override void Hide()
         {
             this.mLoadingGUI.Hide();
-            this.mStateMgr.MiyagiManager.CursorVisibility = false;
+            this.mStateMgr.MiyagiMgr.CursorVisibility = false;
         }
 
         public override void Show()
         {
             this.mLoadingGUI.Show();
-            this.mStateMgr.MiyagiManager.CursorVisibility = false;
+            this.mStateMgr.MiyagiMgr.CursorVisibility = false;
         }
 
         public override void Update(float frameTime) 

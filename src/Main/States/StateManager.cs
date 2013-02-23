@@ -6,6 +6,7 @@ using Mogre;
 using Game.BaseApp;
 using Game.GUICreator;
 using Game.Display;
+using Game.MyGameConsole;
 
 namespace Game.States
 {
@@ -13,28 +14,32 @@ namespace Game.States
     {
         public enum TypeWorld { Sinus, Dome, Plain, Mountain }
 
-        private MiyagiMgr    mMiyagiMgr;        
+        private MiyagiMgr    mMiyagiMgr;
+        private MyConsole    mConsole;
         private Stack<State> mStateStack;
         private Stack<Type>  mNewStates;
         private int          mPopRequested;
         private TypeWorld    mChosenWorld;
         private bool         mWaitOneFrame;
 
-        public Root         Root          { get { return this.mRoot; } }
-        public SceneManager SceneManager  { get { return this.mSceneMgr; } }
-        public RenderWindow Window        { get { return this.mWindow; } }
-        public MoisManager  Input         { get { return this.mInput; } }
-        public MiyagiMgr    MiyagiManager { get { return this.mMiyagiMgr; } }
-        public Camera       Camera        { get { return this.mCam; } }
-        public Viewport     Viewport      { get { return this.mViewport; } }
-        public TypeWorld    ChosenWorld   { get { return this.mChosenWorld; } set { this.mChosenWorld = value; } }
-        public int          NumberState   { get { return this.mStateStack.Count; } }
+        public Root         Root        { get { return this.mRoot; } }
+        public SceneManager SceneMgr    { get { return this.mSceneMgr; } }
+        public RenderWindow Window      { get { return this.mWindow; } }
+        public MoisManager  Input       { get { return this.mInput; } }
+        public MiyagiMgr    MiyagiMgr   { get { return this.mMiyagiMgr; } }
+        public Camera       Camera      { get { return this.mCam; } }
+        public Viewport     Viewport    { get { return this.mViewport; } }
+        public TypeWorld    ChosenWorld { get { return this.mChosenWorld; } set { this.mChosenWorld = value; } }
+        public int          NumberState { get { return this.mStateStack.Count; } }
+        public MyConsole    MyConsole   { get { return this.mConsole; } }
 
         protected override void Create()
         {
             GraphicBlock.generateFace();
             LogManager.Singleton.DefaultLog.LogMessage("***********************Program\'s Log***********************");
             this.mMiyagiMgr = new MiyagiMgr(this.mInput, new Vector2(this.mWindow.Width, this.mWindow.Height));
+            this.mConsole = new MyConsole(this);
+            
             this.mStateStack = new Stack<State>();
             this.mNewStates = new Stack<Type>();
             this.mPopRequested = 0;
@@ -49,8 +54,6 @@ namespace Game.States
 
             float frameTime = evt.timeSinceLastFrame;
             if (frameTime > 0.1) { return; }
-
-            this.mMiyagiMgr.Update();
 
             while(this.mPopRequested > 0) { this.PopState(); }
 
@@ -70,6 +73,10 @@ namespace Game.States
 
             if      (this.mWaitOneFrame)         { this.mWaitOneFrame = false; }
             else if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Update(frameTime); }
+
+
+            this.mMiyagiMgr.Update();
+            this.mConsole.Update();
         }
 
         /* Add a State to the stack and start it up */
@@ -128,9 +135,18 @@ namespace Game.States
         {
             LogManager.Singleton.DefaultLog.LogMessage("***********************End of Program\'s Log***********************");
             while (this.mStateStack.Count > 0) { this.PopState(); }
+            this.mConsole.Dispose();
             this.mMiyagiMgr.ShutDown();
             this.mInput.Shutdown(); 
             this.mRoot.Dispose();
+        }
+
+        public void WriteOnConsole(string txt) { this.mConsole.WriteLine(txt); }
+
+        public void HideGUIs()
+        {
+            this.mMiyagiMgr.AllGuisVisibility(false);
+            this.mConsole.GUI.Visible = true;
         }
     }
 }
