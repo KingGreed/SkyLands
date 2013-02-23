@@ -4,31 +4,32 @@ using Mogre;
 
 using Game.World;
 using Game.States;
+using Game.Console;
 
 namespace Game.CharacSystem
 {
     public class CharacMgr
     {
-        public static float YAW_SENSIVITY = 1f;   // Temp
-        public static float PITCH_SENSIVITY = 0.15f;   // Temp
-
         private List<VanillaCharacter> mCharacList;
         private MainPlayerCamera       mMainPlayerCam;
         private SceneManager           mSceneMgr;
         private MoisManager            mInput;
         private MainWorld              mWorld;
+        private GameConsole            mConsole;
         private string                 mMeshName = "Sinbad.mesh";
 
         public SceneManager     SceneMgr      { get { return this.mSceneMgr; } }
         public MoisManager      Input         { get { return this.mInput; } }
         public MainWorld        World         { get { return this.mWorld; } }
+        public GameConsole      GameConsole   { get { return this.mConsole; } }
         public MainPlayerCamera MainPlayerCam { get { return this.mMainPlayerCam; } }
 
-        public CharacMgr(StateManager stateMgr, MainWorld world)
+        public CharacMgr(StateManager stateMgr, MainWorld world, GameConsole console)
         {
             this.mSceneMgr = stateMgr.SceneManager;
             this.mInput = stateMgr.Input;
             this.mWorld = world;
+            this.mConsole = console;
             this.mMainPlayerCam = new MainPlayerCamera(stateMgr.Camera);
             this.mCharacList = new List<VanillaCharacter>();
         }

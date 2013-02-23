@@ -38,7 +38,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -147,7 +146,7 @@
     <Compile Include="src\Main\Characters\Player\MainPlayerCamera.cs" />
     <Compile Include="src\Main\Characters\Player\VanillaPlayer.cs" />
     <Compile Include="src\Main\Characters\VanillaCharacter.cs" />
-    <Compile Include="src\Main\GUIs\GameGUI.cs" />
+    <Compile Include="src\Main\GUIs\GameConsole.cs" />
     <Compile Include="src\Main\GUIs\LoadingGUI.cs" />
     <Compile Include="src\Main\GUIs\MiyagiMgr.cs" />
     <Compile Include="src\Main\GUIs\OptionsGUI.cs" />

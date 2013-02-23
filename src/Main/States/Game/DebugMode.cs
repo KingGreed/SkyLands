@@ -8,10 +8,12 @@ namespace Game
 {
     public class DebugMode
     {
-        private bool        mIsDebugMode;
+        private bool        mIsDebugMode, mIsConsoleMode;
         private CameraMan   mCameraMan;
         private MoisManager mInput;
         private CharacMgr   mCharacMgr;
+
+        public bool IsConsoleMode { get { return this.mIsConsoleMode; } set { this.mIsConsoleMode = value; } }
 
         public DebugMode(MoisManager input, CharacMgr characMgr)
         {
@@ -19,9 +21,10 @@ namespace Game
             this.mCharacMgr = characMgr;
             this.mIsDebugMode = false;
             this.mCameraMan = null;
+            this.mIsConsoleMode = false;
         }
 
-        public void Update(float frameTime)
+        public void Update(float frameTime, bool enablePlayerMove = true)
         {
             if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F1))
             {
@@ -57,9 +60,10 @@ namespace Game
                 this.mCharacMgr.World.getIslandAt(new Vector3(0, 0, 0)).removeFromScene(spawn);
             }
 
+            this.mCharacMgr.GetCharacter().IsAllowedToMove = !this.mIsConsoleMode;
             this.mCharacMgr.Update(frameTime);
 
-            if (!this.mCharacMgr.GetCharacter().IsMoving)
+            if (!this.mCharacMgr.GetCharacter().IsAllowedToMove && !this.mIsConsoleMode)
             {
                 this.mCameraMan.MouseMovement(this.mInput.MouseMoveX, this.mInput.MouseMoveY);
                 this.mCameraMan.UpdateCamera(frameTime, this.mInput);

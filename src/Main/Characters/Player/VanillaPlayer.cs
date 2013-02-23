@@ -19,7 +19,10 @@ namespace Game.CharacSystem
 
             public Emote(MOIS.KeyCode key, AnimName anim) { this.mKey = key; this.mAnim = anim; }
         }
-        
+
+        private static float YAW_SENSIVITY = 1;
+        private static float PITCH_SENSIVITY = 0.15f;
+
         private MoisManager mInput;
         private Emote[]     mEmotes;
         private AnimName[]  mEmotesNames;
@@ -59,14 +62,14 @@ namespace Game.CharacSystem
         public new void Update(float frameTime)
         {
             bool isNowMoving = !this.mIsDebugMode || this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_LCONTROL, MOIS.KeyCode.KC_RCONTROL);
-            if (this.mMovementInfo.IsMoving && !isNowMoving)
+            if (this.mMovementInfo.IsAllowedToMoved && !isNowMoving)
                 this.mAnimMgr.DeleteAllExcept<AnimName[]>(this.mEmotesNames, this.mIdleAnims, this.mJumpAnims);
-            this.mMovementInfo.IsMoving = isNowMoving;
+            this.mMovementInfo.IsAllowedToMoved = isNowMoving;
 
-            if (this.mMovementInfo.IsMoving)
+            if (this.mMovementInfo.IsAllowedToMoved)
             {
-                float yawValue = -this.mInput.MouseMoveX * CharacMgr.YAW_SENSIVITY;
-                float pitchValue = -this.mInput.MouseMoveY * CharacMgr.PITCH_SENSIVITY;
+                float yawValue = -this.mInput.MouseMoveX * YAW_SENSIVITY;
+                float pitchValue = -this.mInput.MouseMoveY * PITCH_SENSIVITY;
 
                 if (this.mIsFirstView) { this.FirstPersonUpdate(yawValue, pitchValue); }
                 else { this.ThirdPersonUpdate(yawValue, pitchValue); }

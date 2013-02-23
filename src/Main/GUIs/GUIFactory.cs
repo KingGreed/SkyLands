@@ -33,6 +33,5 @@ namespace Game.GUICreator
         public void Dispose()  { this.mGUI.Dispose();       }
         public void Hide()     { this.mGUI.Visible = false; }
         public void Show()     { this.mGUI.Visible = true;  }
-
 	}
 }

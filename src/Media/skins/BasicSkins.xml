@@ -157,4 +157,28 @@
       </SubSkin>
     </SubSkins>
   </Skin>
+  <Skin Name="Console">
+    <SubSkins>
+      <SubSkin Name="Console">
+        <Frames>
+          <Frame>
+            <FileName>ConsoleBackground.png</FileName>
+            <Duration>0</Duration>
+            <UV>
+              <X>0</X>
+              <Y>0</Y>
+              <Width>1</Width>
+              <Height>1</Height>
+            </UV>
+          </Frame>
+        </Frames>
+        <GpuPrograms />
+        <FrameAnimationMode>ForwardOnce</FrameAnimationMode>
+        <ScrollVector>
+          <X>0</X>
+          <Y>0</Y>
+        </ScrollVector>
+      </SubSkin>
+    </SubSkins>
+  </Skin>
 </Skins>
