@@ -19,7 +19,6 @@ namespace Game.BaseApp
         protected bool          mIsShutDownRequested = false;
         private string          mPluginsCfg          = "plugins.cfg";
         private string          mResourcesCfg        = "resources.cfg";
-        private int             mTextureMode         = 0;
         private int             mRenderMode          = 0;
         private MyOverlay       mDebugOverlay;
 
@@ -74,7 +73,7 @@ namespace Game.BaseApp
             this.mInput.Startup(windowHnd, this.mWindow.Width, this.mWindow.Height);
 
             this.mDebugOverlay = new MyOverlay(this.mWindow);
-            this.CycleTextureFilteringMode(3);
+            MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_NONE);
 
             this.Create();
             this.AddFrameLstn(new RootLstn(RootLstn.TypeLstn.FrameRendering, this.OnFrameRendering));
@@ -155,33 +154,9 @@ namespace Game.BaseApp
             if (mInput.WasKeyPressed(MOIS.KeyCode.KC_SYSRQ)) { this.TakeScreenshot(); }
         }
 
-        private void CycleTextureFilteringMode(int cycle = 1)
+        private void CycleTextureFilteringMode()
         {
-            this.mTextureMode = (this.mTextureMode + 1) % 4;
-            switch (this.mTextureMode)
-            {
-                case 0:
-                    MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_BILINEAR);
-                    this.mDebugOverlay.AdditionalInfo = "BiLinear";
-                    break;
-
-                case 1:
-                    MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_TRILINEAR);
-                    this.mDebugOverlay.AdditionalInfo = "TriLinear";
-                    break;
-
-                case 2:
-                    MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_ANISOTROPIC);
-                    MaterialManager.Singleton.DefaultAnisotropy = 8;
-                    this.mDebugOverlay.AdditionalInfo = "Anisotropic";
-                    break;
-
-                case 3:
-                    MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_NONE);
-                    MaterialManager.Singleton.DefaultAnisotropy = 1;
-                    this.mDebugOverlay.AdditionalInfo = "None";
-                    break;
-            }
+            MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_NONE);
         }
 
         private void CyclePolygonMode()

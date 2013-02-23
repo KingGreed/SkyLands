@@ -73,6 +73,7 @@ namespace Game.World.Generator
             }
             foreach(KeyValuePair<string, MultiBlock> pair in this.multiList) {
                 pair.Value.display(this, this.mWorld);
+                pair.Value.addMultiToScene();
             }
         }
         public override void RechargeMulti(MultiBlock multi) {
@@ -288,8 +289,6 @@ namespace Game.World.Generator
             } else {
                 blockNode = this.mFaceNode.CreateChildSceneNode(cubeNodeName, relativePos);
             }
-            
-            LogManager.Singleton.DefaultLog.LogMessage("Added block at : " + cubeNodeName);
             
             faceName = GraphicBlock.getFaceName(face);
             faceEntName = "face-" + relativePos.x + "-" + relativePos.y + "-" + relativePos.z + "-" + faceName;

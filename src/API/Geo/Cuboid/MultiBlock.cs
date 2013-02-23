@@ -25,5 +25,9 @@ namespace API.Geo.Cuboid
         void removeFromScene(Vector3 item, Island currIsland);
 
         void display(Island currentIsland, World currentWorld);
+        void addMultiToScene();
+
+        string getName();
+        void   setName(string name);
     }
 }

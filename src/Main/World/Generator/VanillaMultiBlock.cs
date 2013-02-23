@@ -21,6 +21,9 @@ namespace Game.World.Generator
         private List<int>     mIndexInVertexBuffer;
 
         private string        mMaterial;
+        private string        mName;
+        private Island        mIsland;
+
         ManualObject block;
 
         public static int CUBE_SIDE = MainWorld.CUBE_SIDE;
@@ -51,7 +54,9 @@ namespace Game.World.Generator
             this.moData = new RenderOperation();
         }
 
-        public void addBlock(Vector3 loc) { this.mList.Add(loc); }
+        public void addBlock(Vector3 loc)  { this.mList.Add(loc); }
+        public string getName()            { return this.mName;   }
+        public void   setName(string name) { this.mName = name;   }
 
         private int find(Vector3 item) {
             int i = 0;
@@ -80,7 +85,6 @@ namespace Game.World.Generator
                     this.removeFace(this.mIndexInVertexBuffer[elemPosition]);
                 } else {
                     string cubeNodeName = "Node-" + item.x * MainWorld.CUBE_SIDE + "-" + item.y * MainWorld.CUBE_SIDE + "-" + item.z * MainWorld.CUBE_SIDE ;
-                    LogManager.Singleton.DefaultLog.LogMessage(cubeNodeName);
 
                     currIsland.Node.GetChild(0).RemoveChild(cubeNodeName);
                 }
@@ -114,7 +118,7 @@ namespace Game.World.Generator
 
         public void display(Island currentIsland, API.Geo.World currentWorld) {
             if(mList.Count == 0) { return; }
-            
+            this.mIsland = currentIsland;
 
             string material = currentIsland.getMaterialFromName(this.mMaterial);
             int faceNumber = 0;
@@ -130,8 +134,9 @@ namespace Game.World.Generator
                     new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 0)
                 };
             Vector3 displayCoord;
+            this.mName = this.mMaterial + "0";
 
-            block = new ManualObject("MultiBlock-" + this.mMaterial);
+            block = new ManualObject("MultiBlock-" + this.mName);
             block.Begin(material, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
                 foreach(Vector3 loc in this.mList) {
                     displayCoord = currentWorld.getDisplayCoords(currentIsland.getPosition(), loc);
@@ -149,8 +154,10 @@ namespace Game.World.Generator
                 }
 
             block.End();
-
-            currentIsland.Node.CreateChildSceneNode("MultiBlockNode-" + this.mMaterial).AttachObject(block);
+        }
+        public void addMultiToScene() {
+            if(mList.Count == 0) { return; }
+            this.mIsland.Node.CreateChildSceneNode("MultiBlockNode-" + this.mName).AttachObject(block);
         }
     }
 }

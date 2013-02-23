@@ -14,6 +14,7 @@ using Game.World.Generator;
 using Game.States;
 using Game.Sky;
 using Game.World.Blocks;
+using Game.World.Display;
 using Game.World.Generator.Biomes;
 using Game.CharacSystem;
 
@@ -37,7 +38,8 @@ namespace Game.World
 
         private StateManager  mStateMgr;
         private SkyMgr        mSkyMgr;
-        private Thread        mTerrainThread; 
+        private Thread        mTerrainThread;
+        private bool          mIsThreadLaunched;
 
         public MainWorld(StateManager stateMgr)
         {
@@ -60,6 +62,7 @@ namespace Game.World
             this.mSkyMgr = new SkyMgr(this.mStateMgr);
 
             this.setSafeSpawnPoint(Vector3.ZERO);
+
         }
 
 
@@ -168,8 +171,9 @@ namespace Game.World
             this.mSkyMgr.Update();
 
             foreach (KeyValuePair<Vector3, Island> pair in this.mIslandList) {
-                if(pair.Value.getNumOfBlocksAddedAndRemoved() > 20) {
-
+                if(pair.Value.getNumOfBlocksAddedAndRemoved() > 2) {
+                    ThreadTerrainRegenerate regen = new ThreadTerrainRegenerate(pair.Value, this);
+                    this.mTerrainThread = new Thread(regen.regenIsland);
                 }
             }
         }
