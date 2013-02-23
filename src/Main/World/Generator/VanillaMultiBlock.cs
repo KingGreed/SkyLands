@@ -50,8 +50,14 @@ namespace Game.World.Generator
             this.mList                = new List<Vector3>();
             this.mIndexInVertexBuffer = new List<int>    ();
             this.mMaterial = mat;
+            this.mName = this.mMaterial + Guid.NewGuid().ToString() + "0";
 
             this.moData = new RenderOperation();
+        }
+
+        public void regen() {
+            this.mIndexInVertexBuffer = new List<int>    ();
+
         }
 
         public void addBlock(Vector3 loc)  { this.mList.Add(loc); }
@@ -73,7 +79,6 @@ namespace Game.World.Generator
             if(this.vBuff == null) {
                 this.block.GetSection(0).GetRenderOperation(this.moData);
                 this.posEl = this.moData.vertexData.vertexDeclaration.FindElementBySemantic(VertexElementSemantic.VES_POSITION);
-                this.vBuff = this.moData.vertexData.vertexBufferBinding.GetBuffer(posEl.Source);
             }
             Block curr = currIsland.getBlock(item, false);
 
@@ -91,7 +96,12 @@ namespace Game.World.Generator
             } else {
                 foreach(BlockFace face in Enum.GetValues(typeof(BlockFace))) {
                     if(currIsland.hasVisiblefaceAt((int)item.x, (int)item.y, (int)item.z, face)) {
-                        this.removeFace(this.mIndexInVertexBuffer[elemPosition] + i*4);
+                        if(!currIsland.isinBlocksAdded(item, VanillaChunk.staticBlock[this.mMaterial].getFaces()[0])) {
+                            this.removeFace(this.mIndexInVertexBuffer[elemPosition] + i*4);
+                        }  else {
+                            string cubeNodeName = "Node-" + item.x * MainWorld.CUBE_SIDE + "-" + item.y * MainWorld.CUBE_SIDE + "-" + item.z * MainWorld.CUBE_SIDE ;
+                            currIsland.Node.GetChild(0).RemoveChild(cubeNodeName);
+                        }
                         i++;
                     }
                 }
@@ -100,7 +110,8 @@ namespace Game.World.Generator
 
         }
         private unsafe void removeFace(int pos) {
-            
+
+            this.vBuff = this.moData.vertexData.vertexBufferBinding.GetBuffer(posEl.Source);
             byte*  pVertex = (byte*)vBuff.Lock(HardwareBuffer.LockOptions.HBL_NORMAL) + vBuff.VertexSize * pos;
             float* pReal;
 
@@ -112,6 +123,7 @@ namespace Game.World.Generator
             }
 
             vBuff.Unlock();
+            this.vBuff.Dispose();
         }
 
         public string getMaterial() { return this.mMaterial; }
@@ -134,7 +146,6 @@ namespace Game.World.Generator
                     new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 0)
                 };
             Vector3 displayCoord;
-            this.mName = this.mMaterial + "0";
 
             block = new ManualObject("MultiBlock-" + this.mName);
             block.Begin(material, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);

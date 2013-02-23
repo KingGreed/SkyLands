@@ -171,6 +171,7 @@
     <Compile Include="src\Main\World\Blocks\VanillaBlock.cs" />
     <Compile Include="src\Main\World\Blocks\WoodBlock.cs" />
     <Compile Include="src\Main\World\Display\GraphicBlock.cs" />
+    <Compile Include="src\Main\World\Display\StaticRectangle.cs" />
     <Compile Include="src\Main\World\Display\ThreadTerrainRegenerate.cs" />
     <Compile Include="src\Main\World\Generator\Biomes\Mountains.cs" />
     <Compile Include="src\Main\World\Generator\Biomes\Hills.cs" />
