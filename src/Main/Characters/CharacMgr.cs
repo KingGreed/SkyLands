@@ -9,7 +9,7 @@ namespace Game.CharacSystem
 {
     public class CharacMgr
     {
-        public static float YAW_SENSIVITY = 0.15f;   // Temp
+        public static float YAW_SENSIVITY = 1f;   // Temp
         public static float PITCH_SENSIVITY = 0.15f;   // Temp
 
         private List<VanillaCharacter> mCharacList;

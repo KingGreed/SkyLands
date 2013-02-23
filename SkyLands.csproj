@@ -38,6 +38,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -120,6 +121,7 @@
     <Compile Include="src\API\Generic\BlockFace.cs" />
     <Compile Include="src\API\Generic\Material.cs" />
     <Compile Include="src\API\Generic\PlayerFace.cs" />
+    <Compile Include="src\API\Generic\PositionFaceAndName.cs" />
     <Compile Include="src\API\Geo\AreaBlockAccess.cs" />
     <Compile Include="src\API\Geo\AreaChunkAccess.cs" />
     <Compile Include="src\API\Geo\AreaIslandAccess.cs" />

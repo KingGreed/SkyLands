@@ -25,6 +25,13 @@ namespace Game.World.Generator
 
         public static int CUBE_SIDE = MainWorld.CUBE_SIDE;
 
+        private RenderOperation moData;
+        private VertexElement posEl;
+        private HardwareVertexBufferSharedPtr vBuff;
+
+        private uint size = VertexElement.GetTypeSize(VertexElementType.VET_FLOAT3);
+
+
         //see API.generic.BlockFace
         public static Vector3[] blockPointCoords = 
             new Vector3[] {
@@ -40,6 +47,8 @@ namespace Game.World.Generator
             this.mList                = new List<Vector3>();
             this.mIndexInVertexBuffer = new List<int>    ();
             this.mMaterial = mat;
+
+            this.moData = new RenderOperation();
         }
 
         public void addBlock(Vector3 loc) { this.mList.Add(loc); }
@@ -56,46 +65,49 @@ namespace Game.World.Generator
         }
 
         public unsafe void removeFromScene(Vector3 item, Island currIsland) {
-
+            if(this.vBuff == null) {
+                this.block.GetSection(0).GetRenderOperation(this.moData);
+                this.posEl = this.moData.vertexData.vertexDeclaration.FindElementBySemantic(VertexElementSemantic.VES_POSITION);
+                this.vBuff = this.moData.vertexData.vertexBufferBinding.GetBuffer(posEl.Source);
+            }
             Block curr = currIsland.getBlock(item, false);
-            if(curr is AirBlock) { return; }
-
-            RenderOperation moData = new RenderOperation();
-            this.block.GetSection(0).GetRenderOperation(moData);
 
             int elemPosition = this.find(item);
-            
-
-            VertexElement posEl = moData.vertexData.vertexDeclaration.FindElementBySemantic(VertexElementSemantic.VES_POSITION);
-            HardwareVertexBufferSharedPtr vBuff = moData.vertexData.vertexBufferBinding.GetBuffer(posEl.Source);
-            
-            uint size = VertexElement.GetTypeSize(VertexElementType.VET_FLOAT3);
- 
-            byte*  pVertex = (byte*)vBuff.Lock(HardwareBuffer.LockOptions.HBL_NORMAL) + vBuff.VertexSize * this.mIndexInVertexBuffer[elemPosition];
-            float* pReal;
+            int i = 0;
 
             if(curr.getComposingFaces().Length > 1) {
-                for(int i = 0; i < 4; i++) {
-                    posEl.BaseVertexPointerToElement(pVertex, &pReal);
-                    
-                    pReal[0] = 0; pReal[1] = 0; pReal[2] = 0;
-                    pVertex += vBuff.VertexSize;
+                if(!currIsland.isinBlocksAdded(item, VanillaChunk.staticBlock[this.mMaterial].getFaces()[0])) {
+                    this.removeFace(this.mIndexInVertexBuffer[elemPosition]);
+                } else {
+                    string cubeNodeName = "Node-" + item.x * MainWorld.CUBE_SIDE + "-" + item.y * MainWorld.CUBE_SIDE + "-" + item.z * MainWorld.CUBE_SIDE ;
+                    LogManager.Singleton.DefaultLog.LogMessage(cubeNodeName);
+
+                    currIsland.Node.GetChild(0).RemoveChild(cubeNodeName);
                 }
             } else {
                 foreach(BlockFace face in Enum.GetValues(typeof(BlockFace))) {
                     if(currIsland.hasVisiblefaceAt((int)item.x, (int)item.y, (int)item.z, face)) {
-                        for(int i = 0; i < 4; i++) { 
-                            posEl.BaseVertexPointerToElement(pVertex, &pReal);
-                    
-                            pReal[0] = 0; pReal[1] = 0; pReal[2] = 0;
-                            pVertex += vBuff.VertexSize;
-                        }
+                        this.removeFace(this.mIndexInVertexBuffer[elemPosition] + i*4);
+                        i++;
                     }
                 }
             }
             
+
+        }
+        private unsafe void removeFace(int pos) {
+            
+            byte*  pVertex = (byte*)vBuff.Lock(HardwareBuffer.LockOptions.HBL_NORMAL) + vBuff.VertexSize * pos;
+            float* pReal;
+
+            for(int i = 0; i < 4; i++) {
+                posEl.BaseVertexPointerToElement(pVertex, &pReal);
+                    
+                pReal[0] = 0; pReal[1] = 0; pReal[2] = 0;
+                pVertex += vBuff.VertexSize;
+            }
+
             vBuff.Unlock();
-            vBuff.Dispose();
         }
 
         public string getMaterial() { return this.mMaterial; }

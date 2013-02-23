@@ -203,22 +203,18 @@ namespace Game.World.Generator
 
             if (curr is AirBlock) { return; }
 
-            if(this.isinBlocksAdded(item)) {
-                string cubeNodeName = "Node-" + item.x + "-" + item.y + "-" + item.z;
-                this.mWorld.getSceneMgr().RootSceneNode.RemoveChild(cubeNodeName);
-            } else {
                 string[] key = curr.getComposingFaces();
-                this.blocksDeleted.Add(new Pair<string, Vector3>(curr.getName(), item));
 
-                if(key.Length == 1) {
-                    this.multiList[key[0]].removeFromScene(item, this);
-                } else {
-                    for(int i = 0; i < 6; i++) {
-                        if(this.hasVisiblefaceAt((int) item.x, (int) item.y, (int) item.z, (BlockFace) i)) {
-                            this.multiList[key[i]].removeFromScene(item, this);
-                        }
+            if(key.Length == 1) {
+                this.multiList[key[0]].removeFromScene(item, this);
+            } else {
+                for(int i = 0; i < 6; i++) {
+                    if(this.hasVisiblefaceAt((int) item.x, (int) item.y, (int) item.z, (BlockFace) i)) {
+                        this.multiList[key[i]].removeFromScene(item, this);
+                        this.blocksDeleted.Add(new PositionFaceAndName(item, (BlockFace) i, curr.getName()));
                     }
                 }
+                
             }
             this.setBlockAt((int) item.x, (int) item.y, (int) item.z, "Air", false);
 
@@ -264,7 +260,6 @@ namespace Game.World.Generator
             this.setBlockAt((int)relativePos.x, (int)relativePos.y, (int)relativePos.z, material, true);
             
             Block curr = this.getBlock(relativePos, false);
-            this.blocksAdded.Add(new Pair<string, Vector3>(material, relativePos));
 
             if(this.setVisibleFaces(relativePos, curr)) {
                 foreach(BlockFace face in curr.getFaces()) {
@@ -277,6 +272,8 @@ namespace Game.World.Generator
         }
 
         public override void addFaceToScene(BlockFace face, Vector3 relativePos, string material) {
+            
+            this.blocksAdded.Add(new PositionFaceAndName(relativePos, face, material));
             
             relativePos += this.getPosition();
             relativePos *= MainWorld.CUBE_SIDE;
@@ -291,6 +288,8 @@ namespace Game.World.Generator
             } else {
                 blockNode = this.mFaceNode.CreateChildSceneNode(cubeNodeName, relativePos);
             }
+            
+            LogManager.Singleton.DefaultLog.LogMessage("Added block at : " + cubeNodeName);
             
             faceName = GraphicBlock.getFaceName(face);
             faceEntName = "face-" + relativePos.x + "-" + relativePos.y + "-" + relativePos.z + "-" + faceName;

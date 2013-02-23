@@ -9,7 +9,6 @@ using API.Generator;
 using API.Generic;
 
 using Entity   = API.Ent.Entity;
-using MaterialAndCoord = Mogre.Pair<string, Mogre.Vector3>;
 
 
 using Mogre;
@@ -22,14 +21,14 @@ namespace API.Geo.Cuboid
     public abstract class Island : AreaChunkAccess {
 
         protected Vector3                        mIslandSize;
-        protected World                          mWorld;
+        public World                             mWorld;
         protected SceneNode                      mNode;
         protected SceneNode                      mFaceNode;
         protected bool                           mIsTerrainUpdated;
         protected Biome                          mBiome;
         public Dictionary<string, MultiBlock>    multiList = new Dictionary<string, MultiBlock>();
-        public List<MaterialAndCoord>            blocksAdded;
-        public List<MaterialAndCoord>            blocksDeleted;
+        public List<PositionFaceAndName>         blocksAdded;
+        public List<PositionFaceAndName>         blocksDeleted;
 
 
         protected Dictionary<Vector3, Chunk> mChunkList;
@@ -45,8 +44,8 @@ namespace API.Geo.Cuboid
             this.mIslandSize  = new Vector3(size.x, 0, size.y);
             this.mWorld = currentWorld;
             
-            this.blocksAdded   = new List<MaterialAndCoord>();
-            this.blocksDeleted = new List<MaterialAndCoord>();
+            this.blocksAdded   = new List<PositionFaceAndName>();
+            this.blocksDeleted = new List<PositionFaceAndName>();
 
             this.mFaceNode = node.CreateChildSceneNode("faces");
         }
@@ -133,13 +132,20 @@ namespace API.Geo.Cuboid
          */
         public bool isinBlocksAdded(Vector3 item) {
             for(int i = 0; i < this.blocksAdded.Count; i++) {
-                if(this.blocksAdded[i].second == item) { return true; }
+                if(this.blocksAdded[i].position == item) { return true; }
             }
             return false;
         }
         public bool isinBlocksDeleted(Vector3 item) {
             for(int i = 0; i < this.blocksDeleted.Count; i++) {
-                if(this.blocksDeleted[i].second == item) { return true; }
+                if(this.blocksDeleted[i].position == item) { return true; }
+            }
+            return false;
+        }
+
+        public bool isinBlocksAdded(Vector3 item, BlockFace face) {
+            for(int i = 0; i < this.blocksAdded.Count; i++) {
+                if(this.blocksAdded[i].position == item && face == this.blocksAdded[i].face) { return true; }
             }
             return false;
         }
