@@ -112,7 +112,11 @@
   		\newpage
 		
 		\chapter{\textcolor{blue}{Introduction}}
- 											
+ 			It has been two month since the last presentation. Two month is a short time and we had a lot to do the task was almost daunting. Indeed, when we learned that we did not have all points on the progress, not only did we want to realize all the task written in the book of specifications but we had to do more. \\
+
+ 			And more, meant to us, impressing terrain generation, amazing FPS through a complete rewritting of the displaying system an even better GUI than planned, a console and awesome physics such as Jumping all around the place. \\
+
+ 			However, creating those features were really time consumming, we litterally spent days coding them and, throughout this report we will show you the best of our game.
   		\chapter{\textcolor{blue}{Communications}}
 			\section{Twitter, Facebook and YouTube }
 				Since our game is starting to be playable, we wanted to show the world what it looked like.\\
@@ -181,12 +185,50 @@ $newsList   = $repository->findBy(array(), array('date' => 'desc'), 4, 0);
 			First, we explored the available licences and, one of the first licence we were directed to was the GNU GPL.
 
 			\section{GNU LGPL}
+\begin{textblock}{0.475}(0.150, 0.460)
 				The GNU Lesser General Public License or LGPL (formerly the GNU Library General Public License) is a free software license published by the Free Software Foundation (FSF). The LGPL allows developers and companies to use and integrate LGPL software into their own (even proprietary) software without being required (by the terms of a strong copyleft) to release the source code of their own software-parts. Merely the LGPL software-parts need to be modifiable by end-users (via source code availability): therefore, in the case of proprietary software, the LGPL-parts are usually used in the form of a shared library (e.g. DLL), so that there is a clear separation between the proprietary parts and open source LGPL parts.\\
+				\end{textblock}
 
+				\begin{textblock}{0.628}(0.600, 0.450)
+					\begin{figure}
+						\includegraphics[width=6.5cm]{images/LGPL.png}
+					\end{figure}
+				\end{textblock}
+~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\
 				However one of the downside of the LGPL is that if you do not use the code in a DLL, so you put it in your code, your project automatically gets under the LGPL. It is usually said that the licence is viral. That is one the only thing we do not agree with.
 
 			\section{BSD licence}
 				BSD licenses are a family of permissive free software licenses, imposing minimal restrictions on the redistribution of covered software. This is in contrast to copyleft licenses, which have reciprocity share-alike requirements. The original BSD license was used for its namesake, the Berkeley Software Distribution (BSD), a Unix-like operating system. The original version has since been revised and its descendants are more properly termed modified BSD licenses.
+				This is the license we choose. Basically, anyone can copy our source code choose the license he wants or even choose to make his code proprietary. But he must say that he used our code. This was the oly condition we wanted on our source code.\\
+Here are the terms of our license : \\
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met: 
+
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. \\
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\\
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\\
+
+The views and conclusions contained in the software and documentation are those
+of the authors and should not be interpreted as representing official policies, 
+either expressed or implied, of the FreeBSD Project.\\
+
+				\begin{textblock}{0.628}(0.325, 0.450)
+					\begin{figure}
+						\includegraphics[width=6.5cm]{images/BSD.jpeg}
+					\end{figure}
+				\end{textblock}
+		
 
 		\chapter{\textcolor{blue}{Terrain display}}
 			\section{What was done}
