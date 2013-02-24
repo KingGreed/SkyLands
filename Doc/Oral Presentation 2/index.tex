@@ -165,6 +165,11 @@ This system may seem a bit complicated, and it was, but it was totally worth the
 			\section{Results}
 			
 			\section{Sky}
+				At the first oral, we presented you a sky using the lilbrary Caelum but then we wanted to try another well-known library : SkyX. Once again we actually used a wrapper of the original library coded in C++. We wanted to try another library so that we could choose the best for our game.\\
+				
+Unfortunately it appeared that even if SkyX is a great library in C++ its wrapper is much less interesting. Indeed many functions weren't implemented in the wrapper. This lack leads to a far less awesome render than in the C++ version. Besides we had lots of troubles integrating this library to our project because of the different existing versions of Mogre.\\
+
+That's why we ended up choosing Caelum. But we didn't made this choice because it was the first we saw but because this is the best one we can have.
 
 		\chapter{\textcolor{blue}{Player actions}}
 			\section{Adding blocks}
@@ -175,11 +180,11 @@ This system may seem a bit complicated, and it was, but it was totally worth the
 		C\# having a thread system which is easy to handle, this part was pretty easy.
 				
 			\section{Removing them}
-				On the other hand removing blocks from the scene was a tricky part. Because the function we needed was not implemented in C\# we had to get it from the C++ librarys. And, what's more, the function needed pointers so we had to use the unsafe option.\\
-The basic idea is that a Manual Object is just an abstract layer to Vertex and Vertices. Thus we had to get the vertex buffer, Lock it, get the position of the first element and from there on tell what was the face number we wanted to access, and multiply this number by the "size" of a Vector3 this would set the pointer to the right position. From there on we only had to set for a face, it's 4 coords to 0 and check how many faces were visibles.\\
+				On the other hand removing blocks from the scene was a tricky part. Because the function we needed was not implemented in C\# we had to get it from the C++ libraries. And, what's more, the function needed pointers so we had to use the unsafe option.\\
+The basic idea is that a Manual Object is just an abstract layer to Vertex and Vertices. Thus we had to get the vertex buffer, Lock it, get the position of the first element and from there on tell what was the face number we wanted to access, and multiply this number by the "size" of a Vector3 this would set the pointer to the right position. From there on we only had to set for a face, it's 4 coords to 0 and check how many faces were visible.\\
 
-However 2 problems arose : the first block with multiple structures, had to be dealt with in a seperate way. \\
-The second was that when removing a block, we had to refresh the surrounding blocks, thus most of the time creating faces which were not in the manual object (that was the cause of a bug). So we had to be carefull not to suppress 
+However 2 problems arose : the first block with multiple structures, had to be dealt with in a separate way. \\
+The second was that when removing a block, we had to refresh the surrounding blocks, thus most of the time creating faces which were not in the manual object (that was the cause of a bug). So we had to be careful not to suppress 
 
 		\chapter{\textcolor{blue}{Terran generation}}
 			\section{A new structure}
@@ -190,13 +195,20 @@ The second was that when removing a block, we had to refresh the surrounding blo
 			
 		\chapter{\textcolor{blue}{Buildings}}
 			\section{Constructions blocks}
+				Unlike in Minecraft, our player can build some presaved buildings. This is the basic of a Starcraft-like game. These buildings will allow the players to spawn some bots for his army and also to gather few basic resources.\\
+
+We don't want the player to build all of the constructions block per block, all he will have to do is to place a "construction block". Then when he clicks this block, a menu opens and the player will have to give the required resources to start the construction. For now we haven't the inventory system with the actual resources of the player that's why the construction menu is very simple.
 			
 			\section{Saving and loading the structure}
 			
 		\chapter{\textcolor{blue}{Physics}}
-			\section{Collisoins}
-				
+			\section{Collisions}
+				As we want the best of our game, we tried to implement the library MogreNewt. This library provides a physic engine and handle collisions detection. It is a powerful tool but it implies to add each cube one by one as a "Body" that is to say about 80 000 blocks. This leads to an important loss of FPS which is definitely what we don't want. Here you can see all the wires of the bodies including the character which was automatically created using its mesh file.\\
+
+Eventually, we kept our system using the height points of each corner since we consider our character as a parallelepiped rectangle. This isn't an AABB collision algorithm because we look at the type of block there are next to the points.
+
 			\section{Jump}
+				As promised our characters can now jump. Once the collisions with the floor worked this wasn't a hard task. We use a second order polynomial to determine the actual speed of the jump depending on the time since the character has jumped. Then our gravity system takes cares to make him fall.
 				
 		\chapter{\textcolor{blue}{Character}}
 
