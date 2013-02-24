@@ -3,7 +3,8 @@ ProjetSup
 
 Projet de Sup Epita 2017
 
-### Key list
+## Key list
+### Keyboard
 
 * **F1** ................... Switch from *debug mode* to *player mode* or vice-versa
 * **F2** ................... Hide or show the debug overlay
@@ -12,7 +13,11 @@ Projet de Sup Epita 2017
 * **F5** ................... Reload all textures
 * **F11** .................. Change texture filtering mode
 * **F12** .................. Change polygon mode
-* **Impr ecran** ..... Take a screenshot (saved next to the .exe)
+* **Impr ecran** ...... Take a screenshot (saved next to the .exe)
+
+### Mouse
+* **Left click**......... Delete block
+* **Right click**....... Open a gui on construction block. *+ numPad(number)* add a block if air
 * **MouseWheel**... *Up* to increase time speed and *down* to decrease it
 
 #### *Debug Mode*

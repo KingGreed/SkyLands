@@ -36,6 +36,46 @@ material cube/grass/bottom{
         }
     }
 }
+material cube/construction/side1{
+    technique{
+        pass{
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0       
+            texture_unit{ texture constructionBlockSide1.png  }
+            
+        }
+    }
+}
+material cube/construction/side2{
+    technique{
+        pass{
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0       
+            texture_unit{ texture constructionBlockSide2.png  }
+            
+        }
+    }
+}
+material cube/construction/top {
+	technique {
+		pass {
+			ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+			texture_unit{ texture constructionBlockTop.png  }
+		}
+	}
+}
+material cube/construction/bottom{
+    technique {
+        pass {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit{ texture constructionBlockBottom.png  }
+        }
+    }
+}
 material cube/stone
 {
     technique

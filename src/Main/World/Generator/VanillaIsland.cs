@@ -263,9 +263,9 @@ namespace Game.World.Generator
             Block curr = this.getBlock(relativePos, false);
 
             if(this.setVisibleFaces(relativePos, curr)) {
-                foreach(BlockFace face in curr.getFaces()) {
-                    if(this.hasVisiblefaceAt((int) relativePos.x, (int) relativePos.y, (int) relativePos.z, face)) {
-                        this.addFaceToScene(face, relativePos, VanillaChunk.staticBlock[material].getMaterial());
+                for(int i = 0; i < curr.getFaces().Length; i++) {
+                    if(this.hasVisiblefaceAt((int) relativePos.x, (int) relativePos.y, (int) relativePos.z, (BlockFace)i)) {
+                        this.addFaceToScene((BlockFace)i, relativePos, VanillaChunk.staticBlock[VanillaChunk.staticBlock[material].getComposingFaces()[i]].getMaterial());
                     }
                 }
             }

@@ -77,7 +77,7 @@ namespace Game.IGConsole
         {
             this.mTextBox = new Panel("TextBox1")
             {
-                Size = new Size(this.mOriginalWndSize.Width / 3, 32),
+                Size = new Size((int)((float)this.mOriginalWndSize.Width / 2.5f), 32),
                 Padding = new Thickness(9, 0, 8, 0),
                 TextStyle =
                 {
