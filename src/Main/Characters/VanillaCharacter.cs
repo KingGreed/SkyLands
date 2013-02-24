@@ -12,8 +12,8 @@ namespace Game.CharacSystem
     {
         private readonly Vector3 CHARAC_SIZE = new Vector3(80, 110, 80);
         private const float WALK_SPEED = 300.0f;
-        private const float COL_HEIGHT_MARGE = 0.86f;
-        private const float COL_SIDE_MARGE = 0.47f;
+        private const float COL_HEIGHT_MARGE = 0.8f;
+        private const float COL_SIDE_MARGE = 0.38f;
 
         protected CharacMgr     mCharacMgr;
         protected SceneNode     mNode;
@@ -68,6 +68,7 @@ namespace Game.CharacSystem
             {
                 this.mHitPoints[i] = this.mNode.CreateChildSceneNode(this.GetTranslation(i));
                 this.mHitPoints[i].InheritScale = false;
+                this.mHitPoints[i].InheritOrientation = true;
 
                 Entity cube = sceneMgr.CreateEntity("cube.mesh");
                 this.mPoints[i] = sceneMgr.RootSceneNode.CreateChildSceneNode();
@@ -210,20 +211,23 @@ namespace Game.CharacSystem
             Vector3 actualBlock = this.mCharacMgr.World.GetBlockAbsPosFromAbs(this);
             if (actualBlock != -Vector3.UNIT_SCALE)
             {
+                Matrix3 matrix = this.mNode.LocalAxes.Transpose();
+                //Vector3 newTranslation = this.FeetPosition;
+
                 /*if (translation.x < 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.rightFace))
-                    translation.x = actualBlock.x - this.FeetPosition.x;
+                    translation.x = 0;
                 if (translation.x > 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.leftFace))
-                    translation.x = this.FeetPosition.x - actualBlock.x;*/
+                    translation.x = 0;*/
 
                 this.mMovementInfo.IsFalling = !this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.underFace);
                 if (translation.y < 0 && !this.mMovementInfo.IsFalling)  { translation.y = actualBlock.y - this.FeetPosition.y; }
                 if (translation.y > 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.upperFace))
-                    translation.y = this.FeetPosition.y - actualBlock.y;
+                    translation.y = actualBlock.y - this.FeetPosition.y;
 
-                /*if (translation.z < 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.backFace))
-                    translation.z = actualBlock.z - this.FeetPosition.z;
+                if (translation.z < 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.backFace))
+                    translation.z = 0;
                 if (translation.z > 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.frontFace))
-                    translation.z = this.FeetPosition.z - actualBlock.z;*/
+                    translation.z = 0;
             }
 
             /* Here translate has been modified to avoid collisions */

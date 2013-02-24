@@ -54,9 +54,9 @@ namespace Game.Sky
             this.mCaelumSystem.PointStarfield.MagnitudeScale = 1.05f;
 
             /* Fog */
-            this.mCaelumSystem.SceneFogDensityMultiplier = 0.0006f;
-            this.mCaelumSystem.SceneFogColourMultiplier  = new ColourValue(0.3f, 0.3f, 0.3f);
-            this.mCaelumSystem.ManageSceneFog = true;
+            this.mCaelumSystem.SceneFogDensityMultiplier = 0;
+            /*this.mCaelumSystem.SceneFogColourMultiplier  = new ColourValue(0.3f, 0.3f, 0.3f);
+            this.mCaelumSystem.ManageSceneFog = true;*/
         }
 
         public void Update() { this.mCaelumSystem.TimeScale += this.mStateMgr.Input.MouseMoveZ; }
