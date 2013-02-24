@@ -203,8 +203,11 @@ namespace Game
                 if (this.WasKeyPressed(code))
                 {
                     char c = this.GetKeyCodeChar(code);
-                    if(c != '\0')
+                    if (c != '\0')
+                    {
+                        //if (c == (char)127)
                         txt += c;
+                    }
                 }
             }
 
@@ -219,6 +222,9 @@ namespace Game
             else if (code == KeyCode.KC_LBRACKET)  { c = '('; }
             else if (code == KeyCode.KC_RBRACKET)  { c = ')'; }
             else if (code == KeyCode.KC_MINUS)     { c = '_'; }
+            else if (code == KeyCode.KC_BACKSLASH) { c = '\\'; }
+            else if (code == KeyCode.KC_BACK)      { c = (char)127; }  // Supr
+            else if (code == KeyCode.KC_DELETE)    { c = (char)8; } // Del
             
             if(c == '\0')   // The char isn't a special character
             {
@@ -230,7 +236,7 @@ namespace Game
                     char tmp;
 
                     if (!this.IsShiftDown) { tmp = txt.ToLower()[0]; }
-                    else                  { tmp = txt.ToUpper()[0]; }
+                    else                   { tmp = txt.ToUpper()[0]; }
 
                     if ((tmp >= 'a' && tmp <= 'z') || (tmp >= '0' && tmp <= '9') || (tmp >= 'A' && tmp <= 'Z'))
                         c = tmp;

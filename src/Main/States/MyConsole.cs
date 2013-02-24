@@ -195,6 +195,14 @@ namespace Game.IGConsole
                 string txt = this.mInput.GetText();
                 if (txt != "")
                     this.mNewLabel.Text += txt;
+
+                for(int i = 1; i < this.mNewLabel.Text.Length; i++)
+                {
+                    if (this.mNewLabel.Text[i] == (char)127)  // Supr
+                        this.mNewLabel.Text = this.mNewLabel.Text.Remove(i - 1, 2);   // Delete the carac 127 and the previous print
+                    /*else if (this.mNewLabel.Text[i] == (char)8)  // Del
+                        this.mNewLabel.Text = this.mNewLabel.Text.Remove(i, 2);*/   // Delete the carac 8 and the next print
+                }
             }
             else
             {
