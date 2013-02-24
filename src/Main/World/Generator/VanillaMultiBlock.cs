@@ -77,7 +77,7 @@ namespace Game.World.Generator
 
         public unsafe void removeFromScene(Vector3 item, Island currIsland) {
             if(this.vBuff == null) {
-                this.block.GetSection(0).GetRenderOperation(this.moData);
+                this.block.GetSection(0).GetRenderOperation(this.moData);  ///////////////* FIX ME *////////////////////
                 this.posEl = this.moData.vertexData.vertexDeclaration.FindElementBySemantic(VertexElementSemantic.VES_POSITION);
             }
             Block curr = currIsland.getBlock(item, false);
@@ -92,7 +92,7 @@ namespace Game.World.Generator
                 } else {
                     string cubeNodeName = "Node-" + item.x * MainWorld.CUBE_SIDE + "-" + item.y * MainWorld.CUBE_SIDE + "-" + item.z * MainWorld.CUBE_SIDE ;
 
-                    currIsland.Node.GetChild(0).RemoveChild(cubeNodeName);
+                    currIsland.Node.GetChild(0).RemoveChild(cubeNodeName);  ///////////////* FIX ME *////////////////////
                 }
             } else {
                 foreach(BlockFace face in Enum.GetValues(typeof(BlockFace))) {
