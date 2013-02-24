@@ -52,7 +52,7 @@ namespace Game.World
             SceneNode node = this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
             Island island;
             if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Dome)            { island = new DomeIsland(node, new Vector2(3, 3), this); }
-            else if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { island = new RandomIsland(node, new Vector2(15, 15), new Plains(),    this); }
+            else if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { island = new RandomIsland(node, new Vector2(15, 15), new Desert(),    this); }
             else if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { island = new RandomIsland(node, new Vector2(13, 13), new Hills(),     this); }
             else  /*(this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Mountain)*/ { island = new RandomIsland(node, new Vector2(6, 6),   new Mountains(), this); }
             this.mIslandList.Add(Vector3.ZERO, island);

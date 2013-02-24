@@ -40,6 +40,5 @@ namespace Game.World.Blocks
         public virtual string[] getComposingFaces() { return new string[1] { this.mName }; }
         public virtual BlockFace[] getFaces() { return this.CubeFaces; }
 
-
     }
 }

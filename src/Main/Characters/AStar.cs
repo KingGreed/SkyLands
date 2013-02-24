@@ -36,6 +36,7 @@ namespace Game.src.Main.Characters
             this.mIsland = curr;
             this.mHeight = y;
             this.mPath = new List<Vector3>();
+
         }
 
         public void goTo(Vector3 begin, Vector3 end) {
