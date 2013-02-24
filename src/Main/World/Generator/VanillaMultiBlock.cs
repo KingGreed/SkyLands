@@ -99,6 +99,7 @@ namespace Game.World.Generator
             
 
         }
+
         private unsafe void removeFace(int pos) {
             
             byte*  pVertex = (byte*)vBuff.Lock(HardwareBuffer.LockOptions.HBL_NORMAL) + vBuff.VertexSize * pos;

@@ -4,7 +4,7 @@ using Mogre;
 
 using Game.World;
 using Game.Animation;
-using Game.MyGameConsole;
+using Game.IGConsole;
 
 namespace Game.CharacSystem
 {
@@ -86,7 +86,7 @@ namespace Game.CharacSystem
 
             this.mNode.Scale(CHARAC_SIZE / ent.BoundingBox.Size);
 
-            //this.mCharacMgr.StateMgr.MyConsole.OnCommandEntered += new MyConsole.ConsoleEvent(this.OnCommandEntered);
+            this.mCharacMgr.StateMgr.MyConsole.OnCommandEntered += new MyConsole.ConsoleEvent(this.OnCommandEntered);
         }
 
         private Vector3 GetTranslation(int i)
@@ -121,10 +121,27 @@ namespace Game.CharacSystem
             }
         }
 
-        /*private void OnCommandEntered(string command)
+        private void OnCommandEntered(string command)
         {
-            Console.WriteLine("ok");
-        }*/
+            string[] args = command.Split(new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
+
+            if(args.Length >= 2)
+            {
+                if (args[0] == "get_charac_pos")
+                {
+                    int index;
+                    if (int.TryParse(args[1], out index))
+                    {
+                        Vector3 tmp = this.FeetPosition / MainWorld.CUBE_SIDE;
+                        tmp.x = Mogre.Math.IFloor(tmp.x);
+                        tmp.y = Mogre.Math.IFloor(tmp.y);
+                        tmp.z = Mogre.Math.IFloor(tmp.z);
+
+                        this.mCharacMgr.StateMgr.WriteOnConsole("FeetPosition : " + '(' + tmp.x + ',' + tmp.y + ',' + tmp.z + ')');
+                    }
+                }
+            }
+        }
 
         public void Update(float frameTime)
         {

@@ -147,13 +147,12 @@
     <Compile Include="src\Main\Characters\Player\RayCaster.cs" />
     <Compile Include="src\Main\Characters\Player\VanillaPlayer.cs" />
     <Compile Include="src\Main\Characters\VanillaCharacter.cs" />
-    <Compile Include="src\Main\States\Console\MyConsole.cs" />
+    <Compile Include="src\Main\States\MyConsole.cs" />
     <Compile Include="src\Main\GUIs\GameGUI.cs" />
     <Compile Include="src\Main\GUIs\LoadingGUI.cs" />
     <Compile Include="src\Main\GUIs\MiyagiMgr.cs" />
     <Compile Include="src\Main\GUIs\OptionsGUI.cs" />
     <Compile Include="src\Main\GUIs\SecondMenuGUI.cs" />
-    <Compile Include="src\Main\States\Console\GenerateTextEventArgs.cs" />
     <Compile Include="src\Main\States\Game\DebugMode.cs" />
     <Compile Include="src\Main\States\Menu\LoadingState.cs" />
     <Compile Include="src\Main\States\Menu\OptionsState.cs" />
@@ -173,6 +172,7 @@
     <Compile Include="src\Main\World\Blocks\VanillaBlock.cs" />
     <Compile Include="src\Main\World\Blocks\WoodBlock.cs" />
     <Compile Include="src\Main\World\Display\GraphicBlock.cs" />
+    <Compile Include="src\Main\World\Display\StaticRectangle.cs" />
     <Compile Include="src\Main\World\Display\ThreadTerrainRegenerate.cs" />
     <Compile Include="src\Main\World\Generator\Biomes\Mountains.cs" />
     <Compile Include="src\Main\World\Generator\Biomes\Hills.cs" />

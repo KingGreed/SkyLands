@@ -4,6 +4,7 @@ using Mogre;
 
 using Game.World;
 using Game.Animation;
+using Game.World.Display;
 
 namespace Game.CharacSystem
 {
@@ -69,7 +70,7 @@ namespace Game.CharacSystem
 
         public new void Update(float frameTime)
         {
-            bool isNowMoving = !this.mIsDebugMode || this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_LCONTROL, MOIS.KeyCode.KC_RCONTROL);
+            bool isNowMoving = !this.mIsDebugMode || this.mInput.IsCtrltDown;
             if (this.mMovementInfo.IsAllowedToMoved && !isNowMoving)
                 this.mAnimMgr.DeleteAllExcept<AnimName[]>(this.mEmotesNames, this.mIdleAnims, this.mJumpAnims);
             this.mMovementInfo.IsAllowedToMoved = isNowMoving;
@@ -119,20 +120,29 @@ namespace Game.CharacSystem
 
         private void OnClick()
         {
-            Vector3 blockPos = Vector3.ZERO, normal = Vector3.ZERO;
-            string msg = this.mRayCaster.RayCast(this.mNode, ref blockPos, ref normal).ToString();
+            Vector3 blockPos;
+            bool isInRay = this.mRayCaster.IsBlockInRay(this.mCharacMgr.SceneMgr, this.mNode, 500, out blockPos);
+            //if (!isInRay) { return; }
+            string msg = isInRay.ToString() + ' ';
+
+            Vector3 eyesPos = this.mNode.Position;
+            eyesPos.y += this.Height / 2 - 13;
+            StaticRectangle.DrawLine(this.mCharacMgr.SceneMgr, eyesPos, blockPos);
 
             blockPos /= MainWorld.CUBE_SIDE;
             blockPos.x = Mogre.Math.IFloor(blockPos.x);
             blockPos.y = Mogre.Math.IFloor(blockPos.y);
             blockPos.z = Mogre.Math.IFloor(blockPos.z);
 
-            msg += blockPos.ToString();
-            msg += this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(blockPos, false).getName();
+            API.Geo.Cuboid.Block b = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(blockPos, false);
+            
+            msg += blockPos.ToString() + ' ';
+            msg += b.getName();
 
-            this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addBlockToScene(blockPos, "Grass");
+            if (b is Game.World.Blocks.AirBlock && isInRay)
+                this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addBlockToScene(blockPos, "Stone");
 
-            //this.mCharacMgr.StateMgr.WriteOnConsole(msg);
+            this.mCharacMgr.StateMgr.WriteOnConsole(msg);
         }
     }
 }

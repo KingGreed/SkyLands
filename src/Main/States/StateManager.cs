@@ -6,7 +6,7 @@ using Mogre;
 using Game.BaseApp;
 using Game.GUICreator;
 using Game.Display;
-using Game.MyGameConsole;
+using Game.IGConsole;
 
 namespace Game.States
 {
@@ -141,7 +141,7 @@ namespace Game.States
             this.mRoot.Dispose();
         }
 
-        public void WriteOnConsole(string txt) { this.mConsole.WriteLine(txt); }
+        public void WriteOnConsole(object o) { this.mConsole.WriteLine(o); }
 
         public void HideGUIs()
         {
