@@ -32,7 +32,6 @@ namespace Game.CharacSystem
         private bool             mIsFirstView;
         private bool             mIsDebugMode;
         private MainPlayerCamera mCam;
-        private RayCaster        mRayCaster;
 
         public MoisManager Input         { get { return this.mInput; } }
         public float       YawCamValue   { get { return this.mYawCamValue; } }
@@ -65,7 +64,6 @@ namespace Game.CharacSystem
         public void AttachCamera(MainPlayerCamera cam)
         { 
             this.mCam = cam;
-            this.mRayCaster = new RayCaster(this.mCharacMgr.SceneMgr, this.mCam.Camera, this.mCam.WndWidth, this.mCam.WndHeight);
         }
 
         public new void Update(float frameTime)
@@ -121,17 +119,8 @@ namespace Game.CharacSystem
 
         private void OnLClick()
         {
-            float distance;
-            Vector3 blockPos;
-            Ray ray = this.mRayCaster.Camera.GetCameraToViewportRay(0.5f, 0.5f);
-            //bool isInRay = this.mRayCaster.CastRay(this.mCharacMgr.StateMgr.MyConsole, ray, this.mNode, out distance, out blockPos);
-
-            distance = 200;
-            blockPos = ray.GetPoint(distance);
-
-            Vector3 eyesPos = this.mNode.Position;
-            eyesPos.y += this.Height / 2 - 13;
-            StaticRectangle.DrawLine(this.mCharacMgr.SceneMgr, eyesPos, blockPos);
+            float distance = 200;
+            Vector3 blockPos = this.mCam.Camera.GetCameraToViewportRay(0.5f, 0.5f).GetPoint(distance);
 
             Vector3 tmp = blockPos;
             blockPos /= MainWorld.CUBE_SIDE;
@@ -139,23 +128,17 @@ namespace Game.CharacSystem
             blockPos.y = Mogre.Math.IFloor(blockPos.y);
             blockPos.z = Mogre.Math.IFloor(blockPos.z);
 
-            this.mCharacMgr.StateMgr.WriteOnConsole("Clicked on : " + this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(blockPos, false).getName() + " at");
-            this.mCharacMgr.StateMgr.WriteOnConsole(tmp);
+            string material = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(blockPos, false).getName();
+            this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).removeFromScene(blockPos);  // Delete block
+
+            if (material != "Air")
+                this.mCharacMgr.StateMgr.WriteOnConsole("Deleted : " + material);
         }
 
         private void OnRClick()
         {
-            float distance;
-            Vector3 blockPos;
-            Ray ray = this.mRayCaster.Camera.GetCameraToViewportRay(0.5f, 0.5f);
-            //bool isInRay = this.mRayCaster.CastRay(this.mCharacMgr.StateMgr.MyConsole, ray, this.mNode, out distance, out blockPos);
-
-            distance = 200;
-            blockPos = ray.GetPoint(distance);
-
-            Vector3 eyesPos = this.mNode.Position;
-            eyesPos.y += this.Height / 2 - 13;
-            StaticRectangle.DrawLine(this.mCharacMgr.SceneMgr, eyesPos, blockPos);
+            float distance = 200;
+            Vector3 blockPos = this.mCam.Camera.GetCameraToViewportRay(0.5f, 0.5f).GetPoint(distance);
 
             Vector3 tmp = blockPos;
             blockPos  /= MainWorld.CUBE_SIDE;
@@ -186,17 +169,11 @@ namespace Game.CharacSystem
                 if (material != "")
                 {
                     this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addBlockToScene(blockPos, material);
-                    this.mCharacMgr.StateMgr.WriteOnConsole("Added " + material + " at " + tmp);
+                    this.mCharacMgr.StateMgr.WriteOnConsole("Added : " + material);
                 }
-                else
-                    this.mCharacMgr.StateMgr.WriteOnConsole("Tried to delete Air at " + tmp);
             }
-            else
-            {
-                this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).removeFromScene(blockPos);
-            }
-
-            //this.mCharacMgr.StateMgr.WriteOnConsole(msg);
+            else if(b is Game.World.Blocks.ConstructionBlock)
+                this.mCharacMgr.StateMgr.WriteOnConsole("Open GUI");
         }
     }
 }

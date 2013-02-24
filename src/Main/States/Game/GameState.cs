@@ -11,6 +11,7 @@ namespace Game.States
         private MainWorld mWorld;
         private CharacMgr mCharacMgr;
         private DebugMode mDebugMode;
+        private GameGUI mGUI;
 
         public GameState(StateManager stateMgr) : base(stateMgr) { }
 
@@ -18,6 +19,7 @@ namespace Game.States
         {
             this.mWorld = new MainWorld(this.mStateMgr);
             this.mCharacMgr = new CharacMgr(this.mStateMgr, this.mWorld);
+            this.mGUI = new GameGUI(this.mStateMgr);
 
             CharacterInfo playerInfo = new CharacterInfo("Sinbad", true);
             playerInfo.SpawnPoint = this.mWorld.getSpawnPoint();
@@ -32,11 +34,12 @@ namespace Game.States
             Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop begin");
         }
 
-        public override void Hide() { }
+        public override void Hide() { this.mGUI.Hide(); }
         public override void Show()
         {
             this.mStateMgr.HideGUIs();
             this.mStateMgr.MiyagiMgr.CursorVisibility = false;
+            this.mGUI.Show();
         }
 
         public override void Update(float frameTime)
@@ -51,6 +54,7 @@ namespace Game.States
         protected override void Shutdown()
         {
             Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop end");
+            this.mGUI.Dispose();
             this.mWorld.Shutdown();
             this.mDebugMode.Dispose();
         }

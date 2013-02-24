@@ -146,7 +146,6 @@
     <Compile Include="src\Main\Characters\Misc\JumpSpeed.cs" />
     <Compile Include="src\Main\Characters\NonPlayer\VanillaNonPlayer.cs" />
     <Compile Include="src\Main\Characters\Player\MainPlayerCamera.cs" />
-    <Compile Include="src\Main\Characters\Player\RayCaster.cs" />
     <Compile Include="src\Main\Characters\Player\VanillaPlayer.cs" />
     <Compile Include="src\Main\Characters\VanillaCharacter.cs" />
     <Compile Include="src\Main\States\MyConsole.cs" />

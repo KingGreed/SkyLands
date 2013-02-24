@@ -25,7 +25,7 @@ namespace Game.GUICreator
             /* Backgroung image */
             PictureBox backgroung = new PictureBox();
             backgroung.AlwaysOnBottom = true;
-            backgroung.Bitmap = new System.Drawing.Bitmap(@"../../src/Media/skins/background.bmp");
+            backgroung.Bitmap = new System.Drawing.Bitmap(@"../../src/Media/images/background.bmp");
             backgroung.Size = this.mOriginalWndSize;
             this.mGUI.Controls.Add(backgroung);
             
