@@ -18,6 +18,7 @@ namespace Game.Sky
             this.mStateMgr = stateMgr;
             this.mCaelumSystem = new CaelumSystem(this.mStateMgr.Root, this.mStateMgr.SceneMgr, CaelumSystem.CaelumComponent.None);
             this.mListener = new RootLstn(RootLstn.TypeLstn.FrameStarted, mCaelumSystem.FrameStarted);
+
             this.CreateSky(); this.AddListeners();
         }
 
@@ -27,6 +28,8 @@ namespace Game.Sky
 
             this.mCaelumSystem.GetUniversalClock().SetGregorianDateTime(2012, 12, 21, 12, 0, 0);
             this.mCaelumSystem.TimeScale = 1;
+            //this.mCaelumSystem.EnsureSingleLightSource = true;
+            this.mCaelumSystem.EnsureSingleShadowSource = true;
 
             /* Sky */
             this.mCaelumSystem.SkyDome = new SkyDome(this.mStateMgr.SceneMgr, this.mCaelumSystem.GetCaelumCameraNode());

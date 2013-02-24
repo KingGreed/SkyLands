@@ -82,11 +82,12 @@ namespace Game.World.Generator
             }
             Block curr = currIsland.getBlock(item, false);
 
-            int elemPosition = this.find(item);
+            int elemPosition;
             int i = 0;
 
             if(curr.getComposingFaces().Length > 1) {
                 if(!currIsland.isinBlocksAdded(item, VanillaChunk.staticBlock[this.mMaterial].getFaces()[0])) {
+                    elemPosition = this.find(item);
                     this.removeFace(this.mIndexInVertexBuffer[elemPosition]);
                 } else {
                     string cubeNodeName = "Node-" + item.x * MainWorld.CUBE_SIDE + "-" + item.y * MainWorld.CUBE_SIDE + "-" + item.z * MainWorld.CUBE_SIDE ;
@@ -97,6 +98,7 @@ namespace Game.World.Generator
                 foreach(BlockFace face in Enum.GetValues(typeof(BlockFace))) {
                     if(currIsland.hasVisiblefaceAt((int)item.x, (int)item.y, (int)item.z, face)) {
                         if(!currIsland.isinBlocksAdded(item, VanillaChunk.staticBlock[this.mMaterial].getFaces()[0])) {
+                            elemPosition = this.find(item);
                             this.removeFace(this.mIndexInVertexBuffer[elemPosition] + i*4);
                         }  else {
                             string cubeNodeName = "Node-" + item.x * MainWorld.CUBE_SIDE + "-" + item.y * MainWorld.CUBE_SIDE + "-" + item.z * MainWorld.CUBE_SIDE ;

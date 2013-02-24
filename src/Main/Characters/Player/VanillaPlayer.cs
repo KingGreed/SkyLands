@@ -83,7 +83,8 @@ namespace Game.CharacSystem
                 if (this.mIsFirstView) { this.FirstPersonUpdate(yawValue, pitchValue); }
                 else { this.ThirdPersonUpdate(yawValue, pitchValue); }
 
-                if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left)) { this.OnClick(); }
+                if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left))  { this.OnLClick(); }
+                if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Right)) { this.OnRClick(); }
 
                 /* Update emotes animations */
                 if (!this.mAnimMgr.AreAnimationsPlaying(AnimName.JumpStart, AnimName.JumpLoop, AnimName.JumpEnd, AnimName.RunBase, AnimName.RunTop))
@@ -118,31 +119,72 @@ namespace Game.CharacSystem
 
         private void ThirdPersonUpdate(float yawValue, float pitchValue) { }
 
-        private void OnClick()
+        private void OnLClick()
         {
+            float distance;
             Vector3 blockPos;
-            bool isInRay = this.mRayCaster.IsBlockInRay(this.mCharacMgr.SceneMgr, this.mNode, 500, out blockPos);
-            //if (!isInRay) { return; }
-            string msg = isInRay.ToString() + ' ';
+            Ray ray = this.mRayCaster.Camera.GetCameraToViewportRay(0.5f, 0.5f);
+            //bool isInRay = this.mRayCaster.CastRay(this.mCharacMgr.StateMgr.MyConsole, ray, this.mNode, out distance, out blockPos);
+
+            distance = 150;
+            blockPos = ray.GetPoint(distance);
 
             Vector3 eyesPos = this.mNode.Position;
             eyesPos.y += this.Height / 2 - 13;
             StaticRectangle.DrawLine(this.mCharacMgr.SceneMgr, eyesPos, blockPos);
 
+            Vector3 tmp = blockPos;
             blockPos /= MainWorld.CUBE_SIDE;
             blockPos.x = Mogre.Math.IFloor(blockPos.x);
             blockPos.y = Mogre.Math.IFloor(blockPos.y);
             blockPos.z = Mogre.Math.IFloor(blockPos.z);
 
+            this.mCharacMgr.StateMgr.WriteOnConsole("Clicked on : " + this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(blockPos, false).getName() + " at");
+            this.mCharacMgr.StateMgr.WriteOnConsole(tmp);
+        }
+
+        private void OnRClick()
+        {
+            float distance;
+            Vector3 blockPos;
+            Ray ray = this.mRayCaster.Camera.GetCameraToViewportRay(0.5f, 0.5f);
+            //bool isInRay = this.mRayCaster.CastRay(this.mCharacMgr.StateMgr.MyConsole, ray, this.mNode, out distance, out blockPos);
+
+            distance = 150;
+            blockPos = ray.GetPoint(distance);
+
+            Vector3 eyesPos = this.mNode.Position;
+            eyesPos.y += this.Height / 2 - 13;
+            StaticRectangle.DrawLine(this.mCharacMgr.SceneMgr, eyesPos, blockPos);
+
+            Vector3 tmp = blockPos;
+            blockPos  /= MainWorld.CUBE_SIDE;
+            blockPos.x = Mogre.Math.IFloor(blockPos.x);
+            blockPos.y = Mogre.Math.IFloor(blockPos.y);
+            blockPos.z = Mogre.Math.IFloor(blockPos.z) + 1;
+
             API.Geo.Cuboid.Block b = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(blockPos, false);
-            
-            msg += blockPos.ToString() + ' ';
-            msg += b.getName();
 
-            if (b is Game.World.Blocks.AirBlock && isInRay)
-                this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addBlockToScene(blockPos, "Stone");
+            if (b is Game.World.Blocks.AirBlock)
+            {
+                string material = "";
+                if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_NUMPAD1))
+                    material = "Stone";
 
-            this.mCharacMgr.StateMgr.WriteOnConsole(msg);
+                if (material != "")
+                {
+                    this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addBlockToScene(blockPos, material);
+                    this.mCharacMgr.StateMgr.WriteOnConsole("Added " + material + " at " + tmp);
+                }
+                else
+                    this.mCharacMgr.StateMgr.WriteOnConsole("Tried to delete Air at " + tmp);
+            }
+            else
+            {
+                this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).removeFromScene(blockPos);
+            }
+
+            //this.mCharacMgr.StateMgr.WriteOnConsole(msg);
         }
     }
 }

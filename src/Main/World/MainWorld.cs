@@ -47,6 +47,7 @@ namespace Game.World
             this.mSeed       = 42;
 
             this.mStateMgr = stateMgr;
+            //this.mStateMgr.SceneMgr.ShadowTechnique = ShadowTechnique.SHADOWTYPE_TEXTURE_MODULATIVE;
 
             this.mIslandList = new Dictionary<Vector3, Island>();
             SceneNode node = this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
@@ -61,6 +62,14 @@ namespace Game.World
             this.mSkyMgr = new SkyMgr(this.mStateMgr);
 
             this.setSafeSpawnPoint(Vector3.ZERO);
+
+
+            Light mPointLight = stateMgr.SceneMgr.CreateLight("pointLight");
+            
+            mPointLight.Type = Light.LightTypes.LT_POINT;
+            mPointLight.Position = this.mSpawnPoint;
+            //mPointLight.Direction = this.mCaelumSystem.Sun.LightDirection;
+
 
             /*StaticRectangle.DisplayRectangle(this.mSpawnPoint, 5, 5, 16*CHUNK_SIDE*CUBE_SIDE, node);
             Vector3 pos = new Vector3((this.mIslandList[new Vector3(0, 0, 0)].getSize().x + 3) * CHUNK_SIDE * CUBE_SIDE, 0, (this.mIslandList[new Vector3(0, 0, 0)].getSize().z + 3) * CHUNK_SIDE * CUBE_SIDE);
