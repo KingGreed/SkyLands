@@ -38,8 +38,7 @@ namespace Game.World
 
         private StateManager  mStateMgr;
         private SkyMgr        mSkyMgr;
-        private Thread        mTerrainThread;
-        private bool          mIsThreadLaunched;
+        private Thread        workerThread;
 
         public MainWorld(StateManager stateMgr)
         {
@@ -62,6 +61,16 @@ namespace Game.World
             this.mSkyMgr = new SkyMgr(this.mStateMgr);
 
             this.setSafeSpawnPoint(Vector3.ZERO);
+
+            /*StaticRectangle.DisplayRectangle(this.mSpawnPoint, 5, 5, 16*CHUNK_SIDE*CUBE_SIDE, node);
+            Vector3 pos = new Vector3((this.mIslandList[new Vector3(0, 0, 0)].getSize().x + 3) * CHUNK_SIDE * CUBE_SIDE, 0, (this.mIslandList[new Vector3(0, 0, 0)].getSize().z + 3) * CHUNK_SIDE * CUBE_SIDE);
+
+            node = this.mStateMgr.SceneManager.RootSceneNode.CreateChildSceneNode(pos);
+
+            island = new RandomIsland(node, new Vector2(13, 13), new Hills(), this);
+            island.display();
+            this.mIslandList.Add(pos, island);
+            */
 
         }
 
@@ -157,6 +166,14 @@ namespace Game.World
             return !(block == null || block is AirBlock);
         }
 
+        public void generateIslandThreaded() {
+            Vector3 pos = new Vector3(this.mIslandList[new Vector3(0, 0, 0)].getPosition().x * CHUNK_SIDE + 3 * CHUNK_SIDE, 0, this.mIslandList[new Vector3(0, 0, 0)].getPosition().z * CHUNK_SIDE + 3 * CHUNK_SIDE);
+            SceneNode node = this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
+            this.mIslandList.Add(pos, new RandomIsland(node, new Vector2(13, 13), new Hills(), this));
+
+            workerThread = new Thread(this.mIslandList[pos].display);
+        }
+
         public Vector3 GetBlockAbsPosFromAbs(VanillaCharacter charac)             { return this.GetBlockAbsPosFromAbs(charac.FeetPosition, charac.Info.IslandLoc); }
         public Vector3 GetBlockAbsPosFromAbs(Vector3 absCoord, Vector3 islandLoc) {
             Vector3 blockPos, chunkPos;
@@ -168,12 +185,6 @@ namespace Game.World
         public void Update(float frameTime) {
             this.mSkyMgr.Update();
 
-            foreach (KeyValuePair<Vector3, Island> pair in this.mIslandList) {
-                if(pair.Value.getNumOfBlocksAddedAndRemoved() > 2) {
-                    ThreadTerrainRegenerate regen = new ThreadTerrainRegenerate(pair.Value, this);
-                    this.mTerrainThread = new Thread(regen.regenIsland);
-                }
-            }
         }
 
         public void Shutdown() {

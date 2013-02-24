@@ -47,7 +47,7 @@ namespace API.Geo.Cuboid
             this.blocksAdded   = new List<PositionFaceAndName>();
             this.blocksDeleted = new List<PositionFaceAndName>();
 
-            this.mFaceNode = node.CreateChildSceneNode("faces");
+            this.mFaceNode = node.CreateChildSceneNode();
         }
 
         //Init

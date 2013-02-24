@@ -127,7 +127,7 @@ namespace Game.CharacSystem
 
             if(args.Length >= 2)
             {
-                if (args[0] == "get_charac_pos")
+                if (args[0] == "/get_charac_pos")
                 {
                     int index;
                     if (int.TryParse(args[1], out index))

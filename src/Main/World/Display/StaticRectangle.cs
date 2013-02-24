@@ -9,8 +9,7 @@ namespace Game.World.Display
 {
     static class StaticRectangle
     {
-        static StaticRectangle()
-        {
+        static StaticRectangle() {
             /* For drawing lines */
             String resourceGroupName = "debugger";
             if (ResourceGroupManager.Singleton.ResourceGroupExists(resourceGroupName) == false)
@@ -25,7 +24,7 @@ namespace Game.World.Display
             moMaterial.Dispose();  // dispose pointer, not the material
         }
         
-        public static void DisplayRectangle(Vector3 origin, int height, int width, int depth, SceneNode node) {
+        static void DisplayRectangle(Vector3 origin, int height, int width, int depth, SceneNode node) {
             ManualObject block = new ManualObject(Guid.NewGuid().ToString());
             block.Begin("cube/Sand", RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
 
