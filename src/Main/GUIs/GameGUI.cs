@@ -13,7 +13,7 @@ using Miyagi.UI.Controls.Styles;
 using Game.GUICreator;
 using Game.States;
 
-namespace Game.MyGameConsole
+namespace Game.IGConsole
 {
     class GameGUI : GUIFactory
     {

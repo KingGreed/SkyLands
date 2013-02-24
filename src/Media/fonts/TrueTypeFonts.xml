@@ -11,5 +11,11 @@
     <FontStyle>Regular</FontStyle>
     <Resolution>96</Resolution>
     <Size>19</Size>
-  </TrueTypeFont>  
+  </TrueTypeFont>
+  <TrueTypeFont Name="Console">
+    <FileName>../../src/Media/fonts/bluehigh.ttf</FileName>
+    <FontStyle>Regular</FontStyle>
+    <Resolution>96</Resolution>
+    <Size>16</Size>
+  </TrueTypeFont> 
 </TrueTypeFonts>

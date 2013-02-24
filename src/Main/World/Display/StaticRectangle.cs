@@ -7,9 +7,24 @@ using Mogre;
 
 namespace Game.World.Display
 {
-    class StaticRectangle
+    static class StaticRectangle
     {
-        public static void DisplayRectangle(Vector3 origin, int height, int width, int depth, SceneNode node) {
+        static StaticRectangle() {
+            /* For drawing lines */
+            String resourceGroupName = "debugger";
+            if (ResourceGroupManager.Singleton.ResourceGroupExists(resourceGroupName) == false)
+                ResourceGroupManager.Singleton.CreateResourceGroup(resourceGroupName);
+
+            MaterialPtr moMaterial = MaterialManager.Singleton.Create("line_material", resourceGroupName);
+            moMaterial.ReceiveShadows = false;
+            moMaterial.GetTechnique(0).SetLightingEnabled(true);
+            moMaterial.GetTechnique(0).GetPass(0).SetDiffuse(0, 0, 1, 0);
+            moMaterial.GetTechnique(0).GetPass(0).SetAmbient(0, 0, 1);
+            moMaterial.GetTechnique(0).GetPass(0).SetSelfIllumination(0, 0, 1);
+            moMaterial.Dispose();  // dispose pointer, not the material
+        }
+        
+        static void DisplayRectangle(Vector3 origin, int height, int width, int depth, SceneNode node) {
             ManualObject block = new ManualObject(Guid.NewGuid().ToString());
             block.Begin("cube/Sand", RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
 
@@ -43,6 +58,19 @@ namespace Game.World.Display
 
             block.End();
             node.AttachObject(block);
+        }
+
+        public static void DrawLine(SceneManager sceneMgr, Vector3 p1, Vector3 p2)
+        {
+            ManualObject manOb = sceneMgr.CreateManualObject();
+            manOb.Begin("line_material", RenderOperation.OperationTypes.OT_LINE_LIST);
+            manOb.Position(0, 0, 0);
+            manOb.Position(p2 - p1);
+            manOb.End();
+
+            SceneNode node = sceneMgr.RootSceneNode.CreateChildSceneNode();
+            node.Position = p1;
+            node.AttachObject(manOb);
         }
     }
 }

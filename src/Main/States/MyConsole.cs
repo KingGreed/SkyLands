@@ -13,7 +13,7 @@ using Miyagi.UI.Controls.Styles;
 using Game.GUICreator;
 using Game.States;
 
-namespace Game.MyGameConsole
+namespace Game.IGConsole
 {
     public class MyConsole : GUIFactory
     {
@@ -91,7 +91,7 @@ namespace Game.MyGameConsole
 
             TextStyle style = new TextStyle();
             style.Alignment = Alignment.MiddleLeft;
-            style.Font = this.mMiyagiMgr.Fonts["Small_BlueHighway"];
+            style.Font = this.mMiyagiMgr.Fonts["Console"];
             style.ForegroundColour = Colours.White;
             this.mNewLabel = new Label();
             this.mNewLabel.Text = "";
@@ -195,6 +195,14 @@ namespace Game.MyGameConsole
                 string txt = this.mInput.GetText();
                 if (txt != "")
                     this.mNewLabel.Text += txt;
+
+                for(int i = 1; i < this.mNewLabel.Text.Length; i++)
+                {
+                    if (this.mNewLabel.Text[i] == (char)127)  // Supr
+                        this.mNewLabel.Text = this.mNewLabel.Text.Remove(i - 1, 2);   // Delete the carac 127 and the previous print
+                    /*else if (this.mNewLabel.Text[i] == (char)8)  // Del
+                        this.mNewLabel.Text = this.mNewLabel.Text.Remove(i, 2);*/   // Delete the carac 8 and the next print
+                }
             }
             else
             {

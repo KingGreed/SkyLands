@@ -23,6 +23,9 @@ namespace Game
         public Keyboard KeyBoard { get { return this.mKeyboard; } }
         public Mouse Mouse { get { return this.mMouse; } }
 
+        public bool IsShiftDown { get { return this.IsOneKeyEventTrue(this.IsKeyDown, KeyCode.KC_LSHIFT, KeyCode.KC_RSHIFT); } }
+        public bool IsCtrltDown { get { return this.IsOneKeyEventTrue(this.IsKeyDown, KeyCode.KC_LCONTROL, KeyCode.KC_RCONTROL); } }
+
         // Get last relative mouse movement (and wheel movement on Z axis)
         public int MouseMoveX { get { return (int)this.mMouseMove.x; } }
         public int MouseMoveY { get { return (int)this.mMouseMove.y; } }
@@ -135,7 +138,10 @@ namespace Game
 
         public bool AreAllKeyEventTrue(IsKeyEvent keyEvent, params MOIS.KeyCode[] keys)
         {
-            return !this.IsOneKeyEventTrue(keyEvent, keys);
+            foreach (MOIS.KeyCode key in keys)
+                if (!keyEvent(key)) { return false; }
+
+            return true;
         }
 
         private void ClearKeyPressed()
@@ -197,8 +203,11 @@ namespace Game
                 if (this.WasKeyPressed(code))
                 {
                     char c = this.GetKeyCodeChar(code);
-                    if(c != '\0')
+                    if (c != '\0')
+                    {
+                        //if (c == (char)127)
                         txt += c;
+                    }
                 }
             }
 
@@ -207,24 +216,29 @@ namespace Game
 
         public char GetKeyCodeChar(KeyCode code)
         {
-            char c = (char)0;
+            char c = '\0';
             string txt;
-            if (code == KeyCode.KC_SPACE)
-                c = ' ';
-            else if (code == KeyCode.KC_LBRACKET)
-                c = '(';
-            else if (code == KeyCode.KC_RBRACKET)
-                c = ')';
-            else
+            if      (code == KeyCode.KC_SPACE)     { c = ' '; }
+            else if (code == KeyCode.KC_LBRACKET)  { c = '('; }
+            else if (code == KeyCode.KC_RBRACKET)  { c = ')'; }
+            else if (code == KeyCode.KC_MINUS)     { c = '_'; }
+            else if (code == KeyCode.KC_BACKSLASH) { c = '\\'; }
+            else if (code == KeyCode.KC_BACK)      { c = (char)127; }  // Supr
+            else if (code == KeyCode.KC_DELETE)    { c = (char)8; } // Del
+            
+            if(c == '\0')   // The char isn't a special character
             {
                 txt = Enum.GetName(typeof(KeyCode), code);
                 txt = txt.Substring(3);
 
                 if (txt.Length == 1)    // Consider the letters and numbers
                 {
-                    char tmp = txt.ToLower()[0];
+                    char tmp;
 
-                    if ((tmp >= 'a' && tmp <= 'z') || (tmp >= '0' && tmp <= '9'))
+                    if (!this.IsShiftDown) { tmp = txt.ToLower()[0]; }
+                    else                   { tmp = txt.ToUpper()[0]; }
+
+                    if ((tmp >= 'a' && tmp <= 'z') || (tmp >= '0' && tmp <= '9') || (tmp >= 'A' && tmp <= 'Z'))
                         c = tmp;
                 }
             }

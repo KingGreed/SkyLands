@@ -4,7 +4,7 @@ using Mogre;
 
 using Game.World;
 using Game.States;
-using Game.MyGameConsole;
+using Game.IGConsole;
 
 namespace Game.CharacSystem
 {

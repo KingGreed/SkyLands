@@ -109,6 +109,7 @@ namespace Game.World.Generator
             
 
         }
+
         private unsafe void removeFace(int pos) {
 
             this.vBuff = this.moData.vertexData.vertexBufferBinding.GetBuffer(posEl.Source);

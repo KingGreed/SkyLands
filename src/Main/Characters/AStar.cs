@@ -20,7 +20,7 @@ namespace Game.src.Main.Characters
         public Cell(Vector3 loc, int movementCost, int distanceToPoint) {
             this.loc             = loc;
             this.movementCost    = movementCost;
-            this.distanceToPoint = distanceToPoint
+            this.distanceToPoint = distanceToPoint;
         }
 
         public int getHeuristicCost() { return this.movementCost + this.distanceToPoint; }
@@ -35,7 +35,7 @@ namespace Game.src.Main.Characters
         public AStar(Island curr, int y) {
             this.mIsland = curr;
             this.mHeight = y;
-            this.mPath = new List<cell>();
+            this.mPath = new List<Vector3>();
         }
 
         public void goTo(Vector3 begin, Vector3 end) {
