@@ -9,7 +9,7 @@ namespace Game.World.Blocks
     {
         public GrassBlock() {
             this.mName = "Grass";
-            this.mMaterial = "cube/wood";
+            this.mMaterial = "wdc";
             this.mId = 1;
         }
 

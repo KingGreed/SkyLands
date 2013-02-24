@@ -55,7 +55,7 @@ namespace Game.World
             if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Dome)            { island = new DomeIsland(node, new Vector2(3, 3), this); }
             else if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { island = new RandomIsland(node, new Vector2(30, 30), new Hills(),    this); }
             else if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { island = new RandomIsland(node, new Vector2(13, 13), new Hills(),     this); }
-            else  /*(this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Mountain)*/ { island = new RandomIsland(node, new Vector2(30, 30),   new Mountains(), this); }
+            else  /*(this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Mountain)*/ { island = new RandomIsland(node, new Vector2(10, 10),   new Mountains(), this); }
             this.mIslandList.Add(Vector3.ZERO, island);
             this.mIslandList[Vector3.ZERO].display();
 
@@ -143,36 +143,49 @@ namespace Game.World
 
         public bool HasCharacCollision(Vector3[] hitBlocks, Vector3 islandLoc, CubeFace collisionSide)  // hitBlocks should be of size 4
         {
-            int[] indexToTest;
+            /*int[] indexToTest;
             if      (collisionSide == CubeFace.underFace)   { indexToTest = new int[] { 0, 1, 2, 3 }; }
             else if (collisionSide == CubeFace.upperFace)   { indexToTest = new int[] { 4, 5, 6, 7 }; }
             else if (collisionSide == CubeFace.leftFace)    { indexToTest = new int[] { 0, 3, 4, 7 }; }
             else if (collisionSide == CubeFace.rightFace)   { indexToTest = new int[] { 1, 2, 5, 6 }; }
             else if (collisionSide == CubeFace.backFace)    { indexToTest = new int[] { 2, 3, 6, 7 }; }
-            else  /*(collisionSide == CubeFace.frontFace)*/ { indexToTest = new int[] { 0, 1, 4, 5 }; }
+            else  /*(collisionSide == CubeFace.frontFace)* { indexToTest = new int[] { 0, 1, 4, 5 }; }*/
 
-            int nbCollision = 0;
-            foreach (Vector3 blockPos in hitBlocks)
+            foreach (int i in this.GetIndexesToToTest(hitBlocks, collisionSide))
             {
-                if (this.hasBlockCollision(blockPos, islandLoc))
-                {
-                    if (nbCollision >= 3) { return true; }
-                    else                  { nbCollision++; }
-                }
+                if (this.hasPointCollision(hitBlocks[i], islandLoc))
+                    return true;
             }
 
             return false;
         }
 
-        private bool hasBlockCollision(Vector3 blockPos, Vector3 islandLoc)
+        private bool hasPointCollision(Vector3 blockPos, Vector3 islandLoc)
         {
             blockPos += this.mIslandList[islandLoc].getPosition();
             blockPos /= CUBE_SIDE;
-
-            
+            blockPos.z++;
 
             Block block = this.mIslandList[islandLoc].getBlock(blockPos, false);
             return !(block == null || block is AirBlock);
+        }
+
+        private int[] GetIndexesToToTest(Vector3[] hitBlocks, CubeFace face)
+        {
+            int[] indexToTest;
+            if (face == CubeFace.underFace) { indexToTest = new int[] { 0, 1, 2, 3 }; }
+            else if (face == CubeFace.upperFace) { indexToTest = new int[] { 4, 5, 6, 7 }; }
+            else if (face == CubeFace.leftFace) { indexToTest = new int[] { 0, 3, 4, 7 }; }
+            else if (face == CubeFace.rightFace) { indexToTest = new int[] { 1, 2, 5, 6 }; }
+            else if (face == CubeFace.backFace) { indexToTest = new int[] { 2, 3, 6, 7 }; }
+            else  /*(face == CubeFace.frontFace)*/ { indexToTest = new int[] { 0, 1, 4, 5 }; }
+
+            /*for (int i = 0, j = 0; i < hitBlocks.Length; i++)
+            {
+                if (hitBlocks[i].x < characPos.x && face == CubeFace.leftFace) { indexToTest[j] = i; j++; }
+            }*/
+
+            return indexToTest;
         }
 
         public void generateIslandThreaded() {

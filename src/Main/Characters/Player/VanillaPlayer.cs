@@ -126,7 +126,7 @@ namespace Game.CharacSystem
             Ray ray = this.mRayCaster.Camera.GetCameraToViewportRay(0.5f, 0.5f);
             //bool isInRay = this.mRayCaster.CastRay(this.mCharacMgr.StateMgr.MyConsole, ray, this.mNode, out distance, out blockPos);
 
-            distance = 150;
+            distance = 200;
             blockPos = ray.GetPoint(distance);
 
             Vector3 eyesPos = this.mNode.Position;
@@ -150,7 +150,7 @@ namespace Game.CharacSystem
             Ray ray = this.mRayCaster.Camera.GetCameraToViewportRay(0.5f, 0.5f);
             //bool isInRay = this.mRayCaster.CastRay(this.mCharacMgr.StateMgr.MyConsole, ray, this.mNode, out distance, out blockPos);
 
-            distance = 150;
+            distance = 200;
             blockPos = ray.GetPoint(distance);
 
             Vector3 eyesPos = this.mNode.Position;
@@ -169,7 +169,19 @@ namespace Game.CharacSystem
             {
                 string material = "";
                 if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_NUMPAD1))
+                    material = "Grass";
+                else if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_NUMPAD2))
+                    material = "Dirt";
+                else if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_NUMPAD3))
                     material = "Stone";
+                else if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_NUMPAD4))
+                    material = "Wood";
+                else if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_NUMPAD5))
+                    material = "Leaves";
+                else if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_NUMPAD6))
+                    material = "Sand";
+                else if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_NUMPAD7))
+                    material = "Construction";
 
                 if (material != "")
                 {
