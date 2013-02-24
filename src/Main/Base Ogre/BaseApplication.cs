@@ -108,7 +108,7 @@ namespace Game.BaseApp
         {
             this.mCam = this.mSceneMgr.CreateCamera("MainCamera");
             this.mCam.NearClipDistance = 5;
-            this.mCam.FarClipDistance = 3000;
+            //this.mCam.FarClipDistance = 5000;
         }
 
         private void CreateViewports()

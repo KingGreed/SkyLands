@@ -1,14 +1,15 @@
-\documentclass[article]{report} % Type of document
+\documentclass[article]{report}             % Type of document
 
-\usepackage[utf8]{inputenc}    		 	% Encoding
-\usepackage[english]{babel}			% Language
+\usepackage[utf8]{inputenc}    		 	    % Encoding
+\usepackage[english]{babel}			        % Language
 \usepackage{geometry}           			% Page margin
 \usepackage{graphicx}           			% For images
 \usepackage{newcent}            			% Font
 \usepackage{color}              			% Colors
 \usepackage{listings}           			% Lists
-\usepackage[footnote, nolist]{acronym}	% Acronyms
-\usepackage[absolute, overlay]{textpos}	% Text positioning
+\usepackage[footnote, nolist]{acronym}	    % Acronyms
+\usepackage[absolute, overlay]{textpos}	    % Text positioning
+\usepackage[babel=true]{csquotes}
 
 \usepackage{fancyhdr}          			 % We might have a need for them
 \usepackage{float}
@@ -114,10 +115,78 @@
  											
   		\chapter{\textcolor{blue}{Communications}}
 			\section{Twitter, Facebook and YouTube }
+				Since our game is starting to be playable, we wanted to show the world what it looked like.\\
+				To do so, we created accounts on the two main social networking web sites: Facebook and Twitter. Also to give people the possibility to really have an idea of what our game look like, we have made a small footage showing the main goal of our game and it's advancement and posted it on Youtube.
 				
 			\section{Web site}
-				
+				You might have seen it at the first oral presentation, our website was a little bit empty. Knowing that we made some efforts, and added some pages to the website. The first we added was the download page the second we added and completed was the page World. Finally, we created an admin area where we could edit the news on the front page.
+
+				This is done using an SQL database, this means as we are using Symfony, we use Doctrine. An example of Doctrine is the following class (this is not all the class) : 
+\begin{lstlisting}
+<?php
+/* @ORM\Table()
+ * @ORM\Entity(repositoryClass="SkyLands\KernelBundle\Entity\NewsRepository") */
+class News {
+    /**
+     * @var integer
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var string
+     * @ORM\Column(name="author", type="string", length=255)
+     */
+    private $author;
+    /**
+     * @var string
+     * @ORM\Column(name="message", type="text")
+     */
+    private $message;
+
+
+    /*Get id
+     * @return integer 
+     */
+    public function getId() { return $this->id; }
+} ?>
+\end{lstlisting}
+ 		Thanks to symfony, creating the file and lauching a php command line symfony will detect all new doctrine class (marked with a @ORM comment) and update the database for us (creating a table).\\
+ 		Also creating a new row in a table and reading from a table is made easier with doctrine : 
+\begin{lstlisting}
+<?php
+//writting
+$article = new News();
+$article->setTitle('2nd Oral presentation');
+$article->setAuteur('Dedalus');
+
+$em = $this->getDoctrine()->getManager();
+$em->persist($article);
+$em->flush();
+
+//reading
+$repository = $this->getDoctrine()->getManager()->
+getRepository('SkyLandsKernelBundle:News');
+
+$newsList   = $repository->findBy(array(), array('date' => 'desc'), 4, 0);
+//newsList is an array of array access it with newsList[i][fieldName]
+?>
+\end{lstlisting}
+		
+
 		\chapter{\textcolor{blue}{Licencing}}
+			At Dedalus, we consider that Licencing our code is an important task. According to the french legal code, a licence is an authorization.\\
+			First, we explored the available licences and, one of the first licence we were directed to was the GNU GPL.
+
+			\section{GNU LGPL}
+				The GNU Lesser General Public License or LGPL (formerly the GNU Library General Public License) is a free software license published by the Free Software Foundation (FSF). The LGPL allows developers and companies to use and integrate LGPL software into their own (even proprietary) software without being required (by the terms of a strong copyleft) to release the source code of their own software-parts. Merely the LGPL software-parts need to be modifiable by end-users (via source code availability): therefore, in the case of proprietary software, the LGPL-parts are usually used in the form of a shared library (e.g. DLL), so that there is a clear separation between the proprietary parts and open source LGPL parts.\\
+
+				However one of the downside of the LGPL is that if you do not use the code in a DLL, so you put it in your code, your project automatically gets under the LGPL. It is usually said that the licence is viral. That is one the only thing we do not agree with.
+
+			\section{BSD licence}
+				BSD licenses are a family of permissive free software licenses, imposing minimal restrictions on the redistribution of covered software. This is in contrast to copyleft licenses, which have reciprocity share-alike requirements. The original BSD license was used for its namesake, the Berkeley Software Distribution (BSD), a Unix-like operating system. The original version has since been revised and its descendants are more properly termed modified BSD licenses.
 
 		\chapter{\textcolor{blue}{Terrain display}}
 			\section{What was done}
@@ -152,7 +221,7 @@ Basically, the idea we had was to gather all visible blocks of the same material
 
 First of all you need to understand our architecture : 
 				\begin{figure}[h]
-				\includegraphics[scale=0.5]{images/Hierarchy.png}
+					\includegraphics[scale=0.5]{images/Hierarchy.png}
 				\end{figure}
 
 As you can see here each chunk contains an array of block. At first, in this array, we stored in each cell a new instance of an object (The cube object) which had an attribute defining it's material.\\
@@ -187,32 +256,68 @@ That's why we ended up choosing Caelum. But we didn't made this choice because i
 				C\# having a thread system which is easy to handle, this part was pretty easy.
 				
 			\section{Removing Blocks}
-				On the other hand removing blocks from the scene was a tricky part. Because the function we needed was not implemented in C\# we had to get it from the C++ libraries. And, what's more, the function needed pointers so we had to use the unsafe option.\\
-The basic idea is that a Manual Object is just an abstract layer to Vertex and Vertices. Thus we had to get the vertex buffer, Lock it, get the position of the first element and from there on tell what was the face number we wanted to access, and multiply this number by the "size" of a Vector3 this would set the pointer to the right position. From there on we only had to set for a face, it's 4 coords to 0 and check how many faces were visible.\\
+				On the other hand removing blocks from the scene was a tricky part. Because the function we needed was not implemented in C\# (traveling through the Manual object and modifying the faces, which are vector3) we had to get it from the C++ libraries. And, what's more, when we found the function we needed, we discovered the function needed pointers, thus so we had to use the unsafe option.\\
 
-However 2 problems arose : the first block with multiple structures, had to be dealt with in a separate way. \\
-The second was that when removing a block, we had to refresh the surrounding blocks, thus most of the time creating faces which were not in the manual object (that was the cause of a bug). So we had to be careful not to suppress 
+				The basic idea is that a Manual Object is just a buffer of pointers to a Vector3 (actually it's a pointer to an array of size 3 which represent the coordinates of the vector3). Thus we had to get the vertex buffer, Lock it, get the position of the first element and from there on tell what was the face number we wanted to access, and multiply this number by the \enquote{size} of a Vector3 this would set the pointer to the right position. From there on we only had to set for a face, it's 4 coords to 0 and check how many faces were visible.\\
+
+				However 2 problems arose : the first block with multiple textures, had to be dealt with in a separate way. \\
+				The second was that when removing a block, we had to refresh the surrounding blocks, thus most of the time creating faces which were not in the manual object, that was the cause of a bug where we tried to supress faces which were not in the manual object. You can imagine that it was deleting other faces than the one we wanted deleted.
 
 		\chapter{\textcolor{blue}{Terrain generation}}
 			\section{A new structure}
+				After the first oral, we wished for a more modable, and more object oriented structure. Thus most of the code was rewritten, allowing us to first create island which were not using Perlin3d and secondly, when generating the terrain have what we called \enquote{populators} which were called after the terrain was generated.\\
+
+				Thus, in game you will now see trees and cactus as well. We can also set what we call the \enquote{ground cover} which define which blocks you'll find on the first second and third layer of the ground. 
 				
 			\section{Perlin 3d algorithm}
+				Thanks to our display optimization, we can now generate bigger islands. On the other hand the terrain's generation algorith is still an algorith of complexity O(n) (we have to travel through the terrain in the 3 dimensions). And can not be as optimized as the display.\\
+
+
+
+				Our Perlin3d algorith still works combining 3d noise in a polynomal expression :
+
+				\begin{lstlisting}
+
+double noiseValue = (noise[xx, yy, zz]) * noise2[xx, 255 - yy, zz] + noise[xx, yy, zz] - System.Math.Abs(1 / smoothHeight * (yy - smoothHeight - minElevation + 20))
+
+				\end{lstlisting} 
+~\\
+
+				Basically, perlin noise generate solid terrain and not islands. Removing the absolute value of 1/elevation to the noise value ensure that we get a more Island shaped terrain.\\
+				The 2nd degree polynomal and the smoothHeight + 20 is a form we came after hours of testing. \\
+
+				Combining a bigger terrain and and an upgraded perlin algorithm gave us nice results : 
 				
+				\begin{figure}[h]
+					\includegraphics[scale=0.25]{images/terrain01.png}
+					\includegraphics[scale=0.25]{images/terrain02.png}
+				\end{figure}
+
+				~\\~\\ ~\\
 			\section{Biomes}
-			
+				You must have noticed in the previous formula the minElevation variable. This is an essential part of the terrain generation. When it's low value, the terrain is flatter. Whereas a higher value will generate multiple levels and \enquote{mountains}. \\
+
+				Therefore we took advantage of this and created what we called the class Biome which not only had a value determining the minElevation variable but also had the ability to change the blocks on the ground (ground cover) and had populators.
+
+
 		\chapter{\textcolor{blue}{Buildings}}
 			\section{Constructions blocks}
 				Unlike in Minecraft, our player can build some presaved buildings. This is the basic of a Starcraft-like game. These buildings will allow the players to spawn some bots for his army and also to gather few basic resources.\\
 
-We don't want the player to build all of the constructions block per block, all he will have to do is to place a "construction block". Then when he clicks this block, a menu opens and the player will have to give the required resources to start the construction. For now we haven't the inventory system with the actual resources of the player that's why the construction menu is light.\\
+We don't want the player to build all of the constructions block per block, all he will have to do is to place a \enquote{construction block}. Then when he clicks this block, a menu opens and the player will have to give the required resources to start the construction. For now we haven't the inventory system with the actual resources of the player that's why the construction menu is light.\\
 
-For this oral presentation, our buildings are simple. The player will actually be able to save his own buildings for the fourth presentation, this is part of the "map editor".
+For this oral presentation, our buildings are simple. The player will actually be able to save his own buildings for the fourth presentation, this is part of the \enquote{map editor}.
 			
-			\section{Saving and loading the structure}
-			
+			\section{Saving and loading the structure and terrain}
+				This wasn't very complicated, basically as we already explained you a block has an id which is a char. We only had to save each char in a file using a StreamWritter so as a byte.\\
+				This is how it works : foreach Islands, call the function save. This function will create a new file in the users' AppData/Roaming/SkyLands called Islands-Position.\\
+
+				It will write in the file it's X, Y, Z size (in chunks and not in blocks) and then begin to write the information using 3 simple for loops.
+				The results talk for themselves, for 100 000 blocks = 100 000 bytes = 100 ko. which would be around the number of blocks contained in a 15 * 15 island.
+				
 		\chapter{\textcolor{blue}{Physics}}
 			\section{Collisions}
-				As we want the best of our game, we tried to implement the library MogreNewt. This library provides a physic engine and handle collisions detection. It is a powerful tool but it implies to add each cube one by one as a "Body" that is to say about 80 000 blocks. This leads to an important loss of FPS which is definitely what we don't want. Here you can see all the wires of the bodies including the character which was automatically created using its mesh file.\\
+				As we want the best of our game, we tried to implement the library MogreNewt. This library provides a physic engine and handle collisions detection. It is a powerful tool but it implies to add each cube one by one as a \enquote{Body} that is to say about 80 000 blocks. This leads to an important loss of FPS which is definitely what we don't want. Here you can see all the wires of the bodies including the character which was automatically created using its mesh file.\\
 
 Eventually, we kept our system using the height points of each corner since we consider our character as a parallelepiped rectangle. This isn't an AABB collision algorithm because we look at the type of block there are next to the points.
 
