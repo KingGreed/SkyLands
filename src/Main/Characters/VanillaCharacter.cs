@@ -28,6 +28,10 @@ namespace Game.CharacSystem
         private GravitySpeed    mGravitySpeed;
         private JumpSpeed       mJumpSpeed;
 
+        //MoveForward variable
+        private Vector3         mStartingPoint;
+        private Vector3         mEndingPoint;
+
         public SceneNode     Node            { get { return this.mNode; } }
         public bool          IsAllowedToMove { get { return this.mMovementInfo.IsAllowedToMoved; } set { this.mMovementInfo.IsAllowedToMoved = value; } }
         public float         Height          { get { return this.CHARAC_SIZE.y; } }
@@ -57,6 +61,8 @@ namespace Game.CharacSystem
             ent.AttachObjectToBone("Sheath.R", swordR);
 
             this.mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id);
+
+            this.mStartingPoint = this.mEndingPoint = Vector3.ZERO;
 
             this.mNode.AttachObject(ent);
             this.FeetPosition = this.mCharInfo.SpawnPoint + new Vector3(0, 300, 0);
@@ -121,10 +127,27 @@ namespace Game.CharacSystem
             }
         }
 
-        /*private void OnCommandEntered(string command)
+        private void OnCommandEntered(string command)
         {
-            Console.WriteLine("ok");
-        }*/
+            LogManager.Singleton.DefaultLog.LogMessage("\n \n \n Test");
+            string[] args = command.Split(new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
+
+            if(args.Length >= 2)
+            {
+                if (args[0] == "moveforward")
+                {
+                    int index;
+                    if (int.TryParse(args[1], out index)) {
+                        this.moveForward(index);
+                        this.mCharacMgr.StateMgr.WriteOnConsole("True");
+                    }
+                    else { LogManager.Singleton.DefaultLog.LogMessage("test"); }
+                }
+                else { LogManager.Singleton.DefaultLog.LogMessage("test2"); }
+            }
+            else { LogManager.Singleton.DefaultLog.LogMessage("test3"); }
+
+        }
 
         public void Update(float frameTime)
         {
@@ -134,6 +157,9 @@ namespace Game.CharacSystem
                 if (this.mCharInfo.IsPlayer) { (this as VanillaPlayer).Update(frameTime); }
                 else { (this as VanillaNonPlayer).Update(frameTime); }
             }
+            //MoveForward
+            if(this.mStartingPoint != this.mEndingPoint) { this.mMovementInfo.MoveDirection = Vector3.UNIT_Z; }
+
 
             /* Apply mMovementInfo */
             Vector3 translation = Vector3.ZERO;
@@ -219,5 +245,13 @@ namespace Game.CharacSystem
 
             this.mNode.Translate(translation, Mogre.Node.TransformSpace.TS_LOCAL);
         }
+
+        public void moveForward(int numBlocks) 
+        {
+            this.mStartingPoint = this.mNode.Position;
+            this.mEndingPoint   = this.mNode.Position + (numBlocks * MainWorld.CUBE_SIDE) * Vector3.UNIT_Z ;
+        }
+
+        public bool isMoveForwardFinished() { return this.mStartingPoint == this.mNode.Position; }
     }
 }

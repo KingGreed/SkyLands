@@ -38,7 +38,7 @@ namespace Game.World
 
         private StateManager  mStateMgr;
         private SkyMgr        mSkyMgr;
-        private Thread        workerThread;
+        //private Thread        workerThread;
 
         public MainWorld(StateManager stateMgr)
         {
@@ -168,10 +168,10 @@ namespace Game.World
 
         public void generateIslandThreaded() {
             Vector3 pos = new Vector3(this.mIslandList[new Vector3(0, 0, 0)].getPosition().x * CHUNK_SIDE + 3 * CHUNK_SIDE, 0, this.mIslandList[new Vector3(0, 0, 0)].getPosition().z * CHUNK_SIDE + 3 * CHUNK_SIDE);
-            SceneNode node = this.mStateMgr.SceneManager.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
+            /*SceneNode node = this.mStateMgr.SceneManager.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
             this.mIslandList.Add(pos, new RandomIsland(node, new Vector2(13, 13), new Hills(), this));
 
-            workerThread = new Thread(this.mIslandList[pos].display);
+            workerThread = new Thread(this.mIslandList[pos].display);*/
         }
 
         public Vector3 GetBlockAbsPosFromAbs(VanillaCharacter charac)             { return this.GetBlockAbsPosFromAbs(charac.FeetPosition, charac.Info.IslandLoc); }

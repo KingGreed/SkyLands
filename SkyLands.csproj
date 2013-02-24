@@ -137,6 +137,7 @@
     <Compile Include="src\Main\Base Ogre\Overlay.cs" />
     <Compile Include="src\Main\Characters\Anim.cs" />
     <Compile Include="src\Main\Characters\AnimationMgr.cs" />
+    <Compile Include="src\Main\Characters\AStar.cs" />
     <Compile Include="src\Main\Characters\CharacMgr.cs" />
     <Compile Include="src\Main\Characters\Misc\GravitySpeed.cs" />
     <Compile Include="src\Main\Characters\Misc\CharacterInfo.cs" />
