@@ -33,6 +33,7 @@ namespace Game.CharacSystem
         //MoveForward variable
         private Vector3         mStartingPoint;
         private Vector3         mEndingPoint;
+        private bool            mIsWalking;
 
         public SceneNode     Node            { get { return this.mNode; } }
         public bool          IsAllowedToMove { get { return this.mMovementInfo.IsAllowedToMoved; } set { this.mMovementInfo.IsAllowedToMoved = value; } }
@@ -65,6 +66,7 @@ namespace Game.CharacSystem
             this.mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id);
 
             this.mStartingPoint = this.mEndingPoint = Vector3.ZERO;
+            this.mIsWalking = false;
 
             this.mNode.AttachObject(ent);
             this.FeetPosition = this.mCharInfo.SpawnPoint;// +new Vector3(0, 300, 0);
@@ -169,7 +171,18 @@ namespace Game.CharacSystem
                         this.mCharacMgr.StateMgr.WriteOnConsole("Z : " + this.mNode.Orientation.z);
                     }
                 }
+                else if (args[0] == "/goTo")
+                {
+                    LogManager.Singleton.DefaultLog.LogMessage("test");
+                    int index;
+                    if (int.TryParse(args[1], out index))
+                    {
+                        LogManager.Singleton.DefaultLog.LogMessage("test");
+                        this.moveForward(index);
+                    }
+                }
             }
+            LogManager.Singleton.DefaultLog.LogMessage("test");
         }
 
         public void Update(float frameTime)
@@ -181,8 +194,11 @@ namespace Game.CharacSystem
                 else { (this as VanillaNonPlayer).Update(frameTime); }
             }
             //MoveForward
-            if(this.mStartingPoint != this.mEndingPoint) { this.mMovementInfo.MoveDirection = Vector3.UNIT_Z; }
-
+            if (this.mIsWalking)
+            {
+                if (this.mStartingPoint.z != this.mEndingPoint.z) { this.mMovementInfo.MoveDirection = Vector3.UNIT_Z; }
+                else { this.mIsWalking = false; }
+            }
 
             /* Apply mMovementInfo */
             Vector3 translation = Vector3.ZERO;
@@ -292,9 +308,15 @@ namespace Game.CharacSystem
 
         public void moveForward(int numBlocks) 
         {
-            this.mStartingPoint = this.mNode.Position;
+
+            this.mIsWalking = true;
+
+            this.mNode.Yaw(new Radian(Mogre.Math.PI / 2));
+
+            this.mStartingPoint = this.mNode.Position * Vector3.UNIT_SCALE;
             this.mEndingPoint   = this.mNode.Position + (numBlocks * MainWorld.CUBE_SIDE) * Vector3.UNIT_Z ;
         }
+
 
         public bool isMoveForwardFinished() { return this.mStartingPoint == this.mNode.Position; }
     }
