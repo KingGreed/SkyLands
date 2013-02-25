@@ -7,19 +7,18 @@ using Game.BaseApp;
 using Game.GUICreator;
 using Game.Display;
 using Game.IGConsole;
+using Game.World;
 
 namespace Game.States
 {
     public abstract class StateManager : BaseApplication
     {
-        public enum TypeWorld { Sinus, Dome, Plain, Mountain }
-
         private MiyagiMgr    mMiyagiMgr;
         private MyConsole    mConsole;
         private Stack<State> mStateStack;
         private Stack<Type>  mNewStates;
         private int          mPopRequested;
-        private TypeWorld    mChosenWorld;
+        private GameInfo     mGameInfo;
         private bool         mWaitOneFrame;
 
         public Root         Root        { get { return this.mRoot; } }
@@ -29,7 +28,7 @@ namespace Game.States
         public MiyagiMgr    MiyagiMgr   { get { return this.mMiyagiMgr; } }
         public Camera       Camera      { get { return this.mCam; } }
         public Viewport     Viewport    { get { return this.mViewport; } }
-        public TypeWorld    ChosenWorld { get { return this.mChosenWorld; } set { this.mChosenWorld = value; } }
+        public GameInfo     GameInfo    { get { return this.mGameInfo; } set { this.mGameInfo = value; } }
         public int          NumberState { get { return this.mStateStack.Count; } }
         public MyConsole    MyConsole   { get { return this.mConsole; } }
 
@@ -43,7 +42,6 @@ namespace Game.States
             this.mStateStack = new Stack<State>();
             this.mNewStates = new Stack<Type>();
             this.mPopRequested = 0;
-            this.mChosenWorld = TypeWorld.Plain;
             this.mWaitOneFrame = false;
             this.RequestStatePush(typeof(MainMenu));
         }

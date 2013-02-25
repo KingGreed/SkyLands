@@ -5,6 +5,7 @@ using Mogre;
 using Game.World;
 using Game.Animation;
 using Game.World.Display;
+using Game.IGConsole;
 
 namespace Game.CharacSystem
 {
@@ -117,30 +118,30 @@ namespace Game.CharacSystem
 
         private void ThirdPersonUpdate(float yawValue, float pitchValue) { }
 
-        /*private bool GetBlockPos(out Vector3 blockPos, out API.Geo.Cuboid.Block b)
+        private bool GetBlockPos(out Vector3 point, out Vector3 relBlockPos, out API.Geo.Cuboid.Block b)
         {
             float distMax = 200;
             float distance = 0;
-            blockPos = Vector3.ZERO;
+            point = Vector3.ZERO;
+            relBlockPos = Vector3.ZERO;
             b = null;
 
             Ray ray = this.mCam.Camera.GetCameraToViewportRay(0.5f, 0.5f);
             do
             {
                 distance += 40;
-                blockPos = ray.GetPoint(distance);
-                Vector3 loc = blockPos / MainWorld.CUBE_SIDE;
-                loc.x = Mogre.Math.IFloor(loc.x);
-                loc.y = Mogre.Math.IFloor(loc.y);
-                loc.z = Mogre.Math.IFloor(loc.z);
-                loc.z++;
-                this.mCharacMgr.StateMgr.WriteOnConsole(Game.IGConsole.MyConsole.GetString(loc));
-                b = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(loc, false);
+                point = ray.GetPoint(distance);
+                relBlockPos = point / MainWorld.CUBE_SIDE;
+                relBlockPos.x = Mogre.Math.IFloor(relBlockPos.x);
+                relBlockPos.y = Mogre.Math.IFloor(relBlockPos.y);
+                relBlockPos.z = Mogre.Math.IFloor(relBlockPos.z);
+                relBlockPos.z++;
+                b = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(relBlockPos, false);
             } while (b is Game.World.Blocks.AirBlock && distance <= distMax);
 
             if (distance > distMax)
             {
-                blockPos = Vector3.ZERO;
+                relBlockPos = Vector3.ZERO;
                 b = null;
                 return false;
             }
@@ -149,12 +150,12 @@ namespace Game.CharacSystem
 
         private void OnLClick()
         {
-            Vector3 blockPos;
+            Vector3 relBlockPos, tmp;
             API.Geo.Cuboid.Block b;
-            if (!this.GetBlockPos(out blockPos, out b)) { return; }
+            if (!this.GetBlockPos(out tmp, out relBlockPos, out b)) { return; }
 
-            string material = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(blockPos, false).getName();
-            this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).removeFromScene(blockPos);  // Delete block
+            string material = b.getName();
+            this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).removeFromScene(relBlockPos);  // Delete block
 
             if (material != "Air")
                 this.mCharacMgr.StateMgr.WriteOnConsole("Deleted : " + material);
@@ -162,12 +163,39 @@ namespace Game.CharacSystem
 
         private void OnRClick()
         {
-            Vector3 blockPos;
+            Vector3 relBlockPos, collisionPoint;
             API.Geo.Cuboid.Block b;
-            if (!this.GetBlockPos(out blockPos, out b)) { return; }
+            if (!this.GetBlockPos(out collisionPoint, out relBlockPos, out b)) { return; }
 
-            if (b is Game.World.Blocks.AirBlock)
+            if (b is Game.World.Blocks.ConstructionBlock)
+                this.mCharacMgr.StateMgr.WriteOnConsole("Open GUI");
+            else
             {
+                Vector3 absPosBlock = relBlockPos * MainWorld.CUBE_SIDE;
+
+                /*this.mCharacMgr.StateMgr.WriteOnConsole("Block : " + MyConsole.GetString(absPosBlock));
+                this.mCharacMgr.StateMgr.WriteOnConsole("Col : " + MyConsole.GetString(collisionPoint));*/
+                int index = -1;
+                float minDist = -1;
+                Vector3[] points = Game.World.Generator.VanillaMultiBlock.blockPointCoords;
+                for(int i = 0; i < points.Length; i += 4)
+                {
+                    Mogre.Plane p = new Plane(points[i] + absPosBlock, points[i + 1] + absPosBlock, points[i + 2] + absPosBlock); // Need the 3 first points
+                    float dist = p.GetDistance(collisionPoint);
+                    if (minDist < 0 || dist < minDist)
+                    {
+                        minDist = dist;
+                        index = i / 4;
+                    }
+                }
+                CubeFace face = (CubeFace)index;
+                if      (face == CubeFace.underFace) { relBlockPos.y--; }
+                else if (face == CubeFace.upperFace) { relBlockPos.y++; }
+                else if (face == CubeFace.leftFace) { relBlockPos.x--; }
+                else if (face == CubeFace.rightFace) { relBlockPos.x++; }
+                else if (face == CubeFace.backFace) { relBlockPos.z--; }
+                else  /*(face == CubeFace.frontFace)*/ { relBlockPos.z++; }
+                
                 string material = "";
                 if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_1, MOIS.KeyCode.KC_NUMPAD1))
                     material = "Grass";
@@ -186,15 +214,13 @@ namespace Game.CharacSystem
 
                 if (material != "")
                 {
-                    this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addBlockToScene(blockPos, material);
+                    this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addBlockToScene(relBlockPos, material);
                     this.mCharacMgr.StateMgr.WriteOnConsole("Added : " + material);
                 }
             }
-            else if(b is Game.World.Blocks.ConstructionBlock)
-                this.mCharacMgr.StateMgr.WriteOnConsole("Open GUI");
-        }*/
+        }
 
-        private void OnLClick()
+        /*private void OnLClick2()
         {
             float distance = 200;
             Vector3 blockPos = this.mCam.Camera.GetCameraToViewportRay(0.5f, 0.5f).GetPoint(distance);
@@ -211,8 +237,8 @@ namespace Game.CharacSystem
             if (material != "Air")
                 this.mCharacMgr.StateMgr.WriteOnConsole("Deleted : " + material);
         }
-
-        private void OnRClick()
+        
+        /*private void OnRClick()
         {
             float distance = 200;
             Vector3 blockPos = this.mCam.Camera.GetCameraToViewportRay(0.5f, 0.5f).GetPoint(distance);
@@ -251,6 +277,6 @@ namespace Game.CharacSystem
             }
             else if(b is Game.World.Blocks.ConstructionBlock)
                 this.mCharacMgr.StateMgr.WriteOnConsole("Open GUI");
-        }
+        }*/
     }
 }

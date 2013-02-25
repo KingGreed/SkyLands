@@ -10,6 +10,7 @@ using Miyagi.Common.Events;
 using Miyagi.UI.Controls.Styles;
 
 using Game.States;
+using Game.World;
 
 namespace Game.GUICreator
 {
@@ -19,20 +20,21 @@ namespace Game.GUICreator
         private PictureBox mBackGround;
         private Label mLabel;
         private Button mBackButton;
-        private string mSeed;
-        private string mSizeX;
-        private string mSizeY;
+        private GameInfo mGameInfo;
 
-        public SecondMenuGUI(StateManager stateMgr, string name) : base(stateMgr, name) { }
+        public SecondMenuGUI(StateManager stateMgr, GameInfo gameInfo) : base(stateMgr, "SecondMenu GUI")
+        {
+            this.mGameInfo = gameInfo;
+        }
 
         protected override void CreateGUI()
         {
             /* Panel */
-            mBackGround = new PictureBox();
-            //mBackGround.AlwaysOnBottom = true;
-            mBackGround.Bitmap = new System.Drawing.Bitmap(@"../../src/Media/images/menuPlay.png");
-            mBackGround.Size = this.mOriginalWndSize;
-            this.mGUI.Controls.Add(mBackGround);
+            this.mBackGround = new PictureBox();
+            this.mBackGround.AlwaysOnBottom = true;
+            this.mBackGround.Bitmap = new System.Drawing.Bitmap(@"../../src/Media/images/menuPlay.png");
+            this.mBackGround.Size = this.mOriginalWndSize;
+            this.mGUI.Controls.Add(this.mBackGround);
 
             /* Text */
             this.mLabel = new Label();
@@ -52,25 +54,25 @@ namespace Game.GUICreator
             Point originalpos = this.mBackGround.Location + new Point(space, 65);
 
             this.mButtons = new Dictionary<string, Button>();
-            for (int i = 0; i < Enum.GetValues(typeof(StateManager.TypeWorld)).Length; i++)
+            for (int i = 0; i < Enum.GetValues(typeof(GameInfo.TypeWorld)).Length; i++)
             {
 
                 Button button = new Button();
                 button.Size = actualButtonSize;
-                button.Text = Enum.GetName(typeof(StateManager.TypeWorld), (StateManager.TypeWorld)i);
+                button.Text = Enum.GetName(typeof(GameInfo.TypeWorld), (GameInfo.TypeWorld)i);
                 button.TextStyle = style;
                 button.Location = originalpos + new Point(i * (actualButtonSize.Width + space), 150);
                 button.Skin = this.mMiyagiMgr.Skins["Button"];
                 this.mGUI.Controls.Add(button);
                 this.mButtons.Add(button.Text, button);
             }
-            mBackButton = new Button();
-            mBackButton.Size = actualButtonSize;
-            mBackButton.Text = "BACK";
-            mBackButton.TextStyle = style;
-            mBackButton.Location = this.mBackGround.Location + new Point(this.mBackGround.Size.Width / 10, (this.mBackGround.Size.Height / 10) * 9);
-            mBackButton.Skin = this.mMiyagiMgr.Skins["Button"];
-            this.mGUI.Controls.Add(mBackButton);
+            this.mBackButton = new Button();
+            this.mBackButton.Size = actualButtonSize;
+            this.mBackButton.Text = "BACK";
+            this.mBackButton.TextStyle = style;
+            this.mBackButton.Location = this.mBackGround.Location + new Point(this.mBackGround.Size.Width / 10, (this.mBackGround.Size.Height / 10) * 9);
+            this.mBackButton.Skin = this.mMiyagiMgr.Skins["Button"];
+            this.mGUI.Controls.Add(this.mBackButton);
 
             Miyagi.UI.Controls.TextBox textBoxSeed = new TextBox();
             textBoxSeed.Size = new Size(450, 50);
@@ -87,7 +89,7 @@ namespace Game.GUICreator
             Seed.Text = "Choose Seed";
             Seed.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
             Seed.Size = new Size(50, 50);
-            Seed.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 3 - 110, (this.mBackGround.Size.Height / 10) * 4 + 10);
+            Seed.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 3 - (this.mBackGround.Size.Width / 10) * 2, (this.mBackGround.Size.Height / 10) * 4 + 10);
             Seed.AutoSize = true;
             Seed.AutoSizeMode = Miyagi.UI.AutoSizeMode.GrowAndShrink;
             this.mGUI.Controls.Add(Seed);
@@ -105,10 +107,10 @@ namespace Game.GUICreator
             textBoxSizeX.Submit += new EventHandler<ValueEventArgs<string>>(textBoxSizeX_Submit);
 
             Label SizeX = new Label();
-            SizeX.Text = "Choose Width size";
+            SizeX.Text = "Choose Width";
             SizeX.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
             SizeX.Size = new Size(50, 50);
-            SizeX.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 3 - 110, (this.mBackGround.Size.Height / 10) * 4 + 80);
+            SizeX.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 3 - (this.mBackGround.Size.Width / 10) * 2, (this.mBackGround.Size.Height / 10) * 4 + 80);
             SizeX.AutoSize = true;
             SizeX.AutoSizeMode = Miyagi.UI.AutoSizeMode.GrowAndShrink;
             this.mGUI.Controls.Add(SizeX);
@@ -125,10 +127,10 @@ namespace Game.GUICreator
             textBoxSizeY.Submit += new EventHandler<ValueEventArgs<string>>(textBoxSizeY_Submit);
 
             Label SizeY = new Label();
-            SizeY.Text = "Choose Height size";
+            SizeY.Text = "Choose Height";
             SizeY.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
             SizeY.Size = new Size(50, 50);
-            SizeY.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 3 - 110, (this.mBackGround.Size.Height / 10) * 4 + 150);
+            SizeY.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 3 - (this.mBackGround.Size.Width / 10) * 2, (this.mBackGround.Size.Height / 10) * 4 + 150);
             SizeY.AutoSize = true;
             SizeY.AutoSizeMode = Miyagi.UI.AutoSizeMode.GrowAndShrink;
             this.mGUI.Controls.Add(SizeY);
@@ -137,17 +139,30 @@ namespace Game.GUICreator
 
         void textBoxSizeY_Submit(object sender, ValueEventArgs<string> e)
         {
-            this.mSizeY = e.Data;
+            int sizeY;
+            if (int.TryParse(e.Data, out sizeY))
+            {
+                Mogre.Vector2 size = this.mGameInfo.Size;
+                size.y = sizeY;
+                this.mGameInfo.Size = size;
+            }
         }
 
         void textBoxSizeX_Submit(object sender, ValueEventArgs<string> e)
         {
-            this.mSizeX = e.Data;
+            int sizeX;
+            if (int.TryParse(e.Data, out sizeX)) 
+            {
+                Mogre.Vector2 size = this.mGameInfo.Size;
+                size.x = sizeX;
+                this.mGameInfo.Size = size;
+            }
         }
 
         void textBoxSeed_Submit(object sender, ValueEventArgs<string> e)
         {
-            this.mSeed = e.Data;
+            int seed;
+            if (int.TryParse(e.Data, out seed)) { this.mGameInfo.Seed = seed; }
         }
 
         protected override void AfterResize()
@@ -155,9 +170,9 @@ namespace Game.GUICreator
             this.mLabel.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width - this.mLabel.Size.Width) / 2, 15);
         }
 
-        public void SetListener(StateManager.TypeWorld button, EventHandler<MouseButtonEventArgs> del)
+        public void SetListener(GameInfo.TypeWorld button, EventHandler<MouseButtonEventArgs> del)
         {
-            this.mButtons[Enum.GetName(typeof(StateManager.TypeWorld), button)].MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(del);
+            this.mButtons[Enum.GetName(typeof(GameInfo.TypeWorld), button)].MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(del);
         }
 
         public void SetListenerBack(EventHandler<MouseButtonEventArgs> del)

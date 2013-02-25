@@ -52,10 +52,13 @@ namespace Game.World
             this.mIslandList = new Dictionary<Vector3, Island>();
             SceneNode node = this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
             Island island;
-            if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Dome)            { island = new DomeIsland(node, new Vector2(3, 3), this); }
-            else if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { island = new RandomIsland(node, new Vector2(13, 13), new Desert(),    this); }
-            else if (this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Plain)      { island = new RandomIsland(node, new Vector2(13, 13), new Hills(),     this); }
-            else  /*(this.mStateMgr.ChosenWorld == StateManager.TypeWorld.Mountain)*/ { island = new RandomIsland(node, new Vector2(10, 10),   new Mountains(), this); }
+
+            GameInfo info = this.mStateMgr.GameInfo;
+            if      (info.Type == GameInfo.TypeWorld.Dome)       { island = new DomeIsland(node, info.Size, this); }
+            else if (info.Type == GameInfo.TypeWorld.Plains)     { island = new RandomIsland(node, info.Size, new Plains(), this); }
+            else if (info.Type == GameInfo.TypeWorld.Hills)     { island = new RandomIsland(node, info.Size, new Hills(), this); }
+            else  /*(info.Type == GameInfo.TypeWorld.Mountain)*/ { island = new RandomIsland(node, info.Size, new Mountains(), this); }
+
             this.mIslandList.Add(Vector3.ZERO, island);
             this.mIslandList[Vector3.ZERO].display();
 
