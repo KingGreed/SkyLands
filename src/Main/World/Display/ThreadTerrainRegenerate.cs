@@ -24,7 +24,7 @@ namespace Game.World.Display
         public void regenIsland() {
             LogManager.Singleton.DefaultLog.LogMessage("Regenerating Island !");
             List<string> multiToRegenerate = new List<string>();
-
+            
             for(int i = 0; i < this.mIsland.blocksAdded.Count; i++) {
                 this.mIsland.multiList[VanillaChunk.materialToString[this.mIsland.blocksAdded[i].blockName]].addBlock(this.mIsland.blocksAdded[0].position);
                 if(!multiToRegenerate.Contains(VanillaChunk.materialToString[this.mIsland.blocksAdded[i].blockName])) {

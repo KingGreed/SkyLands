@@ -141,6 +141,33 @@ material cube/sand
 		}
 	}
 }
+material cube/YellowSand
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture sand2.png }
+        }
+    }
+}
+material cube/RedSand
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture sand3.png }
+        }
+    }
+}
+
 material cube/dirt
 {
     technique

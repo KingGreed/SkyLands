@@ -72,41 +72,37 @@ namespace Game.World.Generator
                 }
                 i++;
             }
-            throw new ArgumentException("Could not find item");
+            return -1;
         }
 
         public unsafe void removeFromScene(Vector3 item, Island currIsland) {
             if(this.vBuff == null) {
-                this.block.GetSection(0).GetRenderOperation(this.moData);  ///////////////* FIX ME *////////////////////
+                this.block.GetSection(0).GetRenderOperation(this.moData);
                 this.posEl = this.moData.vertexData.vertexDeclaration.FindElementBySemantic(VertexElementSemantic.VES_POSITION);
             }
             Block curr = currIsland.getBlock(item, false);
 
-            int elemPosition;
+            int elemPosition = this.find(item);
             int i = 0;
+            bool isInAdded = false;
+
+            if (elemPosition == -1) { return; }
 
             if(curr.getComposingFaces().Length > 1) {
-                if(!currIsland.isinBlocksAdded(item, VanillaChunk.staticBlock[this.mMaterial].getFaces()[0])) {
-                    elemPosition = this.find(item);
                     this.removeFace(this.mIndexInVertexBuffer[elemPosition]);
-                } else {
-                    string cubeNodeName = "Node-" + item.x * MainWorld.CUBE_SIDE + "-" + item.y * MainWorld.CUBE_SIDE + "-" + item.z * MainWorld.CUBE_SIDE ;
-
-                    currIsland.Node.GetChild(0).RemoveChild(cubeNodeName);  ///////////////* FIX ME *////////////////////
-                }
             } else {
                 foreach(BlockFace face in Enum.GetValues(typeof(BlockFace))) {
                     if(currIsland.hasVisiblefaceAt((int)item.x, (int)item.y, (int)item.z, face)) {
-                        if(!currIsland.isinBlocksAdded(item, VanillaChunk.staticBlock[this.mMaterial].getFaces()[0])) {
-                            elemPosition = this.find(item);
+                        if(!currIsland.isInBlocksAdded(item, VanillaChunk.staticBlock[this.mMaterial].getFaces()[0])) {
                             this.removeFace(this.mIndexInVertexBuffer[elemPosition] + i*4);
-                        }  else {
-                            string cubeNodeName = "Node-" + item.x * MainWorld.CUBE_SIDE + "-" + item.y * MainWorld.CUBE_SIDE + "-" + item.z * MainWorld.CUBE_SIDE ;
-                            currIsland.Node.GetChild(0).RemoveChild(cubeNodeName);
-                        }
-                        i++;
+                            i++;
+                        }  else { isInAdded = true; }
                     }
                 }
+            }
+            if (isInAdded) {
+                string cubeNodeName = "Node-" + item.x * MainWorld.CUBE_SIDE + "-" + item.y * MainWorld.CUBE_SIDE + "-" + item.z * MainWorld.CUBE_SIDE;
+                currIsland.Node.GetChild(0).RemoveChild(cubeNodeName);
             }
             
 

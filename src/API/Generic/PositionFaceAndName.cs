@@ -7,15 +7,17 @@ using Mogre;
 
 namespace API.Generic
 {
-    public struct PositionFaceAndName {
+    public class PositionFaceAndStatus {
         public Vector3   position;
         public BlockFace face;
-        public string    blockName;
+        public bool      status;
 
-        public PositionFaceAndName(Vector3 loc, BlockFace face, string name) {
+        public PositionFaceAndStatus(Vector3 loc, BlockFace face) {
             this.position  = loc;
             this.face      = face;
-            this.blockName = name;
+            this.status    = true;//exists
         }
+
+        public void setStatus(bool val) { this.status = val; }
     }
 }

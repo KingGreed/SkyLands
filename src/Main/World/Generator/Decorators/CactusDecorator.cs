@@ -29,9 +29,14 @@ namespace Game.World.Generator.Decorators
                 }
 
                 curr.setBlockAt(x, y, z, 8, true);
-                if (random.Next(3)  > 1) { curr.setBlockAt(x, y + 1, z, 8, true); }
-                if (random.Next(9)  > 1) { curr.setBlockAt(x, y + 2, z, 8, true); }
-                if (random.Next(17) > 1) { curr.setBlockAt(x, y + 3, z, 8, true); }
+                curr.setBlockAt(x, y+1, z, 8, true);
+                if (random.Next(4)  > 1) {
+                    curr.setBlockAt(x, y + 2, z, 8, true);
+                    if (random.Next(11) > 6) {
+                        curr.setBlockAt(x, y + 3, z, 8, true);
+                        if (random.Next(20) > 15) { curr.setBlockAt(x, y + 4, z, 8, true); }
+                    }
+                }
 
             }
         }

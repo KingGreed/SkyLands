@@ -27,8 +27,8 @@ namespace API.Geo.Cuboid
         protected bool                           mIsTerrainUpdated;
         protected Biome                          mBiome;
         public Dictionary<string, MultiBlock>    multiList = new Dictionary<string, MultiBlock>();
-        public List<PositionFaceAndName>         blocksAdded;
-        public List<PositionFaceAndName>         blocksDeleted;
+        public List<PositionFaceAndStatus>       blocksAdded;
+        public List<PositionFaceAndStatus>       blocksDeleted;
 
 
         protected Dictionary<Vector3, Chunk> mChunkList;
@@ -43,9 +43,9 @@ namespace API.Geo.Cuboid
             this.mNode = node;
             this.mIslandSize  = new Vector3(size.x, 0, size.y);
             this.mWorld = currentWorld;
-            
-            this.blocksAdded   = new List<PositionFaceAndName>();
-            this.blocksDeleted = new List<PositionFaceAndName>();
+
+            this.blocksAdded    = new List<PositionFaceAndStatus>();
+            this.blocksDeleted = new List<PositionFaceAndStatus> ();
 
             this.mFaceNode = node.CreateChildSceneNode();
         }
@@ -56,6 +56,7 @@ namespace API.Geo.Cuboid
 	    public Vector3 getSize()       { return this.mIslandSize;  }
         public Vector3 getPosition()   { return this.mNode.Position; }
         public Vector3 getSpawnPoint() { throw new NotImplementedException(); }
+        public SceneNode getFaceNode() { return this.mFaceNode; }
 
         public Chunk getChunk  (int x, int y, int z)                  { return this.mChunkList[new Vector3(x,y,z)]; }
 	    public Chunk getChunkAt(Vector3 relativePosition)             { return this.mChunkList[relativePosition];   }
@@ -136,14 +137,14 @@ namespace API.Geo.Cuboid
             }
             return false;
         }
-        public bool isinBlocksDeleted(Vector3 item) {
+        public bool isInBlocksDeleted(Vector3 item) {
             for(int i = 0; i < this.blocksDeleted.Count; i++) {
                 if(this.blocksDeleted[i].position == item) { return true; }
             }
             return false;
         }
 
-        public bool isinBlocksAdded(Vector3 item, BlockFace face) {
+        public bool isInBlocksAdded(Vector3 item, BlockFace face) {
             for(int i = 0; i < this.blocksAdded.Count; i++) {
                 if(this.blocksAdded[i].position == item && face == this.blocksAdded[i].face) { return true; }
             }
@@ -154,7 +155,25 @@ namespace API.Geo.Cuboid
         public void removeFromBlocksAdded(int pos)   { this.blocksAdded.RemoveAt  (pos); }
         public void removeFromBlocksDeleted(int pos) { this.blocksDeleted.RemoveAt(pos); }
         public int  getNumOfBlocksAddedAndRemoved()  { return this.blocksAdded.Count + this.blocksDeleted.Count; }
+        public bool wasBlockAddedDeleted(Vector3 item, BlockFace face) {
+            for (int i = 0; i < this.blocksAdded.Count; i++) {
+                if (this.blocksAdded[i].position == item && face == this.blocksAdded[i].face) { return !this.blocksAdded[i].status; }
+            }
+            return true;//throw an exception ?
+        }
 
+        public int getItemPosInBlocksAdded(Vector3 item, BlockFace face) {
+            for (int i = 0; i < this.blocksAdded.Count; i++) {
+                if (this.blocksAdded[i].position == item && face == this.blocksAdded[i].face) { return i; }
+            }
+            return -1;
+        }
 
+        public bool isInBlocksAdded(Vector3 item) {
+            for (int i = 0; i < this.blocksAdded.Count; i++) {
+                if (this.blocksAdded[i].position == item) { return true; }
+            }
+            return false;
+        }
     }
 }

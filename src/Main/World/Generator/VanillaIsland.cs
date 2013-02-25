@@ -200,6 +200,7 @@ namespace Game.World.Generator
                 this.mChunkList[chunkLocation].setBlock(blockLocation, material);
             } 
         }
+
         public override void setBlockAt(int x, int y, int z, byte material, bool force) { this.setBlockAt(x, y, z, VanillaChunk.byteToString[material], force); }
 
         public override void removeFromScene(Vector3 item) {
@@ -207,18 +208,25 @@ namespace Game.World.Generator
 
             if (curr is AirBlock) { return; }
 
-                string[] key = curr.getComposingFaces();
+            string[] key   = curr.getComposingFaces();
+            bool isInAdded = false;
 
             if(key.Length == 1) {
                 this.multiList[key[0]].removeFromScene(item, this);
             } else {
                 for(int i = 0; i < 6; i++) {
                     if(this.hasVisiblefaceAt((int) item.x, (int) item.y, (int) item.z, (BlockFace) i)) {
-                        this.multiList[key[i]].removeFromScene(item, this);
-                        this.blocksDeleted.Add(new PositionFaceAndName(item, (BlockFace) i, curr.getName()));
+                        if (this.isInBlocksAdded(item, (BlockFace)i)) { isInAdded = true; }
+                        else {
+                            this.multiList[key[i]].removeFromScene(item, this);
+                        }
                     }
                 }
                 
+            }
+            if (isInAdded) {
+                string cubeNodeName = "Node-" + item.x * MainWorld.CUBE_SIDE + "-" + item.y * MainWorld.CUBE_SIDE + "-" + item.z * MainWorld.CUBE_SIDE;
+                this.mFaceNode.RemoveChild(cubeNodeName);
             }
             this.setBlockAt((int) item.x, (int) item.y, (int) item.z, "Air", false);
 
@@ -283,8 +291,8 @@ namespace Game.World.Generator
         }
 
         public override void addFaceToScene(BlockFace face, Vector3 relativePos, string material) {
-            
-            this.blocksAdded.Add(new PositionFaceAndName(relativePos, face, material));
+
+            this.blocksAdded.Add(new PositionFaceAndStatus(relativePos, face));
             
             relativePos += this.getPosition();
             relativePos *= MainWorld.CUBE_SIDE;

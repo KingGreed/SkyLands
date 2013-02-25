@@ -22,7 +22,7 @@ namespace API.Generator
         protected double min, max;
 
 	    protected List<Decorator> mDecorators  = new List<Decorator>();
-        protected List<string>    mGroundCover = new List<string>();
+        protected List<string[]>  mGroundCover = new List<string[]>();
 
 	    public Biome(byte id, params Decorator[] decorators) {
 		    this.mDecorators.AddRange(decorators.OfType<Decorator>().ToList());
@@ -43,6 +43,6 @@ namespace API.Generator
         public double getMin() { return this.min; }
         public double getMax() { return this.max; }
 
-        public List<string> getGroundCover() { return this.mGroundCover; }
+        public List<string[]> getGroundCover() { return this.mGroundCover; }
     }
 }
