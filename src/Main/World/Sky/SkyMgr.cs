@@ -29,7 +29,8 @@ namespace Game.Sky
             this.mCaelumSystem.GetUniversalClock().SetGregorianDateTime(2012, 12, 21, 12, 0, 0);
             this.mCaelumSystem.TimeScale = 1;
             //this.mCaelumSystem.EnsureSingleLightSource = true;
-            this.mCaelumSystem.EnsureSingleShadowSource = true;
+            //this.mCaelumSystem.EnsureSingleShadowSource = true;
+            //this.mCaelumSystem.AutoNotifyCameraChanged = false;
 
             /* Sky */
             this.mCaelumSystem.SkyDome = new SkyDome(this.mStateMgr.SceneMgr, this.mCaelumSystem.GetCaelumCameraNode());
@@ -55,8 +56,8 @@ namespace Game.Sky
 
             /* Fog */
             this.mCaelumSystem.SceneFogDensityMultiplier = 0;
-            /*this.mCaelumSystem.SceneFogColourMultiplier  = new ColourValue(0.3f, 0.3f, 0.3f);
-            this.mCaelumSystem.ManageSceneFog = true;*/
+            //this.mCaelumSystem.SceneFogColourMultiplier  = new ColourValue(0.3f, 0.3f, 0.3f);
+            this.mCaelumSystem.ManageSceneFog = true;
         }
 
         public void Update() { this.mCaelumSystem.TimeScale += this.mStateMgr.Input.MouseMoveZ; }

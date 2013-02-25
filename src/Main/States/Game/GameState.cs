@@ -29,7 +29,7 @@ namespace Game.States
             iaInfo.SpawnPoint = playerInfo.SpawnPoint;
             this.mCharacMgr.AddCharacter(iaInfo);*/
 
-            this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr);
+            this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr, this.mGUI);
             this.Show();
             Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop begin");
         }

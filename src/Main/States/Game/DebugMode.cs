@@ -3,6 +3,7 @@ using Mogre;
 
 using Game.BaseApp;
 using Game.CharacSystem;
+using Game.GUICreator;
 
 namespace Game
 {
@@ -12,16 +13,19 @@ namespace Game
         private CameraMan   mCameraMan;
         private MoisManager mInput;
         private CharacMgr   mCharacMgr;
+        private GameGUI     mGUI;
 
+        public bool IsDebugMode   { get { return this.mIsDebugMode; }   set { this.mIsDebugMode = value; } }
         public bool IsConsoleMode { get { return this.mIsConsoleMode; } set { this.mIsConsoleMode = value; } }
 
-        public DebugMode(MoisManager input, CharacMgr characMgr)
+        public DebugMode(MoisManager input, CharacMgr characMgr, GameGUI gui)
         {
             this.mInput = input;
             this.mCharacMgr = characMgr;
             this.mIsDebugMode = false;
             this.mCameraMan = null;
             this.mIsConsoleMode = false;
+            this.mGUI = gui;
         }
 
         public void Update(float frameTime, bool enablePlayerMove = true)
@@ -29,6 +33,7 @@ namespace Game
             if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F1))
             {
                 this.mIsDebugMode = !this.mIsDebugMode;
+                this.mGUI.SwitchGUIForDebugCam();
 
                 ((VanillaPlayer)this.mCharacMgr.GetCharacter()).IsDebugMode = this.mIsDebugMode;
 

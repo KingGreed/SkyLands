@@ -222,7 +222,7 @@ namespace Game
             else if (code == KeyCode.KC_LBRACKET)  { c = '('; }
             else if (code == KeyCode.KC_RBRACKET)  { c = ')'; }
             else if (code == KeyCode.KC_MINUS)     { c = '_'; }
-            else if (code == KeyCode.KC_BACKSLASH) { c = '\\'; }
+            else if (code == KeyCode.KC_SLASH)     { c = '/'; }
             else if (code == KeyCode.KC_BACK)      { c = (char)127; }  // Supr
             else if (code == KeyCode.KC_DELETE)    { c = (char)8; } // Del
             

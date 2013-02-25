@@ -43,8 +43,8 @@ namespace Game.BaseApp
 
             move.Normalise();
 
-            move *= 250;
-            if (mFastMove) { move *= 7; } // With shift button pressed, move twice as fast.
+            move *= 800;
+            if (mFastMove) { move *= 6; } // With shift button pressed, move twice as fast.
             if (move != Vector3.ZERO) { mCamera.Move(move * frameTime); }
         }
 

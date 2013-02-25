@@ -153,6 +153,13 @@ namespace Game.World
 
             foreach (int i in this.GetIndexesToToTest(hitBlocks, collisionSide))
             {
+                if      (collisionSide == CubeFace.underFace)   { hitBlocks[i].y--; }
+                else if (collisionSide == CubeFace.upperFace)   { hitBlocks[i].y++; }
+                else if (collisionSide == CubeFace.leftFace)    { hitBlocks[i].x--; }
+                else if (collisionSide == CubeFace.rightFace)   { hitBlocks[i].x++; }
+                else if (collisionSide == CubeFace.backFace)    { hitBlocks[i].z--; }
+                else  /*(collisionSide == CubeFace.frontFace)*/ { hitBlocks[i].z++; }
+                
                 if (this.hasPointCollision(hitBlocks[i], islandLoc))
                     return true;
             }
@@ -173,7 +180,7 @@ namespace Game.World
         private int[] GetIndexesToToTest(Vector3[] hitBlocks, CubeFace face)
         {
             int[] indexToTest;
-            if (face == CubeFace.underFace) { indexToTest = new int[] { 0, 1, 2, 3 }; }
+            if      (face == CubeFace.underFace) { indexToTest = new int[] { 0, 1, 2, 3 }; }
             else if (face == CubeFace.upperFace) { indexToTest = new int[] { 4, 5, 6, 7 }; }
             else if (face == CubeFace.leftFace) { indexToTest = new int[] { 0, 3, 4, 7 }; }
             else if (face == CubeFace.rightFace) { indexToTest = new int[] { 1, 2, 5, 6 }; }
