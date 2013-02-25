@@ -89,7 +89,7 @@ namespace Game.GUICreator
             Seed.Text = "Choose Seed";
             Seed.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
             Seed.Size = new Size(50, 50);
-            Seed.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 3 - 110, (this.mBackGround.Size.Height / 10) * 4 + 10);
+            Seed.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 3 - (this.mBackGround.Size.Width / 10) * 2, (this.mBackGround.Size.Height / 10) * 4 + 10);
             Seed.AutoSize = true;
             Seed.AutoSizeMode = Miyagi.UI.AutoSizeMode.GrowAndShrink;
             this.mGUI.Controls.Add(Seed);
@@ -110,7 +110,7 @@ namespace Game.GUICreator
             SizeX.Text = "Choose Width size";
             SizeX.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
             SizeX.Size = new Size(50, 50);
-            SizeX.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 3 - 110, (this.mBackGround.Size.Height / 10) * 4 + 80);
+            SizeX.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 3 - (this.mBackGround.Size.Width / 10) * 2, (this.mBackGround.Size.Height / 10) * 4 + 80);
             SizeX.AutoSize = true;
             SizeX.AutoSizeMode = Miyagi.UI.AutoSizeMode.GrowAndShrink;
             this.mGUI.Controls.Add(SizeX);
@@ -130,7 +130,7 @@ namespace Game.GUICreator
             SizeY.Text = "Choose Height size";
             SizeY.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
             SizeY.Size = new Size(50, 50);
-            SizeY.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 3 - 110, (this.mBackGround.Size.Height / 10) * 4 + 150);
+            SizeY.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 3 - (this.mBackGround.Size.Width / 10) * 2, (this.mBackGround.Size.Height / 10) * 4 + 150);
             SizeY.AutoSize = true;
             SizeY.AutoSizeMode = Miyagi.UI.AutoSizeMode.GrowAndShrink;
             this.mGUI.Controls.Add(SizeY);
