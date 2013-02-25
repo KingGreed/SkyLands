@@ -87,7 +87,7 @@ namespace Game.World.Generator
 		    double[, ,] noise  = WorldGeneratorUtils.fastNoise(FINAL, 16*(int)this.mIslandSize.x, 256, 16*(int)this.mIslandSize.z, 4, 0, 0, 0);
             double[, ,] noise2 = WorldGeneratorUtils.fastNoise(FINAL, 16*(int)this.mIslandSize.x, 256, 16*(int)this.mIslandSize.z, 4, 0, 10, 0);
 
-            LogManager.Singleton.DefaultLog.LogMessage("Perlin set");
+            LogManager.Singleton.DefaultLog.LogMessage("Perlin generated");
 
             Vector3 chunkTempPosition = new Vector3(0, 0, 0);
 
@@ -126,6 +126,10 @@ namespace Game.World.Generator
 				    }
 			    }
             }
+            LogManager.Singleton.DefaultLog.LogMessage("Perlin set");
+            this.mBiome.decorate(this, new Random());
+            LogManager.Singleton.DefaultLog.LogMessage("Island decorated");
+
         }
         //@return -1 if isFalse else : num between 0 and near
         private int isNearSurface(int near, Vector3 loc) {
@@ -137,6 +141,8 @@ namespace Game.World.Generator
             return -1;
             
         }
+
+
         private bool isValid(int x, int y, int z) {
         	Vector3 center    = new Vector3(this.mIslandSize.x / 2, 256 / 2, this.mIslandSize.z / 2);
             Vector3 distance  = new Vector3(x, y, z) - center;

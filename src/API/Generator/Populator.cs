@@ -27,6 +27,6 @@ namespace API.Generator
 	     * @param chunk the chunk to populate
 	     * @param random The RNG for this chunk
 	     */
-	    public abstract void populate(Island chunk, Random random);
+        public abstract void populate(Island curr, Random random);
     }
 }

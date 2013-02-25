@@ -39,6 +39,7 @@ namespace Game.CharacSystem
         public bool          IsAllowedToMove { get { return this.mMovementInfo.IsAllowedToMoved; } set { this.mMovementInfo.IsAllowedToMoved = value; } }
         public float         Height          { get { return this.CHARAC_SIZE.y; } }
         public CharacterInfo Info            { get { return this.mCharInfo; } }
+        public SceneNode[]   Points          { get { return this.mPoints; } }
         public Vector3       FeetPosition
         {
             get         { return this.mNode.Position - new Vector3(0, this.Height / 2 + 5, 0); }
@@ -95,8 +96,6 @@ namespace Game.CharacSystem
             this.mAnimMgr.SetAnims(this.mIdleAnims);
 
             this.mNode.Scale(CHARAC_SIZE / ent.BoundingBox.Size);
-
-            this.mCharacMgr.StateMgr.MyConsole.OnCommandEntered += new MyConsole.ConsoleEvent(this.OnCommandEntered);
         }
 
         private Degree GetDegree(int i)
@@ -137,52 +136,6 @@ namespace Game.CharacSystem
                 this.mAnimMgr.SetAnims(AnimName.JumpStart, AnimName.JumpLoop);
                 this.mJumpSpeed.Jump();
             }
-        }
-
-        private void OnCommandEntered(string command)
-        {
-            string[] args = command.Split(new char[]{' '}, StringSplitOptions.RemoveEmptyEntries);
-
-            if(args.Length >= 2)
-            {
-
-                if (args[0] == "/get_charac_pos")
-                {
-                    int index;
-                    if (int.TryParse(args[1], out index))
-                    {
-                        Vector3 tmp = this.FeetPosition / MainWorld.CUBE_SIDE;
-                        tmp.x = Mogre.Math.IFloor(tmp.x);
-                        tmp.y = Mogre.Math.IFloor(tmp.y);
-                        tmp.z = Mogre.Math.IFloor(tmp.z);
-
-                        this.mCharacMgr.StateMgr.WriteOnConsole("FeetPosition : " + '(' + tmp.x + ',' + tmp.y + ',' + tmp.z + ')');
-                    }
-                }
-                else if (args[0] == "/get_charac_yaw")
-                {
-                    int index;
-                    if (int.TryParse(args[1], out index))
-                    {
-                        this.mCharacMgr.StateMgr.WriteOnConsole("Yaw : " + this.mNode.Orientation.Yaw.ValueAngleUnits);
-                        this.mCharacMgr.StateMgr.WriteOnConsole("W : " + this.mNode.Orientation.w);
-                        this.mCharacMgr.StateMgr.WriteOnConsole("X : " + this.mNode.Orientation.x);
-                        this.mCharacMgr.StateMgr.WriteOnConsole("Y : " + this.mNode.Orientation.y);
-                        this.mCharacMgr.StateMgr.WriteOnConsole("Z : " + this.mNode.Orientation.z);
-                    }
-                }
-                else if (args[0] == "/goTo")
-                {
-                    LogManager.Singleton.DefaultLog.LogMessage("test");
-                    int index;
-                    if (int.TryParse(args[1], out index))
-                    {
-                        LogManager.Singleton.DefaultLog.LogMessage("test");
-                        this.moveForward(index);
-                    }
-                }
-            }
-            LogManager.Singleton.DefaultLog.LogMessage("test");
         }
 
         public void Update(float frameTime)
@@ -273,36 +226,39 @@ namespace Game.CharacSystem
 
         private void Translate(Vector3 translation)
         {
-            Vector3 actualBlock = this.mCharacMgr.World.GetBlockAbsPosFromAbs(this);
-            if (actualBlock != -Vector3.UNIT_SCALE)
-            {
-                //Matrix3 matrix = this.mNode.LocalAxes.Transpose();
-                //Vector3 newTranslation = this.FeetPosition;
-
-                if (translation.x < 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.leftFace))
+            /*Vector3 loc = this.FeetPosition.y + translation;
+            loc /= MainWorld.CUBE_SIDE;
+            loc.x = Mogre.Math.IFloor(loc.x);
+            loc.y = Mogre.Math.IFloor(loc.y);
+            loc.z = Mogre.Math.IFloor(loc.z);
+            Vector3 newPos = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlockCoord(loc);*/
+            Vector3 newPos = this.mCharacMgr.World.GetBlockAbsPosFromAbs(this.FeetPosition.y + translation, this.mCharInfo.IslandLoc);
+            if (newPos == -Vector3.UNIT_SCALE) { newPos = this.FeetPosition; }
+            
+            if (translation.x < 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.leftFace))
                     translation.x = 0;
                 if (translation.x > 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.rightFace))
                     translation.x = 0;
 
                 this.mMovementInfo.IsFalling = !this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.underFace);
-                if (translation.y < 0 && !this.mMovementInfo.IsFalling) { translation.y = 0; }
-                if (translation.y > 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.upperFace))
+                if (translation.y < 0 && !this.mMovementInfo.IsFalling)
+                { 
+                    /*Vector3 tmp = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlockCoord(loc);
+                    if(tmp.x > -1)
+                        this.mCharacMgr.StateMgr.WriteOnConsole(MyConsole.GetString(tmp));*/
+                    //translation.y = this.FeetPosition.y - newPos.y + 1;
                     translation.y = 0;
+                }
+                if (translation.y > 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.upperFace))
+                    translation.y = newPos.y - this.mNode.Position.y;
 
                 if (translation.z < 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.backFace))
                     translation.z = 0;
                 if (translation.z > 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.frontFace))
                     translation.z = 0;
-            }
 
             /* Here translate has been modified to avoid collisions */
             this.mMovementInfo.IsJumping = translation.y > 0 && this.mJumpSpeed.IsJumping;
-
-            /* Temp */
-            /*API.Geo.Cuboid.Block block = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock((this.mNode.Position - 15 * Vector3.UNIT_Y) / Game.World.MainWorld.CUBE_SIDE, false);
-            if (!(block is Game.World.Blocks.AirBlock))
-                translation.y = Game.World.MainWorld.CUBE_SIDE + 100;*/
-
             this.mNode.Translate(translation, Mogre.Node.TransformSpace.TS_LOCAL);
         }
 

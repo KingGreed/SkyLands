@@ -161,6 +161,7 @@
     <Compile Include="src\Main\States\Menu\SecondMenuState.cs" />
     <Compile Include="src\Main\World\Blocks\AirBlock.cs" />
     <Compile Include="src\Main\World\Blocks\ConstructionBlock.cs" />
+    <Compile Include="src\Main\World\Blocks\CactusBlock.cs" />
     <Compile Include="src\Main\World\Blocks\Faces\ConstructionBackBlock.cs" />
     <Compile Include="src\Main\World\Blocks\Faces\ConstructionBottomBlock.cs" />
     <Compile Include="src\Main\World\Blocks\Faces\ConstructionFrontBlock.cs" />
@@ -187,6 +188,8 @@
     <Compile Include="src\Main\World\Generator\Biomes\Mountains.cs" />
     <Compile Include="src\Main\World\Generator\Biomes\Hills.cs" />
     <Compile Include="src\Main\World\Generator\Biomes\Plains.cs" />
+    <Compile Include="src\Main\World\Generator\Decorators\CactusDecorator.cs" />
+    <Compile Include="src\Main\World\Generator\Decorators\TreeDecorator.cs" />
     <Compile Include="src\Main\World\Generator\RandomIsland.cs" />
     <Compile Include="src\Main\World\Generator\DomeIsland.cs" />
     <Compile Include="src\Main\World\Generator\VanillaChunk.cs" />

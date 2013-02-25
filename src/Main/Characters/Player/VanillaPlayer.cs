@@ -117,6 +117,83 @@ namespace Game.CharacSystem
 
         private void ThirdPersonUpdate(float yawValue, float pitchValue) { }
 
+        /*private bool GetBlockPos(out Vector3 blockPos, out API.Geo.Cuboid.Block b)
+        {
+            float distMax = 200;
+            float distance = 0;
+            blockPos = Vector3.ZERO;
+            b = null;
+
+            Ray ray = this.mCam.Camera.GetCameraToViewportRay(0.5f, 0.5f);
+            do
+            {
+                distance += 40;
+                blockPos = ray.GetPoint(distance);
+                Vector3 loc = blockPos / MainWorld.CUBE_SIDE;
+                loc.x = Mogre.Math.IFloor(loc.x);
+                loc.y = Mogre.Math.IFloor(loc.y);
+                loc.z = Mogre.Math.IFloor(loc.z);
+                loc.z++;
+                this.mCharacMgr.StateMgr.WriteOnConsole(Game.IGConsole.MyConsole.GetString(loc));
+                b = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(loc, false);
+            } while (b is Game.World.Blocks.AirBlock && distance <= distMax);
+
+            if (distance > distMax)
+            {
+                blockPos = Vector3.ZERO;
+                b = null;
+                return false;
+            }
+            return true;
+        }
+
+        private void OnLClick()
+        {
+            Vector3 blockPos;
+            API.Geo.Cuboid.Block b;
+            if (!this.GetBlockPos(out blockPos, out b)) { return; }
+
+            string material = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(blockPos, false).getName();
+            this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).removeFromScene(blockPos);  // Delete block
+
+            if (material != "Air")
+                this.mCharacMgr.StateMgr.WriteOnConsole("Deleted : " + material);
+        }
+
+        private void OnRClick()
+        {
+            Vector3 blockPos;
+            API.Geo.Cuboid.Block b;
+            if (!this.GetBlockPos(out blockPos, out b)) { return; }
+
+            if (b is Game.World.Blocks.AirBlock)
+            {
+                string material = "";
+                if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_1, MOIS.KeyCode.KC_NUMPAD1))
+                    material = "Grass";
+                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_2, MOIS.KeyCode.KC_NUMPAD2))
+                    material = "Dirt";
+                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_3, MOIS.KeyCode.KC_NUMPAD3))
+                    material = "Stone";
+                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_4, MOIS.KeyCode.KC_NUMPAD4))
+                    material = "Wood";
+                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_5, MOIS.KeyCode.KC_NUMPAD5))
+                    material = "Leaves";
+                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_6, MOIS.KeyCode.KC_NUMPAD6))
+                    material = "Sand";
+                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_7, MOIS.KeyCode.KC_NUMPAD7))
+                    material = "Construction";
+
+                if (material != "")
+                {
+                    this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addBlockToScene(blockPos, material);
+                    this.mCharacMgr.StateMgr.WriteOnConsole("Added : " + material);
+                }
+            }
+            else if(b is Game.World.Blocks.ConstructionBlock)
+                this.mCharacMgr.StateMgr.WriteOnConsole("Open GUI");
+        }*/
+
         private void OnLClick()
         {
             float distance = 200;
@@ -126,7 +203,7 @@ namespace Game.CharacSystem
             blockPos /= MainWorld.CUBE_SIDE;
             blockPos.x = Mogre.Math.IFloor(blockPos.x);
             blockPos.y = Mogre.Math.IFloor(blockPos.y);
-            blockPos.z = Mogre.Math.IFloor(blockPos.z);
+            blockPos.z = Mogre.Math.IFloor(blockPos.z) + 1;
 
             string material = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(blockPos, false).getName();
             this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).removeFromScene(blockPos);  // Delete block
@@ -151,19 +228,19 @@ namespace Game.CharacSystem
             if (b is Game.World.Blocks.AirBlock)
             {
                 string material = "";
-                if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_NUMPAD1))
+                if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_1, MOIS.KeyCode.KC_NUMPAD1))
                     material = "Grass";
-                else if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_NUMPAD2))
+                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_2, MOIS.KeyCode.KC_NUMPAD2))
                     material = "Dirt";
-                else if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_NUMPAD3))
+                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_3, MOIS.KeyCode.KC_NUMPAD3))
                     material = "Stone";
-                else if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_NUMPAD4))
+                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_4, MOIS.KeyCode.KC_NUMPAD4))
                     material = "Wood";
-                else if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_NUMPAD5))
+                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_5, MOIS.KeyCode.KC_NUMPAD5))
                     material = "Leaves";
-                else if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_NUMPAD6))
+                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_6, MOIS.KeyCode.KC_NUMPAD6))
                     material = "Sand";
-                else if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_NUMPAD7))
+                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_7, MOIS.KeyCode.KC_NUMPAD7))
                     material = "Construction";
 
                 if (material != "")

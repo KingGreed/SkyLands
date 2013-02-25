@@ -228,5 +228,10 @@ namespace Game.IGConsole
                     l.Visible = vis;
             }
         }
+
+        public static string GetString(Mogre.Vector3 v)
+        {
+            return "(" + v.x + "; " + v.y + "; " + v.z + ")";
+        }
     }
 }

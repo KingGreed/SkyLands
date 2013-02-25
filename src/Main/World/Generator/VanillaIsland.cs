@@ -41,10 +41,12 @@ namespace Game.World.Generator
             }
         }
 
-        public override int getSurfaceHeight(int x, int z) {
+        public override int getSurfaceHeight(int x, int z, string restriction = "") {
             for(int y = (int)this.mIslandSize.y * MainWorld.CHUNK_SIDE; y != 0 ; y--) { 
                 if(!(this.getBlock(x, y, z, false) is AirBlock)) {
-                    return y + 1; 
+                    if (restriction == "") { return y + 1; }
+                    else if (this.getBlock(x, y, z, false).getName() != restriction) { continue; }
+                    else { return y + 1; }
                 }
             }
             return -1;
@@ -56,6 +58,7 @@ namespace Game.World.Generator
         public override void display() {
 
             Block curr;
+            LogManager.Singleton.DefaultLog.LogMessage("Now displaying");
 
             for(int x = 0; x < this.mIslandSize.x * MainWorld.CHUNK_SIDE; x++) {
                 for(int y = 0; y < this.mIslandSize.y * MainWorld.CHUNK_SIDE; y++) {

@@ -63,14 +63,6 @@ namespace Game.World
 
             this.setSafeSpawnPoint(Vector3.ZERO);
 
-
-            Light mPointLight = stateMgr.SceneMgr.CreateLight("pointLight");
-            
-            mPointLight.Type = Light.LightTypes.LT_POINT;
-            mPointLight.Position = this.mSpawnPoint;
-            //mPointLight.Direction = this.mCaelumSystem.Sun.LightDirection;
-
-
             /*StaticRectangle.DisplayRectangle(this.mSpawnPoint, 5, 5, 16*CHUNK_SIDE*CUBE_SIDE, node);
             Vector3 pos = new Vector3((this.mIslandList[new Vector3(0, 0, 0)].getSize().x + 3) * CHUNK_SIDE * CUBE_SIDE, 0, (this.mIslandList[new Vector3(0, 0, 0)].getSize().z + 3) * CHUNK_SIDE * CUBE_SIDE);
 
@@ -80,7 +72,6 @@ namespace Game.World
             island.display();
             this.mIslandList.Add(pos, island);
             */
-
         }
 
 
@@ -153,6 +144,10 @@ namespace Game.World
 
             foreach (int i in this.GetIndexesToToTest(hitBlocks, collisionSide))
             {
+                hitBlocks[i].x = Mogre.Math.IFloor(hitBlocks[i].x);
+                hitBlocks[i].y = Mogre.Math.IFloor(hitBlocks[i].y);
+                hitBlocks[i].z = Mogre.Math.IFloor(hitBlocks[i].z);
+                
                 if      (collisionSide == CubeFace.underFace)   { hitBlocks[i].y--; }
                 else if (collisionSide == CubeFace.upperFace)   { hitBlocks[i].y++; }
                 else if (collisionSide == CubeFace.leftFace)    { hitBlocks[i].x--; }
@@ -182,10 +177,10 @@ namespace Game.World
             int[] indexToTest;
             if      (face == CubeFace.underFace) { indexToTest = new int[] { 0, 1, 2, 3 }; }
             else if (face == CubeFace.upperFace) { indexToTest = new int[] { 4, 5, 6, 7 }; }
-            else if (face == CubeFace.leftFace) { indexToTest = new int[] { 0, 3, 4, 7 }; }
-            else if (face == CubeFace.rightFace) { indexToTest = new int[] { 1, 2, 5, 6 }; }
-            else if (face == CubeFace.backFace) { indexToTest = new int[] { 2, 3, 6, 7 }; }
-            else  /*(face == CubeFace.frontFace)*/ { indexToTest = new int[] { 0, 1, 4, 5 }; }
+            else if (face == CubeFace.rightFace) { indexToTest = new int[] { 2, 3, 6, 7 }; }
+            else if (face == CubeFace.leftFace) { indexToTest = new int[] { 0, 1, 4, 5 }; }
+            else if (face == CubeFace.backFace) { indexToTest = new int[] { 1, 2, 5, 6 }; }
+            else  /*(face == CubeFace.frontFace)*/ { indexToTest = new int[] { 0, 3, 4, 7 }; }
 
             /*for (int i = 0, j = 0; i < hitBlocks.Length; i++)
             {
