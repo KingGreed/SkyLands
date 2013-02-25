@@ -107,7 +107,7 @@ namespace Game.GUICreator
             textBoxSizeX.Submit += new EventHandler<ValueEventArgs<string>>(textBoxSizeX_Submit);
 
             Label SizeX = new Label();
-            SizeX.Text = "Choose Width size";
+            SizeX.Text = "Choose Width";
             SizeX.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
             SizeX.Size = new Size(50, 50);
             SizeX.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 3 - (this.mBackGround.Size.Width / 10) * 2, (this.mBackGround.Size.Height / 10) * 4 + 80);
@@ -127,7 +127,7 @@ namespace Game.GUICreator
             textBoxSizeY.Submit += new EventHandler<ValueEventArgs<string>>(textBoxSizeY_Submit);
 
             Label SizeY = new Label();
-            SizeY.Text = "Choose Height size";
+            SizeY.Text = "Choose Height";
             SizeY.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
             SizeY.Size = new Size(50, 50);
             SizeY.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 3 - (this.mBackGround.Size.Width / 10) * 2, (this.mBackGround.Size.Height / 10) * 4 + 150);
