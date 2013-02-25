@@ -116,14 +116,17 @@
 
  			And more, meant to us, impressing terrain generation, amazing FPS through a complete rewritting of the displaying system an even better GUI than planned, a console and awesome physics such as Jumping all around the place. \\
 
- 			However, creating those features were really time consumming, we litterally spent days coding them and, throughout this report we will show you the best of our game.
+ 			However, creating those features were really time consuming, we literally spent days coding them and, throughout this report we will show you the best of our game.
   		\chapter{\textcolor{blue}{Communications}}
 			\section{Twitter, Facebook and YouTube }
 				Since our game is starting to be playable, we wanted to show the world what it looked like.\\
 				To do so, we created accounts on the two main social networking web sites: Facebook and Twitter. Also to give people the possibility to really have an idea of what our game look like, we have made a small footage showing the main goal of our game and it's advancement and posted it on Youtube.
-				
+
+				\includegraphics[width = 17cm]{images/Graphics/fb.png}
+				\newpage
+
 			\section{Web site}
-				You might have seen it at the first oral presentation, our website was a little bit empty. Knowing that we made some efforts, and added some pages to the website. The first we added was the download page the second we added and completed was the page World. Finally, we created an admin area where we could edit the news on the front page.
+				You might have seen it at the first oral presentation, our website was a little bit empty. Knowing that we made some efforts, and added some pages to the website. The first we added was the download page, the second we added was the page World. Finally, we created an admin area where we could edit the news on the front page.
 
 				This is done using an SQL database, this means as we are using Symfony, we use Doctrine. An example of Doctrine is the following class (this is not all the class) : 
 \begin{lstlisting}
@@ -154,9 +157,10 @@ class News {
     /*Get id
      * @return integer 
      */
-    public function getId() { return $this->id; }
-} ?>
+    public function getId() { return $this->id; }}
+?>
 \end{lstlisting}
+\newpage
  		Thanks to symfony, creating the file and launching a php command line Symfony will detect all new doctrine class (marked with a @ORM comment) and update the database for us (creating a table).\\
  		Also creating a new row in a table and reading from a table is made easier with doctrine : 
 \begin{lstlisting}
@@ -179,17 +183,23 @@ $newsList   = $repository->findBy(array(), array('date' => 'desc'), 4, 0);
 ?>
 \end{lstlisting}
 		
+						
+
+						\includegraphics[width=16cm]{images/Graphics/web.png}
+					
 
 		\chapter{\textcolor{blue}{Licensing}}
 			At Dedalus, we consider that Licensing our code is an important task. According to the French legal code, a license is an authorization.\\
 			First, we explored the available licenses and, one of the first license we were directed to was the GNU GPL.
 
 			\section{GNU LGPL}
-\begin{textblock}{0.475}(0.150, 0.460)
-				The GNU Lesser General Public License or LGPL (formerly the GNU Library General Public License) is a free software license published by the Free Software Foundation (FSF). The LGPL allows developers and companies to use and integrate LGPL software into their own (even proprietary) software without being required (by the terms of a strong copyleft) to release the source code of their own software-parts. Merely the LGPL software-parts need to be modifiable by end-users (via source code availability): therefore, in the case of proprietary software, the LGPL-parts are usually used in the form of a shared library (e.g. DLL), so that there is a clear separation between the proprietary parts and open source LGPL parts.\\
+\begin{textblock}{0.475}(0.120, 0.470)
+				
+The GNU Lesser General Public License or LGPL (formerly the GNU Library General Public License) is a free software license published by the Free Software Foundation (FSF). \\
+The LGPL allows developers and companies to use and integrate LGPL software into their own (even proprietary) software without being required (by the terms of a strong copyleft) to release the source code of their own software-parts. Merely the LGPL software-parts need to be modifiable by end-users (via source code availability): therefore, in the case of proprietary software, the LGPL-parts are usually used in the form of a shared library (e.g. DLL), so that there is a clear separation between the proprietary parts and open source LGPL parts.\\
 				\end{textblock}
 
-				\begin{textblock}{0.628}(0.600, 0.450)
+				\begin{textblock}{0.628}(0.600, 0.495)
 					\begin{figure}
 						\includegraphics[width=6.5cm]{images/LGPL.png}
 					\end{figure}
@@ -199,7 +209,7 @@ $newsList   = $repository->findBy(array(), array('date' => 'desc'), 4, 0);
 
 			\section{BSD license}
 				BSD licenses are a family of permissive free software licenses, imposing minimal restrictions on the redistribution of covered software. This is in contrast to copyleft licenses, which have reciprocity share-alike requirements. The original BSD license was used for its namesake, the Berkeley Software Distribution (BSD), a Unix-like operating system. The original version has since been revised and its descendants are more properly termed modified BSD licenses.
-				This is the license we choose. Basically, anyone can copy our source code choose the license he wants or even choose to make his code proprietary. But he must say that he used our code. This was the oly condition we wanted on our source code.\\
+				This is the license we choose. Basically, anyone can copy our source code choose the license he wants or even choose to make his code proprietary. But he must say that he used our code. This was the only condition we wanted on our source code.\\
 Here are the terms of our license : \\
 
 Redistribution and use in source and binary forms, with or without
@@ -280,15 +290,15 @@ than in this example.\\
 
 
 This system may seem a bit complicated, and it was, but it was totally worth the cost, we increased the frame rate by 20, and it now turns around 400FPS. Also, the Islands size were trippled, getting from 4*4 to 12*12 (on the x, z coordinates with y the height) and can even be increased to 30 * 30. This means that if we assimilated the terrain as one continuous layer of block we would have : 	30 * 30 * 16 * 16 = 230400 cubes, counting only top faces and bottom faces : 460800 faces and 921600 triangles, around 1 000 000 triangles (with about 100 FPS).
-			\section{Results}
 			
 			\section{Sky}
 				At the first oral, we presented you a sky using the library Caelum but then we wanted to try another well-known library : SkyX. Once again we actually used a wrapper of the original library coded in C++. We wanted to try another library so that we could choose the best for our game.\\
 				
 Unfortunately it appeared that even if SkyX is a great library in C++ its wrapper is much less interesting. Indeed many functions weren't implemented in the wrapper. This lack leads to a far less awesome render than in the C++ version. Besides we had lots of troubles integrating this library to our project because of the different existing versions of Mogre.\\
 
-That's why we ended up choosing Caelum. But we didn't made this choice because it was the first we saw but because this is the best one we can have.
+That's why we ended up choosing Caelum. But we didn't made this choice because it was the first we saw but because this is the best one we can have. \\
 
+				\includegraphics[width = 16cm]{images/Graphics/sky.png}
 		\chapter{\textcolor{blue}{Player actions}}
 			\section{Adding blocks}
 				Our player can now add blocks on the terrain using the mouse. A cursor at the center of the screen help to see the targeted block. \\
@@ -297,9 +307,13 @@ The first difficulty was to compute the actual position of this cursor in the 3 
 
 				One of the downside of gathering all faces in one object is that you can't add faces to the object. Therefore we had to think a bit outside the object. What we did was the following : When the player adds cube to the terrain, we display the face as an independent object. And  we remember the position where he added a block. When he has added 30 blocks, we launch a new thread whose role is to recreate each multiblocks that were modified.\\
 
-				First this thread must change the list of Vector3 of the instance of each Multiblock which were modified and add the blocks the player added to it's list. Then he must recreate the object and when it's done remove the old one and replace it with a new one.\\
+				First this thread must change the list of Vector3 of the instance of each multiblock which were modified and add the blocks the player added to it's list. Then he must recreate the object and when it's done remove the old one and replace it with a new one. C\# having a thread system which is easy to handle, this part was pretty easy. \\
 
-				C\# having a thread system which is easy to handle, this part was pretty easy.
+
+				\includegraphics[width = 8cm]{images/Graphics/beforeAdd.png}		
+				\includegraphics[width = 8cm]{images/Graphics/afterAdd.png} \newpage
+
+				
 				
 			\section{Removing Blocks}
 				If we can add block this would be great if we could remove blocks as well. So that's what we did. Computing the position of the targeted block the same work as for adding blocks.
@@ -309,7 +323,12 @@ The first difficulty was to compute the actual position of this cursor in the 3 
 				The basic idea is that a Manual Object is just a buffer of pointers to a Vector3 (actually it's a pointer to an array of size 3 which represent the coordinates of the vector3). Thus we had to get the vertex buffer, Lock it, get the position of the first element and from there on tell what was the face number we wanted to access, and multiply this number by the \enquote{size} of a Vector3 this would set the pointer to the right position. From there on we only had to set for a face, it's 4 coords to 0 and check how many faces were visible.\\
 
 				However 2 problems arose : the first block with multiple textures, had to be dealt with in a separate way. \\
-				The second was that when removing a block, we had to refresh the surrounding blocks, thus most of the time creating faces which were not in the manual object, that was the cause of a bug where we tried to suppress faces which were not in the manual object. You can imagine that it was deleting other faces than the one we wanted deleted.
+				The second was that when removing a block, we had to refresh the surrounding blocks, thus most of the time creating faces which were not in the manual object, that was the cause of a bug where we tried to suppress faces which were not in the manual object. You can imagine that it was deleting other faces than the one we wanted deleted.\\
+
+				\includegraphics[width = 8cm]{images/Graphics/before.png}		
+				\includegraphics[width = 8cm]{images/Graphics/after.png} \\
+
+
 
 		\chapter{\textcolor{blue}{Terrain generation}}
 			\section{A new structure}
@@ -318,7 +337,7 @@ The first difficulty was to compute the actual position of this cursor in the 3 
 				Thus, in game you will now see trees and cactus as well. We can also set what we call the \enquote{ground cover} which define which blocks you'll find on the first second and third layer of the ground. 
 				
 			\section{Perlin 3D algorithm}
-				Thanks to our display optimization, we can now generate bigger islands. On the other hand the terrain's generation algorithm is still an algorith of complexity O(n) (we have to travel through the terrain in the 3 dimensions). And can not be as optimized as the display.\\
+				Thanks to our display optimization, we can now generate bigger islands. On the other hand the terrain's generation algorithm is still an algorithm of complexity O(n) (we have to travel through the terrain in the 3 dimensions). And can not be as optimized as the display.\\
 
 
 
@@ -376,13 +395,30 @@ Eventually, we kept our system using the height points of each corner since we c
 
 		\chapter{\textcolor{blue}{AI}}
 			\section{Pathfinding}
-				
-				
+				Pathfinding refers to the plotting, by a computer application, of the shortest route between two points. At its core, a pathfinding algorithm searches a graph by sarting at one vertex and exploring adjacent nodes until the destination node is reached. Althought graph searching methods such as a beadth-first search would find a route if given enougth tmie, other methods, which explore the graph, would tend to reach the destination sooner. \\
+ It is useful when integrating an IA. With it, a character will dodge holes and dead ends. An example use of the pathfinding : if an enemy see the player, the algorithm will find the shortest path the enemy can take to come and attack the player.
 			\section{A star (A*)}
-		
-		\chapter{\textcolor{blue}{Menu}}
+				The A* (A star) is an algoritgm wildely used in pathfinding and graph traversal, the process of plotting an efficently traversable path between points, called nodes. Noted for its performance and accuracy, it enjoys widespread use.\\
+ The A* uses a best-first search and finds a least-cost path from a given initial node to one goal node. As A* traverses the graph, it follows a path of the lowest expected total cost or distance, keeping a sorted priority queue of alternate path segments along the way. \\
+			\begin{center}
+				\includegraphics[width = 8cm]{images/Graphics/AStar.png}	
+			\end{center}		
+\chapter{\textcolor{blue}{Menu}}
 			\section{Console}
-				
+				Something we understood is that we need a console in game to gather some informations directly. Most 
+of the time this is temporary informations but this is still useful.  We used a system of listener so that we 
+could be notified anywhere in the code that the player entered a command.  That’s why we can easily for 
+instance get the character position.  \\
+
+			\section{New menu}
+				Since the last oral presentation, we added many menus.  First, we have some options in the main menu. 
+We also added an intermediate menu in game for the escape key and menu when we click on a construction 
+block.  \\
+
+				\begin{center}
+					\includegraphics[width = 16cm]{images/Graphics/menuNew.png}	
+				\end{center}	
+
 
 		\chapter{\textcolor{blue}{Conclusion}}
 
