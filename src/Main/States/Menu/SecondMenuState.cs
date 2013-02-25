@@ -18,6 +18,7 @@ namespace Game.States
             this.mTempMenuGUI.SetListener(StateManager.TypeWorld.Dome, this.ClickDomeButton);
             this.mTempMenuGUI.SetListener(StateManager.TypeWorld.Plain, this.ClickPlainButton);
             this.mTempMenuGUI.SetListener(StateManager.TypeWorld.Mountain, this.ClickMountainButton);
+            this.mTempMenuGUI.SetListenerBack(this.ClickBackButton);
         }
 
         public override void Hide()
@@ -36,13 +37,18 @@ namespace Game.States
             if (this.mStateMgr.Input.IsKeyDown(MOIS.KeyCode.KC_ESCAPE)) { this.mStateMgr.RequestStatePop(); }
         }
 
-        protected override void Shutdown() { this.mTempMenuGUI.Dispose(); }
+        protected override void Shutdown()
+        {
+            this.mTempMenuGUI.Dispose();
+            
+        }
 
         public void ClickButton()
         {
             //this.mStateMgr.RequestStatePop();
             this.mStateMgr.RequestStatePush(typeof(LoadingState));
         }
+        private void ClickBackButton(object obj, MouseButtonEventArgs arg) { this.mStateMgr.RequestStatePop(); }
         private void ClickSinusButton(object obj, MouseButtonEventArgs arg)    { this.mStateMgr.ChosenWorld = StateManager.TypeWorld.Sinus; this.ClickButton(); }
         private void ClickDomeButton(object obj, MouseButtonEventArgs arg)     { this.mStateMgr.ChosenWorld = StateManager.TypeWorld.Dome; this.ClickButton(); }
         private void ClickPlainButton(object obj, MouseButtonEventArgs arg)    { this.mStateMgr.ChosenWorld = StateManager.TypeWorld.Plain; this.ClickButton(); }
