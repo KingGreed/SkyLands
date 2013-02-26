@@ -63,7 +63,7 @@ namespace Game.States
 
             if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_ESCAPE))
             {
-                this.mCharacMgr.GetCharacter().IsAllowedToMove = !this.mGUI.SwitchVisibleIGMenu();
+                this.mDebugMode.IsAllowedToMoveCam = !this.mGUI.SwitchVisibleIGMenu();
             }
         }
 

@@ -151,12 +151,41 @@ namespace Game.CharacSystem
             if (this.mIsWalking)
             {
                 if (this.mNode.Position != this.mPath.mPath.Peek()) {
-                    this.mNode.Translate((this.mPath.mPath.Peek() - this.mNode.Position) * WALK_SPEED * frameTime);
+                    this.mMovementInfo.MoveDirection = Vector3.UNIT_Z;
+
+                    Vector3 d = (this.mNode.Position - this.mPath.mPath.Peek());
+                    d /= d.Length;
+
+                    bool isOnLeft = this.mNode.Orientation.Yaw >= 0;
+                    bool isOnTop = Mogre.Math.Abs(this.mNode.Orientation.w) >= Mogre.Math.Abs(this.mNode.Orientation.y);
+
+                    Degree alpha = this.mNode.Orientation.Yaw;
+                    if (!isOnTop)
+                    {
+                        if (isOnLeft)
+                            alpha = new Degree(180) - this.mNode.Orientation.Yaw;
+                        else
+                            alpha = -new Degree(180) - this.mNode.Orientation.Yaw;
+                    }
+                    alpha *= -1;
+
+
+                    Degree beta = this.mNode.Orientation.Yaw;
+                    if (!isOnTop) {
+                        if (isOnLeft)
+                            beta = new Degree(180) - this.mNode.Orientation.Yaw;
+                        else
+                            beta = -new Degree(180) - this.mNode.Orientation.Yaw;
+                    }
+                    beta *= -1;
+
+                    this.mMovementInfo.YawValue = (beta - alpha).ValueAngleUnits;
                 }
                 else {
                     this.mPath.mPath.Dequeue();
 
-                    if (this.mPath.mPath.Count == 0) { this.mIsWalking = false; } 
+                    if (this.mPath.mPath.Count == 0) { this.mIsWalking = false; }
+                    
                 }
             }
 
@@ -269,11 +298,8 @@ namespace Game.CharacSystem
             this.mPath          = new AStar(this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc));
             this.mPath.goTo(this.mStartingPoint, destination);
 
-            this.mNode.Orientation = Quaternion.IDENTITY;
+                        
 
-            /*Vector3 src = this.mNode.Orientation * Vector3.UNIT_X;
-            Quaternion quat = src.GetRotationTo(this.mPath.mPath.Peek() - this.mNode.Position);
-            mNode.Rotate(quat);*/
         }
 
 

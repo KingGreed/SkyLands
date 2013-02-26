@@ -216,7 +216,7 @@ namespace Game.CharacSystem
                 this.mCharacMgr.GetCharacter(this.mCharacMgr.getNumberOfCharacter() - 1).moveTo(relBlockPos * MainWorld.CHUNK_SIDE);
                 
             }
-            else
+            else if(b is Game.World.Blocks.AirBlock)
             {
                 /*if      (face == CubeFace.underFace) { relBlockPos.y--; }
                 else if (face == CubeFace.upperFace) { relBlockPos.y++; }

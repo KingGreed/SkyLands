@@ -5,7 +5,7 @@ namespace Game.World
 {
     public class GameInfo
     {
-        public enum TypeWorld { Dome, Plains, Hills, Mountain }
+        public enum TypeWorld { Dome, Plains, Desert, Hills, Mountain }
 
         private int mSeed;
         private Vector2 mSize;

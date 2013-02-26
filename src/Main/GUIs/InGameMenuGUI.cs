@@ -38,15 +38,17 @@ namespace Game.GUICreator
             this.mMainMenu.Size = new Size(150, 60);
             this.mMainMenu.Text = "Menu";
             this.mMainMenu.TextStyle = style;
-            this.mMainMenu.Location = this.mPanel.Location + new Point(50, 50);
+            this.mMainMenu.Location = this.mPanel.Location + new Point(200, this.mPanel.Size.Height / 2 - this.mMainMenu.Size.Height / 2);
             this.mMainMenu.Skin = this.mMiyagiMgr.Skins["Button"];
+            this.mGUI.Controls.Add(this.mMainMenu);
 
             this.mOption = new Button();
             this.mOption.Size = new Size(150, 60);
-            this.mOption.Text = "Menu";
+            this.mOption.Text = "Option";
             this.mOption.TextStyle = style;
-            this.mOption.Location = this.mMainMenu.Location + new Point(this.mMainMenu.Size.Width + 50, 0);
+            this.mOption.Location = this.mMainMenu.Location + new Point(this.mMainMenu.Size.Width + 150, 0);
             this.mOption.Skin = this.mMiyagiMgr.Skins["Button"];
+            this.mGUI.Controls.Add(this.mOption);
             /*Size actualButtonSize = new Size(150, 60);
             int space = (this.mPanel.Size.Width - 4 * actualButtonSize.Width) / 5;
             Point originalpos = this.mPanel.Location + new Point(space, 65);

@@ -9,7 +9,7 @@ namespace Game
 {
     public class DebugMode
     {
-        private bool        mIsDebugMode, mIsConsoleMode;
+        private bool        mIsDebugMode, mIsConsoleMode, mIsAllowedToMoveCam;
         private CameraMan   mCameraMan;
         private MoisManager mInput;
         private CharacMgr   mCharacMgr;
@@ -17,6 +17,7 @@ namespace Game
 
         public bool IsDebugMode   { get { return this.mIsDebugMode; }   set { this.mIsDebugMode = value; } }
         public bool IsConsoleMode { get { return this.mIsConsoleMode; } set { this.mIsConsoleMode = value; } }
+        public bool IsAllowedToMoveCam { get { return this.mIsAllowedToMoveCam; } set { this.mIsAllowedToMoveCam = value; } }
 
         public DebugMode(MoisManager input, CharacMgr characMgr, GameGUI gui)
         {
@@ -25,6 +26,7 @@ namespace Game
             this.mIsDebugMode = false;
             this.mCameraMan = null;
             this.mIsConsoleMode = false;
+            this.mIsAllowedToMoveCam = true;
             this.mGUI = gui;
         }
 
@@ -65,10 +67,10 @@ namespace Game
                 this.mCharacMgr.World.getIslandAt(new Vector3(0, 0, 0)).removeFromScene(spawn);
             }
 
-            this.mCharacMgr.GetCharacter().IsAllowedToMove = !this.mIsConsoleMode;
+            this.mCharacMgr.GetCharacter().IsAllowedToMove = !this.mIsConsoleMode && this.mIsAllowedToMoveCam;
             this.mCharacMgr.Update(frameTime);
 
-            if (!this.mCharacMgr.GetCharacter().IsAllowedToMove && !this.mIsConsoleMode)
+            if (!this.mCharacMgr.GetCharacter().IsAllowedToMove && !this.mIsConsoleMode && this.mIsAllowedToMoveCam)
             {
                 this.mCameraMan.MouseMovement(this.mInput.MouseMoveX, this.mInput.MouseMoveY);
                 this.mCameraMan.UpdateCamera(frameTime, this.mInput);
