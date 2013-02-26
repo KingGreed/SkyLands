@@ -22,6 +22,7 @@ namespace Game.States
             this.mSecondMenuGUI = new SecondMenuGUI(this.mStateMgr, this.mGameInfo);
             this.mSecondMenuGUI.SetListener(GameInfo.TypeWorld.Dome, this.ClickDomeButton);
             this.mSecondMenuGUI.SetListener(GameInfo.TypeWorld.Plains, this.ClickPlainsButton);
+            this.mSecondMenuGUI.SetListener(GameInfo.TypeWorld.Desert, this.ClickDesertButton);
             this.mSecondMenuGUI.SetListener(GameInfo.TypeWorld.Hills, this.ClickHillsButton);
             this.mSecondMenuGUI.SetListener(GameInfo.TypeWorld.Mountain, this.ClickMountainButton);
             this.mSecondMenuGUI.SetListenerBack(this.ClickBackButton);
@@ -59,41 +60,56 @@ namespace Game.States
         {
             this.mGameInfo.Type = GameInfo.TypeWorld.Dome;
             Mogre.Vector2 newSize = this.mGameInfo.Size;
-            if (newSize.x <= 0 || newSize.x > 30) { newSize.x = 3; }
-            if (newSize.y <= 0 || newSize.y > 30) { newSize.y = 3; }
+            if (newSize.x <= 0 || newSize.x > 30) { newSize.x = 4; }
+            if (newSize.y <= 0 || newSize.y > 30) { newSize.y = 4; }
             this.mGameInfo.Size = newSize;
 
             this.mStateMgr.GameInfo = this.mGameInfo;
             this.ClickButton();
         }
+
         private void ClickPlainsButton(object obj, MouseButtonEventArgs arg)
         {
             this.mGameInfo.Type = GameInfo.TypeWorld.Plains;
             Mogre.Vector2 newSize = this.mGameInfo.Size;
-            if (newSize.x <= 0 || newSize.x > 30) { newSize.x = 13; }
-            if (newSize.y <= 0 || newSize.y > 30) { newSize.y = 13; }
+            if (newSize.x <= 2 || newSize.x >= 60) { newSize.x = 11; }
+            if (newSize.y <= 2 || newSize.y >= 60) { newSize.y = 11; }
             this.mGameInfo.Size = newSize;
 
             this.mStateMgr.GameInfo = this.mGameInfo;
             this.ClickButton();
         }
+
+        private void ClickDesertButton(object obj, MouseButtonEventArgs arg)
+        {
+            this.mGameInfo.Type = GameInfo.TypeWorld.Desert;
+            Mogre.Vector2 newSize = this.mGameInfo.Size;
+            if (newSize.x <= 2 || newSize.x >= 60) { newSize.x = 13; }
+            if (newSize.y <= 2 || newSize.y >= 60) { newSize.y = 13; }
+            this.mGameInfo.Size = newSize;
+
+            this.mStateMgr.GameInfo = this.mGameInfo;
+            this.ClickButton();
+        }
+
         private void ClickHillsButton(object obj, MouseButtonEventArgs arg)
         {
             this.mGameInfo.Type = GameInfo.TypeWorld.Hills;
             Mogre.Vector2 newSize = this.mGameInfo.Size;
-            if (newSize.x <= 0 || newSize.x > 30) { newSize.x = 15; }
+            if (newSize.x <= 2 || newSize.x >= 30) { newSize.x = 15; }
             if (newSize.y != newSize.x)           { newSize.y = newSize.x; }
             this.mGameInfo.Size = newSize;
 
             this.mStateMgr.GameInfo = this.mGameInfo;
             this.ClickButton();
         }
+
         private void ClickMountainButton(object obj, MouseButtonEventArgs arg)
         {
             this.mGameInfo.Type = GameInfo.TypeWorld.Mountain;
             Mogre.Vector2 newSize = this.mGameInfo.Size;
-            if (newSize.x <= 0 || newSize.x > 30) { newSize.x = 15; }
-            if (newSize.y <= 0 || newSize.y > 30) { newSize.y = 15; }
+            if (newSize.x <= 2 || newSize.x >= 30) { newSize.x = 15; }
+            if (newSize.y <= 2 || newSize.y >= 30) { newSize.y = 15; }
             this.mGameInfo.Size = newSize;
 
             this.mStateMgr.GameInfo = this.mGameInfo;

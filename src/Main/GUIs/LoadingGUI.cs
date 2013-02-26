@@ -22,10 +22,11 @@ namespace Game.GUICreator
             TextStyle style = new TextStyle();
             style.Alignment = Alignment.MiddleCenter;
             style.Font = this.mMiyagiMgr.Fonts["Small_BlueHighway"];
+            style.ForegroundColour = new Colour(255, 255, 255, 255);
             Label label = new Label();
             label.Text = "World loading ...";
             label.Size = new Size(250, 50);
-            label.Location = new Point(660, 680);
+            label.Location = new Point(1300, 820);
             label.TextStyle = style;
             this.mGUI.Controls.Add(label);
         }

@@ -51,7 +51,11 @@ namespace Game.GUICreator
 
                 Button button = new Button();
                 button.Size = actualButtonSize;
-                //button.Text = "ON/OFF";
+
+                button.Text = "OFF";
+                if ((ButtonName)i == ButtonName.HighQuality || (ButtonName)i == ButtonName.VSync)
+                    button.Text = "ON";
+
                 button.TextStyle = style;
                 button.Location = originalpos + new Point(0, i * (actualButtonSize.Height + space));
                 button.Skin = this.mMiyagiMgr.Skins["Button"];
@@ -92,6 +96,7 @@ namespace Game.GUICreator
             this.mLabel.Size = new Size(this.mPanel.Size.Width, 60);
             this.mLabel.AutoSize = true;
             this.mLabel.AutoSizeMode = Miyagi.UI.AutoSizeMode.GrowAndShrink;
+            this.mLabel.Location = this.mPanel.Location + new Point(this.mPanel.Size.Width / 2 - 50, 0);
             this.mGUI.Controls.Add(this.mLabel);
 
             Label[] labels = new Label[4];
@@ -102,16 +107,16 @@ namespace Game.GUICreator
                 labels[i].Size = new Size(this.mPanel.Size.Width / 2, 60);
                 labels[i].AutoSize = true;
                 labels[i].AutoSizeMode = Miyagi.UI.AutoSizeMode.GrowAndShrink;
-                labels[i].Location = this.mButtons[(ButtonName)i].Location - new Point(labels[i].Size.Width * 3 , 0);
+                labels[i].Location = this.mButtons[(ButtonName)i].Location + new Point(-250 , 10);
                 this.mGUI.Controls.Add(labels[i]);
             }
 
         }
 
-        protected override void AfterResize()
+        /*protected override void AfterResize()
         {
             this.mLabel.Location = this.mPanel.Location + new Point((this.mPanel.Size.Width - this.mLabel.Size.Width) / 2, 15);
-        }
+        }*/
 
         public void SetListener(ButtonName button, EventHandler<MouseButtonEventArgs> del)
         {

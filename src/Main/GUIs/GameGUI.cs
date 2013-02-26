@@ -42,6 +42,18 @@ namespace Game.GUICreator
             this.mCross.Visible = !this.mCross.Visible;
         }
 
+        public override void  Hide()
+        {
+            this.mIGMenu.Hide();
+            base.Hide();
+        }
+
+        public override void Dispose()
+        {
+            this.mIGMenu.Dispose();
+            base.Dispose();
+        }
+
         public bool SwitchVisibleIGMenu()   // Retun whether it is shown or not
         {
             this.mIGMenu.SwithVisibility();

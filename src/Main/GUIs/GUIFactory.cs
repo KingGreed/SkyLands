@@ -38,9 +38,9 @@ namespace Game.GUICreator
         protected abstract void CreateGUI();
         protected virtual void AfterResize() { }
 
-        public void Dispose()  { this.mGUI.Dispose();       }
-        public void Hide()     { this.mGUI.Visible = false; }
-        public void Show()     { this.mGUI.Visible = true;  }
+        public virtual void Dispose()      { this.mGUI.Dispose(); }
+        public virtual void Hide() { this.mGUI.Visible = false; }
+        public virtual void Show() { this.mGUI.Visible = true; }
         public void SwithVisibility()
         {
             this.mGUI.Visible = !this.mGUI.Visible;
