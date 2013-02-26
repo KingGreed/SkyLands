@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Miyagi.Common.Events;
+
 using Game.CharacSystem;
 using Game.World;
 using Game.GUICreator;
@@ -20,6 +22,8 @@ namespace Game.States
             this.mWorld = new MainWorld(this.mStateMgr);
             this.mCharacMgr = new CharacMgr(this.mStateMgr, this.mWorld);
             this.mGUI = new GameGUI(this.mStateMgr);
+            this.mGUI.IGMenu.SetListenerMenu(this.ClickMenuButton);
+            this.mGUI.IGMenu.SetListenerOption(this.ClickOptionButton);
 
             CharacterInfo playerInfo = new CharacterInfo("Sinbad", true);
             playerInfo.SpawnPoint = this.mWorld.getSpawnPoint();
@@ -42,13 +46,25 @@ namespace Game.States
             this.mGUI.Show();
         }
 
+        private void ClickMenuButton(object obj, MouseButtonEventArgs arg)
+        {
+            this.mStateMgr.RequestStatePop(this.mStateMgr.NumberState - 1);
+        }
+        private void ClickOptionButton(object obj, MouseButtonEventArgs arg)
+        {
+            this.mStateMgr.RequestStatePush(typeof(OptionsState));
+        }
+
         public override void Update(float frameTime)
         {
             this.mWorld.Update(frameTime);
             this.mDebugMode.IsConsoleMode = this.mStateMgr.MyConsole.Enable;
             this.mDebugMode.Update(frameTime);
 
-            if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_ESCAPE)) { this.mStateMgr.RequestStatePop(this.mStateMgr.NumberState - 1); }
+            if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_ESCAPE))
+            {
+                this.mCharacMgr.GetCharacter().IsAllowedToMove = !this.mGUI.SwitchVisibleIGMenu();
+            }
         }
 
         protected override void Shutdown()

@@ -9,7 +9,7 @@ namespace Game.GUICreator
 {
 	public abstract class GUIFactory
     {
-        private StateManager mStateMgr;
+        protected StateManager mStateMgr;
         protected MiyagiMgr  mMiyagiMgr;
         protected GUI        mGUI;
         protected Size       mOriginalWndSize = new Size(1600, 900);
@@ -17,6 +17,7 @@ namespace Game.GUICreator
         protected Size WndSize  { get { return this.mMiyagiMgr.WndSize; } }
         private float RatioX    { get { return (float)this.WndSize.Width / (float)this.mOriginalWndSize.Width; } }
         private float RatioY    { get { return (float)this.WndSize.Height / (float)this.mOriginalWndSize.Height; } }
+        public bool Visible { get { return this.mGUI.Visible; } }
         
         public GUIFactory(StateManager stateMgr, string name)
         {
@@ -40,5 +41,9 @@ namespace Game.GUICreator
         public void Dispose()  { this.mGUI.Dispose();       }
         public void Hide()     { this.mGUI.Visible = false; }
         public void Show()     { this.mGUI.Visible = true;  }
+        public void SwithVisibility()
+        {
+            this.mGUI.Visible = !this.mGUI.Visible;
+        }
 	}
 }
