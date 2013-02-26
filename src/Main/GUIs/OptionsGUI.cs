@@ -20,6 +20,8 @@ namespace Game.GUICreator
         private Panel mPanel;
         private Label mLabel;
         private Button mBackButton;
+        private Button mSaveButton;
+        private Button mLoadButton;
 
         public Dictionary<ButtonName, Button> Buttons { get { return this.mButtons; } }
 
@@ -41,7 +43,7 @@ namespace Game.GUICreator
             style.Font = this.mMiyagiMgr.Fonts["Small_BlueHighway"];
             Size actualButtonSize = new Size(150, 60);
             int space = 30;
-            Point originalpos = this.mPanel.Location + new Point(450, 150);
+            Point originalpos = this.mPanel.Location + new Point(450, 120);
 
             this.mButtons = new Dictionary<ButtonName, Button>();
             for (int i = 0; i < Enum.GetValues(typeof(ButtonName)).Length; i++)
@@ -49,13 +51,16 @@ namespace Game.GUICreator
 
                 Button button = new Button();
                 button.Size = actualButtonSize;
-                button.Text = "ON/OFF";
+                //button.Text = "ON/OFF";
                 button.TextStyle = style;
                 button.Location = originalpos + new Point(0, i * (actualButtonSize.Height + space));
                 button.Skin = this.mMiyagiMgr.Skins["Button"];
                 this.mGUI.Controls.Add(button);
                 this.mButtons.Add((ButtonName)i, button);
             }
+            
+            //ButtonName.FullScreen
+
             mBackButton = new Button();
             mBackButton.Size = actualButtonSize;
             mBackButton.Text = "BACK";
@@ -63,6 +68,23 @@ namespace Game.GUICreator
             mBackButton.Location = this.mPanel.Location + new Point(this.mPanel.Size.Width /10, (this.mPanel.Size.Height /10) *9);
             mBackButton.Skin = this.mMiyagiMgr.Skins["Button"];
             this.mGUI.Controls.Add(mBackButton);
+
+            mSaveButton = new Button();
+            mSaveButton.Size = actualButtonSize;
+            mSaveButton.Text = "SAVE";
+            mSaveButton.TextStyle = style;
+            mSaveButton.Location = this.mPanel.Location + new Point((this.mPanel.Size.Width / 10) * 5 + 50 , (this.mPanel.Size.Height / 10) * 7 + 20);
+            mSaveButton.Skin = this.mMiyagiMgr.Skins["Button"];
+            this.mGUI.Controls.Add(mSaveButton);
+
+            mLoadButton = new Button();
+            mLoadButton.Size = actualButtonSize;
+            mLoadButton.Text = "LOAD";
+            mLoadButton.TextStyle = style;
+            mLoadButton.Location = this.mPanel.Location + new Point((this.mPanel.Size.Width / 10) * 2 + 50, (this.mPanel.Size.Height / 10) * 7 + 20);
+            mLoadButton.Skin = this.mMiyagiMgr.Skins["Button"];
+            this.mGUI.Controls.Add(mLoadButton);
+
             
             /* Text */
             this.mLabel = new Label();
