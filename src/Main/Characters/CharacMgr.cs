@@ -117,7 +117,10 @@ namespace Game.CharacSystem
         public void Dispose()
         {
             this.mCharacList.Clear();
+            this.mCharacList = null;
+            this.mStateMgr.MyConsole.OnCommandEntered -= new MyConsole.ConsoleEvent(this.OnCommandEntered);
             this.mMainPlayerCam.Dispose();
+            this.mMainPlayerCam = null;
         }
     }
 }

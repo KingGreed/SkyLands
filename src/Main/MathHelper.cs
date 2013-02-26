@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Numerics;
 
 namespace Game
 {
@@ -225,18 +224,9 @@ namespace Game
 		    }
 	    }
 
-        public static Mogre.Vector3 Yaw(Mogre.Vector3 center, Mogre.Vector3 p, Mogre.Radian yaw)
+        public static bool isInBlock(Mogre.Vector3 origin, Mogre.Vector3 p, int side)
         {
-            Mogre.Vector3 res = Mogre.Vector3.ZERO;
-            Complex c = Rotate(new Complex(center.x, center.z), new Complex(p.x, p.z), yaw.ValueRadians);
-            res.x = (float)c.Real;
-            res.z = (float)c.Imaginary;
-            return res;
-        }
-
-        private static Complex Rotate(Complex centre, Complex m, float angle)
-        {
-            return Complex.Exp(Complex.ImaginaryOne * angle) * (m - centre) + m;
+            return (p.x >= origin.x && p.x < origin.x + side) && (p.y >= origin.y && p.y < origin.y + side) && (p.z >= origin.z - 50 && p.z < origin.z);
         }
     }
 
