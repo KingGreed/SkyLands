@@ -118,20 +118,19 @@ namespace Game.CharacSystem
 
         private void ThirdPersonUpdate(float yawValue, float pitchValue) { }
 
-        private bool GetBlockPos(out Vector3 point, out Vector3 relBlockPos, out API.Geo.Cuboid.Block b)
+        private bool GetBlockPos(out Vector3 relBlockPos, out API.Geo.Cuboid.Block b, out CubeFace face)
         {
             float distMax = 200;
             float distance = 0;
-            point = Vector3.ZERO;
             relBlockPos = Vector3.ZERO;
             b = null;
+            face = CubeFace.frontFace;
 
             Ray ray = this.mCam.Camera.GetCameraToViewportRay(0.5f, 0.5f);
             do
             {
                 distance += 40;
-                point = ray.GetPoint(distance);
-                relBlockPos = point / MainWorld.CUBE_SIDE;
+                relBlockPos = ray.GetPoint(distance) / MainWorld.CUBE_SIDE;
                 relBlockPos.x = Mogre.Math.IFloor(relBlockPos.x);
                 relBlockPos.y = Mogre.Math.IFloor(relBlockPos.y);
                 relBlockPos.z = Mogre.Math.IFloor(relBlockPos.z);
@@ -145,14 +144,45 @@ namespace Game.CharacSystem
                 b = null;
                 return false;
             }
-            return true;
+            else
+            {
+                /* Compute the exact position */
+                Vector3 absPosBlock = relBlockPos * MainWorld.CUBE_SIDE;
+                int index = -1;
+                float minDist = -1;
+                Vector3[] points = Game.World.Generator.VanillaMultiBlock.blockPointCoords;
+                for (int i = 0; i < points.Length; i += 4)
+                {
+                    Mogre.Plane p = new Plane(points[i] + absPosBlock, points[i + 1] + absPosBlock, points[i + 2] + absPosBlock); // Need the 3 first points
+
+                    Vector3 v1 = p.normal * ray.Origin;
+                    Vector3 v2 = p.normal * ray.Direction;
+                    float dist = (-v1.x - v1.y - v1.z - p.d) / (v2.x + v2.y + v2.z);    // distance between the origin of the ray and the plan
+
+                    if (dist > 0)
+                    {
+                        Vector3 actPoint = ray.GetPoint(dist);
+
+                        if ((minDist < 0 || dist < minDist) && MathHelper.isInBlock(absPosBlock, actPoint, MainWorld.CUBE_SIDE))
+                        {
+                            minDist = dist;
+                            index = i / 4;
+                        }
+                    }
+                }
+
+                face = (CubeFace)index;
+
+                return true;
+            }
         }
 
         private void OnLClick()
         {
-            Vector3 relBlockPos, tmp;
+            Vector3 relBlockPos;
             API.Geo.Cuboid.Block b;
-            if (!this.GetBlockPos(out tmp, out relBlockPos, out b)) { return; }
+            CubeFace f;
+            if (!this.GetBlockPos(out relBlockPos, out b, out f)) { return; }
 
             string material = b.getName();
             this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).removeFromScene(relBlockPos);  // Delete block
@@ -163,32 +193,39 @@ namespace Game.CharacSystem
 
         private void OnRClick()
         {
-            Vector3 relBlockPos, collisionPoint;
+            Vector3 relBlockPos;
             API.Geo.Cuboid.Block b;
-            if (!this.GetBlockPos(out collisionPoint, out relBlockPos, out b)) { return; }
+            CubeFace face;
+            if (!this.GetBlockPos(out relBlockPos, out b, out face)) { return; }
 
             if (b is Game.World.Blocks.ConstructionBlock)
                 this.mCharacMgr.StateMgr.WriteOnConsole("Open GUI");
             else
             {
-                Vector3 absPosBlock = relBlockPos * MainWorld.CUBE_SIDE;
+                //Vector3 absPosBlock = relBlockPos * MainWorld.CUBE_SIDE;
 
                 /*this.mCharacMgr.StateMgr.WriteOnConsole("Block : " + MyConsole.GetString(absPosBlock));
                 this.mCharacMgr.StateMgr.WriteOnConsole("Col : " + MyConsole.GetString(collisionPoint));*/
-                int index = -1;
+                /*int index = -1;
                 float minDist = -1;
                 Vector3[] points = Game.World.Generator.VanillaMultiBlock.blockPointCoords;
                 for(int i = 0; i < points.Length; i += 4)
                 {
                     Mogre.Plane p = new Plane(points[i] + absPosBlock, points[i + 1] + absPosBlock, points[i + 2] + absPosBlock); // Need the 3 first points
-                    float dist = p.GetDistance(collisionPoint);
+                    
+                    Vector3 v1 = p.Direction * p.Origin;
+                    Vector3 v2 = p.Direction * p.normal;
+                    float t = (-v1.x - v1.y - v1.z - p.d) / (v2.x + v2.y + v2.z);
+                    Vector3 exactCollision = p.GetPoint(t);
+
+                    float dist = Mogre.Math.Abs(p.GetDistance(exactCollision));
                     if (minDist < 0 || dist < minDist)
                     {
                         minDist = dist;
                         index = i / 4;
                     }
                 }
-                CubeFace face = (CubeFace)index;
+                CubeFace face = (CubeFace)index;*/
                 if      (face == CubeFace.underFace) { relBlockPos.y--; }
                 else if (face == CubeFace.upperFace) { relBlockPos.y++; }
                 else if (face == CubeFace.leftFace) { relBlockPos.x--; }
@@ -215,6 +252,7 @@ namespace Game.CharacSystem
                 if (material != "")
                 {
                     this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addBlockToScene(relBlockPos, material);
+                    this.mCharacMgr.StateMgr.WriteOnConsole("Face : " + Enum.GetName(typeof(CubeFace), face));
                     this.mCharacMgr.StateMgr.WriteOnConsole("Added : " + material);
                 }
             }

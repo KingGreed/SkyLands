@@ -314,7 +314,6 @@ namespace Game.World.Generator
             ent = this.mWorld.getSceneMgr().CreateEntity(faceEntName, faceName);
             ent.SetMaterialName(material);
             blockNode.AttachObject(ent);
-
         }
 
 
