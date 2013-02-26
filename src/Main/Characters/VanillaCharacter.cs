@@ -269,9 +269,11 @@ namespace Game.CharacSystem
             this.mPath          = new AStar(this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc));
             this.mPath.goTo(this.mStartingPoint, destination);
 
-            Vector3 src = this.mNode.Orientation * Vector3.UNIT_X;
+            this.mNode.Orientation = Quaternion.IDENTITY;
+
+            /*Vector3 src = this.mNode.Orientation * Vector3.UNIT_X;
             Quaternion quat = src.GetRotationTo(this.mPath.mPath.Peek() - this.mNode.Position);
-            mNode.Rotate(quat);
+            mNode.Rotate(quat);*/
         }
 
 

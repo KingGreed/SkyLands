@@ -24,10 +24,27 @@ namespace Game.CharacSystem {
 
         public void goTo(Vector3 begin, Vector3 end) {
             
-            this.mPath.Enqueue(new Vector3(begin.x, begin.y, end.z));
-            this.mPath.Enqueue(end);
-            begin /= MainWorld.CUBE_SIDE;
-            end   /= MainWorld.CUBE_SIDE;
+
+            while (begin != end) {
+                if (begin.x < end.x && this.mIsland.getBlock(begin + 1 * Vector3.UNIT_X, false) is AirBlock) {
+                    begin += 1 * Vector3.UNIT_X;
+                    this.mPath.Enqueue(begin);
+                    continue;
+                } else if (begin.x > end.x && this.mIsland.getBlock(begin - 1 * Vector3.UNIT_X, false) is AirBlock) {
+                    begin -= 1 * Vector3.UNIT_X;
+                    this.mPath.Enqueue(begin);
+                    continue;
+                } else if (begin.z < end.z && this.mIsland.getBlock(begin + 1 * Vector3.UNIT_Z, false) is AirBlock) {
+                    begin += 1 * Vector3.UNIT_Z;
+                    this.mPath.Enqueue(begin);
+                    continue;
+                } else if (begin.z > end.z && this.mIsland.getBlock(begin - 1 * Vector3.UNIT_Z, false) is AirBlock) {
+                    begin -= 1 * Vector3.UNIT_Z;
+                    this.mPath.Enqueue(begin);
+                    continue;
+                }
+                break;
+            }
             /*
             Block[]   adjacentBlocks;
             Vector3[] adjacentPos;
