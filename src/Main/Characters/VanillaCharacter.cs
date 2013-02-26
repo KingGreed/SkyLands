@@ -32,8 +32,9 @@ namespace Game.CharacSystem
 
         //MoveForward variable
         private Vector3         mStartingPoint;
-        private Vector3         mEndingPoint;
+        private int             mDist;
         private bool            mIsWalking;
+        private AStar           mPath;
 
         public SceneNode     Node            { get { return this.mNode; } }
         public bool          IsAllowedToMove { get { return this.mMovementInfo.IsAllowedToMoved; } set { this.mMovementInfo.IsAllowedToMoved = value; } }
@@ -66,8 +67,9 @@ namespace Game.CharacSystem
 
             this.mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id);
 
-            this.mStartingPoint = this.mEndingPoint = Vector3.ZERO;
-            this.mIsWalking = false;
+            this.mStartingPoint = Vector3.ZERO;
+            this.mDist          = 0;
+            this.mIsWalking     = false;
 
             this.mNode.AttachObject(ent);
             this.FeetPosition = this.mCharInfo.SpawnPoint;// +new Vector3(0, 300, 0);
@@ -149,8 +151,15 @@ namespace Game.CharacSystem
             //MoveForward
             if (this.mIsWalking)
             {
-                if (this.mStartingPoint.z != this.mEndingPoint.z) { this.mMovementInfo.MoveDirection = Vector3.UNIT_Z; }
-                else { this.mIsWalking = false; }
+                if (this.mPath.mPath.Count == 0) { this.mIsWalking = false; }
+                if ((this.mStartingPoint - this.mPath.mPath.Peek()).Length < this.mDist * MainWorld.CUBE_SIDE) { this.mMovementInfo.MoveDirection = Vector3.UNIT_Z; }
+                else {
+                    this.mPath.mPath.Dequeue();
+
+                    Vector3 src = this.mNode.Orientation * Vector3.UNIT_X;
+                    Quaternion quat = src.GetRotationTo(this.mPath.mPath.Peek());
+                    mNode.Rotate(quat);
+                }
             }
 
             /* Apply mMovementInfo */
@@ -174,6 +183,7 @@ namespace Game.CharacSystem
             Vector3[] points = this.GetHitPoints();
             for (int i = 0; i < this.mPoints.Length; i++)
                 this.mPoints[i].Position = points[i];
+
 
             /* Update animations */
             if (!this.mMovementInfo.IsJumping && !this.mMovementInfo.IsFalling)
@@ -262,15 +272,16 @@ namespace Game.CharacSystem
             this.mNode.Translate(translation, Mogre.Node.TransformSpace.TS_LOCAL);
         }
 
-        public void moveForward(int numBlocks) 
+        public void moveTo(Vector3 destination) 
         {
+            this.mIsWalking     = true;
+            this.mStartingPoint = this.mNode.Position;
+            this.mPath          = new AStar(this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc));
+            this.mPath.goTo(this.mStartingPoint, destination);
 
-            this.mIsWalking = true;
-
-            this.mNode.Yaw(new Radian(Mogre.Math.PI / 2));
-
-            this.mStartingPoint = this.mNode.Position * Vector3.UNIT_SCALE;
-            this.mEndingPoint   = this.mNode.Position + (numBlocks * MainWorld.CUBE_SIDE) * Vector3.UNIT_Z ;
+            Vector3 src = this.mNode.Orientation * Vector3.UNIT_X;
+            Quaternion quat = src.GetRotationTo(this.mPath.mPath.Peek());
+            mNode.Rotate(quat);
         }
 
 

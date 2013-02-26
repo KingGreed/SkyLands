@@ -57,6 +57,7 @@ namespace Game.CharacSystem
         }
 
         public VanillaCharacter GetCharacter(int index = 0) { return this.mCharacList[index]; }    // By default return the main player
+        public int getNumberOfCharacter() { return this.mCharacList.Count; }
 
         private void OnCommandEntered(string command)
         {
@@ -98,16 +99,6 @@ namespace Game.CharacSystem
                         SceneNode node = this.GetCharacter().Points[index];
                         node.FlipVisibility();
                         this.mStateMgr.WriteOnConsole("Flipped : " + MyConsole.GetString(node.Position));
-                    }
-                }
-                else if (args[0] == "/goTo")
-                {
-                    LogManager.Singleton.DefaultLog.LogMessage("test");
-                    int index;
-                    if (int.TryParse(args[1], out index))
-                    {
-                        LogManager.Singleton.DefaultLog.LogMessage("test");
-                        this.GetCharacter().moveForward(index);
                     }
                 }
             }

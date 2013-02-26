@@ -56,7 +56,7 @@ namespace Game.World
             GameInfo info = this.mStateMgr.GameInfo;
             if      (info.Type == GameInfo.TypeWorld.Dome)       { island = new DomeIsland(node, info.Size, this); }
             else if (info.Type == GameInfo.TypeWorld.Plains)     { island = new RandomIsland(node, info.Size, new Plains(), this); }
-            else if (info.Type == GameInfo.TypeWorld.Hills)     { island = new RandomIsland(node, info.Size, new Hills(), this); }
+            else if (info.Type == GameInfo.TypeWorld.Hills)      { island = new RandomIsland(node, info.Size, new Hills(), this); }
             else  /*(info.Type == GameInfo.TypeWorld.Mountain)*/ { island = new RandomIsland(node, info.Size, new Mountains(), this); }
 
             this.mIslandList.Add(Vector3.ZERO, island);

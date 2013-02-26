@@ -11,11 +11,11 @@ using Game.World.Blocks;
 using Mogre;
 
 
-namespace Game.src.Main.Characters {
+namespace Game.CharacSystem {
 
     class AStar {
         private Island mIsland;
-        Queue<Vector3> mPath;
+        public Queue<Vector3> mPath;
 
         public AStar(Island curr) {
             this.mIsland = curr;

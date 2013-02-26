@@ -167,10 +167,16 @@ namespace Game.CharacSystem
             API.Geo.Cuboid.Block b;
             if (!this.GetBlockPos(out collisionPoint, out relBlockPos, out b)) { return; }
 
-            if (b is Game.World.Blocks.ConstructionBlock)
-                this.mCharacMgr.StateMgr.WriteOnConsole("Open GUI");
-            else
+            if (b is Game.World.Blocks.ConstructionBlock) 
             {
+                CharacterInfo iaInfo = new CharacterInfo("NPC_" + Guid.NewGuid().ToString(), false);
+                iaInfo.SpawnPoint = this.mCharacMgr.World.getSpawnPoint(); ;
+                this.mCharacMgr.AddCharacter(iaInfo);
+
+                this.mCharacMgr.GetCharacter(this.mCharacMgr.getNumberOfCharacter()).moveTo(relBlockPos * MainWorld.CHUNK_SIDE);
+                
+            }
+            else {
                 Vector3 absPosBlock = relBlockPos * MainWorld.CUBE_SIDE;
 
                 /*this.mCharacMgr.StateMgr.WriteOnConsole("Block : " + MyConsole.GetString(absPosBlock));
@@ -178,24 +184,17 @@ namespace Game.CharacSystem
                 int index = -1;
                 float minDist = -1;
                 Vector3[] points = Game.World.Generator.VanillaMultiBlock.blockPointCoords;
-                for(int i = 0; i < points.Length; i += 4)
-                {
+                for (int i = 0; i < points.Length; i += 4) {
                     Mogre.Plane p = new Plane(points[i] + absPosBlock, points[i + 1] + absPosBlock, points[i + 2] + absPosBlock); // Need the 3 first points
                     float dist = p.GetDistance(collisionPoint);
-                    if (minDist < 0 || dist < minDist)
-                    {
+                    if (minDist < 0 || dist < minDist) {
                         minDist = dist;
                         index = i / 4;
                     }
                 }
                 CubeFace face = (CubeFace)index;
-                if      (face == CubeFace.underFace) { relBlockPos.y--; }
-                else if (face == CubeFace.upperFace) { relBlockPos.y++; }
-                else if (face == CubeFace.leftFace) { relBlockPos.x--; }
-                else if (face == CubeFace.rightFace) { relBlockPos.x++; }
-                else if (face == CubeFace.backFace) { relBlockPos.z--; }
-                else  /*(face == CubeFace.frontFace)*/ { relBlockPos.z++; }
-                
+                if (face == CubeFace.underFace) { relBlockPos.y--; } else if (face == CubeFace.upperFace) { relBlockPos.y++; } else if (face == CubeFace.leftFace) { relBlockPos.x--; } else if (face == CubeFace.rightFace) { relBlockPos.x++; } else if (face == CubeFace.backFace) { relBlockPos.z--; } else  /*(face == CubeFace.frontFace)*/ { relBlockPos.z++; }
+
                 string material = "";
                 if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_1, MOIS.KeyCode.KC_NUMPAD1))
                     material = "Grass";
@@ -212,8 +211,7 @@ namespace Game.CharacSystem
                 else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_7, MOIS.KeyCode.KC_NUMPAD7))
                     material = "Construction";
 
-                if (material != "")
-                {
+                if (material != "") {
                     this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addBlockToScene(relBlockPos, material);
                     this.mCharacMgr.StateMgr.WriteOnConsole("Added : " + material);
                 }
