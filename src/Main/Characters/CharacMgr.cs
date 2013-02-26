@@ -108,8 +108,8 @@ namespace Game.CharacSystem
 
         public void Update(float frameTime)
         {
-            foreach (VanillaCharacter charac in this.mCharacList)
-                charac.Update(frameTime);
+            for(int i = 0; i < this.mCharacList.Count; i++)
+                this.mCharacList[i].Update(frameTime);
 
             this.mMainPlayerCam.Update();
         }

@@ -371,7 +371,7 @@ double noiseValue = (noise[xx, yy, zz]) * noise2[xx, 255 - yy, zz] + noise[xx, y
 			\section{Constructions blocks}
 				Unlike in Minecraft, our player can build some presaved buildings. This is the basic of a Starcraft-like game. These buildings will allow the players to spawn some bots for his army and also to gather few basic resources.\\
 
-We don't want the player to build all of the constructions block per block, all he will have to do is to place a \enquote{construction block}. Then when he clicks this block, a menu opens and the player will have to give the required resources to start the construction. For now we haven't the inventory system with the actual resources of the player that's why the construction menu is light.\\
+We don't want the player to build all of the constructions block per block, all he will have to do is to place a \enquote{construction block}. Then when he clicks this block, a menu opens and the player will have to give the required resources to start the construction. Right now the inventory system with the actual resources of the player isn't implemented but, it will be implemented soon\\
 
 For this oral presentation, our buildings are simple. The player will actually be able to save his own buildings for the fourth presentation, this is part of the \enquote{map editor}.
 			
@@ -384,7 +384,7 @@ For this oral presentation, our buildings are simple. The player will actually b
 				
 		\chapter{\textcolor{blue}{Physics}}
 			\section{Collisions}
-				As we want the best of our game, we tried to implement the library MogreNewt. This library provides a physic engine and handle collisions detection. It is a powerful tool but it implies to add each cube one by one as a \enquote{Body} that is to say about 80 000 blocks. This leads to an important loss of FPS which is definitely what we don't want. Here you can see all the wires of the bodies including the character which was automatically created using its mesh file.\\
+				Because we want the best of our game, we tried implementing the library MogreNewt. This library provides a physic engine and handle collisions detection. It is a powerful tool but it implies to add each cube one by one as a \enquote{Body} that is to say about 80 000 blocks. This leads to an important loss of FPS which is definitely what we don't want. Here you can see all the wires of the bodies including the character which was automatically created using its mesh file.\\
 
 Eventually, we kept our system using the height points of each corner since we consider our character as a parallelepiped rectangle. This isn't an AABB collision algorithm because we look at the type of block there are next to the points.
 
