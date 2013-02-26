@@ -7,6 +7,8 @@ using Game.Animation;
 using Game.World.Display;
 using Game.IGConsole;
 
+using Game.Buildings;
+
 namespace Game.CharacSystem
 {
     public class VanillaPlayer : VanillaCharacter
@@ -212,6 +214,8 @@ namespace Game.CharacSystem
                 CharacterInfo iaInfo = new CharacterInfo("NPC_" + Guid.NewGuid().ToString(), false);
                 iaInfo.SpawnPoint = this.mCharacMgr.World.getSpawnPoint(); ;
                 this.mCharacMgr.AddCharacter(iaInfo);
+
+                new Building(this.mCharacMgr.World.getIslandAt(new Vector3(0, 0, 0)), relBlockPos);
 
                 //this.mCharacMgr.GetCharacter(this.mCharacMgr.getNumberOfCharacter() - 1).moveTo(relBlockPos * MainWorld.CHUNK_SIDE);
                 

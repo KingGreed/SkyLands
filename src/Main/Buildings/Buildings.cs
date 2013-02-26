@@ -3,16 +3,17 @@ using System.Collections.Generic;
 
 using Mogre;
 
+using Game.World.Blocks;
 using API.Geo.Cuboid;
 
 namespace Game.Buildings
 {
-    public class Buildings
+    public class Building
     {
         private Vector3 mPos;
         private Island mIsland;
-        
-        public Buildings(Island island, Vector3 pos)
+
+        public Building(Island island, Vector3 pos)
         {
             this.mPos = pos;
             this.mIsland = island;
@@ -21,15 +22,24 @@ namespace Game.Buildings
 
         private void Build()
         {
-            /*for (int y = 5; y > 0; y--)
+            LogManager.Singleton.DefaultLog.LogMessage("test");
+            for (int x = 0; x < 5; x++)
             {
-                for(int x = 0; x <
+                for (int y = 0; y < 10; y++)
+                {
+                    for (int z = 0; z < 5; z++)
+                    {
+                        if (this.mIsland.getBlock(this.mPos + new Vector3(x, y, z), true) is AirBlock && isInSphere(x, y, z, 5))
+                        {
+                            this.mIsland.addBlockToScene(this.mPos + new Vector3(x, y, z), "Grass");
+                        }
+                    }
+                }
             }
-
-            for (int y = 1; y <= 5; y++)
-            {
-                int side = 2 * y + 1;
-            }*/
+        }
+        private bool isInSphere(int x, int y, int z, int r)
+        {
+            return (x * x + y * y + z * z <= r * r);
         }
     }
 }

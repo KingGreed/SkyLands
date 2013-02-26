@@ -108,8 +108,8 @@ namespace Game.States
         {
             this.mGameInfo.Type = GameInfo.TypeWorld.Mountain;
             Mogre.Vector2 newSize = this.mGameInfo.Size;
-            if (newSize.x <= 2 || newSize.x >= 30) { newSize.x = 15; }
-            if (newSize.y <= 2 || newSize.y >= 30) { newSize.y = 15; }
+            if (newSize.x <= 2 || newSize.x > 30) { newSize.x = 15; }
+            if (newSize.y <= 2 || newSize.y > 30) { newSize.y = 15; }
             this.mGameInfo.Size = newSize;
 
             this.mStateMgr.GameInfo = this.mGameInfo;
