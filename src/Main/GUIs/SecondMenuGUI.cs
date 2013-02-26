@@ -50,7 +50,7 @@ namespace Game.GUICreator
             style.Alignment = Alignment.MiddleCenter;
             style.Font = this.mMiyagiMgr.Fonts["Small_BlueHighway"];
             Size actualButtonSize = new Size(150, 60);
-            int space = (this.mBackGround.Size.Width - 4 * actualButtonSize.Width) / 5;
+            int space = (this.mBackGround.Size.Width - 5 * actualButtonSize.Width) / 6;
             Point originalpos = this.mBackGround.Location + new Point(space, 65);
 
             this.mButtons = new Dictionary<string, Button>();
@@ -146,6 +146,7 @@ namespace Game.GUICreator
                 size.y = sizeY;
                 this.mGameInfo.Size = size;
             }
+            this.mStateMgr.MyConsole.UpdateConsole = false;
         }
 
         void textBoxSizeX_Submit(object sender, ValueEventArgs<string> e)
@@ -157,12 +158,14 @@ namespace Game.GUICreator
                 size.x = sizeX;
                 this.mGameInfo.Size = size;
             }
+            this.mStateMgr.MyConsole.UpdateConsole = false;
         }
 
         void textBoxSeed_Submit(object sender, ValueEventArgs<string> e)
         {
             int seed;
             if (int.TryParse(e.Data, out seed)) { this.mGameInfo.Seed = seed; }
+            this.mStateMgr.MyConsole.UpdateConsole = false;
         }
 
         protected override void AfterResize()

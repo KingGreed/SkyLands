@@ -20,7 +20,7 @@ namespace Game.IGConsole
         public delegate void ConsoleEvent(string command);
         public event ConsoleEvent OnCommandEntered;
 
-        private bool mIsEnable, mKeepPanelOpen;
+        private bool mIsEnable, mKeepPanelOpen, mUpdate;
         private Panel mLog, mTextBox;
         private Label mNewLabel;
         private Queue<Label> mOldLabels;
@@ -28,6 +28,7 @@ namespace Game.IGConsole
         private Timer mTimer;
 
         public Miyagi.UI.GUI GUI { get { return this.mGUI; } }
+        public bool UpdateConsole { get { return this.mUpdate; } set { mUpdate = value;}}
         
         public bool KeepPanelOpen
         {
@@ -187,7 +188,7 @@ namespace Game.IGConsole
 
         public void Update()
         {
-            if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_RETURN)) { this.Enable = !this.Enable; }
+            if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_RETURN) && this.mUpdate) { this.Enable = !this.Enable; }
             if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_TAB))    { this.KeepPanelOpen = !this.KeepPanelOpen; }
 
             if (this.Enable)

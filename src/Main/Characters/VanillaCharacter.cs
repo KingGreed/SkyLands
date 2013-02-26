@@ -150,36 +150,8 @@ namespace Game.CharacSystem
             //MoveForward
             if (this.mIsWalking)
             {
-                if (this.mNode.Position != this.mPath.mPath.Peek()) {
+                if ((this.mNode.Position - this.mPath.mPath.Peek()).Length > 50) {
                     this.mMovementInfo.MoveDirection = Vector3.UNIT_Z;
-
-                    Vector3 d = (this.mNode.Position - this.mPath.mPath.Peek());
-                    d /= d.Length;
-
-                    bool isOnLeft = this.mNode.Orientation.Yaw >= 0;
-                    bool isOnTop = Mogre.Math.Abs(this.mNode.Orientation.w) >= Mogre.Math.Abs(this.mNode.Orientation.y);
-
-                    Degree alpha = this.mNode.Orientation.Yaw;
-                    if (!isOnTop)
-                    {
-                        if (isOnLeft)
-                            alpha = new Degree(180) - this.mNode.Orientation.Yaw;
-                        else
-                            alpha = -new Degree(180) - this.mNode.Orientation.Yaw;
-                    }
-                    alpha *= -1;
-
-
-                    Degree beta = this.mNode.Orientation.Yaw;
-                    if (!isOnTop) {
-                        if (isOnLeft)
-                            beta = new Degree(180) - this.mNode.Orientation.Yaw;
-                        else
-                            beta = -new Degree(180) - this.mNode.Orientation.Yaw;
-                    }
-                    beta *= -1;
-
-                    this.mMovementInfo.YawValue = (beta - alpha).ValueAngleUnits;
                 }
                 else {
                     this.mPath.mPath.Dequeue();
@@ -298,7 +270,17 @@ namespace Game.CharacSystem
             this.mPath          = new AStar(this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc));
             this.mPath.goTo(this.mStartingPoint, destination);
 
-                        
+
+            Vector3 a = this.mNode.Position;
+            Vector3 b = this.mPath.mPath.Peek();
+            Vector3 c = this.mNode.Position;
+            c.z -= 100;
+
+            float dA = (b - c).Length;
+            float dB = (a - c).Length;
+            float dC = (a - b).Length;
+
+            //this.mNode.Orientation = new Quaternion(new Radian((dA * dA + dC * dC + dB * dB) / (2 * dA * dC)).ValueAngleUnits, Vector3.UNIT_Y);
 
         }
 

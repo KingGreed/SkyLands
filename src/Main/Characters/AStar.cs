@@ -24,8 +24,8 @@ namespace Game.CharacSystem {
 
         public void goTo(Vector3 begin, Vector3 end) {
 
-
-            while (begin != end) {
+            mPath.Enqueue(end);
+            /*while (begin != end) {
                 if (begin.x < end.x && this.mIsland.getBlock(begin + 1 * Vector3.UNIT_X, false) is AirBlock) {
                     begin += 1 * Vector3.UNIT_X;
                     this.mPath.Enqueue(begin);
