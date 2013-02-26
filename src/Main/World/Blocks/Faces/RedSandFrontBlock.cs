@@ -9,9 +9,9 @@ using Mogre;
 
 namespace Game.World.Blocks
 {
-    class GrassFrontBlock : VanillaBlock
+    class RedSandFrontBlock : VanillaBlock
     {
-        public GrassFrontBlock() {
+        public RedSandFrontBlock() {
             this.mName = "RedSand front";
             this.mMaterial = "cube/RedSand";
         }

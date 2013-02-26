@@ -9,16 +9,16 @@ using Mogre;
 
 namespace Game.World.Blocks
 {
-    class SandFrontBlock : VanillaBlock
+    class SandLeftBlock : VanillaBlock
     {
-        public SandFrontBlock() {
-            this.mName = "Sand front";
+        public SandLeftBlock() {
+            this.mName = "Sand left";
             this.mMaterial = "cube/sand";
         }
 
         public override BlockFace[] getFaces() { 
             return new BlockFace[] {
-                BlockFace.frontFace,
+                BlockFace.leftFace,
             };
         }
     }

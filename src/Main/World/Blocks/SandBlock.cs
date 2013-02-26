@@ -16,7 +16,7 @@ namespace Game.World.Blocks
 
         public override string[] getComposingFaces()
         { //Must be placed in the blockFace order
-            return new string[6] { "Sand front", "Sand front", "Sand front", "Sand front", "Sand front", "Sand front" };
+            return new string[6] { "Sand front", "Sand back", "Sand top", "Sand bottom", "Sand left", "Sand right" };
         }
     }
 }
