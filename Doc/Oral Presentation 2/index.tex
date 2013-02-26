@@ -209,14 +209,15 @@ The LGPL allows developers and companies to use and integrate LGPL software into
 
 			\section{BSD license}
 				BSD licenses are a family of permissive free software licenses, imposing minimal restrictions on the redistribution of covered software. This is in contrast to copyleft licenses, which have reciprocity share-alike requirements. The original BSD license was used for its namesake, the Berkeley Software Distribution (BSD), a Unix-like operating system. The original version has since been revised and its descendants are more properly termed modified BSD licenses.
-				This is the license we choose. Basically, anyone can copy our source code choose the license he wants or even choose to make his code proprietary. But he must say that he used our code. This was the only condition we wanted on our source code.\\
+				This is the license we choose. Basically, anyone can copy our source code choose the license he wants or even choose to make his code proprietary. But he must say that he used our code. This was the only condition we wanted on our source code.\newpage
 Here are the terms of our license : \\
-
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met: 
 
-1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. \\
-2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\\
+\begin{enumerate}
+\item Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+\item Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+\end{enumerate}
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS enquote{"AS IS"} AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -233,7 +234,7 @@ The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies, 
 either expressed or implied, of the FreeBSD Project.\\
 
-				\begin{textblock}{0.628}(0.325, 0.450)
+				\begin{textblock}{0.628}(0.325, 0.50)
 					\begin{figure}
 						\includegraphics[width=6.5cm]{images/BSD.jpeg}
 					\end{figure}
@@ -270,7 +271,7 @@ Basically, the idea we had was to gather all visible blocks of the same material
 \item We wanted blocks which had more than one texture on it (for example the grass cube doesn't have the same texture on the the top face than on the bottom
  face)
  \end {itemize}
-
+\newpage
 First of all you need to understand our architecture : 
 				\begin{figure}[h]
 					\includegraphics[scale=0.5]{images/Hierarchy.png}
@@ -389,7 +390,9 @@ For this oral presentation, our buildings are simple. The player will actually b
 				\includegraphics[width = 14cm]{images/MogreNewtWires.png}	
 			\end{center}	
 
-Eventually, we kept our system using the height points of each corner since we consider our character as a parallelepiped rectangle. This isn't an AABB collision algorithm because we look at the type of block there are next to the points.
+Eventually, we kept our system using the height points of each corner since we consider our character as a parallelepiped rectangle. This isn't an AABB collision algorithm because we look at the type of block there are next to the points. It may sounds easy but it is definitly not. Those height points have to move and rotate just as the character does.\\
+
+Moreover when there is a collision, we have to replace the character at the exact position so that we avoid the collisions and also so that we avoid the same test of collisions at the next frame. For instance, when the character hit the floor, if he is replaced just one pixel to height, he will fall again on the next frame. As a result, we would see the player being like at 2 different places.
 
 			\section{Jump}
 				As promised our characters can now jump. Once the collisions with the floor worked this wasn't a hard task. We use a second order polynomial to determine the actual speed of the jump depending on the time since the character has jumped. Then our gravity system takes cares to make him fall.
