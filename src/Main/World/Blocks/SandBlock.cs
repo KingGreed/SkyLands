@@ -10,8 +10,13 @@ namespace Game.World.Blocks
     class SandBlock : VanillaBlock {
         public SandBlock() {
             this.mName = "Sand";
-            this.mMaterial = "cube/sand";
+            this.mMaterial = "";
             this.mId = 6;
+        }
+
+        public override string[] getComposingFaces()
+        { //Must be placed in the blockFace order
+            return new string[6] { "Sand front", "Sand front", "Sand front", "Sand front", "Sand front", "Sand front" };
         }
     }
 }
