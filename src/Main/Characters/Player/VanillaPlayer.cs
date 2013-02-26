@@ -204,7 +204,7 @@ namespace Game.CharacSystem
                 iaInfo.SpawnPoint = this.mCharacMgr.World.getSpawnPoint(); ;
                 this.mCharacMgr.AddCharacter(iaInfo);
 
-                //this.mCharacMgr.GetCharacter(this.mCharacMgr.getNumberOfCharacter() - 1).moveTo(relBlockPos * MainWorld.CHUNK_SIDE);
+                this.mCharacMgr.GetCharacter(this.mCharacMgr.getNumberOfCharacter() - 1).moveTo(relBlockPos * MainWorld.CHUNK_SIDE);
                 
             }
             else {

@@ -23,9 +23,12 @@ namespace Game.CharacSystem {
         }
 
         public void goTo(Vector3 begin, Vector3 end) {
+            
+            this.mPath.Enqueue(new Vector3(begin.x, begin.y, end.z));
+            this.mPath.Enqueue(end);
             begin /= MainWorld.CUBE_SIDE;
             end   /= MainWorld.CUBE_SIDE;
-
+            /*
             Block[]   adjacentBlocks;
             Vector3[] adjacentPos;
 
@@ -60,7 +63,7 @@ namespace Game.CharacSystem {
                 else { this.mPath.Enqueue(adjacentPos[min]); }
 
                 begin = adjacentPos[min];
-            }
+            }*/
         }
     }
 }

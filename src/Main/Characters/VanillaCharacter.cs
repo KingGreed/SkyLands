@@ -151,14 +151,13 @@ namespace Game.CharacSystem
             //MoveForward
             if (this.mIsWalking)
             {
-                if (this.mPath.mPath.Count == 0) { this.mIsWalking = false; }
-                if ((this.mStartingPoint - this.mPath.mPath.Peek()).Length < this.mDist * MainWorld.CUBE_SIDE) { this.mMovementInfo.MoveDirection = Vector3.UNIT_Z; }
+                if (this.mNode.Position != this.mPath.mPath.Peek()) {
+                    this.mNode.Translate((this.mPath.mPath.Peek() - this.mNode.Position) * WALK_SPEED * frameTime);
+                }
                 else {
                     this.mPath.mPath.Dequeue();
 
-                    Vector3 src = this.mNode.Orientation * Vector3.UNIT_X;
-                    Quaternion quat = src.GetRotationTo(this.mPath.mPath.Peek());
-                    mNode.Rotate(quat);
+                    if (this.mPath.mPath.Count == 0) { this.mIsWalking = false; } 
                 }
             }
 
@@ -280,7 +279,7 @@ namespace Game.CharacSystem
             this.mPath.goTo(this.mStartingPoint, destination);
 
             Vector3 src = this.mNode.Orientation * Vector3.UNIT_X;
-            Quaternion quat = src.GetRotationTo(this.mPath.mPath.Peek());
+            Quaternion quat = src.GetRotationTo(this.mPath.mPath.Peek() - this.mNode.Position);
             mNode.Rotate(quat);
         }
 
