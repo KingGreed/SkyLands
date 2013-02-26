@@ -17,8 +17,14 @@ namespace Game.GUICreator
     public class GameGUI : GUIFactory
     {
         private PictureBox mCross;
+        private InGameMenuGUI mIGMenu;
+
+        public InGameMenuGUI IGMenu { get { return this.mIGMenu; } }
         
-        public GameGUI(StateManager stateMgr) : base(stateMgr, "Game GUI") { }
+        public GameGUI(StateManager stateMgr) : base(stateMgr, "Game GUI")
+        {
+            this.mIGMenu = new InGameMenuGUI(stateMgr);
+        }
 
         protected override void CreateGUI()
         {
@@ -34,6 +40,15 @@ namespace Game.GUICreator
         public void SwitchGUIForDebugCam()
         {
             this.mCross.Visible = !this.mCross.Visible;
+        }
+
+        public bool SwitchVisibleIGMenu()   // Retun whether it is shown or not
+        {
+            this.mIGMenu.SwithVisibility();
+
+            this.mStateMgr.MiyagiMgr.CursorVisibility = this.mIGMenu.Visible;
+
+            return this.mIGMenu.Visible;
         }
     }
 }

@@ -23,7 +23,6 @@ namespace Game.CharacSystem
         protected AnimName[]    mJumpAnims;
         protected AnimName[]    mIdleAnims;
         private SceneNode[]     mPoints;    // mPoints is used to show the cube of collision
-        //private Vector3[]       mHitPoints;
         private Degree[]        mHitDegrees;
         private float           mHitRadius;
         private Vector3         mPreviousTranslation;
@@ -161,7 +160,7 @@ namespace Game.CharacSystem
                 }
             }
 
-            /* Apply mMovementInfo */
+            /* Compute translation and yaw */
             Vector3 translation = Vector3.ZERO;
             if (this.mMovementInfo.IsJumping)
                 translation.y = this.mJumpSpeed.GetSpeed();
@@ -173,8 +172,6 @@ namespace Game.CharacSystem
                 translation += WALK_SPEED * this.mMovementInfo.MoveDirection * new Vector3(1, 0, 1);    // Ignores the y axis translation here
                 this.mNode.Yaw(this.mMovementInfo.YawValue * frameTime);
             }
-
-            this.Translate(translation * frameTime);
 
             /* Temp - Show Points */
             if (this.mCharInfo.IsPlayer && (this as VanillaPlayer).Input.WasKeyPressed(MOIS.KeyCode.KC_F4))
@@ -191,7 +188,8 @@ namespace Game.CharacSystem
                     (translation.z < 0 && this.mPreviousTranslation.z >= 0))  { this.mAnimMgr.SetAnims(this.mRunAnims); }
                 if (translation.z == 0 && this.mPreviousTranslation.z != 0)   { this.mAnimMgr.DeleteAnims(this.mRunAnims); }
             }
-            this.mPreviousTranslation = translation;
+
+            this.mPreviousTranslation = this.Translate(translation * frameTime);    // Apply the translation
             if (this.mAnimMgr.CurrentAnims.Count == 0) // By default apply idle anim
             { 
                 this.mAnimMgr.AddAnims(this.mIdleAnims);
@@ -227,48 +225,41 @@ namespace Game.CharacSystem
                 hitPoints[i].x += this.mHitRadius * Mogre.Math.Cos(deg);
                 hitPoints[i].z += this.mHitRadius * Mogre.Math.Sin(deg);
 
-                if (i >= 4) { hitPoints[i].y += CHARAC_SIZE.y; }
+                if (i >= 4) { hitPoints[i].y += this.Height; }
             }
 
             return hitPoints;
         }
 
-        private void Translate(Vector3 translation)
+        private Vector3 Translate(Vector3 translation)  // Return the actual translation
         {
-            /*Vector3 loc = this.FeetPosition.y + translation;
-            loc /= MainWorld.CUBE_SIDE;
-            loc.x = Mogre.Math.IFloor(loc.x);
-            loc.y = Mogre.Math.IFloor(loc.y);
-            loc.z = Mogre.Math.IFloor(loc.z);
-            Vector3 newPos = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlockCoord(loc);*/
-            Vector3 newPos = this.mCharacMgr.World.GetBlockAbsPosFromAbs(this.FeetPosition.y + translation, this.mCharInfo.IslandLoc);
-            if (newPos == -Vector3.UNIT_SCALE) { newPos = this.FeetPosition; }
+            Vector3 colissionBlockRelPos;
             
-            if (translation.x < 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.leftFace))
+            if (translation.x < 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.leftFace, out colissionBlockRelPos))
                     translation.x = 0;
-                if (translation.x > 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.rightFace))
+                if (translation.x > 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.rightFace, out colissionBlockRelPos))
                     translation.x = 0;
 
-                this.mMovementInfo.IsFalling = !this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.underFace);
+                this.mMovementInfo.IsFalling = !this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.underFace, out colissionBlockRelPos);
                 if (translation.y < 0 && !this.mMovementInfo.IsFalling)
-                { 
-                    /*Vector3 tmp = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlockCoord(loc);
-                    if(tmp.x > -1)
-                        this.mCharacMgr.StateMgr.WriteOnConsole(MyConsole.GetString(tmp));*/
-                    //translation.y = this.FeetPosition.y - newPos.y + 1;
-                    translation.y = 0;
+                    translation.y = (colissionBlockRelPos.y + 1) * MainWorld.CUBE_SIDE - this.FeetPosition.y;
+                if (translation.y > 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.upperFace, out colissionBlockRelPos))
+                {
+                    translation.y = -(colissionBlockRelPos.y * MainWorld.CUBE_SIDE - this.FeetPosition.y - this.Height);
+                    if (translation.y > 0)
+                        translation.y = 0;
                 }
-                if (translation.y > 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.upperFace))
-                    translation.y = newPos.y - this.mNode.Position.y;
 
-                if (translation.z < 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.backFace))
+                if (translation.z < 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.backFace, out colissionBlockRelPos))
                     translation.z = 0;
-                if (translation.z > 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.frontFace))
+                if (translation.z > 0 && this.mCharacMgr.World.HasCharacCollision(this.GetHitPoints(translation), this.mCharInfo.IslandLoc, CubeFace.frontFace, out colissionBlockRelPos))
                     translation.z = 0;
 
             /* Here translate has been modified to avoid collisions */
             this.mMovementInfo.IsJumping = translation.y > 0 && this.mJumpSpeed.IsJumping;
             this.mNode.Translate(translation, Mogre.Node.TransformSpace.TS_LOCAL);
+
+            return translation;
         }
 
         public void moveTo(Vector3 destination) 

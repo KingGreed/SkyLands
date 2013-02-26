@@ -25,7 +25,7 @@ namespace Game.GUICreator
             Label label = new Label();
             label.Text = "World loading ...";
             label.Size = new Size(250, 50);
-            label.Location = new Point(660, 515);
+            label.Location = new Point(660, 680);
             label.TextStyle = style;
             this.mGUI.Controls.Add(label);
         }

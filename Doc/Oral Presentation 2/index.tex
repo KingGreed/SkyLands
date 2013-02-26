@@ -209,14 +209,15 @@ The LGPL allows developers and companies to use and integrate LGPL software into
 
 			\section{BSD license}
 				BSD licenses are a family of permissive free software licenses, imposing minimal restrictions on the redistribution of covered software. This is in contrast to copyleft licenses, which have reciprocity share-alike requirements. The original BSD license was used for its namesake, the Berkeley Software Distribution (BSD), a Unix-like operating system. The original version has since been revised and its descendants are more properly termed modified BSD licenses.
-				This is the license we choose. Basically, anyone can copy our source code choose the license he wants or even choose to make his code proprietary. But he must say that he used our code. This was the only condition we wanted on our source code.\\
+				This is the license we choose. Basically, anyone can copy our source code choose the license he wants or even choose to make his code proprietary. But he must say that he used our code. This was the only condition we wanted on our source code.\newpage
 Here are the terms of our license : \\
-
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met: 
 
-1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer. \\
-2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.\\
+\begin{enumerate}
+\item Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+\item Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+\end{enumerate}
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS enquote{"AS IS"} AND
 ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
@@ -233,7 +234,7 @@ The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies, 
 either expressed or implied, of the FreeBSD Project.\\
 
-				\begin{textblock}{0.628}(0.325, 0.450)
+				\begin{textblock}{0.628}(0.325, 0.50)
 					\begin{figure}
 						\includegraphics[width=6.5cm]{images/BSD.jpeg}
 					\end{figure}
@@ -270,7 +271,7 @@ Basically, the idea we had was to gather all visible blocks of the same material
 \item We wanted blocks which had more than one texture on it (for example the grass cube doesn't have the same texture on the the top face than on the bottom
  face)
  \end {itemize}
-
+\newpage
 First of all you need to understand our architecture : 
 				\begin{figure}[h]
 					\includegraphics[scale=0.5]{images/Hierarchy.png}
@@ -303,7 +304,7 @@ That's why we ended up choosing Caelum. But we didn't make this choice because i
 			\section{Adding blocks}
 				Our player can now add blocks on the terrain using the mouse. We added a cursor at the center of the screen to help the player seeing the targeted block. \\
 
-The first difficulty was to compute the actual position of this cursor in the 3 dimensional world. Then we cast a ray in the camera's direction so that we check if there already is a block. Computing the position of the new block is only half of the work, we then had to add the faces at the right position.\\
+The first difficulty was to compute the actual position of this cursor in the 3 dimensional world. Then we hqd to cast a ray in the camera's direction so that we could store the blocks hitted by this ray. But this isn't it; we then had to found out which face was actually clicked so that we could place the new block next to this face. Computing the position of the new block is only half of the work, we then had to add the faces at the right position.\\
 
 				One of the downside of gathering all faces in one object is that you can't add faces to the object. Therefore we had to think a bit outside the object. What we did was the following : When the player adds cube to the terrain, we display the face as an independent object. And  we remember the position where he added a block. When he has added 30 blocks, we launch a new thread whose role is to recreate each multiblocks that were modified.\\
 
@@ -371,12 +372,9 @@ double noiseValue = (noise[xx, yy, zz]) * noise2[xx, 255 - yy, zz] + noise[xx, y
 			\section{Constructions blocks}
 				Unlike in Minecraft, our player can build some presaved buildings. This is the basic of a Starcraft-like game. These buildings will allow the players to spawn some units for his army and also to gather few basic resources.\\
 
-We didn't want the player to build the buildings block per block, all he will have to do is to place a \enquote{construction block}. Then when he clicks this block, a menu opens and the player will have to give the required resources to start the construction. Right now the inventory system the GUIaren't implemented yet. However clicking on the construction block will build a simple structure\\
+We didn't want the player to build the buildings block per block, all he will have to do is to place a \enquote{construction block}. Then when he clicks this block, a menu opens and the player will have to give the required resources to start the construction. The inventory system isn't implemented yet; however clicking on the construction block will build a simple structure.\\
 
 For this oral presentation, our buildings are simple. The player will actually be able to save his own buildings for the fourth presentation, this is part of the \enquote{map editor}.
-%\begin{figure}
-	%\includegraphics[scale=0.4]{images/constructionBlock.png}
-%\end{figure}
 			
 			\section{Saving and loading the structure and terrain}
 				This wasn't very complicated, basically as we already explained you a block has an id which is a char. We only had to save each char in a file using a StreamWritter so as a byte.\\
@@ -387,12 +385,20 @@ For this oral presentation, our buildings are simple. The player will actually b
 				
 		\chapter{\textcolor{blue}{Physics}}
 			\section{Collisions}
-				Because we want the best of our game, we tried implementing the library MogreNewt. This library provides a physic engine and handle collisions detection. It is a powerful tool but it implies to add each cube one by one as a \enquote{Body} that is to say about 80 000 blocks. This leads to an important loss of FPS which is definitely what we don't want. Here you can see all the wires of the bodies including the character which was automatically created using its mesh file.\\
+				Because we want the best of our game, we tried implementing the library MogreNewt. This library provides a physic engine and handle collisions detection. It is a powerful tool but it implies to add each cube one by one as a \enquote{Body} that is to say about 80 000 blocks. This leads to an important loss of FPS which is definitely what we don't want. You can see below all the wires of the bodies. Note that the character body was automatically created using its mesh file.\\
+			\begin{center}
+				\includegraphics[width = 14cm]{images/MogreNewtWires.png}	
+			\end{center}	
 
-Eventually, we kept our system using the height points of each corner since we consider our character as a parallelepiped rectangle. This isn't an AABB collision algorithm because we look at the type of block there are next to the points.
+Eventually, we kept our system using the height points of each corner since we consider our character as a parallelepiped rectangle. This isn't an AABB collision algorithm because we look at the type of block there are next to the points. It may sounds easy but it is definitly not. Those height points have to move and rotate just as the character does.\\
+
+Moreover when there is a collision, we have to replace the character at the exact position so that we avoid the collisions and also so that we avoid the same test of collisions at the next frame. For instance, when the character hit the floor, if he is replaced just one pixel to height, he will fall again on the next frame. As a result, we would see the player being like at 2 different places.
 
 			\section{Jump}
 				As promised our characters can now jump. Once the collisions with the floor worked this wasn't a hard task. We use a second order polynomial to determine the actual speed of the jump depending on the time since the character has jumped. Then our gravity system takes cares to make him fall.
+				\begin{center}
+				\includegraphics[width = 14cm]{images/SinbadJump.png}	
+			\end{center}
 
 		\chapter{\textcolor{blue}{AI}}
 			\section{Pathfinding}

@@ -135,7 +135,7 @@ namespace Game.World
 	    public void unload(bool save) { throw new NotImplementedException(); }
 	    public void save() { throw new NotImplementedException(); }
 
-        public bool HasCharacCollision(Vector3[] hitBlocks, Vector3 islandLoc, CubeFace collisionSide)  // hitBlocks should be of size 4
+        public bool HasCharacCollision(Vector3[] hitBlocks, Vector3 islandLoc, CubeFace collisionSide, out Vector3 blockRelPos)  // hitBlocks should be of size 4
         {
             /*int[] indexToTest;
             if      (collisionSide == CubeFace.underFace)   { indexToTest = new int[] { 0, 1, 2, 3 }; }
@@ -147,28 +147,31 @@ namespace Game.World
 
             foreach (int i in this.GetIndexesToToTest(hitBlocks, collisionSide))
             {
-                hitBlocks[i].x = Mogre.Math.IFloor(hitBlocks[i].x);
-                hitBlocks[i].y = Mogre.Math.IFloor(hitBlocks[i].y);
-                hitBlocks[i].z = Mogre.Math.IFloor(hitBlocks[i].z);
-                
                 if      (collisionSide == CubeFace.underFace)   { hitBlocks[i].y--; }
                 else if (collisionSide == CubeFace.upperFace)   { hitBlocks[i].y++; }
                 else if (collisionSide == CubeFace.leftFace)    { hitBlocks[i].x--; }
                 else if (collisionSide == CubeFace.rightFace)   { hitBlocks[i].x++; }
                 else if (collisionSide == CubeFace.backFace)    { hitBlocks[i].z--; }
                 else  /*(collisionSide == CubeFace.frontFace)*/ { hitBlocks[i].z++; }
-                
-                if (this.hasPointCollision(hitBlocks[i], islandLoc))
+
+                if (this.hasPointCollision(ref hitBlocks[i], islandLoc))
+                {
+                    blockRelPos = hitBlocks[i];
                     return true;
+                }
             }
 
+            blockRelPos = -Vector3.UNIT_SCALE;
             return false;
         }
 
-        private bool hasPointCollision(Vector3 blockPos, Vector3 islandLoc)
+        private bool hasPointCollision(ref Vector3 blockPos, Vector3 islandLoc)
         {
             blockPos += this.mIslandList[islandLoc].getPosition();
             blockPos /= CUBE_SIDE;
+            blockPos.x = Mogre.Math.IFloor(blockPos.x);
+            blockPos.y = Mogre.Math.IFloor(blockPos.y);
+            blockPos.z = Mogre.Math.IFloor(blockPos.z);
             blockPos.z++;
 
             Block block = this.mIslandList[islandLoc].getBlock(blockPos, false);

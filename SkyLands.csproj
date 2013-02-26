@@ -149,6 +149,7 @@
     <Compile Include="src\Main\Characters\Player\MainPlayerCamera.cs" />
     <Compile Include="src\Main\Characters\Player\VanillaPlayer.cs" />
     <Compile Include="src\Main\Characters\VanillaCharacter.cs" />
+    <Compile Include="src\Main\GUIs\InGameMenuGUI.cs" />
     <Compile Include="src\Main\States\Game\GameInfo.cs" />
     <Compile Include="src\Main\States\MyConsole.cs" />
     <Compile Include="src\Main\GUIs\GameGUI.cs" />

@@ -193,10 +193,19 @@ namespace Game.CharacSystem
 
         private void OnRClick()
         {
-            Vector3 relBlockPos;
+            /*Vector3 relBlockPos;
             API.Geo.Cuboid.Block b;
             CubeFace face;
-            if (!this.GetBlockPos(out relBlockPos, out b, out face)) { return; }
+            if (!this.GetBlockPos(out relBlockPos, out b, out face)) { return; }*/
+            float distance = 200;
+            Vector3 relBlockPos = this.mCam.Camera.GetCameraToViewportRay(0.5f, 0.5f).GetPoint(distance);
+
+            relBlockPos /= MainWorld.CUBE_SIDE;
+            relBlockPos.x = Mogre.Math.IFloor(relBlockPos.x);
+            relBlockPos.y = Mogre.Math.IFloor(relBlockPos.y);
+            relBlockPos.z = Mogre.Math.IFloor(relBlockPos.z) + 1;
+
+            API.Geo.Cuboid.Block b = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(relBlockPos, false);
 
             if (b is Game.World.Blocks.ConstructionBlock) 
             {
@@ -207,95 +216,15 @@ namespace Game.CharacSystem
                 this.mCharacMgr.GetCharacter(this.mCharacMgr.getNumberOfCharacter() - 1).moveTo(relBlockPos * MainWorld.CHUNK_SIDE);
                 
             }
-            else {
-                //Vector3 absPosBlock = relBlockPos * MainWorld.CUBE_SIDE;
-
-                /*this.mCharacMgr.StateMgr.WriteOnConsole("Block : " + MyConsole.GetString(absPosBlock));
-                this.mCharacMgr.StateMgr.WriteOnConsole("Col : " + MyConsole.GetString(collisionPoint));*/
-                /*int index = -1;
-                float minDist = -1;
-                Vector3[] points = Game.World.Generator.VanillaMultiBlock.blockPointCoords;
-                for(int i = 0; i < points.Length; i += 4)
-                {
-                    Mogre.Plane p = new Plane(points[i] + absPosBlock, points[i + 1] + absPosBlock, points[i + 2] + absPosBlock); // Need the 3 first points
-                    
-                    Vector3 v1 = p.Direction * p.Origin;
-                    Vector3 v2 = p.Direction * p.normal;
-                    float t = (-v1.x - v1.y - v1.z - p.d) / (v2.x + v2.y + v2.z);
-                    Vector3 exactCollision = p.GetPoint(t);
-
-                    float dist = Mogre.Math.Abs(p.GetDistance(exactCollision));
-                    if (minDist < 0 || dist < minDist)
-                    {
-                        minDist = dist;
-                        index = i / 4;
-                    }
-                }
-                CubeFace face = (CubeFace)index;*/
-                if      (face == CubeFace.underFace) { relBlockPos.y--; }
+            else
+            {
+                /*if      (face == CubeFace.underFace) { relBlockPos.y--; }
                 else if (face == CubeFace.upperFace) { relBlockPos.y++; }
                 else if (face == CubeFace.leftFace) { relBlockPos.x--; }
                 else if (face == CubeFace.rightFace) { relBlockPos.x++; }
                 else if (face == CubeFace.backFace) { relBlockPos.z--; }
-                else  /*(face == CubeFace.frontFace)*/ { relBlockPos.z++; }
+                else  /*(face == CubeFace.frontFace)* { relBlockPos.z++; }*/
                 
-                string material = "";
-                if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_1, MOIS.KeyCode.KC_NUMPAD1))
-                    material = "Grass";
-                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_2, MOIS.KeyCode.KC_NUMPAD2))
-                    material = "Dirt";
-                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_3, MOIS.KeyCode.KC_NUMPAD3))
-                    material = "Stone";
-                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_4, MOIS.KeyCode.KC_NUMPAD4))
-                    material = "Wood";
-                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_5, MOIS.KeyCode.KC_NUMPAD5))
-                    material = "Leaves";
-                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_6, MOIS.KeyCode.KC_NUMPAD6))
-                    material = "Sand";
-                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_7, MOIS.KeyCode.KC_NUMPAD7))
-                    material = "Construction";
-
-                if (material != "") {
-                    this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addBlockToScene(relBlockPos, material);
-                    this.mCharacMgr.StateMgr.WriteOnConsole("Face : " + Enum.GetName(typeof(CubeFace), face));
-                    this.mCharacMgr.StateMgr.WriteOnConsole("Added : " + material);
-                }
-            }
-        }
-
-        /*private void OnLClick2()
-        {
-            float distance = 200;
-            Vector3 blockPos = this.mCam.Camera.GetCameraToViewportRay(0.5f, 0.5f).GetPoint(distance);
-
-            Vector3 tmp = blockPos;
-            blockPos /= MainWorld.CUBE_SIDE;
-            blockPos.x = Mogre.Math.IFloor(blockPos.x);
-            blockPos.y = Mogre.Math.IFloor(blockPos.y);
-            blockPos.z = Mogre.Math.IFloor(blockPos.z) + 1;
-
-            string material = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(blockPos, false).getName();
-            this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).removeFromScene(blockPos);  // Delete block
-
-            if (material != "Air")
-                this.mCharacMgr.StateMgr.WriteOnConsole("Deleted : " + material);
-        }
-        
-        /*private void OnRClick()
-        {
-            float distance = 200;
-            Vector3 blockPos = this.mCam.Camera.GetCameraToViewportRay(0.5f, 0.5f).GetPoint(distance);
-
-            Vector3 tmp = blockPos;
-            blockPos  /= MainWorld.CUBE_SIDE;
-            blockPos.x = Mogre.Math.IFloor(blockPos.x);
-            blockPos.y = Mogre.Math.IFloor(blockPos.y);
-            blockPos.z = Mogre.Math.IFloor(blockPos.z) + 1;
-
-            API.Geo.Cuboid.Block b = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(blockPos, false);
-
-            if (b is Game.World.Blocks.AirBlock)
-            {
                 string material = "";
                 if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_1, MOIS.KeyCode.KC_NUMPAD1))
                     material = "Grass";
@@ -314,12 +243,11 @@ namespace Game.CharacSystem
 
                 if (material != "")
                 {
-                    this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addBlockToScene(blockPos, material);
+                    this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addBlockToScene(relBlockPos, material);
+                    //this.mCharacMgr.StateMgr.WriteOnConsole("Face : " + Enum.GetName(typeof(CubeFace), face));
                     this.mCharacMgr.StateMgr.WriteOnConsole("Added : " + material);
                 }
             }
-            else if(b is Game.World.Blocks.ConstructionBlock)
-                this.mCharacMgr.StateMgr.WriteOnConsole("Open GUI");
-        }*/
+        }
     }
 }
