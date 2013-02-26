@@ -115,7 +115,25 @@ namespace Game.World.Generator
                         if (noiseValue >= 0) {
                             
                             if(this.getBlock(xx, yy + 1, zz, false) is AirBlock) {
-                                this.setBlockAt(xx, yy, zz, this.mBiome.getGroundCover()[0][rd.Next(0, this.mBiome.getGroundCover()[0].Length)], true);
+
+                                if (this.mBiome.getGroundCover()[0].Length == 1)
+                                {
+                                    this.setBlockAt(xx, yy, zz, this.mBiome.getGroundCover()[0][0], true);
+                                    continue;
+                                }
+                                int rdRes = rd.Next(0, 100);
+                                if (rdRes <= 60)
+                                {
+                                    this.setBlockAt(xx, yy, zz, this.mBiome.getGroundCover()[0][0], true);
+                                }
+                                else if (rdRes <= 80)
+                                {
+                                    this.setBlockAt(xx, yy, zz, this.mBiome.getGroundCover()[0][1], true);
+                                }
+                                else
+                                {
+                                    this.setBlockAt(xx, yy, zz, this.mBiome.getGroundCover()[0][2], true);
+                                }
                             } else {
                                 dist = this.isNearSurface(this.mBiome.getGroundCover().Count - 1, new Vector3(xx, yy, zz));
                                 if(dist != -1) {

@@ -76,7 +76,7 @@ namespace Game.World.Generator
         }
 
         public unsafe void removeFromScene(Vector3 item, Island currIsland) {
-            if(this.vBuff == null) {
+            if (this.vBuff == null && this.block != null) {
                 this.block.GetSection(0).GetRenderOperation(this.moData);
                 this.posEl = this.moData.vertexData.vertexDeclaration.FindElementBySemantic(VertexElementSemantic.VES_POSITION);
             }

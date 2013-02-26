@@ -7,6 +7,8 @@ using Game.Animation;
 using Game.World.Display;
 using Game.IGConsole;
 
+using Game.Buildings;
+
 namespace Game.CharacSystem
 {
     public class VanillaPlayer : VanillaCharacter
@@ -214,6 +216,7 @@ namespace Game.CharacSystem
                 this.mCharacMgr.AddCharacter(iaInfo);
 
                 this.mCharacMgr.GetCharacter(this.mCharacMgr.getNumberOfCharacter() - 1).moveTo(relBlockPos * MainWorld.CHUNK_SIDE);
+                new Building(this.mCharacMgr.World.getIslandAt(new Vector3(0, 0, 0)), relBlockPos);
                 
             }
             else if(b is Game.World.Blocks.AirBlock)
