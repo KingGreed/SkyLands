@@ -292,7 +292,7 @@ than in this example.\\
 This system may seem a bit complicated, and it was, but it was totally worth the cost, we increased the frame rate by 20, and it now turns around 400FPS. Also, the Islands size were trippled, getting from 4*4 to 12*12 (on the x, z coordinates with y the height) and can even be increased to 30 * 30. This means that if we assimilated the terrain as one continuous layer of block we would have : 	30 * 30 * 16 * 16 = 230400 cubes, counting only top faces and bottom faces : 460800 faces and 921600 triangles, around 1 000 000 triangles (with about 100 FPS).
 			
 			\section{Sky}
-				At the first oral, we presented you a sky using the library Caelum but then we wanted to try another well-known library : SkyX. Once again we actually used a wrapper of the original library coded in C++. We wanted to try another library so that we could choose the best for our game.\\
+				At the first oral, we presented you a sky using the library Caelum but then we wanted to try another well-known library : SkyX. Once again we actually used a wrapper of the original library coded in C++. It took us much time but we wanted to try another library so that we could choose the best for our game.\\
 				
 Unfortunately it appeared that even if SkyX is a great library in C++ its wrapper is much less interesting. Indeed many functions weren't implemented in the wrapper. This lack leads to a far less awesome render than in the C++ version. Besides we had lots of troubles integrating this library to our project because of the different existing versions of Mogre.\\
 
@@ -316,7 +316,7 @@ The first difficulty was to compute the actual position of this cursor in the 3 
 				
 				
 			\section{Removing Blocks}
-				If we can add block this would be great if we could remove blocks as well. So that's what we did. Computing the position of the targeted block the same work as for adding blocks.
+				If we can add block, then it would be great if we could remove blocks as well. So that's what we did. Computing the position of the targeted block the same work as for adding blocks.
 
 				On the other hand removing blocks from the scene was a tricky part. Because the function we needed was not implemented in C\# (traveling through the Manual object and modifying the faces, which are vector3) we had to get it from the C++ libraries. And, what's more, when we found the function we needed, we discovered the function needed pointers, thus so we had to use the unsafe option.\\
 
@@ -374,6 +374,9 @@ double noiseValue = (noise[xx, yy, zz]) * noise2[xx, 255 - yy, zz] + noise[xx, y
 We don't want the player to build all of the constructions block per block, all he will have to do is to place a \enquote{construction block}. Then when he clicks this block, a menu opens and the player will have to give the required resources to start the construction. For now we haven't the inventory system with the actual resources of the player that's why the construction menu is light.\\
 
 For this oral presentation, our buildings are simple. The player will actually be able to save his own buildings for the fourth presentation, this is part of the \enquote{map editor}.
+%\begin{figure}
+	%\includegraphics[scale=0.4]{images/constructionBlock.png}
+%\end{figure}
 			
 			\section{Saving and loading the structure and terrain}
 				This wasn't very complicated, basically as we already explained you a block has an id which is a char. We only had to save each char in a file using a StreamWritter so as a byte.\\
@@ -390,8 +393,6 @@ Eventually, we kept our system using the height points of each corner since we c
 
 			\section{Jump}
 				As promised our characters can now jump. Once the collisions with the floor worked this wasn't a hard task. We use a second order polynomial to determine the actual speed of the jump depending on the time since the character has jumped. Then our gravity system takes cares to make him fall.
-				
-		\chapter{\textcolor{blue}{Character}}
 
 		\chapter{\textcolor{blue}{AI}}
 			\section{Pathfinding}
