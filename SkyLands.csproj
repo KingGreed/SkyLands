@@ -137,6 +137,7 @@
     <Compile Include="src\Main\Base Ogre\Listener.cs" />
     <Compile Include="src\Main\Base Ogre\MoisManager.cs" />
     <Compile Include="src\Main\Base Ogre\Overlay.cs" />
+    <Compile Include="src\Main\Buildings\Buildings.cs" />
     <Compile Include="src\Main\Characters\Anim.cs" />
     <Compile Include="src\Main\Characters\AnimationMgr.cs" />
     <Compile Include="src\Main\Characters\AStar.cs" />
