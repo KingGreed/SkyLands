@@ -10,7 +10,7 @@ namespace Game.World.Blocks
         public ConstructionBlock()
         {
             this.mName = "Construction";
-            this.mMaterial = "osef";
+            this.mMaterial = "";
             this.mId = 7;
         }
     }

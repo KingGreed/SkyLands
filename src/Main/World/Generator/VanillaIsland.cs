@@ -269,20 +269,14 @@ namespace Game.World.Generator
             
             Block curr = this.getBlock(relativePos, false);
 
-            /*if(this.setVisibleFaces(relativePos, curr)) {
-                for(int i = 0; i < curr.getFaces().Length; i++) {
-                    if (VanillaChunk.staticBlock[material].getComposingFaces().Length > 1) {
-                        if (this.hasVisiblefaceAt((int)relativePos.x, (int)relativePos.y, (int)relativePos.z, (BlockFace)i)) {
-                            this.addFaceToScene((BlockFace)i, relativePos, VanillaChunk.staticBlock[VanillaChunk.staticBlock[material].getComposingFaces()[i]].getMaterial());
-                        }
-                    }
-                    else {
-                        if (this.hasVisiblefaceAt((int)relativePos.x, (int)relativePos.y, (int)relativePos.z, curr.getFaces()[i])) {
-                            this.addFaceToScene(curr.getFaces()[i], relativePos, VanillaChunk.staticBlock[material].getMaterial());
-                        }
+            if(this.setVisibleFaces(relativePos, curr)) {
+                for(int i = 0; i < 6; i++) {
+                    
+                    if (this.hasVisiblefaceAt((int)relativePos.x, (int)relativePos.y, (int)relativePos.z, (BlockFace) i)) {
+                        this.addFaceToScene((BlockFace) i, relativePos, curr.getFace(i));
                     }
                 }
-            }*/
+            }
 
         }
 
