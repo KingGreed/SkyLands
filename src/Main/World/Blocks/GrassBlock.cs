@@ -9,12 +9,20 @@ namespace Game.World.Blocks
     {
         public GrassBlock() {
             this.mName = "Grass";
-            this.mMaterial = "wdc";
+            this.mMaterial = "";
             this.mId = 1;
         }
 
-        public override string[] getComposingFaces() { //Must be placed in the blockFace order
-            return new string[6] { "Grass front", "Grass back", "Grass top", "Grass bottom" , "Grass left", "Grass right"};
+        public override string getFace(int i) {
+            switch (i) {
+                case 0: return "cube/grass/side";
+                case 1: return "cube/grass/side";
+                case 2: return "cube/grass/top";
+                case 3: return "cube/grass/bottom";
+                case 4: return "cube/grass/side";
+                case 5: return "cube/grass/side";
+            }
+            return "";
         }
     }
 }

@@ -26,13 +26,13 @@ namespace Game.BaseApp
 
         public void Go()
         {
-            //try
+            try
             {
                 if (!this.Setup()) { return; }
                 this.mRoot.StartRendering();
                 this.Shutdown();
             }
-            /*catch (System.Runtime.InteropServices.SEHException e)
+            catch (System.Runtime.InteropServices.SEHException e)
             {
                 Console.WriteLine(e);
 
@@ -49,7 +49,7 @@ namespace Game.BaseApp
                     e.Message, "Error",
                     System.Windows.Forms.MessageBoxButtons.OK,
                     System.Windows.Forms.MessageBoxIcon.Error);
-            }*/
+            }
         }
 
         private bool Setup()

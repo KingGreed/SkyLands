@@ -8,10 +8,7 @@ using Material = API.Generic.Material;
 
 namespace API.Geo.Cuboid
 {
-    public interface MultiBlock
-    {
-
-
+    public interface MultiBlock {
         /*
          * @param the block's location
          */
@@ -22,10 +19,10 @@ namespace API.Geo.Cuboid
         /*
          * Warning does not remove item from List, only from Scene
          * */
-        void removeFromScene(Vector3 item, Island currIsland);
-
         void display(Island currentIsland, World currentWorld);
         void addMultiToScene();
+        void removeFromScene(Vector3 item, int numFaces);
+
 
         string getName();
         void   setName(string name);

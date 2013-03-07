@@ -10,12 +10,9 @@ namespace Game.World.Blocks
     class YellowSandBlock : VanillaBlock {
         public YellowSandBlock() {
             this.mName = "Yellow Sand";
-            this.mMaterial = "";
+            this.mMaterial = "cube/YellowSand";
             this.mId = 9;
         }
 
-        public override string[] getComposingFaces() { //Must be placed in the blockFace order
-          return new string[6] { "YellowSand front", "YellowSand back", "YellowSand top", "YellowSand bottom", "YellowSand left", "YellowSand right" };
-        }
     }
 }

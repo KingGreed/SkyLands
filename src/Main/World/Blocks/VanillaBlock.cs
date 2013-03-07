@@ -25,20 +25,12 @@ namespace Game.World.Blocks
 
         protected static int CUBE_SIDE = MainWorld.CUBE_SIDE;
 
-        public BlockFace[] CubeFaces = 
-            new BlockFace[] {
-                BlockFace.frontFace, BlockFace.backFace,
-                BlockFace.upperFace, BlockFace.underFace,
-                BlockFace.leftFace,  BlockFace.rightFace
-            };
-
         public string getName    () { return this.mName;     }
         public string getMaterial() { return this.mMaterial; }
         public byte   getId      () { return this.mId;       }
 
 
-        public virtual string[] getComposingFaces() { return new string[1] { this.mName }; }
-        public virtual BlockFace[] getFaces() { return this.CubeFaces; }
+        public virtual string getFace(int i) { return this.mMaterial; }
 
     }
 }

@@ -60,7 +60,11 @@ namespace Game.World.Generator
 
         }
 
-        public void addBlock(Vector3 loc)  { this.mList.Add(loc); }
+        public void addBlock(Vector3 loc)  {
+            if (this.mList.Count == 0 || (this.mList.Count >= 1 && this.mList[this.mList.Count - 1] != loc)) {
+                this.mList.Add(loc);
+            }
+        }
         public string getName()            { return this.mName;   }
         public void   setName(string name) { this.mName = name;   }
 
@@ -75,54 +79,31 @@ namespace Game.World.Generator
             return -1;
         }
 
-        public unsafe void removeFromScene(Vector3 item, Island currIsland) {
+        public unsafe void removeFromScene(Vector3 item, int numFaces) {
+
+
             if (this.vBuff == null && this.block != null) {
                 this.block.GetSection(0).GetRenderOperation(this.moData);
                 this.posEl = this.moData.vertexData.vertexDeclaration.FindElementBySemantic(VertexElementSemantic.VES_POSITION);
             }
-            Block curr = currIsland.getBlock(item, false);
 
             int elemPosition = this.find(item);
-            int i = 0;
-            bool isInAdded = false;
 
             if (elemPosition == -1) { return; }
 
-            if(curr.getComposingFaces().Length > 1) {
-                    this.removeFace(this.mIndexInVertexBuffer[elemPosition]);
-            } else {
-                foreach(BlockFace face in Enum.GetValues(typeof(BlockFace))) {
-                    if(currIsland.hasVisiblefaceAt((int)item.x, (int)item.y, (int)item.z, face)) {
-                        if(!currIsland.isInBlocksAdded(item, VanillaChunk.staticBlock[this.mMaterial].getFaces()[0])) {
-                            this.removeFace(this.mIndexInVertexBuffer[elemPosition] + i*4);
-                            i++;
-                        }  else { isInAdded = true; }
-                    }
-                }
-            }
-            if (isInAdded) {
-                string cubeNodeName = "Node-" + item.x * MainWorld.CUBE_SIDE + "-" + item.y * MainWorld.CUBE_SIDE + "-" + item.z * MainWorld.CUBE_SIDE;
-                currIsland.Node.GetChild(0).RemoveChild(cubeNodeName);
-            }
-            
-
-        }
-
-        private unsafe void removeFace(int pos) {
-
             this.vBuff = this.moData.vertexData.vertexBufferBinding.GetBuffer(posEl.Source);
-            byte*  pVertex = (byte*)vBuff.Lock(HardwareBuffer.LockOptions.HBL_NORMAL) + vBuff.VertexSize * pos;
+            byte* pVertex = (byte*)vBuff.Lock(HardwareBuffer.LockOptions.HBL_NORMAL) + vBuff.VertexSize * this.mIndexInVertexBuffer[elemPosition];
             float* pReal;
 
-            for(int i = 0; i < 4; i++) {
+
+            for (int i = 0; i < numFaces * 4; i++) {
                 posEl.BaseVertexPointerToElement(pVertex, &pReal);
-                    
+
                 pReal[0] = 0; pReal[1] = 0; pReal[2] = 0;
                 pVertex += vBuff.VertexSize;
             }
 
             vBuff.Unlock();
-            this.vBuff.Dispose();
         }
 
         public string getMaterial() { return this.mMaterial; }
@@ -131,9 +112,12 @@ namespace Game.World.Generator
             if(mList.Count == 0) { return; }
             this.mIsland = currentIsland;
 
-            string material = currentIsland.getMaterialFromName(this.mMaterial);
+            bool[] isFaceofMaterial = new bool[6];
+            for (int i = 0; i < 6; i++) {
+                isFaceofMaterial[i] = this.mIsland.getBlock(this.mList[0], false).getFace(i) == this.mMaterial;
+            }
+
             int faceNumber = 0;
-            Block curr = VanillaChunk.staticBlock[this.mMaterial];
 
             Vector2[] textureCoord = 
                 new Vector2[] {
@@ -146,14 +130,16 @@ namespace Game.World.Generator
                 };
             Vector3 displayCoord;
 
+            LogManager.Singleton.DefaultLog.LogMessage(this.mMaterial);
+
             block = new ManualObject("MultiBlock-" + this.mName);
-            block.Begin(material, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
+            block.Begin(this.mMaterial, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
                 foreach(Vector3 loc in this.mList) {
                     displayCoord = currentWorld.getDisplayCoords(currentIsland.getPosition(), loc);
                     this.mIndexInVertexBuffer.Add(faceNumber);
 
-                    foreach(BlockFace face in curr.getFaces()) {
-                        if(currentIsland.hasVisiblefaceAt((int) loc.x, (int) loc.y, (int) loc.z, face)) {
+                    foreach (BlockFace face in Enum.GetValues(typeof(BlockFace))) {
+                        if (currentIsland.hasVisiblefaceAt((int)loc.x, (int)loc.y, (int)loc.z, face) && isFaceofMaterial[(int)face]) {
                             for(int i = 0; i < 4; i++) {
                                 block.Position(displayCoord + blockPointCoords[(int)face * 4 + i]); block.TextureCoord(textureCoord[(int)face * 4 + i]);
                                 faceNumber++;
@@ -162,7 +148,6 @@ namespace Game.World.Generator
                         }
                     }
                 }
-
             block.End();
         }
         public void addMultiToScene() {

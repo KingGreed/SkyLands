@@ -26,7 +26,11 @@ namespace Game.World.Generator
         public VanillaIsland(SceneNode node, Vector2 size, MainWorld currentWorld) : base(node, size, currentWorld) {
             foreach (KeyValuePair<string, Block> pair in VanillaChunk.staticBlock) {
                 if(!(pair.Value is AirBlock)) {
-                    this.multiList.Add(pair.Key, new VanillaMultiBlock(pair.Key));
+                    for (int i = 0; i < 6; i++) {
+                        if (!this.multiList.ContainsKey(pair.Value.getFace(i))) {
+                            this.multiList.Add(pair.Value.getFace(i), new VanillaMultiBlock(pair.Value.getFace(i)));
+                        }
+                    }
                 }
             }
 
@@ -65,10 +69,11 @@ namespace Game.World.Generator
                     for(int z = 0; z < this.mIslandSize.z * MainWorld.CHUNK_SIDE; z++) {
                         curr = this.getBlock(x, y, z, false);
                         if(!(curr is AirBlock) && this.setVisibleFaces(new Vector3(x, y, z), curr)) {
-
-                            string[] key = curr.getComposingFaces();
-
-                            for(int i = 0; i < curr.getComposingFaces().Length; i++) { this.multiList[key[i]].addBlock(new Vector3(x, y, z)); }
+                            for(int i = 0; i < 6; i++) {
+                                if(this.hasVisiblefaceAt(x, y, z, (BlockFace) i)) {
+                                    this.multiList[curr.getFace(i)].addBlock(new Vector3(x, y, z));
+                                }
+                            }
 
                         }
                     }
@@ -78,12 +83,6 @@ namespace Game.World.Generator
                 pair.Value.display(this, this.mWorld);
                 pair.Value.addMultiToScene();
             }
-        }
-        public override void RechargeMulti(MultiBlock multi) {
-            if(this.mWorld.getSceneMgr().HasSceneNode("MultiBlockNode-" + multi.getMaterial())) {
-                this.mWorld.getSceneMgr().DestroySceneNode("MultiBlockNode-" + multi.getMaterial());
-            }
-            multi.display(this, this.mWorld);
         }
 
 
@@ -145,7 +144,7 @@ namespace Game.World.Generator
             else if(force) {
                 this.mChunkList.Add(chunkLocation, new VanillaChunk(new Vector3(16,16,16), chunkLocation, this));
                 return this.mChunkList[chunkLocation].getBlock(blockLocation);
-            } 
+            }
             else { return defaultBlock; }
         }
 
@@ -205,29 +204,32 @@ namespace Game.World.Generator
 
         public override void removeFromScene(Vector3 item) {
             Block curr = this.getBlock(item, false);
-
             if (curr is AirBlock) { return; }
 
-            string[] key   = curr.getComposingFaces();
             bool isInAdded = false;
+            Dictionary<string, int> faces = new Dictionary<string, int>();
 
-            if(key.Length == 1) {
-                this.multiList[key[0]].removeFromScene(item, this);
-            } else {
-                for(int i = 0; i < 6; i++) {
-                    if(this.hasVisiblefaceAt((int) item.x, (int) item.y, (int) item.z, (BlockFace) i)) {
-                        if (this.isInBlocksAdded(item, (BlockFace)i)) { isInAdded = true; }
-                        else {
-                            this.multiList[key[i]].removeFromScene(item, this);
-                        }
+            for (int i = 0; i < 6; i++) {
+                if (this.isInBlocksAdded(item, (BlockFace)i)) {
+                    isInAdded = true;
+                } else {
+                    if (this.hasVisiblefaceAt((int)item.x, (int)item.y, (int)item.z, (BlockFace)i)) {
+                        if (!faces.ContainsKey(curr.getFace(i))) { faces.Add(curr.getFace(i), 1); }
+                        else { faces[curr.getFace(i)]++; }
                     }
                 }
-                
             }
+
+            foreach (KeyValuePair<string, int> pair in faces) {
+                LogManager.Singleton.DefaultLog.LogMessage("item : " + pair.Key + " has value : " + pair.Value);
+                this.multiList[pair.Key].removeFromScene(item, pair.Value);
+            }
+
             if (isInAdded) {
                 string cubeNodeName = "Node-" + item.x * MainWorld.CUBE_SIDE + "-" + item.y * MainWorld.CUBE_SIDE + "-" + item.z * MainWorld.CUBE_SIDE;
                 this.mFaceNode.RemoveChild(cubeNodeName);
             }
+
             this.setBlockAt((int) item.x, (int) item.y, (int) item.z, "Air", false);
 
             refreshBlock(new Vector3(item.x,   item.y-1, item.z));
@@ -251,19 +253,13 @@ namespace Game.World.Generator
                 i++;
             }
             
-            i = 0;
             this.setVisibleFaces(relativePos, curr);
 
-            foreach(BlockFace face in Enum.GetValues(typeof(BlockFace))) {
-                isVisible = this.hasVisiblefaceAt((int) relativePos.x, (int) relativePos.y, (int) relativePos.z, face);
-                if(isVisible && isVisible != currentvisibleFaces[i]) {
-                    if(curr.getComposingFaces().Length == 1) {
-                        this.addFaceToScene(face, relativePos, curr.getMaterial());
-                    } else {
-                        this.addFaceToScene(face, relativePos, VanillaChunk.staticBlock[curr.getComposingFaces()[(int)face]].getMaterial());
-                    }
+            for (int j = 0; j < 6; j++) {
+                isVisible = this.hasVisiblefaceAt((int) relativePos.x, (int) relativePos.y, (int) relativePos.z, (BlockFace)j);
+                if(isVisible && isVisible != currentvisibleFaces[j]) {
+                    this.addFaceToScene((BlockFace)j, relativePos, curr.getFace(j));
                 }
-                i++;
             }
 
         }
@@ -273,7 +269,7 @@ namespace Game.World.Generator
             
             Block curr = this.getBlock(relativePos, false);
 
-            if(this.setVisibleFaces(relativePos, curr)) {
+            /*if(this.setVisibleFaces(relativePos, curr)) {
                 for(int i = 0; i < curr.getFaces().Length; i++) {
                     if (VanillaChunk.staticBlock[material].getComposingFaces().Length > 1) {
                         if (this.hasVisiblefaceAt((int)relativePos.x, (int)relativePos.y, (int)relativePos.z, (BlockFace)i)) {
@@ -286,7 +282,7 @@ namespace Game.World.Generator
                         }
                     }
                 }
-            }
+            }*/
 
         }
 

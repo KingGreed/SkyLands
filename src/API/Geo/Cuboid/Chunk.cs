@@ -50,13 +50,7 @@ namespace API.Geo.Cuboid
 	    public virtual List<Entity> getLiveEntities() { throw new NotImplementedException(); }
 
 
-        public Block getBlock(int x, int y, int z, bool force = false) 
-        {
-            if (x >= 0 && y >= 0 && z >= 0 && x < this.mBlockList.GetLength(0) && y < this.mBlockList.GetLength(1) && z < this.mBlockList.GetLength(2))
-                return this.mBlockList[x, y, z];
-            else
-                return null;
-        }
+        public Block getBlock(int x, int y, int z, bool force = false) { return this.mBlockList[x, y, z]; }
         public Block getBlock(Vector3 loc, bool force = false)         { return this.getBlock((int)loc.x, (int)loc.y, (int)loc.z, force); }
 
         public abstract string getBlockMaterial(int x, int y, int z);

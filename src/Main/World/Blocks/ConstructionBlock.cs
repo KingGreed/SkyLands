@@ -13,10 +13,5 @@ namespace Game.World.Blocks
             this.mMaterial = "osef";
             this.mId = 7;
         }
-
-        public override string[] getComposingFaces()
-        { //Must be placed in the blockFace order
-            return new string[6] { "Construction front", "Construction back", "Construction top", "Construction bottom", "Construction left", "Construction right" };
-        }
     }
 }

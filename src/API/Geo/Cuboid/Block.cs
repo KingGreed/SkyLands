@@ -19,8 +19,7 @@ namespace API.Geo.Cuboid
         string getMaterial();
         byte   getId      ();
 
-        BlockFace[] getFaces();
-        string[]    getComposingFaces();
+        string      getFace (int i);
 
 
 

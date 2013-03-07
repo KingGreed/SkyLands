@@ -108,7 +108,6 @@ namespace API.Geo.Cuboid
         public abstract void addBlockToScene(Vector3 relativePos, string material);
         public abstract void addFaceToScene(BlockFace face, Vector3 relativePos, string material);
 
-        public abstract void RechargeMulti(MultiBlock multi);
 
 
 	    /**
