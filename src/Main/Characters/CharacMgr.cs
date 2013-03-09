@@ -71,10 +71,7 @@ namespace Game.CharacSystem
                     int index;
                     if (int.TryParse(args[1], out index))
                     {
-                        Vector3 tmp = this.GetCharacter(index).FeetPosition / MainWorld.CUBE_SIDE;
-                        tmp.x = Mogre.Math.IFloor(tmp.x);
-                        tmp.y = Mogre.Math.IFloor(tmp.y);
-                        tmp.z = Mogre.Math.IFloor(tmp.z);
+                        Vector3 tmp = MainWorld.AbsToRelative(this.GetCharacter(index).FeetPosition);
 
                         this.mStateMgr.WriteOnConsole("FeetPosition : " + '(' + tmp.x + ',' + tmp.y + ',' + tmp.z + ')');
                     }
@@ -84,14 +81,15 @@ namespace Game.CharacSystem
                     int index;
                     if (int.TryParse(args[1], out index))
                     {
-                        this.mStateMgr.WriteOnConsole("Yaw : " + this.GetCharacter(index).Node.Orientation.Yaw.ValueAngleUnits);
-                        this.mStateMgr.WriteOnConsole("W : " + this.GetCharacter(index).Node.Orientation.w);
-                        this.mStateMgr.WriteOnConsole("X : " + this.GetCharacter(index).Node.Orientation.x);
-                        this.mStateMgr.WriteOnConsole("Y : " + this.GetCharacter(index).Node.Orientation.y);
-                        this.mStateMgr.WriteOnConsole("Z : " + this.GetCharacter(index).Node.Orientation.z);
+                        Quaternion quat = this.GetCharacter(index).Node.Orientation;
+                        this.mStateMgr.WriteOnConsole("Yaw : " + quat.Yaw.ValueAngleUnits);
+                        this.mStateMgr.WriteOnConsole("W : " + quat.w);
+                        this.mStateMgr.WriteOnConsole("X : " + quat.x);
+                        this.mStateMgr.WriteOnConsole("Y : " + quat.y);
+                        this.mStateMgr.WriteOnConsole("Z : " + quat.z);
                     }
                 }
-                else if (args[0] == "/flip")
+                /*else if (args[0] == "/flip")
                 {
                     int index;
                     if (int.TryParse(args[1], out index) && index < 8)
@@ -100,7 +98,7 @@ namespace Game.CharacSystem
                         node.FlipVisibility();
                         this.mStateMgr.WriteOnConsole("Flipped : " + MyConsole.GetString(node.Position));
                     }
-                }
+                }*/
             }
         }
 

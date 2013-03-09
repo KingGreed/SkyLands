@@ -4,8 +4,7 @@ using Mogre;
 
 using Game.World;
 using Game.Animation;
-using Game.World.Display;
-using Game.IGConsole;
+using API.Geo.Cuboid;
 
 using Game.Buildings;
 
@@ -72,11 +71,11 @@ namespace Game.CharacSystem
         public new void Update(float frameTime)
         {
             bool isNowMoving = !this.mIsDebugMode || this.mInput.IsCtrltDown;
-            if (this.mMovementInfo.IsAllowedToMoved && !isNowMoving)
+            if (this.mMovementInfo.IsAllowedToMove && !isNowMoving)
                 this.mAnimMgr.DeleteAllExcept<AnimName[]>(this.mEmotesNames, this.mIdleAnims, this.mJumpAnims);
-            this.mMovementInfo.IsAllowedToMoved = isNowMoving;
+            this.mMovementInfo.IsAllowedToMove = isNowMoving;
 
-            if (this.mMovementInfo.IsAllowedToMoved)
+            if (this.mMovementInfo.IsAllowedToMove)
             {
                 float yawValue = -this.mInput.MouseMoveX * YAW_SENSIVITY;
                 float pitchValue = -this.mInput.MouseMoveY * PITCH_SENSIVITY;
@@ -86,6 +85,7 @@ namespace Game.CharacSystem
 
                 if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left))  { this.OnLClick(); }
                 if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Right)) { this.OnRClick(); }
+                //if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Middle)) { this.OnMClick(); }
 
                 /* Update emotes animations */
                 if (!this.mAnimMgr.AreAnimationsPlaying(AnimName.JumpStart, AnimName.JumpLoop, AnimName.JumpEnd, AnimName.RunBase, AnimName.RunTop))
@@ -120,7 +120,7 @@ namespace Game.CharacSystem
 
         private void ThirdPersonUpdate(float yawValue, float pitchValue) { }
 
-        private bool GetBlockPos(out Vector3 relBlockPos, out API.Geo.Cuboid.Block b, out CubeFace face)
+        private bool GetBlockPos(out Vector3 relBlockPos, out Block b, out CubeFace face)
         {
             float distMax = 200;
             float distance = 0;
@@ -132,11 +132,7 @@ namespace Game.CharacSystem
             do
             {
                 distance += 40;
-                relBlockPos = ray.GetPoint(distance) / MainWorld.CUBE_SIDE;
-                relBlockPos.x = Mogre.Math.IFloor(relBlockPos.x);
-                relBlockPos.y = Mogre.Math.IFloor(relBlockPos.y);
-                relBlockPos.z = Mogre.Math.IFloor(relBlockPos.z);
-                relBlockPos.z++;
+                relBlockPos = MainWorld.AbsToRelative(ray.GetPoint(distance));
                 b = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(relBlockPos, false);
             } while (b is Game.World.Blocks.AirBlock && distance <= distMax);
 
@@ -179,6 +175,23 @@ namespace Game.CharacSystem
             }
         }
 
+        /* Test of ray for vertical collision */
+        /*private void OnMClick()
+        {
+            Vector3 origin = this.FeetPosition + this.Height * Vector3.UNIT_Y;
+            origin.y += 200;
+            Ray ray = new Ray(origin, Vector3.NEGATIVE_UNIT_Y);
+            RaySceneQuery raySQuery = this.mCharacMgr.SceneMgr.CreateRayQuery(ray);
+            raySQuery.SetSortByDistance(true, 15);
+
+            RaySceneQueryResult raySQResult = raySQuery.Execute();
+            for (Int16 i = 0; i < raySQResult.Count; i++)
+                Console.WriteLine("distance : " + raySQResult[i].distance + "\t" + raySQResult[i].movable.MovableType + "\t" + raySQResult[i].movable.Name);
+            Console.WriteLine();
+
+            StaticRectangle.DrawLine(this.mCharacMgr.SceneMgr, origin, ray.GetPoint(raySQResult[raySQResult.Count - 1].distance));
+        }*/
+
         private void OnLClick()
         {
             Vector3 relBlockPos;
@@ -200,14 +213,10 @@ namespace Game.CharacSystem
             CubeFace face;
             if (!this.GetBlockPos(out relBlockPos, out b, out face)) { return; }*/
             float distance = 200;
-            Vector3 relBlockPos = this.mCam.Camera.GetCameraToViewportRay(0.5f, 0.5f).GetPoint(distance);
+            Vector3 relBlockPos = MainWorld.AbsToRelative(this.mCam.Camera.GetCameraToViewportRay(0.5f, 0.5f).GetPoint(distance));
 
-            relBlockPos /= MainWorld.CUBE_SIDE;
-            relBlockPos.x = Mogre.Math.IFloor(relBlockPos.x);
-            relBlockPos.y = Mogre.Math.IFloor(relBlockPos.y);
-            relBlockPos.z = Mogre.Math.IFloor(relBlockPos.z) + 1;
-
-            API.Geo.Cuboid.Block b = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(relBlockPos, false);
+            Island island = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc);
+            Block b = island.getBlock(relBlockPos, false);
 
             if (b is Game.World.Blocks.ConstructionBlock) 
             {
@@ -216,8 +225,7 @@ namespace Game.CharacSystem
                 this.mCharacMgr.AddCharacter(iaInfo);
 
                 this.mCharacMgr.GetCharacter(this.mCharacMgr.getNumberOfCharacter() - 1).moveTo(relBlockPos * MainWorld.CHUNK_SIDE);
-                new Building(this.mCharacMgr.World.getIslandAt(new Vector3(0, 0, 0)), relBlockPos);
-                
+                new Building(island, relBlockPos);
             }
             else if(b is Game.World.Blocks.AirBlock)
             {
@@ -246,7 +254,7 @@ namespace Game.CharacSystem
 
                 if (material != "")
                 {
-                    this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).addBlockToScene(relBlockPos, material);
+                    island.addBlockToScene(relBlockPos, material);
                     //this.mCharacMgr.StateMgr.WriteOnConsole("Face : " + Enum.GetName(typeof(CubeFace), face));
                     this.mCharacMgr.StateMgr.WriteOnConsole("Added : " + material);
                 }

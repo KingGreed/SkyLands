@@ -14,7 +14,7 @@ namespace Game.CharacSystem
 
         private Timer mTimeOfJump;
 
-        public bool IsJumping { get { return GetSec() < T_MAX; } }
+        public bool IsJumping { get { return this.GetSec() < T_MAX; } }
 
         public JumpSpeed()
         {
@@ -24,7 +24,7 @@ namespace Game.CharacSystem
         public float GetSpeed()
         {
             float speed = 0;
-            float sec = GetSec();
+            float sec = this.GetSec();
             if (sec < T_MAX) { speed = A * sec * sec + B * sec + JUMP_T0; }
             return speed;
         }

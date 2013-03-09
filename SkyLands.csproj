@@ -142,6 +142,7 @@
     <Compile Include="src\Main\Characters\AnimationMgr.cs" />
     <Compile Include="src\Main\Characters\AStar.cs" />
     <Compile Include="src\Main\Characters\CharacMgr.cs" />
+    <Compile Include="src\Main\Characters\CollisionMgr.cs" />
     <Compile Include="src\Main\Characters\Misc\GravitySpeed.cs" />
     <Compile Include="src\Main\Characters\Misc\CharacterInfo.cs" />
     <Compile Include="src\Main\Characters\Misc\MovementInfo.cs" />

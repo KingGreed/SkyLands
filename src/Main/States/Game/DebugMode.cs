@@ -54,7 +54,7 @@ namespace Game
                     this.mCharacMgr.MainPlayerCam.InitCamera();
             }
 
-            if(this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F3)) {
+            /*if(this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F3)) {
 
                 Vector3 spawn = this.mCharacMgr.GetCharacter().FeetPosition;
                 spawn /= World.MainWorld.CUBE_SIDE;
@@ -65,7 +65,7 @@ namespace Game
 
 
                 this.mCharacMgr.World.getIslandAt(new Vector3(0, 0, 0)).removeFromScene(spawn);
-            }
+            }*/
 
             this.mCharacMgr.GetCharacter().IsAllowedToMove = !this.mIsConsoleMode && this.mIsAllowedToMoveCam;
             this.mCharacMgr.Update(frameTime);

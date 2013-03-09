@@ -148,18 +148,6 @@ namespace Game.World.Generator
             else { return defaultBlock; }
         }
 
-        public override void getBlockCoord(Vector3 pos, out Vector3 blockPos, out Vector3 chunkPos)
-        {
-            chunkPos = getChunkCoordFromRelative((int)pos.x, (int)pos.y, (int)pos.z);
-            blockPos = getBlockCoordFromRelative((int)pos.x, (int)pos.y, (int)pos.z);
-
-            if (!this.hasChunk(chunkPos) || pos.x < 0 || pos.y < 0 || pos.z <0)
-            {
-                chunkPos = -Vector3.UNIT_SCALE;
-                blockPos = -Vector3.UNIT_SCALE;
-            }
-        }
-
         public override Vector3 getBlockCoord(int x, int y, int z) {
             if(x < 0 || y < 0 || z < 0) { return -Vector3.UNIT_SCALE; }
             
