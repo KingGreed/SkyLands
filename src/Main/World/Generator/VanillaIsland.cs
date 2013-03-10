@@ -221,13 +221,13 @@ namespace Game.World.Generator
             }
 
             foreach (KeyValuePair<string, int> pair in faces) {
-                LogManager.Singleton.DefaultLog.LogMessage("item : " + pair.Key + " has value : " + pair.Value);
                 this.multiList[pair.Key].removeFromScene(item, pair.Value);
             }
 
             if (isInAdded) {
                 string cubeNodeName = "Node-" + item.x * MainWorld.CUBE_SIDE + "-" + item.y * MainWorld.CUBE_SIDE + "-" + item.z * MainWorld.CUBE_SIDE;
-                this.mFaceNode.RemoveChild(cubeNodeName);
+                
+                this.mFaceNode.RemoveAndDestroyChild(cubeNodeName);
             }
 
             this.setBlockAt((int) item.x, (int) item.y, (int) item.z, "Air", false);
@@ -300,6 +300,8 @@ namespace Game.World.Generator
             
             faceName = GraphicBlock.getFaceName(face);
             faceEntName = "face-" + relativePos.x + "-" + relativePos.y + "-" + relativePos.z + "-" + faceName;
+
+            if (this.mWorld.getSceneMgr().HasEntity(faceEntName)) { this.mWorld.getSceneMgr().DestroyEntity(faceEntName); }
 
             ent = this.mWorld.getSceneMgr().CreateEntity(faceEntName, faceName);
             ent.SetMaterialName(material);

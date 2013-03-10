@@ -22,6 +22,12 @@ namespace API.Geo.Cuboid
         string      getFace (int i);
 
 
+        void onCreation();
+        void onDeletion();
+
+        void onRightClick();
+        void onLeftClick ();
+
 
 
     }

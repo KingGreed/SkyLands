@@ -223,5 +223,11 @@ namespace API.Geo
 	     * </p>
 	     */
 	    void save();
+
+        void onCreation(Vector3 absCoord, Vector3 island);
+        void onDeletion(Vector3 absCoord, Vector3 island);
+
+        void onRightClick(Vector3 absCoord, Vector3 island);
+        void onLeftClick(Vector3 absCoord, Vector3 island);
     }
 }

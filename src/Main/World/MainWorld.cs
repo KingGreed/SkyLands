@@ -127,11 +127,39 @@ namespace Game.World
                 }
             }
         }
+
+        
+
 	    public Entity createEntity(Vector3 point, Entity type) { throw new NotImplementedException(); }
 	    public Entity createAndSpawnEntity(Vector3 point, Entity e) { throw new NotImplementedException(); }
 	    public void spawnEntity(Entity e) { throw new NotImplementedException(); }
 	    public void setSpawnPoint(Vector3 transform) { throw new NotImplementedException(); }
 	    public List<Character> getPlayers() { throw new NotImplementedException(); }
+
+        public Vector3 getRelativeFromAbsolute(Vector3 absCoord) {
+            absCoord /= CUBE_SIDE;
+            absCoord.x = Mogre.Math.IFloor(absCoord.x);
+            absCoord.y = Mogre.Math.IFloor(absCoord.y);
+            absCoord.z = Mogre.Math.ICeil(absCoord.z);
+
+            return absCoord;
+        }
+
+        public void onCreation(Vector3 absCoord, Vector3 island) {
+            this.mIslandList[island].getBlock(this.getRelativeFromAbsolute(absCoord), false).onCreation();
+        }
+        public void onDeletion(Vector3 absCoord, Vector3 island) {
+            this.mIslandList[island].getBlock(this.getRelativeFromAbsolute(absCoord), false).onDeletion();
+        }
+
+        public void onRightClick(Vector3 absCoord, Vector3 island) {
+            this.mIslandList[island].getBlock(this.getRelativeFromAbsolute(absCoord), false).onRightClick();
+        }
+
+        public void onLeftClick(Vector3 absCoord, Vector3 island) {
+            this.mIslandList[island].getBlock(this.getRelativeFromAbsolute(absCoord), false).onLeftClick();
+        }
+
 
 	    public void unload(bool save) { throw new NotImplementedException(); }
 	    public void save() { throw new NotImplementedException(); }
@@ -221,6 +249,7 @@ namespace Game.World
         public void Shutdown() {
             this.mSkyMgr.Shutdown();
             this.mStateMgr.SceneMgr.ClearScene();
+            this.mStateMgr.SceneMgr.DestroyAllCameras();
         }
     }
 }

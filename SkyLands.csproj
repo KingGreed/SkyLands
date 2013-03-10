@@ -147,6 +147,8 @@
     <Compile Include="src\Main\Characters\Misc\MovementInfo.cs" />
     <Compile Include="src\Main\Characters\Misc\JumpSpeed.cs" />
     <Compile Include="src\Main\Characters\NonPlayer\VanillaNonPlayer.cs" />
+    <Compile Include="src\Main\Characters\PlayerInventory\Inventory.cs" />
+    <Compile Include="src\Main\Characters\PlayerInventory\Slot.cs" />
     <Compile Include="src\Main\Characters\Player\MainPlayerCamera.cs" />
     <Compile Include="src\Main\Characters\Player\VanillaPlayer.cs" />
     <Compile Include="src\Main\Characters\VanillaCharacter.cs" />

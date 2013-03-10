@@ -130,7 +130,6 @@ namespace Game.World.Generator
                 };
             Vector3 displayCoord;
 
-            LogManager.Singleton.DefaultLog.LogMessage(this.mMaterial);
 
             block = new ManualObject("MultiBlock-" + this.mName);
             block.Begin(this.mMaterial, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
