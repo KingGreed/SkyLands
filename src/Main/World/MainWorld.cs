@@ -164,68 +164,17 @@ namespace Game.World
 	    public void unload(bool save) { throw new NotImplementedException(); }
 	    public void save() { throw new NotImplementedException(); }
 
-        public bool HasCharacCollision(Vector3[] hitBlocks, Vector3 islandLoc, CubeFace collisionSide, out Vector3 blockRelPos)  // hitBlocks should be of size 4
-        {
-            /*int[] indexToTest;
-            if      (collisionSide == CubeFace.underFace)   { indexToTest = new int[] { 0, 1, 2, 3 }; }
-            else if (collisionSide == CubeFace.upperFace)   { indexToTest = new int[] { 4, 5, 6, 7 }; }
-            else if (collisionSide == CubeFace.leftFace)    { indexToTest = new int[] { 0, 3, 4, 7 }; }
-            else if (collisionSide == CubeFace.rightFace)   { indexToTest = new int[] { 1, 2, 5, 6 }; }
-            else if (collisionSide == CubeFace.backFace)    { indexToTest = new int[] { 2, 3, 6, 7 }; }
-            else  /*(collisionSide == CubeFace.frontFace)* { indexToTest = new int[] { 0, 1, 4, 5 }; }*/
-
-            foreach (int i in this.GetIndexesToToTest(hitBlocks, collisionSide))
-            {
-                if      (collisionSide == CubeFace.underFace)   { hitBlocks[i].y--; }
-                else if (collisionSide == CubeFace.upperFace)   { hitBlocks[i].y++; }
-                else if (collisionSide == CubeFace.leftFace)    { hitBlocks[i].x--; }
-                else if (collisionSide == CubeFace.rightFace)   { hitBlocks[i].x++; }
-                else if (collisionSide == CubeFace.backFace)    { hitBlocks[i].z--; }
-                else  /*(collisionSide == CubeFace.frontFace)*/ { hitBlocks[i].z++; }
-
-                if (this.hasPointCollision(ref hitBlocks[i], islandLoc))
-                {
-                    blockRelPos = hitBlocks[i];
-                    return true;
-                }
-            }
-
-            blockRelPos = -Vector3.UNIT_SCALE;
-            return false;
-        }
-
-        private bool hasPointCollision(ref Vector3 blockPos, Vector3 islandLoc)
+        public bool HasPointCollision(ref Vector3 blockPos, Vector3 islandLoc) // the argument blockPos is in absolute coord, it becomes relative
         {
             blockPos += this.mIslandList[islandLoc].getPosition();
-            blockPos /= CUBE_SIDE;
-            blockPos.x = Mogre.Math.IFloor(blockPos.x);
-            blockPos.y = Mogre.Math.IFloor(blockPos.y);
-            blockPos.z = Mogre.Math.IFloor(blockPos.z);
-            blockPos.z++;
+            blockPos = AbsToRelative(blockPos);
 
             Block block = this.mIslandList[islandLoc].getBlock(blockPos, false);
             return !(block == null || block is AirBlock);
         }
 
-        private int[] GetIndexesToToTest(Vector3[] hitBlocks, CubeFace face)
+        public void generateIslandThreaded()
         {
-            int[] indexToTest;
-            if      (face == CubeFace.underFace) { indexToTest = new int[] { 0, 1, 2, 3 }; }
-            else if (face == CubeFace.upperFace) { indexToTest = new int[] { 4, 5, 6, 7 }; }
-            else if (face == CubeFace.rightFace) { indexToTest = new int[] { 2, 3, 6, 7 }; }
-            else if (face == CubeFace.leftFace) { indexToTest = new int[] { 0, 1, 4, 5 }; }
-            else if (face == CubeFace.backFace) { indexToTest = new int[] { 1, 2, 5, 6 }; }
-            else  /*(face == CubeFace.frontFace)*/ { indexToTest = new int[] { 0, 3, 4, 7 }; }
-
-            /*for (int i = 0, j = 0; i < hitBlocks.Length; i++)
-            {
-                if (hitBlocks[i].x < characPos.x && face == CubeFace.leftFace) { indexToTest[j] = i; j++; }
-            }*/
-
-            return indexToTest;
-        }
-
-        public void generateIslandThreaded() {
             Vector3 pos = new Vector3(this.mIslandList[new Vector3(0, 0, 0)].getPosition().x * CHUNK_SIDE + 3 * CHUNK_SIDE, 0, this.mIslandList[new Vector3(0, 0, 0)].getPosition().z * CHUNK_SIDE + 3 * CHUNK_SIDE);
             /*SceneNode node = this.mStateMgr.SceneManager.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
             this.mIslandList.Add(pos, new RandomIsland(node, new Vector2(13, 13), new Hills(), this));
@@ -233,23 +182,20 @@ namespace Game.World
             workerThread = new Thread(this.mIslandList[pos].display);*/
         }
 
-        public Vector3 GetBlockAbsPosFromAbs(VanillaCharacter charac)             { return this.GetBlockAbsPosFromAbs(charac.FeetPosition, charac.Info.IslandLoc); }
-        public Vector3 GetBlockAbsPosFromAbs(Vector3 absCoord, Vector3 islandLoc) {
-            Vector3 blockPos, chunkPos;
-            this.mIslandList[islandLoc].getBlockCoord(absCoord / CUBE_SIDE, out blockPos, out chunkPos);
-            if (blockPos == -Vector3.UNIT_SCALE || chunkPos == -Vector3.UNIT_SCALE) { return -Vector3.UNIT_SCALE;}
-            else { return (chunkPos * CHUNK_SIDE + blockPos) * CUBE_SIDE; }
-        }
+        public void Update(float frameTime) { this.mSkyMgr.Update(); }
 
-        public void Update(float frameTime) {
-            this.mSkyMgr.Update();
-
+        public static Vector3 AbsToRelative(Vector3 v)
+        {
+            v /= Game.World.MainWorld.CUBE_SIDE;
+            v.x = Mogre.Math.IFloor(v.x);
+            v.y = Mogre.Math.IFloor(v.y);
+            v.z = Mogre.Math.ICeil(v.z);
+            return v;
         }
 
         public void Shutdown() {
             this.mSkyMgr.Shutdown();
             this.mStateMgr.SceneMgr.ClearScene();
-            this.mStateMgr.SceneMgr.DestroyAllCameras();
         }
     }
 }

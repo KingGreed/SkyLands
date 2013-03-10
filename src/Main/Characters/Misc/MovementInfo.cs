@@ -1,5 +1,4 @@
-﻿using System;
-using Mogre;
+﻿using Mogre;
 
 namespace Game.CharacSystem
 {
@@ -11,28 +10,17 @@ namespace Game.CharacSystem
         private Vector3 mMoveDirection;
         private float mYawValue;
 
-        public float   YawValue         { get { return this.mYawValue; } set { this.mYawValue = value; } }
-        public bool    IsAllowedToMoved { get { return this.mIsAllowedToMove; } set { this.mIsAllowedToMove = value; } }
-        public bool    IsFalling
+        public float YawValue        { get { return this.mYawValue; } set { this.mYawValue = value; } }
+        public bool  IsAllowedToMove { get { return this.mIsAllowedToMove; } set { this.mIsAllowedToMove = value; } }
+        public bool  IsFalling
         {
-            get { return mIsFalling; }
-            set 
-            {
-                if (this.mIsFalling != value)
-                { this.mIsFalling = value; this.mOnFall(this.IsFalling); }
-            }
+            get { return this.mIsFalling; }
+            set  { if (this.mIsFalling != value) { this.mIsFalling = value; this.mOnFall(this.IsFalling); } }
         }
         public bool IsJumping
-        { 
-            get { return mIsJumping; }
-            set
-            {
-                if ((!value || !this.IsFalling) && this.mIsJumping != value)
-                {
-                    this.mIsJumping = value;
-                    this.mOnJump(this.IsJumping);
-                }
-            }
+        {
+            get { return this.mIsJumping; }
+            set { if (this.mIsJumping != value) { this.mIsJumping = value; this.mOnJump(this.IsJumping); } }
         }
         public Vector3 MoveDirection    // MoveDirection value must be set once per frame
         {

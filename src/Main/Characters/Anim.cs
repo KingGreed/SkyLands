@@ -12,7 +12,8 @@ namespace Game.Animation
         private AnimName mName;
         private float mTimeFactor;
 
-        public AnimName Name { get { return this.mName; } }
+        public AnimName Name    { get { return this.mName; } }
+        public float TimeFactor { get { return this.mTimeFactor; } }
 
         public Anim(AnimName name, float timeFactor = 1)
         {

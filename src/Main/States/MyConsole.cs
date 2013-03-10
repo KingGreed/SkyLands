@@ -72,6 +72,7 @@ namespace Game.IGConsole
             this.mInput = stateMgr.Input;
             this.mTimer = new Timer();
             this.mKeepPanelOpen = false;
+            this.mUpdate = true;
         }
 
         protected override void CreateGUI()

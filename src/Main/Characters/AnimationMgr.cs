@@ -95,7 +95,7 @@ namespace Game.Animation
             this.FadeAnimations(frameTime);
 
             foreach (Anim anim in this.mWantedAnims)
-                this.mAnimStates[(int)anim.Name].AddTime(frameTime);
+                this.mAnimStates[(int)anim.Name].AddTime(frameTime * anim.TimeFactor);
         }
 
         private void FadeAnimations(float frameTime)
