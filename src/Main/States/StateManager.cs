@@ -69,8 +69,8 @@ namespace Game.States
 
             if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F2)) { this.OverlayVisibility = !this.OverlayVisibility; }
 
-            this.mMiyagiMgr.Update();
             this.mConsole.Update();
+            this.mMiyagiMgr.Update();
 
             if (this.mWaitOneFrame) { this.mWaitOneFrame = false; }
             else if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Update(frameTime); }

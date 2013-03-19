@@ -195,7 +195,7 @@ namespace Game
             return true;
         }
 
-        public string GetText()
+        /*public string GetText()
         {
             string txt = "";
             foreach (KeyCode code in Enum.GetValues(typeof(KeyCode)))
@@ -244,7 +244,7 @@ namespace Game
             }
 
             return c;
-        }
+        }*/
 
         private bool OnMouseMoved(MouseEvent arg)
         {

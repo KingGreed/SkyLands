@@ -10,6 +10,7 @@ namespace Game.CharacSystem
 {
     public class CharacMgr
     {
+        private CommandInfo[]          mCommands;
         private List<VanillaCharacter> mCharacList;
         private MainPlayerCamera       mMainPlayerCam;
         private StateManager           mStateMgr;
@@ -30,7 +31,22 @@ namespace Game.CharacSystem
             this.mWorld = world;
             this.mCharacList = new List<VanillaCharacter>();
 
-            this.mStateMgr.MyConsole.OnCommandEntered += new MyConsole.ConsoleEvent(this.OnCommandEntered);
+            this.mCommands = new CommandInfo[]
+            {
+                new CommandInfo("getCharacPos", 1, delegate(string[] args)
+                    {
+                        int index;
+                        if (int.TryParse(args[0], out index))
+                            this.mStateMgr.WriteOnConsole("FeetPosition : " + MyConsole.GetString(this.GetCharacter(index).FeetPosition));
+                    }),
+                new CommandInfo("getCharacYaw", 1, delegate(string[] args)
+                    {
+                        int index;
+                        if (int.TryParse(args[0], out index))
+                            this.mStateMgr.WriteOnConsole(("Yaw : " + this.GetCharacter(index).GetYaw().ValueAngleUnits));
+                    })
+            };
+            this.mStateMgr.MyConsole.AddCommands(this.mCommands);
         }
 
         public void AddCharacter(CharacterInfo info)
@@ -59,51 +75,6 @@ namespace Game.CharacSystem
         public VanillaCharacter GetCharacter(int index = 0) { return this.mCharacList[index]; }    // By default return the main player
         public int getNumberOfCharacter() { return this.mCharacList.Count; }
 
-        private void OnCommandEntered(string command)
-        {
-            string[] args = command.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-            if (args.Length >= 2)
-            {
-
-                if (args[0] == "/get_charac_pos")
-                {
-                    int index;
-                    if (int.TryParse(args[1], out index))
-                    {
-                        Vector3 tmp = MainWorld.AbsToRelative(this.GetCharacter(index).FeetPosition);
-
-                        this.mStateMgr.WriteOnConsole("FeetPosition : " + '(' + tmp.x + ',' + tmp.y + ',' + tmp.z + ')');
-                    }
-                }
-                else if (args[0] == "/get_charac_yaw")
-                {
-                    int index;
-                    if (int.TryParse(args[1], out index))
-                    {
-                        Quaternion quat = this.GetCharacter(index).Node.Orientation;
-                        this.mStateMgr.WriteOnConsole("Yaw : " + quat.Yaw.ValueAngleUnits);
-                        this.mStateMgr.WriteOnConsole("W : " + quat.w);
-                        this.mStateMgr.WriteOnConsole("X : " + quat.x);
-                        this.mStateMgr.WriteOnConsole("Y : " + quat.y);
-                        this.mStateMgr.WriteOnConsole("Z : " + quat.z);
-                    }
-                }
-                /*else if (args[0] == "/flip")
-                {
-                    int index;
-                    if (int.TryParse(args[1], out index) && index < 8)
-                    {
-                        SceneNode node = this.GetCharacter().Points[index];
-                        node.FlipVisibility();
-                        this.mStateMgr.WriteOnConsole("Flipped : " + MyConsole.GetString(node.Position));
-                    }
-                }*/
-            }
-        }
-
-
-
         public void Update(float frameTime)
         {
             for(int i = 0; i < this.mCharacList.Count; i++)
@@ -116,7 +87,7 @@ namespace Game.CharacSystem
         {
             this.mCharacList.Clear();
             this.mCharacList = null;
-            this.mStateMgr.MyConsole.OnCommandEntered -= new MyConsole.ConsoleEvent(this.OnCommandEntered);
+            this.mStateMgr.MyConsole.DeleteCommands(this.mCommands);
             this.mMainPlayerCam.Dispose();
             this.mMainPlayerCam = null;
         }

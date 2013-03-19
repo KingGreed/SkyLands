@@ -17,13 +17,13 @@ namespace Game.GUICreator
         private Dictionary<string, Skin> mSkins;
         private Dictionary<string, Font> mFonts;
         private Mogre.Vector2            mWindowSize;
-        private int                      mZOrder;
+        //private int                      mZOrder;
 
         public Dictionary<string, Skin> Skins { get { return this.mSkins; } }
         public Dictionary<string, Font> Fonts { get { return this.mFonts; } }
         public Size WndSize                   { get { return new Size((int)this.mWindowSize.x, (int)this.mWindowSize.y); } }
         public bool CursorVisibility          { get { return this.mCursor.Visible; } set { this.mCursor.Visible = value; } }
-        public int  ZOrder                    { get { return this.mZOrder; } set { this.mZOrder = value; } }
+        //public int  ZOrder                    { get { return this.mZOrder; } set { this.mZOrder = value; } }
 
         public MiyagiMgr(MoisManager input, Mogre.Vector2 windowSize)
         {
@@ -31,7 +31,7 @@ namespace Game.GUICreator
             this.mFonts = new Dictionary<string, Font>();
             this.mSkins = new Dictionary<string, Skin>();
             this.mWindowSize = windowSize;
-            this.mZOrder = 0;
+            //this.mZOrder = 0;
 
             this.mSystem.PluginManager.LoadPlugin(@"Miyagi.Plugin.Input.Mois.dll", input.KeyBoard, input.Mouse);
 

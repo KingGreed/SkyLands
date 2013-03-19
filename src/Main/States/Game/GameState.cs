@@ -58,7 +58,7 @@ namespace Game.States
         public override void Update(float frameTime)
         {
             this.mWorld.Update(frameTime);
-            this.mDebugMode.IsConsoleMode = this.mStateMgr.MyConsole.Enable;
+            this.mDebugMode.IsConsoleMode = this.mStateMgr.MyConsole.Enabled;
             this.mDebugMode.Update(frameTime);
 
             if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_ESCAPE))

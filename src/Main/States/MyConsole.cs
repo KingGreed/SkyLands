@@ -15,54 +15,67 @@ using Game.States;
 
 namespace Game.IGConsole
 {
+    public struct CommandInfo
+    {
+        public Action<string[]> Action { get; private set; }
+        public string CommandName      { get; private set; }
+        public int NbArgsMin           { get; private set; }
+        public int NbArgsMax           { get; private set; }
+
+        public CommandInfo(string name, int nbArgsMin, Action<string[]> action) : this(name, nbArgsMin, nbArgsMin, action) { }
+        public CommandInfo(string name, int nbArgsMin, int nbArgsMax, Action<string[]> action) : this()
+        {
+            if (name[0] != '\\') { name.Insert(0, "\\"); }
+            CommandName = name;
+            Action = action;
+            NbArgsMin = nbArgsMin;
+            NbArgsMax = nbArgsMax;
+        }
+    }
+
     public class MyConsole : GUIFactory
     {
-        public delegate void ConsoleEvent(string command);
-        public event ConsoleEvent OnCommandEntered;
+        private List<CommandInfo> mCommands;
 
-        private bool mIsEnable, mKeepPanelOpen, mUpdate;
-        private Panel mLog, mTextBox;
-        private Label mNewLabel;
-        private Queue<Label> mOldLabels;
+        private bool mVisible, mEnabled, mVerr;
+        private TextBox[] mTextBoxes;
         private MoisManager mInput;
         private Timer mTimer;
+        private int mNbLines = 6;
 
         public Miyagi.UI.GUI GUI { get { return this.mGUI; } }
-        public bool UpdateConsole { get { return this.mUpdate; } set { mUpdate = value;}}
-        
-        public bool KeepPanelOpen
+        private TextBox CurrentTextBox { get { return this.mTextBoxes[this.mTextBoxes.Length - 1]; } }
+        public bool Visible
         {
-            get { return this.mKeepPanelOpen; }
+            get { return this.mVisible; }
             set
             {
-                if (this.mKeepPanelOpen != value)
-                {
-                    this.mKeepPanelOpen = value;
-                    if (this.mKeepPanelOpen)  { this.PanelVisibility(true); }
-                    else                      { this.mTimer.Reset(); }
-                }
+                this.mVisible = value;
+                foreach (TextBox b in this.mTextBoxes) { b.Visible = this.mVisible; }
+                if (!this.mVisible) { this.Enabled = false; }
             }
         }
-
-        public bool Enable
+        public bool Enabled
         {
-            get { return this.mIsEnable; }
+            get { return this.mEnabled; }
             set
             {
-                if (this.mIsEnable != value)
+                this.mEnabled = value;
+                this.CurrentTextBox.Focused = this.mEnabled;
+                if (this.mEnabled) { this.Visible = true; }
+                else               { this.mTimer.Reset(); }
+            }
+        }
+        public bool Verr
+        {
+            get { return this.mVerr; }
+            private set
+            {
+                if (this.mVerr != value)
                 {
-                    this.mIsEnable = value;
-                    if (this.mIsEnable)
-                    {
-                        this.TextBoxVisibility(true);
-                        this.PanelVisibility(true);
-                    }
-                    else
-                    {
-                        this.WriteLine(this.mNewLabel.Text);
-                        this.TextBoxVisibility(false);
-                        this.mTimer.Reset();
-                    }
+                    this.mVerr = value;
+                    if (this.mVerr) { this.Visible = true; }
+                    else            { this.mTimer.Reset(); }
                 }
             }
         }
@@ -71,169 +84,186 @@ namespace Game.IGConsole
         {
             this.mInput = stateMgr.Input;
             this.mTimer = new Timer();
-            this.mKeepPanelOpen = false;
-            this.mUpdate = true;
+            this.mCommands = new List<CommandInfo>();
+            this.mVisible = false;
+            this.mEnabled = false;
+            this.mVerr = false;
         }
 
         protected override void CreateGUI()
         {
-            this.mTextBox = new Panel("TextBox1")
+            this.mTextBoxes = new TextBox[this.mNbLines];
+            Size txtBoxSize = new Size((int)((float)this.mOriginalWndSize.Width / 2.5f), 32);
+            Point consoleLoc = new Point(0, this.mOriginalWndSize.Height - txtBoxSize.Height * this.mNbLines);
+
+            for (int i = 0; i < this.mNbLines; i++)
             {
-                Size = new Size((int)((float)this.mOriginalWndSize.Width / 2.5f), 32),
-                Padding = new Thickness(9, 0, 8, 0),
-                TextStyle =
-                {
-                    Alignment = Alignment.MiddleLeft,
-                    ForegroundColour = Colours.White
-                },
-                Skin = this.mMiyagiMgr.Skins["Console"],
-            };
-            this.mTextBox.Location = new Point(0, this.mOriginalWndSize.Height - this.mTextBox.Size.Height);
-            this.mTextBox.TabIndex = 2;
+                TextBox textBox = new TextBox();
+                textBox.Size = txtBoxSize;
+                textBox.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
+                textBox.TextStyle.Alignment = Alignment.MiddleLeft;
+                textBox.TextStyle.Font = this.mMiyagiMgr.Fonts["Small_BlueHighway"];
+                textBox.Location = consoleLoc + new Point(0, i * textBox.Size.Height);
+                textBox.Skin = this.mMiyagiMgr.Skins["Console"];
+                textBox.Visible = false;
+                this.mGUI.Controls.Add(textBox);
+                this.mTextBoxes[i] = textBox;
+            }
 
-            TextStyle style = new TextStyle();
-            style.Alignment = Alignment.MiddleLeft;
-            style.Font = this.mMiyagiMgr.Fonts["Console"];
-            style.ForegroundColour = Colours.White;
-            this.mNewLabel = new Label();
-            this.mNewLabel.Text = "";
-            this.mNewLabel.Size = this.mTextBox.Size;
-            this.mNewLabel.Location = this.mTextBox.Location;
-            this.mNewLabel.TextStyle = style;
-            this.mNewLabel.TabIndex = 0;
-            this.mGUI.Controls.Add(this.mNewLabel);
-
-            this.mLog = new Panel("Panel1")
-            {
-                TabStop = false,
-                TabIndex = 0,
-                Throwable = true,
-                Size = new Size(this.mTextBox.Size.Width, this.mOriginalWndSize.Height / 4 - this.mTextBox.Size.Height),
-                MinSize = new Size(0, 0),
-                ResizeThreshold = new Thickness(0),
-                BorderStyle =
-                {
-                    Thickness = new Thickness(8, 16, 8, 8)
-                },
-                HScrollBarStyle =
-                {
-                    Extent = 16,
-                    ThumbStyle =
-                    {
-                        BorderStyle =
-                        {
-                            Thickness = new Thickness(2, 2, 2, 2)
-                        }
-                    }
-                },
-                VScrollBarStyle =
-                {
-                    Extent = 16,
-                    ThumbStyle =
-                    {
-                        BorderStyle =
-                        {
-                            Thickness = new Thickness(2, 2, 2, 2)
-                        }
-                    }
-                },
-                Skin = this.mMiyagiMgr.Skins["Console"]
-            };
-            mLog.Location = new Point(0, this.mOriginalWndSize.Height - mLog.Size.Height - this.mTextBox.Size.Height);
-            this.mLog.TabIndex = 3;
-
-            this.mOldLabels = new Queue<Label>();
-
-            this.mIsEnable = false;
-            this.TextBoxVisibility(false);
-            this.PanelVisibility(false);
-
-            this.mGUI.Controls.Add(this.mTextBox);
-            this.mGUI.Controls.Add(this.mLog);
+            this.CurrentTextBox.Submit += new EventHandler<ValueEventArgs<string>>(this.Submit);
         }
 
-        public void WriteLine(object o) { this.WriteLine(o.ToString()); }
-        public void WriteLine(string txt)
+        public void AddCommand(CommandInfo command) { this.mCommands.Add(command); }
+        public void AddCommands(CommandInfo[] commands)
         {
-            if (!this.Enable)
+            foreach(CommandInfo command in commands)
+                this.mCommands.Add(command);
+        }
+        public void DeleteCommand(CommandInfo command) { this.mCommands.Remove(command); }
+        public void DeleteCommands(CommandInfo[] commands)
+        {
+            foreach (CommandInfo command in commands)
+                this.mCommands.Remove(command);
+        }
+
+        public void WriteLine(object o) { this.WriteLine(MyConsole.GetString(o)); }
+        public void WriteLine(string txt)   // Won't execute a command if we use WriteLine in the code. Use ThrowCommand instead.
+        {
+            if (txt.Length > 0)
             {
-                this.PanelVisibility(true);
-                this.mTimer.Reset();
-            }
-            
-            Label newL = new Label();
-            newL.Text = txt;
-            newL.AutoSize = true;
-            newL.MaxSize = this.mTextBox.Size;
-            newL.SuccessfulHitTest += (s, e) => e.Cancel = true;
-            newL.TextStyle = this.mNewLabel.TextStyle;
+                if (!this.mEnabled)
+                {
+                    this.Enabled = true;
+                    this.mTimer.Reset();
+                }
 
-            if (this.mOldLabels.Count >= this.mLog.Size.Height / this.mNewLabel.Size.Height)
+                int index = this.mTextBoxes.Length - 2; // The second last textBox
+                while (index > 0 && this.mTextBoxes[index - 1].Text == "") // Find the index of the first non empty textBox
+                    index--;
+                if (this.mTextBoxes[index].Text != "")    // If all the textBoxes are used
+                {
+                    for (int i = 1; i <= index; i++)    // Move the texts one step up
+                        this.mTextBoxes[i - 1].Text = this.mTextBoxes[i].Text;
+                }
+                this.mTextBoxes[index].Text = txt;
+            }
+        }
+
+        public bool ThrowCommand(string command)    // Return whether a command has been thrown. command must begin by '\\'
+        {
+            if (command[0] == '\\')
             {
-                this.mLog.Controls.Remove(this.mOldLabels.Dequeue());
-                foreach (Label l in this.mOldLabels)
-                    l.Location = new Point(0, l.Location.Y - this.mNewLabel.Size.Height);
+                command = command.Remove(0, 1); // Remove the '\\'
+                /* Determines the first word entered */
+                string commandNameEntered = "";
+                foreach (char c in command)
+                {
+                    if (c == ' ')
+                        break;
+                    else
+                        commandNameEntered += c;
+                }
+
+                /* Throw the delegate of the wanted command */
+                for (int i = 0; i < mCommands.Count; i++)
+                {
+                    if (commandNameEntered == mCommands[i].CommandName)
+                    {
+                        string[] args;
+                        if (!GetArgs(command, mCommands[i], out args))
+                            return false;
+
+                        mCommands[i].Action(args);
+                        return true;
+                    }
+                }
+
+                this.WriteLine("Unknown command.");
+            }
+            return false;
+        }
+
+        private bool GetArgs(string command, CommandInfo info, out string[] args)
+        {
+            List<string> readArgs = new List<string>();
+            args = null;
+
+            bool isCommandName = true;  // bool to know that the first word is the command name but not an arg
+            bool isQuoted = false;  // If this args is quoted, it avoids the ' ' in an arg issue
+            string arg = "";
+            for (int i = 0; i < command.Length; i++)
+            {
+                char c = command[i];
+                if (c == ' ' && isCommandName)
+                {
+                    isCommandName = false;
+                    continue;
+                }
+
+                if (!isCommandName)
+                {
+                    if (c == '"')
+                    {
+                        isQuoted = !isQuoted;
+                        continue;
+                    }
+
+                    if (isQuoted || c != ' ')
+                        arg += c;
+                    else
+                    {
+                        readArgs.Add(arg);
+                        arg = "";
+                    }
+                }
             }
 
-            int lastYLoc = this.mOldLabels.Count * this.mNewLabel.Size.Height;
+            if (arg != "")
+                readArgs.Add(arg);
 
-            newL.Location = new Point(0, lastYLoc);
+            if (readArgs.Count < info.NbArgsMin)
+                this.WriteLine("Not enough arguments given. At least " + info.NbArgsMin + " are expected.");
+            else if (readArgs.Count > info.NbArgsMax)
+                this.WriteLine("Too many arguments given. A maximum of " + info.NbArgsMax + " are expected");
+            else
+            {
+                args = readArgs.ToArray();
+                return true;
+            }
 
-            this.mLog.Controls.Add(newL);
-            this.mOldLabels.Enqueue(newL);
-            this.mNewLabel.Text = "";
+            return false;
+        }
 
-            if(this.OnCommandEntered != null)
-                this.OnCommandEntered(txt);
+        private void Submit(object sender, ValueEventArgs<string> e)
+        {
+            string txt = e.Data;
+            this.CurrentTextBox.Text = "";
+            if (txt.Length > 0)
+            {
+                this.WriteLine(txt);
+                this.ThrowCommand(txt);
+            }
         }
 
         public void Update()
         {
-            if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_RETURN) && this.mUpdate) { this.Enable = !this.Enable; }
-            if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_TAB))    { this.KeepPanelOpen = !this.KeepPanelOpen; }
+            if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_RETURN)) { this.Enabled = !this.Enabled; }
+            if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_TAB) && !this.mInput.IsKeyDown(MOIS.KeyCode.KC_LMENU)) { this.Verr = !this.Verr; }
 
-            if (this.Enable)
-            {
-                string txt = this.mInput.GetText();
-                if (txt != "")
-                    this.mNewLabel.Text += txt;
-
-                for(int i = 1; i < this.mNewLabel.Text.Length; i++)
-                {
-                    if (this.mNewLabel.Text[i] == (char)127)  // Supr
-                        this.mNewLabel.Text = this.mNewLabel.Text.Remove(i - 1, 2);   // Delete the carac 127 and the previous print
-                    /*else if (this.mNewLabel.Text[i] == (char)8)  // Del
-                        this.mNewLabel.Text = this.mNewLabel.Text.Remove(i, 2);*/   // Delete the carac 8 and the next print
-                }
-            }
-            else
-            {
-                if (((float)this.mTimer.Milliseconds) / 1000f > 3)
-                    this.PanelVisibility(false);
-            }
+            if (!this.Enabled && !this.Verr && ((float)this.mTimer.Milliseconds) / 1000f > 3)
+                this.Visible = false;
         }
 
         public void UpdateZOder(int zOrder) { this.mGUI.ZOrder = zOrder; }
 
-        private void TextBoxVisibility(bool vis)
+        public static string GetString(object o)
         {
-            this.mTextBox.Visible = vis;
-            this.mNewLabel.Visible = vis;
-        }
-
-        private void PanelVisibility(bool vis)
-        {
-            if (vis || !this.mKeepPanelOpen)
+            if (o.GetType() == typeof(Mogre.Vector3))
             {
-                this.mLog.Visible = vis;
-                foreach (Label l in this.mOldLabels)
-                    l.Visible = vis;
+                Mogre.Vector3 v = (Mogre.Vector3)o;
+                return "(" + v.x + "; " + v.y + "; " + v.z + ")";
             }
-        }
-
-        public static string GetString(Mogre.Vector3 v)
-        {
-            return "(" + v.x + "; " + v.y + "; " + v.z + ")";
+            else { return o.ToString(); }
         }
     }
 }

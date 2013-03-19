@@ -1,5 +1,6 @@
 ﻿using System;
 using Miyagi.Common.Events;
+using Mogre;
 
 using Game.GUICreator;
 using Game.World;
@@ -17,7 +18,7 @@ namespace Game.States
         {
             this.mGameInfo = new GameInfo();
             this.mGameInfo.Seed = 42;
-            this.mGameInfo.Size = new Mogre.Vector2(-1, -1);
+            this.mGameInfo.Size = new Vector2(5, 5);
 
             this.mSecondMenuGUI = new SecondMenuGUI(this.mStateMgr, this.mGameInfo);
             this.mSecondMenuGUI.SetListener(GameInfo.TypeWorld.Dome, this.ClickDomeButton);
@@ -47,21 +48,19 @@ namespace Game.States
         protected override void Shutdown()
         {
             this.mSecondMenuGUI.Dispose();
-            
         }
 
         public void ClickButton()
         {
-            //this.mStateMgr.RequestStatePop();
             this.mStateMgr.RequestStatePush(typeof(LoadingState));
         }
         private void ClickBackButton(object obj, MouseButtonEventArgs arg) { this.mStateMgr.RequestStatePop(); }
         private void ClickDomeButton(object obj, MouseButtonEventArgs arg)
         {
             this.mGameInfo.Type = GameInfo.TypeWorld.Dome;
-            Mogre.Vector2 newSize = this.mGameInfo.Size;
+            Vector2 newSize = this.mGameInfo.Size;
             if (newSize.x <= 0 || newSize.x > 30) { newSize.x = 4; }
-            if (newSize.y <= 0 || newSize.y > 30) { newSize.y = 4; }
+            if (newSize.y != newSize.x)           { newSize.y = newSize.x; }
             this.mGameInfo.Size = newSize;
 
             this.mStateMgr.GameInfo = this.mGameInfo;
@@ -71,7 +70,7 @@ namespace Game.States
         private void ClickPlainsButton(object obj, MouseButtonEventArgs arg)
         {
             this.mGameInfo.Type = GameInfo.TypeWorld.Plains;
-            Mogre.Vector2 newSize = this.mGameInfo.Size;
+            Vector2 newSize = this.mGameInfo.Size;
             if (newSize.x <= 2 || newSize.x >= 60) { newSize.x = 11; }
             if (newSize.y <= 2 || newSize.y >= 60) { newSize.y = 11; }
             this.mGameInfo.Size = newSize;
@@ -83,7 +82,7 @@ namespace Game.States
         private void ClickDesertButton(object obj, MouseButtonEventArgs arg)
         {
             this.mGameInfo.Type = GameInfo.TypeWorld.Desert;
-            Mogre.Vector2 newSize = this.mGameInfo.Size;
+            Vector2 newSize = this.mGameInfo.Size;
             if (newSize.x <= 2 || newSize.x >= 60) { newSize.x = 13; }
             if (newSize.y <= 2 || newSize.y >= 60) { newSize.y = 13; }
             this.mGameInfo.Size = newSize;
@@ -95,9 +94,9 @@ namespace Game.States
         private void ClickHillsButton(object obj, MouseButtonEventArgs arg)
         {
             this.mGameInfo.Type = GameInfo.TypeWorld.Hills;
-            Mogre.Vector2 newSize = this.mGameInfo.Size;
+            Vector2 newSize = this.mGameInfo.Size;
             if (newSize.x <= 2 || newSize.x >= 30) { newSize.x = 15; }
-            if (newSize.y != newSize.x)           { newSize.y = newSize.x; }
+            if (newSize.y <= 2 || newSize.y >= 30) { newSize.y = 15; }
             this.mGameInfo.Size = newSize;
 
             this.mStateMgr.GameInfo = this.mGameInfo;
@@ -107,7 +106,7 @@ namespace Game.States
         private void ClickMountainButton(object obj, MouseButtonEventArgs arg)
         {
             this.mGameInfo.Type = GameInfo.TypeWorld.Mountain;
-            Mogre.Vector2 newSize = this.mGameInfo.Size;
+            Vector2 newSize = this.mGameInfo.Size;
             if (newSize.x <= 2 || newSize.x > 30) { newSize.x = 15; }
             if (newSize.y <= 2 || newSize.y > 30) { newSize.y = 15; }
             this.mGameInfo.Size = newSize;

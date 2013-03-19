@@ -58,9 +58,9 @@ namespace Game.GUICreator
         {
             this.mIGMenu.SwithVisibility();
 
-            this.mStateMgr.MiyagiMgr.CursorVisibility = this.mIGMenu.Visible;
+            this.mStateMgr.MiyagiMgr.CursorVisibility = this.mIGMenu.IsGUIVisible;
 
-            return this.mIGMenu.Visible;
+            return this.mIGMenu.IsGUIVisible;
         }
     }
 }

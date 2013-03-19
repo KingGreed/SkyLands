@@ -17,7 +17,7 @@ namespace Game.GUICreator
     public class SecondMenuGUI : GUIFactory
     {
         private Dictionary<string, Button> mButtons;
-        private PictureBox mBackGround;
+        private PictureBox mBackground;
         private Label mLabel;
         private Button mBackButton;
         private GameInfo mGameInfo;
@@ -29,29 +29,29 @@ namespace Game.GUICreator
 
         protected override void CreateGUI()
         {
-            /* Panel */
-            this.mBackGround = new PictureBox();
-            this.mBackGround.AlwaysOnBottom = true;
-            this.mBackGround.Bitmap = new System.Drawing.Bitmap(@"../../src/Media/images/menuPlay.png");
-            this.mBackGround.Size = this.mOriginalWndSize;
-            this.mGUI.Controls.Add(this.mBackGround);
+            /* Background */
+            this.mBackground = new PictureBox();
+            this.mBackground.AlwaysOnBottom = true;
+            this.mBackground.Bitmap = new System.Drawing.Bitmap(@"../../src/Media/images/menuPlay.png");
+            this.mBackground.Size = this.mOriginalWndSize;
+            this.mGUI.Controls.Add(this.mBackground);
 
             /* Text */
             this.mLabel = new Label();
             this.mLabel.Text = "Choose an Island";
             this.mLabel.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
-            this.mLabel.Size = new Size(this.mBackGround.Size.Width, 50);
+            this.mLabel.Size = new Size(this.mBackground.Size.Width, 50);
             this.mLabel.AutoSize = true;
             this.mLabel.AutoSizeMode = Miyagi.UI.AutoSizeMode.GrowAndShrink;
             this.mGUI.Controls.Add(this.mLabel);
 
-            /* Buttons */
+            /* Islands Buttons */
             TextStyle style = new TextStyle();
             style.Alignment = Alignment.MiddleCenter;
             style.Font = this.mMiyagiMgr.Fonts["Small_BlueHighway"];
             Size actualButtonSize = new Size(150, 60);
-            int space = (this.mBackGround.Size.Width - 5 * actualButtonSize.Width) / 6;
-            Point originalpos = this.mBackGround.Location + new Point(space, 65);
+            int space = (this.mBackground.Size.Width - 5 * actualButtonSize.Width) / 6;
+            Point originalpos = this.mBackground.Location + new Point(space, 65);
 
             this.mButtons = new Dictionary<string, Button>();
             for (int i = 0; i < Enum.GetValues(typeof(GameInfo.TypeWorld)).Length; i++)
@@ -70,74 +70,69 @@ namespace Game.GUICreator
             this.mBackButton.Size = actualButtonSize;
             this.mBackButton.Text = "BACK";
             this.mBackButton.TextStyle = style;
-            this.mBackButton.Location = this.mBackGround.Location + new Point(this.mBackGround.Size.Width / 10, (this.mBackGround.Size.Height / 10) * 9);
+            this.mBackButton.Location = this.mBackground.Location + new Point(this.mBackground.Size.Width / 10, (this.mBackground.Size.Height / 10) * 9);
             this.mBackButton.Skin = this.mMiyagiMgr.Skins["Button"];
             this.mGUI.Controls.Add(this.mBackButton);
 
-            Miyagi.UI.Controls.TextBox textBoxSeed = new TextBox();
+            /* Seed TextBox */
+            TextBox textBoxSeed = new TextBox();
             textBoxSeed.Size = new Size(450, 50);
-            textBoxSeed.Focused = true;
-            textBoxSeed.ToolTipText = textBoxSeed.Text;
             textBoxSeed.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
             textBoxSeed.TextStyle.Alignment = Alignment.MiddleCenter;
-            textBoxSeed.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 4 -40, (this.mBackGround.Size.Height / 10) * 4);
+            textBoxSeed.Location = this.mBackground.Location + new Point((this.mBackground.Size.Width / 10) * 4 -40, (this.mBackground.Size.Height / 10) * 4);
             textBoxSeed.Skin = this.mMiyagiMgr.Skins["Console"];
             this.mGUI.Controls.Add(textBoxSeed);
             textBoxSeed.Submit += new EventHandler<ValueEventArgs<string>>(textBoxSeed_Submit);
 
-            Label Seed = new Label();
-            Seed.Text = "Choose Seed";
-            Seed.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
-            Seed.Size = new Size(50, 50);
-            Seed.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 3 - (this.mBackGround.Size.Width / 10) * 2, (this.mBackGround.Size.Height / 10) * 4 + 10);
-            Seed.AutoSize = true;
-            Seed.AutoSizeMode = Miyagi.UI.AutoSizeMode.GrowAndShrink;
-            this.mGUI.Controls.Add(Seed);
-            //textBox.Text = "42";
+            Label labelSeed = new Label();
+            labelSeed.Text = "Choose Seed";
+            labelSeed.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
+            labelSeed.Size = new Size(50, 50);
+            labelSeed.Location = this.mBackground.Location + new Point((this.mBackground.Size.Width / 10) * 3 - (this.mBackground.Size.Width / 10) * 2, (this.mBackground.Size.Height / 10) * 4 + 10);
+            labelSeed.AutoSize = true;
+            labelSeed.AutoSizeMode = Miyagi.UI.AutoSizeMode.GrowAndShrink;
+            this.mGUI.Controls.Add(labelSeed);
 
-            Miyagi.UI.Controls.TextBox textBoxSizeX = new TextBox();
+            /* Width TextBox */
+            TextBox textBoxSizeX = new TextBox();
             textBoxSizeX.Size = new Size(450, 50);
-            textBoxSizeX.Focused = true;
-            textBoxSizeX.ToolTipText = textBoxSizeX.Text;
             textBoxSizeX.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
             textBoxSizeX.TextStyle.Alignment = Alignment.MiddleCenter;
-            textBoxSizeX.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 4 -40, (this.mBackGround.Size.Height / 10) * 4 + 70);
+            textBoxSizeX.Location = this.mBackground.Location + new Point((this.mBackground.Size.Width / 10) * 4 -40, (this.mBackground.Size.Height / 10) * 4 + 70);
             textBoxSizeX.Skin = this.mMiyagiMgr.Skins["Console"];
             this.mGUI.Controls.Add(textBoxSizeX);
             textBoxSizeX.Submit += new EventHandler<ValueEventArgs<string>>(textBoxSizeX_Submit);
 
-            Label SizeX = new Label();
-            SizeX.Text = "Choose Width";
-            SizeX.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
-            SizeX.Size = new Size(50, 50);
-            SizeX.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 3 - (this.mBackGround.Size.Width / 10) * 2, (this.mBackGround.Size.Height / 10) * 4 + 80);
-            SizeX.AutoSize = true;
-            SizeX.AutoSizeMode = Miyagi.UI.AutoSizeMode.GrowAndShrink;
-            this.mGUI.Controls.Add(SizeX);
+            Label labelWidth = new Label();
+            labelWidth.Text = "Choose Width";
+            labelWidth.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
+            labelWidth.Size = new Size(50, 50);
+            labelWidth.Location = this.mBackground.Location + new Point((this.mBackground.Size.Width / 10) * 3 - (this.mBackground.Size.Width / 10) * 2, (this.mBackground.Size.Height / 10) * 4 + 80);
+            labelWidth.AutoSize = true;
+            labelWidth.AutoSizeMode = Miyagi.UI.AutoSizeMode.GrowAndShrink;
+            this.mGUI.Controls.Add(labelWidth);
 
-            Miyagi.UI.Controls.TextBox textBoxSizeY = new TextBox();
+            /* Height TextBox */
+            TextBox textBoxSizeY = new TextBox();
             textBoxSizeY.Size = new Size(450, 50);
-            textBoxSizeY.Focused = true;
-            textBoxSizeY.ToolTipText = textBoxSizeY.Text;
             textBoxSizeY.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
             textBoxSizeY.TextStyle.Alignment = Alignment.MiddleCenter;
-            textBoxSizeY.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 4 - 40, (this.mBackGround.Size.Height / 10) * 4 + 140);
+            textBoxSizeY.Location = this.mBackground.Location + new Point((this.mBackground.Size.Width / 10) * 4 - 40, (this.mBackground.Size.Height / 10) * 4 + 140);
             textBoxSizeY.Skin = this.mMiyagiMgr.Skins["Console"];
             this.mGUI.Controls.Add(textBoxSizeY);
             textBoxSizeY.Submit += new EventHandler<ValueEventArgs<string>>(textBoxSizeY_Submit);
 
-            Label SizeY = new Label();
-            SizeY.Text = "Choose Height";
-            SizeY.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
-            SizeY.Size = new Size(50, 50);
-            SizeY.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width / 10) * 3 - (this.mBackGround.Size.Width / 10) * 2, (this.mBackGround.Size.Height / 10) * 4 + 150);
-            SizeY.AutoSize = true;
-            SizeY.AutoSizeMode = Miyagi.UI.AutoSizeMode.GrowAndShrink;
-            this.mGUI.Controls.Add(SizeY);
-            
+            Label labelHeight = new Label();
+            labelHeight.Text = "Choose Height";
+            labelHeight.TextStyle.ForegroundColour = new Colour(255, 255, 255, 255);
+            labelHeight.Size = new Size(50, 50);
+            labelHeight.Location = this.mBackground.Location + new Point((this.mBackground.Size.Width / 10) * 3 - (this.mBackground.Size.Width / 10) * 2, (this.mBackground.Size.Height / 10) * 4 + 150);
+            labelHeight.AutoSize = true;
+            labelHeight.AutoSizeMode = Miyagi.UI.AutoSizeMode.GrowAndShrink;
+            this.mGUI.Controls.Add(labelHeight);
         }
 
-        void textBoxSizeY_Submit(object sender, ValueEventArgs<string> e)
+        private void textBoxSizeY_Submit(object sender, ValueEventArgs<string> e)
         {
             int sizeY;
             if (int.TryParse(e.Data, out sizeY))
@@ -146,10 +141,10 @@ namespace Game.GUICreator
                 size.y = sizeY;
                 this.mGameInfo.Size = size;
             }
-            this.mStateMgr.MyConsole.UpdateConsole = false;
+            this.mStateMgr.MyConsole.Enabled = false;
         }
 
-        void textBoxSizeX_Submit(object sender, ValueEventArgs<string> e)
+        private void textBoxSizeX_Submit(object sender, ValueEventArgs<string> e)
         {
             int sizeX;
             if (int.TryParse(e.Data, out sizeX)) 
@@ -158,19 +153,19 @@ namespace Game.GUICreator
                 size.x = sizeX;
                 this.mGameInfo.Size = size;
             }
-            this.mStateMgr.MyConsole.UpdateConsole = false;
+            this.mStateMgr.MyConsole.Enabled = false;
         }
 
-        void textBoxSeed_Submit(object sender, ValueEventArgs<string> e)
+        private void textBoxSeed_Submit(object sender, ValueEventArgs<string> e)
         {
             int seed;
             if (int.TryParse(e.Data, out seed)) { this.mGameInfo.Seed = seed; }
-            this.mStateMgr.MyConsole.UpdateConsole = false;
+            this.mStateMgr.MyConsole.Enabled = false;
         }
 
         protected override void AfterResize()
         {
-            this.mLabel.Location = this.mBackGround.Location + new Point((this.mBackGround.Size.Width - this.mLabel.Size.Width) / 2, 15);
+            this.mLabel.Location = this.mBackground.Location + new Point((this.mBackground.Size.Width - this.mLabel.Size.Width) / 2, 15);
         }
 
         public void SetListener(GameInfo.TypeWorld button, EventHandler<MouseButtonEventArgs> del)
