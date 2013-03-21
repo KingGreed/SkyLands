@@ -64,6 +64,8 @@ namespace Game.States
             if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_ESCAPE))
             {
                 this.mDebugMode.IsAllowedToMoveCam = !this.mGUI.SwitchVisibleIGMenu();
+            } else if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_E)) {
+
             }
         }
 

@@ -32,7 +32,7 @@ namespace Game.World.Blocks
 
         public virtual string getFace(int i) { return this.mMaterial; }
 
-        public virtual void onCreation() {}
+        public virtual void onCreation(Vector3 position) {}
         public virtual void onDeletion() {}
 
         public virtual void onRightClick() {}

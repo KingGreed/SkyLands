@@ -27,7 +27,7 @@ namespace Game.CharacSystem
 
         //MoveForward variable
         private Vector3         mStartingPoint;
-        private int             mDist;
+        //private int             mDist;
         private bool            mIsWalking;
         private AStar           mPath;
 
@@ -63,7 +63,7 @@ namespace Game.CharacSystem
             this.mCollisionMgr = new CollisionMgr(sceneMgr, this.mCharacMgr.World, this);
 
             this.mStartingPoint = Vector3.ZERO;
-            this.mDist          = 0;
+            //this.mDist          = 0;
             this.mIsWalking     = false;
 
             this.mNode.AttachObject(ent);

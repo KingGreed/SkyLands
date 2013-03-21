@@ -46,7 +46,6 @@ namespace Game.GUICreator
             this.mButtons = new Dictionary<ButtonName, Button>();
             for (int i = 0; i < Enum.GetValues(typeof(ButtonName)).Length; i++)
             {
-
                 Button button = new Button();
                 button.Size = actualButtonSize;
 

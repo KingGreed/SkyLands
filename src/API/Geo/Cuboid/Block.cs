@@ -22,7 +22,7 @@ namespace API.Geo.Cuboid
         string      getFace (int i);
 
 
-        void onCreation();
+        void onCreation(Vector3 position);
         void onDeletion();
 
         void onRightClick();

@@ -219,6 +219,7 @@ namespace Game.World.Generator
             }
 
             this.setBlockAt((int) item.x, (int) item.y, (int) item.z, "Air", false);
+            curr.onDeletion();
 
             refreshBlock(new Vector3(item.x,   item.y-1, item.z));
             refreshBlock(new Vector3(item.x,   item.y+1, item.z));
@@ -256,7 +257,7 @@ namespace Game.World.Generator
             this.setBlockAt((int)relativePos.x, (int)relativePos.y, (int)relativePos.z, material, true);
             
             Block curr = this.getBlock(relativePos, false);
-
+            curr.onCreation(relativePos);
             if(this.setVisibleFaces(relativePos, curr)) {
                 for(int i = 0; i < 6; i++) {
                     
