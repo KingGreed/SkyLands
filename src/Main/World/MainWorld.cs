@@ -146,7 +146,7 @@ namespace Game.World
         }
 
         public void onCreation(Vector3 absCoord, Vector3 island) {
-            this.mIslandList[island].getBlock(this.getRelativeFromAbsolute(absCoord), false).onCreation();
+            this.mIslandList[island].getBlock(this.getRelativeFromAbsolute(absCoord), false).onCreation(absCoord);
         }
         public void onDeletion(Vector3 absCoord, Vector3 island) {
             this.mIslandList[island].getBlock(this.getRelativeFromAbsolute(absCoord), false).onDeletion();

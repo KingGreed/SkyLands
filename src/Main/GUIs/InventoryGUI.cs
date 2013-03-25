@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace Game.GUICreator {
-    class InventoryGUI : GUIFactory {
+    class InventoryGUI {
 
     }
 }

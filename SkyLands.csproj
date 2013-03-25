@@ -130,6 +130,7 @@
     <Compile Include="src\API\Geo\Cuboid\Chunk.cs" />
     <Compile Include="src\API\Geo\Cuboid\Island.cs" />
     <Compile Include="src\API\Geo\Cuboid\MultiBlock.cs" />
+    <Compile Include="src\API\Geo\Item.cs" />
     <Compile Include="src\API\Geo\World.cs" />
     <Compile Include="src\API\Math\Point.cs" />
     <Compile Include="src\Main\Base Ogre\BaseApplication.cs" />
@@ -148,12 +149,15 @@
     <Compile Include="src\Main\Characters\Misc\MovementInfo.cs" />
     <Compile Include="src\Main\Characters\Misc\JumpSpeed.cs" />
     <Compile Include="src\Main\Characters\NonPlayer\VanillaNonPlayer.cs" />
+    <Compile Include="src\Main\Characters\PlayerInventory\CraftingMgr.cs" />
+    <Compile Include="src\Main\Characters\PlayerInventory\CraftTree.cs" />
     <Compile Include="src\Main\Characters\PlayerInventory\Inventory.cs" />
     <Compile Include="src\Main\Characters\PlayerInventory\Slot.cs" />
     <Compile Include="src\Main\Characters\Player\MainPlayerCamera.cs" />
     <Compile Include="src\Main\Characters\Player\VanillaPlayer.cs" />
     <Compile Include="src\Main\Characters\VanillaCharacter.cs" />
     <Compile Include="src\Main\GUIs\InGameMenuGUI.cs" />
+    <Compile Include="src\Main\GUIs\InventoryGUI.cs" />
     <Compile Include="src\Main\States\Game\GameInfo.cs" />
     <Compile Include="src\Main\States\MyConsole.cs" />
     <Compile Include="src\Main\GUIs\GameGUI.cs" />

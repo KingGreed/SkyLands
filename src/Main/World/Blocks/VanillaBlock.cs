@@ -25,18 +25,18 @@ namespace Game.World.Blocks
 
         protected static int CUBE_SIDE = MainWorld.CUBE_SIDE;
 
-        public string getName    () { return this.mName;     }
-        public string getMaterial() { return this.mMaterial; }
-        public byte   getId      () { return this.mId;       }
+        public override string getName() { return this.mName; }
+        public override string getMaterial() { return this.mMaterial; }
+        public override byte getId() { return this.mId; }
 
 
-        public virtual string getFace(int i) { return this.mMaterial; }
+        public override string getFace(int i) { return this.mMaterial; }
 
-        public virtual void onCreation(Vector3 position) {}
-        public virtual void onDeletion() {}
+        public override void onCreation(Vector3 position) { }
+        public override void onDeletion() { }
 
-        public virtual void onRightClick() {}
-        public virtual void onLeftClick () {}
+        public override void onRightClick() { }
+        public override void onLeftClick() { }
 
     }
 }

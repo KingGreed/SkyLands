@@ -14,19 +14,19 @@ using Material = API.Generic.Material;
 namespace API.Geo.Cuboid
 {
 
-    public interface Block {
-        string getName    ();
-        string getMaterial();
-        byte   getId      ();
+    public abstract class Block {
+        public abstract string getName    ();
+        public abstract string getMaterial();
+        public abstract byte getId();
 
-        string      getFace (int i);
+        public abstract string getFace(int i);
 
 
-        void onCreation(Vector3 position);
-        void onDeletion();
+        public abstract void onCreation(Vector3 position);
+        public abstract void onDeletion();
 
-        void onRightClick();
-        void onLeftClick ();
+        public abstract void onRightClick();
+        public abstract void onLeftClick();
 
 
 
