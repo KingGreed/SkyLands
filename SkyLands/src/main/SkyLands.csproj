@@ -1,0 +1,510 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BDBBE75A-62AB-4416-ACC8-E493E9D0FD17}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Game</RootNamespace>
+    <AssemblyName>SkyLands</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Game.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\Media\fonts\bluehigh.ttf" />
+    <None Include="resources\Media\materials\scripts\cube.material" />
+    <None Include="resources\Media\models\cube.mesh" />
+    <None Include="resources\Media\packs\CaelumPack.zip" />
+    <None Include="resources\Media\packs\MiyagiPack.zip" />
+    <None Include="resources\Media\packs\OgreCore.zip" />
+    <None Include="resources\Media\packs\Sinbad.blend" />
+    <None Include="resources\Media\packs\Sinbad.zip" />
+    <None Include="resources\Media\skins\background.bmp.old" />
+    <None Include="resources\ogre.cfg" />
+    <None Include="resources\plugins.cfg" />
+    <None Include="resources\resources.cfg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="CaelumSharp, Version=0.4.4737.33521, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\CaelumSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="LibNoise, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\LibNoise.dll</HintPath>
+    </Reference>
+    <Reference Include="Miyagi, Version=1.2.1.40980, Culture=neutral, PublicKeyToken=418dc626d1eb4589, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\Miyagi.dll</HintPath>
+    </Reference>
+    <Reference Include="Mogre, Version=1.7.1.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\Mogre.dll</HintPath>
+    </Reference>
+    <Reference Include="MOIS, Version=1.1.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Release\MOIS.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="resources\Media\materials\xml\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="resources\cg.dll" />
+    <Content Include="resources\Media\fonts\TrueTypeFonts.xml" />
+    <Content Include="resources\Media\images\background.bmp" />
+    <Content Include="resources\Media\images\Cross.png" />
+    <Content Include="resources\Media\images\menuPlay.png" />
+    <Content Include="resources\Media\materials\textures\aquawood1.jpg" />
+    <Content Include="resources\Media\materials\textures\aquawood2.jpg" />
+    <Content Include="resources\Media\materials\textures\aquawood3.jpg" />
+    <Content Include="resources\Media\materials\textures\bloodcave_below.jpg" />
+    <Content Include="resources\Media\materials\textures\bloodcave_dark.jpg" />
+    <Content Include="resources\Media\materials\textures\bloodcave_left.jpg" />
+    <Content Include="resources\Media\materials\textures\bloodcave_light.jpg" />
+    <Content Include="resources\Media\materials\textures\bloodcave_right.jpg" />
+    <Content Include="resources\Media\materials\textures\bloodcave_up.jpg" />
+    <Content Include="resources\Media\materials\textures\bloodwood1.jpg" />
+    <Content Include="resources\Media\materials\textures\bloodwood2.jpg" />
+    <Content Include="resources\Media\materials\textures\bloodwood3.jpg" />
+    <Content Include="resources\Media\materials\textures\cactus.png" />
+    <Content Include="resources\Media\materials\textures\constructionBlockBottom.png" />
+    <Content Include="resources\Media\materials\textures\constructionBlockSide1.png" />
+    <Content Include="resources\Media\materials\textures\constructionBlockSide2.png" />
+    <Content Include="resources\Media\materials\textures\constructionBlockTop.png" />
+    <Content Include="resources\Media\materials\textures\copper.jpg" />
+    <Content Include="resources\Media\materials\textures\crystalwood1.jpg" />
+    <Content Include="resources\Media\materials\textures\crystalwood2.jpg" />
+    <Content Include="resources\Media\materials\textures\crystalwood3.jpg" />
+    <Content Include="resources\Media\materials\textures\cuivre.jpg" />
+    <Content Include="resources\Media\materials\textures\darksand.jpg" />
+    <Content Include="resources\Media\materials\textures\darksand2.jpg" />
+    <Content Include="resources\Media\materials\textures\darkwood.jpg" />
+    <Content Include="resources\Media\materials\textures\dirt.jpg" />
+    <Content Include="resources\Media\materials\textures\dust.jpg" />
+    <Content Include="resources\Media\materials\textures\earth_side.jpg" />
+    <Content Include="resources\Media\materials\textures\fire1.jpg" />
+    <Content Include="resources\Media\materials\textures\fire2.jpg" />
+    <Content Include="resources\Media\materials\textures\gold.jpg" />
+    <Content Include="resources\Media\materials\textures\granite.jpg" />
+    <Content Include="resources\Media\materials\textures\grass16.png" />
+    <Content Include="resources\Media\materials\textures\grass2.jpg" />
+    <Content Include="resources\Media\materials\textures\grass3.jpg" />
+    <Content Include="resources\Media\materials\textures\grasscolor.png" />
+    <Content Include="resources\Media\materials\textures\icewood1.jpg" />
+    <Content Include="resources\Media\materials\textures\icewood2.jpg" />
+    <Content Include="resources\Media\materials\textures\icewood3.jpg" />
+    <Content Include="resources\Media\materials\textures\leaves.png" />
+    <Content Include="resources\Media\materials\textures\lightsand.jpg" />
+    <Content Include="resources\Media\materials\textures\lightwood.jpg" />
+    <Content Include="resources\Media\materials\textures\moon.jpg" />
+    <Content Include="resources\Media\materials\textures\pavement.jpg" />
+    <Content Include="resources\Media\materials\textures\poisonwood1.jpg" />
+    <Content Include="resources\Media\materials\textures\poisonwood2.jpg" />
+    <Content Include="resources\Media\materials\textures\poisonwood3.jpg" />
+    <Content Include="resources\Media\materials\textures\redsand1.jpg" />
+    <Content Include="resources\Media\materials\textures\redsand2.jpg" />
+    <Content Include="resources\Media\materials\textures\redsand3.jpg" />
+    <Content Include="resources\Media\materials\textures\redsand4.jpg" />
+    <Content Include="resources\Media\materials\textures\redsand5.jpg" />
+    <Content Include="resources\Media\materials\textures\sand.jpg" />
+    <Content Include="resources\Media\materials\textures\sand2.png" />
+    <Content Include="resources\Media\materials\textures\sand3.png" />
+    <Content Include="resources\Media\materials\textures\shore1.jpg" />
+    <Content Include="resources\Media\materials\textures\shore2.jpg" />
+    <Content Include="resources\Media\materials\textures\shore3.jpg" />
+    <Content Include="resources\Media\materials\textures\soil.jpg" />
+    <Content Include="resources\Media\materials\textures\stone.jpg" />
+    <Content Include="resources\Media\materials\textures\sunwood1.jpg" />
+    <Content Include="resources\Media\materials\textures\sunwood2.jpg" />
+    <Content Include="resources\Media\materials\textures\sunwood3.jpg" />
+    <Content Include="resources\Media\materials\textures\terrain.png" />
+    <Content Include="resources\Media\materials\textures\underwater1.jpg" />
+    <Content Include="resources\Media\materials\textures\underwater2.jpg" />
+    <Content Include="resources\Media\materials\textures\underwater3.jpg" />
+    <Content Include="resources\Media\materials\textures\underwater4.jpg" />
+    <Content Include="resources\Media\materials\textures\water.jpg" />
+    <Content Include="resources\Media\materials\textures\water1.jpg" />
+    <Content Include="resources\Media\materials\textures\water2.jpg" />
+    <Content Include="resources\Media\materials\textures\water3.jpg" />
+    <Content Include="resources\Media\materials\textures\wood.jpg" />
+    <Content Include="resources\Media\skins\BasicSkins.xml" />
+    <Content Include="resources\Media\skins\MiyagiSkins.xml" />
+    <Content Include="resources\Miyagi.Backend.Mogre.dll" />
+    <Content Include="resources\Miyagi.dll" />
+    <Content Include="resources\Miyagi.Plugin.Input.Mois.dll" />
+    <Content Include="resources\Miyagi.xml" />
+    <Content Include="resources\OgreMain.dll" />
+    <Content Include="resources\OgrePaging.dll" />
+    <Content Include="resources\OgreRTShaderSystem.dll" />
+    <Content Include="resources\OgreTerrain.dll" />
+    <Content Include="resources\OIS.dll" />
+    <Content Include="resources\Plugins\cg.dll" />
+    <Content Include="resources\Plugins\Plugin_BSPSceneManager.dll" />
+    <Content Include="resources\Plugins\Plugin_CgProgramManager.dll" />
+    <Content Include="resources\Plugins\Plugin_OctreeSceneManager.dll" />
+    <Content Include="resources\Plugins\Plugin_OctreeZone.dll" />
+    <Content Include="resources\Plugins\Plugin_ParticleFX.dll" />
+    <Content Include="resources\Plugins\Plugin_PCZSceneManager.dll" />
+    <Content Include="resources\Plugins\RenderSystem_Direct3D9.dll" />
+    <Content Include="resources\Plugins\RenderSystem_GL.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="csharp\API\Ent\Character.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Ent\Entity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Generator\biome\Biome.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Generator\biome\Decorator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Generator\Populator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Generator\WorldGeneratorUtils.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Generic\BlockFace.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Generic\Material.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Generic\PlayerFace.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Generic\PositionFaceAndName.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Geo\AreaBlockAccess.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Geo\AreaChunkAccess.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Geo\AreaIslandAccess.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Geo\Cuboid\Block.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Geo\Cuboid\Chunk.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Geo\Cuboid\Island.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Geo\Cuboid\MultiBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Geo\Item.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Geo\World.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\API\Math\Point.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Base Ogre\BaseApplication.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Base Ogre\CameraMan.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Base Ogre\Listener.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Base Ogre\MoisManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Base Ogre\Overlay.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\BlockFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Buildings\Buildings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Characters\Anim.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Characters\AnimationMgr.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Characters\AStar.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Characters\CharacMgr.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Characters\CollisionMgr.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Characters\Misc\CharacterInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Characters\Misc\GravitySpeed.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Characters\Misc\JumpSpeed.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Characters\Misc\MovementInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Characters\NonPlayer\VanillaNonPlayer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Characters\PlayerInventory\CraftingMgr.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Characters\PlayerInventory\CraftTree.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Characters\PlayerInventory\Inventory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Characters\PlayerInventory\Slot.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Characters\Player\MainPlayerCamera.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Characters\Player\VanillaPlayer.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Characters\VanillaCharacter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\GUIs\GameGUI.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\GUIs\GUIFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\GUIs\InGameMenuGUI.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\GUIs\InventoryGUI.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\GUIs\LoadingGUI.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\GUIs\MenuGUI.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\GUIs\MiyagiManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\GUIs\MiyagiMgr.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\GUIs\OptionsGUI.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\GUIs\SecondMenuGUI.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\MathHelper.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Program.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\States\Game\DebugMode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\States\Game\GameInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\States\Game\GameState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\States\Menu\LoadingState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\States\Menu\MenuState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\States\Menu\OptionsState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\States\Menu\SecondMenuState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\States\MyConsole.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\States\State.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\States\StateManager.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Blocks\AirBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Blocks\CactusBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Blocks\ConstructionBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Blocks\DirtBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Blocks\GrassBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Blocks\LeavesBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Blocks\RedSandBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Blocks\SandBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Blocks\StoneBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Blocks\VanillaBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Blocks\WoodBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Blocks\YellowSandBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Display\GraphicBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Display\StaticRectangle.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Display\ThreadTerrainRegenerate.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Generator\Biomes\Desert.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Generator\Biomes\Hills.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Generator\Biomes\Mountains.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Generator\Biomes\Plains.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Generator\Decorators\CactusDecorator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Generator\Decorators\TreeDecorator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Generator\DomeIsland.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Generator\RandomIsland.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Generator\VanillaChunk.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Generator\VanillaIsland.cs" />
+    <Compile Include="csharp\Main\World\Generator\VanillaMultiBlock.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\MainWorld.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\World\Sky\SkyMgr.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>move /Y "$(TargetDir)src\main\resources" $(TargetDir)
+</PostBuildEvent>
+  </PropertyGroup>
+</Project>

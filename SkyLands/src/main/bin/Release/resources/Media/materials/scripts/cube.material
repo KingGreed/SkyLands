@@ -1,0 +1,196 @@
+material Default{
+    technique{
+        pass{
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0       
+        }
+    }
+}
+material cube/grass/side{
+    technique{
+        pass{
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0       
+            texture_unit{ texture earth_side.jpg  }
+            
+        }
+    }
+}
+material cube/grass/top {
+	technique {
+		pass {
+			ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+			texture_unit{ texture grass3.jpg  }
+		}
+	}
+}
+material cube/grass/bottom{
+    technique {
+        pass {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit{ texture soil.jpg  }
+        }
+    }
+}
+material cube/construction/side1{
+    technique{
+        pass{
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0       
+            texture_unit{ texture constructionBlockSide1.png  }
+            
+        }
+    }
+}
+material cube/construction/side2{
+    technique{
+        pass{
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0       
+            texture_unit{ texture constructionBlockSide2.png  }
+            
+        }
+    }
+}
+material cube/construction/top {
+	technique {
+		pass {
+			ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+			texture_unit{ texture constructionBlockTop.png  }
+		}
+	}
+}
+material cube/construction/bottom{
+    technique {
+        pass {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit{ texture constructionBlockBottom.png  }
+        }
+    }
+}
+material cube/stone
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+            
+            texture_unit { texture stone.jpg }
+        }
+    }
+}
+material cube/metal
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+            
+            texture_unit { texture metal.png }
+        }
+    }
+}
+material cube/wood
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+			texture_unit { texture lightwood.jpg }
+		}
+	}
+}
+material cube/leaves
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture leaves.png }
+        }
+    }
+}
+material cube/sand
+{
+	technique
+	{
+		pass
+		{
+			ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+			texture_unit { texture sand.jpg }
+		}
+	}
+}
+material cube/YellowSand
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture sand2.png }
+        }
+    }
+}
+material cube/RedSand
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture sand3.png }
+        }
+    }
+}
+
+material cube/dirt
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture dirt.jpg }
+        }
+    }
+}
+material cube/cactus
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture cactus.png }
+        }
+    }
+}
