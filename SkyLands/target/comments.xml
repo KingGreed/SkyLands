@@ -1,0 +1,578 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SkyLands</name>
+    </assembly>
+    <members>
+        <member name="M:API.Ent.Entity.getId">
+            Gets the current ID of this entity within the current game session
+            @return The entities' id.
+        </member>
+        <member name="M:API.Ent.Entity.remove">
+            Removes the entity. This takes effect at the next snapshot.
+        </member>
+        <member name="M:API.Ent.Entity.isRemoved">
+            True if the entity is removed.
+            @return removed
+        </member>
+        <member name="M:API.Ent.Entity.isSpawned">
+            Returns true if this entity is spawned.
+            @return spawned
+        </member>
+        <member name="M:API.Ent.Entity.setSavable(System.Boolean)">
+            Sets whether or not the entity should be saved.<br/>
+            @param savable True if the entity should be saved, false if not
+        </member>
+        <member name="M:API.Ent.Entity.isSavable">
+            Returns true if this entity should be saved.
+            @return savable
+        </member>
+        <member name="M:API.Ent.Entity.setViewDistance(System.Int32)">
+            Sets the maximum distance at which the entity can be seen.<br/>
+            <br/>
+            The actual view distance used by the server may not be exactly the value that is set.<br/>
+            @param distance in blocks at which the entity can be seen
+        </member>
+        <member name="M:API.Ent.Entity.getViewDistance">
+            Gets the maximum distance at which the entity can be seen.<br/>
+            @return the distance in blocks at which the entity can be seen
+        </member>
+        <member name="M:API.Ent.Entity.getChunk">
+            Gets the {@link Chunk} this entity resides in, or null if removed.
+            @return chunk the entity is in, or null if removed.
+        </member>
+        <member name="M:API.Ent.Entity.getRegion">
+            Gets the region the entity is associated and managed with, or null if removed.
+            @return region the entity is in.
+        </member>
+        <member name="M:API.Ent.Entity.interact(System.Action,API.Ent.Entity)">
+            Interact with this entity.
+        </member>
+        <member name="M:API.Ent.Character.getName">
+            Gets the player's name.
+            @return the player's name
+        </member>
+        <member name="M:API.Ent.Character.getDisplayName">
+            Gets the player's display name. This method is thread-safe.
+            @return the player's display name
+        </member>
+        <member name="M:API.Ent.Character.setDisplayName(System.String)">
+            Sets the player's display name. This method is thread-safe.
+            @param name the player's new display name
+        </member>
+        <member name="M:API.Ent.Character.teleport(Mogre.Vector3)">
+            Teleports the player to the given location and inform's the player's client
+            
+            @param loc the new location
+        </member>
+        <member name="M:API.Ent.Character.save">
+            Immediately saves the players state to disk
+            @return true if successful
+        </member>
+        <member name="M:API.Ent.Character.getSpawnPoint">
+            Gets the player's spawn point.
+            @return the player's spawn point
+        </member>
+        <member name="T:API.Generator.Biome">
+            Defines an abstract biome.
+        </member>
+        <member name="T:API.Generator.Populator">
+            Represents a populator for a chunk
+        </member>
+        <member name="M:API.Generator.Populator.populate(API.Geo.Cuboid.Island,System.Random)">
+             Populates the chunk.
+             This method will be called once per chunk
+            
+             @param chunk the chunk to populate
+             @param random The RNG for this chunk
+        </member>
+        <member name="T:API.Generator.WorldGeneratorUtils">
+            Utilities for World generation
+        </member>
+        <member name="M:API.Generator.WorldGeneratorUtils.getSeed(API.Geo.World,System.Int32,System.Int32,System.Int32,System.Int32)">
+             Returns the particular seed a Random should use for a position
+            
+             The meaning of the x, y and z coordinates can be determined by the
+             generator.
+            
+             This gives consistent results for world generation.
+            
+             The extra seed allows multiple Randoms to be returned for the same
+             position for use by populators and different stages of generation.
+            
+             @param world the World
+             @param x the x coordinate
+             @param y the y coordinate
+             @param z the z coordinate
+             @param extraSeed the extra seed value
+        </member>
+        <member name="M:API.Generator.WorldGeneratorUtils.getSeed(System.Int64,System.Int32,System.Int32,System.Int32,System.Int32)">
+             Returns the particular seed a Random should use for a position
+            
+             The meaning of the x, y and z coordinates can be determined by the
+             generator.
+            
+             This gives consistent results for world generation.
+            
+             The extra seed allows multiple Randoms to be returned for the same
+             position for use by populators and different stages of generation.
+            
+             @param seed the original seed
+             @param x the x coordinate
+             @param y the y coordinate
+             @param z the z coordinate
+             @param extraSeed the extra seed value
+        </member>
+        <member name="M:API.Generator.WorldGeneratorUtils.getRandom(API.Geo.World,System.Int32,System.Int32,System.Int32,System.Int32)">
+             Gets a pre-seeded random for a particular position.
+            
+             The meaning of the x, y and z coordinates can be determined by the
+             generator.
+            
+             The extra seed allows multiple Randoms to be returned for the same
+             position for use by populators and different stages of generation.
+            
+             @param world the World
+             @param x the x coordinate
+             @param y the y coordinate
+             @param z the z coordinate
+             @param extraSeed the extra seed value
+             @return the random
+        </member>
+        <member name="M:API.Generator.WorldGeneratorUtils.getRandom(System.Int64,System.Int32,System.Int32,System.Int32,System.Int32)">
+             Gets a pre-seeded random for a particular position.
+            
+             The meaning of the x, y and z coordinates can be determined by the
+             generator.
+            
+             The extra seed allows multiple Randoms to be returned for the same
+             position for use by populators and different stages of generation.
+            
+             @param seed the original seed
+             @param x the x coordinate
+             @param y the y coordinate
+             @param z the z coordinate
+             @param extraSeed the extra seed value
+             @return the random
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:API.Generator.WorldGeneratorUtils.seedRandomArray(System.Random[0:,0:,0:],API.Geo.World,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)" -->
+        <member name="M:API.Generator.WorldGeneratorUtils.fastNoise(LibNoise.Modules.Module,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+             Generates a 1D noise map using reduced sampling and linear interpolation
+            
+             @param noiseGenerator The noise generator module
+             @param xSize The size of the 1D map
+             @param samplingRate The sampling rate to use. xSize % samplingRate must
+             return 0.
+             @param x The x coord
+             @param y The y coord
+             @param z The z coord
+             @throws IllegalArgumentException if the noise generator is null, the
+             samplign rate is zero, or xSize % samplingRate doesn't return 0
+             @return The noise map
+        </member>
+        <member name="M:API.Generator.WorldGeneratorUtils.fastNoise(LibNoise.Modules.Module,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+             Generates a 2D noise map using reduced sampling and bilinear
+             interpolation.
+            
+             @param noiseGenerator The noise generator module
+             @param xSize The x size of the 2D map
+             @param zSize The z size of the 2D map
+             @param samplingRate The sampling rate to use. xSize % samplingRate and
+             zSize % samplingRate must return 0.
+             @param x The x coord
+             @param y The y coord
+             @param z The z coord
+             @throws IllegalArgumentException if the noise generator is null, the
+             samplign rate is zero, or xSize % samplingRate or zSize % samplingRate
+             doesn't return 0
+             @return The noise map
+        </member>
+        <member name="M:API.Generator.WorldGeneratorUtils.fastNoise(LibNoise.Modules.Module,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32)">
+             Generates a 3D noise map using reduced sampling and trilinear
+             interpolation.
+            
+             @param noiseGenerator The noise generator module
+             @param xSize The x size of the 3D map
+             @param ySize The y size of the 3D map
+             @param zSize The z size of the 3D map
+             @param samplingRate The sampling rate to use. xSize % samplingRate, ySize
+             % samplingRate and zSize % samplingRate must return 0.
+             @param x The x coord
+             @param y The y coord
+             @param z The z coord
+             @throws IllegalArgumentException if the noise generator is null, the
+             samplign rate is zero, or xSize % samplingRate, ySize % samplingRate or
+             zSize % samplingRate doesn't return 0
+             @return The noise map
+        </member>
+        <member name="T:API.Geo.Cuboid.Chunk">
+            Represents a cube containing 16x16x16 Blocks
+        </member>
+        <member name="M:API.Geo.AreaBlockAccess.hasBlock(System.Int32,System.Int32,System.Int32)">
+             Gets if a block is contained in this area
+            
+             @param x coordinate of the block
+             @param y coordinate of the block
+             @param z coordinate of the block
+             @return true if it is contained, false if not
+        </member>
+        <member name="M:API.Geo.AreaBlockAccess.getBlock(System.Int32,System.Int32,System.Int32,System.Boolean)">
+             Gets a {@link Block} representing the block at (x, y, z)
+            
+             @param x coordinate of the block
+             @param y coordinate of the block
+             @param z coordinate of the block
+             @return the Block
+        </member>
+        <member name="M:API.Geo.AreaBlockAccess.getBlock(Mogre.Vector3,System.Boolean)">
+             Gets a {@link Block} representing the block at the position given
+            
+             @param position of the block
+             @return the Block
+        </member>
+        <member name="M:API.Geo.Cuboid.Chunk.getIsland">
+             Gets the region that this chunk is located in
+            
+             @return region
+        </member>
+        <member name="M:API.Geo.Cuboid.Chunk.getLiveEntities">
+             Gets the entities currently in the chunk
+            
+             @return the entities
+        </member>
+        <member name="M:API.Geo.Cuboid.Chunk.isLoaded">
+             Tests if the chunk is currently loaded
+            
+             Chunks may be unloaded at the end of each tick
+        </member>
+        <member name="M:API.Geo.Cuboid.Chunk.isPopulated">
+             Gets if this chunk already has been populated.
+            
+             @return if the chunk is populated.
+        </member>
+        <member name="M:API.Geo.Cuboid.Chunk.populate">
+             Populates the chunk with all the Populators attached to the
+             WorldGenerator of its world.
+            
+             @return
+        </member>
+        <member name="M:API.Geo.Cuboid.Chunk.unload(System.Boolean)">
+             Performs the necessary tasks to unload this chunk from the world.
+            
+             @param save whether the chunk data should be saved.
+        </member>
+        <member name="M:API.Geo.Cuboid.Chunk.save">
+            Performs the necessary tasks to save this chunk.
+        </member>
+        <member name="T:API.Geo.Cuboid.Island">
+            Represents an Island
+        </member>
+        <member name="M:API.Geo.AreaChunkAccess.getChunk(System.Int32,System.Int32,System.Int32)">
+             Gets the {@link Chunk} at chunk coordinates (x, y, z)
+            
+             @param x coordinate of the chunk
+             @param y coordinate of the chunk
+             @param z coordinate of the chunk
+             @return the chunk
+        </member>
+        <member name="M:API.Geo.AreaChunkAccess.getChunkFromBlock(System.Int32,System.Int32,System.Int32)">
+             Gets the {@link Chunk} at block coordinates (x, y, z)
+            
+             @param x coordinate of the block
+             @param y coordinate of the block
+             @param z coordinate of the block
+             @return the chunk
+        </member>
+        <member name="M:API.Geo.AreaChunkAccess.getChunkFromBlock(Mogre.Vector3)">
+             Gets the {@link Chunk} at the given position
+            
+             @param position of the block
+             @return the chunk
+        </member>
+        <member name="M:API.Geo.AreaChunkAccess.hasChunk(System.Int32,System.Int32,System.Int32)">
+             True if the region has a loaded chunk at the (x, y, z).
+            
+             @param x coordinate of the chunk
+             @param y coordinate of the chunk
+             @param z coordinate of the chunk
+             @return true if chunk exists
+        </member>
+        <member name="M:API.Geo.AreaChunkAccess.unloadChunk(System.Int32,System.Int32,System.Int32,System.Boolean)">
+             Unloads a chunk, and queues it for saving, if requested.
+            
+             @param x coordinate of the chunk
+             @param y coordinate of the chunk
+             @param z coordinate of the chunk
+             @Param whether to save this chunk
+        </member>
+        <member name="M:API.Geo.Cuboid.Island.generate(System.Int32)">
+            Generate the Island's terrain
+        </member>
+        <member name="M:API.Geo.Cuboid.Island.display">
+            Displays the Island's terrain
+        </member>
+        <member name="M:API.Geo.Cuboid.Island.save">
+            	     * Save the Island
+                     * Warning this function does not create a thread
+        </member>
+        <member name="M:API.Geo.Cuboid.Island.unload(System.Boolean)">
+            Performs the nessecary tasks to unload this region from the world, and
+            all associated chunks.
+            @param save whether to save the region and associated data.
+        </member>
+        <member name="M:API.Geo.AreaIslandAccess.getIslands">
+            Gets an unmodifiable collection of all loaded regions
+            
+            @return all loaded regions
+        </member>
+        <member name="M:API.Geo.AreaIslandAccess.getIsland(System.Int32,System.Int32,System.Int32)">
+             Gets the {@link Island} at region coordinates (x, y, z)
+            
+             @param x the region x coordinate
+             @param y the region y coordinate
+             @param z the region z coordinate
+             @return the region
+        </member>
+        <member name="M:API.Geo.AreaIslandAccess.getIslandFromChunk(System.Int32,System.Int32,System.Int32)">
+             Gets the {@link Island} at chunk coordinates (x, y, z)
+            
+             @param x the chunk x coordinate
+             @param y the chunk y coordinate
+             @param z the chunk z coordinate
+             @return the region
+        </member>
+        <member name="M:API.Geo.AreaIslandAccess.getIslandFromBlock(System.Int32,System.Int32,System.Int32)">
+             Gets the {@link Island} at block coordinates (x, y, z)
+            
+             @param x the block x coordinate
+             @param y the block y coordinate
+             @param z the block z coordinate
+             @return the region
+        </member>
+        <member name="M:API.Geo.AreaIslandAccess.getIslandFromBlock(Mogre.Vector3)">
+             Gets the {@link Island} at block coordinates (x, y, z)
+            
+             @param position of the block
+             @return the region
+        </member>
+        <member name="M:API.Geo.World.getName">
+            Gets the name of the world
+            @return the name of the world
+        </member>
+        <member name="M:API.Geo.World.getAge">
+            Gets the age of the world in ms. This count cannot be modified, and
+            increments on every tick
+            @return the world's age in ms
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:API.Geo.World.getSurfaceHeight(System.Int32,System.Int32,Mogre.Vector3)" -->
+        <member name="M:API.Geo.World.createEntity(Mogre.Vector3,API.Ent.Entity)">
+            Create a new Entity for initialization
+            <p/>
+            This does not add the Entity to the server. You must call
+            {@link #spawnEntity(Entity)} to simulate the Entity in the world
+            @param point The point to spawn the Entity
+            @param component The component to give the Entity.
+            @return The created entity
+        </member>
+        <member name="M:API.Geo.World.createAndSpawnEntity(Mogre.Vector3,API.Ent.Entity)">
+            Create a new Entity for initialization
+            <p/>
+            This does not add the Entity to the server. You must call
+            {@link #spawnEntity(Entity)} to simulate the Entity in the world
+            @param point The point to spawn the Entity
+            @param prefab The entity prefab.
+            @return The created entity
+        </member>
+        <member name="M:API.Geo.World.spawnEntity(API.Ent.Entity)">
+            Add a created entity to the world for simulation and syncing to clients
+            @param e The entity to spawn
+        </member>
+        <member name="M:API.Geo.World.getSpawnPoint">
+            Gets the world's spawn point
+            @return the spawn point
+        </member>
+        <member name="M:API.Geo.World.setSpawnPoint(Mogre.Vector3)">
+            Sets the world's spawn point
+            @param transform the Transform of the spawn point
+        </member>
+        <member name="M:API.Geo.World.getSeed">
+            Gets the world's seed. This value is immutable and set at world creation
+            @return the seed
+        </member>
+        <member name="M:API.Geo.World.getHeight">
+            Gets the height of this world in blocks.
+            @return The height of this world in blocks
+        </member>
+        <member name="M:API.Geo.World.getDisplayCoords(Mogre.Vector3,Mogre.Vector3)">
+                     * @param absolute coord of the Island
+                     * @param relative coords in the Island
+            	     * @return the display coords of an relative position
+        </member>
+        <member name="M:API.Geo.World.getPlayers">
+            Gets a set of all players on active on this world
+            @return all players on this world
+        </member>
+        <member name="M:API.Geo.World.getNearbyEntities(Mogre.Vector3,API.Ent.Entity,System.Int32)">
+            Gets a list of nearby entities of the point, inside of the range
+            @param position of the center
+            @param ignore Entity to ignore
+            @param range to look for
+            @return the list of nearby entities (or empty if none)
+        </member>
+        <member name="M:API.Geo.World.getNearbyEntities(Mogre.Vector3,System.Int32)">
+            Gets a set of nearby players to the point, inside of the range
+            @param position of the center
+            @param range to look for
+            @return A set of nearby Players
+        </member>
+        <member name="M:API.Geo.World.getNearbyEntities(API.Ent.Entity,System.Int32)">
+            Gets a set of nearby players to the entity, inside of the range
+            @param entity marking the center and which is ignored
+            @param range to look for
+            @return A set of nearby Players
+        </member>
+        <member name="M:API.Geo.World.getNearestEntity(Mogre.Vector3,API.Ent.Entity,System.Int32)">
+            Gets the absolute closest player from the specified point within a specified range.
+            @param position to search from
+            @param ignore to ignore while searching
+            @param range to search
+            @return nearest player
+        </member>
+        <member name="M:API.Geo.World.getNearestEntity(Mogre.Vector3,System.Int32)">
+            Gets the absolute closest player from the specified point within a specified range.
+            @param position center of search
+            @param range to search
+            @return nearest player
+        </member>
+        <member name="M:API.Geo.World.getNearestEntity(API.Ent.Entity,System.Int32)">
+            Gets the absolute closest player from the specified point within a specified range.
+            @param entity to search from
+            @param range to search
+            @return nearest player
+        </member>
+        <member name="M:API.Geo.World.getNearbyPlayers(Mogre.Vector3,API.Ent.Character,System.Int32)">
+            Gets a set of nearby players to the point, inside of the range.
+            The search will ignore the specified entity.
+            @param position of the center
+            @param ignore Entity to ignore
+            @param range to look for
+            @return A set of nearby Players
+        </member>
+        <member name="M:API.Geo.World.getNearbyPlayers(Mogre.Vector3,System.Int32)">
+            Gets a set of nearby players to the point, inside of the range
+            @param position of the center
+            @param range to look for
+            @return A set of nearby Players
+        </member>
+        <member name="M:API.Geo.World.getNearbyPlayers(API.Ent.Entity,System.Int32)">
+            Gets a set of nearby players to the entity, inside of the range
+            @param entity marking the center and which is ignored
+            @param range to look for
+            @return A set of nearby Players
+        </member>
+        <member name="M:API.Geo.World.getNearestPlayer(Mogre.Vector3,API.Ent.Character,System.Int32)">
+            Gets the absolute closest player from the specified point within a specified range.
+            @param position to search from
+            @param ignore to ignore while searching
+            @param range to search
+            @return nearest player
+        </member>
+        <member name="M:API.Geo.World.getNearestPlayer(Mogre.Vector3,System.Int32)">
+            Gets the absolute closest player from the specified point within a specified range.
+            @param position center of search
+            @param range to search
+            @return nearest player
+        </member>
+        <member name="M:API.Geo.World.getNearestPlayer(API.Ent.Entity,System.Int32)">
+            Gets the absolute closest player from the specified point within a specified range.
+            @param entity to search from
+            @param range to search
+            @return nearest player
+        </member>
+        <member name="M:API.Geo.World.unload(System.Boolean)">
+             Unloads the world from the server. Undefined behavior will occur
+             if any players are currently alive on the world while it is being
+             unloaded.
+            
+             @param save
+        </member>
+        <member name="M:API.Geo.World.save">
+            Saves all world data to world data file.
+            <p>
+            Note: World data does not include chunks, regions, or other data.
+            World data pertains to world age, world name, and world data maps.
+            </p>
+        </member>
+        <member name="M:Game.MathHelper.getAngleDifference(System.Single,System.Single)">
+             Gets the difference between two angles
+             This value is always positive (0 - 180)
+            
+             @param angle1
+             @param angle2
+             @return the positive angle difference
+        </member>
+        <member name="M:Game.MathHelper.getRadianDifference(System.Double,System.Double)">
+             Gets the difference between two radians
+             This value is always positive (0 - PI)
+            
+             @param radian1
+             @param radian2
+             @return the positive radian difference
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:Game.MathHelper.wrapAngle(System.Single)" -->
+        <!-- Badly formed XML comment ignored for member "M:Game.MathHelper.wrapByte(System.Int32)" -->
+        <!-- Badly formed XML comment ignored for member "M:Game.MathHelper.wrapRadian(System.Double)" -->
+        <member name="M:Game.MathHelper.round(System.Double,System.Int32)">
+             Rounds a number to the amount of decimals specified
+            
+             @param input to round
+             @param decimals to round to
+             @return the rounded number
+        </member>
+        <member name="M:Game.MathHelper.lerp(System.Double,System.Double,System.Double,System.Double,System.Double)">
+             Calculates the value at x using linear interpolation
+            
+             @param x the X coord of the value to interpolate
+             @param x1 the X coord of q0
+             @param x2 the X coord of q1
+             @param q0 the first known value (x1)
+             @param q1 the second known value (x2)
+             @return the interpolated value
+        </member>
+        <member name="M:Game.MathHelper.triLerp(System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)">
+             Calculates the value at x,y,z using trilinear interpolation
+            
+             @param x the X coord of the value to interpolate
+             @param y the Y coord of the value to interpolate
+             @param z the Z coord of the value to interpolate
+             @param q000 the first known value (x1, y1, z1)
+             @param q001 the second known value (x1, y2, z1)
+             @param q010 the third known value (x1, y1, z2)
+             @param q011 the fourth known value (x1, y2, z2)
+             @param q100 the fifth known value (x2, y1, z1)
+             @param q101 the sixth known value (x2, y2, z1)
+             @param q110 the seventh known value (x2, y1, z2)
+             @param q111 the eighth known value (x2, y2, z2)
+             @param x1 the X coord of q000, q001, q010 and q011
+             @param x2 the X coord of q100, q101, q110 and q111
+             @param y1 the Y coord of q000, q010, q100 and q110
+             @param y2 the Y coord of q001, q011, q101 and q111
+             @param z1 the Z coord of q000, q001, q100 and q101
+             @param z2 the Z coord of q010, q011, q110 and q111
+             @return the interpolated value
+        </member>
+        <member name="M:Game.MathHelper.max(System.Byte,System.Byte)">
+            Gets the maximum byte value from two values
+            
+            @param value1
+            @param value2
+            @return the maximum value
+        </member>
+        <member name="M:Game.MathHelper.roundUpPow2(System.Int32)">
+             Rounds an integer up to the next power of 2.
+            
+             @param x
+             @return the lowest power of 2 greater or equal to x
+        </member>
+    </members>
+</doc>
