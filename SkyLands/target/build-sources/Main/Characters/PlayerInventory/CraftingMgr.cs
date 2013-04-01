@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace Game.Characters.PlayerInventory {
-    class CraftingMgr {
+    public class CraftingMgr {
         private CraftTree c = new CraftTree();
         public CraftingMgr() {
 
@@ -45,18 +45,17 @@ namespace Game.Characters.PlayerInventory {
             return num;
         }
 
-        /*
-        public byte getCraftingResult(byte[] b) {
-            if(b.Length != 9) { throw new ArgumentException("Crafting must have 9 slots"); }
+        public int getBegining(byte[] craftingGrid) { for(int i = 0; i < 9; i++)  { if(craftingGrid[i] != 255) { return i; } } return -1; }
+        public int getEnd(byte[] craftingGrid)      { for(int i = 8; i != 0; i--) { if(craftingGrid[i] != 255) { return i; } } return -1; }
+        
+        public byte getCraftingResult(byte[] craftingGrid) {
+            if(craftingGrid.Length != 9) { throw new ArgumentException("Crafting must have 9 slots"); }
 
-            if(this.c.childs.ContainsKey(new byte[3] { b[0], b[1], b[2] })) {
-                if(this.c[new byte[3] { b[0], b[1], b[2] }].childs.ContainsKey(new byte[3] { b[3], b[4], b[5] })) {
-                    if(this.c[new byte[3] { b[0], b[1], b[2] }][new byte[3] { b[3], b[4], b[5] }].childs.ContainsKey(new byte[3] { b[6], b[7], b[8] })) {
-                        return this.c[new byte[3] { b[0], b[1], b[2] }][new byte[3] { b[3], b[4], b[5] }][new byte[3] { b[6], b[7], b[8] }].Value;
-                    }
-                }
-            }
+            int begin = getBegining(craftingGrid), end = getEnd(craftingGrid);
+
+            
+
             return 255;
-        }*/
+        }
     }
 }

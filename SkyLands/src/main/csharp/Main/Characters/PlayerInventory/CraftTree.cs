@@ -6,14 +6,14 @@ using System.Text;
 using API.Geo;
 
 namespace Game.Characters.PlayerInventory {
-    class CraftTree {
+    public class CraftTree {
         private byte mVal = 255;
         private bool mEndOfLine = false;
         public  byte Value { get { return this.mVal; } }
         public Dictionary<byte, CraftTree> childs = new Dictionary<byte,CraftTree>();
         public CraftTree this[byte index] {
             get { return this.childs[index]; }
-        }
+        } 
 
         public CraftTree(bool endOfLine = false) { this.mEndOfLine = endOfLine; }
         public CraftTree(byte value, bool endOfLine = false) { this.mVal = value; this.mEndOfLine = endOfLine; }
@@ -26,7 +26,8 @@ namespace Game.Characters.PlayerInventory {
             }
             else { this.childs.Add(b, c); return c; }
         }
-        public void setValue(byte b) { this.mVal = b; }
 
+        public void setValue(byte b) { this.mVal = b; }
+        public bool hasChild(byte key) { return this.childs.ContainsKey(key); }
     }
 }

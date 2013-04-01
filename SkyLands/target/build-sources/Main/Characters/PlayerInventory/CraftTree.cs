@@ -6,7 +6,7 @@ using System.Text;
 using API.Geo;
 
 namespace Game.Characters.PlayerInventory {
-    class CraftTree {
+    public class CraftTree {
         private byte mVal = 255;
         private bool mEndOfLine = false;
         public  byte Value { get { return this.mVal; } }
@@ -26,7 +26,8 @@ namespace Game.Characters.PlayerInventory {
             }
             else { this.childs.Add(b, c); return c; }
         }
+
         public void setValue(byte b) { this.mVal = b; }
-       
+        public bool hasChild(byte key) { return this.childs.ContainsKey(key); }
     }
 }

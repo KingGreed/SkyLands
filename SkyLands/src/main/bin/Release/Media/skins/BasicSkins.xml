@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported with Sprite Sheet Packer using Aralox's Miyagi Skin Exporter-->
+<Skins>
+  <Skin Name="Button">
+    <SubSkins>
+      <SubSkin Name="Button.MouseDown">
+        <Frames>
+          <Frame>
+            <FileName>SheetSprite.png</FileName>
+            <Duration>0</Duration>
+            <UV>
+              <X>0.005</X>
+              <Y>0.5958904109589041</Y>
+              <Width>0.99</Width>
+              <Height>0.1232876712328767</Height>
+            </UV>
+          </Frame>
+        </Frames>
+        <GpuPrograms />
+        <FrameAnimationMode>ForwardOnce</FrameAnimationMode>
+        <ScrollVector>
+          <X>0</X>
+          <Y>0</Y>
+        </ScrollVector>
+      </SubSkin>
+      <SubSkin Name="Button.MouseEnter">
+        <Frames>
+          <Frame>
+            <FileName>SheetSprite.png</FileName>
+            <Duration>0</Duration>
+            <UV>
+              <X>0.005</X>
+              <Y>0.5958904109589041</Y>
+              <Width>0.99</Width>
+              <Height>0.1232876712328767</Height>
+            </UV>
+          </Frame>
+        </Frames>
+        <GpuPrograms />
+        <FrameAnimationMode>ForwardOnce</FrameAnimationMode>
+        <ScrollVector>
+          <X>0</X>
+          <Y>0</Y>
+        </ScrollVector>
+      </SubSkin>
+      <SubSkin Name="Button">
+        <Frames>
+          <Frame>
+            <FileName>SheetSprite.png</FileName>
+            <Duration>0</Duration>
+            <UV>
+              <X>0.005</X>
+              <Y>0.4589041095890411</Y>
+              <Width>0.99</Width>
+              <Height>0.1232876712328767</Height>
+            </UV>
+          </Frame>
+        </Frames>
+        <GpuPrograms />
+        <FrameAnimationMode>ForwardOnce</FrameAnimationMode>
+        <ScrollVector>
+          <X>0</X>
+          <Y>0</Y>
+        </ScrollVector>
+      </SubSkin>
+    </SubSkins>
+  </Skin>
+  <Skin Name="ProgressBar">
+    <SubSkins>
+      <SubSkin Name="ProgressBar.Bar">
+        <Frames>
+          <Frame>
+            <FileName>testSkin.png</FileName>
+            <Duration>0</Duration>
+            <UV>
+              <X>0</X>
+              <Y>0.859030843</Y>
+              <Width>0.124513619</Width>
+              <Height>0.140969157</Height>
+            </UV>
+          </Frame>
+        </Frames>
+        <GpuPrograms />
+        <FrameAnimationMode>ForwardOnce</FrameAnimationMode>
+        <ScrollVector>
+          <X>0</X>
+          <Y>0</Y>
+        </ScrollVector>
+      </SubSkin>
+      <SubSkin Name="ProgressBar">
+        <Frames>
+          <Frame>
+            <FileName>testSkin.png</FileName>
+            <Duration>0</Duration>
+            <UV>
+              <X>0.128404662</X>
+              <Y>0.859030843</Y>
+              <Width>0.124513619</Width>
+              <Height>0.140969157</Height>
+            </UV>
+          </Frame>
+        </Frames>
+        <GpuPrograms />
+        <FrameAnimationMode>ForwardOnce</FrameAnimationMode>
+        <ScrollVector>
+          <X>0</X>
+          <Y>0</Y>
+        </ScrollVector>
+      </SubSkin>
+    </SubSkins>
+  </Skin>
+  <Skin Name="PanelSkin">
+    <SubSkins>
+      <SubSkin Name="PanelSkin">
+        <Frames>
+          <Frame>
+            <FileName>SheetSprite.png</FileName>
+            <Duration>0</Duration>
+            <UV>
+              <X>0.005</X>
+              <Y>0.3219178082191781</Y>
+              <Width>0.99</Width>
+              <Height>0.1232876712328767</Height>
+            </UV>
+          </Frame>
+        </Frames>
+        <GpuPrograms />
+        <FrameAnimationMode>ForwardOnce</FrameAnimationMode>
+        <ScrollVector>
+          <X>0</X>
+          <Y>0</Y>
+        </ScrollVector>
+      </SubSkin>
+    </SubSkins>
+  </Skin>
+  <Skin Name="cursorSkin">
+    <SubSkins>
+      <SubSkin Name="cursorSkin">
+        <Frames>
+          <Frame>
+            <FileName>Mouse Cursor.png</FileName>
+            <Duration>0</Duration>
+            <UV>
+              <X>0</X>
+              <Y>0</Y>
+              <Width>1</Width>
+              <Height>1</Height>
+            </UV>
+          </Frame>
+        </Frames>
+        <GpuPrograms />
+        <FrameAnimationMode>ForwardOnce</FrameAnimationMode>
+        <ScrollVector>
+          <X>0</X>
+          <Y>0</Y>
+        </ScrollVector>
+      </SubSkin>
+    </SubSkins>
+  </Skin>
+  <Skin Name="Console">
+    <SubSkins>
+      <SubSkin Name="Console">
+        <Frames>
+          <Frame>
+            <FileName>ConsoleBackground.png</FileName>
+            <Duration>0</Duration>
+            <UV>
+              <X>0</X>
+              <Y>0</Y>
+              <Width>1</Width>
+              <Height>1</Height>
+            </UV>
+          </Frame>
+        </Frames>
+        <GpuPrograms />
+        <FrameAnimationMode>ForwardOnce</FrameAnimationMode>
+        <ScrollVector>
+          <X>0</X>
+          <Y>0</Y>
+        </ScrollVector>
+      </SubSkin>
+    </SubSkins>
+  </Skin>
+</Skins>
