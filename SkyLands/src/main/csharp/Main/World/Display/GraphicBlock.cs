@@ -7,6 +7,7 @@ using System.Text;
 
 using API.Generic;
 using Game.World;
+using Game.World.Generator;
 
 namespace Game.Display
 {
@@ -28,10 +29,10 @@ namespace Game.Display
             ManualObject block = new ManualObject("frontFace");
             block.Begin(defaultMaterial, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
 
-            block.Position(new Vector3(0, 0, 0)); block.TextureCoord(1, 1);
-            block.Position(new Vector3(0, MainWorld.CUBE_SIDE, 0)); block.TextureCoord(1, 0);
-            block.Position(new Vector3(MainWorld.CUBE_SIDE, MainWorld.CUBE_SIDE, 0)); block.TextureCoord(0, 0);
-            block.Position(new Vector3(MainWorld.CUBE_SIDE, 0, 0)); block.TextureCoord(0, 1);
+            block.Position(new Vector3(0, 0, 0));                                     block.TextureCoord(1, 1); block.Normal(VanillaMultiBlock.normals[0]);
+            block.Position(new Vector3(0, MainWorld.CUBE_SIDE, 0));                   block.TextureCoord(1, 0); block.Normal(VanillaMultiBlock.normals[0]);
+            block.Position(new Vector3(MainWorld.CUBE_SIDE, MainWorld.CUBE_SIDE, 0)); block.TextureCoord(0, 0); block.Normal(VanillaMultiBlock.normals[0]);
+            block.Position(new Vector3(MainWorld.CUBE_SIDE, 0, 0));                   block.TextureCoord(0, 1); block.Normal(VanillaMultiBlock.normals[0]);
 
             block.Quad(3, 2, 1, 0);
             block.End();
@@ -41,10 +42,10 @@ namespace Game.Display
             block = new ManualObject("underFace");
             block.Begin(defaultMaterial, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
 
-            block.Position(new Vector3(0, 0, 0)); block.TextureCoord(1, 1);
-            block.Position(new Vector3(0, 0, -MainWorld.CUBE_SIDE)); block.TextureCoord(1, 0);
-            block.Position(new Vector3(MainWorld.CUBE_SIDE, 0, -MainWorld.CUBE_SIDE)); block.TextureCoord(0, 0);
-            block.Position(new Vector3(MainWorld.CUBE_SIDE, 0, 0)); block.TextureCoord(0, 1);
+            block.Position(new Vector3(0, 0, 0));                                      block.TextureCoord(1, 1); block.Normal(VanillaMultiBlock.normals[1]);
+            block.Position(new Vector3(0, 0, -MainWorld.CUBE_SIDE));                   block.TextureCoord(1, 0); block.Normal(VanillaMultiBlock.normals[1]);
+            block.Position(new Vector3(MainWorld.CUBE_SIDE, 0, -MainWorld.CUBE_SIDE)); block.TextureCoord(0, 0); block.Normal(VanillaMultiBlock.normals[1]);
+            block.Position(new Vector3(MainWorld.CUBE_SIDE, 0, 0));                    block.TextureCoord(0, 1); block.Normal(VanillaMultiBlock.normals[1]);
 
             block.Quad(0, 1, 2, 3);
             block.End();
@@ -54,10 +55,10 @@ namespace Game.Display
             block = new ManualObject("rightFace");
             block.Begin(defaultMaterial, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
 
-            block.Position(new Vector3(MainWorld.CUBE_SIDE, 0, 0)); block.TextureCoord(0, 1);
-            block.Position(new Vector3(MainWorld.CUBE_SIDE, 0, -MainWorld.CUBE_SIDE)); block.TextureCoord(1, 1);
-            block.Position(new Vector3(MainWorld.CUBE_SIDE, MainWorld.CUBE_SIDE, -MainWorld.CUBE_SIDE)); block.TextureCoord(1, 0);
-            block.Position(new Vector3(MainWorld.CUBE_SIDE, MainWorld.CUBE_SIDE, 0)); block.TextureCoord(0, 0);
+            block.Position(new Vector3(MainWorld.CUBE_SIDE, 0, 0));                                      block.TextureCoord(0, 1); block.Normal(VanillaMultiBlock.normals[2]);
+            block.Position(new Vector3(MainWorld.CUBE_SIDE, 0, -MainWorld.CUBE_SIDE));                   block.TextureCoord(1, 1); block.Normal(VanillaMultiBlock.normals[2]);
+            block.Position(new Vector3(MainWorld.CUBE_SIDE, MainWorld.CUBE_SIDE, -MainWorld.CUBE_SIDE)); block.TextureCoord(1, 0); block.Normal(VanillaMultiBlock.normals[2]);
+            block.Position(new Vector3(MainWorld.CUBE_SIDE, MainWorld.CUBE_SIDE, 0));                    block.TextureCoord(0, 0); block.Normal(VanillaMultiBlock.normals[2]);
 
             block.Quad(0, 1, 2, 3);
             block.End();
@@ -67,10 +68,10 @@ namespace Game.Display
             block = new ManualObject("upperFace");
             block.Begin(defaultMaterial, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
 
-            block.Position(new Vector3(MainWorld.CUBE_SIDE, MainWorld.CUBE_SIDE, 0)); block.TextureCoord(1, 1);
-            block.Position(new Vector3(MainWorld.CUBE_SIDE, MainWorld.CUBE_SIDE, -MainWorld.CUBE_SIDE)); block.TextureCoord(1, 0);
-            block.Position(new Vector3(0, MainWorld.CUBE_SIDE, -MainWorld.CUBE_SIDE)); block.TextureCoord(0, 0);
-            block.Position(new Vector3(0, MainWorld.CUBE_SIDE, 0)); block.TextureCoord(0, 1);
+            block.Position(new Vector3(MainWorld.CUBE_SIDE, MainWorld.CUBE_SIDE, 0));                    block.TextureCoord(1, 1); block.Normal(VanillaMultiBlock.normals[3]);
+            block.Position(new Vector3(MainWorld.CUBE_SIDE, MainWorld.CUBE_SIDE, -MainWorld.CUBE_SIDE)); block.TextureCoord(1, 0); block.Normal(VanillaMultiBlock.normals[3]);
+            block.Position(new Vector3(0, MainWorld.CUBE_SIDE, -MainWorld.CUBE_SIDE));                   block.TextureCoord(0, 0); block.Normal(VanillaMultiBlock.normals[3]);
+            block.Position(new Vector3(0, MainWorld.CUBE_SIDE, 0));                                      block.TextureCoord(0, 1); block.Normal(VanillaMultiBlock.normals[3]);
 
             block.Quad(0, 1, 2, 3);
             block.End();
@@ -80,10 +81,10 @@ namespace Game.Display
             block = new ManualObject("leftFace");
             block.Begin(defaultMaterial, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
 
-            block.Position(new Vector3(0, 0, 0)); block.TextureCoord(1, 1);
-            block.Position(new Vector3(0, MainWorld.CUBE_SIDE, 0)); block.TextureCoord(1, 0);
-            block.Position(new Vector3(0, MainWorld.CUBE_SIDE, -MainWorld.CUBE_SIDE)); block.TextureCoord(0, 0);
-            block.Position(new Vector3(0, 0, -MainWorld.CUBE_SIDE)); block.TextureCoord(0, 1);
+            block.Position(new Vector3(0, 0, 0));                                      block.TextureCoord(1, 1); block.Normal(VanillaMultiBlock.normals[4]);
+            block.Position(new Vector3(0, MainWorld.CUBE_SIDE, 0));                    block.TextureCoord(1, 0); block.Normal(VanillaMultiBlock.normals[4]);
+            block.Position(new Vector3(0, MainWorld.CUBE_SIDE, -MainWorld.CUBE_SIDE)); block.TextureCoord(0, 0); block.Normal(VanillaMultiBlock.normals[4]);
+            block.Position(new Vector3(0, 0, -MainWorld.CUBE_SIDE));                   block.TextureCoord(0, 1); block.Normal(VanillaMultiBlock.normals[4]);
 
             block.Quad(0, 1, 2, 3);
             block.End();
@@ -93,10 +94,10 @@ namespace Game.Display
             block = new ManualObject("backFace");
             block.Begin(defaultMaterial, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
 
-            block.Position(new Vector3(0, 0, -MainWorld.CUBE_SIDE)); block.TextureCoord(1, 1);
-            block.Position(new Vector3(0, MainWorld.CUBE_SIDE, -MainWorld.CUBE_SIDE)); block.TextureCoord(1, 0);
-            block.Position(new Vector3(MainWorld.CUBE_SIDE, MainWorld.CUBE_SIDE, -MainWorld.CUBE_SIDE)); block.TextureCoord(0, 0);
-            block.Position(new Vector3(MainWorld.CUBE_SIDE, 0, -MainWorld.CUBE_SIDE)); block.TextureCoord(0, 1);
+            block.Position(new Vector3(0, 0, -MainWorld.CUBE_SIDE));                                     block.TextureCoord(1, 1); block.Normal(VanillaMultiBlock.normals[5]);
+            block.Position(new Vector3(0, MainWorld.CUBE_SIDE, -MainWorld.CUBE_SIDE));                   block.TextureCoord(1, 0); block.Normal(VanillaMultiBlock.normals[5]);
+            block.Position(new Vector3(MainWorld.CUBE_SIDE, MainWorld.CUBE_SIDE, -MainWorld.CUBE_SIDE)); block.TextureCoord(0, 0); block.Normal(VanillaMultiBlock.normals[5]);
+            block.Position(new Vector3(MainWorld.CUBE_SIDE, 0, -MainWorld.CUBE_SIDE));                   block.TextureCoord(0, 1); block.Normal(VanillaMultiBlock.normals[5]);
 
             block.Quad(0, 1, 2, 3);
             block.End();

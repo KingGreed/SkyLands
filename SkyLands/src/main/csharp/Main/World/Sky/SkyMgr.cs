@@ -36,8 +36,8 @@ namespace Game.Sky
             this.mCaelumSystem.SkyDome = new SkyDome(this.mStateMgr.SceneMgr, this.mCaelumSystem.GetCaelumCameraNode());
 
             /* Sun */
-            this.mCaelumSystem.ManageAmbientLight = true;
-            this.mCaelumSystem.MinimumAmbientLight = new ColourValue(0.2f, 0.2f, 0.3f);
+            this.mCaelumSystem.ManageAmbientLight = false;
+            this.mCaelumSystem.MinimumAmbientLight = new ColourValue(0.1f, 0.1f, 0.1f);
             this.mCaelumSystem.Sun = new SpriteSun(this.mStateMgr.SceneMgr, this.mCaelumSystem.GetCaelumCameraNode(), "Custom_sun_disc.png", 4);
             this.mCaelumSystem.Sun.AmbientMultiplier  = new ColourValue(0.8f, 0.8f, 0.8f);
             this.mCaelumSystem.Sun.DiffuseMultiplier  = new ColourValue(3, 3, 2.7f);
@@ -55,7 +55,7 @@ namespace Game.Sky
             this.mCaelumSystem.PointStarfield.MagnitudeScale = 1.05f;
 
             /* Fog */
-            this.mCaelumSystem.SceneFogDensityMultiplier = 0;
+            this.mCaelumSystem.SceneFogDensityMultiplier = 0.0f;
             //this.mCaelumSystem.SceneFogColourMultiplier  = new ColourValue(0.3f, 0.3f, 0.3f);
             this.mCaelumSystem.ManageSceneFog = true;
         }

@@ -6,7 +6,7 @@ using System.Text;
 using Mogre;
 
 namespace Game.Characters.PlayerInventory {
-    class CraftingMgr {
+    public class CraftingMgr {
         private CraftTree c = new CraftTree();
         public CraftingMgr() {
 

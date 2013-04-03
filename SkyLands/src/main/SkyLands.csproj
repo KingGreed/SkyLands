@@ -90,7 +90,7 @@
     <None Include="resources\resources.cfg" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="CaelumSharp, Version=0.4.4737.33521, Culture=neutral, processorArchitecture=x86">
+    <Reference Include="CaelumSharp, Version=0.4.4841.21867, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Release\CaelumSharp.dll</HintPath>
     </Reference>

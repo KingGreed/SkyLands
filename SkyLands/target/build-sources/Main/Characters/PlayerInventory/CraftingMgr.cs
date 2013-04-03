@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using Mogre;
+
 namespace Game.Characters.PlayerInventory {
     public class CraftingMgr {
         private CraftTree c = new CraftTree();
@@ -45,15 +47,31 @@ namespace Game.Characters.PlayerInventory {
             return num;
         }
 
-        public int getBegining(byte[] craftingGrid) { for(int i = 0; i < 9; i++)  { if(craftingGrid[i] != 255) { return i; } } return -1; }
-        public int getEnd(byte[] craftingGrid)      { for(int i = 8; i != 0; i--) { if(craftingGrid[i] != 255) { return i; } } return -1; }
         
-        public byte getCraftingResult(byte[] craftingGrid) {
-            if(craftingGrid.Length != 9) { throw new ArgumentException("Crafting must have 9 slots"); }
+        public byte getCraftingResult(byte[,] craftingGrid) {
+            if(craftingGrid.GetLength(0) != 3 && craftingGrid.GetLength(1) != 3) { throw new ArgumentException("Crafting must have 9 slots"); }
 
-            int begin = getBegining(craftingGrid), end = getEnd(craftingGrid);
+            Vector2 begin = Vector2.ZERO, end = Vector2.ZERO;
 
-            
+            for(int i = 0; i < 3;  i++) { for(int j = 0; j < 3;  j++) { if(craftingGrid[j, i] != 255) { begin = new Vector2(i, j); break; } } }
+            for(int i = 2; i >= 0; i--) { for(int j = 2; j >= 0; j--) { if(craftingGrid[j, i] != 255) { end   = new Vector2(i, j); break; } } }
+
+            List<byte> b = new List<byte>();
+
+            for(int i = (int)begin.x; i < (int)end.x; i++) {
+                for(int j = (int)begin.y; j < (int)end.y; j++) {
+                    b.Add(craftingGrid[i, j]);
+                }
+                b.Add(0);
+            }
+            return 255;
+        }
+
+        public byte findRecipe(List<byte> b, int i, CraftTree c) {
+            if(i >= b.Count) { return c.Value; }
+
+            if(c.hasChild(b[i])) { return this.findRecipe(b, i + 1, c[b[i]]); }
+            if(b[i] == 255 && c.hasChild(b[i + 1])) { return this.findRecipe(b, i + 2, c[b[i + 1]]); }
 
             return 255;
         }

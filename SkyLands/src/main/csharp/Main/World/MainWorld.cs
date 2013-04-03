@@ -47,7 +47,8 @@ namespace Game.World
             this.mSeed       = 42;
 
             this.mStateMgr = stateMgr;
-            //this.mStateMgr.SceneMgr.ShadowTechnique = ShadowTechnique.SHADOWTYPE_TEXTURE_MODULATIVE;
+            this.mStateMgr.SceneMgr.AmbientLight = ColourValue.ZERO;
+            this.mStateMgr.SceneMgr.ShadowTechnique = ShadowTechnique.SHADOWDETAILTYPE_INTEGRATED;
 
             this.mIslandList = new Dictionary<Vector3, Island>();
             SceneNode node = this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
@@ -66,6 +67,14 @@ namespace Game.World
             this.mSkyMgr = new SkyMgr(this.mStateMgr);
 
             this.setSafeSpawnPoint(Vector3.ZERO);
+
+            Light lightGV = this.mStateMgr.SceneMgr.CreateLight( "LightGV" );
+            lightGV.Type = Light.LightTypes.LT_POINT;
+            lightGV.Position       = this.mSpawnPoint;
+            lightGV.DiffuseColour  = new ColourValue(1.0f, 1.0f, 1.0f);
+            lightGV.SpecularColour = new ColourValue(1.0f, 1.0f, 1.0f);
+            lightGV.SetAttenuation(10000f, 1.0f, 0.0045f, 0.00075f);
+            lightGV.CastShadows = false;
 
             /*StaticRectangle.DisplayRectangle(this.mSpawnPoint, 5, 5, 16*CHUNK_SIDE*CUBE_SIDE, node);
             Vector3 pos = new Vector3((this.mIslandList[new Vector3(0, 0, 0)].getSize().x + 3) * CHUNK_SIDE * CUBE_SIDE, 0, (this.mIslandList[new Vector3(0, 0, 0)].getSize().z + 3) * CHUNK_SIDE * CUBE_SIDE);

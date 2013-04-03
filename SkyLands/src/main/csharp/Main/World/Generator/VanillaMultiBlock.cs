@@ -46,6 +46,16 @@ namespace Game.World.Generator
                 new Vector3(CUBE_SIDE, 0, 0),         new Vector3(CUBE_SIDE, 0, -CUBE_SIDE),         new Vector3(CUBE_SIDE, CUBE_SIDE, -CUBE_SIDE), new Vector3(CUBE_SIDE, CUBE_SIDE, 0),
             };
 
+        public static Vector3[] normals =
+            new Vector3[] {
+                (blockPointCoords[3]  - blockPointCoords[2]) .CrossProduct(blockPointCoords[1]  - blockPointCoords[2]),
+                -(blockPointCoords[3] - blockPointCoords[2]) .CrossProduct(blockPointCoords[1]  - blockPointCoords[2]),
+                (blockPointCoords[8]  - blockPointCoords[9]) .CrossProduct(blockPointCoords[10] - blockPointCoords[9]),
+                (blockPointCoords[15] - blockPointCoords[14]).CrossProduct(blockPointCoords[13] - blockPointCoords[14]),
+                (blockPointCoords[19] - blockPointCoords[18]).CrossProduct(blockPointCoords[17] - blockPointCoords[18]),
+                (blockPointCoords[20] - blockPointCoords[21]).CrossProduct(blockPointCoords[22] - blockPointCoords[21]),
+            };
+
         public VanillaMultiBlock(string mat) {
             this.mList                = new List<Vector3>();
             this.mIndexInVertexBuffer = new List<int>    ();
@@ -112,9 +122,11 @@ namespace Game.World.Generator
             if(mList.Count == 0) { return; }
             this.mIsland = currentIsland;
 
+            Block current = this.mIsland.getBlock(this.mList[0], false);
+
             bool[] isFaceofMaterial = new bool[6];
             for (int i = 0; i < 6; i++) {
-                isFaceofMaterial[i] = this.mIsland.getBlock(this.mList[0], false).getFace(i) == this.mMaterial;
+                isFaceofMaterial[i] = current.getFace(i) == this.mMaterial;
             }
 
             int faceNumber = 0;
@@ -138,9 +150,10 @@ namespace Game.World.Generator
                     this.mIndexInVertexBuffer.Add(faceNumber);
 
                     foreach (BlockFace face in Enum.GetValues(typeof(BlockFace))) {
-                        if (currentIsland.hasVisiblefaceAt((int)loc.x, (int)loc.y, (int)loc.z, face) && isFaceofMaterial[(int)face]) {
+                        if(currentIsland.hasVisiblefaceAt((int)loc.x, (int)loc.y, (int)loc.z, face) && isFaceofMaterial[(int)face]) {
                             for(int i = 0; i < 4; i++) {
                                 block.Position(displayCoord + blockPointCoords[(int)face * 4 + i]); block.TextureCoord(textureCoord[(int)face * 4 + i]);
+                                block.Normal(normals[(int) face]);
                                 faceNumber++;
                             }
                             block.Quad((uint)faceNumber-4, (uint)faceNumber-3, (uint)faceNumber-2, (uint)faceNumber-1);

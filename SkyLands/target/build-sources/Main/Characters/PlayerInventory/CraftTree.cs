@@ -13,7 +13,7 @@ namespace Game.Characters.PlayerInventory {
         public Dictionary<byte, CraftTree> childs = new Dictionary<byte,CraftTree>();
         public CraftTree this[byte index] {
             get { return this.childs[index]; }
-        }
+        } 
 
         public CraftTree(bool endOfLine = false) { this.mEndOfLine = endOfLine; }
         public CraftTree(byte value, bool endOfLine = false) { this.mVal = value; this.mEndOfLine = endOfLine; }

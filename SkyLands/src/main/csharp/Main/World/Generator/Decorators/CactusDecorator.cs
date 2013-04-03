@@ -22,7 +22,7 @@ namespace Game.World.Generator.Decorators
                 int z = random.Next() % (int)(curr.getSize().z * MainWorld.CHUNK_SIDE);
                 int y = curr.getSurfaceHeight(x, z);
 
-                while(y == -1 && curr.getBlock(x, y, z, true) is GrassBlock) {
+                while(y == -1) {
                     x = random.Next() % (int)(curr.getSize().x * MainWorld.CHUNK_SIDE);
                     z = random.Next() % (int)(curr.getSize().z * MainWorld.CHUNK_SIDE);
                     y = curr.getSurfaceHeight(x, z);
