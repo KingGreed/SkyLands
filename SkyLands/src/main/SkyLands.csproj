@@ -76,39 +76,55 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\Media\fonts\bluehigh.ttf" />
-    <None Include="resources\Media\materials\scripts\cube.material" />
+    <Content Include="resources\Media\fonts\bluehigh.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\scripts\cube.material">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="resources\Media\models\cube.mesh" />
-    <None Include="resources\Media\packs\CaelumPack.zip" />
-    <None Include="resources\Media\packs\MiyagiPack.zip" />
-    <None Include="resources\Media\packs\OgreCore.zip" />
+    <Content Include="resources\Media\packs\CaelumPack.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\packs\MiyagiPack.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\packs\OgreCore.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="resources\Media\packs\Sinbad.blend" />
-    <None Include="resources\Media\packs\Sinbad.zip" />
-    <None Include="resources\Media\skins\background.bmp.old" />
-    <None Include="resources\ogre.cfg" />
-    <None Include="resources\plugins.cfg" />
-    <None Include="resources\resources.cfg" />
+    <Content Include="resources\Media\packs\Sinbad.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\skins\background.bmp.old">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\ogre.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\plugins.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\resources.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="CaelumSharp, Version=0.4.4841.21867, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Release\CaelumSharp.dll</HintPath>
+    <Reference Include="CaelumSharp">
+      <HintPath>..\..\..\Libs\CaelumSharp.dll</HintPath>
     </Reference>
-    <Reference Include="LibNoise, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Release\LibNoise.dll</HintPath>
+    <Reference Include="LibNoise">
+      <HintPath>..\..\..\Libs\LibNoise.dll</HintPath>
     </Reference>
     <Reference Include="Miyagi, Version=1.2.1.40980, Culture=neutral, PublicKeyToken=418dc626d1eb4589, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Release\Miyagi.dll</HintPath>
+      <HintPath>..\..\..\Libs\Miyagi.dll</HintPath>
     </Reference>
-    <Reference Include="Mogre, Version=1.7.1.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Release\Mogre.dll</HintPath>
+    <Reference Include="Mogre">
+      <HintPath>..\..\..\Libs\Mogre.dll</HintPath>
     </Reference>
-    <Reference Include="MOIS, Version=1.1.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Release\MOIS.dll</HintPath>
+    <Reference Include="MOIS">
+      <HintPath>..\..\..\Libs\MOIS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
@@ -117,108 +133,302 @@
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="resources\Media\materials\xml\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="resources\cg.dll" />
-    <Content Include="resources\Media\fonts\TrueTypeFonts.xml" />
-    <Content Include="resources\Media\images\background.bmp" />
-    <Content Include="resources\Media\images\Cross.png" />
-    <Content Include="resources\Media\images\menuPlay.png" />
-    <Content Include="resources\Media\materials\textures\aquawood1.jpg" />
-    <Content Include="resources\Media\materials\textures\aquawood2.jpg" />
-    <Content Include="resources\Media\materials\textures\aquawood3.jpg" />
-    <Content Include="resources\Media\materials\textures\bloodcave_below.jpg" />
-    <Content Include="resources\Media\materials\textures\bloodcave_dark.jpg" />
-    <Content Include="resources\Media\materials\textures\bloodcave_left.jpg" />
-    <Content Include="resources\Media\materials\textures\bloodcave_light.jpg" />
-    <Content Include="resources\Media\materials\textures\bloodcave_right.jpg" />
-    <Content Include="resources\Media\materials\textures\bloodcave_up.jpg" />
-    <Content Include="resources\Media\materials\textures\bloodwood1.jpg" />
-    <Content Include="resources\Media\materials\textures\bloodwood2.jpg" />
-    <Content Include="resources\Media\materials\textures\bloodwood3.jpg" />
-    <Content Include="resources\Media\materials\textures\cactus.png" />
-    <Content Include="resources\Media\materials\textures\constructionBlockBottom.png" />
-    <Content Include="resources\Media\materials\textures\constructionBlockSide1.png" />
-    <Content Include="resources\Media\materials\textures\constructionBlockSide2.png" />
-    <Content Include="resources\Media\materials\textures\constructionBlockTop.png" />
-    <Content Include="resources\Media\materials\textures\copper.jpg" />
-    <Content Include="resources\Media\materials\textures\crystalwood1.jpg" />
-    <Content Include="resources\Media\materials\textures\crystalwood2.jpg" />
-    <Content Include="resources\Media\materials\textures\crystalwood3.jpg" />
-    <Content Include="resources\Media\materials\textures\cuivre.jpg" />
-    <Content Include="resources\Media\materials\textures\darksand.jpg" />
-    <Content Include="resources\Media\materials\textures\darksand2.jpg" />
-    <Content Include="resources\Media\materials\textures\darkwood.jpg" />
-    <Content Include="resources\Media\materials\textures\dirt.jpg" />
-    <Content Include="resources\Media\materials\textures\dust.jpg" />
-    <Content Include="resources\Media\materials\textures\earth_side.jpg" />
-    <Content Include="resources\Media\materials\textures\fire1.jpg" />
-    <Content Include="resources\Media\materials\textures\fire2.jpg" />
-    <Content Include="resources\Media\materials\textures\gold.jpg" />
-    <Content Include="resources\Media\materials\textures\granite.jpg" />
-    <Content Include="resources\Media\materials\textures\grass16.png" />
-    <Content Include="resources\Media\materials\textures\grass2.jpg" />
-    <Content Include="resources\Media\materials\textures\grass3.jpg" />
-    <Content Include="resources\Media\materials\textures\grasscolor.png" />
-    <Content Include="resources\Media\materials\textures\icewood1.jpg" />
-    <Content Include="resources\Media\materials\textures\icewood2.jpg" />
-    <Content Include="resources\Media\materials\textures\icewood3.jpg" />
-    <Content Include="resources\Media\materials\textures\leaves.png" />
-    <Content Include="resources\Media\materials\textures\lightsand.jpg" />
-    <Content Include="resources\Media\materials\textures\lightwood.jpg" />
-    <Content Include="resources\Media\materials\textures\moon.jpg" />
-    <Content Include="resources\Media\materials\textures\pavement.jpg" />
-    <Content Include="resources\Media\materials\textures\poisonwood1.jpg" />
-    <Content Include="resources\Media\materials\textures\poisonwood2.jpg" />
-    <Content Include="resources\Media\materials\textures\poisonwood3.jpg" />
-    <Content Include="resources\Media\materials\textures\redsand1.jpg" />
-    <Content Include="resources\Media\materials\textures\redsand2.jpg" />
-    <Content Include="resources\Media\materials\textures\redsand3.jpg" />
-    <Content Include="resources\Media\materials\textures\redsand4.jpg" />
-    <Content Include="resources\Media\materials\textures\redsand5.jpg" />
-    <Content Include="resources\Media\materials\textures\sand.jpg" />
-    <Content Include="resources\Media\materials\textures\sand2.png" />
-    <Content Include="resources\Media\materials\textures\sand3.png" />
-    <Content Include="resources\Media\materials\textures\shore1.jpg" />
-    <Content Include="resources\Media\materials\textures\shore2.jpg" />
-    <Content Include="resources\Media\materials\textures\shore3.jpg" />
-    <Content Include="resources\Media\materials\textures\soil.jpg" />
-    <Content Include="resources\Media\materials\textures\stone.jpg" />
-    <Content Include="resources\Media\materials\textures\sunwood1.jpg" />
-    <Content Include="resources\Media\materials\textures\sunwood2.jpg" />
-    <Content Include="resources\Media\materials\textures\sunwood3.jpg" />
-    <Content Include="resources\Media\materials\textures\terrain.png" />
-    <Content Include="resources\Media\materials\textures\underwater1.jpg" />
-    <Content Include="resources\Media\materials\textures\underwater2.jpg" />
-    <Content Include="resources\Media\materials\textures\underwater3.jpg" />
-    <Content Include="resources\Media\materials\textures\underwater4.jpg" />
-    <Content Include="resources\Media\materials\textures\water.jpg" />
-    <Content Include="resources\Media\materials\textures\water1.jpg" />
-    <Content Include="resources\Media\materials\textures\water2.jpg" />
-    <Content Include="resources\Media\materials\textures\water3.jpg" />
-    <Content Include="resources\Media\materials\textures\wood.jpg" />
-    <Content Include="resources\Media\skins\BasicSkins.xml" />
-    <Content Include="resources\Media\skins\MiyagiSkins.xml" />
-    <Content Include="resources\Miyagi.Backend.Mogre.dll" />
-    <Content Include="resources\Miyagi.dll" />
-    <Content Include="resources\Miyagi.Plugin.Input.Mois.dll" />
-    <Content Include="resources\Miyagi.xml" />
-    <Content Include="resources\OgreMain.dll" />
-    <Content Include="resources\OgrePaging.dll" />
-    <Content Include="resources\OgreRTShaderSystem.dll" />
-    <Content Include="resources\OgreTerrain.dll" />
-    <Content Include="resources\OIS.dll" />
-    <Content Include="resources\Plugins\cg.dll" />
-    <Content Include="resources\Plugins\Plugin_BSPSceneManager.dll" />
-    <Content Include="resources\Plugins\Plugin_CgProgramManager.dll" />
-    <Content Include="resources\Plugins\Plugin_OctreeSceneManager.dll" />
-    <Content Include="resources\Plugins\Plugin_OctreeZone.dll" />
-    <Content Include="resources\Plugins\Plugin_ParticleFX.dll" />
-    <Content Include="resources\Plugins\Plugin_PCZSceneManager.dll" />
-    <Content Include="resources\Plugins\RenderSystem_Direct3D9.dll" />
-    <Content Include="resources\Plugins\RenderSystem_GL.dll" />
+    <Content Include="resources\cg.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\fonts\TrueTypeFonts.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\images\background.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\images\Cross.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\images\menuPlay.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\aquawood1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\aquawood2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\aquawood3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\bloodcave_below.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\bloodcave_dark.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\bloodcave_left.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\bloodcave_light.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\bloodcave_right.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\bloodcave_up.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\bloodwood1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\bloodwood2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\bloodwood3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\cactus.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\constructionBlockBottom.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\constructionBlockSide1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\constructionBlockSide2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\constructionBlockTop.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\copper.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\crystalwood1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\crystalwood2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\crystalwood3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\cuivre.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\darksand.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\darksand2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\darkwood.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\dirt.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\dust.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\earth_side.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\fire1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\fire2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\gold.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\granite.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\grass16.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\grass2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\grass3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\grasscolor.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\icewood1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\icewood2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\icewood3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\leaves.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\lightsand.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\lightwood.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\moon.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\pavement.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\poisonwood1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\poisonwood2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\poisonwood3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\redsand1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\redsand2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\redsand3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\redsand4.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\redsand5.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\sand.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\sand2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\sand3.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\shore1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\shore2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\shore3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\soil.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\stone.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\sunwood1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\sunwood2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\sunwood3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\terrain.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\underwater1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\underwater2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\underwater3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\underwater4.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\water.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\water1.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\water2.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\water3.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\wood.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\skins\BasicSkins.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\skins\MiyagiSkins.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Miyagi.Backend.Mogre.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Miyagi.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Miyagi.Plugin.Input.Mois.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Miyagi.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\OgreMain.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\OgrePaging.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\OgreRTShaderSystem.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\OgreTerrain.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\OIS.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Plugins\cg.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Plugins\Plugin_BSPSceneManager.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Plugins\Plugin_CgProgramManager.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Plugins\Plugin_OctreeSceneManager.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Plugins\Plugin_OctreeZone.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Plugins\Plugin_ParticleFX.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Plugins\Plugin_PCZSceneManager.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Plugins\RenderSystem_Direct3D9.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Plugins\RenderSystem_GL.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="csharp\API\Ent\Character.cs">
@@ -504,7 +714,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>xcopy /S /Y "$(TargetDir)resources\*" "$(TargetDir)"
+rd /S /Q "$(TargetDir)resources"
+
+</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>
+</PreBuildEvent>
   </PropertyGroup>
 </Project>
