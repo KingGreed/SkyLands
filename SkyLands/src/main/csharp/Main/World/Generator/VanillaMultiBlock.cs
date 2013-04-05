@@ -34,7 +34,15 @@ namespace Game.World.Generator
 
         private uint size = VertexElement.GetTypeSize(VertexElementType.VET_FLOAT3);
 
-
+        public static Vector2[] textureCoord =
+                new Vector2[] {
+                    new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0),
+                    new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 0), new Vector2(0, 1),
+                    new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0),
+                    new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0),
+                    new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 0), new Vector2(0, 1),
+                    new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 0)
+                };
         //see API.generic.BlockFace
         public static Vector3[] blockPointCoords = 
             new Vector3[] {
@@ -131,15 +139,6 @@ namespace Game.World.Generator
 
             int faceNumber = 0;
 
-            Vector2[] textureCoord = 
-                new Vector2[] {
-                    new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0),
-                    new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 0), new Vector2(0, 1),
-                    new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0),
-                    new Vector2(0, 0), new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0),
-                    new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 0), new Vector2(0, 1),
-                    new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 0)
-                };
             Vector3 displayCoord;
 
 
