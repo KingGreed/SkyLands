@@ -56,12 +56,12 @@ namespace Game.World.Generator
 
         public static Vector3[] normals =
             new Vector3[] {
-                (blockPointCoords[3]  - blockPointCoords[2]) .CrossProduct(blockPointCoords[1]  - blockPointCoords[2]),
-                -(blockPointCoords[3] - blockPointCoords[2]) .CrossProduct(blockPointCoords[1]  - blockPointCoords[2]),
-                (blockPointCoords[8]  - blockPointCoords[9]) .CrossProduct(blockPointCoords[10] - blockPointCoords[9]),
-                (blockPointCoords[15] - blockPointCoords[14]).CrossProduct(blockPointCoords[13] - blockPointCoords[14]),
-                (blockPointCoords[19] - blockPointCoords[18]).CrossProduct(blockPointCoords[17] - blockPointCoords[18]),
-                (blockPointCoords[20] - blockPointCoords[21]).CrossProduct(blockPointCoords[22] - blockPointCoords[21]),
+                new Vector3(0, 0, -1),
+                new Vector3(0, 0, -1),
+                new Vector3(0, 1, 0),
+                new Vector3(0, 1, 0),
+                new Vector3(1, 0, 0),
+                new Vector3(-1, 0, 0),
             };
 
         public VanillaMultiBlock(string mat) {

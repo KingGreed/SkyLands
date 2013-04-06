@@ -211,3 +211,43 @@ material cube/cactus
         }
     }
 }
+material fireball
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture fire.jpg }
+        }
+    }
+}
+material darkTower/darkWood
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture darkWood.jpg }
+        }
+    }
+}
+
+material darkTower/towerWood
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture towerWood.jpg }
+        }
+    }
+}

@@ -10,8 +10,10 @@ using Mogre;
 
 namespace Game.Characters.Misc {
     class LaserCube {
+        //Work in progress
         private SceneNode node;
         private double timeSinceCreation = 0;
+        //private double scale = 1;
         private bool created = false;
 
         public void makeFireCubeAt(Vector3 loc, SceneManager mgr) {
@@ -20,7 +22,7 @@ namespace Game.Characters.Misc {
             ball.Begin("fireCube", RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
             foreach(BlockFace face in Enum.GetValues(typeof(BlockFace))) {
                 for(int i = 0; i < 4; i++) {
-                    ball.Position(VanillaMultiBlock.blockPointCoords[(int)face * 4 + i]); ball.TextureCoord(VanillaMultiBlock.textureCoord[(int)face * 4 + i]);
+                    ball.Position(VanillaMultiBlock.blockPointCoords[(int)face * 4 + i]/10); ball.TextureCoord(VanillaMultiBlock.textureCoord[(int)face * 4 + i]);
                     ball.Normal(VanillaMultiBlock.normals[(int)face]);
                     faceNumber++;
                 }
@@ -35,8 +37,11 @@ namespace Game.Characters.Misc {
 
         public void update(float frameTime) {
             if(this.created) {
-                this.timeSinceCreation += frameTime;
+                float dscale = 2f * frameTime / 4f + 1; // la différence de scale à appliquer;
+                this.node.Scale(dscale, dscale, dscale);
 
+                this.timeSinceCreation += frameTime;
+                if(this.timeSinceCreation > 4) { this.created = false; }
             }
         }
 

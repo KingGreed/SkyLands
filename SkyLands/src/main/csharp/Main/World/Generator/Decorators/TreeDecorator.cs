@@ -38,7 +38,7 @@ namespace Game.World.Generator.Decorators
                     int treeZ = (int)(y + i * Math.Sin(angle)) + (random.Next(-10, 11) / 5);
                     int treeY = curr.getSurfaceHeight(treeX, treeZ, "Grass");
 
-                    this.createTree(curr, random, treeX, treeY, treeZ);
+                    if(treeY != -1) { this.createTree(curr, random, treeX, treeY, treeZ); }
                 }
             }
         }
