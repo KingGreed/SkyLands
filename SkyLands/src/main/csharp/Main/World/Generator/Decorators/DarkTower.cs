@@ -16,8 +16,7 @@ namespace Game.World.Generator.Decorators {
 
         public override void populate(Island curr, Random random) {
             Vector3 pos = this.findRandomPoint(curr, random);
-            MainTower t = new MainTower(1);
-            t.makeTower(curr, random, pos);
+            new MainTower(1).build(curr, random, pos);
         }
     }
 }

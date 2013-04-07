@@ -12,10 +12,8 @@ using Game.World.Blocks;
 
 using Mogre;
 
-
 namespace Game.World.Generator.Decorators.DarkTowerPopulator {
-    class MediumTower : Tower {
-        public void build(Island current, Random rd, Vector3 loc) {
-        }
+    interface Tower {
+        void build(Island current, Random rd, Vector3 loc);
     }
 }

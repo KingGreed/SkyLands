@@ -50,7 +50,6 @@ namespace Game.World
 
             this.mStateMgr = stateMgr;
             this.mStateMgr.SceneMgr.AmbientLight = ColourValue.ZERO;
-            this.mStateMgr.SceneMgr.ShadowTechnique = ShadowTechnique.SHADOWDETAILTYPE_INTEGRATED;
 
             this.mIslandList = new Dictionary<Vector3, Island>();
             SceneNode node = this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);

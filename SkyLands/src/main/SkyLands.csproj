@@ -465,6 +465,7 @@
     <Compile Include="csharp\API\Generic\BlockFace.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\API\Generic\Cardinal.cs" />
     <Compile Include="csharp\API\Generic\Material.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -707,8 +708,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\World\Generator\Decorators\DarkTower.cs" />
+    <Compile Include="csharp\Main\World\Generator\Decorators\DarkTower\DarkBeard.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\DarkTower\MainTower.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\DarkTower\MediumTower.cs" />
+    <Compile Include="csharp\Main\World\Generator\Decorators\DarkTower\RoofBuilder.cs" />
+    <Compile Include="csharp\Main\World\Generator\Decorators\DarkTower\Tower.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\TreeDecorator.cs">
       <SubType>Code</SubType>
     </Compile>

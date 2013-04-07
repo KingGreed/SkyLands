@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 
 using API.Generator;
+using API.Generic;
+
 using API.Geo.Cuboid;
 
 using Game.World.Blocks;
@@ -11,65 +13,94 @@ using Game.World.Blocks;
 using Mogre;
 
 namespace Game.World.Generator.Decorators.DarkTowerPopulator {
-    class MainTower {
+    class MainTower : Tower {
         public int towerNum;
         public const int xMax = 20, zMax = 20;
         List<int> mFloorHeight = new List<int>();
+        Orientation mSourceBuilding;
 
-        public MainTower(int num) { this.towerNum = num; }
+        public MainTower(int num, Orientation sourceBuilding = Orientation.None) { this.towerNum = num; this.mSourceBuilding = sourceBuilding; }
 
-        public void makeTower(Island current, Random rd, Vector3 loc) {
+        public void build(Island current, Random rd, Vector3 loc) {
             int towerHeight = rd.Next(40, 71);
 
-            loc = loc + 40 * Vector3.UNIT_Y;
+            if(towerNum == 1) { loc = loc + 40 * Vector3.UNIT_Y; }
             
             //body
             for(int x = 0; x < xMax; x++) {
                 for(int z = 0; z < zMax; z++) {
                     for(int y = 0; y <= towerHeight; y++) {
                         if((x == 0 && z == 0) || (x == 0 && z == zMax - 1) || (x == xMax - 1 && z == 0) || (z == zMax - 1 && x == xMax - 1)) { //corners
-                            current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z + z, VanillaChunk.staticBlock["TowerWoodBlock"].getId(), true);
+                            current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z + z, "TowerWoodBlock", true);
                         } else if((x == 0 || z == 0 || x == xMax - 1 || z == zMax - 1) && y != towerHeight) { //borders
-                            current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z + z, VanillaChunk.staticBlock["DarkWood"].getId(), true);
-                        }
-
-                        if(y == 1 || y == towerHeight - 5) {
-                            //make entrances
+                            current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z + z, "DarkWood", true);
                         }
 
                         if(y == 0 || y == towerHeight -1) {
                             if(x == 0 || z == 0 || x == xMax - 1 || z == zMax - 1) { //borders
-                                current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z + z, VanillaChunk.staticBlock["TowerWoodBlock"].getId(), true);
+                                current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z + z, "TowerWoodBlock", true);
                             } else {
-                                current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z + z, VanillaChunk.staticBlock["DarkWood"].getId(), true);
+                                current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z + z, "DarkWood", true);
                             }
                         }
-
                     }
                 }
             }
-            this.makeDarkBeard(current, towerHeight, loc);
-        }
+            new RoofBuilder().build(current, loc + Vector3.UNIT_Y * towerHeight, new Vector2(xMax, zMax), rd);
 
-        private void makeDarkBeard(Island current, int towerHeight, Vector3 loc) {
-            for(int x = 0; x < zMax; x++) {
-                for(int z = 0; z < zMax; z++) {
-                    if((x != 0) && (x != xMax-1) && (z != 0) && (z != zMax-1)) { continue; } // only borders
+            new DarkBeard().makeDarkBeard(current, towerHeight, loc, xMax, zMax);
 
-                    int length = System.Math.Abs(x - xMax / 2) + System.Math.Abs(z - zMax / 2) / 2;
+            bool newMain = false;
+            int i = 0;
 
-                    if(length == towerHeight - 1) { length++; }
-                    if(length == -1) { length = 1; }
-
-                    for(int y = 0; y <= length; y++) {
-                        current.setBlockAt((int)loc.x + x, (int)loc.y - y, (int)loc.z + z, VanillaChunk.staticBlock["TowerWoodBlock"].getId(), true);
+            foreach(Orientation o in Enum.GetValues(typeof(Orientation))) {
+                if(o == Orientation.None) { continue; }
+                if(this.towerNum < 3) {
+                    if(i != 3 && !newMain && rd.Next(0, 100) > 58) {
+                        new Bridge(o, this.getEntrance(o, towerHeight - 7, loc), new MainTower(this.towerNum + 1)).build(current);
+                        newMain = true;
+                    } else if(i == 3 && !newMain) {
+                        new Bridge(o, this.getEntrance(o, towerHeight - 7, loc), new MainTower(this.towerNum + 1)).build(current);
                     }
+                    else {
+                        new Bridge(o, this.getEntrance(o, 1, loc), new MediumTower()).build(current);
+                    }
+                } else {
+                    new Bridge(o, this.getEntrance(o, towerHeight - 7, loc), new MediumTower()).build(current);
                 }
+                if(o == this.mSourceBuilding) {
+                    new Bridge(o, this.getEntrance(o, 1, loc), new MediumTower()).build(current);
+                } else {
+                    new Bridge(o, this.getEntrance(o, 1, loc), new MediumTower()).build(current);
+                }
+
+                i++;
             }
         }
 
-        private void makeFloor(Island current) {
+        private void makeFloor(Island current) {}
+        private Vector3 getEntrance(Orientation orientation, int y, Vector3 towerLocation) {
+            if(orientation == Orientation.East)       { return towerLocation + new Vector3(xMax - 1, y, zMax / 2); }
+            else if(orientation == Orientation.North) { return towerLocation + new Vector3(xMax / 2, y, zMax - 1); }
+            else if(orientation == Orientation.South) { return towerLocation + new Vector3(xMax / 2, y, 0);        }
+            else                                   { return towerLocation + new Vector3(0, y, zMax / 2);        }
 
+        }
+
+        private void makeEntrance(Vector3 loc, Island current, Orientation orientation) {
+            for(int x = -2; x <= 2; x++) {
+                for(int y = 0; y <= 4; y++) {
+                    if(x == -2 || x == 2 || y == 4 || y == 0) {
+                        if(orientation == Orientation.South || orientation == Orientation.North) {
+                            current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z, "TowerWoodBlock", true);
+                        } else {
+                            current.setBlockAt((int)loc.x, (int)loc.y + y, (int)loc.z + x, "TowerWoodBlock", true);
+                        }
+                    } else {
+                        current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z, "Air", true);
+                    }
+                }
+            }
         }
     }
 }
