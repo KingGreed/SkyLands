@@ -1,2 +1,1 @@
-***** Sample.CraftingMgrTest.TestGetBegining
 ***** Sample.MyAppTest.TestSample

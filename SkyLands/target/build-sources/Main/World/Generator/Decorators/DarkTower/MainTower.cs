@@ -22,7 +22,7 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
         public MainTower(int num, Orientation sourceBuilding = Orientation.None) { this.towerNum = num; this.mSourceBuilding = sourceBuilding; }
 
         public void build(Island current, Random rd, Vector3 loc) {
-            int towerHeight = rd.Next(60, 88);
+            int towerHeight = rd.Next(50, 71);
 
             if(towerNum == 1) { loc = loc + 40 * Vector3.UNIT_Y; }
             
@@ -57,17 +57,16 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
                 if(o == Orientation.None) { continue; }
                 if(this.towerNum < 3) {
                     if(i != 3 && !newMain && rd.Next(0, 100) > 48) {
-                        new Bridge(o, this.getEntrance(o, towerHeight - 7, loc), new MainTower(this.towerNum + 1, (Orientation)(-(int)o))).build(current);
+                        new Bridge(o, this.getEntrance(o, towerHeight - 7, loc), new MainTower(this.towerNum + 1)).build(current);
                         newMain = true;
                     } else if(i == 3 && !newMain) {
-                        new Bridge(o, this.getEntrance(o, towerHeight - 7, loc), new MainTower(this.towerNum + 1, (Orientation)(-(int)o))).build(current);
-                        newMain = true;
+                        new Bridge(o, this.getEntrance(o, towerHeight - 7, loc), new MainTower(this.towerNum + 1)).build(current);
                     } else {
                         new Bridge(o, this.getEntrance(o, towerHeight - 7, loc), new MediumTower()).build(current);
                     }
                 } else { new Bridge(o, this.getEntrance(o, towerHeight - 7, loc), new MediumTower()).build(current); }
                 if(o == this.mSourceBuilding) { new Bridge(o, this.getEntrance(o, 1, loc), new NullTower()).build(current); }
-                else                          { new Bridge(o, this.getEntrance(o, 1, loc), new MediumTower()).build(current); }
+                else { new Bridge(o, this.getEntrance(o, 1, loc), new MediumTower()).build(current); }
                 i++;
             }
         }
@@ -77,7 +76,7 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
             if(orientation == Orientation.East)       { return towerLocation + new Vector3(xMax - 1, y, zMax / 2); }
             else if(orientation == Orientation.North) { return towerLocation + new Vector3(xMax / 2, y, zMax - 1); }
             else if(orientation == Orientation.South) { return towerLocation + new Vector3(xMax / 2, y, 0);        }
-            else                                      { return towerLocation + new Vector3(0, y, zMax / 2);        }
+            else                                   { return towerLocation + new Vector3(0, y, zMax / 2);        }
 
         }
 

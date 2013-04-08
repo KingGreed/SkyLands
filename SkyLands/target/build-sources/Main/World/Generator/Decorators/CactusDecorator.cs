@@ -8,33 +8,28 @@ using API.Geo.Cuboid;
 
 using Game.World.Blocks;
 
+using Mogre;
+
 namespace Game.World.Generator.Decorators
 {
     class CactusDecorator : Decorator {
         public CactusDecorator() {}
 
 
-        public override void populate(Island curr, Random random)
-        {
+        public override void populate(Island curr, Random random) {
             for (int i = 0; i < (curr.getSize().x + curr.getSize().z) * 4 ; i++)
             {
-                int x = random.Next() % (int)(curr.getSize().x * MainWorld.CHUNK_SIDE);
-                int z = random.Next() % (int)(curr.getSize().z * MainWorld.CHUNK_SIDE);
-                int y = curr.getSurfaceHeight(x, z);
+                Vector3 pos = this.findRandomPoint(curr, random);
 
-                while(y == -1 && curr.getBlock(x, y, z, true) is GrassBlock) {
-                    x = random.Next() % (int)(curr.getSize().x * MainWorld.CHUNK_SIDE);
-                    z = random.Next() % (int)(curr.getSize().z * MainWorld.CHUNK_SIDE);
-                    y = curr.getSurfaceHeight(x, z);
-                }
+                byte cactus = VanillaChunk.staticBlock["Cactus"].getId();
 
-                curr.setBlockAt(x, y, z, 8, true);
-                curr.setBlockAt(x, y+1, z, 8, true);
+                curr.setBlockAt((int)pos.x, (int)pos.y, (int)pos.z, cactus, true);
+                curr.setBlockAt((int)pos.x, (int)pos.y + 1, (int)pos.z, cactus, true);
                 if (random.Next(4)  > 1) {
-                    curr.setBlockAt(x, y + 2, z, 8, true);
+                    curr.setBlockAt((int)pos.x, (int)pos.y + 2, (int)pos.z, cactus, true);
                     if (random.Next(11) > 6) {
-                        curr.setBlockAt(x, y + 3, z, 8, true);
-                        if (random.Next(20) > 15) { curr.setBlockAt(x, y + 4, z, 8, true); }
+                        curr.setBlockAt((int)pos.x, (int)pos.y + 3, (int)pos.z, cactus, true);
+                        if(random.Next(20) > 15) { curr.setBlockAt((int)pos.x, (int)pos.y + 4, (int)pos.z, cactus, true); }
                     }
                 }
 

@@ -64,17 +64,20 @@ namespace Game.World.Generator
             Block curr;
             LogManager.Singleton.DefaultLog.LogMessage("Now displaying");
 
-            for(int x = 0; x < this.mIslandSize.x * MainWorld.CHUNK_SIDE; x++) {
-                for(int y = 0; y < this.mIslandSize.y * MainWorld.CHUNK_SIDE; y++) {
-                    for(int z = 0; z < this.mIslandSize.z * MainWorld.CHUNK_SIDE; z++) {
-                        curr = this.getBlock(x, y, z, false);
-                        if(!(curr is AirBlock) && this.setVisibleFaces(new Vector3(x, y, z), curr)) {
-                            for(int i = 0; i < 6; i++) {
-                                if(this.hasVisiblefaceAt(x, y, z, (BlockFace) i)) {
-                                    this.multiList[curr.getFace(i)].addBlock(new Vector3(x, y, z));
-                                }
-                            }
+            foreach(KeyValuePair<Vector3, Chunk> pair in this.mChunkList) {
+                for(int x = 0; x < MainWorld.CHUNK_SIDE; x++) {
+                    for(int y = 0; y < MainWorld.CHUNK_SIDE; y++) {
+                        for(int z = 0; z < MainWorld.CHUNK_SIDE; z++) {
+                            curr = pair.Value.getBlock(x, y, z);
 
+                            if(!(curr is AirBlock) && this.setVisibleFaces(new Vector3(x, y, z) + pair.Key * MainWorld.CHUNK_SIDE, curr)) {
+                                for(int i = 0; i < 6; i++) {
+                                    if(this.hasVisiblefaceAt(pair.Value, x, y, z, (BlockFace)i)) {
+                                        this.multiList[curr.getFace(i)].addBlock(pair.Key * MainWorld.CHUNK_SIDE + new Vector3(x, y, z));
+                                    }
+                                }
+
+                            }
                         }
                     }
                 }
@@ -85,6 +88,7 @@ namespace Game.World.Generator
             }
         }
 
+        public bool hasVisiblefaceAt(Chunk c, int x, int y, int z, BlockFace i) { return c.hasVisibleFaceAt(x, y, z, i); }
 
         //For optimization purpose returns wether the block has visible faces
         public bool setVisibleFaces(Vector3 blockCoord, Block curr)
@@ -115,80 +119,32 @@ namespace Game.World.Generator
             this.setVisibleFaceAt((int)loc.x, (int)loc.y, (int)loc.z, face, val); 
         }
 
+
         public override void setVisibleFaceAt(int x, int y, int z, BlockFace face, bool val) {
-            Chunk blockChunk = this.getChunkFromBlock(x, y, z);
-            if(blockChunk != null) {
-                blockChunk.setVisibleFaceAt(x % 16, y % 16, z % 16, face, val);
+            Vector3 chunkLocation = new Vector3(x / 16, y / 16, z / 16),
+                    blockLocation = new Vector3(x % 16, y % 16, z % 16);
+
+            if(blockLocation.x < 0 || blockLocation.y < 0 || blockLocation.z < 0) {
+                if(blockLocation.x < 0) { blockLocation.x += 16; chunkLocation.x -= 1; }
+                if(blockLocation.z < 0) { blockLocation.z += 16; chunkLocation.z -= 1; }
+                if(blockLocation.y < 0) { blockLocation.y += 16; chunkLocation.y -= 1; }
             }
+            if(this.hasChunk(chunkLocation)) { this.mChunkList[chunkLocation].setVisibleFaceAt((int)blockLocation.x, (int)blockLocation.y, (int)blockLocation.z, face, val); }
         }
 
         public override bool hasVisiblefaceAt(int x, int y, int z, BlockFace face) {
-            Chunk blockChunk = this.getChunkFromBlock(x, y, z);
-            if(blockChunk != null) {
-                return blockChunk.hasVisibleFaceAt(x % 16, y % 16, z % 16, face);
+            Vector3 chunkLocation = new Vector3(x / 16, y / 16, z / 16),
+                    blockLocation = new Vector3(x % 16, y % 16, z % 16);
+
+            if(blockLocation.x < 0 || blockLocation.y < 0 || blockLocation.z < 0) {
+                if(blockLocation.x < 0) { blockLocation.x += 16; chunkLocation.x -= 1; }
+                if(blockLocation.z < 0) { blockLocation.z += 16; chunkLocation.z -= 1; }
+                if(blockLocation.y < 0) { blockLocation.y += 16; chunkLocation.y -= 1; }
             }
-            return true;
+            if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation].hasVisibleFaceAt((int)blockLocation.x, (int)blockLocation.y, (int)blockLocation.z, face); }
+            else { return false; }
         }
 
-        public override Block getBlock(int x, int y, int z, bool force) {
-            if(x < 0 || y < 0 || z < 0) { return defaultBlock; }
-
-            if(force && y > this.mIslandSize.y * MainWorld.CHUNK_SIDE) {
-                this.mIslandSize.y = (int) System.Math.Ceiling((float)y / 16f);
-            }
-
-            Vector3 chunkLocation = getChunkCoordFromRelative(x, y, z), 
-                    blockLocation = getBlockCoordFromRelative(x, y, z);
-
-            if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation].getBlock(blockLocation); }
-            else if(force) {
-                this.mChunkList.Add(chunkLocation, new VanillaChunk(new Vector3(16,16,16), chunkLocation, this));
-                return this.mChunkList[chunkLocation].getBlock(blockLocation);
-            }
-            else { return defaultBlock; }
-        }
-
-        public override Vector3 getBlockCoord(int x, int y, int z) {
-            if(x < 0 || y < 0 || z < 0) { return -Vector3.UNIT_SCALE; }
-            
-            Vector3 chunkLocation = getChunkCoordFromRelative(x, y, z), 
-                    blockLocation = getBlockCoordFromRelative(x, y, z);
-
-            if(this.hasChunk(chunkLocation)) { return blockLocation; }
-            else                             { return -Vector3.UNIT_SCALE; }
-        }
-
-        public override Chunk getChunkFromBlock(int x, int y, int z) {
-            if(x < 0 || y < 0 || z < 0) { return null; }
-
-
-            Vector3 chunkLocation = getChunkCoordFromRelative(x, y, z);
-
-            if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation]; }
-            else                             { return null; }
-        }
-
-        private Vector3 getBlockCoordFromRelative(int x, int y, int z) { return new Vector3(x % 16, y % 16, z % 16); }
-        private Vector3 getChunkCoordFromRelative(int x, int y, int z) { return new Vector3(x / 16, y / 16, z / 16); }
-
-        public override void setBlockAt(int x, int y, int z, string material, bool force) {
-            if(x < 0 || y < 0 || z < 0) { return; }
-
-            if(force && y > this.mIslandSize.y * MainWorld.CHUNK_SIDE) {
-                this.mIslandSize.y = (int) System.Math.Ceiling((float)y / 16f);
-            }
-
-            Vector3 chunkLocation = getChunkCoordFromRelative(x, y, z), 
-                    blockLocation = getBlockCoordFromRelative(x, y, z);
-
-            if (this.hasChunk(chunkLocation)) { this.mChunkList[chunkLocation].setBlock(blockLocation, material); }
-            else if(force) {
-                this.mChunkList.Add(chunkLocation, new VanillaChunk(MainWorld.CHUNK_SIDE * Vector3.UNIT_SCALE, chunkLocation, this));
-                this.mChunkList[chunkLocation].setBlock(blockLocation, material);
-            } 
-        }
-
-        public override void setBlockAt(int x, int y, int z, byte material, bool force) { this.setBlockAt(x, y, z, VanillaChunk.byteToString[material], force); }
 
         public override void removeFromScene(Vector3 item) {
             Block curr = this.getBlock(item, false);
@@ -349,8 +305,79 @@ namespace Game.World.Generator
             reader.Close();
         }
 
-        public override string getMaterialFromName(string name) {
-            return VanillaChunk.staticBlock[name].getMaterial();
+        public override string getMaterialFromName(string name) { return VanillaChunk.staticBlock[name].getMaterial(); }
+
+        public override Block getBlock(int x, int y, int z, bool force) {
+            if(!force && (x < 0 || y < 0 || z < 0)) { return defaultBlock; }
+
+            Vector3 chunkLocation = new Vector3(x / 16, y / 16, z / 16),
+                    blockLocation = new Vector3(x % 16, y % 16, z % 16);
+
+            if(force && (blockLocation.x < 0 || blockLocation.y < 0 || blockLocation.z < 0)) {
+                if(blockLocation.x < 0) { blockLocation.x += 16; chunkLocation.x -= 1; }
+                if(blockLocation.z < 0) { blockLocation.z += 16; chunkLocation.z -= 1; }
+                if(blockLocation.y < 0) { blockLocation.y += 16; chunkLocation.y -= 1; }
+            }
+
+            if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation].getBlock(blockLocation); }
+            else if(force) {
+                this.mChunkList.Add(chunkLocation, new VanillaChunk(MainWorld.CHUNK_SIDE * Vector3.UNIT_SCALE, chunkLocation, this));
+                if(force && y > this.mIslandSize.y * MainWorld.CHUNK_SIDE) { this.mIslandSize.y = (int)System.Math.Ceiling((float)y / 16f); }
+                if(force && x > this.mIslandSize.x * MainWorld.CHUNK_SIDE) { this.mIslandSize.x = (int)System.Math.Ceiling((float)x / 16f); }
+                if(force && z > this.mIslandSize.z * MainWorld.CHUNK_SIDE) { this.mIslandSize.z = (int)System.Math.Ceiling((float)z / 16f); }
+
+                return this.mChunkList[chunkLocation].getBlock(blockLocation);
+            } else { return defaultBlock; }
         }
+
+        public override Vector3 getBlockCoord(int x, int y, int z) {
+            if(x < 0 || y < 0 || z < 0) { return -Vector3.UNIT_SCALE; }
+
+            Vector3 chunkLocation = new Vector3(x / 16, y / 16, z / 16),
+                    blockLocation = new Vector3(x % 16, y % 16, z % 16);
+
+            if(this.hasChunk(chunkLocation)) { return blockLocation; }
+            else                             { return -Vector3.UNIT_SCALE; }
+        }
+
+        public override Chunk getChunkFromBlock(int x, int y, int z) {
+            Vector3 chunkLocation = new Vector3(x / 16, y / 16, z / 16);
+
+            if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation]; }
+            else                             { return null; }
+        }
+
+        private Vector3 getBlockCoordFromRelative(int x, int y, int z) { return new Vector3(x % 16, y % 16, z % 16); }
+        private Vector3 getChunkCoordFromRelative(int x, int y, int z) { return new Vector3(x / 16, y / 16, z / 16); }
+
+
+        public override void setBlockAt(int x, int y, int z, string material, bool force) {
+            if(!force && (x < 0 || y < 0 || z < 0)) { return; }
+
+            Vector3 chunkLocation = new Vector3(x / 16, y / 16, z / 16),
+                    blockLocation = new Vector3(x % 16, y % 16, z % 16);
+
+            if(force && (blockLocation.x < 0 || blockLocation.y < 0 || blockLocation.z < 0)) {
+                if(blockLocation.x < 0) { blockLocation.x += 16; chunkLocation.x -= 1; }
+                if(blockLocation.z < 0) { blockLocation.z += 16; chunkLocation.z -= 1; }
+                if(blockLocation.y < 0) { blockLocation.y += 16; chunkLocation.y -= 1; }
+            }
+
+            if (this.hasChunk(chunkLocation)) { this.mChunkList[chunkLocation].setBlock(blockLocation, material); }
+            else if(force) {
+                this.mChunkList.Add(chunkLocation, new VanillaChunk(MainWorld.CHUNK_SIDE * Vector3.UNIT_SCALE, chunkLocation, this));
+                this.mChunkList[chunkLocation].setBlock(blockLocation, material);
+
+                if(force && y > this.mIslandSize.y * MainWorld.CHUNK_SIDE) { this.mIslandSize.y = (int)System.Math.Ceiling((float)y / 16f); }
+                if(force && x > this.mIslandSize.x * MainWorld.CHUNK_SIDE) { this.mIslandSize.x = (int)System.Math.Ceiling((float)x / 16f); }
+                if(force && z > this.mIslandSize.z * MainWorld.CHUNK_SIDE) { this.mIslandSize.z = (int)System.Math.Ceiling((float)z / 16f); }
+            } 
+        }
+
+        public override void setBlockAt(int x, int y, int z, byte material, bool force) { this.setBlockAt(x, y, z, VanillaChunk.byteToString[material], force); }
+
+        /*public void setBlockAt(int x, int y, int z, string material, bool force) {
+
+        }*/
     }
 }

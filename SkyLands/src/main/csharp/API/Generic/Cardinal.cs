@@ -2,10 +2,10 @@
 
 namespace API.Generic {
     public enum Orientation {
-        None,
-        North,
-        South,
-        East,
-        West
+        None  = 0,
+        North = 1,
+        South = -1,
+        East  = -2,
+        West  = 2
     }
 }

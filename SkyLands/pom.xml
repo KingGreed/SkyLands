@@ -89,6 +89,9 @@ under the License.
         <extensions>true</extensions>
         <version>1.4.0-incubating</version>
         <configuration>
+          <descriptors>
+            <descriptor>packaging.xml</descriptor>
+          </descriptors>
           <parameters>
             <parameter>/unsafe</parameter>
             <parameter>/platform:x86</parameter>

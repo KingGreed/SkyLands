@@ -15,10 +15,10 @@ using Mogre;
 
 namespace Game.World.Generator.Decorators.DarkTowerPopulator {
     class MediumTower : Tower {
-        public const int xMax = 10, zMax = 10;
+        public const int xMax = 20, zMax = 20;
         public void build(Island current, Random rd, Vector3 loc) {
 
-            int towerHeight = rd.Next(15, 30);
+            int towerHeight = rd.Next(20, 35);
             //body
             for(int x = 0; x < xMax; x++) {
                 for(int z = 0; z < zMax; z++) {
@@ -39,8 +39,6 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
                     }
                 }
             }
-            new DarkBeard().makeDarkBeard(current, towerHeight, loc, xMax, zMax);
-            new RoofBuilder().build(current, loc + Vector3.UNIT_Y * towerHeight, new Vector2(xMax, zMax), rd);
         }
     }
 }

@@ -711,6 +711,7 @@
     <Compile Include="csharp\Main\World\Generator\Decorators\DarkTower\DarkBeard.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\DarkTower\MainTower.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\DarkTower\MediumTower.cs" />
+    <Compile Include="csharp\Main\World\Generator\Decorators\DarkTower\NullTower.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\DarkTower\RoofBuilder.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\DarkTower\Tower.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\TreeDecorator.cs">

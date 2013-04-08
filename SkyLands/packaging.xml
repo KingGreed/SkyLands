@@ -1,0 +1,23 @@
+<assembly>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <fileSets>
+        <fileSet>
+            <directory>target</directory>
+            <includes>
+                <include>*.dll</include>
+                <include>*.cfg</include>
+                <include>*.config</include>
+                <include>*.exe</include>
+                <include>Media/**</include>
+                <include>Plugin/**</include>
+            </includes>
+            <excludes>
+                <exclude>*-test.dll</exclude>
+                <exclude>NUnit.Framework.dll</exclude>
+            </excludes>
+        </fileSet>
+    </fileSets>
+</assembly>

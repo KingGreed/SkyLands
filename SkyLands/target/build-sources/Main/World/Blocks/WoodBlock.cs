@@ -11,8 +11,19 @@ namespace Game.World.Blocks
     {
         public WoodBlock() {
             this.mName = "Wood";
-            this.mMaterial = "cube/wood";
             this.mId = 4;
+        }
+
+        public override string getFace(int i) {
+            switch(i) {
+                case 0: return "cube/wood/side";
+                case 1: return "cube/wood/side";
+                case 2: return "cube/wood/top";
+                case 3: return "cube/wood/top";
+                case 4: return "cube/wood/side";
+                case 5: return "cube/wood/side";
+            }
+            return "";
         }
     }
 }

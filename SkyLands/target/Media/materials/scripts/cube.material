@@ -102,7 +102,7 @@ material cube/metal
         }
     }
 }
-material cube/wood
+material cube/wood/side
 {
 	technique
 	{
@@ -111,11 +111,11 @@ material cube/wood
 			ambient 1.0 1.0 1.0
             diffuse 1.0 1.0 1.0
 
-			texture_unit { texture lightwood.jpg }
+			texture_unit { texture wood.png }
 		}
 	}
 }
-material cube/leaves
+material cube/wood/top
 {
     technique
     {
@@ -123,6 +123,23 @@ material cube/leaves
         {
             ambient 1.0 1.0 1.0
             diffuse 1.0 1.0 1.0
+
+            texture_unit { texture woodTop.png }
+        }
+    }
+}
+
+material cube/leaves
+{
+    technique
+    {
+        pass
+        {
+             ambient 1 1 1 1
+             diffuse 1 1 1 1
+             specular 0 0 0 0
+             emissive 0 0 0
+ 
 
             texture_unit { texture leaves.png }
         }
@@ -191,6 +208,46 @@ material cube/cactus
             diffuse 1.0 1.0 1.0
 
             texture_unit { texture cactus.png }
+        }
+    }
+}
+material fireball
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture fire.jpg }
+        }
+    }
+}
+material darkTower/darkWood
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture darkWood.jpg }
+        }
+    }
+}
+
+material darkTower/towerWood
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture towerWood.jpg }
         }
     }
 }

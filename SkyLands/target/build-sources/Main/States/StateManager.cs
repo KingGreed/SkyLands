@@ -36,6 +36,8 @@ namespace Game.States
         {
             GraphicBlock.generateFace();
             LogManager.Singleton.DefaultLog.LogMessage("***********************Program\'s Log***********************");
+            this.SceneMgr.ShadowTechnique = ShadowTechnique.SHADOWDETAILTYPE_INTEGRATED;
+            this.SceneMgr.ShadowFarDistance = 400;
             this.mMiyagiMgr = new MiyagiMgr(this.mInput, new Vector2(this.mWindow.Width, this.mWindow.Height));
             this.mConsole = new MyConsole(this);
             

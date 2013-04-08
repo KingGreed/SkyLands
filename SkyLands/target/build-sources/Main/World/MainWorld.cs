@@ -17,6 +17,7 @@ using Game.World.Blocks;
 using Game.World.Display;
 using Game.World.Generator.Biomes;
 using Game.CharacSystem;
+using Game.Characters.Misc;
 
 using Mogre;
 
@@ -30,14 +31,15 @@ namespace Game.World
         private long     mSeed;
         private Vector3  mSpawnPoint;
         public const int MaxHeight = 256; // must be a multiple of 16
-        public const int CHUNK_SIDE = 16;
         public const int CUBE_SIDE = 50;
+        public const int CHUNK_SIDE = 16;
 
         private List<Entity> mEntityList;
         private Dictionary<Vector3, Island> mIslandList;
 
         private StateManager  mStateMgr;
         private SkyMgr        mSkyMgr;
+        private LaserCube l  = new LaserCube();
         //private Thread        workerThread;
 
         public MainWorld(StateManager stateMgr)
@@ -48,7 +50,6 @@ namespace Game.World
 
             this.mStateMgr = stateMgr;
             this.mStateMgr.SceneMgr.AmbientLight = ColourValue.ZERO;
-            this.mStateMgr.SceneMgr.ShadowTechnique = ShadowTechnique.SHADOWDETAILTYPE_INTEGRATED;
 
             this.mIslandList = new Dictionary<Vector3, Island>();
             SceneNode node = this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
@@ -68,9 +69,18 @@ namespace Game.World
 
             this.setSafeSpawnPoint(Vector3.ZERO);
 
-            /*Light pointLight = this.mStateMgr.SceneMgr.CreateLight("pointLight");
-            pointLight.Type = Light.LightTypes.LT_POINT;
-            pointLight.Position = this.mSpawnPoint + new Vector3(100, 100, 100);
+            Light lightGV = this.mStateMgr.SceneMgr.CreateLight( "LightGV" );
+            lightGV.Type = Light.LightTypes.LT_POINT;
+            lightGV.Position       = this.mSpawnPoint;
+            lightGV.DiffuseColour  = new ColourValue(1.0f, 1.0f, 1.0f);
+            lightGV.SpecularColour = new ColourValue(1.0f, 1.0f, 1.0f);
+            lightGV.SetAttenuation(10000f, 1.0f, 0.0045f, 0.00075f);
+            lightGV.CastShadows = false;
+
+            LogManager.Singleton.DefaultLog.LogMessage("2");
+            l.makeFireCubeAt(this.mSpawnPoint + new Vector3(100, 200, 0), this.mStateMgr.SceneMgr);
+            LogManager.Singleton.DefaultLog.LogMessage("3");
+
 
             /*StaticRectangle.DisplayRectangle(this.mSpawnPoint, 5, 5, 16*CHUNK_SIDE*CUBE_SIDE, node);
             Vector3 pos = new Vector3((this.mIslandList[new Vector3(0, 0, 0)].getSize().x + 3) * CHUNK_SIDE * CUBE_SIDE, 0, (this.mIslandList[new Vector3(0, 0, 0)].getSize().z + 3) * CHUNK_SIDE * CUBE_SIDE);
@@ -187,7 +197,7 @@ namespace Game.World
             workerThread = new Thread(this.mIslandList[pos].display);*/
         }
 
-        public void Update(float frameTime) { this.mSkyMgr.Update(); }
+        public void Update(float frameTime) { this.mSkyMgr.Update(); l.update(frameTime); }
 
         public static Vector3 AbsToRelative(Vector3 v)
         {
