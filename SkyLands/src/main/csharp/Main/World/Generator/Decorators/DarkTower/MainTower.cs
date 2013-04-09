@@ -55,7 +55,7 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
 
             foreach(Orientation o in Enum.GetValues(typeof(Orientation))) {
                 if(o == Orientation.None) { continue; }
-                if(this.towerNum < 3) {
+                if(this.towerNum < 4) {
                     if(i != 3 && !newMain && rd.Next(0, 100) > 48) {
                         new Bridge(o, this.getEntrance(o, towerHeight - 7, loc), new MainTower(this.towerNum + 1, (Orientation)(-(int)o))).build(current);
                         newMain = true;
@@ -78,6 +78,7 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
             else if(orientation == Orientation.North) { return towerLocation + new Vector3(xMax / 2, y, zMax - 1); }
             else if(orientation == Orientation.South) { return towerLocation + new Vector3(xMax / 2, y, 0);        }
             else                                      { return towerLocation + new Vector3(0, y, zMax / 2);        }
+            
 
         }
 
