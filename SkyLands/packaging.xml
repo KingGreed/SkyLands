@@ -6,6 +6,7 @@
     <fileSets>
         <fileSet>
             <directory>target</directory>
+            <outputDirectory>/SkyLands</outputDirectory>
             <includes>
                 <include>*.dll</include>
                 <include>*.cfg</include>
