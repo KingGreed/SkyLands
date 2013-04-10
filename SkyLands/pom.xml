@@ -89,14 +89,31 @@ under the License.
         <extensions>true</extensions>
         <version>1.4.0-incubating</version>
         <configuration>
-          <descriptors>
-            <descriptor>packaging.xml</descriptor>
-          </descriptors>
           <parameters>
             <parameter>/unsafe</parameter>
             <parameter>/platform:x86</parameter>
           </parameters>
         </configuration>
+      </plugin>
+
+      <!-- .zip -->
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2-beta-5</version>
+        <configuration>
+          <descriptors>
+            <descriptor>packaging.xml</descriptor>
+          </descriptors>
+        </configuration>
+        <executions>
+          <execution>
+            <id>make-assembly</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins> 
   </build> 

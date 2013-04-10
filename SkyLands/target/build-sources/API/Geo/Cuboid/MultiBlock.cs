@@ -26,6 +26,5 @@ namespace API.Geo.Cuboid
 
         string getName();
         void   setName(string name);
-        void regen();
     }
 }

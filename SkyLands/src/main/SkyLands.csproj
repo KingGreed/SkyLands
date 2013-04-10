@@ -85,6 +85,9 @@
     <None Include="resources\Media\models\cube.mesh">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="resources\Media\materials\textures\planks.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\materials\textures\towerWood.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -653,6 +656,7 @@
     <Compile Include="csharp\Main\World\Blocks\ConstructionBlock.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\World\Blocks\WoodenSlab.cs" />
     <Compile Include="csharp\Main\World\Blocks\TowerWoodBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\DarkWoodBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\DirtBlock.cs">
@@ -703,6 +707,7 @@
     <Compile Include="csharp\Main\World\Generator\Biomes\Plains.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\World\Generator\VanillaMultiHalfBlock.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\Bridge.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\CactusDecorator.cs">
       <SubType>Code</SubType>

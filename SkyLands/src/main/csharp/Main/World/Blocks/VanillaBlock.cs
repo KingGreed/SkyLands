@@ -21,13 +21,15 @@ namespace Game.World.Blocks
     {
         protected string mName;
         protected string mMaterial;
-        protected byte   mId = 255;//Warning do not set 255 as a value
+        protected byte   mId = 255;     //Warning do not set 255 as a value
+        protected int    mMeshType = 0; //For custum mesh
 
         protected static int CUBE_SIDE = MainWorld.CUBE_SIDE;
 
-        public override string getName() { return this.mName; }
+        public override int    getMeshType() { return this.mMeshType; }
+        public override string getName()     { return this.mName; }
         public override string getMaterial() { return this.mMaterial; }
-        public override byte getId() { return this.mId; }
+        public override byte   getId()       { return this.mId; }
 
 
         public override string getFace(int i) { return this.mMaterial; }

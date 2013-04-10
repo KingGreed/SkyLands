@@ -12,7 +12,7 @@
                 <include>*.config</include>
                 <include>*.exe</include>
                 <include>Media/**</include>
-                <include>Plugin/**</include>
+                <include>Plugins/**</include>
             </includes>
             <excludes>
                 <exclude>*-test.dll</exclude>

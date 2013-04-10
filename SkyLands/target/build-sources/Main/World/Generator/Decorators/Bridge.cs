@@ -28,11 +28,20 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
             this.makeEntrance(current);
             this.makeInner(current);
             this.mLocation.y -= 1;
-            switch(this.mOrientation) {
-                case Orientation.East : this.mLocation -= new Vector3(-6, 0, MainTower.zMax / 2); break;
-                case Orientation.West : this.mLocation -= new Vector3(MainTower.xMax + 5, 0, MainTower.zMax / 2); break;
-                case Orientation.North: this.mLocation += new Vector3(-MainTower.xMax / 2, 0, 6); break;
-                case Orientation.South: this.mLocation -= new Vector3(MainTower.xMax / 2, 0, MainTower.zMax + 5); break;
+            if(this.mBridgeTo is MainTower) {
+                switch(this.mOrientation) {
+                    case Orientation.East: this.mLocation -= new Vector3(-6, 0, MainTower.zMax / 2); break;
+                    case Orientation.West: this.mLocation -= new Vector3(MainTower.xMax + 5, 0, MainTower.zMax / 2); break;
+                    case Orientation.North: this.mLocation += new Vector3(-MainTower.xMax / 2, 0, 6); break;
+                    case Orientation.South: this.mLocation -= new Vector3(MainTower.xMax / 2, 0, MainTower.zMax + 5); break;
+                }
+            } else if(this.mBridgeTo is MediumTower) {
+                switch(this.mOrientation) {
+                    case Orientation.East: this.mLocation -= new Vector3(-6, 0, MediumTower.zMax / 2); break;
+                    case Orientation.West: this.mLocation -= new Vector3(MediumTower.xMax + 5, 0, MediumTower.zMax / 2); break;
+                    case Orientation.North: this.mLocation += new Vector3(-MediumTower.xMax / 2, 0, 6); break;
+                    case Orientation.South: this.mLocation -= new Vector3(MediumTower.xMax / 2, 0, MediumTower.zMax + 5); break;
+                }
             }
             this.mBridgeTo.build(current, new Random(), this.mLocation);
         }

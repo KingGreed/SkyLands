@@ -28,7 +28,10 @@ namespace Game.World.Generator
                 if(!(pair.Value is AirBlock)) {
                     for (int i = 0; i < 6; i++) {
                         if (!this.multiList.ContainsKey(pair.Value.getFace(i))) {
-                            this.multiList.Add(pair.Value.getFace(i), new VanillaMultiBlock(pair.Value.getFace(i)));
+                            switch(pair.Value.getMeshType()) {
+                                case 1: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiHalfBlock(pair.Value.getFace(i)));  break;
+                                case 0: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiBlock    (pair.Value.getFace(i)));  break;
+                            }
                         }
                     }
                 }
