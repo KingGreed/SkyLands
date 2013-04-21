@@ -19,6 +19,8 @@ namespace Game
         public bool IsConsoleMode { get { return this.mIsConsoleMode; } set { this.mIsConsoleMode = value; } }
         public bool IsAllowedToMoveCam { get { return this.mIsAllowedToMoveCam; } set { this.mIsAllowedToMoveCam = value; } }
 
+        private SceneNode selected = null;
+
         public DebugMode(MoisManager input, CharacMgr characMgr, GameGUI gui)
         {
             this.mInput = input;
@@ -32,6 +34,30 @@ namespace Game
 
         public void Update(float frameTime, bool enablePlayerMove = true)
         {
+            if(this.mIsDebugMode && this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left)) {
+                if(selected == null) {
+                    Ray ray = this.mCharacMgr.MainPlayerCam.Camera.GetCameraToViewportRay(0.5f, 0.5f);
+                    RaySceneQuery raySceneQuery = this.mCharacMgr.SceneMgr.CreateRayQuery(new Ray());
+                    raySceneQuery.Ray = ray;
+
+                    RaySceneQueryResult result = raySceneQuery.Execute();
+                    RaySceneQueryResult.Enumerator itr = (RaySceneQueryResult.Enumerator)(result.GetEnumerator());
+
+                    while(itr != null && itr.MoveNext()) {
+                        if(itr.Current.movable.Name.Contains("CharacterEnt_")) {
+                            selected = ((SceneNode)itr.Current.movable.ParentNode);
+                            selected.ShowBoundingBox = true;
+                        }
+                    }
+                } else {
+                    int characId = Convert.ToInt32(selected.Name.Substring(14));
+                    this.mCharacMgr.GetCharacter(characId).moveTo(this.mCharacMgr.World.getSpawnPoint() + Vector3.UNIT_Y);
+                    selected.ShowBoundingBox = false;
+                    selected = null;
+                    
+                }
+            }
+
             if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F1))
             {
                 this.mIsDebugMode = !this.mIsDebugMode;
@@ -54,18 +80,6 @@ namespace Game
                     this.mCharacMgr.MainPlayerCam.InitCamera();
             }
 
-            /*if(this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F3)) {
-
-                Vector3 spawn = this.mCharacMgr.GetCharacter().FeetPosition;
-                spawn /= World.MainWorld.CUBE_SIDE;
-                spawn.y -= 1;
-                spawn.x = Mogre.Math.IFloor(spawn.x);
-                spawn.y = Mogre.Math.IFloor(spawn.y);
-                spawn.z = Mogre.Math.IFloor(spawn.z);
-
-
-                this.mCharacMgr.World.getIslandAt(new Vector3(0, 0, 0)).removeFromScene(spawn);
-            }*/
 
             this.mCharacMgr.GetCharacter().IsAllowedToMove = !this.mIsConsoleMode && this.mIsAllowedToMoveCam;
             this.mCharacMgr.Update(frameTime);

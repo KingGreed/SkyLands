@@ -4,6 +4,7 @@ using Mogre;
 
 using Game.World;
 using Game.Animation;
+using Game.Characters.IA;
 
 namespace Game.CharacSystem
 {
@@ -26,10 +27,9 @@ namespace Game.CharacSystem
         private JumpSpeed       mJumpSpeed;
 
         //MoveForward variable
-        private Vector3         mStartingPoint;
-        //private int             mDist;
+        private Vector3         mDirection;
+        private PathFinder      mPathFinder;
         private bool            mIsWalking;
-        private AStar           mPath;
 
         public SceneNode     Node            { get { return this.mNode; } }
         public bool          IsAllowedToMove { get { return this.mMovementInfo.IsAllowedToMove; } set { this.mMovementInfo.IsAllowedToMove = value; } }
@@ -39,6 +39,11 @@ namespace Game.CharacSystem
         {
             get         { return this.mNode.Position - new Vector3(0, this.Height / 2 + 8, 0); }
             private set { this.mNode.SetPosition(value.x, value.y + this.Height / 2 + 8, value.z); }
+        }
+
+        public Vector3 BlockPosition
+        {
+            get { return this.mCharacMgr.World.getRelativeFromAbsolute(this.FeetPosition); }
         }
 
         protected VanillaCharacter(CharacMgr characMgr, string meshName, CharacterInfo charInfo)
@@ -62,7 +67,7 @@ namespace Game.CharacSystem
             this.mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id);
             this.mCollisionMgr = new CollisionMgr(sceneMgr, this.mCharacMgr.World, this);
 
-            this.mStartingPoint = Vector3.ZERO;
+            this.mDirection = Vector3.ZERO;
             //this.mDist          = 0;
             this.mIsWalking     = false;
 
@@ -123,14 +128,22 @@ namespace Game.CharacSystem
             //MoveForward
             if (this.mIsWalking)
             {
-                if ((this.mNode.Position - this.mPath.mPath.Peek()).Length > 50) {
-                    this.mMovementInfo.MoveDirection = Vector3.UNIT_Z;
-                }
-                else {
-                    this.mPath.mPath.Dequeue();
+                //LogManager.Singleton.DefaultLog.LogMessage((this.BlockPosition - this.mPathFinder.goal.Head.Data).SquaredLength.ToString());
+                if(this.mPathFinder.goal.Head != null) {
+                    if((this.BlockPosition - this.mPathFinder.goal.Head.Data).SquaredLength > 3) {
+                        float move = frameTime * WALK_SPEED;
+                        this.mNode.Translate(this.mDirection * move);
 
-                    if (this.mPath.mPath.Count == 0) { this.mIsWalking = false; }
-                    
+                    } else {
+                        
+                        this.mPathFinder.goal.RemoveFirst();
+                        if(this.mPathFinder.goal.Head != null) {
+                            this.mDirection = this.mPathFinder.goal.Head.Data - this.mCharacMgr.World.getRelativeFromAbsolute(this.mNode.Position);
+                                
+                        }
+                    }
+                } else {
+                    this.mIsWalking = false;
                 }
             }
 
@@ -146,6 +159,7 @@ namespace Game.CharacSystem
                 translation += WALK_SPEED * this.mMovementInfo.MoveDirection * new Vector3(1, 0, 1);    // Ignores the y axis translation here
                 this.mNode.Yaw(this.mMovementInfo.YawValue * frameTime);
             }
+
 
             this.mCollisionMgr.DrawPoints();
 
@@ -184,27 +198,16 @@ namespace Game.CharacSystem
             return actualTranslation * this.mNode.LocalAxes;
         }
 
-        public void moveTo(Vector3 destination) 
+        public void moveTo(Vector3 destination)
         {
-            this.mIsWalking     = true;
-            this.mStartingPoint = this.mNode.Position;
-            this.mPath          = new AStar(this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc));
-            this.mPath.goTo(this.mStartingPoint, destination);
 
+            destination = this.mCharacMgr.World.getRelativeFromAbsolute(destination);
+            this.mPathFinder = new PathFinder(destination, this.mCharacMgr.World.getRelativeFromAbsolute(this.mNode.Position), this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc));
+            this.mIsWalking = true;
 
-            Vector3 a = this.mNode.Position;
-            Vector3 b = this.mPath.mPath.Peek();
-            Vector3 c = this.mNode.Position;
-            c.z -= 100;
-
-            float dA = (b - c).Length;
-            float dB = (a - c).Length;
-            float dC = (a - b).Length;
-
-            //this.mNode.Orientation = new Quaternion(new Radian((dA * dA + dC * dC + dB * dB) / (2 * dA * dC)).ValueAngleUnits, Vector3.UNIT_Y);
-
+            this.mDirection = this.mPathFinder.goal.Head.Data - this.mCharacMgr.World.getRelativeFromAbsolute(this.mNode.Position);
+            this.mNode.SetOrientation(0, 0, 180, 0);
         }
 
-        public bool isMoveForwardFinished() { return this.mStartingPoint == this.mNode.Position; }
     }
 }

@@ -147,9 +147,7 @@
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="csharp\Main\Characters\IA\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="resources\cg.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -544,6 +542,11 @@
     <Compile Include="csharp\Main\Characters\CollisionMgr.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\Characters\IA\Misc\AstarLinkedList.cs" />
+    <Compile Include="csharp\Main\Characters\IA\Misc\MyNode.cs" />
+    <Compile Include="csharp\Main\Characters\IA\Misc\NodeList.cs" />
+    <Compile Include="csharp\Main\Characters\IA\Node.cs" />
+    <Compile Include="csharp\Main\Characters\IA\PathFinder.cs" />
     <Compile Include="csharp\Main\Characters\Misc\CharacterInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -708,7 +711,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\World\Generator\VanillaMultiHalfBlock.cs" />
-    <Compile Include="csharp\Main\World\Generator\Decorators\Bridge.cs" />
+    <Compile Include="csharp\Main\World\Generator\Decorators\DarkTower\Bridge.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\CactusDecorator.cs">
       <SubType>Code</SubType>
     </Compile>

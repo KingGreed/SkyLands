@@ -25,6 +25,8 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
             int towerHeight = rd.Next(60, 88);
 
             if(towerNum == 1) { loc = loc + 40 * Vector3.UNIT_Y; }
+
+            List<int> floors = new List<int>();
             
             //body
             for(int x = 0; x < xMax; x++) {
@@ -35,7 +37,7 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
                         } else if((x == 0 || z == 0 || x == xMax - 1 || z == zMax - 1) && y != towerHeight) { //borders
                             current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z + z, "DarkWood", true);
                         }
-
+                        if(x == 0 && z == 0 && y % 5 == 0) { floors.Add(y); }
                         if(y == 0 || y == towerHeight -1) {
                             if(x == 0 || z == 0 || x == xMax - 1 || z == zMax - 1) { //borders
                                 current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z + z, "TowerWoodBlock", true);
@@ -63,11 +65,11 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
                         new Bridge(o, this.getEntrance(o, towerHeight - 7, loc), new MainTower(this.towerNum + 1, (Orientation)(-(int)o))).build(current);
                         newMain = true;
                     } else {
-                        new Bridge(o, this.getEntrance(o, towerHeight - 7, loc), new MediumTower()).build(current);
+                        new Bridge(o, this.getEntrance(o, towerHeight - 7, loc), new MediumTower((Orientation)(-(int)o))).build(current);
                     }
-                } else { new Bridge(o, this.getEntrance(o, towerHeight - 7, loc), new MediumTower()).build(current); }
+                } else { new Bridge(o, this.getEntrance(o, towerHeight - 7, loc), new MediumTower((Orientation)(-(int)o))).build(current); }
                 if(o == this.mSourceBuilding) { new Bridge(o, this.getEntrance(o, 1, loc), new NullTower()).build(current); }
-                else                          { new Bridge(o, this.getEntrance(o, 1, loc), new MediumTower()).build(current); }
+                else                          { new Bridge(o, this.getEntrance(o, 0, loc), new MediumTower((Orientation)(-(int)o))).build(current); }
                 i++;
             }
         }
@@ -80,22 +82,6 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
             else                                      { return towerLocation + new Vector3(0, y, zMax / 2);        }
             
 
-        }
-
-        private void makeEntrance(Vector3 loc, Island current, Orientation orientation) {
-            for(int x = -2; x <= 2; x++) {
-                for(int y = 0; y <= 4; y++) {
-                    if(x == -2 || x == 2 || y == 4 || y == 0) {
-                        if(orientation == Orientation.South || orientation == Orientation.North) {
-                            current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z, "TowerWoodBlock", true);
-                        } else {
-                            current.setBlockAt((int)loc.x, (int)loc.y + y, (int)loc.z + x, "TowerWoodBlock", true);
-                        }
-                    } else {
-                        current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z, "Air", true);
-                    }
-                }
-            }
         }
     }
 }
