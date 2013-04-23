@@ -26,7 +26,7 @@ namespace Game.Characters.IA {
             List<Node> possibleNodes = new List<Node>();
             List<Node> adjacentNodes;
 
-            destination.y = start.y;
+            start.y -= 1;
 
             Node curr;
 
@@ -39,6 +39,7 @@ namespace Game.Characters.IA {
                 if(curr.pos == destination) {
                     AstarLinkedList<Vector3> solution = new AstarLinkedList<Vector3>();
                     while(curr.parent != null) {
+                        curr.pos.y += 1;
                         solution.AddFirst(curr.pos);
                         curr = curr.parent;
                     }
@@ -46,14 +47,8 @@ namespace Game.Characters.IA {
                 }
 
                 adjacentNodes = curr.getAdjacent(current, destination);
-
-                // on ajoute cette liste a notre variable static qui contient l'ensemble des listes adjacentes (gestion de l'affichage)
                 possibleNodes.AddRange(adjacentNodes);
 
-
-                /***************************************/
-                /* Ajout des noeuds adjacents candidat */
-                /***************************************/
                 for(int i = 0; i < possibleNodes.Count; i++) {
                     if(!closed.Contains(possibleNodes[i])) {
                         if(open.Contains(possibleNodes[i])) {
