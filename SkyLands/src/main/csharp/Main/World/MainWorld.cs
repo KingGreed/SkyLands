@@ -6,6 +6,7 @@ using API.Ent;
 using API.Geo;
 using API.Geo.Cuboid;
 using API.Generator;
+using API.Generic;
 
 using Entity    = API.Ent.Entity;
 using Character = API.Ent.Character; 
@@ -30,9 +31,6 @@ namespace Game.World
         private long     mAge;
         private long     mSeed;
         private Vector3  mSpawnPoint;
-        public const int MaxHeight = 256; // must be a multiple of 16
-        public const int CUBE_SIDE = 50;
-        public const int CHUNK_SIDE = 16;
 
         private List<Entity> mEntityList;
         private Dictionary<Vector3, Island> mIslandList;
@@ -100,13 +98,13 @@ namespace Game.World
         public long    getAge()        { return this.mAge;        }
         public long    getSeed()       { return this.mSeed;       }
         public Vector3 getSpawnPoint() { return this.mSpawnPoint; }
-        public int     getHeight()     { return MaxHeight;        }
+        public int getHeight()         { return Cst.MaxHeight;    }
         
         public SceneManager getSceneMgr()        { return this.mStateMgr.SceneMgr; }
         public Island getIslandAt(Vector3 loc)   { return this.mIslandList[loc]; }
         
         public int     getSurfaceHeight(int x, int z, Vector3 islandLoc)                       { return this.mIslandList[islandLoc].getSurfaceHeight(x, z); }
-        public Vector3 getDisplayCoords(Vector3 island, Vector3 relativeLocation)              { return (relativeLocation * CUBE_SIDE) + island; }
+        public Vector3 getDisplayCoords(Vector3 island, Vector3 relativeLocation)              { return (relativeLocation * Cst.CUBE_SIDE) + island; }
 
 	    public List<Entity> getNearbyEntities(Vector3 position, Entity ignore, int range)      { throw new NotImplementedException(); }
 	    public List<Entity> getNearbyEntities(Vector3 position, int range)                     { throw new NotImplementedException(); }
@@ -131,13 +129,13 @@ namespace Game.World
             Random random = new Random();
             int x, y, z;
             while(true) {
-                x = random.Next((int)this.mIslandList[islandLoc].getSize().x * CHUNK_SIDE);
-                z = random.Next((int)this.mIslandList[islandLoc].getSize().z * CHUNK_SIDE);
+                x = random.Next((int)this.mIslandList[islandLoc].getSize().x * Cst.CHUNK_SIDE);
+                z = random.Next((int)this.mIslandList[islandLoc].getSize().z * Cst.CHUNK_SIDE);
 
                 y = this.getSurfaceHeight(x, z, islandLoc);
                 if(y != -1) {
-                    LogManager.Singleton.DefaultLog.LogMessage("\n \n New SpawnPoint at : " + new Vector3(x * CUBE_SIDE, y * CUBE_SIDE, z * CUBE_SIDE).ToString());
-                    this.mSpawnPoint = islandLoc + new Vector3(x * CUBE_SIDE, y * CUBE_SIDE, z * CUBE_SIDE);
+                    LogManager.Singleton.DefaultLog.LogMessage("\n \n New SpawnPoint at : " + new Vector3(x * Cst.CUBE_SIDE, y * Cst.CUBE_SIDE, z * Cst.CUBE_SIDE).ToString());
+                    this.mSpawnPoint = islandLoc + new Vector3(x * Cst.CUBE_SIDE, y * Cst.CUBE_SIDE, z * Cst.CUBE_SIDE);
                     break;
                 }
             }
@@ -152,7 +150,7 @@ namespace Game.World
 	    public List<Character> getPlayers() { throw new NotImplementedException(); }
 
         public Vector3 getRelativeFromAbsolute(Vector3 absCoord) {
-            absCoord /= CUBE_SIDE;
+            absCoord /= Cst.CUBE_SIDE;
             absCoord.x = Mogre.Math.IFloor(absCoord.x);
             absCoord.y = Mogre.Math.IFloor(absCoord.y);
             absCoord.z = Mogre.Math.ICeil(absCoord.z);
@@ -190,7 +188,7 @@ namespace Game.World
 
         public void generateIslandThreaded()
         {
-            Vector3 pos = new Vector3(this.mIslandList[new Vector3(0, 0, 0)].getPosition().x * CHUNK_SIDE + 3 * CHUNK_SIDE, 0, this.mIslandList[new Vector3(0, 0, 0)].getPosition().z * CHUNK_SIDE + 3 * CHUNK_SIDE);
+            Vector3 pos = new Vector3(this.mIslandList[new Vector3(0, 0, 0)].getPosition().x * Cst.CHUNK_SIDE + 3 * Cst.CHUNK_SIDE, 0, this.mIslandList[new Vector3(0, 0, 0)].getPosition().z * Cst.CHUNK_SIDE + 3 * Cst.CHUNK_SIDE);
             /*SceneNode node = this.mStateMgr.SceneManager.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
             this.mIslandList.Add(pos, new RandomIsland(node, new Vector2(13, 13), new Hills(), this));
 
@@ -201,7 +199,7 @@ namespace Game.World
 
         public static Vector3 AbsToRelative(Vector3 v)
         {
-            v /= Game.World.MainWorld.CUBE_SIDE;
+            v /= Cst.CUBE_SIDE;
             v.x = Mogre.Math.IFloor(v.x);
             v.y = Mogre.Math.IFloor(v.y);
             v.z = Mogre.Math.ICeil(v.z);

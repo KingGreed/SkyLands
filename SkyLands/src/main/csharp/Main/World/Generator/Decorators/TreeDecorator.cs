@@ -5,6 +5,7 @@ using System.Text;
 
 using API.Generator;
 using API.Geo.Cuboid;
+using API.Generic;
 
 using Game.World.Blocks;
 using Game.World;
@@ -17,20 +18,20 @@ namespace Game.World.Generator.Decorators
         public TreeDecorator() { }
 
         public override void populate(Island curr, Random random) {
-            int x = random.Next(2, (int)curr.getSize().x) * MainWorld.CHUNK_SIDE;
-            int z = random.Next(2, (int)curr.getSize().z) * MainWorld.CHUNK_SIDE;
+            int x = random.Next(2, (int)curr.getSize().x) * Cst.CHUNK_SIDE;
+            int z = random.Next(2, (int)curr.getSize().z) * Cst.CHUNK_SIDE;
             int y = curr.getSurfaceHeight(x, z);
 
             while (y == -1)
             {
-                x = random.Next(2, (int)curr.getSize().x) * MainWorld.CHUNK_SIDE;
-                z = random.Next(2, (int)curr.getSize().z) * MainWorld.CHUNK_SIDE;
+                x = random.Next(2, (int)curr.getSize().x) * Cst.CHUNK_SIDE;
+                z = random.Next(2, (int)curr.getSize().z) * Cst.CHUNK_SIDE;
                 y = curr.getSurfaceHeight(x, z);
             }
 
             int size = ((int)(curr.getSize().x + curr.getSize().z) / 2) / 5;
 
-            for (int i = 0; i < size * MainWorld.CHUNK_SIDE; i += 5) {
+            for(int i = 0; i < size * Cst.CHUNK_SIDE; i += 5) {
                 for (int j = 0, max = random.Next(4, 10); j < max; j++) {
                     double angle = 2.0 * Math.PI * random.NextDouble();
 

@@ -2,6 +2,7 @@
 using Mogre;
 
 using Game.World;
+using API.Generic;
 
 namespace Game.CharacSystem
 {
@@ -21,7 +22,7 @@ namespace Game.CharacSystem
         {
             this.mWorld = world;
             this.mCharac = charac;
-            this.mNbrHitStage = 2 + (int)charac.Height / MainWorld.CUBE_SIDE;
+            this.mNbrHitStage = 2 + (int)charac.Height / Cst.CUBE_SIDE;
 
             this.mHitRadius = VanillaCharacter.CHARAC_SIZE.x / 2 * COL_SIDE_MARGE;
             this.mHitDegrees = new Degree[NBR_HIT_POINTS];
@@ -57,7 +58,7 @@ namespace Game.CharacSystem
                     hitPoints[index] = this.mCharac.FeetPosition;
                     hitPoints[index].x += this.mHitRadius * Math.Cos(deg);
                     hitPoints[index].z += this.mHitRadius * Math.Sin(deg);
-                    hitPoints[index].y += j < this.mNbrHitStage - 1 ? j * MainWorld.CUBE_SIDE : this.mCharac.Height;
+                    hitPoints[index].y += j < this.mNbrHitStage - 1 ? j * Cst.CUBE_SIDE : this.mCharac.Height;
                 }
             }
 
@@ -104,10 +105,10 @@ namespace Game.CharacSystem
                         if (axis == Vector3.UNIT_Y)
                         {
                             if (this.GetNonNullValue(absTranslation * axis) < 0)
-                            { val = (hitPointsToTest[i].y + 1) * MainWorld.CUBE_SIDE - this.mCharac.FeetPosition.y; }
+                            { val = (hitPointsToTest[i].y + 1) * Cst.CUBE_SIDE - this.mCharac.FeetPosition.y; }
                             /*else
                             {
-                                val = charac.FeetPosition.y + charac.Height - temp[i].y * MainWorld.CUBE_SIDE;
+                                val = charac.FeetPosition.y + charac.Height - temp[i].y * Cst.CUBE_SIDE;
                                 if (absTranslation.y > 0) { absTranslation.y = 0; }
                             }*/
                         }
@@ -171,7 +172,7 @@ namespace Game.CharacSystem
                         for (int j = 0; j < this.mNbrHitStage; j++) // Add the point to test for all stages
                         {
                             pointsToTest[actIndex + NBR_HIT_POINTS / 2 * j] = hitPoints[i];
-                            pointsToTest[actIndex + NBR_HIT_POINTS / 2 * j].y += j < this.mNbrHitStage - 1 ? j * MainWorld.CUBE_SIDE : this.mCharac.Height;
+                            pointsToTest[actIndex + NBR_HIT_POINTS / 2 * j].y += j < this.mNbrHitStage - 1 ? j * Cst.CUBE_SIDE : this.mCharac.Height;
                         }
                         actIndex++;
                     }

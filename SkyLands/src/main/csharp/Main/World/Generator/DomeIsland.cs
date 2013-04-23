@@ -12,6 +12,7 @@ using LibNoise.Modules.Combiner;
 
 using API.Geo.Cuboid;
 using API.Generator;
+using API.Generic;
 
 using Game.World.Blocks;
 
@@ -41,12 +42,12 @@ namespace Game.World.Generator
         public override void generate(int seed) {
             Vector3 chunkTempPosition = new Vector3(0, 0, 0);
 
-            for (int xx = 0; xx < this.mIslandSize.x * MainWorld.CHUNK_SIDE; xx++) {
-                for (int zz = 0; zz < this.mIslandSize.z * MainWorld.CHUNK_SIDE; zz++) {
-                    chunkTempPosition.x = xx / MainWorld.CHUNK_SIDE;
-                    chunkTempPosition.z = zz / MainWorld.CHUNK_SIDE;
-                    for (int yy = 0; yy < MainWorld.MaxHeight; yy++) {
-                        chunkTempPosition.y = yy / MainWorld.CHUNK_SIDE;
+            for(int xx = 0; xx < this.mIslandSize.x * Cst.CHUNK_SIDE; xx++) {
+                for(int zz = 0; zz < this.mIslandSize.z * Cst.CHUNK_SIDE; zz++) {
+                    chunkTempPosition.x = xx / Cst.CHUNK_SIDE;
+                    chunkTempPosition.z = zz / Cst.CHUNK_SIDE;
+                    for (int yy = 0; yy < Cst.MaxHeight; yy++) {
+                        chunkTempPosition.y = yy / Cst.CHUNK_SIDE;
                         
                         if(yy <= 100) {
                             if(this.isInSphere(xx, yy, zz)) {
@@ -70,20 +71,20 @@ namespace Game.World.Generator
 			    int z = rd.Next(16*(int)this.mIslandSize.z);
                 int height = rd.Next(5, 10);
 
-                chunkTempPosition.x = x / MainWorld.CHUNK_SIDE;
-                chunkTempPosition.z = z / MainWorld.CHUNK_SIDE;
+                chunkTempPosition.x = x / Cst.CHUNK_SIDE;
+                chunkTempPosition.z = z / Cst.CHUNK_SIDE;
 
                 if(!(this.getBlock(x, 101, z, true) is WoodBlock)) {
                     while(this.getSurfaceHeight(x, z) == -1) {
                         x = rd.Next(16*(int)this.mIslandSize.x);
         			    z = rd.Next(16*(int)this.mIslandSize.z);
 
-                        chunkTempPosition.x = x / MainWorld.CHUNK_SIDE;
-                        chunkTempPosition.z = z / MainWorld.CHUNK_SIDE;
+                        chunkTempPosition.x = x / Cst.CHUNK_SIDE;
+                        chunkTempPosition.z = z / Cst.CHUNK_SIDE;
 
                     }
                     for(int j = 0; j < height; j++) {
-                        chunkTempPosition.y = (j + 101) / MainWorld.CHUNK_SIDE;
+                        chunkTempPosition.y = (j + 101) / Cst.CUBE_SIDE;
                         this.setBlockAt(x, 101 + j, z, "Wood", true);
 
                         if(height - j <= 3) {
@@ -105,9 +106,9 @@ namespace Game.World.Generator
         }
 
         public bool isInSphere(int x, int y, int z) {
-            int x0 = (int) (this.mIslandSize.x * MainWorld.CHUNK_SIDE / 2),
-                y0 = 100, 
-                z0 = (int) (this.mIslandSize.z * MainWorld.CHUNK_SIDE / 2);
+            int x0 = (int)(this.mIslandSize.x * Cst.CHUNK_SIDE / 2),
+                y0 = 100,
+                z0 = (int)(this.mIslandSize.z * Cst.CHUNK_SIDE / 2);
 
             return (((x-x0) * (x-x0) + (y-y0) * (y-y0) + (z-z0) * (z-z0)) < x0 * x0);
         }

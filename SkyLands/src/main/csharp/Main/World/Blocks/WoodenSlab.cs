@@ -9,11 +9,10 @@ namespace Game.World.Blocks
     {
         public WoodenSlab() {
             this.mName = "Wooden Slab";
-            this.mMaterial = "";
+            this.mMaterial = "cube/planks";
             this.mId = 13;
-            this.mMeshType = (byte)2;
+            this.mMeshType = 1;
         }
 
-        public override string getFace(int i) { return "cube/planks"; }
     }
 }

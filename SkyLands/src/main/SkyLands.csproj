@@ -100,6 +100,9 @@
     <Content Include="resources\Media\materials\textures\constructionBlockTop.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\materials\textures\crystal.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\materials\textures\darkWood.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -121,7 +124,13 @@
     <Content Include="resources\Media\materials\textures\planks.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Media\materials\textures\portals.png">
+    <Content Include="resources\Media\materials\textures\portal.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\portalBlue.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\portalGreen.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\materials\textures\redsand1.jpg">
@@ -305,6 +314,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\API\Generic\Cardinal.cs" />
+    <Compile Include="csharp\API\Generic\Cst.cs" />
     <Compile Include="csharp\API\Generic\Material.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -488,6 +498,7 @@
     <Compile Include="csharp\Main\States\StateManager.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\World\Blocks\Air.cs" />
     <Compile Include="csharp\Main\World\Blocks\AirBlock.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -497,6 +508,8 @@
     <Compile Include="csharp\Main\World\Blocks\ConstructionBlock.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\World\Blocks\Crystal.cs" />
+    <Compile Include="csharp\Main\World\Blocks\PortalBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\WoodenSlab.cs" />
     <Compile Include="csharp\Main\World\Blocks\TowerWoodBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\DarkWoodBlock.cs" />
@@ -548,7 +561,9 @@
     <Compile Include="csharp\Main\World\Generator\Biomes\Plains.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\World\Generator\VanillaMultiHalfBlock.cs" />
+    <Compile Include="csharp\Main\World\Generator\VanillaMultiVerticalHalfBlock.cs" />
+    <Compile Include="csharp\Main\World\Generator\Decorators\Portals.cs" />
+    <Compile Include="csharp\Main\World\Generator\VanillaMultiHorizontalHalfBlock.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\DarkTower\Bridge.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\CactusDecorator.cs">
       <SubType>Code</SubType>

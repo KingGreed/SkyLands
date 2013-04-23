@@ -12,6 +12,7 @@ using LibNoise.Modules.Combiner;
 
 using API.Geo.Cuboid;
 using API.Generator;
+using API.Generic;
 
 using Game.World.Blocks;
 
@@ -102,11 +103,11 @@ namespace Game.World.Generator
 			smoothHeight = (maxSum - minElevation) / 2d;
             int dist = -1;
 
-            for (int xx = 0; xx < this.mIslandSize.x * MainWorld.CHUNK_SIDE; xx++) {
-                for (int zz = 0; zz < this.mIslandSize.z * MainWorld.CHUNK_SIDE; zz++) {
+            for (int xx = 0; xx < this.mIslandSize.x * Cst.CHUNK_SIDE; xx++) {
+                for (int zz = 0; zz < this.mIslandSize.z * Cst.CHUNK_SIDE; zz++) {
 
-                    chunkTempPosition.x = xx / MainWorld.CHUNK_SIDE;
-                    chunkTempPosition.z = zz / MainWorld.CHUNK_SIDE;
+                    chunkTempPosition.x = xx / Cst.CHUNK_SIDE;
+                    chunkTempPosition.z = zz / Cst.CHUNK_SIDE;
 
 				    for (int yy = 250; yy > 0; yy--) {
                         

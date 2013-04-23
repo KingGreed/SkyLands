@@ -29,8 +29,9 @@ namespace Game.World.Generator
                     for (int i = 0; i < 6; i++) {
                         if (!this.multiList.ContainsKey(pair.Value.getFace(i))) {
                             switch(pair.Value.getMeshType()) {
-                                case 1: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiHalfBlock(pair.Value.getFace(i)));  break;
-                                case 0: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiBlock    (pair.Value.getFace(i)));  break;
+                                case 2: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiVerticalHalfBlock  (pair.Value.getFace(i), this, this.mWorld)); break;
+                                case 1: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiHorizontalHalfBlock(pair.Value.getFace(i), this, this.mWorld)); break;
+                                case 0: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiBlock              (pair.Value.getFace(i), this, this.mWorld)); break;
                             }
                         }
                     }
@@ -49,7 +50,7 @@ namespace Game.World.Generator
         }
 
         public override int getSurfaceHeight(int x, int z, string restriction = "") {
-            for(int y = (int)this.mIslandSize.y * MainWorld.CHUNK_SIDE; y != 0 ; y--) { 
+            for(int y = (int)this.mIslandSize.y * Cst.CHUNK_SIDE; y != 0 ; y--) { 
                 if(!(this.getBlock(x, y, z, false) is AirBlock)) {
                     if (restriction == "") { return y + 1; }
                     else if (this.getBlock(x, y, z, false).getName() != restriction) { continue; }
@@ -68,15 +69,15 @@ namespace Game.World.Generator
             LogManager.Singleton.DefaultLog.LogMessage("Now displaying");
 
             foreach(KeyValuePair<Vector3, Chunk> pair in this.mChunkList) {
-                for(int x = 0; x < MainWorld.CHUNK_SIDE; x++) {
-                    for(int y = 0; y < MainWorld.CHUNK_SIDE; y++) {
-                        for(int z = 0; z < MainWorld.CHUNK_SIDE; z++) {
+                for(int x = 0; x < Cst.CHUNK_SIDE; x++) {
+                    for(int y = 0; y < Cst.CHUNK_SIDE; y++) {
+                        for(int z = 0; z < Cst.CHUNK_SIDE; z++) {
                             curr = pair.Value.getBlock(x, y, z);
 
-                            if(!(curr is AirBlock) && this.setVisibleFaces(new Vector3(x, y, z) + pair.Key * MainWorld.CHUNK_SIDE, curr)) {
+                            if(!(curr is AirBlock) && this.setVisibleFaces(new Vector3(x, y, z) + pair.Key * Cst.CHUNK_SIDE, curr)) {
                                 for(int i = 0; i < 6; i++) {
                                     if(this.hasVisiblefaceAt(pair.Value, x, y, z, (BlockFace)i)) {
-                                        this.multiList[curr.getFace(i)].addBlock(pair.Key * MainWorld.CHUNK_SIDE + new Vector3(x, y, z));
+                                        this.multiList[curr.getFace(i)].addBlock(pair.Key * Cst.CHUNK_SIDE + new Vector3(x, y, z), (BlockFace)i);
                                     }
                                 }
 
@@ -98,6 +99,9 @@ namespace Game.World.Generator
         {
 
             if (curr is AirBlock) { return false; }
+
+            if(curr is CrystalGate) { return this.setVisibleFacesForPortals(blockCoord, curr); }
+
             bool hasVisiblefaces = false;
             Dictionary<BlockFace, Vector3> coordToCheck = new Dictionary<BlockFace,Vector3>();
 
@@ -111,7 +115,7 @@ namespace Game.World.Generator
 
             foreach (KeyValuePair<BlockFace, Vector3> keyVal in coordToCheck)
             {
-                if (this.getBlock(keyVal.Value, false) is AirBlock) { 
+                if (this.getBlock(keyVal.Value, false) is Air) { 
                     this.setVisibleFaceAt(blockCoord, keyVal.Key, true); hasVisiblefaces = true; 
                 }
             }
@@ -122,6 +126,25 @@ namespace Game.World.Generator
             this.setVisibleFaceAt((int)loc.x, (int)loc.y, (int)loc.z, face, val); 
         }
 
+        public bool setVisibleFacesForPortals(Vector3 blockCoord, Block curr) {
+            bool hasVisiblefaces = false;
+            Dictionary<BlockFace, Vector3> coordToCheck = new Dictionary<BlockFace, Vector3>();
+
+            coordToCheck.Add(BlockFace.rightFace, new Vector3(blockCoord.x + 1, blockCoord.y, blockCoord.z));
+            coordToCheck.Add(BlockFace.leftFace,  new Vector3(blockCoord.x - 1, blockCoord.y, blockCoord.z));
+            coordToCheck.Add(BlockFace.upperFace, new Vector3(blockCoord.x, blockCoord.y + 1, blockCoord.z));
+            coordToCheck.Add(BlockFace.underFace, new Vector3(blockCoord.x, blockCoord.y - 1, blockCoord.z));
+            coordToCheck.Add(BlockFace.frontFace, new Vector3(blockCoord.x, blockCoord.y, blockCoord.z + 1));
+            coordToCheck.Add(BlockFace.backFace,  new Vector3(blockCoord.x, blockCoord.y, blockCoord.z - 1));
+
+
+            foreach(KeyValuePair<BlockFace, Vector3> keyVal in coordToCheck) {
+                if(this.getBlock(keyVal.Value, false) is Air && !(this.getBlock(keyVal.Value, false) is CrystalGate)) {
+                    this.setVisibleFaceAt(blockCoord, keyVal.Key, true); hasVisiblefaces = true;
+                }
+            }
+            return hasVisiblefaces;
+        }
 
         public override void setVisibleFaceAt(int x, int y, int z, BlockFace face, bool val) {
             Vector3 chunkLocation = new Vector3(x / 16, y / 16, z / 16),
@@ -172,7 +195,7 @@ namespace Game.World.Generator
             }
 
             if (isInAdded) {
-                string cubeNodeName = "Node-" + item.x * MainWorld.CUBE_SIDE + "-" + item.y * MainWorld.CUBE_SIDE + "-" + item.z * MainWorld.CUBE_SIDE;
+                string cubeNodeName = "Node-" + item.x * Cst.CUBE_SIDE + "-" + item.y * Cst.CUBE_SIDE + "-" + item.z * Cst.CUBE_SIDE;
                 
                 this.mFaceNode.RemoveAndDestroyChild(cubeNodeName);
             }
@@ -233,7 +256,7 @@ namespace Game.World.Generator
             this.blocksAdded.Add(new PositionFaceAndStatus(relativePos, face));
             
             relativePos += this.getPosition();
-            relativePos *= MainWorld.CUBE_SIDE;
+            relativePos *= Cst.CUBE_SIDE;
 
             string cubeNodeName = "Node-" + relativePos.x + "-" + relativePos.y + "-" + relativePos.z;
             SceneNode blockNode;
@@ -272,9 +295,9 @@ namespace Game.World.Generator
             writer.WriteByte((byte)this.mIslandSize.z);
             writer.WriteByte((byte)this.mIslandSize.y);
 
-            for(int x = 0; x < this.mIslandSize.x * MainWorld.CHUNK_SIDE; x++) {
-                for(int z = 0; z < this.mIslandSize.z * MainWorld.CHUNK_SIDE; z++) {
-                    for(int y = 0; y < this.mIslandSize.y * MainWorld.CHUNK_SIDE; y++) {
+            for(int x = 0; x < this.mIslandSize.x * Cst.CHUNK_SIDE; x++) {
+                for(int z = 0; z < this.mIslandSize.z * Cst.CHUNK_SIDE; z++) {
+                    for(int y = 0; y < this.mIslandSize.y * Cst.CHUNK_SIDE; y++) {
                         writer.WriteByte(this.getBlock(new Vector3(x, y, z), false).getId());
                     }
                 }
@@ -297,9 +320,9 @@ namespace Game.World.Generator
             this.mIslandSize.z = reader.ReadByte();
             this.mIslandSize.y = reader.ReadByte();
 
-            for(int x = 0; x < this.mIslandSize.x * MainWorld.CHUNK_SIDE; x++) {
-                for(int z = 0; z < this.mIslandSize.z * MainWorld.CHUNK_SIDE; z++) {
-                    for(int y = 0; y < this.mIslandSize.y * MainWorld.CHUNK_SIDE; y++) {
+            for(int x = 0; x < this.mIslandSize.x * Cst.CHUNK_SIDE; x++) {
+                for(int z = 0; z < this.mIslandSize.z * Cst.CHUNK_SIDE; z++) {
+                    for(int y = 0; y < this.mIslandSize.y * Cst.CHUNK_SIDE; y++) {
                         this.setBlockAt(x, y, z, (byte)reader.ReadByte(), true);
                     }
                 }
@@ -324,10 +347,10 @@ namespace Game.World.Generator
 
             if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation].getBlock(blockLocation); }
             else if(force) {
-                this.mChunkList.Add(chunkLocation, new VanillaChunk(MainWorld.CHUNK_SIDE * Vector3.UNIT_SCALE, chunkLocation, this));
-                if(force && y > this.mIslandSize.y * MainWorld.CHUNK_SIDE) { this.mIslandSize.y = (int)System.Math.Ceiling((float)y / 16f); }
-                if(force && x > this.mIslandSize.x * MainWorld.CHUNK_SIDE) { this.mIslandSize.x = (int)System.Math.Ceiling((float)x / 16f); }
-                if(force && z > this.mIslandSize.z * MainWorld.CHUNK_SIDE) { this.mIslandSize.z = (int)System.Math.Ceiling((float)z / 16f); }
+                this.mChunkList.Add(chunkLocation, new VanillaChunk(Cst.CHUNK_SIDE * Vector3.UNIT_SCALE, chunkLocation, this));
+                if(force && y > this.mIslandSize.y * Cst.CHUNK_SIDE) { this.mIslandSize.y = (int)System.Math.Ceiling((float)y / 16f); }
+                if(force && x > this.mIslandSize.x * Cst.CHUNK_SIDE) { this.mIslandSize.x = (int)System.Math.Ceiling((float)x / 16f); }
+                if(force && z > this.mIslandSize.z * Cst.CHUNK_SIDE) { this.mIslandSize.z = (int)System.Math.Ceiling((float)z / 16f); }
 
                 return this.mChunkList[chunkLocation].getBlock(blockLocation);
             } else { return defaultBlock; }
@@ -368,12 +391,12 @@ namespace Game.World.Generator
 
             if (this.hasChunk(chunkLocation)) { this.mChunkList[chunkLocation].setBlock(blockLocation, material); }
             else if(force) {
-                this.mChunkList.Add(chunkLocation, new VanillaChunk(MainWorld.CHUNK_SIDE * Vector3.UNIT_SCALE, chunkLocation, this));
+                this.mChunkList.Add(chunkLocation, new VanillaChunk(Cst.CHUNK_SIDE * Vector3.UNIT_SCALE, chunkLocation, this));
                 this.mChunkList[chunkLocation].setBlock(blockLocation, material);
 
-                if(force && y > this.mIslandSize.y * MainWorld.CHUNK_SIDE) { this.mIslandSize.y = (int)System.Math.Ceiling((float)y / 16f); }
-                if(force && x > this.mIslandSize.x * MainWorld.CHUNK_SIDE) { this.mIslandSize.x = (int)System.Math.Ceiling((float)x / 16f); }
-                if(force && z > this.mIslandSize.z * MainWorld.CHUNK_SIDE) { this.mIslandSize.z = (int)System.Math.Ceiling((float)z / 16f); }
+                if(force && y > this.mIslandSize.y * Cst.CHUNK_SIDE) { this.mIslandSize.y = (int)System.Math.Ceiling((float)y / 16f); }
+                if(force && x > this.mIslandSize.x * Cst.CHUNK_SIDE) { this.mIslandSize.x = (int)System.Math.Ceiling((float)x / 16f); }
+                if(force && z > this.mIslandSize.z * Cst.CHUNK_SIDE) { this.mIslandSize.z = (int)System.Math.Ceiling((float)z / 16f); }
             } 
         }
 

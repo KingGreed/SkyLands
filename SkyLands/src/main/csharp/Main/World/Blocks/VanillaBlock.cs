@@ -24,7 +24,7 @@ namespace Game.World.Blocks
         protected byte   mId = 255;     //Warning do not set 255 as a value
         protected int    mMeshType = 0; //For custum mesh
 
-        protected static int CUBE_SIDE = MainWorld.CUBE_SIDE;
+        protected static int CUBE_SIDE = Cst.CUBE_SIDE;
 
         public override int    getMeshType() { return this.mMeshType; }
         public override string getName()     { return this.mName; }

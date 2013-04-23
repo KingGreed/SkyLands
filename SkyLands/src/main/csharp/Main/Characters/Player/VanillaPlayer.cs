@@ -4,7 +4,9 @@ using Mogre;
 
 using Game.World;
 using Game.Animation;
+
 using API.Geo.Cuboid;
+using API.Generic;
 
 using Game.Buildings;
 
@@ -145,7 +147,7 @@ namespace Game.CharacSystem
             else
             {
                 /* Compute the exact position */
-                Vector3 absPosBlock = relBlockPos * MainWorld.CUBE_SIDE;
+                Vector3 absPosBlock = relBlockPos * Cst.CUBE_SIDE;
                 int index = -1;
                 float minDist = -1;
                 Vector3[] points = Game.World.Generator.VanillaMultiBlock.blockPointCoords;
@@ -161,7 +163,7 @@ namespace Game.CharacSystem
                     {
                         Vector3 actPoint = ray.GetPoint(dist);
 
-                        if ((minDist < 0 || dist < minDist) && MathHelper.isInBlock(absPosBlock, actPoint, MainWorld.CUBE_SIDE))
+                        if ((minDist < 0 || dist < minDist) && MathHelper.isInBlock(absPosBlock, actPoint, Cst.CUBE_SIDE))
                         {
                             minDist = dist;
                             index = i / 4;
@@ -224,7 +226,7 @@ namespace Game.CharacSystem
                 iaInfo.SpawnPoint = this.mCharacMgr.World.getSpawnPoint(); ;
                 this.mCharacMgr.AddCharacter(iaInfo);
 
-                this.mCharacMgr.GetCharacter(this.mCharacMgr.getNumberOfCharacter() - 1).moveTo(relBlockPos * MainWorld.CHUNK_SIDE);
+                this.mCharacMgr.GetCharacter(this.mCharacMgr.getNumberOfCharacter() - 1).moveTo(relBlockPos * Cst.CHUNK_SIDE);
                 new Building(island, relBlockPos);
             }
             else if(b is Game.World.Blocks.AirBlock)

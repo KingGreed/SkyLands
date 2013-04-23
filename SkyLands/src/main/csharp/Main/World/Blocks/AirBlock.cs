@@ -7,7 +7,7 @@ using Mogre;
 
 namespace Game.World.Blocks
 {
-    class AirBlock : VanillaBlock
+    class AirBlock : VanillaBlock, Air
     {
         public AirBlock() {
             this.mName = "Air";

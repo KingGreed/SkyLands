@@ -264,3 +264,67 @@ material darkTower/towerWood
         }
     }
 }
+material cube/Crystal
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture crystal.png }
+        }
+    }
+}
+
+material cube/Crystal
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture crystal.png }
+        }
+    }
+}
+
+material cube/CrystalGate/red {
+    technique {
+        pass {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+            scene_blend alpha_blend
+            depth_write off
+
+            texture_unit { texture portal.png }
+        }
+    }
+}
+material cube/CrystalGate/blue {
+    technique {
+        pass {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+            scene_blend alpha_blend
+            depth_write off
+
+            texture_unit { texture portalBlue.png }
+        }
+    }
+}
+material cube/CrystalGate/green {
+    technique {
+        pass {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+            scene_blend alpha_blend
+            depth_write off
+
+            texture_unit { texture portalGreen.png }
+        }
+    }
+}

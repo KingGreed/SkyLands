@@ -31,7 +31,7 @@ namespace API.Geo.Cuboid
         public List<PositionFaceAndStatus>       blocksDeleted;
 
 
-        protected Dictionary<Vector3, Chunk> mChunkList;
+        public Dictionary<Vector3, Chunk> mChunkList;
 
         public SceneNode Node        { get { return this.mNode; } }
         public bool IsTerrainUpdated { get { return this.mIsTerrainUpdated; } }
