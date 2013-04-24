@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Collections.Generic;
 using Mogre;
+using Awesomium.Core;
 
 using Game.BaseApp;
 using Game.GUICreator;
@@ -46,6 +47,16 @@ namespace Game.States
             this.mPopRequested = 0;
             this.mWaitOneFrame = false;
             this.RequestStatePush(typeof(MainMenu));
+
+            //WebConfig config = new WebConfig();
+            //config.en = true;
+            //config.LogLevel(LogLevel.None);
+            WebCore.Initialize(new WebConfig()
+            {
+                LogPath = Environment.CurrentDirectory,
+                LogLevel = LogLevel.Verbose,
+                ManagedConsole = true
+            });
         }
 
         protected override void Update(FrameEvent evt)
