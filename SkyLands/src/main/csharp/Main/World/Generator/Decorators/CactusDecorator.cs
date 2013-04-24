@@ -23,16 +23,18 @@ namespace Game.World.Generator.Decorators
 
                 byte cactus = VanillaChunk.staticBlock["Cactus"].getId();
 
-                curr.setBlockAt((int)pos.x, (int)pos.y, (int)pos.z, cactus, true);
-                curr.setBlockAt((int)pos.x, (int)pos.y + 1, (int)pos.z, cactus, true);
-                if (random.Next(4)  > 1) {
-                    curr.setBlockAt((int)pos.x, (int)pos.y + 2, (int)pos.z, cactus, true);
-                    if (random.Next(11) > 6) {
-                        curr.setBlockAt((int)pos.x, (int)pos.y + 3, (int)pos.z, cactus, true);
-                        if(random.Next(20) > 15) { curr.setBlockAt((int)pos.x, (int)pos.y + 4, (int)pos.z, cactus, true); }
+                if(!(curr.getBlock((int)pos.x, (int)pos.y, (int)pos.z, true) is Air)) {
+
+                    curr.setBlockAt((int)pos.x, (int)pos.y, (int)pos.z, cactus, true);
+                    curr.setBlockAt((int)pos.x, (int)pos.y + 1, (int)pos.z, cactus, true);
+                    if(random.Next(4) > 1) {
+                        curr.setBlockAt((int)pos.x, (int)pos.y + 2, (int)pos.z, cactus, true);
+                        if(random.Next(11) > 6) {
+                            curr.setBlockAt((int)pos.x, (int)pos.y + 3, (int)pos.z, cactus, true);
+                            if(random.Next(20) > 15) { curr.setBlockAt((int)pos.x, (int)pos.y + 4, (int)pos.z, cactus, true); }
+                        }
                     }
                 }
-
             }
         }
     }
