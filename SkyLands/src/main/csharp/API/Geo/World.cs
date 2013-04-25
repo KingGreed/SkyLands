@@ -229,5 +229,8 @@ namespace API.Geo
 
         void onRightClick(Vector3 absCoord, Vector3 island);
         void onLeftClick(Vector3 absCoord, Vector3 island);
+
+        void onBlockEnter(Vector3 blockCoord, Vector3 island, Entity e);
+        void onBlockLeave(Vector3 blockCoord, Vector3 island, Entity e);
     }
 }

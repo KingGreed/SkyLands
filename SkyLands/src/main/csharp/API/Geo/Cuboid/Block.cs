@@ -28,6 +28,10 @@ namespace API.Geo.Cuboid
         public abstract void onRightClick();
         public abstract void onLeftClick();
 
+        public abstract void onBlockEnter(API.Ent.Entity e);
+        public abstract void onBlockLeave(API.Ent.Entity e);
+
+
 
 
     }

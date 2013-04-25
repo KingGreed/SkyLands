@@ -40,5 +40,8 @@ namespace Game.World.Blocks
         public override void onRightClick() { }
         public override void onLeftClick() { }
 
+        public override void onBlockEnter(API.Ent.Entity e) { }
+        public override void onBlockLeave(API.Ent.Entity e) { }
+
     }
 }

@@ -158,6 +158,13 @@ namespace Game.World
             return absCoord;
         }
 
+        public void onBlockEnter(Vector3 blockCoord, Vector3 island, Entity e) {
+            this.mIslandList[island].getBlock(blockCoord, false).onBlockEnter(e);
+        }
+        public void onBlockLeave(Vector3 blockCoord, Vector3 island, Entity e) {
+            this.mIslandList[island].getBlock(blockCoord, false).onBlockLeave(e);
+        }
+
         public void onCreation(Vector3 absCoord, Vector3 island) {
             this.mIslandList[island].getBlock(this.getRelativeFromAbsolute(absCoord), false).onCreation(absCoord);
         }

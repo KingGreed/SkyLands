@@ -71,12 +71,7 @@ namespace API.Ent
 	    /**
 	     * Interact with this entity.
 	     */
-	    void interact(Action action, Entity source);
 
-	    /**
-	     * Gets a {@link Transform} {@link EntityComponent} representing the current position, scale and
-	     * rotation of the entity.
-	     * @return The transform component
-	     */
+        void setIsPushedByArcaneLevitator(bool value);
     }
 }

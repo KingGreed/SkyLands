@@ -1,39 +1,34 @@
-23:34:14: Creating resource group General
-23:34:14: Creating resource group Internal
-23:34:14: Creating resource group Autodetect
-23:34:14: SceneManagerFactory for type 'DefaultSceneManager' registered.
-23:34:14: Registering ResourceManager for type Material
-23:34:14: Registering ResourceManager for type Mesh
-23:34:14: Registering ResourceManager for type Skeleton
-23:34:14: MovableObjectFactory for type 'ParticleSystem' registered.
-23:34:14: OverlayElementFactory for type Panel registered.
-23:34:14: OverlayElementFactory for type BorderPanel registered.
-23:34:14: OverlayElementFactory for type TextArea registered.
-23:34:14: Registering ResourceManager for type Font
-23:34:14: ArchiveFactory for archive type FileSystem registered.
-23:34:14: ArchiveFactory for archive type Zip registered.
-23:34:14: DDS codec registering
-23:34:14: FreeImage version: 3.13.1
-23:34:14: This program uses FreeImage, a free, open source image library supporting all common bitmap formats. See http://freeimage.sourceforge.net for details
-23:34:15: Supported formats: bmp,ico,jpg,jif,jpeg,jpe,jng,koa,iff,lbm,mng,pbm,pbm,pcd,pcx,pgm,pgm,png,ppm,ppm,ras,tga,targa,tif,tiff,wap,wbmp,wbm,psd,cut,xbm,xpm,gif,hdr,g3,sgi,exr,j2k,j2c,jp2,pfm,pct,pict,pic,bay,bmq,cr2,crw,cs1,dc2,dcr,dng,erf,fff,hdr,k25,kdc,mdc,mos,mrw,nef,orf,pef,pxn,raf,raw,rdc,sr2,srf,arw,3fr,cine,ia,kc2,mef,nrw,qtk,rw2,sti,drf,dsc,ptx,cap,iiq,rwz
-23:34:15: PVRTC codec registering
-23:34:15: Registering ResourceManager for type HighLevelGpuProgram
-23:34:15: Registering ResourceManager for type Compositor
-23:34:15: MovableObjectFactory for type 'Entity' registered.
-23:34:15: MovableObjectFactory for type 'Light' registered.
-23:34:15: MovableObjectFactory for type 'BillboardSet' registered.
-23:34:15: MovableObjectFactory for type 'ManualObject' registered.
-23:34:15: MovableObjectFactory for type 'BillboardChain' registered.
-23:34:15: MovableObjectFactory for type 'RibbonTrail' registered.
-23:34:15: Loading library Plugins\RenderSystem_GL
-23:34:15: Installing plugin: GL RenderSystem
-23:34:15: OpenGL Rendering Subsystem created.
-23:34:15: Plugin successfully installed
-23:34:15: Loading library Plugins\Plugin_OctreeSceneManager
-23:34:15: Installing plugin: Octree & Terrain Scene Manager
-23:34:15: Plugin successfully installed
-23:34:15: Loading library Plugins\Plugin_CgProgramManager
-23:34:15: Installing plugin: Cg Program Manager
-23:34:15: Plugin successfully installed
-23:34:15: *-*-* OGRE Initialising
-23:34:15: *-*-* Version 1.7.4 (Cthugha)
+23:44:34: Creating resource group General
+23:44:34: Creating resource group Internal
+23:44:34: Creating resource group Autodetect
+23:44:34: SceneManagerFactory for type 'DefaultSceneManager' registered.
+23:44:34: Registering ResourceManager for type Material
+23:44:34: Registering ResourceManager for type Mesh
+23:44:34: Registering ResourceManager for type Skeleton
+23:44:34: MovableObjectFactory for type 'ParticleSystem' registered.
+23:44:34: OverlayElementFactory for type Panel registered.
+23:44:34: OverlayElementFactory for type BorderPanel registered.
+23:44:34: OverlayElementFactory for type TextArea registered.
+23:44:34: Registering ResourceManager for type Font
+23:44:34: ArchiveFactory for archive type FileSystem registered.
+23:44:34: ArchiveFactory for archive type Zip registered.
+23:44:34: DDS codec registering
+23:44:34: FreeImage version: 3.13.1
+23:44:34: This program uses FreeImage, a free, open source image library supporting all common bitmap formats. See http://freeimage.sourceforge.net for details
+23:44:34: Supported formats: bmp,ico,jpg,jif,jpeg,jpe,jng,koa,iff,lbm,mng,pbm,pbm,pcd,pcx,pgm,pgm,png,ppm,ppm,ras,tga,targa,tif,tiff,wap,wbmp,wbm,psd,cut,xbm,xpm,gif,hdr,g3,sgi,exr,j2k,j2c,jp2,pfm,pct,pict,pic,bay,bmq,cr2,crw,cs1,dc2,dcr,dng,erf,fff,hdr,k25,kdc,mdc,mos,mrw,nef,orf,pef,pxn,raf,raw,rdc,sr2,srf,arw,3fr,cine,ia,kc2,mef,nrw,qtk,rw2,sti,drf,dsc,ptx,cap,iiq,rwz
+23:44:34: PVRTC codec registering
+23:44:34: Registering ResourceManager for type HighLevelGpuProgram
+23:44:34: Registering ResourceManager for type Compositor
+23:44:34: MovableObjectFactory for type 'Entity' registered.
+23:44:34: MovableObjectFactory for type 'Light' registered.
+23:44:34: MovableObjectFactory for type 'BillboardSet' registered.
+23:44:34: MovableObjectFactory for type 'ManualObject' registered.
+23:44:34: MovableObjectFactory for type 'BillboardChain' registered.
+23:44:34: MovableObjectFactory for type 'RibbonTrail' registered.
+23:44:34: Loading library Plugins\RenderSystem_GL
+23:44:34: Installing plugin: GL RenderSystem
+23:44:34: OpenGL Rendering Subsystem created.
+23:44:34: Plugin successfully installed
+23:44:35: Loading library Plugins\Plugin_OctreeSceneManager
+23:44:35: Installing plugin: Octree & Terrain Scene Manager
+23:44:35: Plugin successfully installed
