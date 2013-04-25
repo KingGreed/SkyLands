@@ -37,7 +37,7 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
                         } else if((x == 0 || z == 0 || x == xMax - 1 || z == zMax - 1) && y != towerHeight) { //borders
                             current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z + z, "DarkWood", true);
                         }
-                        if(x == 0 && z == 0 && y % 5 == 0) { floors.Add(y); }
+                        if(x == 0 && z == 0 && y % 9 == 0) { floors.Add(y); }
                         if(y == 0 || y == towerHeight -1) {
                             if(x == 0 || z == 0 || x == xMax - 1 || z == zMax - 1) { //borders
                                 current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z + z, "TowerWoodBlock", true);
@@ -48,6 +48,13 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
                     }
                 }
             }
+
+            Orientation orient = Orientation.None;
+
+            foreach(int f in floors) {
+                orient = this.MakeFloorAt(f, current, orient, loc); 
+            }
+
             new RoofBuilder().build(current, loc + Vector3.UNIT_Y * towerHeight, new Vector2(xMax, zMax), rd);
 
             new DarkBeard().makeDarkBeard(current, towerHeight, loc, xMax, zMax);
@@ -74,14 +81,52 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
             }
         }
 
-        private void makeFloor(Island current) {}
         private Vector3 getEntrance(Orientation orientation, int y, Vector3 towerLocation) {
             if(orientation == Orientation.East)       { return towerLocation + new Vector3(xMax - 1, y, zMax / 2); }
             else if(orientation == Orientation.North) { return towerLocation + new Vector3(xMax / 2, y, zMax - 1); }
             else if(orientation == Orientation.South) { return towerLocation + new Vector3(xMax / 2, y, 0);        }
             else                                      { return towerLocation + new Vector3(0, y, zMax / 2);        }
-            
+        }
 
+        private Vector3 getFloorEntrance(Orientation o, int y, Vector3 towerLocation) {
+
+            if(o == Orientation.None) { return Vector3.UNIT_SCALE; }
+
+            if(o == Orientation.East) { return towerLocation + new Vector3(xMax - 2, y, zMax / 2); }
+            else if(o == Orientation.North) { return towerLocation + new Vector3(xMax / 2, y, zMax - 2); }
+            else if(o == Orientation.South) { return towerLocation + new Vector3(xMax / 2, y, 1); }
+            else { return towerLocation + new Vector3(1, y, zMax / 2); }
+
+        }
+
+        // @return the orientation exit
+        private Orientation MakeFloorAt(int y, Island current, Orientation entrance, Vector3 loc) {
+            for(int x = 0; x < xMax; x++) {
+                for(int z = 0; z < zMax; z++) {
+                    if(x == 0 || z == 0 || x == xMax - 1 || z == zMax - 1) { continue; }
+                    current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z + z, "DarkWood", true);
+                }
+            }
+            Orientation r;
+            Vector3 exit;
+
+            if(entrance != Orientation.None) {
+                Vector3 entranceFloor = this.getFloorEntrance(entrance, y, loc);
+                exit = this.getFloorEntrance((Orientation)(-(int)entrance), y, loc);
+
+                current.setBlockAt((int)entranceFloor.x, (int)entranceFloor.y, (int)entranceFloor.z, "Air", true);
+                current.setBlockAt((int)exit.x, (int)exit.y, (int)exit.z, "Levitator", true);
+                r = (Orientation)(-(int)entrance);
+            } else {
+                Random rd = new Random();
+                r = (Orientation)rd.Next(-2, 3);
+                exit = this.getFloorEntrance(r, y, loc);
+                current.setBlockAt((int)exit.x, (int)exit.y, (int)exit.z, "Levitator", true);
+            }
+
+            for(int i = 1; i <= 9; i++) { current.setBlockAt((int)exit.x, (int)exit.y + i, (int)exit.z, "Levitator air", true); }
+
+            return r;
         }
     }
 }

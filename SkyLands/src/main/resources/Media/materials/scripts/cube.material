@@ -328,3 +328,33 @@ material cube/CrystalGate/green {
         }
     }
 }
+material cube/Levitator/side{
+    technique{
+        pass{
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0       
+            texture_unit{ texture LevitatorSide.png  }
+            
+        }
+    }
+}
+material cube/Levitator/top {
+    technique {
+        pass {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit{ texture LevitatorTop.png  }
+        }
+    }
+}
+material cube/Levitator/bottom{
+    technique {
+        pass {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit{ texture LevitatorBottom.png  }
+        }
+    }
+}

@@ -127,6 +127,15 @@
     <Content Include="resources\Media\materials\textures\leaves.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\materials\textures\LevitatorBottom.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\LevitatorSide.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\LevitatorTop.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\materials\textures\planks.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -518,6 +527,8 @@
     <Compile Include="csharp\Main\World\Blocks\ConstructionBlock.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\World\Blocks\LevitatorAirBlock.cs" />
+    <Compile Include="csharp\Main\World\Blocks\LevitatorBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\Crystal.cs" />
     <Compile Include="csharp\Main\World\Blocks\PortalBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\WoodenSlab.cs" />

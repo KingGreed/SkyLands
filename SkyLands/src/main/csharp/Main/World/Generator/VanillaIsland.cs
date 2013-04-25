@@ -25,7 +25,7 @@ namespace Game.World.Generator
 
         public VanillaIsland(SceneNode node, Vector2 size, MainWorld currentWorld) : base(node, size, currentWorld) {
             foreach (KeyValuePair<string, Block> pair in VanillaChunk.staticBlock) {
-                if(!(pair.Value is AirBlock)) {
+                if(!(pair.Value is AirBlock) && pair.Value.getMaterial() != null) {
                     for (int i = 0; i < 6; i++) {
                         if (!this.multiList.ContainsKey(pair.Value.getFace(i))) {
                             switch(pair.Value.getMeshType()) {
@@ -74,7 +74,7 @@ namespace Game.World.Generator
                         for(int z = 0; z < Cst.CHUNK_SIDE; z++) {
                             curr = pair.Value.getBlock(x, y, z);
 
-                            if(!(curr is AirBlock) && this.setVisibleFaces(new Vector3(x, y, z) + pair.Key * Cst.CHUNK_SIDE, curr)) {
+                            if(curr.getMaterial() != null && this.setVisibleFaces(new Vector3(x, y, z) + pair.Key * Cst.CHUNK_SIDE, curr)) {
                                 for(int i = 0; i < 6; i++) {
                                     if(this.hasVisiblefaceAt(pair.Value, x, y, z, (BlockFace)i)) {
                                         this.multiList[curr.getFace(i)].addBlock(pair.Key * Cst.CHUNK_SIDE + new Vector3(x, y, z), (BlockFace)i);

@@ -20,7 +20,7 @@ namespace Game.World.Blocks
     public abstract class VanillaBlock : Block
     {
         protected string mName;
-        protected string mMaterial;
+        protected string mMaterial = "";
         protected byte   mId = 255;     //Warning do not set 255 as a value
         protected int    mMeshType = 0; //For custum mesh
 
