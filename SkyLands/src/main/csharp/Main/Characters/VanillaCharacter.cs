@@ -1,14 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mogre;
 
 using Game.World;
 using Game.Animation;
 using Game.Characters.IA;
+using API.Ent;
+using API.Geo.Cuboid;
 
 namespace Game.CharacSystem
 {
-    public abstract class VanillaCharacter
+    public abstract class VanillaCharacter : Character
     {
         public static readonly Vector3 CHARAC_SIZE = new Vector3(65, 99, 65);
         private const float WALK_SPEED = 350.0f;
@@ -23,8 +26,6 @@ namespace Game.CharacSystem
         protected AnimName[]    mIdleAnims;
         private CollisionMgr    mCollisionMgr;
         private Vector3         mPreviousDirection;
-        private GravitySpeed    mGravitySpeed;
-        private JumpSpeed       mJumpSpeed;
 
         //MoveForward variable
         private Vector3         mDirection;
@@ -52,16 +53,14 @@ namespace Game.CharacSystem
             this.mCharInfo = charInfo;
             this.mMovementInfo = new MovementInfo(OnFall, OnJump);
             this.mPreviousDirection = Vector3.ZERO;
-            this.mGravitySpeed = new GravitySpeed();
-            this.mJumpSpeed = new JumpSpeed();
 
             /* Create entity and node */
             SceneManager sceneMgr = characMgr.SceneMgr;
-            Entity ent = sceneMgr.CreateEntity("CharacterEnt_" + this.mCharInfo.Id, meshName);
+            Mogre.Entity ent = sceneMgr.CreateEntity("CharacterEnt_" + this.mCharInfo.Id, meshName);
             ent.Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
-            Entity swordL = sceneMgr.CreateEntity("Sword.mesh");
+            Mogre.Entity swordL = sceneMgr.CreateEntity("Sword.mesh");
             ent.AttachObjectToBone("Sheath.L", swordL);
-            Entity swordR = sceneMgr.CreateEntity("Sword.mesh");
+            Mogre.Entity swordR = sceneMgr.CreateEntity("Sword.mesh");
             ent.AttachObjectToBone("Sheath.R", swordR);
 
             this.mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id);
@@ -90,7 +89,7 @@ namespace Game.CharacSystem
             if (isFalling)
             {
                 this.mAnimMgr.SetAnims(AnimName.JumpLoop);
-                this.mGravitySpeed.Reset();
+                GravitySpeed.Reset();
             }
             else { this.mAnimMgr.SetAnims(AnimName.JumpEnd); }
         }
@@ -100,7 +99,7 @@ namespace Game.CharacSystem
             if (isJumping)
             {
                 this.mAnimMgr.SetAnims(AnimName.JumpStart, AnimName.JumpLoop);
-                this.mJumpSpeed.Jump();
+                JumpSpeed.Jump();
             }
             else { this.mMovementInfo.IsFalling = true; }
         }
@@ -109,10 +108,10 @@ namespace Game.CharacSystem
         {
             Degree deg = this.mNode.Orientation.Yaw;
 
-            if (Math.Abs(this.mNode.Orientation.w) < Math.Abs(this.mNode.Orientation.y))    // isOnBottom
+            if (Mogre.Math.Abs(this.mNode.Orientation.w) < Mogre.Math.Abs(this.mNode.Orientation.y))    // isOnBottom
             {
                 deg *= -1;
-                deg -= Math.Sign(deg.ValueAngleUnits) * new Degree(180); // +180 if on left -180 else
+                deg -= Mogre.Math.Sign(deg.ValueAngleUnits) * new Degree(180); // +180 if on left -180 else
             }
             return deg;
         }
@@ -149,10 +148,12 @@ namespace Game.CharacSystem
 
             /* Compute translation and yaw */
             Vector3 translation = Vector3.ZERO;
-            if (this.mMovementInfo.IsJumping)
-                translation.y = this.mJumpSpeed.GetSpeed();
+            if (this.mMovementInfo.IsPushedByArcaneLevitator)
+                translation.y = ArcaneLevitatorSpeed.GetSpeed();
+            else if (this.mMovementInfo.IsJumping)
+                translation.y = JumpSpeed.GetSpeed();
             else
-                translation.y = this.mGravitySpeed.GetSpeed();
+                translation.y = GravitySpeed.GetSpeed();
 
             if (this.mMovementInfo.IsAllowedToMove)
             {
@@ -160,16 +161,15 @@ namespace Game.CharacSystem
                 this.mNode.Yaw(this.mMovementInfo.YawValue * frameTime);
             }
 
-
             this.mCollisionMgr.DrawPoints();
 
             translation = this.Translate(translation * frameTime);    // Apply the translation
 
             /* Update animations */
-            if (!this.mMovementInfo.IsJumping && !this.mMovementInfo.IsFalling)
+            if (!this.mMovementInfo.IsJumping && !this.mMovementInfo.IsFalling && !this.mMovementInfo.IsPushedByArcaneLevitator)
             {
-                int zDirSign = (int)Math.Sign(this.mMovementInfo.MoveDirection.z);
-                int prevZDirSign = (int)Math.Sign(this.mPreviousDirection.z);
+                int zDirSign = (int)Mogre.Math.Sign(this.mMovementInfo.MoveDirection.z);
+                int prevZDirSign = (int)Mogre.Math.Sign(this.mPreviousDirection.z);
 
                 if (zDirSign != 0 && zDirSign != prevZDirSign)
                     this.mAnimMgr.SetAnims(this.mRunAnims, zDirSign);
@@ -192,7 +192,7 @@ namespace Game.CharacSystem
 
             /* Here translate has been modified to avoid collisions */
             this.mMovementInfo.IsFalling = actualTranslation.y < 0;
-            this.mMovementInfo.IsJumping = actualTranslation.y > 0 && this.mJumpSpeed.IsJumping;
+            this.mMovementInfo.IsJumping = actualTranslation.y > 0 && JumpSpeed.IsJumping;
             this.mNode.Translate(actualTranslation);
 
             return actualTranslation * this.mNode.LocalAxes;
@@ -209,5 +209,32 @@ namespace Game.CharacSystem
             this.mNode.SetOrientation(0, 0, 180, 0);
         }
 
+        /* Character */
+        public String getName()                 { return this.mCharInfo.Name; }
+        public String getDisplayName()          { return this.getName(); }
+        public void setDisplayName(String name) { this.mCharInfo.Name = name; }
+        public void teleport(Vector3 loc)       { this.FeetPosition = loc; }
+        public bool save()                      { throw new NotImplementedException(); }
+        public Vector3 getSpawnPoint()          { return this.mCharInfo.SpawnPoint; }
+        public void setSpawnPoint(Vector3 loc)  { this.mCharInfo.SpawnPoint = loc; }
+
+        /* Entity */
+        public int getId()                        { return this.mCharInfo.Id; }
+        public void remove()                      { this.mCharacMgr.RemoveCharac(this); }
+        public bool isRemoved()                   { throw new NotImplementedException(); }
+        public bool isSpawned()                   { throw new NotImplementedException(); }
+        public void setSavable(bool savable)      { throw new NotImplementedException(); }
+        public bool isSavable()                   { throw new NotImplementedException(); }
+        public void setViewDistance(int distance) { throw new NotImplementedException(); }
+        public int getViewDistance()              { throw new NotImplementedException(); }
+        public Chunk getChunk()                   { throw new NotImplementedException(); }
+        public Island getRegion()                 { throw new NotImplementedException(); }
+        public void setIsPushedByArcaneLevitator(bool value)
+        {
+            if (value && !this.mMovementInfo.IsPushedByArcaneLevitator)
+                ArcaneLevitatorSpeed.StartLevitation();
+            this.mMovementInfo.IsPushedByArcaneLevitator = value;
+            this.mAnimMgr.DeleteAllAnims();
+        }
     }
 }

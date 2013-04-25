@@ -6,21 +6,22 @@ namespace Game.CharacSystem
     {
         public delegate void MovementEvent(bool actualState);
         private MovementEvent mOnFall, mOnJump;
-        private bool mIsAllowedToMove, mIsFalling, mIsJumping;
+        private bool mIsAllowedToMove, mIsFalling, mIsJumping, mIsPushedByArcaneLevitator;
         private Vector3 mMoveDirection;
         private float mYawValue;
 
-        public float YawValue        { get { return this.mYawValue; } set { this.mYawValue = value; } }
-        public bool  IsAllowedToMove { get { return this.mIsAllowedToMove; } set { this.mIsAllowedToMove = value; } }
-        public bool  IsFalling
+        public float YawValue { get { return this.mYawValue; } set { this.mYawValue = value; } }
+        public bool IsAllowedToMove { get { return this.mIsAllowedToMove; } set { this.mIsAllowedToMove = value; } }
+        public bool IsPushedByArcaneLevitator { get { return this.mIsPushedByArcaneLevitator; } set { this.mIsPushedByArcaneLevitator = value; } }
+        public bool IsFalling
         {
             get { return this.mIsFalling; }
-            set  { if (this.mIsFalling != value) { this.mIsFalling = value; this.mOnFall(this.IsFalling); } }
+            set { if (this.mIsFalling != value && !this.mIsPushedByArcaneLevitator) { this.mIsFalling = value; this.mOnFall(this.IsFalling); } }
         }
         public bool IsJumping
         {
             get { return this.mIsJumping; }
-            set { if (this.mIsJumping != value) { this.mIsJumping = value; this.mOnJump(this.IsJumping); } }
+            set { if (this.mIsJumping != value && !this.mIsPushedByArcaneLevitator) { this.mIsJumping = value; this.mOnJump(this.IsJumping); } }
         }
         public Vector3 MoveDirection    // MoveDirection value must be set once per frame
         {
@@ -39,6 +40,7 @@ namespace Game.CharacSystem
             this.mIsAllowedToMove = true;
             this.mIsFalling = false;
             this.mIsJumping = false;
+            this.mIsPushedByArcaneLevitator = false;
             this.mMoveDirection = new Vector3();
             this.ClearInfo();
         }

@@ -10,18 +10,18 @@ namespace Game.CharacSystem
 {
     public class CharacMgr
     {
-        private CommandInfo[]          mCommands;
+        private CommandInfo[] mCommands;
         private List<VanillaCharacter> mCharacList;
-        private MainPlayerCamera       mMainPlayerCam;
-        private StateManager           mStateMgr;
-        private MoisManager            mInput;
-        private MainWorld              mWorld;
-        private string                 mMeshName = "Sinbad.mesh";
+        private MainPlayerCamera mMainPlayerCam;
+        private StateManager mStateMgr;
+        private MoisManager mInput;
+        private MainWorld mWorld;
+        private string mMeshName = "Sinbad.mesh";
 
-        public StateManager     StateMgr      { get { return this.mStateMgr; } }
-        public SceneManager     SceneMgr      { get { return this.mStateMgr.SceneMgr; } }
-        public MoisManager      Input         { get { return this.mInput; } }
-        public MainWorld        World         { get { return this.mWorld; } }
+        public StateManager StateMgr { get { return this.mStateMgr; } }
+        public SceneManager SceneMgr { get { return this.mStateMgr.SceneMgr; } }
+        public MoisManager Input { get { return this.mInput; } }
+        public MainWorld World { get { return this.mWorld; } }
         public MainPlayerCamera MainPlayerCam { get { return this.mMainPlayerCam; } }
 
         public CharacMgr(StateManager stateMgr, MainWorld world)
@@ -72,12 +72,14 @@ namespace Game.CharacSystem
             LogManager.Singleton.DefaultLog.LogMessage(type + " " + info.Name + " added");
         }
 
+        public void RemoveCharac(VanillaCharacter charac) { this.mCharacList.Remove(charac); }
+
         public VanillaCharacter GetCharacter(int index = 0) { return this.mCharacList[index]; }    // By default return the main player
         public int getNumberOfCharacter() { return this.mCharacList.Count; }
 
         public void Update(float frameTime)
         {
-            for(int i = 0; i < this.mCharacList.Count; i++)
+            for (int i = 0; i < this.mCharacList.Count; i++)
                 this.mCharacList[i].Update(frameTime);
 
             this.mMainPlayerCam.Update();

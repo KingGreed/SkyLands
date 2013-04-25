@@ -19,7 +19,7 @@ namespace Game.CharacSystem
             private AnimName mAnim;
             private MOIS.KeyCode mKey;
 
-            public AnimName Anim        { get { return this.mAnim; } }
+            public AnimName Anim { get { return this.mAnim; } }
             public MOIS.KeyCode Key { get { return this.mKey; } }
 
             public Emote(MOIS.KeyCode key, AnimName anim) { this.mKey = key; this.mAnim = anim; }
@@ -41,8 +41,8 @@ namespace Game.CharacSystem
         public float       YawCamValue   { get { return this.mYawCamValue; } }
         public float       PitchCamValue { get { return this.mPitchCamValue; } }
         public bool        IsFirstView   { get { return this.mIsFirstView; } }
-        public bool        IsDebugMode
-        { 
+        public bool IsDebugMode
+        {
             get { return this.mIsDebugMode; }
             set
             {
@@ -66,7 +66,7 @@ namespace Game.CharacSystem
         }
 
         public void AttachCamera(MainPlayerCamera cam)
-        { 
+        {
             this.mCam = cam;
         }
 
@@ -85,9 +85,9 @@ namespace Game.CharacSystem
                 if (this.mIsFirstView) { this.FirstPersonUpdate(yawValue, pitchValue); }
                 else { this.ThirdPersonUpdate(yawValue, pitchValue); }
 
-                if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left))  { this.OnLClick(); }
+                if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left)) { this.OnLClick(); }
                 if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Right)) { this.OnRClick(); }
-                //if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Middle)) { this.OnMClick(); }
+                if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Middle)) { this.setIsPushedByArcaneLevitator(!this.mMovementInfo.IsPushedByArcaneLevitator); }
 
                 /* Update emotes animations */
                 if (!this.mAnimMgr.AreAnimationsPlaying(AnimName.JumpStart, AnimName.JumpLoop, AnimName.JumpEnd, AnimName.RunBase, AnimName.RunTop))
@@ -97,7 +97,7 @@ namespace Game.CharacSystem
                         if (this.mInput.WasKeyPressed(emote.Key))
                         {
                             if (!this.mAnimMgr.AreAnimationsPlaying(emote.Anim)) { this.mAnimMgr.SetAnims(emote.Anim); }
-                            else                                                 { this.mAnimMgr.DeleteAnims(emote.Anim); }
+                            else { this.mAnimMgr.DeleteAnims(emote.Anim); }
                         }
                     }
                 }
@@ -107,11 +107,11 @@ namespace Game.CharacSystem
         private void FirstPersonUpdate(float yawValue, float pitchValue)
         {
             Vector3 moveDirection = new Vector3();
-            if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_W) || this.mInput.IsKeyDown(MOIS.KeyCode.KC_UP))    { moveDirection.z = 1; }
-            if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_S) || this.mInput.IsKeyDown(MOIS.KeyCode.KC_DOWN))  { moveDirection.z = -1; }
-            if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_A) || this.mInput.IsKeyDown(MOIS.KeyCode.KC_LEFT))  { moveDirection.x = 1; }
+            if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_W) || this.mInput.IsKeyDown(MOIS.KeyCode.KC_UP)) { moveDirection.z = 1; }
+            if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_S) || this.mInput.IsKeyDown(MOIS.KeyCode.KC_DOWN)) { moveDirection.z = -1; }
+            if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_A) || this.mInput.IsKeyDown(MOIS.KeyCode.KC_LEFT)) { moveDirection.x = 1; }
             if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_D) || this.mInput.IsKeyDown(MOIS.KeyCode.KC_RIGHT)) { moveDirection.x = -1; }
-            if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_SPACE))                                         { moveDirection.y = 1; }
+            if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_SPACE)) { moveDirection.y = 1; }
             this.mMovementInfo.MoveDirection = moveDirection;
 
             this.mMovementInfo.YawValue = yawValue;
@@ -228,7 +228,7 @@ namespace Game.CharacSystem
             }
 
             Vector3 playerHeadBlockPos = this.BlockPosition + Vector3.UNIT_Y;
-            if (block is Game.World.Blocks.ConstructionBlock) 
+            if (block is Game.World.Blocks.ConstructionBlock)
             {
                 CharacterInfo iaInfo = new CharacterInfo("NPC_" + Guid.NewGuid().ToString(), false);
                 iaInfo.SpawnPoint = this.mCharacMgr.World.getSpawnPoint();
@@ -245,7 +245,7 @@ namespace Game.CharacSystem
                 else if (face == CubeFace.rightFace) { relBlockPos.x++; }
                 else if (face == CubeFace.backFace) { relBlockPos.z--; }
                 else  /*(face == CubeFace.frontFace)* { relBlockPos.z++; }*/
-                
+
                 string material = "";
                 if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_1, MOIS.KeyCode.KC_NUMPAD1))
                     material = "Grass";
