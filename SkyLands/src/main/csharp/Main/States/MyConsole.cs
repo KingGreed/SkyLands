@@ -93,7 +93,7 @@ namespace Game.IGConsole
         protected override void CreateGUI()
         {
             this.mTextBoxes = new TextBox[this.mNbLines];
-            Size txtBoxSize = new Size((int)((float)this.mOriginalWndSize.Width / 2.5f), 32);
+            Size txtBoxSize = new Size((int)((float)this.mOriginalWndSize.Width / 2.5f), 33);
             Point consoleLoc = new Point(0, this.mOriginalWndSize.Height - txtBoxSize.Height * this.mNbLines);
 
             for (int i = 0; i < this.mNbLines; i++)
@@ -133,7 +133,7 @@ namespace Game.IGConsole
             {
                 if (!this.mEnabled)
                 {
-                    this.Enabled = true;
+                    this.Visible = true;
                     this.mTimer.Reset();
                 }
 

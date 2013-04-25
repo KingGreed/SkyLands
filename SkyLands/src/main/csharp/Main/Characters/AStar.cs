@@ -26,19 +26,19 @@ namespace Game.CharacSystem {
 
             mPath.Enqueue(end);
             /*while (begin != end) {
-                if (begin.x < end.x && this.mIsland.getBlock(begin + 1 * Vector3.UNIT_X, false) is AirBlock) {
+                if (begin.x < end.x && this.mIsland.getBlock(begin + 1 * Vector3.UNIT_X, false) is Air) {
                     begin += 1 * Vector3.UNIT_X;
                     this.mPath.Enqueue(begin);
                     continue;
-                } else if (begin.x > end.x && this.mIsland.getBlock(begin - 1 * Vector3.UNIT_X, false) is AirBlock) {
+                } else if (begin.x > end.x && this.mIsland.getBlock(begin - 1 * Vector3.UNIT_X, false) is Air) {
                     begin -= 1 * Vector3.UNIT_X;
                     this.mPath.Enqueue(begin);
                     continue;
-                } else if (begin.z < end.z && this.mIsland.getBlock(begin + 1 * Vector3.UNIT_Z, false) is AirBlock) {
+                } else if (begin.z < end.z && this.mIsland.getBlock(begin + 1 * Vector3.UNIT_Z, false) is Air) {
                     begin += 1 * Vector3.UNIT_Z;
                     this.mPath.Enqueue(begin);
                     continue;
-                } else if (begin.z > end.z && this.mIsland.getBlock(begin - 1 * Vector3.UNIT_Z, false) is AirBlock) {
+                } else if (begin.z > end.z && this.mIsland.getBlock(begin - 1 * Vector3.UNIT_Z, false) is Air) {
                     begin -= 1 * Vector3.UNIT_Z;
                     this.mPath.Enqueue(begin);
                     continue;
@@ -68,7 +68,7 @@ namespace Game.CharacSystem {
 
                 for (short i = 1; i < 4; i++)
                 {
-                    if (!(adjacentBlocks[i] is AirBlock)) { continue; }
+                    if (!(adjacentBlocks[i] is Air)) { continue; }
                     if ((adjacentPos[min] - end).Length > (adjacentPos[i] - end).Length)
                     {
                         min = i;
@@ -76,7 +76,7 @@ namespace Game.CharacSystem {
 
                 }
 
-                if (!(adjacentBlocks[min] is AirBlock)) { this.mPath = new Queue<Vector3>(); return; }
+                if (!(adjacentBlocks[min] is Air)) { this.mPath = new Queue<Vector3>(); return; }
                 else { this.mPath.Enqueue(adjacentPos[min]); }
 
                 begin = adjacentPos[min];

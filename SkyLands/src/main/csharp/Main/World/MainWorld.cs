@@ -183,7 +183,7 @@ namespace Game.World
             blockPos = AbsToRelative(blockPos);
 
             Block block = this.mIslandList[islandLoc].getBlock(blockPos, false);
-            return !(block == null || block is AirBlock);
+            return !(block == null || block is Air);
         }
 
         public void generateIslandThreaded()

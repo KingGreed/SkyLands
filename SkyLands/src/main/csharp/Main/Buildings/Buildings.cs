@@ -29,7 +29,7 @@ namespace Game.Buildings
                 {
                     for (int z = 0; z < 5; z++)
                     {
-                        if (this.mIsland.getBlock(this.mPos + new Vector3(x, y, z), true) is AirBlock && isInSphere(x, y, z, 5))
+                        if (this.mIsland.getBlock(this.mPos + new Vector3(x, y, z), true) is Air && isInSphere(x, y, z, 5))
                         {
                             this.mIsland.addBlockToScene(this.mPos + new Vector3(x, y, z), "Grass");
                         }

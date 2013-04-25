@@ -214,22 +214,30 @@ namespace Game.CharacSystem
             API.Geo.Cuboid.Block b;
             CubeFace face;
             if (!this.GetBlockPos(out relBlockPos, out b, out face)) { return; }*/
-            float distance = 200;
-            Vector3 relBlockPos = MainWorld.AbsToRelative(this.mCam.Camera.GetCameraToViewportRay(0.5f, 0.5f).GetPoint(distance));
-
             Island island = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc);
-            Block b = island.getBlock(relBlockPos, false);
+            Block block = null;
 
-            if (b is Game.World.Blocks.ConstructionBlock) 
+            float distance = 10;
+            Vector3 curRelBlockPos = Vector3.ZERO, prevRelBlockPos = Vector3.ZERO;
+            while (distance <= 250 && (block is Game.World.Blocks.AirBlock || block == null))
+            {
+                prevRelBlockPos = curRelBlockPos;
+                curRelBlockPos = MainWorld.AbsToRelative(this.mCam.Camera.GetCameraToViewportRay(0.5f, 0.5f).GetPoint(distance));
+                block = island.getBlock(curRelBlockPos, false);
+                distance += Cst.CUBE_SIDE;
+            }
+
+            Vector3 playerHeadBlockPos = this.BlockPosition + Vector3.UNIT_Y;
+            if (block is Game.World.Blocks.ConstructionBlock) 
             {
                 CharacterInfo iaInfo = new CharacterInfo("NPC_" + Guid.NewGuid().ToString(), false);
-                iaInfo.SpawnPoint = this.mCharacMgr.World.getSpawnPoint(); ;
+                iaInfo.SpawnPoint = this.mCharacMgr.World.getSpawnPoint();
                 this.mCharacMgr.AddCharacter(iaInfo);
 
-                this.mCharacMgr.GetCharacter(this.mCharacMgr.getNumberOfCharacter() - 1).moveTo(relBlockPos * Cst.CHUNK_SIDE);
-                new Building(island, relBlockPos);
+                this.mCharacMgr.GetCharacter(this.mCharacMgr.getNumberOfCharacter() - 1).moveTo(curRelBlockPos * Cst.CHUNK_SIDE);
+                new Building(island, curRelBlockPos);
             }
-            else if(b is Game.World.Blocks.AirBlock)
+            else if (!(block is Game.World.Blocks.AirBlock) && prevRelBlockPos != playerHeadBlockPos && prevRelBlockPos != this.BlockPosition)
             {
                 /*if      (face == CubeFace.underFace) { relBlockPos.y--; }
                 else if (face == CubeFace.upperFace) { relBlockPos.y++; }
@@ -256,7 +264,7 @@ namespace Game.CharacSystem
 
                 if (material != "")
                 {
-                    island.addBlockToScene(relBlockPos, material);
+                    island.addBlockToScene(prevRelBlockPos, material);
                     //this.mCharacMgr.StateMgr.WriteOnConsole("Face : " + Enum.GetName(typeof(CubeFace), face));
                     this.mCharacMgr.StateMgr.WriteOnConsole("Added : " + material);
                 }
