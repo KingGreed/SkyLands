@@ -1,0 +1,143 @@
+\documentclass[article]{report}             % Type of document
+
+\usepackage[utf8]{inputenc}    		 	    % Encoding
+\usepackage[english]{babel}			        % Language
+\usepackage{geometry}           			% Page margin
+\usepackage{graphicx}           			% For images
+\usepackage{newcent}            			% Font
+\usepackage{color}              			% Colors
+\usepackage{listings}           			% Lists
+\usepackage[footnote, nolist]{acronym}	    % Acronyms
+\usepackage[absolute, overlay]{textpos}	    % Text positioning
+\usepackage[babel=true]{csquotes}
+
+\usepackage{fancyhdr}          			 % We might have a need for them
+\usepackage{float}
+\usepackage{tabularx}
+
+\usepackage{latexsym}
+\usepackage{pdfpages}
+\usepackage{tikz}
+\usepackage{ifthen}
+\usepackage{wrapfig}
+\usepackage{textcomp}
+\usepackage{multicol}
+
+\usepackage{listings} % includes code
+
+\lstset{
+	tabsize=4,
+	language=matlab,
+        basicstyle=\scriptsize,
+        %upquote=true,
+        aboveskip={0.5\baselineskip},
+        columns=fixed,
+        showstringspaces=false,
+        extendedchars=true,
+        breaklines=true,
+        basicstyle=\normalsize,
+        prebreak = \raisebox{2ex}[2ex][2ex]{\ensuremath{\hookleftarrow}},
+        showtabs=false,
+        showspaces=false,
+        showstringspaces=false,
+        identifierstyle=\ttfamily,
+        keywordstyle=\color[rgb]{0,0,1},
+        commentstyle=\color[rgb]{0.133,0.545,0.133},
+        stringstyle=\color[rgb]{0.627,0.126,0.941},
+	language=Java
+}
+
+\setlength{\columnsep}{1cm}
+\setlength{\TPHorizModule}{\paperwidth}	% Used for textblock
+\setlength{\TPVertModule}{\paperheight}	% Used for textblock
+
+\title {Oral Presentation 1}
+\parskip = 0.25cm              % Summary options (spaces between lines)
+
+% Margin
+\geometry{tmargin=2.5cm, bmargin=1.5cm, lmargin=2.5cm, rmargin=2cm}
+
+\definecolor{blue}{rgb}{0.13,0.29,0.46}
+\definecolor{red}{rgb}{1,0,0}
+\definecolor{couleur_titre}{rgb}{0.20, 0.45, 0.80}
+\definecolor{couleur_nom}{rgb}{0.11, 0.6, 0.18}
+
+\renewcommand{\labelitemi}{$\bullet$}
+\renewcommand{\contentsname}{Table of contents}
+
+% Title at the top of the page
+\pagestyle{fancyplain} \chead{}\lhead{\textit{Team Dedalus}} \rhead{\textcolor{couleur_titre}{\emph{\textit{Project: SkyLands}}}}
+
+\title {Oral presentation 3}
+\author {Romain\and Renaud\and Aenora\and Erwan}
+\date {}
+
+%
+% Document
+%
+\begin{document}
+	\thispagestyle{empty}
+  	\begin{titlepage} 
+		\vspace*{1cm} 
+  		\begin{center} 
+  			{\huge{\textsc{3rd Oral} \\ ~ \\{\large From}\\ ~\\ Team \\  ~ \\ }}
+	  		\includegraphics[width = 14cm]{images/Titles/Dedalus.png}
+			\\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ 
+		\end{center}
+  		\hfill {\large Romain \textsc{Biessy}}
+  		\hfill {\large Renaud \textsc{Gaubert}}
+  		\hfill {\large Aenora \textsc{Tye}}
+  		\hfill {\large Erwan  \textsc{Vasseure}}
+  	\end{titlepage} 
+
+  	\tableofcontents
+  		\pagenumbering{arabic}
+  		\newpage
+		
+		\chapter{\textcolor{blue}{Introduction}}
+			Implementing the Minecraft-like part of the game was the work we had to do for the last oral presentation and that was the easy part! For this presentation our goal was to implement the strategy part. At first it seemed easy, then we discovered the joy of programming an AI. Pathfinding and RTS were both a pain to implement. \\
+
+ 			Moreover, with the english major projects of Max and Fuji and the methodology's project, we had less time to work on the project. Also having our oral presentation on a monday didn't help. However we managed to have a pretty good result and to fix the bugs you saw on the previous presentation\\
+
+ 			On the other hand, our work was not only focused on the AI part, we also had fun implementing structures. The most impressing of them is what we named the dark tower and is present only in plain Islands, it took us about four whole days of coding to implement and can still be improved.\\
+			
+			We also had to deal with graphism problems such as the shadow managment which could not be completly implemented because of the fps drop it causes (it almost crash the game). The final part we had to deal with is the integration of the save and load functions to the menu which will be presented to you further in the report.\\
+			
+			To put it in a nutshell, we worked very hard for this oral presentation and have some amazing results which were not planned in the book of specifications. 
+  		\chapter{\textcolor{blue}{PathFinding}}
+			\section{A star 2d}
+			\section{A star 3d}
+				
+		\chapter{\textcolor{blue}{Entities and actions}}
+			\section{Robots}
+			\section{Shooting}
+		\chapter{\textcolor{blue}{Merging Pathfinding and entities actions}}
+			
+		\chapter{\textcolor{blue}{Saving and Loading the game}}
+			\section{Algorithm}
+			\section{A new menu}
+			\section{Integration to the menu}
+
+		\chapter{\textcolor{blue}{Structures}}
+			\section{Behind the scenes}
+			\section{Portals}
+			\section{Buildings}
+			\section{Generating the base and placing it on the map}
+
+		\chapter{\textcolor{blue}{The dark tower}}
+			\section{The main building}
+			\section{The floors}
+			\section{Bridges}
+			\section{Lower towers}
+		\chapter{\textcolor{blue}{Graphics}}
+			\section{Shadows}
+			\section{Real shadows}
+			\section{Creating the meshs}
+		
+		\chapter{\textcolor{blue}{Conclusion}}
+			Unfortunately you have reached the end of this marvelous report! As you've seen throughout this report, we have worked very hard for this oral presentation. The result talk for themselves and the goal fixed were reached.\\
+			
+			Most of the game is still a work in progress (WIP), much has to be done in little time. However, the team is still standing and ready to work on those things !
+			
+			
+\end{document}
