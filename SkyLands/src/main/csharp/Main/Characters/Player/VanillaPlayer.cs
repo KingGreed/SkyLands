@@ -234,7 +234,7 @@ namespace Game.CharacSystem
                 iaInfo.SpawnPoint = this.mCharacMgr.World.getSpawnPoint();
                 this.mCharacMgr.AddCharacter(iaInfo);
 
-                this.mCharacMgr.GetCharacter(this.mCharacMgr.getNumberOfCharacter() - 1).moveTo(curRelBlockPos * Cst.CHUNK_SIDE);
+                this.mCharacMgr.GetCharacterByListPos(this.mCharacMgr.getNumberOfCharacter() - 1).moveTo(curRelBlockPos * Cst.CHUNK_SIDE);
                 new Building(island, curRelBlockPos);
             }
             else if (!(block is Game.World.Blocks.AirBlock) && prevRelBlockPos != playerHeadBlockPos && prevRelBlockPos != this.BlockPosition)

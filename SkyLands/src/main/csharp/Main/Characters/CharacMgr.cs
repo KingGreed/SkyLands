@@ -37,13 +37,13 @@ namespace Game.CharacSystem
                     {
                         int index;
                         if (int.TryParse(args[0], out index))
-                            this.mStateMgr.WriteOnConsole("FeetPosition : " + MyConsole.GetString(this.GetCharacter(index).FeetPosition));
+                            this.mStateMgr.WriteOnConsole("FeetPosition : " + MyConsole.GetString(this.GetCharacterByListPos(index).FeetPosition));
                     }),
                 new CommandInfo("getCharacYaw", 1, delegate(string[] args)
                     {
                         int index;
                         if (int.TryParse(args[0], out index))
-                            this.mStateMgr.WriteOnConsole(("Yaw : " + this.GetCharacter(index).GetYaw().ValueAngleUnits));
+                            this.mStateMgr.WriteOnConsole(("Yaw : " + this.GetCharacterByListPos(index).GetYaw().ValueAngleUnits));
                     })
             };
             this.mStateMgr.MyConsole.AddCommands(this.mCommands);
@@ -60,7 +60,7 @@ namespace Game.CharacSystem
                 if (this.mCharacList.Count == 1)
                 {
                     this.mMainPlayerCam = new MainPlayerCamera(this.mStateMgr.Camera, (this.mCharacList[0] as VanillaPlayer), this.mStateMgr.Window.Width, this.mStateMgr.Window.Height);
-                    (this.GetCharacter() as VanillaPlayer).AttachCamera(this.mMainPlayerCam);
+                    (this.GetCharacterByListPos() as VanillaPlayer).AttachCamera(this.mMainPlayerCam);
                 }
             }
             else
@@ -74,7 +74,8 @@ namespace Game.CharacSystem
 
         public void RemoveCharac(VanillaCharacter charac) { this.mCharacList.Remove(charac); }
 
-        public VanillaCharacter GetCharacter(int index = 0) { return this.mCharacList[index]; }    // By default return the main player
+        public VanillaCharacter GetCharacterByListPos(int index = 0) { return this.mCharacList[index]; }    // By default return the main player
+        public VanillaCharacter GetCharacterById(int id = 0) { return this.mCharacList.Find(charac => charac.Info.Id == id); }    // By default return the main player
         public int getNumberOfCharacter() { return this.mCharacList.Count; }
 
         public void Update(float frameTime)
