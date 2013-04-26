@@ -147,7 +147,4 @@ C:\Users\kingGreed\Lib\Maven\SkyLands\src\main\bin\Release\Miyagi.dll
 C:\Users\kingGreed\Lib\Maven\SkyLands\src\main\bin\Release\Mogre.dll
 C:\Users\kingGreed\Lib\Maven\SkyLands\src\main\bin\Release\MOIS.dll
 C:\Users\kingGreed\Lib\Maven\SkyLands\src\main\bin\Release\Miyagi.xml
-C:\Users\kingGreed\Lib\Maven\SkyLands\src\main\bin\Release\resources\Media\materials\textures\LevitatorBottom.png
-C:\Users\kingGreed\Lib\Maven\SkyLands\src\main\bin\Release\resources\Media\materials\textures\LevitatorSide.png
-C:\Users\kingGreed\Lib\Maven\SkyLands\src\main\bin\Release\resources\Media\materials\textures\LevitatorTop.png
 C:\Users\kingGreed\Lib\Maven\SkyLands\src\main\obj\x86\Release\SkyLands.csprojResolveAssemblyReference.cache

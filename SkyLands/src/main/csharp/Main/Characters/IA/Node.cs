@@ -34,11 +34,15 @@ namespace Game.Characters.IA {
             List<Node> returnList = new List<Node>();
 
             Vector3 adj = Vector3.ZERO;
-            //for(int y = -1; y <= 1; y++) {
+            
                 for(int i = 0; i < adjacent.Length; i++) {
                     adj = adjacent[i] + this.pos;
                     if(current.getBlock(adj, false) is AirBlock && !(current.getBlock(adj + Vector3.NEGATIVE_UNIT_Y, false) is AirBlock)) {
                         returnList.Add(new Node(destination, adj, this));
+                    } else if(current.getBlock(adj + Vector3.UNIT_Y, false) is AirBlock && !(current.getBlock(adj, false) is AirBlock)) {
+                        returnList.Add(new Node(destination, adj + Vector3.UNIT_Y, this));
+                    } else if(current.getBlock(adj - Vector3.UNIT_Y, false) is AirBlock && !(current.getBlock(adj - 2 * Vector3.UNIT_Y, false) is AirBlock)) {
+                        returnList.Add(new Node(destination, adj - Vector3.UNIT_Y, this));
                     }
                 }
             //}

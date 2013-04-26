@@ -520,6 +520,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\World\Blocks\Crystal.cs" />
+    <Compile Include="csharp\Main\World\Blocks\LevitatorAirBlock.cs" />
+    <Compile Include="csharp\Main\World\Blocks\LevitatorBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\PortalBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\WoodenSlab.cs" />
     <Compile Include="csharp\Main\World\Blocks\TowerWoodBlock.cs" />

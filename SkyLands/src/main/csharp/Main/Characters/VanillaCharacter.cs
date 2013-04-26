@@ -134,8 +134,8 @@ namespace Game.CharacSystem
                         this.mNode.Translate(this.mDirection * move);
 
                     } else {
-                        
-                        this.mPathFinder.goal.RemoveFirst();
+
+                        if(this.mPathFinder.goal.Head != null) { this.mPathFinder.goal.RemoveFirst(); }
                         if(this.mPathFinder.goal.Head != null) {
                             this.mDirection = this.mPathFinder.goal.Head.Data - this.mCharacMgr.World.getRelativeFromAbsolute(this.mNode.Position);
                                 
@@ -203,10 +203,13 @@ namespace Game.CharacSystem
 
             destination = this.mCharacMgr.World.getRelativeFromAbsolute(destination);
             this.mPathFinder = new PathFinder(destination, this.mCharacMgr.World.getRelativeFromAbsolute(this.mNode.Position), this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc));
-            this.mIsWalking = true;
 
-            this.mDirection = this.mPathFinder.goal.Head.Data - this.mCharacMgr.World.getRelativeFromAbsolute(this.mNode.Position);
-            this.mNode.SetOrientation(0, 0, 180, 0);
+            if(this.mPathFinder.goal != null) {
+                this.mIsWalking = true;
+
+                this.mDirection = this.mPathFinder.goal.Head.Data - this.mCharacMgr.World.getRelativeFromAbsolute(this.mNode.Position);
+                this.mNode.SetOrientation(0, 0, 180, 0);
+            }
         }
 
         /* Character */
