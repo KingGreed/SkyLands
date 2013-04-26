@@ -135,10 +135,9 @@ namespace Game.CharacSystem
 
                     } else {
 
-                        if(this.mPathFinder.goal.Head != null) { this.mPathFinder.goal.RemoveFirst(); }
+                        this.mPathFinder.goal.RemoveFirst();
                         if(this.mPathFinder.goal.Head != null) {
-                            this.mDirection = this.mPathFinder.goal.Head.Data - this.mCharacMgr.World.getRelativeFromAbsolute(this.mNode.Position);
-                                
+                            this.mDirection = this.mPathFinder.goal.Head.Data - this.BlockPosition;
                         }
                     }
                 } else {

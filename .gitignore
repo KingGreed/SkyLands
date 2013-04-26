@@ -25,3 +25,4 @@ bin\Release\Ogre.log
 *.synctex.gz
 *.toc
 *.vshost.exe
+SkyLands\src\main\bin\Release\SkyLands.vshost.exe

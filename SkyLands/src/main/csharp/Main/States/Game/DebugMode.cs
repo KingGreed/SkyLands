@@ -51,9 +51,8 @@ namespace Game
                     }
                 } else {
                     int characId = Convert.ToInt32(selected.Name.Substring(14));
-                    LogManager.Singleton.DefaultLog.LogMessage("Id is : " + characId.ToString());
                     selected.ShowBoundingBox = false;
-                    this.mCharacMgr.GetCharacterByListPos(characId).moveTo(this.mCharacMgr.World.getSpawnPoint() + Vector3.UNIT_Y);
+                    this.mCharacMgr.GetCharacterById(characId).moveTo(this.mCharacMgr.World.getSpawnPoint() + Vector3.UNIT_Y);
                     selected = null;
                     
                 }

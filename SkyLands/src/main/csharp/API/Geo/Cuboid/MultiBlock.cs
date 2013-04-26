@@ -52,17 +52,16 @@ namespace API.Geo.Cuboid
          * @param the block's location
          */
         public void addBlock(Vector3 loc, BlockFace face) {
-            if(this.mList.Count == 0 || (this.mList.Count >= 1 && this.mList[this.mList.Count - 1] != loc)) { this.mList.Add(loc); }
+            if(this.mList.Count == 0 || (this.mList[this.mList.Count - 1] != loc)) { this.mList.Add(loc); this.mIndexInVertexBuffer.Add(this.faceNumber); }
 
             displayCoord = this.mWorld.getDisplayCoords(this.mIsland.getPosition(), loc);
-            this.mIndexInVertexBuffer.Add(faceNumber);
 
             for(int i = 0; i < 4; i++) {
                 block.Position(displayCoord + getBlockPointsCoord((int)face * 4 + i)); block.TextureCoord(getTextureCoord((int)face * 4 + i));
-                block.Normal(getNormals((int)face));
-                faceNumber++;
+                block.Normal(this.getNormals((int)face));
+                this.faceNumber++;
             }
-            block.Quad((uint)faceNumber - 4, (uint)faceNumber - 3, (uint)faceNumber - 2, (uint)faceNumber - 1);
+            block.Quad((uint)this.faceNumber - 4, (uint)this.faceNumber - 3, (uint)this.faceNumber - 2, (uint)this.faceNumber - 1);
         }
 
 
@@ -75,9 +74,6 @@ namespace API.Geo.Cuboid
          * */
         public void display(Island currentIsland, API.Geo.World currentWorld) {
             if(mList.Count == 0) { return; }
-
-
-
             block.End();
         }
         public void addMultiToScene() {
@@ -89,17 +85,13 @@ namespace API.Geo.Cuboid
         private int find(Vector3 item) {
             int i = 0;
             while(i < this.mList.Count) {
-                if(this.mList[i] == item) {
-                    return i;
-                }
+                if(this.mList[i] == item) { return i; }
                 i++;
             }
             return -1;
         }
 
         public unsafe void removeFromScene(Vector3 item, int numFaces) {
-
-
             if(this.vBuff == null && this.block != null) {
                 this.block.GetSection(0).GetRenderOperation(this.moData);
                 this.posEl = this.moData.vertexData.vertexDeclaration.FindElementBySemantic(VertexElementSemantic.VES_POSITION);
