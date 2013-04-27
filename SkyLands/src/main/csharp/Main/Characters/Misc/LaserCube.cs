@@ -5,18 +5,52 @@ using System.Text;
 
 using Game.World.Generator;
 using API.Generic;
+using Game.CharacSystem;
 
 using Mogre;
 
-namespace Game.Characters.Misc {
-    class LaserCube {
-        //Work in progress
-        private SceneNode node;
-        private double timeSinceCreation = 0;
-        //private double scale = 1;
-        private bool created = false;
+namespace Game.Characters.Misc
+{
+    class LaserCube
+    {
+        private const float SCALE_SPEED = 1.1f;
+        private const float MAX_SCALE = 3;
+        
+        private SceneManager mSceneMgr;
+        private VanillaPlayer mPlayer;
+        private SceneNode mNode;
+        private double mTimeSinceCreation = 0;
+        private bool mCreated = false;
 
-        public void makeFireCubeAt(Vector3 loc, SceneManager mgr) {
+        public LaserCube(SceneManager sceneMgr, VanillaPlayer player)
+        {
+            this.mSceneMgr = sceneMgr;
+            this.mPlayer = player;
+        }
+
+        public void Grow(float frameTime)
+        {
+            if (!mCreated)
+                this.Create();
+            else
+            {
+                this.mNode.Scale(SCALE_SPEED * Vector3.UNIT_SCALE);
+                if (this.mNode.GetScale().x >= MAX_SCALE)
+                {
+                    this.mNode.Scale(MAX_SCALE * Vector3.UNIT_SCALE);
+                    this.Burst();
+                }
+            }
+        }
+
+        public void Burst()
+        {
+            this.mNode.Dispose();
+            this.mCreated = false;
+        }
+
+        private void Create()
+        {
             int faceNumber = 0;
             ManualObject ball = new ManualObject("fireBall-" + Guid.NewGuid().ToString());
             ball.Begin("fireCube", RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
@@ -30,21 +64,13 @@ namespace Game.Characters.Misc {
             }
             ball.End();
 
-            this.node = mgr.RootSceneNode.CreateChildSceneNode(loc);
-            this.node.AttachObject(ball);
-            this.created = true;
+            /* Determine the location */
+            Ray ray = this.mPlayer.Camera.GetCameraToViewportRay(0.5f, 0.5f);
+            ray.Origin = this.mPlayer.FeetPosition + Vector3.UNIT_Y * VanillaCharacter.CHARAC_SIZE / 1.2f;
+
+            this.mNode = this.mSceneMgr.RootSceneNode.CreateChildSceneNode(ray.GetPoint(50));
+            this.mNode.AttachObject(ball);
+            this.mCreated = true;
         }
-
-        public void update(float frameTime) {
-            if(this.created) {
-                float dscale = 2f * frameTime / 4f + 1; // la différence de scale à appliquer;
-                this.node.Scale(dscale, dscale, dscale);
-
-                this.timeSinceCreation += frameTime;
-                if(this.timeSinceCreation > 4) { this.created = false; }
-            }
-        }
-
-       
     }
 }

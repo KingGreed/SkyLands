@@ -4,6 +4,7 @@ using Mogre;
 
 using Game.World;
 using Game.Animation;
+using Game.Characters.Misc;
 
 using API.Geo.Cuboid;
 using API.Generic;
@@ -36,11 +37,13 @@ namespace Game.CharacSystem
         private bool             mIsFirstView;
         private bool             mIsDebugMode;
         private MainPlayerCamera mCam;
+        private LaserCube        mLaserCube;
 
         public MoisManager Input         { get { return this.mInput; } }
         public float       YawCamValue   { get { return this.mYawCamValue; } }
         public float       PitchCamValue { get { return this.mPitchCamValue; } }
         public bool        IsFirstView   { get { return this.mIsFirstView; } }
+        public Camera      Camera        { get { return this.mCam.Camera; } }
         public bool IsDebugMode
         {
             get { return this.mIsDebugMode; }
@@ -55,6 +58,7 @@ namespace Game.CharacSystem
         {
             this.mInput = input;
             this.mIsFirstView = true;
+            this.mLaserCube = new LaserCube(this.mCharacMgr.SceneMgr, this);
 
             this.mEmotes = new Emote[]
             {
@@ -85,8 +89,16 @@ namespace Game.CharacSystem
                 if (this.mIsFirstView) { this.FirstPersonUpdate(yawValue, pitchValue); }
                 else { this.ThirdPersonUpdate(yawValue, pitchValue); }
 
-                if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left)) { this.OnLClick(); }
-                if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Right)) { this.OnRClick(); }
+                if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_LSHIFT, MOIS.KeyCode.KC_RSHIFT))
+                {
+                    if (this.mInput.IsMouseButtonDown(MOIS.MouseButtonID.MB_Left)) { this.mLaserCube.Grow(frameTime); }
+                    //if(this.mInput.re
+                }
+                else
+                {
+                    if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left)) { this.DelBlock(); }
+                    if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Right)) { this.AddBlock(); }
+                }
                 if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Middle)) { this.setIsPushedByArcaneLevitator(!this.mMovementInfo.IsPushedByArcaneLevitator); }
 
                 /* Update emotes animations */
@@ -194,7 +206,7 @@ namespace Game.CharacSystem
             StaticRectangle.DrawLine(this.mCharacMgr.SceneMgr, origin, ray.GetPoint(raySQResult[raySQResult.Count - 1].distance));
         }*/
 
-        private void OnLClick()
+        private void DelBlock()
         {
             Vector3 relBlockPos;
             API.Geo.Cuboid.Block b;
@@ -208,7 +220,7 @@ namespace Game.CharacSystem
                 this.mCharacMgr.StateMgr.WriteOnConsole("Deleted : " + material);
         }
 
-        private void OnRClick()
+        private void AddBlock()
         {
             /*Vector3 relBlockPos;
             API.Geo.Cuboid.Block b;
@@ -219,10 +231,11 @@ namespace Game.CharacSystem
 
             float distance = 10;
             Vector3 curRelBlockPos = Vector3.ZERO, prevRelBlockPos = Vector3.ZERO;
+            Ray ray = this.mCam.Camera.GetCameraToViewportRay(0.5f, 0.5f);
             while (distance <= 250 && (block is Game.World.Blocks.AirBlock || block == null))
             {
                 prevRelBlockPos = curRelBlockPos;
-                curRelBlockPos = MainWorld.AbsToRelative(this.mCam.Camera.GetCameraToViewportRay(0.5f, 0.5f).GetPoint(distance));
+                curRelBlockPos = MainWorld.AbsToRelative(ray.GetPoint(distance));
                 block = island.getBlock(curRelBlockPos, false);
                 distance += Cst.CUBE_SIDE;
             }
