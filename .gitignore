@@ -1,28 +1,12 @@
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
-bin/Debug
-obj
+SkyLands\target
+SkyLands\src\main\bin
+SkyLands\src\main\obj
 
 
 # mstest test results
 TestResults
 
 # Files to ignore here
-bin\Release\Ogre.log
 *.suo
 *.log
-=======
-# Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
-bin/Debug
-obj
-
-# mstest test results
-TestResults
-
-# Files to ignore here
-bin\Release\Ogre.log
-*.suo
-*.log
-*.synctex.gz
-*.toc
-*.vshost.exe
-SkyLands\src\main\bin\Release\SkyLands.vshost.exe
