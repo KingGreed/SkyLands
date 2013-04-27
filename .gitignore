@@ -1,7 +1,7 @@
 # Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
-SkyLands\target
-SkyLands\src\main\bin
-SkyLands\src\main\obj
+SkyLands/target/
+SkyLands/src/main/bin/
+SkyLands/src/main/obj/
 
 
 # mstest test results
