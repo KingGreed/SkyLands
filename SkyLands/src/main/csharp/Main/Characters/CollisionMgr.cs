@@ -8,7 +8,7 @@ namespace Game.CharacSystem
 {
     public class CollisionMgr
     {
-        private const float COL_SIDE_MARGE = 0.65f;
+        private const float COL_SIDE_MARGE = 0.61f;
         private const int NBR_HIT_POINTS = 15;   // Nbr of points for collisions there are at the same height
 
         private MainWorld        mWorld;

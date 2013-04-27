@@ -143,7 +143,7 @@ namespace Game.World
 	    public void setSpawnPoint(Vector3 transform) { throw new NotImplementedException(); }
 	    public List<Character> getPlayers() { throw new NotImplementedException(); }
 
-        public Vector3 getRelativeFromAbsolute(Vector3 absCoord) {
+        public static Vector3 getRelativeFromAbsolute(Vector3 absCoord) {
             absCoord /= Cst.CUBE_SIDE;
             absCoord.x = Mogre.Math.IFloor(absCoord.x);
             absCoord.y = Mogre.Math.IFloor(absCoord.y);
@@ -160,18 +160,18 @@ namespace Game.World
         }
 
         public void onCreation(Vector3 absCoord, Vector3 island) {
-            this.mIslandList[island].getBlock(this.getRelativeFromAbsolute(absCoord), false).onCreation(absCoord);
+            this.mIslandList[island].getBlock(MainWorld.getRelativeFromAbsolute(absCoord), false).onCreation(absCoord);
         }
         public void onDeletion(Vector3 absCoord, Vector3 island) {
-            this.mIslandList[island].getBlock(this.getRelativeFromAbsolute(absCoord), false).onDeletion();
+            this.mIslandList[island].getBlock(MainWorld.getRelativeFromAbsolute(absCoord), false).onDeletion();
         }
 
         public void onRightClick(Vector3 absCoord, Vector3 island) {
-            this.mIslandList[island].getBlock(this.getRelativeFromAbsolute(absCoord), false).onRightClick();
+            this.mIslandList[island].getBlock(MainWorld.getRelativeFromAbsolute(absCoord), false).onRightClick();
         }
 
         public void onLeftClick(Vector3 absCoord, Vector3 island) {
-            this.mIslandList[island].getBlock(this.getRelativeFromAbsolute(absCoord), false).onLeftClick();
+            this.mIslandList[island].getBlock(MainWorld.getRelativeFromAbsolute(absCoord), false).onLeftClick();
         }
 
 

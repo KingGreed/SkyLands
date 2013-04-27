@@ -13,13 +13,13 @@ namespace Game.Shoot
 {
     class FireCube
     {
-        private const float SCALE_SPEED = 2;
-        private const float MAX_SCALE = 1.8f;
+        private const float SCALE_SPEED = 1.4f;
+        private const float MAX_SCALE = 1.9f;
         private const float FIRE_RATE = 500;   // Fire every 500ms
         
         private SceneManager  mSceneMgr;
         private VanillaPlayer mPlayer;
-        private BulletManager mBulletManager;
+        private BulletManager mBulletMgr;
         private SceneNode     mNode;
         private Timer         mTimeSinceLastBall;
         private bool          mCreated = false;
@@ -28,7 +28,7 @@ namespace Game.Shoot
         {
             this.mSceneMgr = sceneMgr;
             this.mPlayer = player;
-            this.mBulletManager = bulletManager;
+            this.mBulletMgr = bulletManager;
             this.mTimeSinceLastBall = new Timer();
         }
 
@@ -56,7 +56,7 @@ namespace Game.Shoot
             {
                 this.mCreated = false;
                 this.mTimeSinceLastBall.Reset();
-                this.mBulletManager.AddBullet(new Bullet(this.mSceneMgr, this.mNode, this.mPlayer.GetYaw()));
+                this.mBulletMgr.AddBullet(new Bullet(this.mBulletMgr, this.mNode, this.mPlayer, this.mNode.GetScale().x * 8));
             }
         }
 
@@ -65,8 +65,10 @@ namespace Game.Shoot
             int faceNumber = 0;
             ManualObject ball = new ManualObject("fireBall-" + Guid.NewGuid().ToString());
             ball.Begin("fireball", RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
-            foreach(BlockFace face in Enum.GetValues(typeof(BlockFace))) {
-                for(int i = 0; i < 4; i++) {
+            foreach(BlockFace face in Enum.GetValues(typeof(BlockFace)))
+            {
+                for(int i = 0; i < 4; i++)
+                {
                     ball.Position(VanillaMultiBlock.blockPointCoords[(int)face * 4 + i]/10); ball.TextureCoord(VanillaMultiBlock.textureCoord[(int)face * 4 + i]);
                     ball.Normal(VanillaMultiBlock.normals[(int)face]);
                     faceNumber++;

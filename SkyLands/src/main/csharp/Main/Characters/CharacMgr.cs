@@ -76,11 +76,15 @@ namespace Game.CharacSystem
             LogManager.Singleton.DefaultLog.LogMessage(type + " " + info.Name + " added");
         }
 
-        public void RemoveCharac(VanillaCharacter charac) { this.mCharacList.Remove(charac); }
+        public void RemoveCharac(VanillaCharacter charac)
+        {
+            this.mCharacList.Remove(charac);
+            charac.Dispose();
+        }
 
         public VanillaCharacter GetCharacterByListPos(int index = 0) { return this.mCharacList[index]; }    // By default return the main player
         public VanillaCharacter GetCharacterById(int id = 0) { return this.mCharacList.Find(charac => charac.Info.Id == id); }    // By default return the main player
-        public int getNumberOfCharacter() { return this.mCharacList.Count; }
+        public int GetNumberOfCharacter() { return this.mCharacList.Count; }
 
         public void Update(float frameTime)
         {
@@ -92,8 +96,12 @@ namespace Game.CharacSystem
 
         public void Dispose()
         {
-            this.mCharacList.Clear();
-            this.mCharacList = null;
+            while (this.mCharacList.Count > 0)
+            {
+                this.mCharacList[0].Dispose();
+                this.mCharacList.RemoveAt(0);
+            }
+
             this.mStateMgr.MyConsole.DeleteCommands(this.mCommands);
             this.mMainPlayerCam.Dispose();
             this.mMainPlayerCam = null;

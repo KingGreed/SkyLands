@@ -22,8 +22,9 @@ namespace Game.States
         protected override void Startup()
         {
             this.mWorld = new MainWorld(this.mStateMgr);
-            this.mBulletMgr = new BulletManager(this.mStateMgr.SceneMgr);
+            this.mBulletMgr = new BulletManager(this.mStateMgr.SceneMgr, this.mWorld);
             this.mCharacMgr = new CharacMgr(this.mStateMgr, this.mWorld, this.mBulletMgr);
+            this.mBulletMgr.AttachCharacMgr(this.mCharacMgr);
             this.mGUI = new GameGUI(this.mStateMgr);
             this.mGUI.IGMenu.SetListenerMenu(this.ClickMenuButton);
             this.mGUI.IGMenu.SetListenerOption(this.ClickOptionButton);
@@ -32,9 +33,9 @@ namespace Game.States
             playerInfo.SpawnPoint = this.mWorld.getSpawnPoint();
             this.mCharacMgr.AddCharacter(playerInfo);
 
-            /*CharacterInfo iaInfo = new CharacterInfo("NPC_01", false);
-            iaInfo.SpawnPoint = playerInfo.SpawnPoint;
-            this.mCharacMgr.AddCharacter(iaInfo);*/
+            CharacterInfo iaInfo = new CharacterInfo("NPC_01", false);
+            iaInfo.SpawnPoint = playerInfo.SpawnPoint + new Mogre.Vector3(100, 0, 100);
+            this.mCharacMgr.AddCharacter(iaInfo);
 
             this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr, this.mGUI);
             this.Show();
@@ -77,8 +78,8 @@ namespace Game.States
         {
             Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop end");
             this.mGUI.Dispose();
-            this.mWorld.Shutdown();
             this.mDebugMode.Dispose();
+            this.mWorld.Shutdown();
         }
     }
 }

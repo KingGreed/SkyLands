@@ -8,6 +8,7 @@ using Game.Animation;
 using Game.Characters.IA;
 using API.Ent;
 using API.Geo.Cuboid;
+using Game.Shoot;
 
 namespace Game.CharacSystem
 {
@@ -44,7 +45,7 @@ namespace Game.CharacSystem
 
         public Vector3 BlockPosition
         {
-            get { return this.mCharacMgr.World.getRelativeFromAbsolute(this.FeetPosition); }
+            get { return MainWorld.getRelativeFromAbsolute(this.FeetPosition); }
         }
 
         protected VanillaCharacter(CharacMgr characMgr, string meshName, CharacterInfo charInfo)
@@ -200,15 +201,31 @@ namespace Game.CharacSystem
         public void moveTo(Vector3 destination)
         {
 
-            destination = this.mCharacMgr.World.getRelativeFromAbsolute(destination);
-            this.mPathFinder = new PathFinder(destination, this.mCharacMgr.World.getRelativeFromAbsolute(this.mNode.Position), this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc));
+            destination = MainWorld.getRelativeFromAbsolute(destination);
+            this.mPathFinder = new PathFinder(destination, MainWorld.getRelativeFromAbsolute(this.mNode.Position), this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc));
 
             if(this.mPathFinder.goal != null) {
                 this.mIsWalking = true;
 
-                this.mDirection = this.mPathFinder.goal.Head.Data - this.mCharacMgr.World.getRelativeFromAbsolute(this.mNode.Position);
+                this.mDirection = this.mPathFinder.goal.Head.Data - MainWorld.getRelativeFromAbsolute(this.mNode.Position);
                 this.mNode.SetOrientation(0, 0, 180, 0);
             }
+        }
+
+        public void Hit(Bullet b)
+        {
+            this.mCharInfo.Life -= b.Damage;
+            if (this.mCharInfo.Life <= 0)
+            {
+                this.mCharacMgr.StateMgr.WriteOnConsole(this.mCharInfo.Name + " died heroically for his nation.");
+                this.mCharacMgr.RemoveCharac(this);
+            }
+        }
+
+        public void Dispose()   // Must be called by the CharacMgr only. Use mCharacMgr.RemoveCharac(this) instead
+        {
+            this.mNode.RemoveAndDestroyAllChildren();
+            this.mCharacMgr.SceneMgr.DestroySceneNode(this.mNode);
         }
 
         /* Character */
@@ -229,11 +246,10 @@ namespace Game.CharacSystem
         public bool isSavable()                   { throw new NotImplementedException(); }
         public void setViewDistance(int distance) { throw new NotImplementedException(); }
         public int getViewDistance()              { throw new NotImplementedException(); }
-
         public Chunk getChunk()                   { throw new NotImplementedException(); }
 
         public Island  getIsland()   { return this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc); }
-        public Vector3 getposition() { return this.BlockPosition; }
+        public Vector3 getPosition() { return this.BlockPosition; }
 
         public void setIsPushedByArcaneLevitator(bool value)
         {

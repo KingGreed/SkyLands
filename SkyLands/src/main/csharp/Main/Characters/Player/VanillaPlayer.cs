@@ -26,7 +26,7 @@ namespace Game.CharacSystem
             public Emote(MOIS.KeyCode key, AnimName anim) { this.mKey = key; this.mAnim = anim; }
         }
 
-        private static float YAW_SENSIVITY = 1;
+        private static float YAW_SENSIVITY = 0.4f;
         private static float PITCH_SENSIVITY = 0.15f;
 
         private MoisManager      mInput;
@@ -248,7 +248,7 @@ namespace Game.CharacSystem
                 iaInfo.SpawnPoint = this.mCharacMgr.World.getSpawnPoint();
                 this.mCharacMgr.AddCharacter(iaInfo);
 
-                this.mCharacMgr.GetCharacterByListPos(this.mCharacMgr.getNumberOfCharacter() - 1).moveTo(curRelBlockPos * Cst.CHUNK_SIDE);
+                this.mCharacMgr.GetCharacterByListPos(this.mCharacMgr.GetNumberOfCharacter() - 1).moveTo(curRelBlockPos * Cst.CHUNK_SIDE);
                 new Building(island, curRelBlockPos);
             }
             else if (!(block is Game.World.Blocks.AirBlock) && prevRelBlockPos != playerHeadBlockPos && prevRelBlockPos != this.BlockPosition)
