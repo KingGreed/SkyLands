@@ -5,22 +5,25 @@ using Miyagi.Common.Events;
 using Game.CharacSystem;
 using Game.World;
 using Game.GUICreator;
+using Game.Shoot;
 
 namespace Game.States
 {
     public class GameState : State
     {
-        private MainWorld mWorld;
-        private CharacMgr mCharacMgr;
-        private DebugMode mDebugMode;
-        private GameGUI mGUI;
+        private MainWorld     mWorld;
+        private CharacMgr     mCharacMgr;
+        private BulletManager mBulletMgr;
+        private DebugMode     mDebugMode;
+        private GameGUI       mGUI;
 
         public GameState(StateManager stateMgr) : base(stateMgr) { }
 
         protected override void Startup()
         {
             this.mWorld = new MainWorld(this.mStateMgr);
-            this.mCharacMgr = new CharacMgr(this.mStateMgr, this.mWorld);
+            this.mBulletMgr = new BulletManager(this.mStateMgr.SceneMgr);
+            this.mCharacMgr = new CharacMgr(this.mStateMgr, this.mWorld, this.mBulletMgr);
             this.mGUI = new GameGUI(this.mStateMgr);
             this.mGUI.IGMenu.SetListenerMenu(this.ClickMenuButton);
             this.mGUI.IGMenu.SetListenerOption(this.ClickOptionButton);
@@ -58,6 +61,7 @@ namespace Game.States
         public override void Update(float frameTime)
         {
             this.mWorld.Update(frameTime);
+            this.mBulletMgr.Update(frameTime);
             this.mDebugMode.IsConsoleMode = this.mStateMgr.MyConsole.Enabled;
             this.mDebugMode.Update(frameTime);
 

@@ -4,7 +4,7 @@ using Mogre;
 
 using Game.World;
 using Game.Animation;
-using Game.Characters.Misc;
+using Game.Shoot;
 
 using API.Geo.Cuboid;
 using API.Generic;
@@ -37,13 +37,14 @@ namespace Game.CharacSystem
         private bool             mIsFirstView;
         private bool             mIsDebugMode;
         private MainPlayerCamera mCam;
-        private LaserCube        mLaserCube;
+        private FireCube         mFireCube;
 
         public MoisManager Input         { get { return this.mInput; } }
         public float       YawCamValue   { get { return this.mYawCamValue; } }
         public float       PitchCamValue { get { return this.mPitchCamValue; } }
         public bool        IsFirstView   { get { return this.mIsFirstView; } }
         public Camera      Camera        { get { return this.mCam.Camera; } }
+        public Degree      Pitch         { get { return this.mCam.Pitch; } }
         public bool IsDebugMode
         {
             get { return this.mIsDebugMode; }
@@ -58,7 +59,7 @@ namespace Game.CharacSystem
         {
             this.mInput = input;
             this.mIsFirstView = true;
-            this.mLaserCube = new LaserCube(this.mCharacMgr.SceneMgr, this);
+            this.mFireCube = new FireCube(this.mCharacMgr.SceneMgr, this, this.mCharacMgr.BulletMgr);
 
             this.mEmotes = new Emote[]
             {
@@ -89,10 +90,10 @@ namespace Game.CharacSystem
                 if (this.mIsFirstView) { this.FirstPersonUpdate(yawValue, pitchValue); }
                 else { this.ThirdPersonUpdate(yawValue, pitchValue); }
 
-                if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_LSHIFT, MOIS.KeyCode.KC_RSHIFT))
+                if (this.mInput.IsShiftDown)
                 {
-                    if (this.mInput.IsMouseButtonDown(MOIS.MouseButtonID.MB_Left)) { this.mLaserCube.Grow(frameTime); }
-                    //if(this.mInput.re
+                    if (this.mInput.IsMouseButtonDown(MOIS.MouseButtonID.MB_Left)) { this.mFireCube.Grow(frameTime, this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left)); }
+                    if (this.mInput.WasMouseButtonReleased(MOIS.MouseButtonID.MB_Left)) { this.mFireCube.Burst(); }
                 }
                 else
                 {

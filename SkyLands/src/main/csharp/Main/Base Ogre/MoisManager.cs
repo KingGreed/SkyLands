@@ -14,6 +14,7 @@ namespace Game
         private bool[] mKeyReleased;
         private bool[] mMouseDown;
         private bool[] mMousePressed;
+        private bool[] mMouseReleased;
         private Vector3 mMouseMove;
         private Vector3 mMousePos;
         private Vector3 mMousePressedPos;
@@ -53,6 +54,7 @@ namespace Game
             this.mKeyReleased = new bool[256];
             this.mMouseDown = new bool[8];
             this.mMousePressed = new bool[8];
+            this.mMouseReleased = new bool[8];
             this.mMouseMove = new Vector3();
             this.mMousePos = new Vector3();
             this.mMousePressedPos = new Vector3();
@@ -105,6 +107,7 @@ namespace Game
             this.ClearKeyPressed();
             this.ClearKeyReleased();
             this.ClearMousePressed();
+            this.ClearMouseReleased();
             this.ClearMouseMove();
 
             this.mKeyboard.Capture();
@@ -117,16 +120,18 @@ namespace Game
             this.ClearKeyReleased();
             this.ClearKeyDown();
             this.ClearMousePressed();
+            this.ClearMouseReleased();
             this.ClearMouseDown();
             this.ClearMouseMove();
         }
 
-        public bool IsKeyDown(KeyCode key)                      { return this.mKeyDown[(int) key]; }
-        public bool WasKeyPressed(KeyCode key)                  { return this.mKeyPressed[(int) key]; }
-        public bool WasKeyReleased(KeyCode key)                 { return this.mKeyReleased[(int)key]; }
-        public bool IsMouseButtonDown(MouseButtonID button)     { return this.mMouseDown[(int) button]; }
-        public bool WasMouseButtonPressed(MouseButtonID button) { return this.mMousePressed[(int) button]; }
-        public bool WasMouseMoved()                             { return this.mMouseMove.x != 0 || this.mMouseMove.y != 0 || this.mMouseMove.z != 0; }
+        public bool IsKeyDown(KeyCode key)                       { return this.mKeyDown[(int) key]; }
+        public bool WasKeyPressed(KeyCode key)                   { return this.mKeyPressed[(int) key]; }
+        public bool WasKeyReleased(KeyCode key)                  { return this.mKeyReleased[(int)key]; }
+        public bool IsMouseButtonDown(MouseButtonID button)      { return this.mMouseDown[(int) button]; }
+        public bool WasMouseButtonPressed(MouseButtonID button)  { return this.mMousePressed[(int) button]; }
+        public bool WasMouseButtonReleased(MouseButtonID button) { return this.mMouseReleased[(int)button]; }
+        public bool WasMouseMoved()                              { return this.mMouseMove.x != 0 || this.mMouseMove.y != 0 || this.mMouseMove.z != 0; }
 
         public bool IsOneKeyEventTrue(IsKeyEvent keyEvent, params MOIS.KeyCode[] keys)
         {
@@ -166,6 +171,12 @@ namespace Game
         {
             for (int i = 0; i < this.mMousePressed.Length; ++i)
                 this.mMousePressed[i] = false;
+        }
+
+        private void ClearMouseReleased()
+        {
+            for (int i = 0; i < this.mMouseReleased.Length; ++i)
+                this.mMouseReleased[i] = false;
         }
 
         private void ClearMouseDown()
@@ -270,6 +281,7 @@ namespace Game
         private bool OnMouseReleased(MouseEvent arg, MouseButtonID id)
         {
             this.mMouseDown[(int)id] = false;
+            this.mMouseReleased[(int)id] = true;
             this.mMousePos.x = arg.state.X.abs;
             this.mMousePos.y = arg.state.Y.abs;
             this.mMouseReleasedPos.x = arg.state.X.abs;

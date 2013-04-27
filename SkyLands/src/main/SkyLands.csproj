@@ -196,10 +196,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Awesomium.Core, Version=1.7.0.5, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Libs\Awesomium.Core.dll</HintPath>
-    </Reference>
     <Reference Include="CaelumSharp">
       <HintPath>..\..\..\Libs\CaelumSharp.dll</HintPath>
     </Reference>
@@ -415,7 +411,9 @@
     <Compile Include="csharp\Main\Characters\Misc\JumpSpeed.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\Characters\Misc\LaserCube.cs" />
+    <Compile Include="csharp\Main\Shoot\Bullet.cs" />
+    <Compile Include="csharp\Main\Shoot\BulletManager.cs" />
+    <Compile Include="csharp\Main\Shoot\FireCube.cs" />
     <Compile Include="csharp\Main\Characters\Misc\MovementInfo.cs">
       <SubType>Code</SubType>
     </Compile>

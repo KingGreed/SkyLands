@@ -5,30 +5,34 @@ using Mogre;
 using Game.World;
 using Game.States;
 using Game.IGConsole;
+using Game.Shoot;
 
 namespace Game.CharacSystem
 {
     public class CharacMgr
     {
-        private CommandInfo[] mCommands;
+        private CommandInfo[]          mCommands;
         private List<VanillaCharacter> mCharacList;
-        private MainPlayerCamera mMainPlayerCam;
-        private StateManager mStateMgr;
-        private MoisManager mInput;
-        private MainWorld mWorld;
-        private string mMeshName = "Sinbad.mesh";
+        private MainPlayerCamera       mMainPlayerCam;
+        private StateManager           mStateMgr;
+        private MoisManager            mInput;
+        private MainWorld              mWorld;
+        private BulletManager          mBulletMgr;
+        private string                 mMeshName = "Sinbad.mesh";
 
-        public StateManager StateMgr { get { return this.mStateMgr; } }
-        public SceneManager SceneMgr { get { return this.mStateMgr.SceneMgr; } }
-        public MoisManager Input { get { return this.mInput; } }
-        public MainWorld World { get { return this.mWorld; } }
+        public StateManager     StateMgr      { get { return this.mStateMgr; } }
+        public SceneManager     SceneMgr      { get { return this.mStateMgr.SceneMgr; } }
+        public MoisManager      Input         { get { return this.mInput; } }
+        public MainWorld        World         { get { return this.mWorld; } }
         public MainPlayerCamera MainPlayerCam { get { return this.mMainPlayerCam; } }
+        public BulletManager    BulletMgr     { get { return this.mBulletMgr; } }
 
-        public CharacMgr(StateManager stateMgr, MainWorld world)
+        public CharacMgr(StateManager stateMgr, MainWorld world, BulletManager bulletMgr)
         {
             this.mStateMgr = stateMgr;
             this.mInput = stateMgr.Input;
             this.mWorld = world;
+            this.mBulletMgr = bulletMgr;
             this.mCharacList = new List<VanillaCharacter>();
 
             this.mCommands = new CommandInfo[]

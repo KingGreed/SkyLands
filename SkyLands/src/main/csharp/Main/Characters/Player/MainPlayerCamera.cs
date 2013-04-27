@@ -13,9 +13,10 @@ namespace Game.CharacSystem
         private bool          mIsCameraFirstView;
         private uint          mWndWidth, mWndHeight;
 
-        public Camera Camera { get { return this.mCam; } }
-        public uint WndWidth  { get { return this.mWndWidth; } }
-        public uint WndHeight { get { return this.mWndHeight; } }
+        public Camera Camera    { get { return this.mCam; } }
+        public uint   WndWidth  { get { return this.mWndWidth; } }
+        public uint   WndHeight { get { return this.mWndHeight; } }
+        public Degree Pitch     { get { return this.mCamPitchNode.Orientation.Pitch; } }
 
         public MainPlayerCamera(Camera cam, VanillaPlayer p, uint wndWidth, uint wndHeight)
         {

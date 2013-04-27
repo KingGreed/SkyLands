@@ -19,7 +19,6 @@ using Game.World.Blocks;
 using Game.World.Display;
 using Game.World.Generator.Biomes;
 using Game.CharacSystem;
-using Game.Characters.Misc;
 
 using Mogre;
 

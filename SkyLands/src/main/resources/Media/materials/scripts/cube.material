@@ -233,7 +233,7 @@ material fireball
             ambient 1.0 1.0 1.0
             diffuse 1.0 1.0 1.0
 
-            texture_unit { texture fire.jpg }
+            texture_unit { texture fire.png }
         }
     }
 }
