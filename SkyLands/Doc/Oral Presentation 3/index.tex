@@ -95,6 +95,8 @@
   		\newpage
 		
 		\chapter{\textcolor{blue}{Introduction}}
+			According to the string theory, there exist another universe where we sold millions of copy of this game! Unfortunatly, in this universe we though worked our hardest we still need some time.\\
+
 			Implementing the Minecraft-like part of the game was the work we had to do for the last oral presentation and that was the easy part! For this presentation our goal was to implement the strategy part. At first it seemed easy, then we discovered the joy of programming an AI. Pathfinding and RTS were both a pain to implement. \\
 
  			Moreover, with the english major projects of Max and Fuji and the methodology's project, we had less time to work on the project. Also having our oral presentation on a monday didn't help. However we managed to have a pretty good result and to fix the bugs you saw on the previous presentation\\
@@ -134,11 +136,33 @@ Even thought this is a simple idea, we think it improves the gameplay. In a way 
 Basically this AI want to destroy the base of the player and to weaken him. But here comes the issue of the difficulty. How to oppose to the player an adequate resistance ? Well the idea we found is simple. This AI bases its choice on the player's actions. 
 		\chapter{\textcolor{blue}{Saving and Loading the game}}
 			\section{Algorithm}
+				The save and load algorithm of the terrain weren't modified since the last oral presentaion. As you know each different block possess an id (for example the id of the grass blocks is  1) which is stored in char whose weight is only one bite. Thus we can store the terrain in binary files fairly easily using the C\#'s native functions.\\
+					
+					We basically use a StreamWritter and a streamReader to save and load islands. However for this oral presentation, new things were added, such as robots and it did not suffice to only save the terrain, we had to save the entities.
+					
+					This time we choosed the easy way, registering the id of an entity and its position next to one another. Here is an explanatory diagram :\\						
+							\begin{center}
+								\includegraphics{images/Save.png}
+							\end{center}
+							
 			\section{A new menu}
+					With the save and load algorith, we felt that our old menu wasn't adapted to the mindset we had for this game. We didn't want the player to be able to choose what Island he could go on or what size! This menu was intended for debug purposes not for ou final product.\\
+
+					So, in order to adapt the old menu to the mindset we thought of, we redesigned the buttons as well as the entire menu. Basically, we wanted a more futuristic menuand more dynamic.
+
 			\section{Integration to the menu}
+					As I've already said, the menu we had was intended for debug purposes only. Our idea for this menu was to let him create only one world and then to let him choose between 
+
 
 		\chapter{\textcolor{blue}{Structures}}
 			\section{Behind the scenes}
+				Handling the structures was an easy task therefore, we decided to complexify it, making it easier to implement more than one structure at a time. The basic idea was to not just have multiple list of structures in the island class and then have a switch which would choose the list according to the biome.\\
+
+				After thinking about a little bit we decided to make use of the inheritance via the abstract Biome class which implemented the methode populate calling the list of structure which is contained in every derived class of Biome.
+				\begin{center}
+					\includegraphics[width=15cm]{images/Structures.png}
+				\end{center}
+
 			\section{Portals}
 			\section{Buildings}
 			\section{Generating the base and placing it on the map}

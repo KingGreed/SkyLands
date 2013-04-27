@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mogre;
 
 using API.Geo.Cuboid;
 
@@ -13,6 +14,12 @@ namespace API.Ent
 	     * @return The entities' id.
 	     */
 	    int getId();
+
+        /*
+         * @return the position of the Entity
+         */
+
+        Vector3 getPosition();
 
 	    /**
 	     * Removes the entity. This takes effect at the next snapshot.
@@ -66,7 +73,7 @@ namespace API.Ent
 	     * Gets the region the entity is associated and managed with, or null if removed.
 	     * @return region the entity is in.
 	     */
-	    Island getRegion();
+        Island getIsland();
 
 	    /**
 	     * Interact with this entity.

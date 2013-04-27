@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.IO;
 
 using API.Ent;
 using API.Geo;
@@ -176,7 +177,28 @@ namespace Game.World
 
 
 	    public void unload(bool save) { throw new NotImplementedException(); }
-	    public void save() { throw new NotImplementedException(); }
+
+        //save Entities
+	    public void save() {
+            IEnumerator<Vector3> enumerator = this.mIslandList.Keys.GetEnumerator();
+            enumerator.MoveNext();
+
+            string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Roaming/SkyLands/",
+                this.getName(), "Island-", StringConverter.ToString(enumerator.Current), "-entities");
+
+            Stream stream;
+            BinaryWriter writter;
+
+            try { stream = new FileStream(fileName, FileMode.CreateNew); writter = new BinaryWriter(stream); }
+            catch { throw new Exception("Could not read file : " + fileName); }
+
+            for(int i = 0; i < this.mEntityList.Count; i++) {
+                writter.Write(this.mEntityList[i].getId());
+                writter.Write(this.mEntityList[i].getPosition().x);
+                writter.Write(this.mEntityList[i].getPosition().y);
+                writter.Write(this.mEntityList[i].getPosition().z);
+            }        
+        }
 
         public bool HasPointCollision(ref Vector3 blockPos, Vector3 islandLoc) // the argument blockPos is in absolute coord, it becomes relative
         {

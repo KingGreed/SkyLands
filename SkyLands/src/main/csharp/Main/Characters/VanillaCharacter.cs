@@ -229,8 +229,12 @@ namespace Game.CharacSystem
         public bool isSavable()                   { throw new NotImplementedException(); }
         public void setViewDistance(int distance) { throw new NotImplementedException(); }
         public int getViewDistance()              { throw new NotImplementedException(); }
+
         public Chunk getChunk()                   { throw new NotImplementedException(); }
-        public Island getRegion()                 { throw new NotImplementedException(); }
+
+        public Island  getIsland()   { return this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc); }
+        public Vector3 getposition() { return this.BlockPosition; }
+
         public void setIsPushedByArcaneLevitator(bool value)
         {
             if (value && !this.mMovementInfo.IsPushedByArcaneLevitator)
