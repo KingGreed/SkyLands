@@ -110,9 +110,28 @@
 				
 		\chapter{\textcolor{blue}{Entities and actions}}
 			\section{Robots}
+				Since we needed enemies for our game, we decided to design it in a futurist style to match our game's story. We decided to go for the basic enemy of every science fiction story or game and created a robot mesh on Blender. The mesh model has simple shapes since our game itself is supposed to be "Minecraft-like" therefore cubic-shaped. As for the texture, they were implemented in-game and are also very simple black and white patterns.\\
+
+Regarding the animations, we did them very simple too; there are only five different animations for death, turning around, shooting, slump and walking. Romain implemented the mesh textures and animations in the game afterwards.\\
+
+However, we faced many problems with trying to export .blend 3D model to .mesh and tried with the 3DS-max software too. Implementing the animations wasn't a simple task either since the tool are too "old" and not always compatible with the current software we are using.
 			\section{Shooting}
-		\chapter{\textcolor{blue}{Merging Pathfinding and entities actions}}
-			
+				We have two different shoot system for the AI and the player. The one for the AI is really simple whereas we wanted something more enjoyable for the player.
+				\subsection{For the AI}
+					At first for the AI, it will check every few seconds if it can shoot at an enemy. It simply cast a ray from its head to the adverse entity and then check if there are obstacles in between. We didn't want them to test this operation every frame for two reasons:\\
+On the one hand to save some precious fps, as you can guess when there will be many AI on the field the fps will decrease a lot so we're already thinking of this matter.\\
+On the other hand, this makes our AI looks more humans. Obviously we, poor little creatures, can't process all the information on the screen each frame. So we try to be fair, we don't want the AI to be invincible.
+
+Once the AI know that someone is at range, it will simply create a mesh representing the bullet. This bullet will cast a new ray every few milliseconds to check if it is hitting something.
+				\subsection{For the player}
+					That's a bit different for the player. There is no more guns but fireballs. The player can hold the left mouse button down to create a fireball in front of him. It will grow while the button is pressed and will be thrown if the max size is reached or if the button is released.\\
+Then this is quite the same than if this is a bullet. Of course the bigger the fireball is the more damage it will inflict.\\
+
+Even thought this is a simple idea, we think it improves the gameplay. In a way it let more options to the player to choose how to kill the enemies.
+		\chapter{\textcolor{blue}{The global AI}}
+			There exist another kind of AI than the one for the entities. This is a global AI which is supposed to build buildings and give orders to its units. This is the actual enemy of the player.\\
+
+Basically this AI want to destroy the base of the player and to weaken him. But here comes the issue of the difficulty. How to oppose to the player an adequate resistance ? Well the idea we found is simple. This AI bases its choice on the player's actions. 
 		\chapter{\textcolor{blue}{Saving and Loading the game}}
 			\section{Algorithm}
 			\section{A new menu}
@@ -132,7 +151,7 @@
 		\chapter{\textcolor{blue}{Graphics}}
 			\section{Shadows}
 			\section{Real shadows}
-			\section{Creating the meshs}
+			\section{Creating the meshes}
 		
 		\chapter{\textcolor{blue}{Conclusion}}
 			Unfortunately you have reached the end of this marvelous report! As you've seen throughout this report, we have worked very hard for this oral presentation. The result talk for themselves and the goal fixed were reached.\\
