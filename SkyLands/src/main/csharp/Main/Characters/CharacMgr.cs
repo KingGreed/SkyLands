@@ -66,14 +66,15 @@ namespace Game.CharacSystem
         {
             string type;
 
-            if (this.mCharacList.Count == 0 || info.IsPlayer)
+            if (info.IsPlayer)
             {
                 type = "Player";
-                this.mCharacList.Add(new VanillaPlayer(this, this.mSinbadMesh, info, this.mInput));
-                if (this.mCharacList.Count == 1)
+                VanillaPlayer player = new VanillaPlayer(this, this.mSinbadMesh, info, this.mInput);
+                this.mCharacList.Add(player);
+                if (this.GetMainPlayer() == null)
                 {
-                    this.mMainPlayerCam = new MainPlayerCamera(this.mStateMgr.Camera, (this.mCharacList[0] as VanillaPlayer), this.mStateMgr.Window.Width, this.mStateMgr.Window.Height);
-                    (this.GetCharacterByListPos() as VanillaPlayer).MainPlayer(this.mMainPlayerCam, this.mHUD);
+                    this.mMainPlayerCam = new MainPlayerCamera(this.mStateMgr.Camera, player, this.mStateMgr.Window.Width, this.mStateMgr.Window.Height);
+                    player.MainPlayer(this.mMainPlayerCam, this.mHUD);
                 }
             }
             else
@@ -91,8 +92,9 @@ namespace Game.CharacSystem
             charac.Dispose();
         }
 
-        public VanillaCharacter GetCharacterByListPos(int index = 0) { return this.mCharacList[index]; }    // By default return the main player
+        public VanillaCharacter GetCharacterByListPos(int index) { return this.mCharacList[index]; }
         public VanillaCharacter GetCharacterById(int id)             { return this.mCharacList.Find(charac => charac.Info.Id == id); }
+        public VanillaPlayer GetMainPlayer() { return (VanillaPlayer)this.mCharacList.Find(c => c.Info.IsPlayer == true && (c as VanillaPlayer).IsMainPlayer); }
 
         public int GetNumberOfCharacter() { return this.mCharacList.Count; }
 

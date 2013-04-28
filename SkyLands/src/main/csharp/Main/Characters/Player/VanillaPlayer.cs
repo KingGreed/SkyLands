@@ -38,7 +38,7 @@ namespace Game.CharacSystem
         private float            mPitchCamValue;
         private bool             mIsFirstView;
         private bool             mIsDebugMode;
-        private FireCube         mFireCube;
+        private ShootCube        mShootCube;
         private MainPlayerCamera mCam;
         private HUD              mHud;
 
@@ -49,6 +49,7 @@ namespace Game.CharacSystem
         public Camera      Camera        { get { return this.mCam.Camera; } }
         public Degree      Pitch         { get { return this.mCam.Pitch; } }
         public HUD         HUD           { get { return this.mHud; } }
+        public bool IsMainPlayer { get { return this.mCam != null; } }
         public bool IsDebugMode
         {
             get { return this.mIsDebugMode; }
@@ -78,7 +79,7 @@ namespace Game.CharacSystem
 
             this.mCollisionMgr = new CollisionMgr(characMgr.SceneMgr, this.mCharacMgr.World, this);
             this.FeetPosition = this.mCharInfo.SpawnPoint;
-            this.mFireCube = new FireCube(this.mCharacMgr.SceneMgr, this, this.mCharacMgr.BulletMgr);
+            this.mShootCube = new ShootCube(this.mCharacMgr.SceneMgr, this, this.mCharacMgr.BulletMgr, "fireball");
 
             this.mEmotes = new Emote[]
             {
@@ -113,8 +114,8 @@ namespace Game.CharacSystem
 
                 if (this.mInput.IsShiftDown)
                 {
-                    if (this.mInput.IsMouseButtonDown(MOIS.MouseButtonID.MB_Left)) { this.mFireCube.Grow(frameTime, this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left)); }
-                    if (this.mInput.WasMouseButtonReleased(MOIS.MouseButtonID.MB_Left)) { this.mFireCube.Burst(); }
+                    if (this.mInput.IsMouseButtonDown(MOIS.MouseButtonID.MB_Left)) { this.mShootCube.Grow(frameTime, this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left)); }
+                    if (this.mInput.WasMouseButtonReleased(MOIS.MouseButtonID.MB_Left)) { this.mShootCube.Burst(); }
                 }
                 else
                 {
@@ -254,12 +255,8 @@ namespace Game.CharacSystem
             if (!this.GetBlockPos(out relBlockPos, out b, out f)) { return; }
 
             string material = b.getName();
-<<<<<<< HEAD
             this.mCharacMgr.World.onDeletion(relBlockPos, this.mCharInfo.IslandLoc);
             //this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).removeFromScene(relBlockPos);  // Delete block
-=======
-            this.mCharacMgr.World.getIsland().removeFromScene(relBlockPos);  // Delete block
->>>>>>> Implemented cristals
 
             if (material != "Air")
                 this.mCharacMgr.StateMgr.WriteOnConsole("Deleted : " + material);
@@ -292,7 +289,7 @@ namespace Game.CharacSystem
                 iaInfo.SpawnPoint = this.mCharacMgr.World.getSpawnPoint();
                 this.mCharacMgr.AddCharacter(iaInfo);
 
-                this.mCharacMgr.GetCharacterByListPos(this.mCharacMgr.GetNumberOfCharacter() - 1).moveTo(curRelBlockPos * Cst.CHUNK_SIDE);
+                this.mCharacMgr.GetCharacterByListPos(this.mCharacMgr.GetNumberOfCharacter() - 1).MoveTo(curRelBlockPos * Cst.CHUNK_SIDE);
                 new Building(island, curRelBlockPos);
             }
             else if (!(block is Game.World.Blocks.AirBlock) && prevRelBlockPos != playerHeadBlockPos && prevRelBlockPos != this.BlockPosition)

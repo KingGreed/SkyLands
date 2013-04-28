@@ -11,7 +11,7 @@ using Mogre;
 
 namespace Game.Shoot
 {
-    class FireCube
+    class ShootCube
     {
         private const float SCALE_SPEED = 1.4f;
         private const float MAX_SCALE = 1.9f;
@@ -23,13 +23,15 @@ namespace Game.Shoot
         private SceneNode     mNode;
         private Timer         mTimeSinceLastBall;
         private bool          mCreated = false;
+        private string        mMaterial;
 
-        public FireCube(SceneManager sceneMgr, VanillaPlayer player, BulletManager bulletManager)
+        public ShootCube(SceneManager sceneMgr, VanillaPlayer player, BulletManager bulletManager, string material)
         {
             this.mSceneMgr = sceneMgr;
             this.mPlayer = player;
             this.mBulletMgr = bulletManager;
             this.mTimeSinceLastBall = new Timer();
+            this.mMaterial = material;
         }
 
         public void Grow(float frameTime, bool allowCreation)
@@ -56,15 +58,15 @@ namespace Game.Shoot
             {
                 this.mCreated = false;
                 this.mTimeSinceLastBall.Reset();
-                this.mBulletMgr.AddBullet(new Bullet(this.mBulletMgr, this.mNode, this.mPlayer, this.mNode.GetScale().x * 10));
+                this.mBulletMgr.AddBullet(new Bullet(this.mBulletMgr, this.mNode, this.mPlayer, this.mNode.GetScale().x * 150 - 60));
             }
         }
 
         private void Create()
         {
             int faceNumber = 0;
-            ManualObject ball = new ManualObject("fireBall-" + Guid.NewGuid().ToString());
-            ball.Begin("fireball", RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
+            ManualObject ball = new ManualObject(this.mMaterial + "-" + Guid.NewGuid().ToString());
+            ball.Begin(this.mMaterial, RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
             foreach(BlockFace face in Enum.GetValues(typeof(BlockFace)))
             {
                 for(int i = 0; i < 4; i++)

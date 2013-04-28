@@ -459,7 +459,6 @@
     <Compile Include="csharp\Main\RTS\RTSManager.cs" />
     <Compile Include="csharp\Main\Shoot\Bullet.cs" />
     <Compile Include="csharp\Main\Shoot\BulletManager.cs" />
-    <Compile Include="csharp\Main\Shoot\FireCube.cs" />
     <Compile Include="csharp\Main\Characters\Misc\MovementInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -523,6 +522,7 @@
     <Compile Include="csharp\Main\Program.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\Shoot\ShootCube.cs" />
     <Compile Include="csharp\Main\States\Game\DebugMode.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -181,7 +181,7 @@ namespace Game.World
             e.getIsland().save();
         }
 
-        public bool HasPointCollision(ref Vector3 blockPos, Vector3 islandLoc) // the argument blockPos is in absolute coord, it becomes relative
+        public bool HasPointCollision(ref Vector3 blockPos) // the argument blockPos is in absolute coord, it becomes relative
         {
             blockPos += this.mIslandLoaded.getPosition();
             blockPos = AbsToRelative(blockPos);

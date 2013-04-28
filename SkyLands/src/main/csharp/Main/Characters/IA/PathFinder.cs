@@ -11,10 +11,12 @@ using Game.Characters.IA.Misc;
 
 namespace Game.Characters.IA {
     class PathFinder {
-        public AstarLinkedList<Vector3> goal;
+        private AstarLinkedList<Vector3> mGoal;
+
+        public AstarLinkedList<Vector3> Goal { get { return this.mGoal; } }
 
         public PathFinder(Vector3 destination, Vector3 start, Island current) {
-            this.goal = this.findPathTo(destination, start, current);
+            this.mGoal = this.findPathTo(destination, start, current);
         }
 
 

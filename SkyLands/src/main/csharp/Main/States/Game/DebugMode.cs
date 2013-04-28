@@ -52,7 +52,7 @@ namespace Game
                 } else {
                     int characId = Convert.ToInt32(selected.Name.Substring(14));
                     selected.ShowBoundingBox = false;
-                    this.mCharacMgr.GetCharacterById(characId).moveTo(this.mCharacMgr.World.getSpawnPoint() + Vector3.UNIT_Y);
+                    this.mCharacMgr.GetCharacterById(characId).MoveTo(this.mCharacMgr.World.getSpawnPoint() + Vector3.UNIT_Y);
                     selected = null;
                     
                 }
@@ -63,7 +63,7 @@ namespace Game
                 this.mIsDebugMode = !this.mIsDebugMode;
                 this.mGUI.SwithVisibility();
 
-                ((VanillaPlayer)this.mCharacMgr.GetCharacterByListPos()).IsDebugMode = this.mIsDebugMode;
+                this.mCharacMgr.GetMainPlayer().IsDebugMode = this.mIsDebugMode;
 
                 if (this.mIsDebugMode)
                 {
@@ -81,10 +81,10 @@ namespace Game
             }
 
 
-            this.mCharacMgr.GetCharacterByListPos().IsAllowedToMove = !this.mIsConsoleMode && this.mIsAllowedToMoveCam;
+            this.mCharacMgr.GetMainPlayer().IsAllowedToMove = !this.mIsConsoleMode && this.mIsAllowedToMoveCam;
             this.mCharacMgr.Update(frameTime);
 
-            if (!this.mCharacMgr.GetCharacterByListPos().IsAllowedToMove && !this.mIsConsoleMode && this.mIsAllowedToMoveCam)
+            if (!this.mCharacMgr.GetMainPlayer().IsAllowedToMove && !this.mIsConsoleMode && this.mIsAllowedToMoveCam)
             {
                 this.mCameraMan.MouseMovement(this.mInput.MouseMoveX, this.mInput.MouseMoveY);
                 this.mCameraMan.UpdateCamera(frameTime, this.mInput);

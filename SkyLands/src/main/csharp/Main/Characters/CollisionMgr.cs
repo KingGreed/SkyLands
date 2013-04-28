@@ -98,7 +98,7 @@ namespace Game.CharacSystem
                 Vector3[] hitPointsToTest = this.GetPointsToTest(actHitPoints, absTranslation, axis);
                 for(int i = 0; i < hitPointsToTest.Length; i++)
                 {
-                    if (this.mWorld.HasPointCollision(ref hitPointsToTest[i], this.mCharac.Info.IslandLoc))
+                    if (this.mWorld.HasPointCollision(ref hitPointsToTest[i]))
                     {
                         /* Compute the possible translation */
                         float val = 0;
