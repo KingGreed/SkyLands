@@ -245,8 +245,8 @@ namespace API.Geo
         void onCreation(Vector3 relCoord);
         void onDeletion(Vector3 relCoord);
 
-        void onRightClick(Vector3 relCoord);
-        void onLeftClick(Vector3 relCoord);
+        bool onRightClick(Vector3 relCoord);
+        bool onLeftClick(Vector3 relCoord);
 
         void onBlockEnter(Vector3 blockCoord, Entity e);
         void onBlockLeave(Vector3 blockCoord, Entity e);

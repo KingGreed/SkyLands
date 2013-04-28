@@ -174,7 +174,7 @@ namespace Game.World.Generator
 
         public override void removeFromScene(Vector3 item) {
             Block curr = this.getBlock(item, false);
-            if (curr is AirBlock) { return; }
+            if (curr is Air) { return; }
 
             bool isInAdded = false;
             Dictionary<string, int> faces = new Dictionary<string, int>();
@@ -253,6 +253,7 @@ namespace Game.World.Generator
 
         public override void addFaceToScene(BlockFace face, Vector3 relativePos, string material) {
 
+            if(material == null) { return; }
             this.blocksAdded.Add(new PositionFaceAndStatus(relativePos, face));
             
             relativePos += this.getPosition();

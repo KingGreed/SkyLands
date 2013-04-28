@@ -56,8 +56,9 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
                 }
             }
 
-            if(this.towerNum == 3) {
-                new RoofBuilder().build(current, loc + Vector3.UNIT_Y * towerHeight, new Vector2(xMax, zMax), rd, true);
+            if(this.towerNum == 4) {
+                Vector3 pos = new Vector3((loc + Vector3.UNIT_Y * towerHeight).x + xMax / 2, (loc + Vector3.UNIT_Y * towerHeight).y, (loc + Vector3.UNIT_Y * towerHeight).z + zMax / 2);
+                Portals.makePortal(1, current, pos);
             } else {
                 new RoofBuilder().build(current, loc + Vector3.UNIT_Y * towerHeight, new Vector2(xMax, zMax), rd);
             }
@@ -131,7 +132,7 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
                 current.setBlockAt((int)exit.x, (int)exit.y, (int)exit.z, "Levitator", true);
             }
 
-            for(int i = 1; i <= 9; i++) { current.setBlockAt((int)exit.x, (int)exit.y + i, (int)exit.z, "Levitator air", true); }
+            for(int i = 1; i <= 10; i++) { current.setBlockAt((int)exit.x, (int)exit.y + i, (int)exit.z, "Levitator air", true); }
 
             return r;
         }

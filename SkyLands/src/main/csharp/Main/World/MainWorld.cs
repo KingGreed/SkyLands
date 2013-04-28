@@ -110,7 +110,7 @@ namespace Game.World
 
                 y = this.getSurfaceHeight(x, z);
                 if(y != -1) {
-                    LogManager.Singleton.DefaultLog.LogMessage("\n \n New SpawnPoint at : " + new Vector3(x * Cst.CUBE_SIDE, y * Cst.CUBE_SIDE, z * Cst.CUBE_SIDE).ToString());
+                    LogManager.Singleton.DefaultLog.LogMessage("New SpawnPoint at : " + new Vector3(x * Cst.CUBE_SIDE, y * Cst.CUBE_SIDE, z * Cst.CUBE_SIDE).ToString());
                     this.mSpawnPoint = new Vector3(x * Cst.CUBE_SIDE, y * Cst.CUBE_SIDE, z * Cst.CUBE_SIDE);
                     break;
                 }
@@ -134,10 +134,10 @@ namespace Game.World
         }
 
         public void onBlockEnter(Vector3 blockCoord, Entity e) {
-            this.mIslandLoaded.getBlock(blockCoord, false).onBlockEnter(e);
+            this.mIslandLoaded.getBlock(blockCoord, false).onBlockEnter(e, blockCoord);
         }
         public void onBlockLeave(Vector3 blockCoord, Entity e) {
-            this.mIslandLoaded.getBlock(blockCoord, false).onBlockLeave(e);
+            this.mIslandLoaded.getBlock(blockCoord, false).onBlockLeave(e, blockCoord);
         }
 
         public void onCreation(Vector3 relCoord) {
@@ -147,12 +147,12 @@ namespace Game.World
             this.mIslandLoaded.getBlock(MainWorld.getRelativeFromAbsolute(relCoord), false).onDeletion();
         }
 
-        public void onRightClick(Vector3 relCoord) {
-            this.mIslandLoaded.getBlock(MainWorld.getRelativeFromAbsolute(relCoord), false).onRightClick();
+        public bool onRightClick(Vector3 relCoord) {
+            return this.mIslandLoaded.getBlock(MainWorld.getRelativeFromAbsolute(relCoord), false).onRightClick();
         }
 
-        public void onLeftClick(Vector3 relCoord) {
-            this.mIslandLoaded.getBlock(MainWorld.getRelativeFromAbsolute(relCoord), false).onLeftClick();
+        public bool onLeftClick(Vector3 relCoord) {
+            return this.mIslandLoaded.getBlock(MainWorld.getRelativeFromAbsolute(relCoord), false).onLeftClick();
         }
 
 

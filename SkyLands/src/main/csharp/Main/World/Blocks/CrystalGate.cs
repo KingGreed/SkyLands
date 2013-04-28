@@ -17,7 +17,7 @@ using Game.CharacSystem;
 
 namespace Game.World.Blocks {
     abstract class CrystalGate : VanillaBlock {
-        public override void onBlockEnter(API.Ent.Entity e) {
+        public override void onBlockEnter(API.Ent.Entity e, Vector3 position) {
             Island current = e.getIsland();
             API.Geo.World w = current.mWorld;
             GameInfo.TypeWorld next = GameInfo.TypeWorld.Hills;

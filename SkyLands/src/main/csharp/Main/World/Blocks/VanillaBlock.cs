@@ -37,11 +37,11 @@ namespace Game.World.Blocks
         public override void onCreation(Vector3 position) { }
         public override void onDeletion() { }
 
-        public override void onRightClick() { }
-        public override void onLeftClick() { }
+        public override bool onRightClick() { return true; }
+        public override bool onLeftClick()  { return true; }
 
-        public override void onBlockEnter(API.Ent.Entity e) { }
-        public override void onBlockLeave(API.Ent.Entity e) { }
+        public override void onBlockEnter(API.Ent.Entity e, Vector3 position) { }
+        public override void onBlockLeave(API.Ent.Entity e, Vector3 position) { }
 
     }
 }

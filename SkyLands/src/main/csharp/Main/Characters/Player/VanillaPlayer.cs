@@ -139,6 +139,7 @@ namespace Game.CharacSystem
                             case GUICreator.HUD.Selection.MagicCube:
                                 material = "magicball";
                                 break;
+
                         }
                         this.mShootCube.Material = material;
                         this.mShootCube.Grow(frameTime, this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left));
@@ -157,14 +158,15 @@ namespace Game.CharacSystem
                         
                     if (leftClick)
                     {
-                        this.mCharacMgr.World.onLeftClick(relBlockPos);
-                        if((int)this.mHud.Selector > 2)
+                        if((int)this.mHud.Selector > 2 && this.mCharacMgr.World.onLeftClick(relBlockPos))
                             this.AddBlock();
                     }
                     if (rightClick)
                     {
-                        this.mCharacMgr.World.onRightClick(relBlockPos);
-                        //this.DelBlock();
+                        if(this.mCharacMgr.World.onRightClick(relBlockPos)) {
+                            this.DelBlock();
+                        }
+
                     }
                 }
                 if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Middle)) { this.setIsPushedByArcaneLevitator(!this.mMovementInfo.IsPushedByArcaneLevitator); }
@@ -274,7 +276,7 @@ namespace Game.CharacSystem
             StaticRectangle.DrawLine(this.mCharacMgr.SceneMgr, origin, ray.GetPoint(raySQResult[raySQResult.Count - 1].distance));
         }*/
 
-        /*private void DelBlock()
+        private void DelBlock()
         {
             Vector3 relBlockPos;
             API.Geo.Cuboid.Block b;
@@ -282,12 +284,13 @@ namespace Game.CharacSystem
             if (!this.GetBlockPos(out relBlockPos, out b, out f)) { return; }
 
             string material = b.getName();
-            this.mCharacMgr.World.onDeletion(relBlockPos, this.mCharInfo.IslandLoc);
-            //this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).removeFromScene(relBlockPos);  // Delete block
+
+            this.mCharacMgr.World.onDeletion(relBlockPos);
+            this.mCharacMgr.World.getIsland().removeFromScene(relBlockPos);  // Delete block
 
             if (material != "Air")
                 this.mCharacMgr.StateMgr.WriteOnConsole("Deleted : " + material);
-        }*/
+        }
 
         private void AddBlock()
         {

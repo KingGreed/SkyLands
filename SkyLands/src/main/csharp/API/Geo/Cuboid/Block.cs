@@ -25,11 +25,11 @@ namespace API.Geo.Cuboid
         public abstract void onCreation(Vector3 position);
         public abstract void onDeletion();
 
-        public abstract void onRightClick();
-        public abstract void onLeftClick();
+        public abstract bool onRightClick();
+        public abstract bool onLeftClick();
 
-        public abstract void onBlockEnter(API.Ent.Entity e);
-        public abstract void onBlockLeave(API.Ent.Entity e);
+        public abstract void onBlockEnter(API.Ent.Entity e, Vector3 position);
+        public abstract void onBlockLeave(API.Ent.Entity e, Vector3 position);
 
 
 

@@ -12,7 +12,7 @@ using Mogre;
 
 namespace Game.World.Generator.Decorators.DarkTowerPopulator {
     class RoofBuilder {
-        public void build(Island current, Vector3 location, Vector2 size, Random rd, bool portal = false) {
+        public void build(Island current, Vector3 location, Vector2 size, Random rd) {
             for(int x = 0; x < size.x; x++) {
                 for(int z = 0; z < size.y; z++) {
                     if(x == 0 || x == size.x - 1 || z == 0 || z == size.y - 1) {
@@ -23,10 +23,6 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
                 }
             }
 
-            if(portal) {
-                Vector3 pos = new Vector3(location.x + size.x / 2, location.y, location.z + size.y / 2);
-                Portals.makePortal(1, current, pos);
-            }
         }
 
         public void buildStructure(Island current, int rand, Vector3 loc) {
