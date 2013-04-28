@@ -35,10 +35,12 @@ namespace Game.States
             this.mHUD.IGMenu.SetListener(InGameMenuGUI.ButtonName.Options, this.ClickOptionsButton);
             this.mHUD.IGMenu.SetListener(InGameMenuGUI.ButtonName.Save, this.ClickSaveButton);
 
-            this.mPlayerRTS = new PlayerRTS(this.mHUD);
             this.CreateCharacterMgr();
-            
+            this.mWorld.populate();
+            this.mWorld.display();
 
+            this.mPlayerRTS = new PlayerRTS(this.mHUD);
+            
             CharacterInfo playerInfo = new CharacterInfo("Sinbad", true);
             playerInfo.SpawnPoint = this.mWorld.getSpawnPoint();
             this.mCharacMgr.AddCharacter(playerInfo);
