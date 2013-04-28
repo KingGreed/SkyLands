@@ -7,11 +7,15 @@ namespace Game.States
     {
         protected StateManager mStateMgr;
         protected bool mIsStartedUp;
+        protected string mName;
+
+        public string Name { get { return this.mName; } }
         
-        public State(StateManager stateMgr)
+        public State(StateManager stateMgr, string name)
         {
             this.mStateMgr = stateMgr;
             this.mIsStartedUp = false;
+            this.mName = name;
         }
 
         public bool StartupState()

@@ -122,5 +122,15 @@ namespace Game.GUICreator
         {
             this.mBackButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(del);
         }
+
+        public void SetListenerSave(EventHandler<MouseButtonEventArgs> del)
+        {
+            this.mSaveButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(del);
+        }
+
+        public void SetListenerLoad(EventHandler<MouseButtonEventArgs> del)
+        {
+            this.mLoadButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(del);
+        }
     }
 }

@@ -115,6 +115,8 @@ namespace API.Geo.Cuboid
 	     */
 	    public virtual void save() { throw new NotImplementedException(); }
 
+        public abstract void load();
+
 	    /**
 	     * Performs the nessecary tasks to unload this region from the world, and
 	     * all associated chunks.

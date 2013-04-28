@@ -306,7 +306,7 @@ namespace Game.World.Generator
             writer.Close();
         }
 
-        public void load() {
+        public override void load() {
             var fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Roaming/SkyLands/",
                 this.mWorld.getName(), "Island-", this.mNode.Position.x.ToString(), "-",
                 this.mNode.Position.y.ToString(), "-", this.mNode.Position.z.ToString());

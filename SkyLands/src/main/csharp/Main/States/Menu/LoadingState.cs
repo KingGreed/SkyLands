@@ -10,7 +10,7 @@ namespace Game.States
         private LoadingGUI mLoadingGUI;
         private bool mWaitOneFrame;
 
-        public LoadingState(StateManager stateMgr) : base(stateMgr) { }
+        public LoadingState(StateManager stateMgr) : base(stateMgr, "Loading") { }
 
         protected override void Startup()
         {

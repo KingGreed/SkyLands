@@ -5,20 +5,21 @@ using System.Text;
 
 namespace Game.Animation
 {
-    public enum AnimName : byte { IdleBase, IdleTop, RunBase, RunTop, JumpStart, JumpLoop, JumpEnd, Dance }
-
     public class Anim
     {
-        private AnimName mName;
+        private string mName;
         private float mTimeFactor;
+        private bool mKeepActive;
 
-        public AnimName Name    { get { return this.mName; } }
+        public string Name { get { return this.mName; } }
         public float TimeFactor { get { return this.mTimeFactor; } }
+        public bool KeepActive { get { return this.mKeepActive; } }
 
-        public Anim(AnimName name, float timeFactor = 1)
+        public Anim(string name, float timeFactor = 1, bool keepActive = false)
         {
             this.mName = name;
             this.mTimeFactor = timeFactor;
+            this.mKeepActive = keepActive;
         }
     }
 }

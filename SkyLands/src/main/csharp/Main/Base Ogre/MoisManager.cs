@@ -126,7 +126,11 @@ namespace Game
         }
 
         public bool IsKeyDown(KeyCode key)                       { return this.mKeyDown[(int) key]; }
-        public bool WasKeyPressed(KeyCode key)                   { return this.mKeyPressed[(int) key]; }
+        public bool WasKeyPressed(KeyCode key, bool setToFalse = false)
+        {
+            if (setToFalse) { this.mKeyPressed[(int)key] = false; }
+            return this.mKeyPressed[(int) key];
+        }
         public bool WasKeyReleased(KeyCode key)                  { return this.mKeyReleased[(int)key]; }
         public bool IsMouseButtonDown(MouseButtonID button)      { return this.mMouseDown[(int) button]; }
         public bool WasMouseButtonPressed(MouseButtonID button)  { return this.mMousePressed[(int) button]; }

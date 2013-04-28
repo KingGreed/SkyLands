@@ -9,7 +9,7 @@ namespace Game.States
     {
         private MenuGUI mMenuGUI;
 
-        public MainMenu(StateManager stateMgr) : base(stateMgr) { }
+        public MainMenu(StateManager stateMgr) : base(stateMgr, "MainMenu") { }
 
         protected override void Startup()
         {

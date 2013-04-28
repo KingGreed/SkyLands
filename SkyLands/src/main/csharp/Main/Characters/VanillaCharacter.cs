@@ -14,19 +14,16 @@ namespace Game.CharacSystem
 {
     public abstract class VanillaCharacter : Character
     {
-        public static readonly Vector3 CHARAC_SIZE = new Vector3(65, 99, 65);
         private const float WALK_SPEED = 350.0f;
 
         protected CharacMgr     mCharacMgr;
         protected SceneNode     mNode;
-        protected AnimationMgr  mAnimMgr;
+        protected MeshAnim      mMesh;
         protected CharacterInfo mCharInfo;
         protected MovementInfo  mMovementInfo;
-        protected AnimName[]    mRunAnims;
-        protected AnimName[]    mJumpAnims;
-        protected AnimName[]    mIdleAnims;
-        private CollisionMgr    mCollisionMgr;
+        protected CollisionMgr  mCollisionMgr;
         private Vector3         mPreviousDirection;
+        private float           mTimeSinceDead;   // Wait the end of the animation 
 
         //MoveForward variable
         private Vector3         mDirection;
@@ -35,12 +32,12 @@ namespace Game.CharacSystem
 
         public SceneNode     Node            { get { return this.mNode; } }
         public bool          IsAllowedToMove { get { return this.mMovementInfo.IsAllowedToMove; } set { this.mMovementInfo.IsAllowedToMove = value; } }
-        public float         Height          { get { return CHARAC_SIZE.y; } }
+        public Vector3       Size            { get { return this.mMesh.MeshSize; } }
         public CharacterInfo Info            { get { return this.mCharInfo; } }
         public Vector3       FeetPosition
         {
-            get         { return this.mNode.Position - new Vector3(0, this.Height / 2 + 8, 0); }
-            private set { this.mNode.SetPosition(value.x, value.y + this.Height / 2 + 8, value.z); }
+            get         { return this.mNode.Position - new Vector3(0, this.Size.y / 2 + this.mMesh.FeetDiff, 0); }
+            protected set { this.mNode.SetPosition(value.x, value.y + this.Size.y / 2 + this.mMesh.FeetDiff, value.z); }
         }
 
         public Vector3 BlockPosition
@@ -54,52 +51,30 @@ namespace Game.CharacSystem
             this.mCharInfo = charInfo;
             this.mMovementInfo = new MovementInfo(OnFall, OnJump);
             this.mPreviousDirection = Vector3.ZERO;
+            this.mTimeSinceDead = 0;
 
-            /* Create entity and node */
-            SceneManager sceneMgr = characMgr.SceneMgr;
-            Mogre.Entity ent = sceneMgr.CreateEntity("CharacterEnt_" + this.mCharInfo.Id, meshName);
-            ent.Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
-            Mogre.Entity swordL = sceneMgr.CreateEntity("Sword.mesh");
-            ent.AttachObjectToBone("Sheath.L", swordL);
-            Mogre.Entity swordR = sceneMgr.CreateEntity("Sword.mesh");
-            ent.AttachObjectToBone("Sheath.R", swordR);
-
-            this.mNode = sceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id);
-            this.mCollisionMgr = new CollisionMgr(sceneMgr, this.mCharacMgr.World, this);
+            this.mNode = characMgr.SceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id);
 
             this.mDirection = Vector3.ZERO;
             //this.mDist          = 0;
-            this.mIsWalking     = false;
-
-            this.mNode.AttachObject(ent);
-            this.FeetPosition = this.mCharInfo.SpawnPoint;
-
-
-            /* Create Animations */
-            this.mIdleAnims = new AnimName[] { AnimName.IdleBase, AnimName.IdleTop };
-            this.mRunAnims  = new AnimName[] { AnimName.RunBase, AnimName.RunTop };
-            this.mJumpAnims = new AnimName[] { AnimName.JumpStart, AnimName.JumpLoop, AnimName.JumpEnd };
-            this.mAnimMgr   = new AnimationMgr(ent.AllAnimationStates);
-            this.mAnimMgr.SetAnims(this.mIdleAnims);
-
-            this.mNode.Scale(CHARAC_SIZE / ent.BoundingBox.Size);
         }
 
         private void OnFall(bool isFalling)
         {
             if (isFalling)
             {
-                this.mAnimMgr.SetAnims(AnimName.JumpLoop);
+                if (this.mCharInfo.IsPlayer) { (this.mMesh as Sinbad).JumpLoop(); }
                 GravitySpeed.Reset();
             }
-            else { this.mAnimMgr.SetAnims(AnimName.JumpEnd); }
+            else if (this.mCharInfo.IsPlayer)
+                (this.mMesh as Sinbad).EndJump();
         }
 
         private void OnJump(bool isJumping)
         {
             if (isJumping)
             {
-                this.mAnimMgr.SetAnims(AnimName.JumpStart, AnimName.JumpLoop);
+                this.mMesh.StartJump();
                 JumpSpeed.Jump();
             }
             else { this.mMovementInfo.IsFalling = true; }
@@ -119,31 +94,48 @@ namespace Game.CharacSystem
 
         public void Update(float frameTime)
         {
-            /* Actualise mMovementInfo */
-            if (this.mMovementInfo.IsAllowedToMove)
-            {
-                if (this.mCharInfo.IsPlayer) { (this as VanillaPlayer).Update(frameTime); }
-                else { (this as VanillaNonPlayer).Update(frameTime); }
-            }
-            //MoveForward
-            if (this.mIsWalking)
-            {
-                //LogManager.Singleton.DefaultLog.LogMessage((this.BlockPosition - this.mPathFinder.goal.Head.Data).SquaredLength.ToString());
-                if(this.mPathFinder.goal.Head != null) {
-                    if((this.BlockPosition - this.mPathFinder.goal.Head.Data).SquaredLength > 3) {
-                        float move = frameTime * WALK_SPEED;
-                        this.mNode.Translate(this.mDirection * move);
+            bool isDead = this.mCharInfo.Life <= 0;
 
-                    } else {
+            if (!isDead)
+            {
+                /* Actualise mMovementInfo */
+                if (this.mMovementInfo.IsAllowedToMove)
+                {
+                    if (this.mCharInfo.IsPlayer) { (this as VanillaPlayer).Update(frameTime); }
+                    else { (this as VanillaNonPlayer).Update(frameTime); }
+                }
+                //MoveForward
+                if (this.mIsWalking)
+                {
+                    //LogManager.Singleton.DefaultLog.LogMessage((this.BlockPosition - this.mPathFinder.goal.Head.Data).SquaredLength.ToString());
+                    if (this.mPathFinder.goal.Head != null)
+                    {
+                        if ((this.BlockPosition - this.mPathFinder.goal.Head.Data).SquaredLength > 3)
+                        {
+                            float move = frameTime * WALK_SPEED;
+                            this.mNode.Translate(this.mDirection * move);
 
-                        this.mPathFinder.goal.RemoveFirst();
-                        if(this.mPathFinder.goal.Head != null) {
-                            this.mDirection = this.mPathFinder.goal.Head.Data - this.BlockPosition;
+                        }
+                        else
+                        {
+
+                            this.mPathFinder.goal.RemoveFirst();
+                            if (this.mPathFinder.goal.Head != null)
+                            {
+                                this.mDirection = this.mPathFinder.goal.Head.Data - this.BlockPosition;
+                            }
                         }
                     }
-                } else {
-                    this.mIsWalking = false;
+                    else
+                    {
+                        this.mIsWalking = false;
+                    }
                 }
+            }
+            else
+            {
+                this.mTimeSinceDead += frameTime;
+                if (this.mTimeSinceDead >= 2) { this.mCharacMgr.RemoveCharac(this); }
             }
 
             /* Compute translation and yaw */
@@ -155,7 +147,7 @@ namespace Game.CharacSystem
             else
                 translation.y = GravitySpeed.GetSpeed();
 
-            if (this.mMovementInfo.IsAllowedToMove)
+            if (this.mMovementInfo.IsAllowedToMove && !isDead)
             {
                 translation += WALK_SPEED * this.mMovementInfo.MoveDirection * new Vector3(1, 0, 1);    // Ignores the y axis translation here
                 this.mNode.Yaw(this.mMovementInfo.YawValue * frameTime);
@@ -163,26 +155,28 @@ namespace Game.CharacSystem
 
             this.mCollisionMgr.DrawPoints();
 
-            translation = this.Translate(translation * frameTime);    // Apply the translation
-
-            /* Update animations */
-            if (!this.mMovementInfo.IsJumping && !this.mMovementInfo.IsFalling && !this.mMovementInfo.IsPushedByArcaneLevitator)
+            if (!isDead)
             {
-                int zDirSign = (int)Mogre.Math.Sign(this.mMovementInfo.MoveDirection.z);
-                int prevZDirSign = (int)Mogre.Math.Sign(this.mPreviousDirection.z);
+                translation = this.Translate(translation * frameTime);    // Apply the translation
 
-                if (zDirSign != 0 && zDirSign != prevZDirSign)
-                    this.mAnimMgr.SetAnims(this.mRunAnims, zDirSign);
-                else if (zDirSign == 0 && prevZDirSign != 0)
-                    this.mAnimMgr.DeleteAnims(this.mRunAnims);
+                if (!this.mMovementInfo.IsJumping && !this.mMovementInfo.IsFalling && !this.mMovementInfo.IsPushedByArcaneLevitator)
+                {
+                    int zDirSign = (int)Mogre.Math.Sign(this.mMovementInfo.MoveDirection.z);
+                    int prevZDirSign = (int)Mogre.Math.Sign(this.mPreviousDirection.z);
+
+                    if (zDirSign != 0 && zDirSign != prevZDirSign)
+                        this.mMesh.Walk(true, zDirSign);
+                    else if (zDirSign == 0 && prevZDirSign != 0)
+                        this.mMesh.Walk(false);
+                }
+                this.mPreviousDirection = this.mMovementInfo.MoveDirection;
+                if (this.mMesh.AnimMgr.CurrentAnims.Count == 0) // By default apply idle anim
+                {
+                    this.mMesh.Idle();
+                    this.mPreviousDirection = Vector3.ZERO;
+                }
             }
-            this.mPreviousDirection = this.mMovementInfo.MoveDirection;
-            if (this.mAnimMgr.CurrentAnims.Count == 0) // By default apply idle anim
-            { 
-                this.mAnimMgr.AddAnims(this.mIdleAnims);
-                this.mPreviousDirection = Vector3.ZERO;
-            }
-            this.mAnimMgr.Update(frameTime);
+            this.mMesh.Update(frameTime);
             this.mMovementInfo.ClearInfo();
         }
 
@@ -218,7 +212,9 @@ namespace Game.CharacSystem
             if (this.mCharInfo.Life <= 0)
             {
                 this.mCharacMgr.StateMgr.WriteOnConsole(this.mCharInfo.Name + " died heroically for his nation.");
-                this.mCharacMgr.RemoveCharac(this);
+
+                if (!this.mCharInfo.IsPlayer) { (this.mMesh as Robot).Die(); }
+                else { this.mCharacMgr.RemoveCharac(this); }
             }
         }
 
@@ -256,7 +252,7 @@ namespace Game.CharacSystem
             if (value && !this.mMovementInfo.IsPushedByArcaneLevitator)
                 ArcaneLevitatorSpeed.StartLevitation();
             this.mMovementInfo.IsPushedByArcaneLevitator = value;
-            this.mAnimMgr.DeleteAllAnims();
+            this.mMesh.AnimMgr.DeleteAllAnims();
         }
     }
 }

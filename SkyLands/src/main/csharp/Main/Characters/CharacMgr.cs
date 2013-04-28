@@ -18,7 +18,8 @@ namespace Game.CharacSystem
         private MoisManager            mInput;
         private MainWorld              mWorld;
         private BulletManager          mBulletMgr;
-        private string                 mMeshName = "Sinbad.mesh";
+        private string                 mSinbadMesh = "Sinbad.mesh";
+        private string                 mRobotMesh = "robot.mesh";
 
         public StateManager     StateMgr      { get { return this.mStateMgr; } }
         public SceneManager     SceneMgr      { get { return this.mStateMgr.SceneMgr; } }
@@ -60,7 +61,7 @@ namespace Game.CharacSystem
             if (this.mCharacList.Count == 0 || info.IsPlayer)
             {
                 type = "Player";
-                this.mCharacList.Add(new VanillaPlayer(this, this.mMeshName, info, this.mInput));
+                this.mCharacList.Add(new VanillaPlayer(this, this.mSinbadMesh, info, this.mInput));
                 if (this.mCharacList.Count == 1)
                 {
                     this.mMainPlayerCam = new MainPlayerCamera(this.mStateMgr.Camera, (this.mCharacList[0] as VanillaPlayer), this.mStateMgr.Window.Width, this.mStateMgr.Window.Height);
@@ -70,7 +71,7 @@ namespace Game.CharacSystem
             else
             {
                 type = "NonPlayer";
-                this.mCharacList.Add(new VanillaNonPlayer(this, this.mMeshName, info));
+                this.mCharacList.Add(new VanillaNonPlayer(this, this.mRobotMesh, info));
             }
 
             LogManager.Singleton.DefaultLog.LogMessage(type + " " + info.Name + " added");
@@ -83,7 +84,8 @@ namespace Game.CharacSystem
         }
 
         public VanillaCharacter GetCharacterByListPos(int index = 0) { return this.mCharacList[index]; }    // By default return the main player
-        public VanillaCharacter GetCharacterById(int id = 0) { return this.mCharacList.Find(charac => charac.Info.Id == id); }    // By default return the main player
+        public VanillaCharacter GetCharacterById(int id)             { return this.mCharacList.Find(charac => charac.Info.Id == id); }
+
         public int GetNumberOfCharacter() { return this.mCharacList.Count; }
 
         public void Update(float frameTime)

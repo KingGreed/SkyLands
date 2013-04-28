@@ -3,6 +3,8 @@ using Miyagi.Common.Events;
 using Miyagi.UI.Controls;
 
 using Game.GUICreator;
+using Mogre;
+using Game.World;
 
 namespace Game.States
 {
@@ -10,7 +12,10 @@ namespace Game.States
     {
         private OptionsGUI mOptionsGUI;
         private bool mIsFullScreen;
-        public OptionsState(StateManager stateMgr) : base(stateMgr) { }
+        private Vector3 mIslandLoc;
+        private MainWorld mWorld = null;
+
+        public OptionsState(StateManager stateMgr) : base(stateMgr, "Option") { }
 
         protected override void Startup()
         {
@@ -20,6 +25,8 @@ namespace Game.States
             this.mOptionsGUI.SetListener(OptionsGUI.ButtonName.Music, this.ClickMusicButton);
             this.mOptionsGUI.SetListener(OptionsGUI.ButtonName.VSync, this.ClickVSyncButton);
             this.mOptionsGUI.SetListenerBack(this.ClickBackButton);
+            this.mOptionsGUI.SetListenerSave(this.ClickSaveButton);
+            this.mOptionsGUI.SetListenerLoad(this.ClickLoadButton);
             this.mIsFullScreen = this.mStateMgr.Window.IsFullScreen;
         }
 
@@ -32,6 +39,12 @@ namespace Game.States
         {
             this.mOptionsGUI.Show();
             this.mStateMgr.MiyagiMgr.CursorVisibility = true;
+        }
+
+        public void AttachWorld(MainWorld world, Vector3 islandLoc)
+        {
+            this.mWorld = world;
+            this.mIslandLoc = islandLoc;
         }
 
         public override void Update(float frameTime)
@@ -47,25 +60,41 @@ namespace Game.States
             else{b.Text = "ON";}
         }
 
-        private void ClickBackButton(object obj, MouseButtonEventArgs arg) { this.mStateMgr.RequestStatePop();}
+        private void ClickBackButton(object obj, MouseButtonEventArgs arg)
+        {
+            this.mStateMgr.RequestStatePop(this.mWorld == null ? 1 : 2);
+        }
+
         private void ClickMusicButton(object obj, MouseButtonEventArgs arg) 
         {
             this.SwitchText(this.mOptionsGUI.Buttons[OptionsGUI.ButtonName.Music]);
         }
+
         private void ClickQualityButton(object obj, MouseButtonEventArgs arg) 
         {
             this.SwitchText(this.mOptionsGUI.Buttons[OptionsGUI.ButtonName.HighQuality]);
         }
+
         private void ClickVSyncButton(object obj, MouseButtonEventArgs arg) 
         {
             this.SwitchText(this.mOptionsGUI.Buttons[OptionsGUI.ButtonName.VSync]);
         }
+
         private void ClickFullScreenButton(object obj, MouseButtonEventArgs arg) 
         {
             this.mIsFullScreen = !this.mIsFullScreen;
             this.mStateMgr.Window.SetFullscreen(this.mIsFullScreen, this.mStateMgr.Window.Width, this.mStateMgr.Window.Height);
             this.SwitchText(this.mOptionsGUI.Buttons[OptionsGUI.ButtonName.FullScreen]);
         }
-        //private void ClickScreenResolutionButton(object obj, MouseButtonEventArgs arg) { this.mStateMgr.Window.Resize(,); }
+
+        private void ClickSaveButton(object obj, MouseButtonEventArgs arg)
+        {
+            if (this.mWorld != null) { this.mWorld.getIslandAt(this.mIslandLoc).save(); }
         }
+
+        private void ClickLoadButton(object obj, MouseButtonEventArgs arg)
+        {
+            if (this.mWorld != null) { this.mWorld.getIslandAt(this.mIslandLoc).load(); }
+        }
+    }
 }

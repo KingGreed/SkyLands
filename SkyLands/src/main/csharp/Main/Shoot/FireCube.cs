@@ -79,7 +79,7 @@ namespace Game.Shoot
 
             /* Determine the location */
             Ray ray = this.mPlayer.Camera.GetCameraToViewportRay(0.5f, 0.5f);
-            ray.Origin = this.mPlayer.FeetPosition + Vector3.UNIT_Y * VanillaCharacter.CHARAC_SIZE / 1.2f;
+            ray.Origin = this.mPlayer.FeetPosition + Vector3.UNIT_Y * this.mPlayer.Size / 1.2f;
 
             this.mNode = /*this.mPlayer.Node.CreateChildSceneNode(ray.GetPoint(50));*/ this.mSceneMgr.RootSceneNode.CreateChildSceneNode(ray.GetPoint(50));
             this.mNode.InheritScale = false;

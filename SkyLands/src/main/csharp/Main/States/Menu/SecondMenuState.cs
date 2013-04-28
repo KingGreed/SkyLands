@@ -12,13 +12,13 @@ namespace Game.States
         private SecondMenuGUI mSecondMenuGUI;
         private GameInfo mGameInfo;
 
-        public SecondMenuState(StateManager stateMgr) : base(stateMgr) { }
+        public SecondMenuState(StateManager stateMgr) : base(stateMgr, "SecondMenu") { }
 
         protected override void Startup()
         {
             this.mGameInfo = new GameInfo();
             this.mGameInfo.Seed = 42;
-            this.mGameInfo.Size = new Vector2(5, 5);
+            this.mGameInfo.Size = new Vector2(-1, -1);
 
             this.mSecondMenuGUI = new SecondMenuGUI(this.mStateMgr, this.mGameInfo);
             this.mSecondMenuGUI.SetListener(GameInfo.TypeWorld.Dome, this.ClickDomeButton);
@@ -59,7 +59,7 @@ namespace Game.States
         {
             this.mGameInfo.Type = GameInfo.TypeWorld.Dome;
             Vector2 newSize = this.mGameInfo.Size;
-            if (newSize.x <= 0 || newSize.x > 30) { newSize.x = 4; }
+            if (newSize.x <= 0 || newSize.x > 25) { newSize.x = 5; }
             if (newSize.y != newSize.x)           { newSize.y = newSize.x; }
             this.mGameInfo.Size = newSize;
 
@@ -71,8 +71,8 @@ namespace Game.States
         {
             this.mGameInfo.Type = GameInfo.TypeWorld.Plains;
             Vector2 newSize = this.mGameInfo.Size;
-            if (newSize.x <= 2 || newSize.x >= 60) { newSize.x = 11; }
-            if (newSize.y <= 2 || newSize.y >= 60) { newSize.y = 11; }
+            if (newSize.x <= 2 || newSize.x >= 25) { newSize.x = 11; }
+            if (newSize.y <= 2 || newSize.y >= 25) { newSize.y = 11; }
             this.mGameInfo.Size = newSize;
 
             this.mStateMgr.GameInfo = this.mGameInfo;
@@ -83,8 +83,8 @@ namespace Game.States
         {
             this.mGameInfo.Type = GameInfo.TypeWorld.Desert;
             Vector2 newSize = this.mGameInfo.Size;
-            if (newSize.x <= 2 || newSize.x >= 60) { newSize.x = 13; }
-            if (newSize.y <= 2 || newSize.y >= 60) { newSize.y = 13; }
+            if (newSize.x <= 2 || newSize.x >= 25) { newSize.x = 13; }
+            if (newSize.y <= 2 || newSize.y >= 25) { newSize.y = 13; }
             this.mGameInfo.Size = newSize;
 
             this.mStateMgr.GameInfo = this.mGameInfo;
@@ -95,8 +95,8 @@ namespace Game.States
         {
             this.mGameInfo.Type = GameInfo.TypeWorld.Hills;
             Vector2 newSize = this.mGameInfo.Size;
-            if (newSize.x <= 2 || newSize.x >= 30) { newSize.x = 15; }
-            if (newSize.y <= 2 || newSize.y >= 30) { newSize.y = 15; }
+            if (newSize.x <= 2 || newSize.x >= 25) { newSize.x = 15; }
+            if (newSize.y <= 2 || newSize.y >= 25) { newSize.y = 15; }
             this.mGameInfo.Size = newSize;
 
             this.mStateMgr.GameInfo = this.mGameInfo;
@@ -107,8 +107,8 @@ namespace Game.States
         {
             this.mGameInfo.Type = GameInfo.TypeWorld.Mountain;
             Vector2 newSize = this.mGameInfo.Size;
-            if (newSize.x <= 2 || newSize.x > 30) { newSize.x = 15; }
-            if (newSize.y <= 2 || newSize.y > 30) { newSize.y = 15; }
+            if (newSize.x <= 2 || newSize.x > 25) { newSize.x = 15; }
+            if (newSize.y <= 2 || newSize.y > 25) { newSize.y = 15; }
             this.mGameInfo.Size = newSize;
 
             this.mStateMgr.GameInfo = this.mGameInfo;

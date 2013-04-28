@@ -142,6 +142,7 @@ namespace Game.GUICreator
                 this.mGameInfo.Size = size;
             }
             this.mStateMgr.MyConsole.Enabled = false;
+            this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_RETURN, true);
         }
 
         private void textBoxSizeX_Submit(object sender, ValueEventArgs<string> e)
@@ -154,6 +155,7 @@ namespace Game.GUICreator
                 this.mGameInfo.Size = size;
             }
             this.mStateMgr.MyConsole.Enabled = false;
+            this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_RETURN, true);
         }
 
         private void textBoxSeed_Submit(object sender, ValueEventArgs<string> e)
@@ -161,6 +163,7 @@ namespace Game.GUICreator
             int seed;
             if (int.TryParse(e.Data, out seed)) { this.mGameInfo.Seed = seed; }
             this.mStateMgr.MyConsole.Enabled = false;
+            this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_RETURN, true);
         }
 
         protected override void AfterResize()

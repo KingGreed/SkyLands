@@ -82,6 +82,9 @@
     <Content Include="resources\Media\materials\scripts\cube.material">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\materials\scripts\Example.material">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="resources\Media\models\cube.mesh">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -133,6 +136,9 @@
     <Content Include="resources\Media\materials\textures\portalGreen.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\materials\textures\r2skin.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\materials\textures\redsand1.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -172,7 +178,6 @@
     <Content Include="resources\Media\packs\OgreCore.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="resources\Media\packs\Sinbad.blend" />
     <Content Include="resources\Media\packs\Sinbad.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -186,6 +191,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\resources.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\models\robot.mesh">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\models\robot.skeleton">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -375,12 +386,15 @@
     <Compile Include="csharp\Main\Buildings\Buildings.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\Characters\Anim.cs">
+    <Compile Include="csharp\Main\Characters\Animations\Anim.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\Characters\AnimationMgr.cs">
+    <Compile Include="csharp\Main\Characters\Animations\AnimationMgr.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\Characters\Animations\Robot.cs" />
+    <Compile Include="csharp\Main\Characters\Animations\MeshAnim.cs" />
+    <Compile Include="csharp\Main\Characters\Animations\Sinbad.cs" />
     <Compile Include="csharp\Main\Characters\AStar.cs">
       <SubType>Code</SubType>
     </Compile>

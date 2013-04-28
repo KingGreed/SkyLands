@@ -92,6 +92,8 @@ namespace Game.States
                     return false;
                 }
 
+                //if (newState.Name == "Option") { (newState as OptionsState).AttachWorld(); }
+
                 if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Hide(); }
                     this.mStateStack.Push(newState);
                 this.mStateStack.Peek().Show();

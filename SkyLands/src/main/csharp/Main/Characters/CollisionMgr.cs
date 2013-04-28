@@ -22,9 +22,9 @@ namespace Game.CharacSystem
         {
             this.mWorld = world;
             this.mCharac = charac;
-            this.mNbrHitStage = 2 + (int)charac.Height / Cst.CUBE_SIDE;
+            this.mNbrHitStage = 2 + (int)charac.Size.y / Cst.CUBE_SIDE;
 
-            this.mHitRadius = VanillaCharacter.CHARAC_SIZE.x / 2 * COL_SIDE_MARGE;
+            this.mHitRadius = charac.Size.x / 2 * COL_SIDE_MARGE;
             this.mHitDegrees = new Degree[NBR_HIT_POINTS];
             this.mPoints = new SceneNode[this.mHitDegrees.Length * this.mNbrHitStage];
             Degree delta = 360 / this.mHitDegrees.Length;
@@ -58,7 +58,7 @@ namespace Game.CharacSystem
                     hitPoints[index] = this.mCharac.FeetPosition;
                     hitPoints[index].x += this.mHitRadius * Math.Cos(deg);
                     hitPoints[index].z += this.mHitRadius * Math.Sin(deg);
-                    hitPoints[index].y += j < this.mNbrHitStage - 1 ? j * Cst.CUBE_SIDE : this.mCharac.Height;
+                    hitPoints[index].y += j < this.mNbrHitStage - 1 ? j * Cst.CUBE_SIDE : this.mCharac.Size.y;
                 }
             }
 
@@ -172,7 +172,7 @@ namespace Game.CharacSystem
                         for (int j = 0; j < this.mNbrHitStage; j++) // Add the point to test for all stages
                         {
                             pointsToTest[actIndex + NBR_HIT_POINTS / 2 * j] = hitPoints[i];
-                            pointsToTest[actIndex + NBR_HIT_POINTS / 2 * j].y += j < this.mNbrHitStage - 1 ? j * Cst.CUBE_SIDE : this.mCharac.Height;
+                            pointsToTest[actIndex + NBR_HIT_POINTS / 2 * j].y += j < this.mNbrHitStage - 1 ? j * Cst.CUBE_SIDE : this.Size.y;
                         }
                         actIndex++;
                     }

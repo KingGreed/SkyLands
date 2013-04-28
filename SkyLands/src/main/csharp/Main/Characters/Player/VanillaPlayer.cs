@@ -17,13 +17,13 @@ namespace Game.CharacSystem
     {
         private struct Emote
         {
-            private AnimName mAnim;
+            private Sinbad.AnimName mAnim;
             private MOIS.KeyCode mKey;
 
-            public AnimName Anim { get { return this.mAnim; } }
+            public Sinbad.AnimName Anim { get { return this.mAnim; } }
             public MOIS.KeyCode Key { get { return this.mKey; } }
 
-            public Emote(MOIS.KeyCode key, AnimName anim) { this.mKey = key; this.mAnim = anim; }
+            public Emote(MOIS.KeyCode key, Sinbad.AnimName anim) { this.mKey = key; this.mAnim = anim; }
         }
 
         private static float YAW_SENSIVITY = 0.4f;
@@ -31,7 +31,7 @@ namespace Game.CharacSystem
 
         private MoisManager      mInput;
         private Emote[]          mEmotes;
-        private AnimName[]       mEmotesNames;
+        private Sinbad.AnimName[] mEmotesNames;
         private float            mYawCamValue;
         private float            mPitchCamValue;
         private bool             mIsFirstView;
@@ -59,13 +59,28 @@ namespace Game.CharacSystem
         {
             this.mInput = input;
             this.mIsFirstView = true;
+
+            SceneManager sceneMgr = characMgr.SceneMgr;
+            Mogre.Entity ent = sceneMgr.CreateEntity("CharacterEnt_" + this.mCharInfo.Id, meshName);
+            ent.Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
+            Mogre.Entity swordL = sceneMgr.CreateEntity("Sword.mesh");
+            ent.AttachObjectToBone("Sheath.L", swordL);
+            Mogre.Entity swordR = sceneMgr.CreateEntity("Sword.mesh");
+            ent.AttachObjectToBone("Sheath.R", swordR);
+            this.mMesh = new Sinbad(ent);
+
+            this.mNode.AttachObject(ent);
+            this.mNode.Scale(this.mMesh.MeshSize / ent.BoundingBox.Size);
+
+            this.mCollisionMgr = new CollisionMgr(characMgr.SceneMgr, this.mCharacMgr.World, this);
+            this.FeetPosition = this.mCharInfo.SpawnPoint;
             this.mFireCube = new FireCube(this.mCharacMgr.SceneMgr, this, this.mCharacMgr.BulletMgr);
 
             this.mEmotes = new Emote[]
             {
-                new Emote(MOIS.KeyCode.KC_1, AnimName.Dance)
+                new Emote(MOIS.KeyCode.KC_1, Sinbad.AnimName.Dance)
             };
-            this.mEmotesNames = new AnimName[this.mEmotes.Length];
+            this.mEmotesNames = new Sinbad.AnimName[this.mEmotes.Length];
             for (int i = 0; i < this.mEmotes.Length; i++)
                 this.mEmotesNames[i] = this.mEmotes[i].Anim;
         }
@@ -79,7 +94,7 @@ namespace Game.CharacSystem
         {
             bool isNowMoving = !this.mIsDebugMode || this.mInput.IsCtrltDown;
             if (this.mMovementInfo.IsAllowedToMove && !isNowMoving)
-                this.mAnimMgr.DeleteAllExcept<AnimName[]>(this.mEmotesNames, this.mIdleAnims, this.mJumpAnims);
+                (this.mMesh as Sinbad).SwitchToDebugMode();
             this.mMovementInfo.IsAllowedToMove = isNowMoving;
 
             if (this.mMovementInfo.IsAllowedToMove)
@@ -103,14 +118,14 @@ namespace Game.CharacSystem
                 if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Middle)) { this.setIsPushedByArcaneLevitator(!this.mMovementInfo.IsPushedByArcaneLevitator); }
 
                 /* Update emotes animations */
-                if (!this.mAnimMgr.AreAnimationsPlaying(AnimName.JumpStart, AnimName.JumpLoop, AnimName.JumpEnd, AnimName.RunBase, AnimName.RunTop))
+                if (!this.mMesh.AnimMgr.AreAnimationsPlaying(MeshAnim.GetString<Sinbad.AnimName>(Sinbad.AnimName.JumpStart, Sinbad.AnimName.JumpLoop, Sinbad.AnimName.JumpEnd, Sinbad.AnimName.RunBase, Sinbad.AnimName.RunTop)))
                 {
                     foreach (Emote emote in this.mEmotes)
                     {
                         if (this.mInput.WasKeyPressed(emote.Key))
                         {
-                            if (!this.mAnimMgr.AreAnimationsPlaying(emote.Anim)) { this.mAnimMgr.SetAnims(emote.Anim); }
-                            else { this.mAnimMgr.DeleteAnims(emote.Anim); }
+                            if (!this.mMesh.AnimMgr.AreAnimationsPlaying(MeshAnim.GetString<Sinbad.AnimName>(emote.Anim))) { this.mMesh.AnimMgr.SetAnims(MeshAnim.GetString<Sinbad.AnimName>(emote.Anim)); }
+                            else { this.mMesh.AnimMgr.DeleteAnims(MeshAnim.GetString<Sinbad.AnimName>(emote.Anim)); }
                         }
                     }
                 }

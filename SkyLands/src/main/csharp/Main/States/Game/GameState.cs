@@ -17,7 +17,9 @@ namespace Game.States
         private DebugMode     mDebugMode;
         private GameGUI       mGUI;
 
-        public GameState(StateManager stateMgr) : base(stateMgr) { }
+        public MainWorld World { get { return this.mWorld; } }
+
+        public GameState(StateManager stateMgr) : base(stateMgr, "Game") { }
 
         protected override void Startup()
         {
@@ -33,8 +35,10 @@ namespace Game.States
             playerInfo.SpawnPoint = this.mWorld.getSpawnPoint();
             this.mCharacMgr.AddCharacter(playerInfo);
 
-            CharacterInfo iaInfo = new CharacterInfo("NPC_01", false);
-            iaInfo.SpawnPoint = playerInfo.SpawnPoint + new Mogre.Vector3(100, 0, 100);
+
+            CharacterInfo iaInfo = new CharacterInfo("Robot-01", false);
+            iaInfo.SpawnPoint = playerInfo.SpawnPoint + new Mogre.Vector3(800, 0, 200);
+
             this.mCharacMgr.AddCharacter(iaInfo);
 
             this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr, this.mGUI);
@@ -69,7 +73,9 @@ namespace Game.States
             if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_ESCAPE))
             {
                 this.mDebugMode.IsAllowedToMoveCam = !this.mGUI.SwitchVisibleIGMenu();
-            } else if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_E)) {
+            }
+            else if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_E))
+            {
 
             }
         }
