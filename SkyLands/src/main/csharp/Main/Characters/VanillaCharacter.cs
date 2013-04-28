@@ -23,6 +23,7 @@ namespace Game.CharacSystem
         protected MovementInfo  mMovementInfo;
         protected CollisionMgr  mCollisionMgr;
         private Vector3         mPreviousDirection;
+        private Vector3         mPreviousBlockPos;
         private float           mTimeSinceDead;   // Wait the end of the animation 
 
         //MoveForward variable
@@ -52,6 +53,7 @@ namespace Game.CharacSystem
             this.mMovementInfo = new MovementInfo(OnFall, OnJump);
             this.mPreviousDirection = Vector3.ZERO;
             this.mTimeSinceDead = 0;
+            this.mPreviousBlockPos = -1 * Vector3.UNIT_SCALE;
 
             this.mNode = characMgr.SceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id);
 
@@ -187,7 +189,15 @@ namespace Game.CharacSystem
             /* Here translate has been modified to avoid collisions */
             this.mMovementInfo.IsFalling = actualTranslation.y < 0;
             this.mMovementInfo.IsJumping = actualTranslation.y > 0 && JumpSpeed.IsJumping;
+
             this.mNode.Translate(actualTranslation);
+            Vector3 blockPos = MainWorld.getRelativeFromAbsolute(this.FeetPosition);
+            if (blockPos != this.mPreviousBlockPos)
+            {
+                this.mCharacMgr.World.onBlockLeave(this.mPreviousBlockPos, this.mCharInfo.IslandLoc, this);
+                this.mCharacMgr.World.onBlockEnter(blockPos, this.mCharInfo.IslandLoc, this);
+                this.mPreviousBlockPos = blockPos;
+            }
 
             return actualTranslation * this.mNode.LocalAxes;
         }
@@ -209,6 +219,8 @@ namespace Game.CharacSystem
         public void Hit(Bullet b)
         {
             this.mCharInfo.Life -= b.Damage;
+            if (this.mCharInfo.IsPlayer && (this as VanillaPlayer).HUD != null) { (this as VanillaPlayer).HUD.UpdateLife(this.mCharInfo.Life, VanillaPlayer.DEFAULT_PLAYER_LIFE); }
+
             if (this.mCharInfo.Life <= 0)
             {
                 this.mCharacMgr.StateMgr.WriteOnConsole(this.mCharInfo.Name + " died heroically for his nation.");

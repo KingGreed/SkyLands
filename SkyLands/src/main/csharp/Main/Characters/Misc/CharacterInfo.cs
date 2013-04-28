@@ -14,13 +14,13 @@ namespace Game.CharacSystem
         private bool    mIsPlayer;
 
         public int     Id         { get { return this.mId; } }
-        public string Name        { get { return this.mName; }       set { this.mName = value; } }
+        public string  Name        { get { return this.mName; }       set { this.mName = value; } }
         public Vector3 SpawnPoint { get { return this.mSpawnPoint; } set { this.mSpawnPoint = value; } }
         public Vector3 IslandLoc  { get { return this.mIslandLoc; }  set { this.mIslandLoc = value; } }
         public float   Life       { get { return this.mLife; }       set { this.mLife = value; } }
         public bool    IsPlayer   { get { return this.mIsPlayer; } }
 
-        public CharacterInfo(string name, bool isPlayer = false, float life = 100)
+        public CharacterInfo(string name, bool isPlayer = false, float life = -1)
         {
             this.mId = lastPlayerId;
             lastPlayerId++;
@@ -28,7 +28,10 @@ namespace Game.CharacSystem
             this.mSpawnPoint = Vector3.ZERO;
             this.mIslandLoc = Vector3.ZERO;
             this.mIsPlayer = isPlayer;
+            if (life == -1) { life = this.mIsPlayer ? VanillaPlayer.DEFAULT_PLAYER_LIFE : VanillaNonPlayer.DEFAULT_NPC_LIFE; }
             this.mLife = life;
         }
+
+        public static void ResetID() { lastPlayerId = 0; }
     }
 }

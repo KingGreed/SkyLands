@@ -19,7 +19,7 @@ namespace Game.World
         {
             this.mSeed = 42;
             this.mType = GameInfo.TypeWorld.Hills;
-            this.mSize = new Vector2(15, 15);
+            this.mSize = new Vector2(11, 11);
         }
     }
 }

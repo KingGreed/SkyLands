@@ -6,6 +6,8 @@ using Game.World;
 using Game.States;
 using Game.IGConsole;
 using Game.Shoot;
+using Game.GUICreator;
+using Game.RTS;
 
 namespace Game.CharacSystem
 {
@@ -18,6 +20,8 @@ namespace Game.CharacSystem
         private MoisManager            mInput;
         private MainWorld              mWorld;
         private BulletManager          mBulletMgr;
+        private HUD                    mHUD;
+        private PlayerRTS              mPlayerRTS;
         private string                 mSinbadMesh = "Sinbad.mesh";
         private string                 mRobotMesh = "robot.mesh";
 
@@ -28,12 +32,14 @@ namespace Game.CharacSystem
         public MainPlayerCamera MainPlayerCam { get { return this.mMainPlayerCam; } }
         public BulletManager    BulletMgr     { get { return this.mBulletMgr; } }
 
-        public CharacMgr(StateManager stateMgr, MainWorld world, BulletManager bulletMgr)
+        public CharacMgr(StateManager stateMgr, MainWorld world, BulletManager bulletMgr, HUD hud, PlayerRTS playerRTS)
         {
             this.mStateMgr = stateMgr;
             this.mInput = stateMgr.Input;
             this.mWorld = world;
             this.mBulletMgr = bulletMgr;
+            this.mHUD = hud;
+            this.mPlayerRTS = playerRTS;
             this.mCharacList = new List<VanillaCharacter>();
 
             this.mCommands = new CommandInfo[]
@@ -65,7 +71,7 @@ namespace Game.CharacSystem
                 if (this.mCharacList.Count == 1)
                 {
                     this.mMainPlayerCam = new MainPlayerCamera(this.mStateMgr.Camera, (this.mCharacList[0] as VanillaPlayer), this.mStateMgr.Window.Width, this.mStateMgr.Window.Height);
-                    (this.GetCharacterByListPos() as VanillaPlayer).AttachCamera(this.mMainPlayerCam);
+                    (this.GetCharacterByListPos() as VanillaPlayer).MainPlayer(this.mMainPlayerCam, this.mHUD);
                 }
             }
             else
@@ -104,6 +110,7 @@ namespace Game.CharacSystem
                 this.mCharacList.RemoveAt(0);
             }
 
+            CharacterInfo.ResetID();
             this.mStateMgr.MyConsole.DeleteCommands(this.mCommands);
             this.mMainPlayerCam.Dispose();
             this.mMainPlayerCam = null;

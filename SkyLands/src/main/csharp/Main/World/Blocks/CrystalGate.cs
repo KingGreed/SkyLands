@@ -16,6 +16,5 @@ namespace Game.World.Blocks {
             this.mId = 19;
             this.mMeshType = 1;
         }
-
     }
 }

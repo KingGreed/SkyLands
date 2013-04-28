@@ -18,7 +18,6 @@ namespace Game.GUICreator
         public enum ButtonName { HighQuality, FullScreen, VSync, Music}
         private Dictionary<ButtonName, Button> mButtons;
         private Button mBackButton;
-        private Button mLoadButton;
 
         public Dictionary<ButtonName, Button> Buttons { get { return this.mButtons; } }
 
@@ -30,9 +29,18 @@ namespace Game.GUICreator
             Panel panel = new Panel();
             panel.AlwaysOnBottom = true;
             panel.Skin = this.mMiyagiMgr.Skins["PanelSkin"];
-            panel.Size = new Size(800, 700);
+            panel.Size = new Size(630, 600);
             panel.Location = new Point(380, 100);
             this.mGUI.Controls.Add(panel);
+
+            /* Text */
+            Label label = new Label();
+            label.Text = "Options";
+            label.Size = new Size(panel.Size.Width, 60);
+            label.AutoSize = true;
+            label.AutoSizeMode = Miyagi.UI.AutoSizeMode.GrowAndShrink;
+            label.Location = panel.Location + new Point(panel.Size.Width / 2 - 50, 0);
+            this.mGUI.Controls.Add(label);
 
             /* Buttons */
             TextStyle style = new TextStyle();
@@ -40,7 +48,7 @@ namespace Game.GUICreator
             style.Font = this.mMiyagiMgr.Fonts["Small_BlueHighway"];
             Size actualButtonSize = new Size(150, 60);
             int space = 30;
-            Point originalpos = panel.Location + new Point(450, 120);
+            Point originalpos = panel.Location + new Point(350, 120);
 
             this.mButtons = new Dictionary<ButtonName, Button>();
             for (int i = 0; i < Enum.GetValues(typeof(ButtonName)).Length; i++)
@@ -63,27 +71,9 @@ namespace Game.GUICreator
             this.mBackButton.Size = actualButtonSize;
             this.mBackButton.Text = "BACK";
             this.mBackButton.TextStyle = style;
-            this.mBackButton.Location = panel.Location + new Point(panel.Size.Width /10, (panel.Size.Height /10) *9);
+            this.mBackButton.Location = panel.Location + new Point(panel.Size.Width / 10, panel.Size.Height / 10 * 8 + 30);
             this.mBackButton.Skin = this.mMiyagiMgr.Skins["Button"];
             this.mGUI.Controls.Add(this.mBackButton);
-
-            this.mLoadButton = new Button();
-            this.mLoadButton.Size = actualButtonSize;
-            this.mLoadButton.Text = "LOAD";
-            this.mLoadButton.TextStyle = style;
-            this.mLoadButton.Location = panel.Location + new Point((panel.Size.Width / 10) * 2 + 50, (panel.Size.Height / 10) * 7 + 20);
-            this.mLoadButton.Skin = this.mMiyagiMgr.Skins["Button"];
-            this.mGUI.Controls.Add(this.mLoadButton);
-
-            
-            /* Text */
-            Label label = new Label();
-            label.Text = "Options";
-            label.Size = new Size(panel.Size.Width, 60);
-            label.AutoSize = true;
-            label.AutoSizeMode = Miyagi.UI.AutoSizeMode.GrowAndShrink;
-            label.Location = panel.Location + new Point(panel.Size.Width / 2 - 50, 0);
-            this.mGUI.Controls.Add(label);
 
             Label[] labels = new Label[4];
             for (int i = 0; i < labels.Length; i++)
@@ -93,10 +83,9 @@ namespace Game.GUICreator
                 labels[i].Size = new Size(panel.Size.Width / 2, 60);
                 labels[i].AutoSize = true;
                 labels[i].AutoSizeMode = Miyagi.UI.AutoSizeMode.GrowAndShrink;
-                labels[i].Location = this.mButtons[(ButtonName)i].Location + new Point(-250 , 10);
+                labels[i].Location = this.mButtons[(ButtonName)i].Location + new Point(-250, 10);
                 this.mGUI.Controls.Add(labels[i]);
             }
-
         }
 
         /*protected override void AfterResize()
@@ -112,11 +101,6 @@ namespace Game.GUICreator
         public void SetListenerBack(EventHandler<MouseButtonEventArgs> del)
         {
             this.mBackButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(del);
-        }
-
-        public void SetListenerLoad(EventHandler<MouseButtonEventArgs> del)
-        {
-            this.mLoadButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(del);
         }
     }
 }

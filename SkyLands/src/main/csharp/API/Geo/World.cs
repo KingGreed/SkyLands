@@ -224,11 +224,11 @@ namespace API.Geo
 	     */
 	    void save();
 
-        void onCreation(Vector3 absCoord, Vector3 island);
-        void onDeletion(Vector3 absCoord, Vector3 island);
+        void onCreation(Vector3 relCoord, Vector3 island);
+        void onDeletion(Vector3 relCoord, Vector3 island);
 
-        void onRightClick(Vector3 absCoord, Vector3 island);
-        void onLeftClick(Vector3 absCoord, Vector3 island);
+        void onRightClick(Vector3 relCoord, Vector3 island);
+        void onLeftClick(Vector3 relCoord, Vector3 island);
 
         void onBlockEnter(Vector3 blockCoord, Vector3 island, Entity e);
         void onBlockLeave(Vector3 blockCoord, Vector3 island, Entity e);

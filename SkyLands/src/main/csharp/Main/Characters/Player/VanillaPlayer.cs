@@ -5,6 +5,7 @@ using Mogre;
 using Game.World;
 using Game.Animation;
 using Game.Shoot;
+using Game.GUICreator;
 
 using API.Geo.Cuboid;
 using API.Generic;
@@ -26,6 +27,7 @@ namespace Game.CharacSystem
             public Emote(MOIS.KeyCode key, Sinbad.AnimName anim) { this.mKey = key; this.mAnim = anim; }
         }
 
+        public static float DEFAULT_PLAYER_LIFE = 340;
         private static float YAW_SENSIVITY = 0.4f;
         private static float PITCH_SENSIVITY = 0.15f;
 
@@ -36,8 +38,9 @@ namespace Game.CharacSystem
         private float            mPitchCamValue;
         private bool             mIsFirstView;
         private bool             mIsDebugMode;
-        private MainPlayerCamera mCam;
         private FireCube         mFireCube;
+        private MainPlayerCamera mCam;
+        private HUD              mHud;
 
         public MoisManager Input         { get { return this.mInput; } }
         public float       YawCamValue   { get { return this.mYawCamValue; } }
@@ -45,6 +48,7 @@ namespace Game.CharacSystem
         public bool        IsFirstView   { get { return this.mIsFirstView; } }
         public Camera      Camera        { get { return this.mCam.Camera; } }
         public Degree      Pitch         { get { return this.mCam.Pitch; } }
+        public HUD         HUD           { get { return this.mHud; } }
         public bool IsDebugMode
         {
             get { return this.mIsDebugMode; }
@@ -85,9 +89,11 @@ namespace Game.CharacSystem
                 this.mEmotesNames[i] = this.mEmotes[i].Anim;
         }
 
-        public void AttachCamera(MainPlayerCamera cam)
+        public void MainPlayer(MainPlayerCamera cam, HUD hud)
         {
             this.mCam = cam;
+            this.mHud = hud;
+            this.mHud.UpdateLife(this.mCharInfo.Life, VanillaPlayer.DEFAULT_PLAYER_LIFE);
         }
 
         public new void Update(float frameTime)
@@ -112,8 +118,26 @@ namespace Game.CharacSystem
                 }
                 else
                 {
-                    if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left)) { this.DelBlock(); }
-                    if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Right)) { this.AddBlock(); }
+                    bool leftClick = this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left);
+                    bool rightClick = this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Right);
+                    if (!this.mIsDebugMode && leftClick || rightClick)
+                    {
+                        Vector3 relBlockPos;
+                        API.Geo.Cuboid.Block b;
+                        CubeFace f;
+                        if (!this.GetBlockPos(out relBlockPos, out b, out f)) { return; }
+                        
+                        if (leftClick)
+                        {
+                            this.mCharacMgr.World.onLeftClick(relBlockPos, this.mCharInfo.IslandLoc);
+                            this.AddBlock();
+                        }
+                        if (rightClick)
+                        {
+                            this.mCharacMgr.World.onRightClick(relBlockPos, this.mCharInfo.IslandLoc);
+                            this.DelBlock();
+                        }
+                    }
                 }
                 if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Middle)) { this.setIsPushedByArcaneLevitator(!this.mMovementInfo.IsPushedByArcaneLevitator); }
 
@@ -152,7 +176,7 @@ namespace Game.CharacSystem
 
         private bool GetBlockPos(out Vector3 relBlockPos, out Block b, out CubeFace face)
         {
-            float distMax = 200;
+            float distMax = 250;
             float distance = 0;
             relBlockPos = Vector3.ZERO;
             b = null;
@@ -230,7 +254,8 @@ namespace Game.CharacSystem
             if (!this.GetBlockPos(out relBlockPos, out b, out f)) { return; }
 
             string material = b.getName();
-            this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).removeFromScene(relBlockPos);  // Delete block
+            this.mCharacMgr.World.onDeletion(relBlockPos, this.mCharInfo.IslandLoc);
+            //this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).removeFromScene(relBlockPos);  // Delete block
 
             if (material != "Air")
                 this.mCharacMgr.StateMgr.WriteOnConsole("Deleted : " + material);
@@ -294,6 +319,7 @@ namespace Game.CharacSystem
                 if (material != "")
                 {
                     island.addBlockToScene(prevRelBlockPos, material);
+                    this.mCharacMgr.World.onCreation(prevRelBlockPos, this.mCharInfo.IslandLoc);
                     //this.mCharacMgr.StateMgr.WriteOnConsole("Face : " + Enum.GetName(typeof(CubeFace), face));
                     this.mCharacMgr.StateMgr.WriteOnConsole("Added : " + material);
                 }

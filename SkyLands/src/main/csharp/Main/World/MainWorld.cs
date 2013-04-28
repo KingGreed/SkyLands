@@ -160,19 +160,19 @@ namespace Game.World
             this.mIslandList[island].getBlock(blockCoord, false).onBlockLeave(e);
         }
 
-        public void onCreation(Vector3 absCoord, Vector3 island) {
-            this.mIslandList[island].getBlock(MainWorld.getRelativeFromAbsolute(absCoord), false).onCreation(absCoord);
+        public void onCreation(Vector3 relCoord, Vector3 island) {
+            this.mIslandList[island].getBlock(relCoord, false).onCreation(relCoord);
         }
-        public void onDeletion(Vector3 absCoord, Vector3 island) {
-            this.mIslandList[island].getBlock(MainWorld.getRelativeFromAbsolute(absCoord), false).onDeletion();
-        }
-
-        public void onRightClick(Vector3 absCoord, Vector3 island) {
-            this.mIslandList[island].getBlock(MainWorld.getRelativeFromAbsolute(absCoord), false).onRightClick();
+        public void onDeletion(Vector3 relCoord, Vector3 island) {
+            this.mIslandList[island].getBlock(relCoord, false).onDeletion();
         }
 
-        public void onLeftClick(Vector3 absCoord, Vector3 island) {
-            this.mIslandList[island].getBlock(MainWorld.getRelativeFromAbsolute(absCoord), false).onLeftClick();
+        public void onRightClick(Vector3 relCoord, Vector3 island) {
+            this.mIslandList[island].getBlock(relCoord, false).onRightClick();
+        }
+
+        public void onLeftClick(Vector3 relCoord, Vector3 island) {
+            this.mIslandList[island].getBlock(relCoord, false).onLeftClick();
         }
 
 

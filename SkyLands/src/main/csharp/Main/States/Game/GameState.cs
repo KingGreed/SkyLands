@@ -6,6 +6,7 @@ using Game.CharacSystem;
 using Game.World;
 using Game.GUICreator;
 using Game.Shoot;
+using Game.RTS;
 
 namespace Game.States
 {
@@ -15,7 +16,8 @@ namespace Game.States
         private CharacMgr     mCharacMgr;
         private BulletManager mBulletMgr;
         private DebugMode     mDebugMode;
-        private GameGUI       mGUI;
+        private HUD           mHUD;
+        private PlayerRTS     mPlayerRTS; 
 
         public GameState(StateManager stateMgr) : base(stateMgr, "Game") { }
 
@@ -24,12 +26,15 @@ namespace Game.States
             this.mStateMgr.IsInGame = true;
             this.mWorld = new MainWorld(this.mStateMgr);
             this.mBulletMgr = new BulletManager(this.mStateMgr.SceneMgr, this.mWorld);
-            this.mCharacMgr = new CharacMgr(this.mStateMgr, this.mWorld, this.mBulletMgr);
+
+            this.mHUD = new HUD(this.mStateMgr);
+            this.mHUD.IGMenu.SetListener(InGameMenuGUI.ButtonName.Menu, this.ClickMenuButton);
+            this.mHUD.IGMenu.SetListener(InGameMenuGUI.ButtonName.Options, this.ClickOptionsButton);
+            this.mHUD.IGMenu.SetListener(InGameMenuGUI.ButtonName.Save, this.ClickSaveButton);
+
+            this.mPlayerRTS = new PlayerRTS(this.mHUD);
+            this.mCharacMgr = new CharacMgr(this.mStateMgr, this.mWorld, this.mBulletMgr, this.mHUD, this.mPlayerRTS);
             this.mBulletMgr.AttachCharacMgr(this.mCharacMgr);
-            this.mGUI = new GameGUI(this.mStateMgr);
-            this.mGUI.IGMenu.SetListener(InGameMenuGUI.ButtonName.Menu, this.ClickMenuButton);
-            this.mGUI.IGMenu.SetListener(InGameMenuGUI.ButtonName.Options, this.ClickOptionsButton);
-            this.mGUI.IGMenu.SetListener(InGameMenuGUI.ButtonName.Save, this.ClickSaveButton);
 
             CharacterInfo playerInfo = new CharacterInfo("Sinbad", true);
             playerInfo.SpawnPoint = this.mWorld.getSpawnPoint();
@@ -40,21 +45,21 @@ namespace Game.States
 
             this.mCharacMgr.AddCharacter(iaInfo);
 
-            this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr, this.mGUI);
+            this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr, this.mHUD);
             this.Show();
             Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop begin");
         }
 
         public override void Hide()
         {
-            this.mGUI.Hide();
-            this.mGUI.IGMenu.ShowSaveMessage(false);
+            this.mHUD.Hide();
+            this.mHUD.IGMenu.ShowSaveMessage(false);
         }
         public override void Show()
         {
             this.mStateMgr.HideGUIs();
             this.mStateMgr.MiyagiMgr.CursorVisibility = false;
-            this.mGUI.Show();
+            this.mHUD.Show();
             this.mDebugMode.IsAllowedToMoveCam = true;
         }
 
@@ -71,7 +76,7 @@ namespace Game.States
         private void ClickSaveButton(object obj, MouseButtonEventArgs arg)
         {
             this.mWorld.getIslandAt(this.mCharacMgr.GetCharacterByListPos().Info.IslandLoc).save();
-            this.mGUI.IGMenu.ShowSaveMessage(true);
+            this.mHUD.IGMenu.ShowSaveMessage(true);
         }
 
         public override void Update(float frameTime)
@@ -83,7 +88,7 @@ namespace Game.States
 
             if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_ESCAPE))
             {
-                this.mDebugMode.IsAllowedToMoveCam = !this.mGUI.SwitchVisibleIGMenu();
+                this.mDebugMode.IsAllowedToMoveCam = !this.mHUD.SwitchVisibleIGMenu();
             }
             else if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_E))
             {
@@ -94,7 +99,7 @@ namespace Game.States
         protected override void Shutdown()
         {
             Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop end");
-            this.mGUI.Dispose();
+            this.mHUD.Dispose();
             this.mDebugMode.Dispose();
             this.mWorld.Shutdown();
         }

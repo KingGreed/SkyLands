@@ -13,7 +13,7 @@ namespace Game
         private CameraMan   mCameraMan;
         private MoisManager mInput;
         private CharacMgr   mCharacMgr;
-        private GameGUI     mGUI;
+        private HUD         mGUI;
 
         public bool IsDebugMode   { get { return this.mIsDebugMode; }   set { this.mIsDebugMode = value; } }
         public bool IsConsoleMode { get { return this.mIsConsoleMode; } set { this.mIsConsoleMode = value; } }
@@ -21,7 +21,7 @@ namespace Game
 
         private SceneNode selected = null;
 
-        public DebugMode(MoisManager input, CharacMgr characMgr, GameGUI gui)
+        public DebugMode(MoisManager input, CharacMgr characMgr, HUD gui)
         {
             this.mInput = input;
             this.mCharacMgr = characMgr;
@@ -61,7 +61,7 @@ namespace Game
             if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F1))
             {
                 this.mIsDebugMode = !this.mIsDebugMode;
-                this.mGUI.SwitchGUIForDebugCam();
+                this.mGUI.SwithVisibility();
 
                 ((VanillaPlayer)this.mCharacMgr.GetCharacterByListPos()).IsDebugMode = this.mIsDebugMode;
 

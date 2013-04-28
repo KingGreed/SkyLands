@@ -56,7 +56,7 @@ namespace Game.Shoot
             {
                 this.mCreated = false;
                 this.mTimeSinceLastBall.Reset();
-                this.mBulletMgr.AddBullet(new Bullet(this.mBulletMgr, this.mNode, this.mPlayer, this.mNode.GetScale().x * 8));
+                this.mBulletMgr.AddBullet(new Bullet(this.mBulletMgr, this.mNode, this.mPlayer, this.mNode.GetScale().x * 10));
             }
         }
 

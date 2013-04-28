@@ -9,6 +9,8 @@ namespace Game.CharacSystem
 {
     class VanillaNonPlayer : VanillaCharacter
     {
+        public static float DEFAULT_NPC_LIFE = 500;
+        
         public VanillaNonPlayer(CharacMgr characMgr, string meshName, CharacterInfo info) : base(characMgr, meshName, info)
         {
             SceneManager sceneMgr = characMgr.SceneMgr;
