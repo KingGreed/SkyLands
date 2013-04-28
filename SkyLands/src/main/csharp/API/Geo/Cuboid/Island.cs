@@ -8,6 +8,8 @@ using API.Geo;
 using API.Generator;
 using API.Generic;
 
+using Game.States;
+
 using Entity   = API.Ent.Entity;
 
 
@@ -131,7 +133,7 @@ namespace API.Geo.Cuboid
             this.mChunkList = null;
             this.multiList = null;
             this.mEntitiesInIsland = null;
-            this.mWorld.getCharMgr().Dispose();
+            ((GameState)this.mWorld.getStateMgr().GameState).getCharacMgr().Dispose();
             this.mWorld.unloadIsland();
         }
 
@@ -185,6 +187,12 @@ namespace API.Geo.Cuboid
                 if (this.blocksAdded[i].position == item) { return true; }
             }
             return false;
+        }
+
+        public void populate() {
+            LogManager.Singleton.DefaultLog.LogMessage("Perlin set");
+            this.mBiome.decorate(this, new Random());
+            LogManager.Singleton.DefaultLog.LogMessage("Island decorated");
         }
     }
 }

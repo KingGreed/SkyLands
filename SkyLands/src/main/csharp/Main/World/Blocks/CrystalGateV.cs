@@ -6,7 +6,7 @@ using System.Drawing;
 using Mogre;
 
 namespace Game.World.Blocks {
-    class CrystalGateV : VanillaBlock, Air, TransparentBlock {
+    class CrystalGateV : CrystalGate, Air, TransparentBlock {
         public CrystalGateV() {
 
             string[] s = new string[]{ "red", "green", "blue" };

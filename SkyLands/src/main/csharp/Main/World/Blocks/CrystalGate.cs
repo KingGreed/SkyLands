@@ -20,23 +20,21 @@ namespace Game.World.Blocks {
         public override void onBlockEnter(API.Ent.Entity e) {
             Island current = e.getIsland();
             API.Geo.World w = current.mWorld;
-            Vector3 position = current.getPosition();
-            Biome next = new Hills();
+            GameInfo.TypeWorld next = GameInfo.TypeWorld.Hills;
 
-            if(current.getBiome() is Hills)          { next = new Desert();    }
-            else if(current.getBiome() is Desert)    { next = new Mountains(); }
-            else if(current.getBiome() is Mountains) { next = new Plains();    }
+            if(current.getBiome() is Hills)          { next = GameInfo.TypeWorld.Desert;    }
+            else if(current.getBiome() is Desert)    { next = GameInfo.TypeWorld.Mountain;  }
+            else if(current.getBiome() is Mountains) { next = GameInfo.TypeWorld.Plains;    }
 
-            current.unload(true);
-            Island nextIsland = new RandomIsland(w.getAScenNode(), new Vector2(11, 11), next, w);
+            StateManager s = w.getStateMgr();
+            s.RequestStatePop();
 
-            ((GameState)w.getStateMgr().GameState).CreateCharacterMgr();
+            GameInfo g = new GameInfo();
+            g.Type = next;
 
+            s.GameInfo = new GameInfo();
+            s.RequestStatePush(typeof(GameState));
 
-            w.setSafeSpawnPoint();
-            CharacterInfo playerInfo = new CharacterInfo("Sinbad", true);
-            playerInfo.SpawnPoint = w.getSpawnPoint();
-            ((GameState)w.getStateMgr().GameState).getCharacMgr().AddCharacter(playerInfo);
             
         }
     }

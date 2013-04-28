@@ -36,13 +36,12 @@ namespace Game.World
 
         private StateManager  mStateMgr;
         private SkyMgr        mSkyMgr;
-        private CharacterMgr  mCharacMgr;
 
         public MainWorld(StateManager stateMgr)
         {
             this.mAge        = 0;
             this.mSeed       = 42;
-            this.mName = new Guid().ToString();
+            this.mName = Guid.NewGuid().ToString();
 
             this.mStateMgr = stateMgr;
             this.mStateMgr.SceneMgr.AmbientLight = ColourValue.ZERO;
@@ -56,39 +55,27 @@ namespace Game.World
             else if (info.Type == GameInfo.TypeWorld.Hills)      { this.mIslandLoaded = new RandomIsland(node, info.Size, new Hills(), this); }
             else  /*(info.Type == GameInfo.TypeWorld.Mountain)*/ { this.mIslandLoaded = new RandomIsland(node, info.Size, new Mountains(), this); }
 
-            this.mIslandLoaded.display();
-
             this.mSkyMgr = new SkyMgr(this.mStateMgr);
-
-            this.setSafeSpawnPoint();
-
-            /*StaticRectangle.DisplayRectangle(this.mSpawnPoint, 5, 5, 16*CHUNK_SIDE*CUBE_SIDE, node);
-            Vector3 pos = new Vector3((this.mIslandList[new Vector3(0, 0, 0)].getSize().x + 3) * CHUNK_SIDE * CUBE_SIDE, 0, (this.mIslandList[new Vector3(0, 0, 0)].getSize().z + 3) * CHUNK_SIDE * CUBE_SIDE);
-
-            node = this.mStateMgr.SceneManager.RootSceneNode.CreateChildSceneNode(pos);
-
-            island = new RandomIsland(node, new Vector2(13, 13), new Hills(), this);
-            island.display();
-            this.mIslandList.Add(pos, island);
-            */
         }
 
 
         //get
+
+        public void populate() { this.mIslandLoaded.populate(); this.setSafeSpawnPoint(); }
+        public void display()  { this.mIslandLoaded.display(); }
 
         public string  getName()          { return this.mName;       }
         public long    getAge()           { return this.mAge;        }
         public long    getSeed()          { return this.mSeed;       }
         public Vector3 getSpawnPoint()    { return this.mSpawnPoint; }
         public int getHeight()            { return Cst.MaxHeight;    }
-        public CharacterMgr getCharMgr()  { return this.mCharacMgr;  }
         public StateManager getStateMgr() { return this.mStateMgr;   }
 
-        public void addCharacterMgr(CharacterMgr c) { this.mCharacMgr = c; }
 
         public SceneManager getSceneMgr()        { return this.mStateMgr.SceneMgr; }
         public SceneNode getAScenNode()          { return this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO); }
         public Island getIsland()                { return this.mIslandLoaded; }
+        public void setIsland(Island newIsland)  { this.mIslandLoaded = newIsland; }
         
         public int     getSurfaceHeight(int x, int z)                                          { return this.mIslandLoaded.getSurfaceHeight(x, z); }
         public Vector3 getDisplayCoords(Vector3 island, Vector3 relativeLocation)              { return (relativeLocation * Cst.CUBE_SIDE) + island; }

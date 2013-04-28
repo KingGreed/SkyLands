@@ -25,6 +25,7 @@ namespace Game.States
 
         protected override void Startup()
         {
+            this.mStateMgr.GameState = this;
             this.mStateMgr.IsInGame = true;
             this.mWorld = new MainWorld(this.mStateMgr);
             this.mBulletMgr = new BulletManager(this.mStateMgr.SceneMgr, this.mWorld);
@@ -44,7 +45,6 @@ namespace Game.States
 
             CharacterInfo iaInfo = new CharacterInfo("Robot-01", false);
             iaInfo.SpawnPoint = playerInfo.SpawnPoint + new Mogre.Vector3(800, 0, 200);
-
             this.mCharacMgr.AddCharacter(iaInfo);
 
             this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr, this.mHUD);

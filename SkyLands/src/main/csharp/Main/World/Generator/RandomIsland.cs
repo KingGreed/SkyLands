@@ -149,10 +149,6 @@ namespace Game.World.Generator
 				    }
 			    }
             }
-            LogManager.Singleton.DefaultLog.LogMessage("Perlin set");
-            this.mBiome.decorate(this, new Random());
-            LogManager.Singleton.DefaultLog.LogMessage("Island decorated");
-
         }
         //@return -1 if isFalse else : num between 0 and near
         private int isNearSurface(int near, Vector3 loc) {

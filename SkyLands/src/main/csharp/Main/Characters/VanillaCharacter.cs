@@ -159,7 +159,7 @@ namespace Game.CharacSystem
 
             if (!isDead)
             {
-                translation = this.Translate(translation * frameTime);    // Apply the translation
+                this.Translate(translation * frameTime);    // Apply the translation
 
                 if (!this.mMovementInfo.IsJumping && !this.mMovementInfo.IsFalling && !this.mMovementInfo.IsPushedByArcaneLevitator)
                 {
@@ -182,7 +182,7 @@ namespace Game.CharacSystem
             this.mMovementInfo.ClearInfo();
         }
 
-        private Vector3 Translate(Vector3 relTranslation)  // relTranslation is the translation relative to the player. Return the actual relative translation
+        private void Translate(Vector3 relTranslation)  // relTranslation is the translation relative to the player. Return the actual relative translation
         {
             Vector3 actualTranslation = this.mCollisionMgr.ComputeCollision(relTranslation * this.mNode.LocalAxes.Transpose());
 
@@ -199,7 +199,6 @@ namespace Game.CharacSystem
                 this.mPreviousBlockPos = blockPos;
             }
 
-            return actualTranslation * this.mNode.LocalAxes;
         }
 
         public void moveTo(Vector3 destination)

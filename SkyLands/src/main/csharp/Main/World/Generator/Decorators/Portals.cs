@@ -29,14 +29,12 @@ namespace Game.World.Generator.Decorators {
                 exitZ = islandCenter.z - Math.Sin(angle) * radius;
                 if(curr.getSurfaceHeight((int)entranceX, (int)entranceZ) != -1) { break; }
 			}
-            Vector3 entrancePortal = new Vector3((float)entranceX, curr.getSurfaceHeight((int)entranceX, (int)entranceZ), (float)entranceZ),
-                    exitPortal = new Vector3((float)exitX, curr.getSurfaceHeight((int)exitX, (int)exitZ), (float)exitZ);
+            Vector3 entrancePortal = new Vector3((float)entranceX, curr.getSurfaceHeight((int)entranceX, (int)entranceZ), (float)entranceZ);
 
-            this.makePortal(random.Next(1, 3), curr, entrancePortal);
-            this.makePortal(random.Next(1, 3), curr, exitPortal);
+            makePortal(random.Next(1, 3), curr, entrancePortal);
         }
 
-        private void makePortal(int val, Island current, Vector3 position) {
+        public static void makePortal(int val, Island current, Vector3 position) {
             switch(val) {
                 case 1:
                     for(int x = 0; x < 4; x++) {

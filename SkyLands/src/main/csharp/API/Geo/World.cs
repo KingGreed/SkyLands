@@ -41,9 +41,6 @@ namespace API.Geo
 	    int getSurfaceHeight(int x, int z);
 
 
-        void addCharacterMgr(CharacterMgr c);
-        CharacterMgr getCharMgr();
-
 	    /**
 	     * Create a new Entity for initialization
 	     * <p/>
@@ -233,6 +230,12 @@ namespace API.Geo
 	     * World data pertains to world age, world name, and world data maps.
 	     * </p>
 	     */
+
+        void populate();
+        void display();
+
+        void setIsland(Island newIsland);
+
         StateManager getStateMgr();
 
         SceneNode getAScenNode();

@@ -56,7 +56,11 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
                 }
             }
 
-            new RoofBuilder().build(current, loc + Vector3.UNIT_Y * towerHeight, new Vector2(xMax, zMax), rd);
+            if(this.towerNum == 3) {
+                new RoofBuilder().build(current, loc + Vector3.UNIT_Y * towerHeight, new Vector2(xMax, zMax), rd, true);
+            } else {
+                new RoofBuilder().build(current, loc + Vector3.UNIT_Y * towerHeight, new Vector2(xMax, zMax), rd);
+            }
 
             new DarkBeard().makeDarkBeard(current, towerHeight, loc, xMax, zMax);
 
