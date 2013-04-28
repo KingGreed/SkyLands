@@ -16,11 +16,18 @@ namespace API.Generator
 
         public Vector3 findRandomPoint(Island curr, Random rd) {
             int x, y, z;
+
+            int t = 0;
+
             do {
                 x = rd.Next() % (int)(curr.getSize().x * 16);
                 z = rd.Next() % (int)(curr.getSize().z * 16);
                 y = curr.getSurfaceHeight(x, z);
-            } while(y == -1);
+                t++;
+            } while(y == -1 && t <= 10);
+
+
+            if(y == -1) { return Vector3.ZERO; }
 
             return new Vector3(x, y, z);
         }

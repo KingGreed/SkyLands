@@ -23,7 +23,7 @@ namespace Game.World.Generator.Decorators
 
                 byte cactus = VanillaChunk.staticBlock["Cactus"].getId();
 
-                if(!(curr.getBlock((int)pos.x, (int)pos.y, (int)pos.z, true) is Air)) {
+                if((curr.getBlock((int)pos.x, (int)pos.y, (int)pos.z, true) is AirBlock)) {
 
                     curr.setBlockAt((int)pos.x, (int)pos.y, (int)pos.z, cactus, true);
                     curr.setBlockAt((int)pos.x, (int)pos.y + 1, (int)pos.z, cactus, true);

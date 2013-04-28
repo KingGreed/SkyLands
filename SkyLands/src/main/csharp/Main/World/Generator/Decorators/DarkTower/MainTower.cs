@@ -15,6 +15,7 @@ using Mogre;
 namespace Game.World.Generator.Decorators.DarkTowerPopulator {
     class MainTower : Tower {
         public int towerNum;
+        private int towerHeight = 0;
         public const int xMax = 20, zMax = 20;
         List<int> mFloorHeight = new List<int>();
         Orientation mSourceBuilding;
@@ -22,11 +23,9 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
         public MainTower(int num, Orientation sourceBuilding = Orientation.None) { this.towerNum = num; this.mSourceBuilding = sourceBuilding; }
 
         public void build(Island current, Random rd, Vector3 loc) {
-            int towerHeight = rd.Next(60, 88);
+            towerHeight = rd.Next(60, 88);
 
             if(towerNum == 1) { loc = loc + 40 * Vector3.UNIT_Y; }
-
-            List<int> floors = new List<int>();
             
             //body
             for(int x = 0; x < xMax; x++) {
@@ -37,7 +36,6 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
                         } else if((x == 0 || z == 0 || x == xMax - 1 || z == zMax - 1) && y != towerHeight) { //borders
                             current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z + z, "DarkWood", true);
                         }
-                        if(x == 0 && z == 0 && y % 9 == 0) { floors.Add(y); }
                         if(y == 0 || y == towerHeight -1) {
                             if(x == 0 || z == 0 || x == xMax - 1 || z == zMax - 1) { //borders
                                 current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z + z, "TowerWoodBlock", true);
@@ -51,15 +49,12 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
 
             Orientation orient = Orientation.None;
 
-
-            for(int j = 0; j < floors.Count; j++) {
-                if(j == floors.Count - 1) {
-                    orient = this.MakeFloorAt(floors[j], current, orient, loc, false);
-                } else {
-                    orient = this.MakeFloorAt(floors[j], current, orient, loc);
+            orient = this.MakeFloorAt(towerHeight - 7, current, orient, loc, false);
+            for(int j = towerHeight - 14; j > 0; j--) {
+                if(j % 9 == 0) {
+                    orient = this.MakeFloorAt(j, current, orient, loc);
                 }
             }
-            
 
             new RoofBuilder().build(current, loc + Vector3.UNIT_Y * towerHeight, new Vector2(xMax, zMax), rd);
 
@@ -113,6 +108,8 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
                     current.setBlockAt((int)loc.x + x, (int)loc.y + y, (int)loc.z + z, "DarkWood", true);
                 }
             }
+
+            
             Orientation r;
             Vector3 exit;
 
@@ -121,7 +118,7 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
                 exit = this.getFloorEntrance((Orientation)(-(int)entrance), y, loc);
 
                 current.setBlockAt((int)entranceFloor.x, (int)entranceFloor.y, (int)entranceFloor.z, "Air", true);
-                if(makeExit) { current.setBlockAt((int)exit.x, (int)exit.y, (int)exit.z, "Levitator", true); }
+                if(y != towerHeight - 7 && makeExit) { current.setBlockAt((int)exit.x, (int)exit.y, (int)exit.z, "Levitator", true); }
                 r = (Orientation)(-(int)entrance);
             } else {
                 Random rd = new Random();

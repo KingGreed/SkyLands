@@ -32,8 +32,8 @@ namespace Game.World.Generator.Decorators {
             Vector3 entrancePortal = new Vector3((float)entranceX, curr.getSurfaceHeight((int)entranceX, (int)entranceZ), (float)entranceZ),
                     exitPortal = new Vector3((float)exitX, curr.getSurfaceHeight((int)exitX, (int)exitZ), (float)exitZ);
 
-            this.makePortal(1, curr, entrancePortal);
-            this.makePortal(1, curr, exitPortal);
+            this.makePortal(random.Next(1, 3), curr, entrancePortal);
+            this.makePortal(random.Next(1, 3), curr, exitPortal);
         }
 
         private void makePortal(int val, Island current, Vector3 position) {
@@ -47,6 +47,15 @@ namespace Game.World.Generator.Decorators {
                     }
                 break;
                 case 2:
+                for(int x = 0; x < 4; x++) {
+                    for(int z = 0; z < 4; z++) {
+                        if(x == 0 || z == 0 || x == 3 || z == 3) { current.setBlockAt((int)position.x + x, (int)position.y, (int)position.z + z, "Crystal", true); }
+                        else {
+                            current.setBlockAt((int)position.x + x, (int)position.y, (int)position.z + z, "CrystalGate H", true);
+                        }
+                    }
+                }
+
                 break;
 
             }

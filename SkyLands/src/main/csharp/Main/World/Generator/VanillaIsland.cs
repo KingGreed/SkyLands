@@ -100,7 +100,7 @@ namespace Game.World.Generator
 
             if (curr is AirBlock) { return false; }
 
-            if(curr is CrystalGate) { return this.setVisibleFacesForPortals(blockCoord, curr); }
+            if(curr is TransparentBlock) { return this.setVisibleFacesForPortals(blockCoord, curr); }
 
             bool hasVisiblefaces = false;
             Dictionary<BlockFace, Vector3> coordToCheck = new Dictionary<BlockFace,Vector3>();
@@ -139,7 +139,7 @@ namespace Game.World.Generator
 
 
             foreach(KeyValuePair<BlockFace, Vector3> keyVal in coordToCheck) {
-                if(this.getBlock(keyVal.Value, false) is Air && !(this.getBlock(keyVal.Value, false) is CrystalGate)) {
+                if(this.getBlock(keyVal.Value, false) is Air && !(this.getBlock(keyVal.Value, false) is TransparentBlock)) {
                     this.setVisibleFaceAt(blockCoord, keyVal.Key, true); hasVisiblefaces = true;
                 }
             }

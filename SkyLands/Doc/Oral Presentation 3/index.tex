@@ -107,48 +107,119 @@
 			
 			To put it in a nutshell, we worked very hard for this oral presentation and have some amazing results which were not planned in the book of specifications. 
   		\chapter{\textcolor{blue}{PathFinding}}
+Pathfinding refers to the plotting, by a computer application, of the shortest route between two points. At its core, a pathfinding algorithm searches a graph by starting at one vertex and exploring adjacent nodes until the destination node is reached. Although graph searching methods such as a beadth-first search would find a route if given enough time, other methods, which explore the graph, would tend to reach the destination sooner. \\
+It is useful when integrating an IA. With it, a character will dodge holes and dead ends. An example use of the pathfinding : if an enemy see the player, the algorithm will find the shortest path the enemy can take to come and attack the player.
 			\section{A star 2d}
+				The A* algorithm combines features of uniform-cost search and pure heuristic search to efficiently compute optimal solutions. A* algorithm is a best-first search algorithm in which the cost associated with a node is $ f (n) = g(n) + h(n) $ , where$  g(n) $  is the cost of the path from the initial state to node $ n $ and $ h(n) $ is the heuristic estimate or the cost or a path from node $ n $ to a goal. Thus, $ f(n) $ estimates the lowest total cost of any solution path going through node $ n $. At each point a node with lowest $ f $ value is chosen for expansion. Ties among nodes of equal $ f $ value should be broken in favor of nodes with lower $ h $ values. The algorithm terminates when a goal is chosen for expansion.
+
+A* algorithm guides an optimal path to a goal if the heuristic function $ h(n) $ is admissible, meaning it never overestimates actual cost.
+
+For Puzzle, A* algorithm, using these evaluation functions, can find optimal solutions to these problems. In addition, A* makes the most efficient use of the given heuristic function in the following sense: among all shortest-path algorithms using the given heuristic function $ h(n) $. A* algorithm expands the fewest number of nodes.
+
+The main drawback of A* algorithm and indeed of any best-first search is its memory requirement. Since at least the entire open list must be saved, A* algorithm is severely space-limited in practice, and is no more practical than best-first search algorithm on current machines. \\
 			\section{A star 3d}
+				Implementing the third dimensions for the A star algorithm was easier then expected. The A star in two dimensions uses an open list where it stores all the possible nodes which can be part of the best path. To find the best path, the algorithm look at all the adjacent nodes of each nodes in it's open list.\\
+
+				To implement the third dimensions we only had to change the function which returns the adjacent nodes which only send the adjacent nodes on the same Y level we added two more levels and had to make sure the algorithm would not return a  path in the air.
 				
+
+				\begin{center}
+					\includegraphics{images/Astar.png}
+				\end{center}
+
 		\chapter{\textcolor{blue}{Entities and actions}}
 			\section{Robots}
-				Since we needed enemies for our game, we decided to design it in a futurist style to match our game's story. We decided to go for the basic enemy of every science fiction story or game and created a robot mesh on Blender. The mesh model has simple shapes since our game itself is supposed to be "Minecraft-like" therefore cubic-shaped. As for the texture, they were implemented in-game and are also very simple black and white patterns.\\
+				Since we needed enemies for our game, we decided to design it in a futurist style to match our game's story. We decided to go for the basic enemy of every science fiction story or game and created a robot mesh on Blender. The mesh model has simple shapes since our game itself is supposed to be ``Minecraft-like'' therefore cubic-shaped. As for the texture, they were implemented in-game and are also very simple black and white patterns.\\
 
-Regarding the animations, we did them very simple too; there are only five different animations for death, turning around, shooting, slump and walking. Romain implemented the mesh textures and animations in the game afterwards.\\
+				Regarding the animations, we did them very simple too; there are only five different animations :
+				\begin{itemize}
+					\item death \& shooting
+					\item turning around
+					\item jump \& walking
+				\end{itemize}
 
-However, we faced many problems with trying to export .blend 3D model to .mesh and tried with the 3DS-max software too. Implementing the animations wasn't a simple task either since the tool are too "old" and not always compatible with the current software we are using.
+				However, we faced many problems when trying to export .blend (3D model from blender) to .mesh (Ogre's 3d format). We even tried using 3DS-max which is another 3d modeling software.Implementing the animations wasn't a simple task either since the tool are too ``old'' and not always compatible with the current software we are using. We struggled to export them and still have some bugs. One of the main issue we had is that every annimations were merged in a single one.
+				\begin{center}
+					\includegraphics[width = 15cm, height = 4cm]{images/robotMesh2.png}
+				\end{center}
+
+			
 			\section{Shooting}
 				We have two different shoot system for the AI and the player. The one for the AI is really simple whereas we wanted something more enjoyable for the player.
+
+
 				\subsection{For the AI}
-					At first for the AI, it will check every few seconds if it can shoot at an enemy. It simply cast a ray from its head to the adverse entity and then check if there are obstacles in between. We didn't want them to test this operation every frame for two reasons:\\
-On the one hand to save some precious fps, as you can guess when there will be many AI on the field the fps will decrease a lot so we're already thinking of this matter.\\
-On the other hand, this makes our AI looks more humans. Obviously we, poor little creatures, can't process all the information on the screen each frame. So we try to be fair, we don't want the AI to be invincible.
+					When an entity moves and change it's block position, it will get each units in a radius of 16 blocks and tell them it's here, the AI will then move and attack if there is a player in it's reach. Shooting an ennemy is really simple, you just have to create a bullet in front of the entity, give it a good direction using quaternions (a 4 dimension vector which helps representing rotations in 3d) and translate it along the x, y and z axis.\\
 
-Once the AI know that someone is at range, it will simply create a mesh representing the bullet. This bullet will cast a new ray every few milliseconds to check if it is hitting something.
+					We then need to check the collisions, the basic idea is to cast a ray from the bullet's head to the adverse entity and then check if there are obstacles in between. However, we aren't doing this at each fram for two reasons:\\
+					\begin{itemize}
+						\item On the one hand to save some precious fps, as you can guess when there will be many AI on the field the fps will decrease a lot so we're already thinking of this matter.
+						\item On the other hand, this makes our AI looks more humans. Obviously we, poor little creatures, can't process all the information on the screen each frame. So we try to be fair, we don't want the AI to be invincible.
+					\end{itemize}
+				\begin{center}
+					\includegraphics[width = 15cm]{images/robotShoot.png}
+				\end{center}
+				
 				\subsection{For the player}
-					That's a bit different for the player. There is no more guns but fireballs. The player can hold the left mouse button down to create a fireball in front of him. It will grow while the button is pressed and will be thrown if the max size is reached or if the button is released.\\
-Then this is quite the same than if this is a bullet. Of course the bigger the fireball is the more damage it will inflict.\\
+				\begin{textblock}{0.508}(0.120, 0.75)
+					The player's shooting system is very different from the bullets fired by the AI. He doesn't use guns but fireballs, waterBalls or even magicBalls. \\
 
-Even thought this is a simple idea, we think it improves the gameplay. In a way it let more options to the player to choose how to kill the enemies.
+					To fire them the player must hold the left mouse button down to create a fireball in front of him.
+ 				It will grow while the button is pressed and will be thrown if the max size is reached or if the button is released.\\
+				\end{textblock}
+
+				\begin{textblock}{0.628}(0.630, 0.75)
+					\begin{figure}
+						\includegraphics[height = 5cm]{images/Fireball.png}
+					\end{figure}
+				\end{textblock}
+\newpage
+
+					We implemented different robot types and thus set their resistance to the different fireballs. Thus the waterBalls have more damage on fiery robots wherease fireBalls do normal damages against them.\\
+
+					As for the collision, the algorith used to test when an entity is hit is the same as the algorith used for the bullets Of course the bigger the fireball the more damage it will inflict.\\
+
+					Even thought this is a simple idea, we think it improves the gameplay. In a way it let more options to the player to choose how to kill the enemies.
+
+					\begin{figure}[h]
+								\includegraphics[width=15cm]{images/DarkRobot.png}
+								\begin{center}\it A dark robot\end{center}
+							\end{figure}
+		
 		\chapter{\textcolor{blue}{The global AI}}
-			There exist another kind of AI than the one for the entities. This is a global AI which is supposed to build buildings and give orders to its units. This is the actual enemy of the player.\\
+				To control the the ennemies such as the robot, we implemented what we called a ``global AI'' the basic idea is to thread only one AI which will then compute how much unit it should spawn, where it should move it's units how much ressources it needs to collect.\\
 
-Basically this AI want to destroy the base of the player and to weaken him. But here comes the issue of the difficulty. How to oppose to the player an adequate resistance ? Well the idea we found is simple. This AI bases its choice on the player's actions. 
+				The IA implemented is very simple and plays according to the players moves. Actually it cheats because it has access to the players stats such as how much units or how much ressources he has. Also, when the AI detects one of the player's unit within 16 blocks of one of it's units, the AI sends units to check if the player is trying to attack it and, if this happens he usually tries to send his whole army there.\\
+
+				Of course this is not the AI used for the dark tower because in the dark tower, there is no base and thus the unit cannot be respawned nor can they gather ressources. Therefore the AI manage the units floors by floors, when they detect a player, they gather and attack him.
+
+				\begin{center}
+					\includegraphics[width=15cm, height = 10cm]{images/hal.jpg}
+				\end{center}
+
 		\chapter{\textcolor{blue}{Saving and Loading the game}}
 			\section{Algorithm}
-				The save and load algorithm of the terrain weren't modified since the last oral presentaion. As you know each different block possess an id (for example the id of the grass blocks is  1) which is stored in char whose weight is only one bite. Thus we can store the terrain in binary files fairly easily using the C\#'s native functions.\\
-					
-					We basically use a StreamWritter and a streamReader to save and load islands. However for this oral presentation, new things were added, such as robots and it did not suffice to only save the terrain, we had to save the entities.
-					
-					This time we choosed the easy way, registering the id of an entity and its position next to one another. Here is an explanatory diagram :\\						
+				Saving and loading the terrain were mostly done at the last oral presentaion. However since we implemented other entities, we had to save and load them as well.
+				As you know each different block possess an id (for example the id of the grass blocks is  1) which is stored in char whose weight is only one bite. Therefore we can store the terrain pretty easily, the 3 first bites beeing the terrain's size and the others beeing the blocks id stored in the x, y, z order.
+
+				This time, for the entities we choosed the easy way, registering the id of an entity and its position next to one another. Just like this:\\						
 							\begin{center}
-								\includegraphics{images/Save.png}
+								\includegraphics[width = 15cm]{images/Save.png}
 							\end{center}
-							
+				
+				One of interresting thing with this method is the fact that the id which is an byte stores more than one information. Because a byte can store a number up to 255, this means it is composed of 8 digits (0000 0000), using a system of mask on the binary value we can actually store 2 information.
+
+				For example : 
+				\begin{lstlisting}
+					byte a = 0xF3; //1111 0011 in hexadecimal
+					Console.WriteLine(a & 0xF);//Outputs 0011
+					Console.WriteLine((a >> 4) & 0xF);//Outputs 1111
+				\end{lstlisting}
+
 			\section{A new menu}
 					With the save and load algorith, we felt that our old menu wasn't adapted to the mindset we had for this game. We didn't want the player to be able to choose what Island he could go on or what size! This menu was intended for debug purposes not for ou final product.\\
 
-					So, in order to adapt the old menu to the mindset we thought of, we redesigned the buttons as well as the entire menu. Basically, we wanted a more futuristic menuand more dynamic.
+					So, in order to adapt the old menu to the mindset we thought of and to add an adventure mode to the game, we decided that the player would only be able to create one world and choose to either continue the last world he created either create a new one, removing the last one he made.
 
 			\section{Integration to the menu}
 					As I've already said, the menu we had was intended for debug purposes only. Our idea for this menu was to let him create only one world and then to let him choose between 
@@ -162,21 +233,100 @@ Basically this AI want to destroy the base of the player and to weaken him. But 
 				\begin{center}
 					\includegraphics[width=15cm]{images/Structures.png}
 				\end{center}
+				\newpage
 
 			\section{Portals}
-			\section{Buildings}
-			\section{Generating the base and placing it on the map}
+				One of our goal for this oral presentation was to establish a link between the islands to ensure the continuity of the game. Therefore we created the portals, they one island to another.\\
+
+				Of course they are structures and are derived from this class and were generated procedurally. At the moment, the game has two types of portals a ``door'' and a ``pool'' and they can have a red, green or blue texture : 
+				\begin{center}
+					\includegraphics[width=7.5cm]{images/Portal1.png}
+					\includegraphics[width=7.5cm]{images/Portal2.png}
+				\end{center}
+
+				When the player performs an action such as moving from one block to another, right clicking on a block, left clicking, creating or even destroying a block he triggers an event. In our case, we use the onBlockEnter event which is in the Block class and overrided by some classes. Basically, when an entity enters the portal, it is teleported to island which it's connect.
+			\section{Buildings}  
+				Unlike the previous oral presentation this time we have multiple buildings. Some were generated as a ``bunker'' for the portals just like the dark tower or the pyramid and others were designed to perform specific task such as the magician's tower or the infantry portals. Until now we generated the following structures :
+
+				As you already know, the structrures are derived from the abstract base class strcture and are generated procedurally. Creating them was a particullarly boring part of the creation of this video game but we managed to have some cool results.\\
+
+				\begin{center}
+					\includegraphics[width=5cm]{images/structure.png}
+					\includegraphics[width=5cm]{images/structure2.png}
+					\includegraphics[width=5cm]{images/structure3.png}
+				\end{center}
+
 
 		\chapter{\textcolor{blue}{The dark tower}}
-			\section{The main building}
-			\section{The floors}
+			\section{Introduction to the dark tower}
+				The dark tower is the biggest structure we made, it is composed of four main towers floating in the sky and is part of the plain biome. This structure is huge because it size can reach 362 blocks on the y axis and has almost 41 floors
+
+
+			\section{The main buildings}
+				The tower consists in four main buildings whose height vary between 60 and 88 blocks it has about seven floors which can be climbed using the arcane levitator which as it names implies allows you to levitate. Basically if you are on the levitator, it will lift you up to the next floor.
+
+				\begin{center}
+					\includegraphics[width=7.5cm]{images/DT/Main.png}
+					\includegraphics[width=7.5cm]{images/DT/floor.png}
+				\end{center}
+			finally on the first and last floor of the main tower, bridges connect the main towers to medium towers or another main tower.
+
 			\section{Bridges}
+				Bridges are generated only by the main towers and allows the player to continue climbing the dark tower. One difficulty we encountered while ``building'' the tower was the orientation. Indeed, the algorith to build a bridge facing north is not the same as the algorithm to build a bridge facing west. We struggled to find a way to ``unify'' those algorithm but we finally choose the simplest solution using a switch. Here is the result :
+				\begin{center}
+					\includegraphics[width=7.5cm]{images/DT/bridge1.png}
+					\includegraphics[width=7.5cm]{images/DT/bridge2.png}
+				\end{center}
+
 			\section{Lower towers}
+				As I've already said before the main tower are linked by bridges to lower towers their height vary between 15 and 30 blocks and in most of them, the player will find prisonners unit guarded by ennemies and when they are defeated (the ennemies), the prisonners joins the player which can then command them.
+				\begin{center}
+					\includegraphics[width=7.5cm]{images/DT/mediumTowers.png}
+					\includegraphics[width=7.5cm]{images/DT/mediumTowers.png} %TODO : Robots
+				\end{center}
+
+			\section{Roofs}
+				Among the multiple things which make the tower, one of the most beautiful thing are the structures on the roof, we made 3 of them :
+				\begin{center}
+					\includegraphics[width=5cm]{images/DT/roof1.png}
+					\includegraphics[width=5cm]{images/DT/roof2.png}
+					\includegraphics[width=5cm]{images/DT/roof3.png}
+				\end{center}
+
+
+			\section{DarkBeard}
+				Finally, we had to deal with the bottom of the towers. At the beginning we thought that it would stay flat but, we managed to find a function that made the bottom look amazing. We called it the dark beard.
+
+				\begin{center}
+					\includegraphics[width=7.5cm]{images/Abs.png}
+					\includegraphics[width=7.5cm]{images/DT/DarkBeard.png} %TODO : Robots
+				\end{center}
+
 		\chapter{\textcolor{blue}{Graphics}}
 			\section{Shadows}
-			\section{Real shadows}
-			\section{Creating the meshes}
-		
+				As you might have seen, our game did not have any shadows, thus we decided to implement some. After a long period of testing, we discovered that integrating real shadows in the game would cause an enormous drop of FPS which ended up crashing the game, no matter what we did.\\
+
+				Therefore we settled for an intermediate solution, shadows are beeing calculated on the mesh only once, at the begining thus giving a better result than a game without shadows.
+
+				\begin{center}
+					\includegraphics[width=8cm]{images/shadows.png} %TODO : Robots
+				\end{center}
+					\begin{textblock}{0.575}(0.110, 0.785)
+					As you can see here, some faces are darker than others, and one is unexpectedly bright, the ``lower'' face this is because the planet is only composed of skylands and thus, the light also comes from under the terrain.\\
+
+					To set the shadows, we had to set normals and, at first we were confused, because we were told to use the cross product to compute the normal's value. Then after thinking a bit about it, we discovered that the only normals we needed were simple and didn't need to be calculated, we could simply add them to the code....
+				\end{textblock}
+
+				\begin{textblock}{0.628}(0.690, 0.75)
+					\begin{figure}
+					\includegraphics[width=5cm]{images/normal.png}
+					\end{figure}
+				\end{textblock}
+\newpage
+			\section{Having fun with Sinbad's textures}
+
+				
+
 		\chapter{\textcolor{blue}{Conclusion}}
 			Unfortunately you have reached the end of this marvelous report! As you've seen throughout this report, we have worked very hard for this oral presentation. The result talk for themselves and the goal fixed were reached.\\
 			

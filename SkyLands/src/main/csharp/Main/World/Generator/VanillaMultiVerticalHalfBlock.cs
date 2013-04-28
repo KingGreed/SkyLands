@@ -30,7 +30,7 @@ namespace Game.World.Generator
         public static Vector3[] blockPointCoords = 
             new Vector3[] {
                 new Vector3(0, CUBE_SIDE, 0),             new Vector3(0, 0, 0),                              new Vector3(CUBE_SIDE, 0, 0),                      new Vector3(CUBE_SIDE, CUBE_SIDE, 0),
-                new Vector3(0, 0, -CUBE_SIDE / 2),        new Vector3(0, CUBE_SIDE, -CUBE_SIDE / 2),             new Vector3(CUBE_SIDE, CUBE_SIDE, -CUBE_SIDE / 2), new Vector3(CUBE_SIDE, 0, -CUBE_SIDE / 2),
+                new Vector3(0, 0, -CUBE_SIDE / 2),        new Vector3(0, CUBE_SIDE, -CUBE_SIDE / 2),         new Vector3(CUBE_SIDE, CUBE_SIDE, -CUBE_SIDE / 2), new Vector3(CUBE_SIDE, 0, -CUBE_SIDE / 2),
                 new Vector3(CUBE_SIDE, CUBE_SIDE, 0),     new Vector3(CUBE_SIDE, CUBE_SIDE, -CUBE_SIDE / 2), new Vector3(0, CUBE_SIDE, -CUBE_SIDE / 2),         new Vector3(0, CUBE_SIDE, 0),
                 new Vector3(0, 0, 0),                     new Vector3(0, 0, -CUBE_SIDE / 2),                 new Vector3(CUBE_SIDE, 0, -CUBE_SIDE / 2),         new Vector3(CUBE_SIDE, 0, 0),
                 new Vector3(0, 0, 0),                     new Vector3(0, CUBE_SIDE, 0),                      new Vector3(0, CUBE_SIDE, -CUBE_SIDE / 2),         new Vector3(0, 0, -CUBE_SIDE / 2),
