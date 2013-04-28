@@ -44,6 +44,7 @@ namespace Game.World
             this.mEntityList = new List<Entity>();
             this.mAge        = 0;
             this.mSeed       = 42;
+            this.mName = new Guid().ToString();
 
             this.mStateMgr = stateMgr;
             this.mStateMgr.SceneMgr.AmbientLight = ColourValue.ZERO;

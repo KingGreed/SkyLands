@@ -18,7 +18,6 @@ namespace Game.GUICreator
         public enum ButtonName { HighQuality, FullScreen, VSync, Music}
         private Dictionary<ButtonName, Button> mButtons;
         private Button mBackButton;
-        private Button mSaveButton;
         private Button mLoadButton;
 
         public Dictionary<ButtonName, Button> Buttons { get { return this.mButtons; } }
@@ -68,14 +67,6 @@ namespace Game.GUICreator
             this.mBackButton.Skin = this.mMiyagiMgr.Skins["Button"];
             this.mGUI.Controls.Add(this.mBackButton);
 
-            this.mSaveButton = new Button();
-            this.mSaveButton.Size = actualButtonSize;
-            this.mSaveButton.Text = "SAVE";
-            this.mSaveButton.TextStyle = style;
-            this.mSaveButton.Location = panel.Location + new Point((panel.Size.Width / 10) * 5 + 50 , (panel.Size.Height / 10) * 7 + 20);
-            this.mSaveButton.Skin = this.mMiyagiMgr.Skins["Button"];
-            this.mGUI.Controls.Add(this.mSaveButton);
-
             this.mLoadButton = new Button();
             this.mLoadButton.Size = actualButtonSize;
             this.mLoadButton.Text = "LOAD";
@@ -121,11 +112,6 @@ namespace Game.GUICreator
         public void SetListenerBack(EventHandler<MouseButtonEventArgs> del)
         {
             this.mBackButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(del);
-        }
-
-        public void SetListenerSave(EventHandler<MouseButtonEventArgs> del)
-        {
-            this.mSaveButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(del);
         }
 
         public void SetListenerLoad(EventHandler<MouseButtonEventArgs> del)

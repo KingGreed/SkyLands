@@ -282,9 +282,11 @@ namespace Game.World.Generator
 
 
         public override void save() {
-            var fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Roaming/SkyLands/",
-                this.mWorld.getName(), "Island-", this.mNode.Position.x.ToString(), "-",
-                this.mNode.Position.y.ToString(), "-", this.mNode.Position.z.ToString());
+            var fileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" +
+                this.mWorld.getName() + "Island-" + this.mNode.Position.x.ToString() + "-" +
+                this.mNode.Position.y.ToString() + "-" + this.mNode.Position.z.ToString() + ".sav";
+
+            new FileInfo(fileName).Directory.Create();
 
             Stream writer;
 
@@ -307,9 +309,9 @@ namespace Game.World.Generator
         }
 
         public override void load() {
-            var fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Roaming/SkyLands/",
-                this.mWorld.getName(), "Island-", this.mNode.Position.x.ToString(), "-",
-                this.mNode.Position.y.ToString(), "-", this.mNode.Position.z.ToString());
+            var fileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" +
+                this.mWorld.getName() + "Island-" + this.mNode.Position.x.ToString() + "-" +
+                this.mNode.Position.y.ToString() + "-" + this.mNode.Position.z.ToString() + ".sav";
 
             FileStream reader;
             

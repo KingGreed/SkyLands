@@ -20,6 +20,7 @@ namespace Game.States
         private int          mPopRequested;
         private GameInfo     mGameInfo;
         private bool         mWaitOneFrame;
+        private bool         mIsInGame;
 
         public Root         Root        { get { return this.mRoot; } }
         public SceneManager SceneMgr    { get { return this.mSceneMgr; } }
@@ -31,6 +32,7 @@ namespace Game.States
         public GameInfo     GameInfo    { get { return this.mGameInfo; } set { this.mGameInfo = value; } }
         public int          NumberState { get { return this.mStateStack.Count; } }
         public MyConsole    MyConsole   { get { return this.mConsole; } }
+        public bool         IsInGame    { get { return this.mIsInGame; } set { this.mIsInGame = value; } }
 
         protected override void Create()
         {
@@ -91,8 +93,6 @@ namespace Game.States
                     LogManager.Singleton.DefaultLog.LogMessage("ERROR : Failed to start up state : " + newState.ToString());
                     return false;
                 }
-
-                //if (newState.Name == "Option") { (newState as OptionsState).AttachWorld(); }
 
                 if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Hide(); }
                     this.mStateStack.Push(newState);

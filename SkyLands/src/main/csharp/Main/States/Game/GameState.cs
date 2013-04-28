@@ -17,24 +17,23 @@ namespace Game.States
         private DebugMode     mDebugMode;
         private GameGUI       mGUI;
 
-        public MainWorld World { get { return this.mWorld; } }
-
         public GameState(StateManager stateMgr) : base(stateMgr, "Game") { }
 
         protected override void Startup()
         {
+            this.mStateMgr.IsInGame = true;
             this.mWorld = new MainWorld(this.mStateMgr);
             this.mBulletMgr = new BulletManager(this.mStateMgr.SceneMgr, this.mWorld);
             this.mCharacMgr = new CharacMgr(this.mStateMgr, this.mWorld, this.mBulletMgr);
             this.mBulletMgr.AttachCharacMgr(this.mCharacMgr);
             this.mGUI = new GameGUI(this.mStateMgr);
-            this.mGUI.IGMenu.SetListenerMenu(this.ClickMenuButton);
-            this.mGUI.IGMenu.SetListenerOption(this.ClickOptionButton);
+            this.mGUI.IGMenu.SetListener(InGameMenuGUI.ButtonName.Menu, this.ClickMenuButton);
+            this.mGUI.IGMenu.SetListener(InGameMenuGUI.ButtonName.Options, this.ClickOptionsButton);
+            this.mGUI.IGMenu.SetListener(InGameMenuGUI.ButtonName.Save, this.ClickSaveButton);
 
             CharacterInfo playerInfo = new CharacterInfo("Sinbad", true);
             playerInfo.SpawnPoint = this.mWorld.getSpawnPoint();
             this.mCharacMgr.AddCharacter(playerInfo);
-
 
             CharacterInfo iaInfo = new CharacterInfo("Robot-01", false);
             iaInfo.SpawnPoint = playerInfo.SpawnPoint + new Mogre.Vector3(800, 0, 200);
@@ -46,21 +45,33 @@ namespace Game.States
             Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop begin");
         }
 
-        public override void Hide() { this.mGUI.Hide(); }
+        public override void Hide()
+        {
+            this.mGUI.Hide();
+            this.mGUI.IGMenu.ShowSaveMessage(false);
+        }
         public override void Show()
         {
             this.mStateMgr.HideGUIs();
             this.mStateMgr.MiyagiMgr.CursorVisibility = false;
             this.mGUI.Show();
+            this.mDebugMode.IsAllowedToMoveCam = true;
         }
 
         private void ClickMenuButton(object obj, MouseButtonEventArgs arg)
         {
             this.mStateMgr.RequestStatePop(this.mStateMgr.NumberState - 1);
         }
-        private void ClickOptionButton(object obj, MouseButtonEventArgs arg)
+
+        private void ClickOptionsButton(object obj, MouseButtonEventArgs arg)
         {
             this.mStateMgr.RequestStatePush(typeof(OptionsState));
+        }
+
+        private void ClickSaveButton(object obj, MouseButtonEventArgs arg)
+        {
+            this.mWorld.getIslandAt(this.mCharacMgr.GetCharacterByListPos().Info.IslandLoc).save();
+            this.mGUI.IGMenu.ShowSaveMessage(true);
         }
 
         public override void Update(float frameTime)

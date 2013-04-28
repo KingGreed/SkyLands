@@ -136,7 +136,16 @@
     <Content Include="resources\Media\materials\textures\portalGreen.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Media\materials\textures\r2skin.jpg">
+    <Content Include="resources\Media\materials\textures\r2skin_DW.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\r2skin_K.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\r2skin_N.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\r2skin_T.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\materials\textures\redsand1.jpg">
@@ -419,6 +428,7 @@
     <Compile Include="csharp\Main\Characters\Misc\JumpSpeed.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\GUIs\SecondMenuGUI.cs" />
     <Compile Include="csharp\Main\Shoot\Bullet.cs" />
     <Compile Include="csharp\Main\Shoot\BulletManager.cs" />
     <Compile Include="csharp\Main\Shoot\FireCube.cs" />
@@ -476,7 +486,7 @@
     <Compile Include="csharp\Main\GUIs\OptionsGUI.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\GUIs\SecondMenuGUI.cs">
+    <Compile Include="csharp\Main\GUIs\DebugMenuGUI.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\MathHelper.cs">
@@ -494,6 +504,7 @@
     <Compile Include="csharp\Main\States\Game\GameState.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\States\Menu\SecondMenuState.cs" />
     <Compile Include="csharp\Main\States\Menu\LoadingState.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -503,7 +514,7 @@
     <Compile Include="csharp\Main\States\Menu\OptionsState.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\States\Menu\SecondMenuState.cs">
+    <Compile Include="csharp\Main\States\Menu\DebugMenuState.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\States\MyConsole.cs">

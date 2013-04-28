@@ -57,6 +57,7 @@ namespace Game.GUICreator
         public bool SwitchVisibleIGMenu()   // Retun whether it is shown or not
         {
             this.mIGMenu.SwithVisibility();
+            this.mIGMenu.ShowSaveMessage(false);
 
             this.mStateMgr.MiyagiMgr.CursorVisibility = this.mIGMenu.IsGUIVisible;
 

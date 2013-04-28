@@ -12,8 +12,6 @@ namespace Game.States
     {
         private OptionsGUI mOptionsGUI;
         private bool mIsFullScreen;
-        private Vector3 mIslandLoc;
-        private MainWorld mWorld = null;
 
         public OptionsState(StateManager stateMgr) : base(stateMgr, "Option") { }
 
@@ -25,8 +23,7 @@ namespace Game.States
             this.mOptionsGUI.SetListener(OptionsGUI.ButtonName.Music, this.ClickMusicButton);
             this.mOptionsGUI.SetListener(OptionsGUI.ButtonName.VSync, this.ClickVSyncButton);
             this.mOptionsGUI.SetListenerBack(this.ClickBackButton);
-            this.mOptionsGUI.SetListenerSave(this.ClickSaveButton);
-            this.mOptionsGUI.SetListenerLoad(this.ClickLoadButton);
+            //this.mOptionsGUI.SetListenerLoad(this.ClickLoadButton);
             this.mIsFullScreen = this.mStateMgr.Window.IsFullScreen;
         }
 
@@ -39,12 +36,6 @@ namespace Game.States
         {
             this.mOptionsGUI.Show();
             this.mStateMgr.MiyagiMgr.CursorVisibility = true;
-        }
-
-        public void AttachWorld(MainWorld world, Vector3 islandLoc)
-        {
-            this.mWorld = world;
-            this.mIslandLoc = islandLoc;
         }
 
         public override void Update(float frameTime)
@@ -62,7 +53,7 @@ namespace Game.States
 
         private void ClickBackButton(object obj, MouseButtonEventArgs arg)
         {
-            this.mStateMgr.RequestStatePop(this.mWorld == null ? 1 : 2);
+            this.mStateMgr.RequestStatePop();
         }
 
         private void ClickMusicButton(object obj, MouseButtonEventArgs arg) 
@@ -87,14 +78,9 @@ namespace Game.States
             this.SwitchText(this.mOptionsGUI.Buttons[OptionsGUI.ButtonName.FullScreen]);
         }
 
-        private void ClickSaveButton(object obj, MouseButtonEventArgs arg)
-        {
-            if (this.mWorld != null) { this.mWorld.getIslandAt(this.mIslandLoc).save(); }
-        }
-
-        private void ClickLoadButton(object obj, MouseButtonEventArgs arg)
+        /*private void ClickLoadButton(object obj, MouseButtonEventArgs arg)
         {
             if (this.mWorld != null) { this.mWorld.getIslandAt(this.mIslandLoc).load(); }
-        }
+        }*/
     }
 }

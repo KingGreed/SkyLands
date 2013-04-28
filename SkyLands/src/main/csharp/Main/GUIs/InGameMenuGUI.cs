@@ -15,8 +15,11 @@ namespace Game.GUICreator
 {
     public class InGameMenuGUI : GUIFactory
     {
-        Button mMainMenu, mOption;
+        public enum ButtonName { Menu, Options, Save}
+        
+        private Button[] mButtons;
         private Panel mPanel;
+        private Label mSaveMsg;
 
         public InGameMenuGUI(StateManager stateMgr) : base(stateMgr, "IG menu") { }
 
@@ -31,50 +34,46 @@ namespace Game.GUICreator
             this.mGUI.Controls.Add(this.mPanel);
 
             /* Buttons */
+            string[] names = (string[]) Enum.GetNames(typeof(ButtonName));
+            this.mButtons = new Button[names.Length];
+            TextStyle buttonStyle = new TextStyle();
+            buttonStyle.Alignment = Alignment.MiddleCenter;
+            buttonStyle.Font = this.mMiyagiMgr.Fonts["Small_BlueHighway"];
+            Size buttonSize = new Size(150, 60);
+            int space = (this.mPanel.Width - names.Length * buttonSize.Width) / (names.Length + 1);
+
+            for (int i = 0; i < this.mButtons.Length; i++)
+            {
+                this.mButtons[i] = new Button();
+                this.mButtons[i].Size = buttonSize;
+                this.mButtons[i].Text = names[i];
+                this.mButtons[i].TextStyle = buttonStyle;
+                this.mButtons[i].Location = this.mPanel.Location + new Point((space + buttonSize.Width) * i + space, this.mPanel.Size.Height / 2 - this.mButtons[i].Size.Height / 2);
+                this.mButtons[i].Skin = this.mMiyagiMgr.Skins["Button"];
+                this.mGUI.Controls.Add(this.mButtons[i]);
+            }
+
             TextStyle style = new TextStyle();
             style.Alignment = Alignment.MiddleCenter;
             style.Font = this.mMiyagiMgr.Fonts["Small_BlueHighway"];
-            this.mMainMenu = new Button();
-            this.mMainMenu.Size = new Size(150, 60);
-            this.mMainMenu.Text = "Menu";
-            this.mMainMenu.TextStyle = style;
-            this.mMainMenu.Location = this.mPanel.Location + new Point(200, this.mPanel.Size.Height / 2 - this.mMainMenu.Size.Height / 2);
-            this.mMainMenu.Skin = this.mMiyagiMgr.Skins["Button"];
-            this.mGUI.Controls.Add(this.mMainMenu);
-
-            this.mOption = new Button();
-            this.mOption.Size = new Size(150, 60);
-            this.mOption.Text = "Option";
-            this.mOption.TextStyle = style;
-            this.mOption.Location = this.mMainMenu.Location + new Point(this.mMainMenu.Size.Width + 150, 0);
-            this.mOption.Skin = this.mMiyagiMgr.Skins["Button"];
-            this.mGUI.Controls.Add(this.mOption);
-            /*Size actualButtonSize = new Size(150, 60);
-            int space = (this.mPanel.Size.Width - 4 * actualButtonSize.Width) / 5;
-            Point originalpos = this.mPanel.Location + new Point(space, 65);
-
-            for (int i = 0; i < Enum.GetValues(typeof(StateManager.TypeWorld)).Length; i++)
-            {
-
-                Button button = new Button();
-                button.Size = actualButtonSize;
-                button.Text = Enum.GetName(typeof(StateManager.TypeWorld), (StateManager.TypeWorld)i);
-                button.TextStyle = style;
-                button.Location = originalpos + new Point(i * (actualButtonSize.Width + space), 0);
-                button.Skin = this.mMiyagiMgr.Skins["Button"];
-                this.mGUI.Controls.Add(button);
-                this.mButtons.Add(button.Text, button);
-            }*/
+            style.ForegroundColour = new Colour(255, 255, 255, 255);
+            this.mSaveMsg = new Label();
+            this.mSaveMsg.Text = "World successfully saved";
+            this.mSaveMsg.Size = new Size(500, 50);
+            this.mSaveMsg.Location = this.mPanel.Location + new Point(this.mPanel.Width / 2 - this.mSaveMsg.Width / 2, this.mPanel.Height - this.mSaveMsg.Size.Height);
+            this.mSaveMsg.TextStyle = style;
+            this.mSaveMsg.Visible = false;
+            this.mGUI.Controls.Add(this.mSaveMsg);
         }
 
-        public void SetListenerMenu(EventHandler<MouseButtonEventArgs> del)
+        public void ShowSaveMessage(bool show)
         {
-            this.mMainMenu.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(del);
+            this.mSaveMsg.Visible = show;
         }
 
-        public void SetListenerOption(EventHandler<MouseButtonEventArgs> del)
+        public void SetListener(ButtonName name, EventHandler<MouseButtonEventArgs> del)
         {
-            this.mOption.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(del);
+            this.mButtons[(int)name].MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(del);
         }
     }
 }

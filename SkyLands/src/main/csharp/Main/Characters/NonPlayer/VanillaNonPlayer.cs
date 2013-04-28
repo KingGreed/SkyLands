@@ -14,6 +14,7 @@ namespace Game.CharacSystem
             SceneManager sceneMgr = characMgr.SceneMgr;
             Entity ent = sceneMgr.CreateEntity("CharacterEnt_" + this.mCharInfo.Id, meshName);
             ent.Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
+            ent.SetMaterialName("Robot_T");
             this.mMesh = new Robot(ent);
 
             this.mNode.AttachObject(ent);
