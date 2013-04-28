@@ -11,29 +11,21 @@ namespace Game.States
     public class SecondMenuState : State
     {
         private SecondMenuGUI mSecondMenuGUI;
-        private bool mIsFullScreen;
 
         public SecondMenuState(StateManager stateMgr) : base(stateMgr, "SecondMenu") { }
 
         protected override void Startup()
         {
-            this.mGameInfo = new GameInfo();
-            this.mGameInfo.Seed = 42;
-            this.mGameInfo.Size = new Vector2(11, 11);
-
-            this.mSecondMenuGUI = new SecondMenuGUI(this.mStateMgr, this.mGameInfo);
-            this.mSecondMenuGUI.SetListener(GameInfo.TypeWorld.Dome, this.ClickDomeButton);
-            this.mSecondMenuGUI.SetListener(GameInfo.TypeWorld.Plains, this.ClickPlainsButton);
-            this.mSecondMenuGUI.SetListener(GameInfo.TypeWorld.Desert, this.ClickDesertButton);
-            this.mSecondMenuGUI.SetListener(GameInfo.TypeWorld.Hills, this.ClickHillsButton);
-            this.mSecondMenuGUI.SetListener(GameInfo.TypeWorld.Mountain, this.ClickMountainButton);
-            this.mSecondMenuGUI.SetListenerBack(this.ClickBackButton);
+            this.mSecondMenuGUI = new SecondMenuGUI(this.mStateMgr);
+            this.mSecondMenuGUI.SetListener(SecondMenuGUI.ButtonName.NewGame, this.ClickNewGameButton);
+            this.mSecondMenuGUI.SetListener(SecondMenuGUI.ButtonName.Continue, this.ClickContinueButton);
+            this.mSecondMenuGUI.SetListener(SecondMenuGUI.ButtonName.Debug, this.ClickDebugButton);
         }
 
         public override void Hide()
         {
             this.mSecondMenuGUI.Hide();
-        }
+        } 
 
         public override void Show()
         {

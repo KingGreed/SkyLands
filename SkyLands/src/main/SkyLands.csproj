@@ -118,6 +118,9 @@
     <Content Include="resources\Media\materials\textures\fire.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\materials\textures\glass.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\materials\textures\grass3.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -173,6 +176,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\materials\textures\stone.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\stonebricksmooth.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\materials\textures\stonebricksmooth_carved.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\materials\textures\terrain.png">
@@ -547,6 +556,9 @@
     </Compile>
     <Compile Include="csharp\Main\World\Blocks\CrystalGateH.cs" />
     <Compile Include="csharp\Main\World\Blocks\Crystal.cs" />
+    <Compile Include="csharp\Main\World\Blocks\Glass.cs" />
+    <Compile Include="csharp\Main\World\Blocks\SmoothStone.cs" />
+    <Compile Include="csharp\Main\World\Blocks\SmoothStone_carved.cs" />
     <Compile Include="csharp\Main\World\Blocks\TransparentBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\LevitatorAirBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\LevitatorBlock.cs" />
@@ -602,8 +614,11 @@
     <Compile Include="csharp\Main\World\Generator\Biomes\Plains.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\World\Generator\Decorators\Gatherer.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\Pine.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\Pyramid.cs" />
+    <Compile Include="csharp\Main\World\Generator\Decorators\Spawner.cs" />
+    <Compile Include="csharp\Main\World\Generator\Decorators\Tower.cs" />
     <Compile Include="csharp\Main\World\Generator\VanillaMultiVerticalHalfBlock.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\Portals.cs" />
     <Compile Include="csharp\Main\World\Generator\VanillaMultiHorizontalHalfBlock.cs" />

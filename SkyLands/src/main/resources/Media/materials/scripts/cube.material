@@ -358,3 +358,44 @@ material cube/Levitator/bottom{
         }
     }
 }
+material cube/smoothStone
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture stonebricksmooth.png }
+        }
+    }
+}
+material cube/smoothStone_carved
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture stonebricksmooth_carved.png }
+        }
+    }
+}
+material cube/glass
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+			scene_blend alpha_blend
+            depth_write off
+
+            texture_unit { texture glass.png }
+        }
+    }
+}
