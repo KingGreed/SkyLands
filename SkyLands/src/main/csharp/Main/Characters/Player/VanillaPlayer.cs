@@ -135,7 +135,7 @@ namespace Game.CharacSystem
                         if (rightClick)
                         {
                             this.mCharacMgr.World.onRightClick(relBlockPos, this.mCharInfo.IslandLoc);
-                            this.DelBlock();
+                            //this.DelBlock();
                         }
                     }
                 }
@@ -246,7 +246,7 @@ namespace Game.CharacSystem
             StaticRectangle.DrawLine(this.mCharacMgr.SceneMgr, origin, ray.GetPoint(raySQResult[raySQResult.Count - 1].distance));
         }*/
 
-        private void DelBlock()
+        /*private void DelBlock()
         {
             Vector3 relBlockPos;
             API.Geo.Cuboid.Block b;
@@ -259,7 +259,7 @@ namespace Game.CharacSystem
 
             if (material != "Air")
                 this.mCharacMgr.StateMgr.WriteOnConsole("Deleted : " + material);
-        }
+        }*/
 
         private void AddBlock()
         {
