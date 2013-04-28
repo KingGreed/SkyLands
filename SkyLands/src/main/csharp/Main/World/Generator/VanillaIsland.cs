@@ -23,7 +23,7 @@ namespace Game.World.Generator
     {
         static Block defaultBlock = new AirBlock();
 
-        public VanillaIsland(SceneNode node, Vector2 size, MainWorld currentWorld) : base(node, size, currentWorld) {
+        public VanillaIsland(SceneNode node, Vector2 size, API.Geo.World currentWorld) : base(node, size, currentWorld) {
             foreach (KeyValuePair<string, Block> pair in VanillaChunk.staticBlock) {
                 if(!(pair.Value is AirBlock) && pair.Value.getMaterial() != null) {
                     for (int i = 0; i < 6; i++) {
@@ -282,30 +282,54 @@ namespace Game.World.Generator
 
 
         public override void save() {
-            var fileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" +
-                this.mWorld.getName() + "Island-" + this.mNode.Position.x.ToString() + "-" +
+            var blockfileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" +
+                this.mWorld.getName() + "-Island-" + this.mNode.Position.x.ToString() + "-" +
                 this.mNode.Position.y.ToString() + "-" + this.mNode.Position.z.ToString() + ".sav";
 
-            new FileInfo(fileName).Directory.Create();
+            new FileInfo(blockfileName).Directory.Create();
 
-            Stream writer;
+            Stream stream;;
+            BinaryWriter writter;
 
-            try { writer = new FileStream(fileName, FileMode.Create, FileAccess.Write); }
-            catch { throw new Exception("Could not read file : " + fileName); }
+            try { stream = new FileStream(blockfileName, FileMode.Create, FileAccess.Write); writter = new BinaryWriter(stream); }
+            catch { throw new Exception("Could not read file : " + blockfileName); }
 
-            writer.WriteByte((byte)this.mIslandSize.x);
-            writer.WriteByte((byte)this.mIslandSize.z);
-            writer.WriteByte((byte)this.mIslandSize.y);
+            writter.Write(this.mIslandSize.x);
+            writter.Write(this.mIslandSize.z);
 
-            for(int x = 0; x < this.mIslandSize.x * Cst.CHUNK_SIDE; x++) {
-                for(int z = 0; z < this.mIslandSize.z * Cst.CHUNK_SIDE; z++) {
-                    for(int y = 0; y < this.mIslandSize.y * Cst.CHUNK_SIDE; y++) {
-                        writer.WriteByte(this.getBlock(new Vector3(x, y, z), false).getId());
+
+            foreach(KeyValuePair<Vector3, Chunk> pair in this.mChunkList) {
+                writter.Write(pair.Key.x);
+                writter.Write(pair.Key.y);
+                writter.Write(pair.Key.z);
+
+                for(int x = 0; x < 16; x++) {
+                    for(int y = 0; y < 16; y++) {
+                        for(int z = 0; z < 16; z++) {
+                            writter.Write(pair.Value.getBlock(x, y, z).getId());       
+                        }
                     }
                 }
             }
+            stream.Close();
+            writter.Close();
 
-            writer.Close();
+
+
+            var entityfileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" +
+                this.mWorld.getName() + "-Island-entities" + this.mNode.Position.x.ToString() + "-" +
+                this.mNode.Position.y.ToString() + "-" + this.mNode.Position.z.ToString() + ".sav";
+
+            try { stream = new FileStream(blockfileName, FileMode.Create, FileAccess.Write); writter = new BinaryWriter(stream); }
+            catch { throw new Exception("Could not read file : " + blockfileName); }
+
+
+            foreach(API.Ent.Entity e in this.mEntitiesInIsland) {
+                writter.Write(e.getId());
+                writter.Write(e.getPosition().x);
+                writter.Write(e.getPosition().y);
+                writter.Write(e.getPosition().z);
+            }
         }
 
         public override void load() {

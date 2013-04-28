@@ -57,7 +57,7 @@ namespace Game.Shoot
                 this.mNode.Translate(distance * Vector3.NEGATIVE_UNIT_Z, Node.TransformSpace.TS_LOCAL);
                 this.mRay.Origin = this.mNode.Position;
 
-                if (!(this.mBulletMgr.World.getIslandAt(this.mCharacSource.Info.IslandLoc).getBlock(MainWorld.getRelativeFromAbsolute(this.mNode.Position), false) is Game.World.Blocks.Air))
+                if (!(this.mBulletMgr.World.getIsland().getBlock(MainWorld.getRelativeFromAbsolute(this.mNode.Position), false) is Game.World.Blocks.Air))
                     return false;
 
                 RaySceneQuery raySQuery = this.mBulletMgr.SceneMgr.CreateRayQuery(this.mRay);

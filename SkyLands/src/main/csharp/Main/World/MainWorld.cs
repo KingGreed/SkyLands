@@ -32,16 +32,14 @@ namespace Game.World
         private long     mSeed;
         private Vector3  mSpawnPoint;
 
-        private List<Entity> mEntityList;
-        private Dictionary<Vector3, Island> mIslandList;
+        private Island   mIslandLoaded;
 
         private StateManager  mStateMgr;
         private SkyMgr        mSkyMgr;
-        //private Thread        workerThread;
+        private CharacterMgr  mCharacMgr;
 
         public MainWorld(StateManager stateMgr)
         {
-            this.mEntityList = new List<Entity>();
             this.mAge        = 0;
             this.mSeed       = 42;
             this.mName = new Guid().ToString();
@@ -49,31 +47,20 @@ namespace Game.World
             this.mStateMgr = stateMgr;
             this.mStateMgr.SceneMgr.AmbientLight = ColourValue.ZERO;
 
-            this.mIslandList = new Dictionary<Vector3, Island>();
             SceneNode node = this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
-            Island island;
 
             GameInfo info = this.mStateMgr.GameInfo;
-            if      (info.Type == GameInfo.TypeWorld.Dome)       { island = new DomeIsland(node, info.Size, this); }
-            else if (info.Type == GameInfo.TypeWorld.Plains)     { island = new RandomIsland(node, info.Size, new Plains(), this); }
-            else if (info.Type == GameInfo.TypeWorld.Desert)     { island = new RandomIsland(node, info.Size, new Desert(), this); }
-            else if (info.Type == GameInfo.TypeWorld.Hills)      { island = new RandomIsland(node, info.Size, new Hills(), this); }
-            else  /*(info.Type == GameInfo.TypeWorld.Mountain)*/ { island = new RandomIsland(node, info.Size, new Mountains(), this); }
+            if      (info.Type == GameInfo.TypeWorld.Dome)       { this.mIslandLoaded = new DomeIsland(node, info.Size, this); }
+            else if (info.Type == GameInfo.TypeWorld.Plains)     { this.mIslandLoaded = new RandomIsland(node, info.Size, new Plains(), this); }
+            else if (info.Type == GameInfo.TypeWorld.Desert)     { this.mIslandLoaded = new RandomIsland(node, info.Size, new Desert(), this); }
+            else if (info.Type == GameInfo.TypeWorld.Hills)      { this.mIslandLoaded = new RandomIsland(node, info.Size, new Hills(), this); }
+            else  /*(info.Type == GameInfo.TypeWorld.Mountain)*/ { this.mIslandLoaded = new RandomIsland(node, info.Size, new Mountains(), this); }
 
-            this.mIslandList.Add(Vector3.ZERO, island);
-            this.mIslandList[Vector3.ZERO].display();
+            this.mIslandLoaded.display();
 
             this.mSkyMgr = new SkyMgr(this.mStateMgr);
 
-            this.setSafeSpawnPoint(Vector3.ZERO);
-
-            Light lightGV = this.mStateMgr.SceneMgr.CreateLight( "LightGV" );
-            lightGV.Type = Light.LightTypes.LT_POINT;
-            lightGV.Position       = this.mSpawnPoint;
-            lightGV.DiffuseColour  = new ColourValue(1.0f, 1.0f, 1.0f);
-            lightGV.SpecularColour = new ColourValue(1.0f, 1.0f, 1.0f);
-            lightGV.SetAttenuation(10000f, 1.0f, 0.0045f, 0.00075f);
-            lightGV.CastShadows = false;
+            this.setSafeSpawnPoint();
 
             /*StaticRectangle.DisplayRectangle(this.mSpawnPoint, 5, 5, 16*CHUNK_SIDE*CUBE_SIDE, node);
             Vector3 pos = new Vector3((this.mIslandList[new Vector3(0, 0, 0)].getSize().x + 3) * CHUNK_SIDE * CUBE_SIDE, 0, (this.mIslandList[new Vector3(0, 0, 0)].getSize().z + 3) * CHUNK_SIDE * CUBE_SIDE);
@@ -89,16 +76,21 @@ namespace Game.World
 
         //get
 
-        public string  getName()       { return this.mName;       }
-        public long    getAge()        { return this.mAge;        }
-        public long    getSeed()       { return this.mSeed;       }
-        public Vector3 getSpawnPoint() { return this.mSpawnPoint; }
-        public int getHeight()         { return Cst.MaxHeight;    }
-        
+        public string  getName()          { return this.mName;       }
+        public long    getAge()           { return this.mAge;        }
+        public long    getSeed()          { return this.mSeed;       }
+        public Vector3 getSpawnPoint()    { return this.mSpawnPoint; }
+        public int getHeight()            { return Cst.MaxHeight;    }
+        public CharacterMgr getCharMgr()  { return this.mCharacMgr;  }
+        public StateManager getStateMgr() { return this.mStateMgr;   }
+
+        public void addCharacterMgr(CharacterMgr c) { this.mCharacMgr = c; }
+
         public SceneManager getSceneMgr()        { return this.mStateMgr.SceneMgr; }
-        public Island getIslandAt(Vector3 loc)   { return this.mIslandList[loc]; }
+        public SceneNode getAScenNode()          { return this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO); }
+        public Island getIsland()                { return this.mIslandLoaded; }
         
-        public int     getSurfaceHeight(int x, int z, Vector3 islandLoc)                       { return this.mIslandList[islandLoc].getSurfaceHeight(x, z); }
+        public int     getSurfaceHeight(int x, int z)                                          { return this.mIslandLoaded.getSurfaceHeight(x, z); }
         public Vector3 getDisplayCoords(Vector3 island, Vector3 relativeLocation)              { return (relativeLocation * Cst.CUBE_SIDE) + island; }
 
 	    public List<Entity> getNearbyEntities(Vector3 position, Entity ignore, int range)      { throw new NotImplementedException(); }
@@ -117,31 +109,32 @@ namespace Game.World
         public Character getNearestPlayer(Vector3 position, Character ignore, int range)       { throw new NotImplementedException(); }
 	    public Character getNearestPlayer(Vector3 position, int range)                         { throw new NotImplementedException(); }
 	    public Character getNearestPlayer(Entity entity, int range)                            { throw new NotImplementedException(); }
+
+        public void unloadIsland() { this.mIslandLoaded = null; }
         
 
         public void setName(string name) { this.mName =  name;}
-        public void setSafeSpawnPoint(Vector3 islandLoc)  {
+        public void setSafeSpawnPoint()  {
             Random random = new Random();
             int x, y, z;
             while(true) {
-                x = random.Next((int)this.mIslandList[islandLoc].getSize().x * Cst.CHUNK_SIDE);
-                z = random.Next((int)this.mIslandList[islandLoc].getSize().z * Cst.CHUNK_SIDE);
+                x = random.Next((int)this.mIslandLoaded.getSize().x * Cst.CHUNK_SIDE);
+                z = random.Next((int)this.mIslandLoaded.getSize().z * Cst.CHUNK_SIDE);
 
-                y = this.getSurfaceHeight(x, z, islandLoc);
+                y = this.getSurfaceHeight(x, z);
                 if(y != -1) {
                     LogManager.Singleton.DefaultLog.LogMessage("\n \n New SpawnPoint at : " + new Vector3(x * Cst.CUBE_SIDE, y * Cst.CUBE_SIDE, z * Cst.CUBE_SIDE).ToString());
-                    this.mSpawnPoint = islandLoc + new Vector3(x * Cst.CUBE_SIDE, y * Cst.CUBE_SIDE, z * Cst.CUBE_SIDE);
+                    this.mSpawnPoint = new Vector3(x * Cst.CUBE_SIDE, y * Cst.CUBE_SIDE, z * Cst.CUBE_SIDE);
                     break;
                 }
             }
         }
 
-        
 
-	    public Entity createEntity(Vector3 point, Entity type) { throw new NotImplementedException(); }
-	    public Entity createAndSpawnEntity(Vector3 point, Entity e) { throw new NotImplementedException(); }
+
+        public void createEntity(Vector3 point, Entity type) { type.getIsland().mEntitiesInIsland.Add(type); }
+        public void createAndSpawnEntity(Vector3 point, Entity e) { throw new NotImplementedException(); }
 	    public void spawnEntity(Entity e) { throw new NotImplementedException(); }
-	    public void setSpawnPoint(Vector3 transform) { throw new NotImplementedException(); }
 	    public List<Character> getPlayers() { throw new NotImplementedException(); }
 
         public static Vector3 getRelativeFromAbsolute(Vector3 absCoord) {
@@ -153,65 +146,66 @@ namespace Game.World
             return absCoord;
         }
 
-        public void onBlockEnter(Vector3 blockCoord, Vector3 island, Entity e) {
-            this.mIslandList[island].getBlock(blockCoord, false).onBlockEnter(e);
+        public void onBlockEnter(Vector3 blockCoord, Entity e) {
+            this.mIslandLoaded.getBlock(blockCoord, false).onBlockEnter(e);
         }
-        public void onBlockLeave(Vector3 blockCoord, Vector3 island, Entity e) {
-            this.mIslandList[island].getBlock(blockCoord, false).onBlockLeave(e);
-        }
-
-        public void onCreation(Vector3 relCoord, Vector3 island) {
-            this.mIslandList[island].getBlock(relCoord, false).onCreation(relCoord);
-        }
-        public void onDeletion(Vector3 relCoord, Vector3 island) {
-            this.mIslandList[island].getBlock(relCoord, false).onDeletion();
+        public void onBlockLeave(Vector3 blockCoord, Entity e) {
+            this.mIslandLoaded.getBlock(blockCoord, false).onBlockLeave(e);
         }
 
-        public void onRightClick(Vector3 relCoord, Vector3 island) {
-            this.mIslandList[island].getBlock(relCoord, false).onRightClick();
+        public void onCreation(Vector3 relCoord) {
+            this.mIslandLoaded.getBlock(MainWorld.getRelativeFromAbsolute(relCoord), false).onCreation(relCoord);
+        }
+        public void onDeletion(Vector3 relCoord) {
+            this.mIslandLoaded.getBlock(MainWorld.getRelativeFromAbsolute(relCoord), false).onDeletion();
         }
 
-        public void onLeftClick(Vector3 relCoord, Vector3 island) {
-            this.mIslandList[island].getBlock(relCoord, false).onLeftClick();
+        public void onRightClick(Vector3 relCoord) {
+            this.mIslandLoaded.getBlock(MainWorld.getRelativeFromAbsolute(relCoord), false).onRightClick();
+        }
+
+        public void onLeftClick(Vector3 relCoord) {
+            this.mIslandLoaded.getBlock(MainWorld.getRelativeFromAbsolute(relCoord), false).onLeftClick();
         }
 
 
 	    public void unload(bool save) { throw new NotImplementedException(); }
 
-        //save Entities
-	    public void save() {
-            IEnumerator<Vector3> enumerator = this.mIslandList.Keys.GetEnumerator();
-            enumerator.MoveNext();
+	    public void save(Entity e) {
 
-            string fileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Roaming/SkyLands/",
-                this.getName(), "Island-", StringConverter.ToString(enumerator.Current), "-entities");
+            var playerFileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" +
+                this.getName() + "-player-" + ".sav";
 
+            new FileInfo(playerFileName).Directory.Create();
             Stream stream;
             BinaryWriter writter;
 
-            try { stream = new FileStream(fileName, FileMode.CreateNew); writter = new BinaryWriter(stream); }
-            catch { throw new Exception("Could not read file : " + fileName); }
+            try { stream = new FileStream(playerFileName, FileMode.Create, FileAccess.Write); writter = new BinaryWriter(stream); }
+            catch { throw new Exception("Could not read file : " + playerFileName); }
 
-            for(int i = 0; i < this.mEntityList.Count; i++) {
-                writter.Write(this.mEntityList[i].getId());
-                writter.Write(this.mEntityList[i].getPosition().x);
-                writter.Write(this.mEntityList[i].getPosition().y);
-                writter.Write(this.mEntityList[i].getPosition().z);
-            }        
+
+            writter.Write(e.getPosition().x);
+            writter.Write(e.getPosition().y);
+            writter.Write(e.getPosition().z);
+
+            writter.Close();
+            stream.Close();
+
+            e.getIsland().save();
         }
 
         public bool HasPointCollision(ref Vector3 blockPos, Vector3 islandLoc) // the argument blockPos is in absolute coord, it becomes relative
         {
-            blockPos += this.mIslandList[islandLoc].getPosition();
+            blockPos += this.mIslandLoaded.getPosition();
             blockPos = AbsToRelative(blockPos);
 
-            Block block = this.mIslandList[islandLoc].getBlock(blockPos, false);
+            Block block = this.mIslandLoaded.getBlock(blockPos, false);
             return !(block == null || block is Air);
         }
 
         public void generateIslandThreaded()
         {
-            Vector3 pos = new Vector3(this.mIslandList[new Vector3(0, 0, 0)].getPosition().x * Cst.CHUNK_SIDE + 3 * Cst.CHUNK_SIDE, 0, this.mIslandList[new Vector3(0, 0, 0)].getPosition().z * Cst.CHUNK_SIDE + 3 * Cst.CHUNK_SIDE);
+            Vector3 pos = new Vector3(this.mIslandLoaded.getPosition().x * Cst.CHUNK_SIDE + 3 * Cst.CHUNK_SIDE, 0, this.mIslandLoaded.getPosition().z * Cst.CHUNK_SIDE + 3 * Cst.CHUNK_SIDE);
             /*SceneNode node = this.mStateMgr.SceneManager.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
             this.mIslandList.Add(pos, new RandomIsland(node, new Vector2(13, 13), new Hills(), this));
 

@@ -29,6 +29,7 @@ namespace API.Geo.Cuboid
         public Dictionary<string, MultiBlock>    multiList = new Dictionary<string, MultiBlock>();
         public List<PositionFaceAndStatus>       blocksAdded;
         public List<PositionFaceAndStatus>       blocksDeleted;
+        public List<Entity>                      mEntitiesInIsland;
 
 
         public Dictionary<Vector3, Chunk> mChunkList;
@@ -36,7 +37,7 @@ namespace API.Geo.Cuboid
         public SceneNode Node        { get { return this.mNode; } }
         public bool IsTerrainUpdated { get { return this.mIsTerrainUpdated; } }
 
-	    public Island(SceneNode node, Vector2 size, Game.World.MainWorld currentWorld) {
+        public Island(SceneNode node, Vector2 size, API.Geo.World currentWorld) {
             this.mChunkList = new Dictionary<Vector3,Chunk>();
             this.initChunks(size);
 
@@ -48,6 +49,7 @@ namespace API.Geo.Cuboid
             this.blocksDeleted = new List<PositionFaceAndStatus> ();
 
             this.mFaceNode = node.CreateChildSceneNode();
+            this.mEntitiesInIsland = new List<Entity>();
         }
 
         //Init
@@ -57,6 +59,7 @@ namespace API.Geo.Cuboid
         public Vector3 getPosition()   { return this.mNode.Position; }
         public Vector3 getSpawnPoint() { throw new NotImplementedException(); }
         public SceneNode getFaceNode() { return this.mFaceNode; }
+        public Biome getBiome()        { return this.mBiome; }
 
         public Chunk getChunk  (int x, int y, int z)                  { return this.mChunkList[new Vector3(x,y,z)]; }
 	    public Chunk getChunkAt(Vector3 relativePosition)             { return this.mChunkList[relativePosition];   }
@@ -122,7 +125,15 @@ namespace API.Geo.Cuboid
 	     * all associated chunks.
 	     * @param save whether to save the region and associated data.
 	     */
-	    public virtual void unload(bool save) { throw new NotImplementedException(); }
+	    public virtual void unload(bool save) {
+            if(save) { this.save(); }
+
+            this.mChunkList = null;
+            this.multiList = null;
+            this.mEntitiesInIsland = null;
+            this.mWorld.getCharMgr().Dispose();
+            this.mWorld.unloadIsland();
+        }
 
         public void unloadChunk(int x, int y, int z, bool save) { throw new NotImplementedException(); }
         public void unloadChunk(Vector3 position, bool save)    { this.unloadChunk((int)position.x, (int)position.y, (int)position.z, save); }

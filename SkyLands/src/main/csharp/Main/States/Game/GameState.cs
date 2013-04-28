@@ -19,6 +19,8 @@ namespace Game.States
         private HUD           mHUD;
         private PlayerRTS     mPlayerRTS; 
 
+        public CharacMgr getCharacMgr() { return this.mCharacMgr; }
+
         public GameState(StateManager stateMgr) : base(stateMgr, "Game") { }
 
         protected override void Startup()
@@ -33,8 +35,8 @@ namespace Game.States
             this.mHUD.IGMenu.SetListener(InGameMenuGUI.ButtonName.Save, this.ClickSaveButton);
 
             this.mPlayerRTS = new PlayerRTS(this.mHUD);
-            this.mCharacMgr = new CharacMgr(this.mStateMgr, this.mWorld, this.mBulletMgr, this.mHUD, this.mPlayerRTS);
-            this.mBulletMgr.AttachCharacMgr(this.mCharacMgr);
+            this.CreateCharacterMgr();
+            
 
             CharacterInfo playerInfo = new CharacterInfo("Sinbad", true);
             playerInfo.SpawnPoint = this.mWorld.getSpawnPoint();
@@ -48,6 +50,12 @@ namespace Game.States
             this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr, this.mHUD);
             this.Show();
             Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop begin");
+        }
+
+        public void CreateCharacterMgr() {
+            this.mCharacMgr = new CharacMgr(this.mStateMgr, this.mWorld, this.mBulletMgr, this.mHUD, this.mPlayerRTS);
+            this.mBulletMgr.AttachCharacMgr(this.mCharacMgr);
+
         }
 
         public override void Hide()
@@ -75,7 +83,7 @@ namespace Game.States
 
         private void ClickSaveButton(object obj, MouseButtonEventArgs arg)
         {
-            this.mWorld.getIslandAt(this.mCharacMgr.GetCharacterByListPos().Info.IslandLoc).save();
+            this.mWorld.getIsland().save();
             this.mHUD.IGMenu.ShowSaveMessage(true);
         }
 

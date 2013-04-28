@@ -194,8 +194,8 @@ namespace Game.CharacSystem
             Vector3 blockPos = MainWorld.getRelativeFromAbsolute(this.FeetPosition);
             if (blockPos != this.mPreviousBlockPos)
             {
-                this.mCharacMgr.World.onBlockLeave(this.mPreviousBlockPos, this.mCharInfo.IslandLoc, this);
-                this.mCharacMgr.World.onBlockEnter(blockPos, this.mCharInfo.IslandLoc, this);
+                this.mCharacMgr.World.onBlockLeave(this.mPreviousBlockPos, this);
+                this.mCharacMgr.World.onBlockEnter(blockPos, this);
                 this.mPreviousBlockPos = blockPos;
             }
 
@@ -206,7 +206,7 @@ namespace Game.CharacSystem
         {
 
             destination = MainWorld.getRelativeFromAbsolute(destination);
-            this.mPathFinder = new PathFinder(destination, MainWorld.getRelativeFromAbsolute(this.mNode.Position), this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc));
+            this.mPathFinder = new PathFinder(destination, MainWorld.getRelativeFromAbsolute(this.mNode.Position), this.mCharacMgr.World.getIsland());
 
             if(this.mPathFinder.goal != null) {
                 this.mIsWalking = true;
@@ -256,7 +256,7 @@ namespace Game.CharacSystem
         public int getViewDistance()              { throw new NotImplementedException(); }
         public Chunk getChunk()                   { throw new NotImplementedException(); }
 
-        public Island  getIsland()   { return this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc); }
+        public Island  getIsland()   { return this.mCharacMgr.World.getIsland(); }
         public Vector3 getPosition() { return this.BlockPosition; }
 
         public void setIsPushedByArcaneLevitator(bool value)

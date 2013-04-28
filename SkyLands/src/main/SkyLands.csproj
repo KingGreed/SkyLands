@@ -339,6 +339,7 @@
     <Compile Include="csharp\API\Ent\Character.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\API\Ent\CharacterMgr.cs" />
     <Compile Include="csharp\API\Ent\Entity.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -563,6 +564,7 @@
     <Compile Include="csharp\Main\World\Blocks\ConstructionBlock.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\World\Blocks\CrystalGate.cs" />
     <Compile Include="csharp\Main\World\Blocks\CrystalGateH.cs" />
     <Compile Include="csharp\Main\World\Blocks\Crystal.cs" />
     <Compile Include="csharp\Main\World\Blocks\Glass.cs" />
@@ -571,7 +573,7 @@
     <Compile Include="csharp\Main\World\Blocks\TransparentBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\LevitatorAirBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\LevitatorBlock.cs" />
-    <Compile Include="csharp\Main\World\Blocks\CrystalGate.cs" />
+    <Compile Include="csharp\Main\World\Blocks\CrystalGateV.cs" />
     <Compile Include="csharp\Main\World\Blocks\WoodenSlab.cs" />
     <Compile Include="csharp\Main\World\Blocks\TowerWoodBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\DarkWoodBlock.cs" />

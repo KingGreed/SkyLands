@@ -4,7 +4,12 @@ using System.Linq;
 using System.Text;
 
 using API.Ent;
+using API.Geo.Cuboid;
+
+using Game.States;
+
 using Entity = API.Ent.Entity;
+
 using Mogre;
 
 namespace API.Geo
@@ -33,8 +38,11 @@ namespace API.Geo
 	     * @param z the block z coordinate of the column
 	     * @return the highest of the highest block
 	     */
-	    int getSurfaceHeight(int x, int z, Vector3 islandLoc);
+	    int getSurfaceHeight(int x, int z);
 
+
+        void addCharacterMgr(CharacterMgr c);
+        CharacterMgr getCharMgr();
 
 	    /**
 	     * Create a new Entity for initialization
@@ -45,7 +53,7 @@ namespace API.Geo
 	     * @param component The component to give the Entity.
 	     * @return The created entity
 	     */
-	    Entity createEntity(Vector3 point, Entity type);
+	    void createEntity(Vector3 point, Entity type);
 
 	    /**
 	     * Create a new Entity for initialization
@@ -56,7 +64,7 @@ namespace API.Geo
 	     * @param prefab The entity prefab.
 	     * @return The created entity
 	     */
-	    Entity createAndSpawnEntity(Vector3 point, Entity e);
+	    void createAndSpawnEntity(Vector3 point, Entity e);
 
 	    /**
 	     * Add a created entity to the world for simulation and syncing to clients
@@ -77,7 +85,7 @@ namespace API.Geo
 	     * Sets the world's spawn point
 	     * @param transform the Transform of the spawn point
 	     */
-	    void setSpawnPoint(Vector3 transform);
+        void setSafeSpawnPoint();
 
 	    /**
 	     * Gets the world's seed. This value is immutable and set at world creation
@@ -214,7 +222,10 @@ namespace API.Geo
 	     */
 	    void unload(bool save);
 
+        void unloadIsland();
 
+
+        Island getIsland();
 	    /**
 	     * Saves all world data to world data file.
 	     * <p>
@@ -222,15 +233,19 @@ namespace API.Geo
 	     * World data pertains to world age, world name, and world data maps.
 	     * </p>
 	     */
-	    void save();
+        StateManager getStateMgr();
 
-        void onCreation(Vector3 relCoord, Vector3 island);
-        void onDeletion(Vector3 relCoord, Vector3 island);
+        SceneNode getAScenNode();
 
-        void onRightClick(Vector3 relCoord, Vector3 island);
-        void onLeftClick(Vector3 relCoord, Vector3 island);
+	    void save(Entity e);
 
-        void onBlockEnter(Vector3 blockCoord, Vector3 island, Entity e);
-        void onBlockLeave(Vector3 blockCoord, Vector3 island, Entity e);
+        void onCreation(Vector3 relCoord);
+        void onDeletion(Vector3 relCoord);
+
+        void onRightClick(Vector3 relCoord);
+        void onLeftClick(Vector3 relCoord);
+
+        void onBlockEnter(Vector3 blockCoord, Entity e);
+        void onBlockLeave(Vector3 blockCoord, Entity e);
     }
 }

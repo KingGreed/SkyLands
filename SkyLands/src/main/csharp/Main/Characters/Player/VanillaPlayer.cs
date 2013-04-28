@@ -129,12 +129,12 @@ namespace Game.CharacSystem
                         
                         if (leftClick)
                         {
-                            this.mCharacMgr.World.onLeftClick(relBlockPos, this.mCharInfo.IslandLoc);
+                            this.mCharacMgr.World.onLeftClick(relBlockPos);
                             this.AddBlock();
                         }
                         if (rightClick)
                         {
-                            this.mCharacMgr.World.onRightClick(relBlockPos, this.mCharInfo.IslandLoc);
+                            this.mCharacMgr.World.onRightClick(relBlockPos);
                             //this.DelBlock();
                         }
                     }
@@ -187,7 +187,7 @@ namespace Game.CharacSystem
             {
                 distance += 40;
                 relBlockPos = MainWorld.AbsToRelative(ray.GetPoint(distance));
-                b = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).getBlock(relBlockPos, false);
+                b = this.mCharacMgr.World.getIsland().getBlock(relBlockPos, false);
             } while (b is Game.World.Blocks.AirBlock && distance <= distMax);
 
             if (distance > distMax)
@@ -254,8 +254,12 @@ namespace Game.CharacSystem
             if (!this.GetBlockPos(out relBlockPos, out b, out f)) { return; }
 
             string material = b.getName();
+<<<<<<< HEAD
             this.mCharacMgr.World.onDeletion(relBlockPos, this.mCharInfo.IslandLoc);
             //this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc).removeFromScene(relBlockPos);  // Delete block
+=======
+            this.mCharacMgr.World.getIsland().removeFromScene(relBlockPos);  // Delete block
+>>>>>>> Implemented cristals
 
             if (material != "Air")
                 this.mCharacMgr.StateMgr.WriteOnConsole("Deleted : " + material);
@@ -267,7 +271,7 @@ namespace Game.CharacSystem
             API.Geo.Cuboid.Block b;
             CubeFace face;
             if (!this.GetBlockPos(out relBlockPos, out b, out face)) { return; }*/
-            Island island = this.mCharacMgr.World.getIslandAt(this.mCharInfo.IslandLoc);
+            Island island = this.mCharacMgr.World.getIsland();
             Block block = null;
 
             float distance = 10;
@@ -319,7 +323,7 @@ namespace Game.CharacSystem
                 if (material != "")
                 {
                     island.addBlockToScene(prevRelBlockPos, material);
-                    this.mCharacMgr.World.onCreation(prevRelBlockPos, this.mCharInfo.IslandLoc);
+                    this.mCharacMgr.World.onCreation(prevRelBlockPos);
                     //this.mCharacMgr.StateMgr.WriteOnConsole("Face : " + Enum.GetName(typeof(CubeFace), face));
                     this.mCharacMgr.StateMgr.WriteOnConsole("Added : " + material);
                 }

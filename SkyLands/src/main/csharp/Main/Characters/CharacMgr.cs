@@ -9,9 +9,11 @@ using Game.Shoot;
 using Game.GUICreator;
 using Game.RTS;
 
+using API.Ent;
+
 namespace Game.CharacSystem
 {
-    public class CharacMgr
+    public class CharacMgr : CharacterMgr
     {
         private CommandInfo[]          mCommands;
         private List<VanillaCharacter> mCharacList;

@@ -32,7 +32,7 @@ namespace Game.World.Generator
 	    private ScalePoint SCALE      = new ScalePoint();
 	    private Clamp      FINAL      = new Clamp();
 
-        public RandomIsland(SceneNode node, Vector2 size, Biome islandBiome, MainWorld currentWorld) : base(node, size, currentWorld) {
+        public RandomIsland(SceneNode node, Vector2 size, Biome islandBiome, API.Geo.World currentWorld) : base(node, size, currentWorld) {
 
             this.mBiome = islandBiome;
 
