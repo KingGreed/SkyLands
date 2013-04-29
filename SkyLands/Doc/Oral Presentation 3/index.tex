@@ -50,8 +50,6 @@
 \setlength{\columnsep}{1cm}
 \setlength{\TPHorizModule}{\paperwidth}	% Used for textblock
 \setlength{\TPVertModule}{\paperheight}	% Used for textblock
-
-\title {Oral Presentation 1}
 \parskip = 0.25cm              % Summary options (spaces between lines)
 
 % Margin
@@ -92,8 +90,8 @@
 
   	\tableofcontents
   		\pagenumbering{arabic}
+  		\setcounter{page}{2}
   		\newpage
-		
 		\chapter{\textcolor{blue}{Introduction}}
 			According to the string theory, there exist another universe where we sold millions of copy of this game! Unfortunatly, in this universe we though worked our hardest we still need some time.\\
 
@@ -143,7 +141,7 @@ The main drawback of A* algorithm and indeed of any best-first search is its mem
 					\includegraphics[width = 15cm, height = 4cm]{images/robotMesh2.png}
 				\end{center}
 
-			
+			\newpage
 			\section{Shooting}
 				We have two different shoot system for the AI and the player. The one for the AI is really simple whereas we wanted something more enjoyable for the player.
 
@@ -160,22 +158,28 @@ The main drawback of A* algorithm and indeed of any best-first search is its mem
 					\includegraphics[width = 15cm]{images/robotShoot.png}
 				\end{center}
 				
+				\newpage
 				\subsection{For the player}
-				\begin{textblock}{0.508}(0.120, 0.75)
+				\begin{textblock}{0.508}(0.120, 0.15)
 					The player's shooting system is very different from the bullets fired by the AI. He doesn't use guns but fireballs, waterBalls or even magicBalls. \\
 
 					To fire them the player must hold the left mouse button down to create a fireball in front of him.
  				It will grow while the button is pressed and will be thrown if the max size is reached or if the button is released.\\
 				\end{textblock}
 
-				\begin{textblock}{0.628}(0.630, 0.75)
+				\begin{textblock}{0.628}(0.630, 0.125)
 					\begin{figure}
 						\includegraphics[height = 5cm]{images/Fireball.png}
 					\end{figure}
 				\end{textblock}
-\newpage
+				
+				\begin{textblock}{0.628}(0.74, 0.31)
+					\it A small fire ball
+				\end{textblock}
+				
+\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip
 
-					We implemented different robot types and thus set their resistance to the different fireballs. Thus the waterBalls have more damage on fiery robots wherease fireBalls do normal damages against them.\\
+					We implemented different robot types and thus set their resistance to the different fireballs. Indeed the waterBalls have more damage on fiery robots wherease fireBalls do normal damages against them.\\
 
 					As for the collision, the algorith used to test when an entity is hit is the same as the algorith used for the bullets Of course the bigger the fireball the more damage it will inflict.\\
 
@@ -323,8 +327,44 @@ The main drawback of A* algorithm and indeed of any best-first search is its mem
 					\end{figure}
 				\end{textblock}
 \newpage
-			\section{Having fun with Sinbad's textures}
-
+			\section{Having fun with textures}
+				\begin{textblock}{0.628}(0.130, 0.16)
+				\begin{figure}
+					\includegraphics[width=5cm]{images/sinbad_body.png}
+				\end{figure}
+				\end{textblock}
+				
+				\begin{textblock}{0.575}(0.40, 0.2)
+					Creating a whole mesh and all its animation is not always possible. Modifying the texture thought is different. You casn see on the left a .tga files. They are used to apply textures to 3d models. But how can we apply a 2d image to a 3d image ? This is what we called the UV mapping and that's a really powerfull technique.
+				\end{textblock}
+				
+				\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip\bigskip
+				
+				We can do the same for the robot mesh. We will use these different textures to distingue each factions. You can see below 2 different textures for the robots. If you wan to see the result on a 3d model, well you will have to turn the page.
+				
+				\begin{textblock}{0.628}(0.120, 0.47)
+					\begin{figure}
+						\includegraphics[width=6cm]{images/r2skin_K.jpg}
+					\end{figure}
+				\end{textblock}
+				
+				\begin{textblock}{0.628}(0.58, 0.47)
+					\begin{figure}
+						\includegraphics[width=6cm]{images/r2skin_T.jpg}
+					\end{figure}
+				\end{textblock}
+				
+				\newpage
+				
+				
+				\begin{center}
+				\includegraphics[width=14.5cm]{images/newSinbad.png}\\
+				\it The new Sinbad
+				
+				\includegraphics[width=14.5cm]{images/greenRobot.png}\\
+				\it A green robot
+				\end{center}
+				
 				
 
 		\chapter{\textcolor{blue}{Conclusion}}

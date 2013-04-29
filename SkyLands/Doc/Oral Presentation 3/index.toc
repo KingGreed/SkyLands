@@ -1,30 +1,30 @@
 \select@language {english}
-\contentsline {chapter}{\numberline {1}\leavevmode {\color {blue}Introduction}}{2}
-\contentsline {chapter}{\numberline {2}\leavevmode {\color {blue}PathFinding}}{3}
-\contentsline {section}{\numberline {2.1}A star 2d}{3}
-\contentsline {section}{\numberline {2.2}A star 3d}{3}
-\contentsline {chapter}{\numberline {3}\leavevmode {\color {blue}Entities and actions}}{5}
-\contentsline {section}{\numberline {3.1}Robots}{5}
-\contentsline {section}{\numberline {3.2}Shooting}{5}
-\contentsline {subsection}{\numberline {3.2.1}For the AI}{6}
-\contentsline {subsection}{\numberline {3.2.2}For the player}{6}
-\contentsline {chapter}{\numberline {4}\leavevmode {\color {blue}The global AI}}{8}
-\contentsline {chapter}{\numberline {5}\leavevmode {\color {blue}Saving and Loading the game}}{9}
-\contentsline {section}{\numberline {5.1}Algorithm}{9}
-\contentsline {section}{\numberline {5.2}A new menu}{10}
-\contentsline {section}{\numberline {5.3}Integration to the menu}{10}
-\contentsline {chapter}{\numberline {6}\leavevmode {\color {blue}Structures}}{11}
-\contentsline {section}{\numberline {6.1}Behind the scenes}{11}
-\contentsline {section}{\numberline {6.2}Portals}{12}
-\contentsline {section}{\numberline {6.3}Buildings}{12}
-\contentsline {chapter}{\numberline {7}\leavevmode {\color {blue}The dark tower}}{13}
-\contentsline {section}{\numberline {7.1}Introduction to the dark tower}{13}
-\contentsline {section}{\numberline {7.2}The main buildings}{13}
-\contentsline {section}{\numberline {7.3}Bridges}{13}
-\contentsline {section}{\numberline {7.4}Lower towers}{14}
-\contentsline {section}{\numberline {7.5}Roofs}{14}
-\contentsline {section}{\numberline {7.6}DarkBeard}{15}
-\contentsline {chapter}{\numberline {8}\leavevmode {\color {blue}Graphics}}{16}
-\contentsline {section}{\numberline {8.1}Shadows}{16}
-\contentsline {section}{\numberline {8.2}Having fun with Sinbad's textures}{17}
-\contentsline {chapter}{\numberline {9}\leavevmode {\color {blue}Conclusion}}{18}
+\contentsline {chapter}{\numberline {1}\leavevmode {\color {blue}Introduction}}{3}
+\contentsline {chapter}{\numberline {2}\leavevmode {\color {blue}PathFinding}}{4}
+\contentsline {section}{\numberline {2.1}A star 2d}{4}
+\contentsline {section}{\numberline {2.2}A star 3d}{4}
+\contentsline {chapter}{\numberline {3}\leavevmode {\color {blue}Entities and actions}}{6}
+\contentsline {section}{\numberline {3.1}Robots}{6}
+\contentsline {section}{\numberline {3.2}Shooting}{7}
+\contentsline {subsection}{\numberline {3.2.1}For the AI}{7}
+\contentsline {subsection}{\numberline {3.2.2}For the player}{8}
+\contentsline {chapter}{\numberline {4}\leavevmode {\color {blue}The global AI}}{9}
+\contentsline {chapter}{\numberline {5}\leavevmode {\color {blue}Saving and Loading the game}}{10}
+\contentsline {section}{\numberline {5.1}Algorithm}{10}
+\contentsline {section}{\numberline {5.2}A new menu}{11}
+\contentsline {section}{\numberline {5.3}Integration to the menu}{11}
+\contentsline {chapter}{\numberline {6}\leavevmode {\color {blue}Structures}}{12}
+\contentsline {section}{\numberline {6.1}Behind the scenes}{12}
+\contentsline {section}{\numberline {6.2}Portals}{13}
+\contentsline {section}{\numberline {6.3}Buildings}{13}
+\contentsline {chapter}{\numberline {7}\leavevmode {\color {blue}The dark tower}}{14}
+\contentsline {section}{\numberline {7.1}Introduction to the dark tower}{14}
+\contentsline {section}{\numberline {7.2}The main buildings}{14}
+\contentsline {section}{\numberline {7.3}Bridges}{14}
+\contentsline {section}{\numberline {7.4}Lower towers}{15}
+\contentsline {section}{\numberline {7.5}Roofs}{15}
+\contentsline {section}{\numberline {7.6}DarkBeard}{16}
+\contentsline {chapter}{\numberline {8}\leavevmode {\color {blue}Graphics}}{17}
+\contentsline {section}{\numberline {8.1}Shadows}{17}
+\contentsline {section}{\numberline {8.2}Having fun with textures}{18}
+\contentsline {chapter}{\numberline {9}\leavevmode {\color {blue}Conclusion}}{20}
