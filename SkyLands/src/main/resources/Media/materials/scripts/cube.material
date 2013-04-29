@@ -237,6 +237,32 @@ material fireball
         }
     }
 }
+material waterball
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture waterCube.png }
+        }
+    }
+}
+material magicball
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture crystal.png }
+        }
+    }
+}
 material darkTower/darkWood
 {
     technique

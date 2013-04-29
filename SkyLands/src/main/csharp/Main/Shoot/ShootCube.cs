@@ -25,13 +25,14 @@ namespace Game.Shoot
         private bool          mCreated = false;
         private string        mMaterial;
 
-        public ShootCube(SceneManager sceneMgr, VanillaPlayer player, BulletManager bulletManager, string material)
+        public string Material { set { this.mMaterial = value; } }
+
+        public ShootCube(SceneManager sceneMgr, VanillaPlayer player, BulletManager bulletManager)
         {
             this.mSceneMgr = sceneMgr;
             this.mPlayer = player;
             this.mBulletMgr = bulletManager;
             this.mTimeSinceLastBall = new Timer();
-            this.mMaterial = material;
         }
 
         public void Grow(float frameTime, bool allowCreation)

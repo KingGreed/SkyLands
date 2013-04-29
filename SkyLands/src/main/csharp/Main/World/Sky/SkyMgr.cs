@@ -60,7 +60,11 @@ namespace Game.Sky
             this.mCaelumSystem.ManageSceneFog = true;
         }
 
-        public void Update() { this.mCaelumSystem.TimeScale += this.mStateMgr.Input.MouseMoveZ; }
+        public void Update()
+        { 
+            if(this.mStateMgr.Input.IsShiftDown)
+                this.mCaelumSystem.TimeScale += this.mStateMgr.Input.MouseMoveZ;
+        }
 
         public void AddListeners()
         {

@@ -67,6 +67,7 @@ namespace Game.CharacSystem
 
             SceneManager sceneMgr = characMgr.SceneMgr;
             Mogre.Entity ent = sceneMgr.CreateEntity("CharacterEnt_" + this.mCharInfo.Id, meshName);
+
             ent.Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
             Mogre.Entity swordL = sceneMgr.CreateEntity("Sword.mesh");
             ent.AttachObjectToBone("Sheath.L", swordL);
@@ -80,7 +81,7 @@ namespace Game.CharacSystem
 
             this.mCollisionMgr = new CollisionMgr(characMgr.SceneMgr, this.mCharacMgr.World, this);
             this.FeetPosition = this.mCharInfo.SpawnPoint;
-            this.mShootCube = new ShootCube(this.mCharacMgr.SceneMgr, this, this.mCharacMgr.BulletMgr, "fireball");
+            this.mShootCube = new ShootCube(this.mCharacMgr.SceneMgr, this, this.mCharacMgr.BulletMgr);
 
             this.mEmotes = new Emote[]
             {
@@ -116,30 +117,54 @@ namespace Game.CharacSystem
                 if (this.mInput.IsShiftDown)
                 {
                     this.mMovementInfo.Sprint = true;
-                    if (this.mInput.IsMouseButtonDown(MOIS.MouseButtonID.MB_Left)) { this.mShootCube.Grow(frameTime, this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left)); }
-                    if (this.mInput.WasMouseButtonReleased(MOIS.MouseButtonID.MB_Left)) { this.mShootCube.Burst(); }
+                    //if (this.mInput.IsMouseButtonDown(MOIS.MouseButtonID.MB_Left)) { this.mShootCube.Grow(frameTime, this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left)); }
+                    //if (this.mInput.WasMouseButtonReleased(MOIS.MouseButtonID.MB_Left)) { this.mShootCube.Burst(); }
+                }
+                //else
+
+                if (this.mInput.WasMouseButtonReleased(MOIS.MouseButtonID.MB_Left)) { this.mShootCube.Burst(); }
+                if (this.mInput.IsMouseButtonDown(MOIS.MouseButtonID.MB_Left))
+                {
+                    if ((int)this.mHud.Selector <= 2)
+                    {
+                        string material = "";
+                        switch (this.mHud.Selector)
+                        {
+                            case GUICreator.HUD.Selection.FireCube:
+                                material = "fireball";
+                                break;
+                            case GUICreator.HUD.Selection.WaterCube:
+                                material = "waterball";
+                                break;
+                            case GUICreator.HUD.Selection.MagicCube:
+                                material = "magicball";
+                                break;
+                        }
+                        this.mShootCube.Material = material;
+                        this.mShootCube.Grow(frameTime, this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left));
+                    }
                 }
                 else
+                    this.mHud.MoveSelector(this.mInput.MouseMoveZ);
+                bool leftClick = this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left);
+                bool rightClick = this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Right);
+                if (!this.mIsDebugMode && leftClick || rightClick)
                 {
-                    bool leftClick = this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left);
-                    bool rightClick = this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Right);
-                    if (!this.mIsDebugMode && leftClick || rightClick)
-                    {
-                        Vector3 relBlockPos;
-                        API.Geo.Cuboid.Block b;
-                        CubeFace f;
-                        if (!this.GetBlockPos(out relBlockPos, out b, out f)) { return; }
+                    Vector3 relBlockPos;
+                    API.Geo.Cuboid.Block b;
+                    CubeFace f;
+                    if (!this.GetBlockPos(out relBlockPos, out b, out f)) { return; }
                         
-                        if (leftClick)
-                        {
-                            this.mCharacMgr.World.onLeftClick(relBlockPos);
+                    if (leftClick)
+                    {
+                        this.mCharacMgr.World.onLeftClick(relBlockPos);
+                        if((int)this.mHud.Selector > 2)
                             this.AddBlock();
-                        }
-                        if (rightClick)
-                        {
-                            this.mCharacMgr.World.onRightClick(relBlockPos);
-                            //this.DelBlock();
-                        }
+                    }
+                    if (rightClick)
+                    {
+                        this.mCharacMgr.World.onRightClick(relBlockPos);
+                        //this.DelBlock();
                     }
                 }
                 if (this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Middle)) { this.setIsPushedByArcaneLevitator(!this.mMovementInfo.IsPushedByArcaneLevitator); }
@@ -304,27 +329,37 @@ namespace Game.CharacSystem
                 else  /*(face == CubeFace.frontFace)* { relBlockPos.z++; }*/
 
                 string material = "";
-                if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_1, MOIS.KeyCode.KC_NUMPAD1))
-                    material = "Grass";
-                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_2, MOIS.KeyCode.KC_NUMPAD2))
-                    material = "Dirt";
-                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_3, MOIS.KeyCode.KC_NUMPAD3))
-                    material = "Stone";
-                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_4, MOIS.KeyCode.KC_NUMPAD4))
-                    material = "Wood";
-                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_5, MOIS.KeyCode.KC_NUMPAD5))
-                    material = "Leaves";
-                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_6, MOIS.KeyCode.KC_NUMPAD6))
-                    material = "Sand";
-                else if (this.mInput.IsOneKeyEventTrue(this.mInput.IsKeyDown, MOIS.KeyCode.KC_7, MOIS.KeyCode.KC_NUMPAD7))
-                    material = "Construction";
+                switch (this.mHud.Selector)
+                {
+                    case GUICreator.HUD.Selection.Grass:
+                        material = "Grass";
+                        break;
+                    case GUICreator.HUD.Selection.Dirt:
+                        material = "Dirt";
+                        break;
+                    case GUICreator.HUD.Selection.Stone:
+                        material = "Stone";
+                        break;
+                    case GUICreator.HUD.Selection.Wood:
+                        material = "Wood";
+                        break;
+                    case GUICreator.HUD.Selection.Leaves:
+                        material = "Leaves";
+                        break;
+                    case GUICreator.HUD.Selection.Sand:
+                        material = "Sand";
+                        break;
+                    case GUICreator.HUD.Selection.Construction:
+                        material = "Construction";
+                        break;
+                }
 
                 if (material != "")
                 {
                     island.addBlockToScene(prevRelBlockPos, material);
                     this.mCharacMgr.World.onCreation(prevRelBlockPos);
                     //this.mCharacMgr.StateMgr.WriteOnConsole("Face : " + Enum.GetName(typeof(CubeFace), face));
-                    this.mCharacMgr.StateMgr.WriteOnConsole("Added : " + material);
+                    //this.mCharacMgr.StateMgr.WriteOnConsole("Added : " + material);
                 }
             }
         }
