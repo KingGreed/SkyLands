@@ -53,6 +53,18 @@ namespace API.Geo.Cuboid
             this.mFaceNode = node.CreateChildSceneNode();
             this.mEntitiesInIsland = new List<Entity>();
         }
+        public Island(SceneNode node, API.Geo.World currentWorld) {
+            this.mChunkList = new Dictionary<Vector3, Chunk>();
+
+            this.mNode = node;
+            this.mWorld = currentWorld;
+
+            this.blocksAdded = new List<PositionFaceAndStatus>();
+            this.blocksDeleted = new List<PositionFaceAndStatus>();
+
+            this.mFaceNode = node.CreateChildSceneNode();
+            this.mEntitiesInIsland = new List<Entity>();
+        }
 
         //Init
         public abstract void initChunks(Vector2 size);

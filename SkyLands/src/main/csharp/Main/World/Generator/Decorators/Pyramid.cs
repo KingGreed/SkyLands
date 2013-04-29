@@ -50,16 +50,16 @@ namespace Game.World.Generator.Decorators
             }
 
             CharacterInfo iaInfo = new CharacterInfo("Robot-" + Guid.NewGuid().ToString(), false);
-            iaInfo.SpawnPoint = new Vector3(pos.x + _width / 2 - 4, (int)pos.y - 7, (int)pos.z + _width / 2) * Cst.CUBE_SIDE;
+
+            iaInfo.SpawnPoint = new Vector3(pos.x + _width / 2 - 4, (int)pos.y - 5, (int)pos.z + _width / 2) * API.Generic.Cst.CUBE_SIDE;
             ((GameState)curr.mWorld.getStateMgr().GameState).getCharacMgr().AddCharacter(iaInfo);
 
             iaInfo = new CharacterInfo("Robot-" + Guid.NewGuid().ToString(), false);
-            iaInfo.SpawnPoint = new Vector3(pos.x + _width / 2 + 6, (int)pos.y - 7, (int)pos.z + _width / 2) * Cst.CUBE_SIDE;
+            iaInfo.SpawnPoint = new Vector3(pos.x + _width / 2 + 4, (int)pos.y - 5, (int)pos.z + _width / 2) * API.Generic.Cst.CUBE_SIDE;
             ((GameState)curr.mWorld.getStateMgr().GameState).getCharacMgr().AddCharacter(iaInfo);
 
 
             Portals.makePortal(1, curr, new Vector3((int)pos.x + _width / 2 - 2, (int)pos.y - 7, (int)pos.z + _width / 2 - 3));
-            //curr.mWorld.getStateMgr
 
             int tmp2 = 0;
             for (int y = 1; y < 6; y++)

@@ -21,7 +21,7 @@ namespace API.Geo.Cuboid
 
 	    protected Vector3     mChunkSize;
         protected Vector3     mChunkLocation;
-        protected Block[, ,]  mBlockList;
+        public Block[, ,]  mBlockList;
         protected Island      mIsland;
         protected bool[, , ,] mVisible;
 

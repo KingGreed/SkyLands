@@ -42,6 +42,7 @@ namespace API.Generator
 
         public double getMin() { return this.min; }
         public double getMax() { return this.max; }
+        public byte   getId()  { return this.id;  }
 
         public List<string[]> getGroundCover() { return this.mGroundCover; }
     }

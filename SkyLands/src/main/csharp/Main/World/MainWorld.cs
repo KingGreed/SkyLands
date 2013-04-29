@@ -39,25 +39,27 @@ namespace Game.World
 
         public MainWorld(StateManager stateMgr)
         {
-            this.mAge        = 0;
-            this.mSeed       = 42;
-            this.mName = Guid.NewGuid().ToString();
+            this.mAge  = 0;
+            this.mSeed = 42;
+            this.mName = "SinglePlayer";
 
             this.mStateMgr = stateMgr;
             this.mStateMgr.SceneMgr.AmbientLight = ColourValue.ZERO;
-
-            SceneNode node = this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
-
+            
             GameInfo info = this.mStateMgr.GameInfo;
-            if      (info.Type == GameInfo.TypeWorld.Dome)       { this.mIslandLoaded = new DomeIsland(node, info.Size, this); }
-            else if (info.Type == GameInfo.TypeWorld.Plains)     { this.mIslandLoaded = new RandomIsland(node, info.Size, new Plains(), this); }
-            else if (info.Type == GameInfo.TypeWorld.Desert)     { this.mIslandLoaded = new RandomIsland(node, info.Size, new Desert(), this); }
-            else if (info.Type == GameInfo.TypeWorld.Hills)      { this.mIslandLoaded = new RandomIsland(node, info.Size, new Hills(), this); }
-            else  /*(info.Type == GameInfo.TypeWorld.Mountain)*/ { this.mIslandLoaded = new RandomIsland(node, info.Size, new Mountains(), this); }
+            if(!info.Load) {
+                SceneNode node = this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
 
+                if      (info.Type == GameInfo.TypeWorld.Dome)       { this.mIslandLoaded = new DomeIsland(node, info.Size, this); }
+                else if (info.Type == GameInfo.TypeWorld.Plains)     { this.mIslandLoaded = new RandomIsland(node, info.Size, new Plains(), this); }
+                else if (info.Type == GameInfo.TypeWorld.Desert)     { this.mIslandLoaded = new RandomIsland(node, info.Size, new Desert(), this); }
+                else if (info.Type == GameInfo.TypeWorld.Hills)      { this.mIslandLoaded = new RandomIsland(node, info.Size, new Hills(), this); }
+                else  /*(info.Type == GameInfo.TypeWorld.Mountain)*/ { this.mIslandLoaded = new RandomIsland(node, info.Size, new Mountains(), this); }
+            } else {
+                this.load();
+            }
             this.mSkyMgr = new SkyMgr(this.mStateMgr);
         }
-
 
         //get
 
@@ -161,7 +163,7 @@ namespace Game.World
 	    public void save(Entity e) {
 
             var playerFileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" +
-                this.getName() + "-player-" + ".sav";
+                this.getName() + "-player" + ".sav";
 
             new FileInfo(playerFileName).Directory.Create();
             Stream stream;
@@ -170,6 +172,7 @@ namespace Game.World
             try { stream = new FileStream(playerFileName, FileMode.Create, FileAccess.Write); writter = new BinaryWriter(stream); }
             catch { throw new Exception("Could not read file : " + playerFileName); }
 
+            writter.Write((int)this.mStateMgr.GameInfo.Type);
 
             writter.Write(e.getPosition().x);
             writter.Write(e.getPosition().y);
@@ -179,6 +182,26 @@ namespace Game.World
             stream.Close();
 
             e.getIsland().save();
+        }
+
+        public void load() {
+            var playerFileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" + this.getName() + "-player" + ".sav";
+
+            Stream stream;
+            BinaryReader reader;
+
+            try { stream = new FileStream(playerFileName, FileMode.Open, FileAccess.Read); reader = new BinaryReader(stream); }
+            catch { throw new Exception("Could not read file : " + playerFileName); }
+
+            GameInfo.TypeWorld g = (GameInfo.TypeWorld)reader.ReadInt32();
+
+            if (g == GameInfo.TypeWorld.Plains)                  { this.mIslandLoaded = new RandomIsland(this.getAScenNode(), new Plains(),    this); }
+            else if (g == GameInfo.TypeWorld.Desert)             { this.mIslandLoaded = new RandomIsland(this.getAScenNode(), new Desert(),    this); }
+            else if (g == GameInfo.TypeWorld.Hills)              { this.mIslandLoaded = new RandomIsland(this.getAScenNode(), new Hills(),     this); }
+            else  /*(info.Type == GameInfo.TypeWorld.Mountain)*/ { this.mIslandLoaded = new RandomIsland(this.getAScenNode(), new Mountains(), this); }
+
+
+
         }
 
         public bool HasPointCollision(ref Vector3 blockPos) // the argument blockPos is in absolute coord, it becomes relative

@@ -24,6 +24,8 @@ namespace Game.World.Generator
             byteToString     = new Dictionary<byte,   string>  ();
             materialToString = new Dictionary<string, string>  ();
 
+
+            byteToString.Add(0, "Air");
             Type[] blockList = GetTypesInNamespace(Assembly.GetExecutingAssembly(), "Game.World.Blocks");
             for (int i = 0; i < blockList.Length; i++) {
 
@@ -35,7 +37,7 @@ namespace Game.World.Generator
                     if(!staticBlock.ContainsKey(test.getName())) {
                         staticBlock.Add(test.getName(), test);
                         
-                        if(test.getId() != 255 && !byteToString.ContainsKey(test.getId())) { byteToString.Add(test.getId() , test.getName()); }
+                        if(!byteToString.ContainsKey(test.getId())) { byteToString.Add(test.getId() , test.getName()); }
                         else if(test.getId() != 255) { throw new Exception(test.getName() + " has the same Id as " +  byteToString[test.getId()]); }
                         
                         if(test.getMaterial() != null && !materialToString.ContainsKey(test.getMaterial())) {
@@ -53,8 +55,6 @@ namespace Game.World.Generator
         }
 
         public VanillaChunk(Vector3 chunkSize, Vector3 location, Island island) : base(chunkSize, location, island) {
-            //LogManager.Singleton.DefaultLog.LogMessage("Space : " + GC.GetTotalMemory(false));
-
             this.mBlockList = new Block[16, 16, 16];
             for(int x = 0; x < mChunkSize.x; x++) {
                 for(int y = 0; y < mChunkSize.y; y++) {

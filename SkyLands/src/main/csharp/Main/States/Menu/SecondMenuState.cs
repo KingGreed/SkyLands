@@ -46,6 +46,8 @@ namespace Game.States
 
         private void ClickContinueButton(object obj, MouseButtonEventArgs arg) 
         {
+            this.mStateMgr.GameInfo = new GameInfo(true);
+            this.mStateMgr.RequestStatePush(typeof(LoadingState));
         }
 
         private void ClickNewGameButton(object obj, MouseButtonEventArgs arg) 

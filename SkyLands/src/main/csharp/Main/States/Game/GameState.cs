@@ -36,7 +36,9 @@ namespace Game.States
             this.mHUD.IGMenu.SetListener(InGameMenuGUI.ButtonName.Save, this.ClickSaveButton);
 
             this.CreateCharacterMgr();
-            this.mWorld.populate();
+
+            if(!mStateMgr.GameInfo.Load) { this.mWorld.populate(); }
+            this.mWorld.setSafeSpawnPoint();
             this.mWorld.display();
 
             this.mPlayerRTS = new PlayerRTS(this.mHUD);
@@ -85,7 +87,7 @@ namespace Game.States
 
         private void ClickSaveButton(object obj, MouseButtonEventArgs arg)
         {
-            this.mWorld.getIsland().save();
+            this.mWorld.save(this.mCharacMgr.GetMainPlayer());
             this.mHUD.IGMenu.ShowSaveMessage(true);
         }
 

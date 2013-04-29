@@ -41,19 +41,6 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
                 }
             }
 
-            CharacterInfo iaInfo = new CharacterInfo("Robot-" + Guid.NewGuid().ToString(), false);
-            iaInfo.SpawnPoint = new Vector3(loc.x + xMax / 2 - 4, (int)loc.y, (int)loc.z + zMax / 2);
-            ((GameState)current.mWorld.getStateMgr().GameState).getCharacMgr().AddCharacter(iaInfo);
-
-            iaInfo = new CharacterInfo("Robot-" + Guid.NewGuid().ToString(), false);
-            iaInfo.SpawnPoint = new Vector3(loc.x + xMax / 2 + 6, (int)loc.y, (int)loc.z + zMax / 2);
-            ((GameState)current.mWorld.getStateMgr().GameState).getCharacMgr().AddCharacter(iaInfo);
-
-            //prisoner
-            iaInfo = new CharacterInfo("Robot-" + Guid.NewGuid().ToString(), false);
-            iaInfo.SpawnPoint = new Vector3(loc.x + xMax / 2, (int)loc.y, (int)loc.z + zMax / 2 - 2);
-            ((GameState)current.mWorld.getStateMgr().GameState).getCharacMgr().AddCharacter(iaInfo);
-
 
             new DarkBeard().makeDarkBeard(current, towerHeight, loc, xMax, zMax);
             new RoofBuilder().build(current, loc + Vector3.UNIT_Y * towerHeight, new Vector2(xMax, zMax), rd);

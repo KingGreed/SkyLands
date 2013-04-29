@@ -1,8 +1,8 @@
 ﻿using System;
-
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 using LibNoise;
 using LibNoise.Modules;
@@ -32,6 +32,10 @@ namespace Game.World.Generator
 	    private ScalePoint SCALE      = new ScalePoint();
 	    private Clamp      FINAL      = new Clamp();
 
+        public RandomIsland(SceneNode node, Biome islandBiome, API.Geo.World currentWorld) : base(node, currentWorld) {
+            this.mBiome = islandBiome;
+            this.load();
+        }
         public RandomIsland(SceneNode node, Vector2 size, Biome islandBiome, API.Geo.World currentWorld) : base(node, size, currentWorld) {
 
             this.mBiome = islandBiome;

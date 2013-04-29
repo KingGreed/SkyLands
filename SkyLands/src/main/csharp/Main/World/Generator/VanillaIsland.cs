@@ -23,7 +23,24 @@ namespace Game.World.Generator
     {
         static Block defaultBlock = new AirBlock();
 
-        public VanillaIsland(SceneNode node, Vector2 size, API.Geo.World currentWorld) : base(node, size, currentWorld) {
+        public VanillaIsland(SceneNode node, Vector2 size, API.Geo.World currentWorld)
+            : base(node, size, currentWorld) {
+            foreach(KeyValuePair<string, Block> pair in VanillaChunk.staticBlock) {
+                if(!(pair.Value is AirBlock) && pair.Value.getMaterial() != null) {
+                    for(int i = 0; i < 6; i++) {
+                        if(!this.multiList.ContainsKey(pair.Value.getFace(i))) {
+                            switch(pair.Value.getMeshType()) {
+                                case 2: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiVerticalHalfBlock(pair.Value.getFace(i), this, this.mWorld)); break;
+                                case 1: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiHorizontalHalfBlock(pair.Value.getFace(i), this, this.mWorld)); break;
+                                case 0: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiBlock(pair.Value.getFace(i), this, this.mWorld)); break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+            public VanillaIsland(SceneNode node, API.Geo.World currentWorld) : base(node, currentWorld) {
             foreach (KeyValuePair<string, Block> pair in VanillaChunk.staticBlock) {
                 if(!(pair.Value is AirBlock) && pair.Value.getMaterial() != null) {
                     for (int i = 0; i < 6; i++) {
@@ -284,80 +301,87 @@ namespace Game.World.Generator
 
         public override void save() {
             var blockfileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" +
-                this.mWorld.getName() + "-Island-" + this.mNode.Position.x.ToString() + "-" +
-                this.mNode.Position.y.ToString() + "-" + this.mNode.Position.z.ToString() + ".sav";
-
-            new FileInfo(blockfileName).Directory.Create();
-
-            Stream stream;;
-            BinaryWriter writter;
-
-            try { stream = new FileStream(blockfileName, FileMode.Create, FileAccess.Write); writter = new BinaryWriter(stream); }
-            catch { throw new Exception("Could not read file : " + blockfileName); }
-
-            writter.Write(this.mIslandSize.x);
-            writter.Write(this.mIslandSize.z);
+                this.mWorld.getName() + "-Island-" + this.mBiome.getId() + ".sav";
 
 
-            foreach(KeyValuePair<Vector3, Chunk> pair in this.mChunkList) {
-                writter.Write(pair.Key.x);
-                writter.Write(pair.Key.y);
-                writter.Write(pair.Key.z);
+            using(TextWriter writer = new StreamWriter(blockfileName)) {
 
-                for(int x = 0; x < 16; x++) {
-                    for(int y = 0; y < 16; y++) {
-                        for(int z = 0; z < 16; z++) {
-                            writter.Write(pair.Value.getBlock(x, y, z).getId());       
+                writer.WriteLine((int)this.mIslandSize.x);
+                writer.WriteLine((int)this.mIslandSize.y);
+                writer.WriteLine((int)this.mIslandSize.z);
+
+                foreach(KeyValuePair<Vector3, Chunk> pair in this.mChunkList) {
+                    writer.WriteLine((int)pair.Key.x);
+                    writer.WriteLine((int)pair.Key.y);
+                    writer.WriteLine((int)pair.Key.z);
+
+                    for(int x = 0; x < 16; x++) {
+                        for(int y = 0; y < 16; y++) {
+                            for(int z = 0; z < 16; z++) {
+                                writer.WriteLine(pair.Value.mBlockList[x, y, z].getId());
+                            }
                         }
                     }
                 }
             }
-            stream.Close();
-            writter.Close();
 
 
 
             var entityfileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" +
                 this.mWorld.getName() + "-Island-entities" + this.mNode.Position.x.ToString() + "-" +
-                this.mNode.Position.y.ToString() + "-" + this.mNode.Position.z.ToString() + ".sav";
-
-            try { stream = new FileStream(blockfileName, FileMode.Create, FileAccess.Write); writter = new BinaryWriter(stream); }
-            catch { throw new Exception("Could not read file : " + blockfileName); }
+                this.mNode.Position.y.ToString() + "-" + this.mNode.Position.z.ToString() + ".txt";
 
 
-            foreach(API.Ent.Entity e in this.mEntitiesInIsland) {
-                writter.Write(e.getId());
-                writter.Write(e.getPosition().x);
-                writter.Write(e.getPosition().y);
-                writter.Write(e.getPosition().z);
+
+            using(StreamWriter writer = new StreamWriter(entityfileName)) {
+                foreach(API.Ent.Entity e in this.mEntitiesInIsland) {
+                    writer.Write(e.getId());
+                    writer.Write(e.getPosition().x);
+                    writer.Write(e.getPosition().y);
+                    writer.Write(e.getPosition().z);
+                }
             }
         }
 
-        public override void load() {
-            var fileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" +
-                this.mWorld.getName() + "Island-" + this.mNode.Position.x.ToString() + "-" +
-                this.mNode.Position.y.ToString() + "-" + this.mNode.Position.z.ToString() + ".sav";
-
-            FileStream reader;
-            
-            try { reader = File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.None); }
-            catch { throw new Exception("Could not read file : " + fileName); }
-
-            this.mIslandSize.x = reader.ReadByte();
-            this.mIslandSize.z = reader.ReadByte();
-            this.mIslandSize.y = reader.ReadByte();
-
-            for(int x = 0; x < this.mIslandSize.x * Cst.CHUNK_SIDE; x++) {
-                for(int z = 0; z < this.mIslandSize.z * Cst.CHUNK_SIDE; z++) {
-                    for(int y = 0; y < this.mIslandSize.y * Cst.CHUNK_SIDE; y++) {
-                        this.setBlockAt(x, y, z, (byte)reader.ReadByte(), true);
+        public byte[] linearize(Block[, ,] a) {
+            byte[] b = new byte[a.GetLength(0) * a.GetLength(1) * a.GetLength(2)];
+            int i = 0;
+            for(int x = 0; x < 16; x++) {
+                for(int y = 0; y < 16; y++) {
+                    for(int z = 0; z < 16; z++) {
+                        b[i] = a[x, y, z].getId();
+                        i++;
                     }
                 }
             }
-
-            reader.Close();
+            return b;
         }
 
+        public override void load() {
+            var blockfileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" +
+            this.mWorld.getName() + "-Island-" + this.mBiome.getId() + ".sav";
+
+            new FileInfo(blockfileName).Directory.Create();
+
+            StreamReader stream;
+
+            try { stream = new StreamReader(blockfileName); }
+            catch { throw new Exception("Could not read file : " + blockfileName); }
+
+
+            this.mIslandSize = new Vector3(Convert.ToInt32(stream.ReadLine()), Convert.ToInt32(stream.ReadLine()), Convert.ToInt32(stream.ReadLine()));
+
+            while(stream.BaseStream.Position != stream.BaseStream.Length) {
+                Vector3 pos = new Vector3(Convert.ToInt32(stream.ReadLine()), Convert.ToInt32(stream.ReadLine()), Convert.ToInt32(stream.ReadLine()));
+                Chunk c = new VanillaChunk(new Vector3(16, 16, 16), pos, this);
+                this.mChunkList.Add(pos, c);
+                for(int x = 0; x < 16; x++) { for(int y = 0; y < 16; y++) { for(int z = 0; z < 16; z++) { c.setBlock(x, y, z, Convert.ToByte(stream.ReadLine())); } } }
+            }
+
+            stream.Close();
+        }
+
+        private int toInt(char[] b) { return b[3] * 0xFFFFFF + b[2] * 0xFFFF + b[1] * 0xFF + b[0]; }
         public override string getMaterialFromName(string name) { return VanillaChunk.staticBlock[name].getMaterial(); }
 
         public override Block getBlock(int x, int y, int z, bool force) {
