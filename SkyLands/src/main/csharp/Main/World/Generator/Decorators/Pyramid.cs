@@ -5,6 +5,7 @@ using System.Text;
 
 using API.Generator;
 using API.Geo.Cuboid;
+using API.Generic;
 
 using Game.World.Blocks;
 using Game.CharacSystem;
@@ -49,11 +50,11 @@ namespace Game.World.Generator.Decorators
             }
 
             CharacterInfo iaInfo = new CharacterInfo("Robot-" + Guid.NewGuid().ToString(), false);
-            iaInfo.SpawnPoint = new Vector3(pos.x + _width / 2 - 4, (int)pos.y - 7, (int)pos.z + _width / 2);
+            iaInfo.SpawnPoint = new Vector3(pos.x + _width / 2 - 4, (int)pos.y - 7, (int)pos.z + _width / 2) * Cst.CUBE_SIDE;
             ((GameState)curr.mWorld.getStateMgr().GameState).getCharacMgr().AddCharacter(iaInfo);
 
             iaInfo = new CharacterInfo("Robot-" + Guid.NewGuid().ToString(), false);
-            iaInfo.SpawnPoint = new Vector3(pos.x + _width / 2 + 6, (int)pos.y - 7, (int)pos.z + _width / 2);
+            iaInfo.SpawnPoint = new Vector3(pos.x + _width / 2 + 6, (int)pos.y - 7, (int)pos.z + _width / 2) * Cst.CUBE_SIDE;
             ((GameState)curr.mWorld.getStateMgr().GameState).getCharacMgr().AddCharacter(iaInfo);
 
 

@@ -16,7 +16,9 @@ namespace Game.CharacSystem
 {
     public abstract class VanillaCharacter : Character
     {
-        private const float WALK_SPEED = 350.0f;
+        private const float WALK_SPEED = 300;
+        private const float YAW_SPEED = 7;    // Only for forced movement
+        private const float SPRINT_FACTOR = 1.65f;
 
         protected CharacMgr     mCharacMgr;
         protected SceneNode     mNode;
@@ -29,7 +31,9 @@ namespace Game.CharacSystem
         private float           mTimeSinceDead;   // Wait the end of the animation 
 
         private PathFinder      mPathFinder;
-        private Stack<Vector3>  mForcedDestination;
+        private Queue<Vector3>  mForcedDestination;
+        private Radian          mYawGoal;   // The rotation the charac has to reach to go to the next forcedPoint
+        private double          mLastSquaredDist;
 
         public SceneNode     Node            { get { return this.mNode; } }
         public bool          IsAllowedToMove { get { return this.mMovementInfo.IsAllowedToMove; } set { this.mMovementInfo.IsAllowedToMove = value; } }
@@ -54,15 +58,16 @@ namespace Game.CharacSystem
             this.mPreviousDirection = Vector3.ZERO;
             this.mTimeSinceDead = 0;
             this.mPreviousBlockPos = -1 * Vector3.UNIT_SCALE;
-            this.mForcedDestination = new Stack<Vector3>();
+            this.mForcedDestination = new Queue<Vector3>();
             this.mNode = characMgr.SceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id);
+            this.mLastSquaredDist = -1;
         }
 
         private void OnFall(bool isFalling)
         {
             if (isFalling)
             {
-                if (this.mCharInfo.IsPlayer) { (this.mMesh as Sinbad).JumpLoop(); }
+                this.mMesh.JumpLoop();
                 GravitySpeed.Reset();
             }
             else if (this.mCharInfo.IsPlayer)
@@ -81,7 +86,7 @@ namespace Game.CharacSystem
 
         public Degree GetYaw()  // Return the yaw between -180 and 180
         {
-            Degree deg = this.mNode.Orientation.Yaw;
+            Degree deg = this.mNode.Orientation.Yaw - this.mMesh.InitialOrientation.Yaw;
 
             if (Mogre.Math.Abs(this.mNode.Orientation.w) < Mogre.Math.Abs(this.mNode.Orientation.y))    // isOnBottom
             {
@@ -96,31 +101,34 @@ namespace Game.CharacSystem
             bool isDead = this.mCharInfo.Life <= 0;
             Vector3 translation = Vector3.ZERO;
 
-            if (this.mMovementInfo.IsPushedByArcaneLevitator)
-                translation.y = ArcaneLevitatorSpeed.GetSpeed();
-            else if (this.mMovementInfo.IsJumping)
-                translation.y = JumpSpeed.GetSpeed();
-            else
-                translation.y = GravitySpeed.GetSpeed();
-
             this.mCollisionMgr.DrawPoints();
 
             if (!isDead)
             {
                 if (this.mForcedDestination.Count > 0)
                 {
-                    if ((this.BlockPosition - this.mForcedDestination.Peek()).SquaredLength > 3)
+                    float x = this.FeetPosition.x - this.mForcedDestination.Peek().x;
+                    float z = this.FeetPosition.z - this.mForcedDestination.Peek().z;
+                    float squaredDistance = x * x + z * z;
+                    if (this.mLastSquaredDist == -1 || squaredDistance > 2500)
                     {
-                        float a = Mogre.Math.ATan2(this.FeetPosition.z - this.mForcedDestination.Peek().x, this.FeetPosition.x - this.mForcedDestination.Peek().z).ValueAngleUnits; // Angle between the z axis and the wanted direction
-                        float y = this.GetYaw().ValueAngleUnits;
+                        //float actYaw = this.GetYaw().ValueAngleUnits;
+                        //this.mMovementInfo.YawValue = YAW_SPEED * YawFactor.GetFactor(this.mYawGoal - actYaw);
+                        //this.mMovementInfo.MoveDirection = this.mMesh.MoveForwardDir;
+                        //this.mMovementInfo.MoveDirection = (this.FeetPosition - this.mForcedDestination.Peek()).NormalisedCopy;
+                        //this.mMovementInfo.MoveDirection = this.mMesh.MoveForwardDir;
+                        this.mNode.Translate((this.mForcedDestination.Peek() - this.FeetPosition).NormalisedCopy * WALK_SPEED * frameTime);
+                        //translation = (this.FeetPosition - this.mForcedDestination.Peek()).NormalisedCopy * WALK_SPEED;
+                        this.mLastSquaredDist = squaredDistance;
 
-                        float angle = a - y;
-                        //this.mMovementInfo.YawValue = angle;
-                        this.mMovementInfo.MoveDirection = Vector3.UNIT_Z;
+                        //if (squaredDistance < 4000 && this.mForcedDestination.Peek().y > this.FeetPosition.y)
+                            //this.mMovementInfo.MoveDirection += Vector3.UNIT_Y;
                     }
                     else
                     {
-                        this.mForcedDestination.Pop();
+                        this.mForcedDestination.Dequeue();
+                        //this.ComputeNextYaw();
+                        this.mLastSquaredDist = -1;
                     }
                 }
                 else if (this.mMovementInfo.IsAllowedToMove)    // Actualise mMovementInfo
@@ -129,15 +137,22 @@ namespace Game.CharacSystem
                     else { (this as VanillaNonPlayer).Update(frameTime); }
                 }
 
-                translation += WALK_SPEED * this.mMovementInfo.MoveDirection * new Vector3(1, 0, 1);    // Ignores the y axis translation here
+                if (this.mMovementInfo.IsPushedByArcaneLevitator)
+                    translation.y = ArcaneLevitatorSpeed.GetSpeed();
+                else if (this.mMovementInfo.IsJumping)
+                    translation.y = JumpSpeed.GetSpeed();
+                else
+                    translation.y = GravitySpeed.GetSpeed();
+
+                translation += WALK_SPEED * this.mMovementInfo.MoveDirection * new Vector3(1, 0, 1) * (this.mMovementInfo.Sprint ? SPRINT_FACTOR : 1);    // Ignores the y axis translation here
                 this.mNode.Yaw(this.mMovementInfo.YawValue * frameTime);
 
                 this.Translate(translation * frameTime);    // Apply the translation
 
                 if (!this.mMovementInfo.IsJumping && !this.mMovementInfo.IsFalling && !this.mMovementInfo.IsPushedByArcaneLevitator)
                 {
-                    int zDirSign = (int)Mogre.Math.Sign(this.mMovementInfo.MoveDirection.z);
-                    int prevZDirSign = (int)Mogre.Math.Sign(this.mPreviousDirection.z);
+                    int zDirSign = this.mMesh.Zdir(this.mMovementInfo.MoveDirection);
+                    int prevZDirSign = this.mMesh.Zdir(this.mPreviousDirection);
 
                     if (zDirSign != 0 && zDirSign != prevZDirSign)
                         this.mMesh.Walk(true, zDirSign);
@@ -179,16 +194,37 @@ namespace Game.CharacSystem
             }
         }
 
+        private void ComputeNextYaw()
+        {
+            if (this.mForcedDestination.Count >= 1)
+            {
+                Vector3 ab = 100 * Vector3.UNIT_Z;//this.FeetPosition - this.mNode.ConvertLocalToWorldPosition(100 * this.mMesh.MoveForwardDir);
+                Vector3 ac = this.mCharacMgr.GetMainPlayer().FeetPosition - this.FeetPosition;
+
+                Vector2 ab_n = new Vector2(ab.x, ab.z).NormalisedCopy;
+                Vector2 ac_n = new Vector2(ac.x, ac.z).NormalisedCopy;
+
+                this.mYawGoal = -Mogre.Math.ACos(ab_n.DotProduct(ac_n));
+                this.mNode.SetOrientation((float)Mogre.Math.Cos(this.mYawGoal / 2), 0, (float)Mogre.Math.Sin(this.mYawGoal / 2), 0);
+                //this.mYawGoal -= this.GetYaw().ValueAngleUnits;
+            }
+        }
+
         public void MoveTo(Vector3 destination)
         {
-            destination = MainWorld.getRelativeFromAbsolute(destination);
-            this.mPathFinder = new PathFinder(destination, MainWorld.getRelativeFromAbsolute(this.mNode.Position), this.mCharacMgr.World.getIsland());
+            //this.mForcedDestination.Enqueue(destination);
+            //this.ComputeNextYaw();
+            this.mPathFinder = new PathFinder(MainWorld.getRelativeFromAbsolute(destination), MainWorld.getRelativeFromAbsolute(this.mNode.Position), this.mCharacMgr.World.getIsland());
 
-            if(this.mPathFinder.Goal.Size > 0) { this.mForcedDestination.Clear(); }
-            while(this.mPathFinder.Goal.Size > 0)
+            if (this.mPathFinder.Goal != null)
             {
-                this.mForcedDestination.Push(this.mPathFinder.Goal.Head.Data * Cst.CUBE_SIDE);
-                this.mPathFinder.Goal.RemoveFirst();
+                if (this.mPathFinder.Goal.Size > 0) { this.mForcedDestination.Clear(); }
+                while (this.mPathFinder.Goal.Size > 0)
+                {
+                    this.mForcedDestination.Enqueue(this.mPathFinder.Goal.Head.Data * Cst.CUBE_SIDE);
+                    this.mPathFinder.Goal.RemoveFirst();
+                }
+                this.ComputeNextYaw();
             }
         }
 

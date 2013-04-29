@@ -76,6 +76,7 @@ namespace Game.CharacSystem
 
             this.mNode.AttachObject(ent);
             this.mNode.Scale(this.mMesh.MeshSize / ent.BoundingBox.Size);
+            this.mNode.Orientation = this.mMesh.InitialOrientation;
 
             this.mCollisionMgr = new CollisionMgr(characMgr.SceneMgr, this.mCharacMgr.World, this);
             this.FeetPosition = this.mCharInfo.SpawnPoint;
@@ -114,6 +115,7 @@ namespace Game.CharacSystem
 
                 if (this.mInput.IsShiftDown)
                 {
+                    this.mMovementInfo.Sprint = true;
                     if (this.mInput.IsMouseButtonDown(MOIS.MouseButtonID.MB_Left)) { this.mShootCube.Grow(frameTime, this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left)); }
                     if (this.mInput.WasMouseButtonReleased(MOIS.MouseButtonID.MB_Left)) { this.mShootCube.Burst(); }
                 }

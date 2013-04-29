@@ -46,7 +46,7 @@ namespace Game.States
             this.mCharacMgr.AddCharacter(playerInfo);
 
             CharacterInfo iaInfo = new CharacterInfo("Robot-01", false);
-            iaInfo.SpawnPoint = playerInfo.SpawnPoint + new Mogre.Vector3(800, 0, 200);
+            iaInfo.SpawnPoint = playerInfo.SpawnPoint + new Mogre.Vector3(800, 100, 200);
             this.mCharacMgr.AddCharacter(iaInfo);
 
             this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr, this.mHUD);

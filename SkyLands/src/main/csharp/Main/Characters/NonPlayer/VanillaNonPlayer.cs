@@ -21,7 +21,7 @@ namespace Game.CharacSystem
 
             this.mNode.AttachObject(ent);
             this.mNode.Scale(this.mMesh.MeshSize / ent.BoundingBox.Size);
-            this.mNode.Orientation = new Quaternion(Mogre.Math.Sqrt(0.5f), 0, -Mogre.Math.Sqrt(0.5f), 0);
+            this.mNode.Orientation = this.mMesh.InitialOrientation;
 
             this.FeetPosition = this.mCharInfo.SpawnPoint;
             this.mCollisionMgr = new CollisionMgr(characMgr.SceneMgr, this.mCharacMgr.World, this);

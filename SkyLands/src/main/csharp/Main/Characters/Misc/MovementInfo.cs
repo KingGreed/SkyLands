@@ -9,10 +9,12 @@ namespace Game.CharacSystem
         private bool mIsAllowedToMove, mIsFalling, mIsJumping, mIsPushedByArcaneLevitator;
         private Vector3 mMoveDirection;
         private float mYawValue;
+        private bool mSprint;
 
         public float YawValue { get { return this.mYawValue; } set { this.mYawValue = value; } }
         public bool IsAllowedToMove { get { return this.mIsAllowedToMove; } set { this.mIsAllowedToMove = value; } }
         public bool IsPushedByArcaneLevitator { get { return this.mIsPushedByArcaneLevitator; } set { this.mIsPushedByArcaneLevitator = value; } }
+        public bool Sprint { get { return this.mSprint; } set { this.mSprint = value; } }
         public bool IsFalling
         {
             get { return this.mIsFalling; }
@@ -49,6 +51,7 @@ namespace Game.CharacSystem
         {
             this.mMoveDirection = Vector3.ZERO;
             this.mYawValue = 0;
+            this.mSprint = false;
         }
     }
 }

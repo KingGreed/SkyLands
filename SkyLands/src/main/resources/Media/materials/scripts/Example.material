@@ -189,3 +189,17 @@ material Robot_T
 		}
 	}
 }
+material 01-Default
+{
+   technique
+   {
+      pass
+      {
+         ambient 0.211765 1 0.266667 1
+         diffuse 0.211765 1 0.266667 1
+         specular 0 0 0 1 10
+      }
+
+   }
+
+}

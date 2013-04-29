@@ -13,11 +13,8 @@ namespace Game.Animation
         public static int FEET_DIFF = 8;
         public enum AnimName : byte { IdleBase, IdleTop, RunBase, RunTop, JumpStart, JumpLoop, JumpEnd, Dance }
 
-        public Sinbad(Entity ent) : base(new AnimationMgr(ent.AllAnimationStates, Enum.GetNames(typeof(AnimName)),
-            new string[] { Enum.GetName(typeof(AnimName), AnimName.JumpStart), Enum.GetName(typeof(AnimName), AnimName.JumpEnd) }), SINBAD_SIZE, FEET_DIFF)
-        {
-
-        }
+        public Sinbad(Entity ent) : base(new AnimationMgr(ent.AllAnimationStates, Enum.GetNames(typeof(AnimName)), new string[] { Enum.GetName(typeof(AnimName),
+            AnimName.JumpStart), Enum.GetName(typeof(AnimName), AnimName.JumpEnd) }), SINBAD_SIZE, FEET_DIFF) { }
 
         public override void Idle(bool on = true)
         {
@@ -36,7 +33,7 @@ namespace Game.Animation
             this.mAnimMgr.SetAnims(MeshAnim.GetString(AnimName.JumpStart, AnimName.JumpLoop));
         }
 
-        public void JumpLoop()
+        public override void JumpLoop()
         {
             this.mAnimMgr.SetAnims(MeshAnim.GetString(AnimName.JumpLoop));
         }

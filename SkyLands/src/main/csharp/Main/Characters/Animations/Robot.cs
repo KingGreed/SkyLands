@@ -13,10 +13,11 @@ namespace Game.Animation
         public static int FEET_DIFF = -65;
         public enum AnimName : byte { Idle, Walk, Slump, Shoot, Die }
 
-        public Robot(Entity ent) : base(new AnimationMgr(ent.AllAnimationStates, Enum.GetNames(typeof(AnimName)),
-                new string[] { Enum.GetName(typeof(AnimName), AnimName.Slump), Enum.GetName(typeof(AnimName), AnimName.Shoot), Enum.GetName(typeof(AnimName), AnimName.Die) }), ROBOT_SIZE, FEET_DIFF)
+        public Robot(Entity ent) : base(new AnimationMgr(ent.AllAnimationStates, Enum.GetNames(typeof(AnimName)), new string[] { Enum.GetName(typeof(AnimName), AnimName.Slump),
+            Enum.GetName(typeof(AnimName), AnimName.Shoot), Enum.GetName(typeof(AnimName), AnimName.Die) }), ROBOT_SIZE, FEET_DIFF)
         {
-
+            this.MoveForwardDir = Vector3.UNIT_X;
+            this.InitialOrientation = new Quaternion(Mogre.Math.Sqrt(0.5f), 0, -Mogre.Math.Sqrt(0.5f), 0);
         }
 
         public override void Idle(bool on = true)
@@ -34,6 +35,11 @@ namespace Game.Animation
         public override void StartJump()
         {
             this.mAnimMgr.SetAnims(MeshAnim.GetString(AnimName.Slump));
+        }
+
+        public override void JumpLoop()
+        {
+            this.mAnimMgr.SetAnims(MeshAnim.GetString(AnimName.Idle));
         }
 
         public void Shoot()
