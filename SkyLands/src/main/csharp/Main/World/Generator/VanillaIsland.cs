@@ -132,7 +132,7 @@ namespace Game.World.Generator
 
             foreach (KeyValuePair<BlockFace, Vector3> keyVal in coordToCheck)
             {
-                if (this.getBlock(keyVal.Value, false) is Air) { 
+                if((this.getBlock(keyVal.Value, false) is TransparentBlock) || this.getBlock(keyVal.Value, false) is Air) { 
                     this.setVisibleFaceAt(blockCoord, keyVal.Key, true); hasVisiblefaces = true; 
                 }
             }

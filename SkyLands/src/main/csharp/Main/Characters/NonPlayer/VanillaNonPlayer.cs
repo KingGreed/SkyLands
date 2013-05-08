@@ -27,6 +27,7 @@ namespace Game.CharacSystem
             this.mCollisionMgr = new CollisionMgr(characMgr.SceneMgr, this.mCharacMgr.World, this);
         }
 
+
         public new void Update(float frameTime)
         {
         }

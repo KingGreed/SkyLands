@@ -167,19 +167,16 @@ namespace Game.World
 
             new FileInfo(playerFileName).Directory.Create();
             Stream stream;
-            BinaryWriter writter;
 
-            try { stream = new FileStream(playerFileName, FileMode.Create, FileAccess.Write); writter = new BinaryWriter(stream); }
-            catch { throw new Exception("Could not read file : " + playerFileName); }
 
-            writter.Write((int)this.mStateMgr.GameInfo.Type);
+            using(TextWriter writer = new StreamWriter(playerFileName)) {
+                writer.WriteLine(e.getIsland().getBiome().getId());
+                writer.WriteLine(e.getPosition().x);
+                writer.WriteLine(e.getPosition().y);
+                writer.WriteLine(e.getPosition().z);
+            }
 
-            writter.Write(e.getPosition().x);
-            writter.Write(e.getPosition().y);
-            writter.Write(e.getPosition().z);
 
-            writter.Close();
-            stream.Close();
 
             e.getIsland().save();
         }
@@ -187,13 +184,12 @@ namespace Game.World
         public void load() {
             var playerFileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" + this.getName() + "-player" + ".sav";
 
-            Stream stream;
-            BinaryReader reader;
+            StreamReader stream;
 
-            try { stream = new FileStream(playerFileName, FileMode.Open, FileAccess.Read); reader = new BinaryReader(stream); }
+            try { stream = new StreamReader(playerFileName); }
             catch { throw new Exception("Could not read file : " + playerFileName); }
 
-            GameInfo.TypeWorld g = (GameInfo.TypeWorld)reader.ReadInt32();
+            GameInfo.TypeWorld g = (GameInfo.TypeWorld)Convert.ToInt32(stream.ReadLine());
 
             if (g == GameInfo.TypeWorld.Plains)                  { this.mIslandLoaded = new RandomIsland(this.getAScenNode(), new Plains(),    this); }
             else if (g == GameInfo.TypeWorld.Desert)             { this.mIslandLoaded = new RandomIsland(this.getAScenNode(), new Desert(),    this); }
