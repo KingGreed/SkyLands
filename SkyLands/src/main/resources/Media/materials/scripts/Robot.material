@@ -1,0 +1,115 @@
+material 1 - Default {}
+
+material Examples/Robot
+{
+	// Hardware skinning technique
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture r2skin.jpg
+			}
+		}
+	}
+}
+
+material Robot_DW
+{
+	// Hardware skinning techniique
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture r2skin_DW.jpg
+			}
+		}
+	}
+
+	// Software blending technique
+	technique
+	{
+		pass
+		{
+
+			texture_unit
+			{
+				texture r2skin_DW.jpg
+			}
+		}
+	}
+}
+
+material Robot_K
+{
+	// Hardware skinning techniique
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture r2skin_K.jpg
+			}
+		}
+	}
+
+	// Software blending technique
+	technique
+	{
+		pass
+		{
+
+			texture_unit
+			{
+				texture r2skin_K.jpg
+			}
+		}
+	}
+}
+
+material Robot_N
+{
+	// Hardware skinning techniique
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture r2skin_N.jpg
+			}
+		}
+	}
+
+	// Software blending technique
+	technique
+	{
+		pass
+		{
+
+			texture_unit
+			{
+				texture r2skin_N.jpg
+			}
+		}
+	}
+}
+
+material Robot_T
+{
+	technique
+	{
+		pass
+		{
+
+			texture_unit
+			{
+				texture r2skin_T.jpg
+			}
+		}
+	}
+}

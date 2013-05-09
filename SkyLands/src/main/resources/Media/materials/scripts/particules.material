@@ -1,0 +1,56 @@
+material Flare
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend add
+			depth_write off
+
+			texture_unit
+			{
+				texture flaretrail.png
+			}
+		}
+	}
+}
+material Flare2
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend add
+			depth_write off
+
+			texture_unit
+			{
+				texture flaretrail.png
+			}
+		}
+	}
+}
+
+material FlarePointSprite
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend add
+			depth_write off
+
+			point_sprites on
+			point_size 1
+			point_size_attenuation on
+
+			texture_unit
+			{
+				texture flare.png
+			}
+		}
+	}
+}

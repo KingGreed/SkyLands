@@ -1,12 +1,17 @@
 ﻿using System;
 
+using Mogre;
+
 using Miyagi.Common.Events;
 
 using Game.CharacSystem;
 using Game.World;
+using Game.World.Display;
 using Game.GUICreator;
 using Game.Shoot;
 using Game.RTS;
+
+
 
 namespace Game.States
 {
@@ -54,6 +59,8 @@ namespace Game.States
             this.mDebugMode = new DebugMode(this.mStateMgr.Input, this.mCharacMgr, this.mHUD);
             this.Show();
             Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop begin");
+
+            ParticleGenerator.mkParticle(this.mStateMgr.SceneMgr, iaInfo.SpawnPoint, "MultiEmitters");
         }
 
         public void CreateCharacterMgr() {

@@ -37,8 +37,7 @@ namespace Game.World
         private StateManager  mStateMgr;
         private SkyMgr        mSkyMgr;
 
-        public MainWorld(StateManager stateMgr)
-        {
+        public MainWorld(StateManager stateMgr) {
             this.mAge  = 0;
             this.mSeed = 42;
             this.mName = "SinglePlayer";
@@ -59,6 +58,7 @@ namespace Game.World
                 this.load();
             }
             this.mSkyMgr = new SkyMgr(this.mStateMgr);
+
         }
 
         //get
@@ -166,7 +166,6 @@ namespace Game.World
                 this.getName() + "-player" + ".sav";
 
             new FileInfo(playerFileName).Directory.Create();
-            Stream stream;
 
 
             using(TextWriter writer = new StreamWriter(playerFileName)) {
