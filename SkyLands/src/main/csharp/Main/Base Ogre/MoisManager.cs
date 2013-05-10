@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Globalization;
 using MOIS;
 
 
@@ -7,22 +7,20 @@ namespace Game
     public class MoisManager
     {
         private InputManager mInputMgr;
-        private Keyboard mKeyboard;
-        private Mouse mMouse;
-        private bool[] mKeyDown;
-        private bool[] mKeyPressed;
-        private bool[] mKeyReleased;
-        private bool[] mMouseDown;
-        private bool[] mMousePressed;
-        private bool[] mMouseReleased;
+        private readonly bool[] mKeyDown;
+        private readonly bool[] mKeyPressed;
+        private readonly bool[] mKeyReleased;
+        private readonly bool[] mMouseDown;
+        private readonly bool[] mMousePressed;
+        private readonly bool[] mMouseReleased;
         private Vector3 mMouseMove;
         private Vector3 mMousePos;
         private Vector3 mMousePressedPos;
         private Vector3 mMouseReleasedPos;
-        public delegate bool IsKeyEvent(MOIS.KeyCode key);   // Represents WasKeyPressed, WasKeyReleased or IsKeyDown
+        public delegate bool IsKeyEvent(KeyCode key);   // Represents WasKeyPressed, WasKeyReleased or IsKeyDown
 
-        public Keyboard KeyBoard { get { return this.mKeyboard; } }
-        public Mouse Mouse { get { return this.mMouse; } }
+        public Keyboard KeyBoard { get; private set; }
+        public Mouse Mouse { get; private set; }
 
         public bool IsShiftDown { get { return this.IsOneKeyEventTrue(this.IsKeyDown, KeyCode.KC_LSHIFT, KeyCode.KC_RSHIFT); } }
         public bool IsCtrltDown { get { return this.IsOneKeyEventTrue(this.IsKeyDown, KeyCode.KC_LCONTROL, KeyCode.KC_RCONTROL); } }
@@ -47,8 +45,8 @@ namespace Game
         internal MoisManager()
         {
             this.mInputMgr = null;
-            this.mKeyboard = null;
-            this.mMouse = null;
+            this.KeyBoard = null;
+            this.Mouse = null;
             this.mKeyDown = new bool[256];
             this.mKeyPressed = new bool[256];
             this.mKeyReleased = new bool[256];
@@ -74,28 +72,28 @@ namespace Game
                 return false;
 
             // initialize keyboard
-            this.mKeyboard = (Keyboard)this.mInputMgr.CreateInputObject(MOIS.Type.OISKeyboard, true);
-            if (this.mKeyboard == null)
+            this.KeyBoard = (Keyboard)this.mInputMgr.CreateInputObject(MOIS.Type.OISKeyboard, true);
+            if (this.KeyBoard == null)
                 return false;
 
             // set up keyboard event handlers
-            this.mKeyboard.KeyPressed += OnKeyPressed;
-            this.mKeyboard.KeyReleased += OnKeyReleased;
+            this.KeyBoard.KeyPressed += OnKeyPressed;
+            this.KeyBoard.KeyReleased += OnKeyReleased;
 
             // initialize mouse
-            this.mMouse = (Mouse)this.mInputMgr.CreateInputObject(MOIS.Type.OISMouse, true);
-            if (this.mMouse == null)
+            this.Mouse = (Mouse)this.mInputMgr.CreateInputObject(MOIS.Type.OISMouse, true);
+            if (this.Mouse == null)
                 return false;
 
             // set up area for absolute mouse positions
-            MouseState_NativePtr state = this.mMouse.MouseState;
+            MouseState_NativePtr state = this.Mouse.MouseState;
             state.width = (int) width;
             state.height = (int) height;
 
             // set up mouse event handlers
-            this.mMouse.MouseMoved += OnMouseMoved;
-            this.mMouse.MousePressed += OnMousePressed;
-            this.mMouse.MouseReleased += OnMouseReleased;
+            this.Mouse.MouseMoved += OnMouseMoved;
+            this.Mouse.MousePressed += OnMousePressed;
+            this.Mouse.MouseReleased += OnMouseReleased;
 
             this.Clear();
 
@@ -110,8 +108,8 @@ namespace Game
             this.ClearMouseReleased();
             this.ClearMouseMove();
 
-            this.mKeyboard.Capture();
-            this.mMouse.Capture();
+            this.KeyBoard.Capture();
+            this.Mouse.Capture();
         }
 
         public void Clear()
@@ -137,17 +135,17 @@ namespace Game
         public bool WasMouseButtonReleased(MouseButtonID button) { return this.mMouseReleased[(int)button]; }
         public bool WasMouseMoved()                              { return this.mMouseMove.x != 0 || this.mMouseMove.y != 0 || this.mMouseMove.z != 0; }
 
-        public bool IsOneKeyEventTrue(IsKeyEvent keyEvent, params MOIS.KeyCode[] keys)
+        public bool IsOneKeyEventTrue(IsKeyEvent keyEvent, params KeyCode[] keys)
         {
-            foreach (MOIS.KeyCode key in keys)
+            foreach (KeyCode key in keys)
                 if (keyEvent(key)) { return true; }
 
             return false;
         }
 
-        public bool AreAllKeyEventTrue(IsKeyEvent keyEvent, params MOIS.KeyCode[] keys)
+        public bool AreAllKeyEventTrue(IsKeyEvent keyEvent, params KeyCode[] keys)
         {
-            foreach (MOIS.KeyCode key in keys)
+            foreach (KeyCode key in keys)
                 if (!keyEvent(key)) { return false; }
 
             return true;
@@ -295,16 +293,16 @@ namespace Game
 
         internal void Shutdown()
         {
-            if (this.mMouse != null)
+            if (this.Mouse != null)
             {
-                this.mInputMgr.DestroyInputObject(this.mMouse);
-                this.mMouse = null;
+                this.mInputMgr.DestroyInputObject(this.Mouse);
+                this.Mouse = null;
             }
 
-            if (this.mKeyboard != null)
+            if (this.KeyBoard != null)
             {
-                this.mInputMgr.DestroyInputObject(this.mKeyboard);
-                this.mKeyboard = null;
+                this.mInputMgr.DestroyInputObject(this.KeyBoard);
+                this.KeyBoard = null;
             }
 
             if (this.mInputMgr != null)

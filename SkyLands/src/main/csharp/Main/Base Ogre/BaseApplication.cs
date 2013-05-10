@@ -1,8 +1,5 @@
 using System;
-using System.Collections.Generic;
 using Mogre;
-
-using Game.GUICreator;
 
 namespace Game.BaseApp
 {
@@ -10,15 +7,16 @@ namespace Game.BaseApp
     
     public abstract class BaseApplication
     {
-        protected Root          mRoot;
+        private const string PLUGINS_CFG = "plugins.cfg";
+        private const string RESOURCES_CFG = "resources.cfg";
+
+        protected Root mRoot;
         protected SceneManager  mSceneMgr;
         protected RenderWindow  mWindow;
         protected MoisManager   mInput;
         protected Camera        mCam;
         protected Viewport      mViewport;
         protected bool          mIsShutDownRequested = false;
-        private string          mPluginsCfg          = "plugins.cfg";
-        private string          mResourcesCfg        = "resources.cfg";
         private int             mRenderMode          = 0;
         private MyOverlay       mDebugOverlay;
 
@@ -26,13 +24,13 @@ namespace Game.BaseApp
 
         public void Go()
         {
-            try
+            //try
             {
                 if (!this.Setup()) { return; }
                 this.mRoot.StartRendering();
                 this.Shutdown();
             }
-            catch (System.Runtime.InteropServices.SEHException e)
+            /*catch (System.Runtime.InteropServices.SEHException e)
             {
                 Console.WriteLine(e);
 
@@ -49,12 +47,12 @@ namespace Game.BaseApp
                     e.Message, "Error",
                     System.Windows.Forms.MessageBoxButtons.OK,
                     System.Windows.Forms.MessageBoxIcon.Error);
-            }
+            }*/
         }
 
         private bool Setup()
         {
-            this.mRoot = new Root(mPluginsCfg);
+            this.mRoot = new Root(PLUGINS_CFG);
 
             if (!this.Configure())
                 return false;
@@ -125,7 +123,7 @@ namespace Game.BaseApp
         {
             // Load resource paths from config file
             var cf = new ConfigFile();
-            cf.Load(mResourcesCfg, "\t:=", true);
+            cf.Load(RESOURCES_CFG, "\t:=", true);
 
             // Go through all sections & settings in the file
             var seci = cf.GetSectionIterator();

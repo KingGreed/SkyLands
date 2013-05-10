@@ -62,8 +62,13 @@ namespace Game.IGConsole
             {
                 this.mEnabled = value;
                 this.CurrentTextBox.Focused = this.mEnabled;
-                if (this.mEnabled) { this.Visible = true; }
-                else               { this.mTimer.Reset(); }
+                if (this.mEnabled)
+                {
+                    this.Visible = true;
+                    this.mStateMgr.MainState.CameraMgr.IsAllowedToMoveCam = false;
+                }
+                else
+                    this.mTimer.Reset();
             }
         }
         public bool Verr

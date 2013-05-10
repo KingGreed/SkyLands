@@ -7,7 +7,6 @@ using Game.States;
 using Game.IGConsole;
 using Game.Shoot;
 using Game.GUICreator;
-using Game.RTS;
 
 using API.Ent;
 
@@ -15,33 +14,31 @@ namespace Game.CharacSystem
 {
     public class CharacMgr : CharacterMgr
     {
-        private CommandInfo[]          mCommands;
-        private List<VanillaCharacter> mCharacList;
-        private MainPlayerCamera       mMainPlayerCam;
-        private StateManager           mStateMgr;
-        private MoisManager            mInput;
-        private MainWorld              mWorld;
-        private BulletManager          mBulletMgr;
-        private HUD                    mHUD;
-        private PlayerRTS              mPlayerRTS;
-        private string                 mSinbadMesh = "Sinbad.mesh";
-        private string                 mRobotMesh = "robot.mesh";
+        private const string SINBAD_MESH = "Sinbad.mesh";
+        private const string ROBOT_MESH = "robot.mesh";
 
-        public StateManager     StateMgr      { get { return this.mStateMgr; } }
-        public SceneManager     SceneMgr      { get { return this.mStateMgr.SceneMgr; } }
-        public MoisManager      Input         { get { return this.mInput; } }
-        public MainWorld        World         { get { return this.mWorld; } }
-        public MainPlayerCamera MainPlayerCam { get { return this.mMainPlayerCam; } }
-        public BulletManager    BulletMgr     { get { return this.mBulletMgr; } }
+        private readonly CommandInfo[]          mCommands;
+        private readonly List<VanillaCharacter> mCharacList;
+        private readonly StateManager           mStateMgr;
+        private readonly MoisManager            mInput;
+        private readonly MainWorld              mWorld;
+        private readonly BulletManager          mBulletMgr;
+        private readonly HUD                    mHUD;
+        private readonly CameraMgr              mCameraMgr;
 
-        public CharacMgr(StateManager stateMgr, MainWorld world, BulletManager bulletMgr, HUD hud, PlayerRTS playerRTS)
+        public StateManager  StateMgr   { get { return this.mStateMgr; } }
+        public SceneManager  SceneMgr   { get { return this.mStateMgr.SceneMgr; } }
+        public MoisManager   Input      { get { return this.mInput; } }
+        public MainWorld     World      { get { return this.mWorld; } }
+        public VanillaPlayer MainPlayer { get; private set; }
+        public BulletManager BulletMgr  { get { return this.mBulletMgr; } }
+
+        public CharacMgr(StateManager stateMgr, MainWorld world, CameraMgr cameraMgr)
         {
             this.mStateMgr = stateMgr;
             this.mInput = stateMgr.Input;
             this.mWorld = world;
-            this.mBulletMgr = bulletMgr;
-            this.mHUD = hud;
-            this.mPlayerRTS = playerRTS;
+            this.mCameraMgr = cameraMgr;
             this.mCharacList = new List<VanillaCharacter>();
 
             this.mCommands = new CommandInfo[]
@@ -62,48 +59,58 @@ namespace Game.CharacSystem
             this.mStateMgr.MyConsole.AddCommands(this.mCommands);
         }
 
+        public CharacMgr(StateManager stateMgr, MainWorld world, BulletManager bulletMgr, CameraMgr cameraMgr) : this(stateMgr, world, cameraMgr)
+        {
+            this.mBulletMgr = bulletMgr;
+            this.mHUD = (HUD)stateMgr.MainState.MainGUI;
+        }
+
         public void AddCharacter(CharacterInfo info)
         {
             string type;
 
             if (info.IsPlayer)
             {
+                if (this.mStateMgr.GameInfo.IsInEditorMode)
+                    throw new Exception("Can't add player in the story editor");
+                
                 type = "Player";
-                VanillaPlayer player = new VanillaPlayer(this, this.mSinbadMesh, info, this.mInput);
+                VanillaPlayer player = new VanillaPlayer(this, SINBAD_MESH, info, this.mInput);
                 this.mCharacList.Add(player);
-                if (this.GetMainPlayer() == null)
+                if (this.MainPlayer == null)
                 {
-                    this.mMainPlayerCam = new MainPlayerCamera(this.mStateMgr.Camera, player, this.mStateMgr.Window.Width, this.mStateMgr.Window.Height);
-                    player.MainPlayer(this.mMainPlayerCam, this.mHUD);
+                    player.MakeHimMainPlayer(this.mCameraMgr, new MainPlayerCamera(this.mStateMgr.Camera, player), this.mHUD);
+                    this.MainPlayer = player;
                 }
             }
             else
             {
                 type = "NonPlayer";
-                this.mCharacList.Add(new VanillaNonPlayer(this, this.mRobotMesh, info));
+                this.mCharacList.Add(new VanillaNonPlayer(this, ROBOT_MESH, info));
             }
 
             LogManager.Singleton.DefaultLog.LogMessage(type + " " + info.Name + " added");
         }
 
-        public void RemoveCharac(VanillaCharacter charac)
-        {
-            this.mCharacList.Remove(charac);
-            charac.Dispose();
-        }
-
         public VanillaCharacter GetCharacterByListPos(int index) { return this.mCharacList[index]; }
         public VanillaCharacter GetCharacterById(int id)             { return this.mCharacList.Find(charac => charac.Info.Id == id); }
-        public VanillaPlayer GetMainPlayer() { return (VanillaPlayer)this.mCharacList.Find(c => c.Info.IsPlayer == true && (c as VanillaPlayer).IsMainPlayer); }
 
         public int GetNumberOfCharacter() { return this.mCharacList.Count; }
 
         public void Update(float frameTime)
         {
             for (int i = 0; i < this.mCharacList.Count; i++)
+            {
+                if (this.mCharacList[i].WaitForRemove)
+                {
+                    this.mCharacList[i].Dispose();
+                    this.mCharacList.Remove(this.mCharacList[i]);
+                    continue;
+                }
                 this.mCharacList[i].Update(frameTime);
+            }
 
-            this.mMainPlayerCam.Update();
+            if (this.MainPlayer != null && this.mCameraMgr.IsAllowedToMoveCam) { this.MainPlayer.MainPlayerCam.Update(); }
         }
 
         public void Dispose()
@@ -116,8 +123,6 @@ namespace Game.CharacSystem
 
             CharacterInfo.ResetID();
             this.mStateMgr.MyConsole.DeleteCommands(this.mCommands);
-            this.mMainPlayerCam.Dispose();
-            this.mMainPlayerCam = null;
         }
     }
 }

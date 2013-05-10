@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Mogre;
 
 using Game.World;
@@ -24,7 +23,6 @@ namespace Game.CharacSystem
         protected SceneNode     mNode;
         protected MeshAnim      mMesh;
         protected CharacterInfo mCharInfo;
-        protected MovementInfo  mMovementInfo;
         protected CollisionMgr  mCollisionMgr;
         private Vector3         mPreviousDirection;
         private Vector3         mPreviousBlockPos;
@@ -36,9 +34,10 @@ namespace Game.CharacSystem
         private double          mLastSquaredDist;
 
         public SceneNode     Node            { get { return this.mNode; } }
-        public bool          IsAllowedToMove { get { return this.mMovementInfo.IsAllowedToMove; } set { this.mMovementInfo.IsAllowedToMove = value; } }
+        public MovementInfo  MovementInfo    { get; protected set; }
         public Vector3       Size            { get { return this.mMesh.MeshSize; } }
         public CharacterInfo Info            { get { return this.mCharInfo; } }
+        public bool          WaitForRemove   { get; private set; }
         public Vector3       FeetPosition
         {
             get         { return this.mNode.Position - new Vector3(0, this.Size.y / 2 + this.mMesh.FeetDiff, 0); }
@@ -50,11 +49,11 @@ namespace Game.CharacSystem
             get { return MainWorld.getRelativeFromAbsolute(this.FeetPosition); }
         }
 
-        protected VanillaCharacter(CharacMgr characMgr, string meshName, CharacterInfo charInfo)
+        protected VanillaCharacter(CharacMgr characMgr, CharacterInfo charInfo)
         {
             this.mCharacMgr = characMgr;
             this.mCharInfo = charInfo;
-            this.mMovementInfo = new MovementInfo(OnFall, OnJump);
+            this.MovementInfo = new MovementInfo(OnFall, OnJump);
             this.mPreviousDirection = Vector3.ZERO;
             this.mTimeSinceDead = 0;
             this.mPreviousBlockPos = -1 * Vector3.UNIT_SCALE;
@@ -71,7 +70,7 @@ namespace Game.CharacSystem
                 GravitySpeed.Reset();
             }
             else if (this.mCharInfo.IsPlayer)
-                (this.mMesh as Sinbad).EndJump();
+                ((Sinbad) this.mMesh).EndJump();
         }
 
         private void OnJump(bool isJumping)
@@ -81,7 +80,7 @@ namespace Game.CharacSystem
                 this.mMesh.StartJump();
                 JumpSpeed.Jump();
             }
-            else { this.mMovementInfo.IsFalling = true; }
+            else { this.MovementInfo.IsFalling = true; }
         }
 
         public Degree GetYaw()  // Return the yaw between -180 and 180
@@ -98,12 +97,11 @@ namespace Game.CharacSystem
 
         public void Update(float frameTime)
         {
-            bool isDead = this.mCharInfo.Life <= 0;
             Vector3 translation = Vector3.ZERO;
 
             this.mCollisionMgr.DrawPoints();
 
-            if (!isDead)
+            if (this.mCharInfo.Life > 0)
             {
                 if (this.mForcedDestination.Count > 0)
                 {
@@ -131,27 +129,27 @@ namespace Game.CharacSystem
                         this.mLastSquaredDist = -1;
                     }
                 }
-                else if (this.mMovementInfo.IsAllowedToMove)    // Actualise mMovementInfo
+                else
                 {
-                    if (this.mCharInfo.IsPlayer) { (this as VanillaPlayer).Update(frameTime); }
-                    else { (this as VanillaNonPlayer).Update(frameTime); }
+                    if      (this.mCharInfo.IsPlayer)            { ((VanillaPlayer) this).Update(frameTime); }
+                    else if (this.MovementInfo.IsAllowedToMove) { ((VanillaNonPlayer)this).Update(frameTime); }
                 }
 
-                if (this.mMovementInfo.IsPushedByArcaneLevitator)
+                if (this.MovementInfo.IsPushedByArcaneLevitator)
                     translation.y = ArcaneLevitatorSpeed.GetSpeed();
-                else if (this.mMovementInfo.IsJumping)
+                else if (this.MovementInfo.IsJumping)
                     translation.y = JumpSpeed.GetSpeed();
                 else
                     translation.y = GravitySpeed.GetSpeed();
 
-                translation += WALK_SPEED * this.mMovementInfo.MoveDirection * new Vector3(1, 0, 1) * (this.mMovementInfo.Sprint ? SPRINT_FACTOR : 1);    // Ignores the y axis translation here
-                this.mNode.Yaw(this.mMovementInfo.YawValue * frameTime);
+                translation += WALK_SPEED * this.MovementInfo.MoveDirection * new Vector3(1, 0, 1) * (this.MovementInfo.Sprint ? SPRINT_FACTOR : 1);    // Ignores the y axis translation here
+                this.mNode.Yaw(this.MovementInfo.YawValue * frameTime);
 
                 this.Translate(translation * frameTime);    // Apply the translation
 
-                if (!this.mMovementInfo.IsJumping && !this.mMovementInfo.IsFalling && !this.mMovementInfo.IsPushedByArcaneLevitator)
+                if (!this.MovementInfo.IsJumping && !this.MovementInfo.IsFalling && !this.MovementInfo.IsPushedByArcaneLevitator)
                 {
-                    int zDirSign = this.mMesh.Zdir(this.mMovementInfo.MoveDirection);
+                    int zDirSign = this.mMesh.Zdir(this.MovementInfo.MoveDirection);
                     int prevZDirSign = this.mMesh.Zdir(this.mPreviousDirection);
 
                     if (zDirSign != 0 && zDirSign != prevZDirSign)
@@ -159,7 +157,7 @@ namespace Game.CharacSystem
                     else if (zDirSign == 0 && prevZDirSign != 0)
                         this.mMesh.Walk(false);
                 }
-                this.mPreviousDirection = this.mMovementInfo.MoveDirection;
+                this.mPreviousDirection = this.MovementInfo.MoveDirection;
                 if (this.mMesh.AnimMgr.CurrentAnims.Count == 0) // By default apply idle anim
                 {
                     this.mMesh.Idle();
@@ -169,11 +167,11 @@ namespace Game.CharacSystem
             else
             {
                 this.mTimeSinceDead += frameTime;
-                if (this.mTimeSinceDead >= 2) { this.mCharacMgr.RemoveCharac(this); }
+                if (this.mTimeSinceDead >= 2) { this.WaitForRemove = true; }
             }
 
             this.mMesh.Update(frameTime);
-            this.mMovementInfo.ClearInfo();
+            this.MovementInfo.ClearInfo();
         }
 
         private void Translate(Vector3 relTranslation)  // relTranslation is the translation relative to the player. Return the actual relative translation
@@ -181,8 +179,8 @@ namespace Game.CharacSystem
             Vector3 actualTranslation = this.mCollisionMgr.ComputeCollision(relTranslation * this.mNode.LocalAxes.Transpose());
 
             /* Here translate has been modified to avoid collisions */
-            this.mMovementInfo.IsFalling = actualTranslation.y < 0;
-            this.mMovementInfo.IsJumping = actualTranslation.y > 0 && JumpSpeed.IsJumping;
+            this.MovementInfo.IsFalling = actualTranslation.y < 0;
+            this.MovementInfo.IsJumping = actualTranslation.y > 0 && JumpSpeed.IsJumping;
 
             this.mNode.Translate(actualTranslation);
             Vector3 blockPos = MainWorld.getRelativeFromAbsolute(this.FeetPosition);
@@ -199,13 +197,13 @@ namespace Game.CharacSystem
             if (this.mForcedDestination.Count >= 1)
             {
                 Vector3 ab = 100 * Vector3.UNIT_Z;//this.FeetPosition - this.mNode.ConvertLocalToWorldPosition(100 * this.mMesh.MoveForwardDir);
-                Vector3 ac = this.mCharacMgr.GetMainPlayer().FeetPosition - this.FeetPosition;
+                Vector3 ac = this.mCharacMgr.MainPlayer.FeetPosition - this.FeetPosition;
 
-                Vector2 ab_n = new Vector2(ab.x, ab.z).NormalisedCopy;
-                Vector2 ac_n = new Vector2(ac.x, ac.z).NormalisedCopy;
+                Vector2 abNormalized = new Vector2(ab.x, ab.z).NormalisedCopy;
+                Vector2 acNormalized = new Vector2(ac.x, ac.z).NormalisedCopy;
 
-                this.mYawGoal = -Mogre.Math.ACos(ab_n.DotProduct(ac_n));
-                this.mNode.SetOrientation((float)Mogre.Math.Cos(this.mYawGoal / 2), 0, (float)Mogre.Math.Sin(this.mYawGoal / 2), 0);
+                this.mYawGoal = -Mogre.Math.ACos(abNormalized.DotProduct(acNormalized));
+                this.mNode.SetOrientation(Mogre.Math.Cos(this.mYawGoal / 2), 0, Mogre.Math.Sin(this.mYawGoal / 2), 0);
                 //this.mYawGoal -= this.GetYaw().ValueAngleUnits;
             }
         }
@@ -231,15 +229,15 @@ namespace Game.CharacSystem
         public void Hit(Bullet b)
         {
             this.mCharInfo.Life -= b.Damage;
-            if (this.mCharInfo.IsPlayer && (this as VanillaPlayer).HUD != null) { (this as VanillaPlayer).HUD.UpdateLife(this.mCharInfo.Life, VanillaPlayer.DEFAULT_PLAYER_LIFE); }
+            if (this.mCharInfo.IsPlayer && ((VanillaPlayer) this).HUD != null) { ((VanillaPlayer) this).HUD.UpdateLife(this.mCharInfo.Life, VanillaPlayer.DEFAULT_PLAYER_LIFE); }
 
             if (this.mCharInfo.Life <= 0)
             {
-                this.mMovementInfo.IsJumping = false;
-                this.mMovementInfo.IsPushedByArcaneLevitator = false;
-
-                if (!this.mCharInfo.IsPlayer) { (this.mMesh as Robot).Die(); }
-                else { this.mCharacMgr.RemoveCharac(this); }
+                this.MovementInfo.IsJumping = false;
+                this.MovementInfo.IsPushedByArcaneLevitator = false;
+                
+                if (!this.mCharInfo.IsPlayer) { ((Robot) this.mMesh).Die(); }   // Don't remove the charac right now to play the animation
+                else {this.WaitForRemove = true;}
             }
         }
 
@@ -260,7 +258,7 @@ namespace Game.CharacSystem
 
         /* Entity */
         public int getId()                        { return this.mCharInfo.Id; }
-        public void remove()                      { this.mCharacMgr.RemoveCharac(this); }
+        public void remove()                      { this.WaitForRemove = true; }
         public bool isRemoved()                   { throw new NotImplementedException(); }
         public bool isSpawned()                   { throw new NotImplementedException(); }
         public void setSavable(bool savable)      { throw new NotImplementedException(); }
@@ -272,11 +270,15 @@ namespace Game.CharacSystem
         public Island getIsland() { return this.mCharacMgr.World.getIsland(); }
         public Vector3 getPosition() { return this.BlockPosition; }
 
-        public void setIsPushedByArcaneLevitator(bool value)
+        public void setIsPushedByArcaneLevitator(bool isPushedWanted)
         {
-            if (value && !this.mMovementInfo.IsPushedByArcaneLevitator)
+            if (isPushedWanted && !this.MovementInfo.IsPushedByArcaneLevitator)
                 ArcaneLevitatorSpeed.StartLevitation();
-            this.mMovementInfo.IsPushedByArcaneLevitator = value;
+
+            if (!isPushedWanted)
+                GravitySpeed.Reset();
+
+            this.MovementInfo.IsPushedByArcaneLevitator = isPushedWanted;
             this.mMesh.AnimMgr.DeleteAllAnims();
         }
     }

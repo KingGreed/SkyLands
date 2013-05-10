@@ -16,6 +16,7 @@ namespace Game.BaseApp
         private bool   mFastMove;
         private bool   mFreeze;
 
+        public Camera Camera     { get { return this.mCamera; } }
         public bool GoingForward { set { mGoingForward = value; } get { return mGoingForward; } }
         public bool GoingBack    { set { mGoingBack = value; }    get { return mGoingBack; } }
         public bool GoingLeft    { set { mGoingLeft = value; }    get { return mGoingLeft; } }

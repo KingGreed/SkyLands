@@ -34,7 +34,7 @@ namespace Game.States
         {
             if (this.mWaitOneFrame) { this.mWaitOneFrame = false; return; }
             this.mStateMgr.RequestStatePop();
-            this.mStateMgr.RequestStatePush(typeof(GameState));
+            this.mStateMgr.RequestStatePush(this.mStateMgr.GameInfo.IsInEditorMode ? typeof(StoryEditorState) : typeof(GameState));
         }
 
         protected override void Shutdown() { this.mLoadingGUI.Dispose(); }

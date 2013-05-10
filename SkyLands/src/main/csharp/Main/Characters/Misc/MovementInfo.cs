@@ -5,25 +5,25 @@ namespace Game.CharacSystem
     public class MovementInfo
     {
         public delegate void MovementEvent(bool actualState);
-        private MovementEvent mOnFall, mOnJump;
-        private bool mIsAllowedToMove, mIsFalling, mIsJumping, mIsPushedByArcaneLevitator;
+        private readonly MovementEvent mOnFall, mOnJump;
+        private bool mIsFalling, mIsJumping;
         private Vector3 mMoveDirection;
-        private float mYawValue;
-        private bool mSprint;
 
-        public float YawValue { get { return this.mYawValue; } set { this.mYawValue = value; } }
-        public bool IsAllowedToMove { get { return this.mIsAllowedToMove; } set { this.mIsAllowedToMove = value; } }
-        public bool IsPushedByArcaneLevitator { get { return this.mIsPushedByArcaneLevitator; } set { this.mIsPushedByArcaneLevitator = value; } }
-        public bool Sprint { get { return this.mSprint; } set { this.mSprint = value; } }
+        public float YawValue                 { get; set; }
+        public float PitchValue               { get; set; }
+        public bool IsAllowedToMove           { get; set; }
+        public bool IsPushedByArcaneLevitator { get; set; }
+        public bool Sprint                    { get; set; }
+
         public bool IsFalling
         {
             get { return this.mIsFalling; }
-            set { if (this.mIsFalling != value && !this.mIsPushedByArcaneLevitator) { this.mIsFalling = value; this.mOnFall(this.IsFalling); } }
+            set { if (this.mIsFalling != value && !this.IsPushedByArcaneLevitator) { this.mIsFalling = value; this.mOnFall(this.IsFalling); } }
         }
         public bool IsJumping
         {
             get { return this.mIsJumping; }
-            set { if (this.mIsJumping != value && !this.mIsPushedByArcaneLevitator) { this.mIsJumping = value; this.mOnJump(this.IsJumping); } }
+            set { if (this.mIsJumping != value && !this.IsPushedByArcaneLevitator) { this.mIsJumping = value; this.mOnJump(this.IsJumping); } }
         }
         public Vector3 MoveDirection    // MoveDirection value must be set once per frame
         {
@@ -39,10 +39,10 @@ namespace Game.CharacSystem
         {
             this.mOnFall = onFall;
             this.mOnJump = onJump;
-            this.mIsAllowedToMove = true;
+            this.IsAllowedToMove = true;
             this.mIsFalling = false;
             this.mIsJumping = false;
-            this.mIsPushedByArcaneLevitator = false;
+            this.IsPushedByArcaneLevitator = false;
             this.mMoveDirection = new Vector3();
             this.ClearInfo();
         }
@@ -50,8 +50,8 @@ namespace Game.CharacSystem
         public void ClearInfo()
         {
             this.mMoveDirection = Vector3.ZERO;
-            this.mYawValue = 0;
-            this.mSprint = false;
+            this.YawValue = 0;
+            this.Sprint = false;
         }
     }
 }

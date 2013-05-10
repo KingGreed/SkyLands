@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace Game.States
+﻿namespace Game.States
 {
     public abstract class State
     {
@@ -10,8 +7,8 @@ namespace Game.States
         protected string mName;
 
         public string Name { get { return this.mName; } }
-        
-        public State(StateManager stateMgr, string name)
+
+        protected State(StateManager stateMgr, string name)
         {
             this.mStateMgr = stateMgr;
             this.mIsStartedUp = false;
@@ -29,9 +26,9 @@ namespace Game.States
 
         protected abstract void Startup();
 
-        public abstract void Hide();
+        public virtual void Hide() {}
 
-        public abstract void Show();
+        public virtual void Show() {}
 
         public abstract void Update(float frameTime);
 

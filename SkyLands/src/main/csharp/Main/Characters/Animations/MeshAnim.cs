@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using Mogre;
 
@@ -10,8 +7,8 @@ namespace Game.Animation
     public abstract class MeshAnim
     {
         protected AnimationMgr mAnimMgr;
-        private Vector3 mMeshSize;
-        private int mFeetDiff;
+        private readonly Vector3 mMeshSize;
+        private readonly int mFeetDiff;
         private Vector3 mMoveForwardDir = Vector3.UNIT_Z;
         private Quaternion mInitialOrientation = Quaternion.IDENTITY;
 
@@ -21,7 +18,7 @@ namespace Game.Animation
         public Quaternion InitialOrientation { get { return this.mInitialOrientation; } protected set { this.mInitialOrientation = value; } }
         public int FeetDiff { get { return this.mFeetDiff; } }
 
-        public MeshAnim(AnimationMgr animMgr, Vector3 meshSize, int feetDiff)
+        protected MeshAnim(AnimationMgr animMgr, Vector3 meshSize, int feetDiff)
         {
             this.mAnimMgr = animMgr;
             this.mMeshSize = meshSize;
@@ -33,6 +30,7 @@ namespace Game.Animation
         public abstract void StartJump();
         public abstract void JumpLoop();
         public abstract bool IsAbleTo(string anim);
+        public virtual void ToFreeCamMode() {}
 
         public static string[] GetString<T>(params T[] anims) where T : struct, IConvertible
         {

@@ -16,9 +16,7 @@ using Game.World.Generator;
 using Game.States;
 using Game.Sky;
 using Game.World.Blocks;
-using Game.World.Display;
 using Game.World.Generator.Biomes;
-using Game.CharacSystem;
 
 using Mogre;
 
@@ -49,8 +47,8 @@ namespace Game.World
             if(!info.Load) {
                 SceneNode node = this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
 
-                if      (info.Type == GameInfo.TypeWorld.Dome)       { this.mIslandLoaded = new DomeIsland(node, info.Size, this); }
-                else if (info.Type == GameInfo.TypeWorld.Plains)     { this.mIslandLoaded = new RandomIsland(node, info.Size, new Plains(), this); }
+                //if      (info.Type == GameInfo.TypeWorld.Dome)       { this.mIslandLoaded = new DomeIsland(node, info.Size, this); }
+                if (info.Type == GameInfo.TypeWorld.Plains)          { this.mIslandLoaded = new RandomIsland(node, info.Size, new Plains(), this); }
                 else if (info.Type == GameInfo.TypeWorld.Desert)     { this.mIslandLoaded = new RandomIsland(node, info.Size, new Desert(), this); }
                 else if (info.Type == GameInfo.TypeWorld.Hills)      { this.mIslandLoaded = new RandomIsland(node, info.Size, new Hills(), this); }
                 else  /*(info.Type == GameInfo.TypeWorld.Mountain)*/ { this.mIslandLoaded = new RandomIsland(node, info.Size, new Mountains(), this); }

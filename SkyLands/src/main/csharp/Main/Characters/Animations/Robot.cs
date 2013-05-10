@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using Mogre;
 
@@ -10,11 +8,14 @@ namespace Game.Animation
     class Robot : MeshAnim
     {
         public static readonly Vector3 ROBOT_SIZE = new Vector3(70, 130, 85);
-        public static int FEET_DIFF = -65;
+        public const int FEET_DIFF = -65;
         public enum AnimName : byte { Idle, Walk, Slump, Shoot, Die }
 
-        public Robot(Entity ent) : base(new AnimationMgr(ent.AllAnimationStates, Enum.GetNames(typeof(AnimName)), new string[] { Enum.GetName(typeof(AnimName), AnimName.Slump),
-            Enum.GetName(typeof(AnimName), AnimName.Shoot), Enum.GetName(typeof(AnimName), AnimName.Die) }), ROBOT_SIZE, FEET_DIFF)
+        public Robot(Entity ent) : base(new AnimationMgr(ent.AllAnimationStates, Enum.GetNames(typeof(AnimName)),
+                                        new string[] { Enum.GetName(typeof(AnimName), AnimName.Slump),
+                                                       Enum.GetName(typeof(AnimName), AnimName.Shoot),
+                                                       Enum.GetName(typeof(AnimName), AnimName.Die) }),
+                                        ROBOT_SIZE, FEET_DIFF)
         {
             this.MoveForwardDir = Vector3.UNIT_X;
             this.InitialOrientation = new Quaternion(Mogre.Math.Sqrt(0.5f), 0, -Mogre.Math.Sqrt(0.5f), 0);
@@ -49,7 +50,7 @@ namespace Game.Animation
 
         public void Die()
         {
-            this.mAnimMgr.SetAnims(new Anim(Enum.GetName(typeof(AnimName), AnimName.Die), 0.85f, true));
+            this.mAnimMgr.SetAnims(new Anim(Enum.GetName(typeof(AnimName), AnimName.Die), 0.82f, true));
         }
 
         public override bool IsAbleTo(string anim)

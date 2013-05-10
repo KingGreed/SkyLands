@@ -10,18 +10,16 @@ namespace Game.States
     public class DebugMenuState : State
     {
         private DebugMenuGUI mSecondMenuGUI;
-        private GameInfo mGameInfo;
 
         public DebugMenuState(StateManager stateMgr) : base(stateMgr, "SecondMenu") { }
 
         protected override void Startup()
         {
-            this.mGameInfo = new GameInfo();
-            this.mGameInfo.Seed = 42;
-            this.mGameInfo.Size = new Vector2(-1, -1);
+            this.mStateMgr.GameInfo = new GameInfo();
+            //this.mStateMgr.GameInfo.Size = new Vector2(-1, -1);
 
-            this.mSecondMenuGUI = new DebugMenuGUI(this.mStateMgr, this.mGameInfo);
-            this.mSecondMenuGUI.SetListener(GameInfo.TypeWorld.Dome, this.ClickDomeButton);
+            this.mSecondMenuGUI = new DebugMenuGUI(this.mStateMgr, this.mStateMgr.GameInfo);
+            this.mSecondMenuGUI.SetListener(GameInfo.TypeWorld.StoryEditor, this.ClickStoryEditorButton);
             this.mSecondMenuGUI.SetListener(GameInfo.TypeWorld.Plains, this.ClickPlainsButton);
             this.mSecondMenuGUI.SetListener(GameInfo.TypeWorld.Desert, this.ClickDesertButton);
             this.mSecondMenuGUI.SetListener(GameInfo.TypeWorld.Hills, this.ClickHillsButton);
@@ -54,64 +52,56 @@ namespace Game.States
         {
             this.mStateMgr.RequestStatePush(typeof(LoadingState));
         }
-        private void ClickBackButton(object obj, MouseButtonEventArgs arg) { this.mStateMgr.RequestStatePop(); }
-        private void ClickDomeButton(object obj, MouseButtonEventArgs arg)
-        {
-            this.mGameInfo.Type = GameInfo.TypeWorld.Dome;
-            Vector2 newSize = this.mGameInfo.Size;
-            if (newSize.x <= 0 || newSize.x > 25) { newSize.x = 5; }
-            if (newSize.y != newSize.x)           { newSize.y = newSize.x; }
-            this.mGameInfo.Size = newSize;
 
-            this.mStateMgr.GameInfo = this.mGameInfo;
+        private void ClickBackButton(object obj, MouseButtonEventArgs arg) { this.mStateMgr.RequestStatePop(); }
+
+        private void ClickStoryEditorButton(object obj, MouseButtonEventArgs arg)
+        {
+            this.mStateMgr.GameInfo.IsInEditorMode = true;
             this.ClickButton();
         }
 
         private void ClickPlainsButton(object obj, MouseButtonEventArgs arg)
         {
-            this.mGameInfo.Type = GameInfo.TypeWorld.Plains;
-            Vector2 newSize = this.mGameInfo.Size;
+            this.mStateMgr.GameInfo.Type = GameInfo.TypeWorld.Plains;
+            Vector2 newSize = this.mStateMgr.GameInfo.Size;
             if (newSize.x <= 2 || newSize.x >= 25) { newSize.x = 11; }
             if (newSize.y <= 2 || newSize.y >= 25) { newSize.y = 11; }
-            this.mGameInfo.Size = newSize;
+            this.mStateMgr.GameInfo.Size = newSize;
 
-            this.mStateMgr.GameInfo = this.mGameInfo;
             this.ClickButton();
         }
 
         private void ClickDesertButton(object obj, MouseButtonEventArgs arg)
         {
-            this.mGameInfo.Type = GameInfo.TypeWorld.Desert;
-            Vector2 newSize = this.mGameInfo.Size;
+            this.mStateMgr.GameInfo.Type = GameInfo.TypeWorld.Desert;
+            Vector2 newSize = this.mStateMgr.GameInfo.Size;
             if (newSize.x <= 2 || newSize.x >= 25) { newSize.x = 13; }
             if (newSize.y <= 2 || newSize.y >= 25) { newSize.y = 13; }
-            this.mGameInfo.Size = newSize;
+            this.mStateMgr.GameInfo.Size = newSize;
 
-            this.mStateMgr.GameInfo = this.mGameInfo;
             this.ClickButton();
         }
 
         private void ClickHillsButton(object obj, MouseButtonEventArgs arg)
         {
-            this.mGameInfo.Type = GameInfo.TypeWorld.Hills;
-            Vector2 newSize = this.mGameInfo.Size;
+            this.mStateMgr.GameInfo.Type = GameInfo.TypeWorld.Hills;
+            Vector2 newSize = this.mStateMgr.GameInfo.Size;
             if (newSize.x <= 2 || newSize.x >= 25) { newSize.x = 15; }
             if (newSize.y <= 2 || newSize.y >= 25) { newSize.y = 15; }
-            this.mGameInfo.Size = newSize;
-
-            this.mStateMgr.GameInfo = this.mGameInfo;
+            this.mStateMgr.GameInfo.Size = newSize;
+            
             this.ClickButton();
         }
 
         private void ClickMountainButton(object obj, MouseButtonEventArgs arg)
         {
-            this.mGameInfo.Type = GameInfo.TypeWorld.Mountain;
-            Vector2 newSize = this.mGameInfo.Size;
+            this.mStateMgr.GameInfo.Type = GameInfo.TypeWorld.Mountain;
+            Vector2 newSize = this.mStateMgr.GameInfo.Size;
             if (newSize.x <= 2 || newSize.x > 25) { newSize.x = 15; }
             if (newSize.y <= 2 || newSize.y > 25) { newSize.y = 15; }
-            this.mGameInfo.Size = newSize;
-
-            this.mStateMgr.GameInfo = this.mGameInfo;
+            this.mStateMgr.GameInfo.Size = newSize;
+            
             this.ClickButton();
         }
     }

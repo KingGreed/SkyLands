@@ -1,10 +1,7 @@
-﻿using System;
-using Miyagi.Common.Events;
+﻿using Miyagi.Common.Events;
 using Miyagi.UI.Controls;
 
 using Game.GUICreator;
-using Mogre;
-using Game.World;
 
 namespace Game.States
 {
@@ -17,13 +14,12 @@ namespace Game.States
 
         protected override void Startup()
         {
-            this.mOptionsGUI = new OptionsGUI(this.mStateMgr, "Options GUI");
+            this.mOptionsGUI = new OptionsGUI(this.mStateMgr);
             this.mOptionsGUI.SetListener(OptionsGUI.ButtonName.FullScreen, this.ClickFullScreenButton);
             this.mOptionsGUI.SetListener(OptionsGUI.ButtonName.HighQuality, this.ClickQualityButton);
             this.mOptionsGUI.SetListener(OptionsGUI.ButtonName.Music, this.ClickMusicButton);
             this.mOptionsGUI.SetListener(OptionsGUI.ButtonName.VSync, this.ClickVSyncButton);
             this.mOptionsGUI.SetListenerBack(this.ClickBackButton);
-            //this.mOptionsGUI.SetListenerLoad(this.ClickLoadButton);
             this.mIsFullScreen = this.mStateMgr.Window.IsFullScreen;
         }
 
@@ -45,10 +41,9 @@ namespace Game.States
 
         protected override void Shutdown() { this.mOptionsGUI.Dispose(); }
 
-        private void SwitchText(Button b) 
+        private void SwitchText(Button b)
         {
-            if (b.Text == "ON") {b.Text = "OFF";}
-            else{b.Text = "ON";}
+            b.Text = b.Text == "ON" ? "OFF" : "ON";
         }
 
         private void ClickBackButton(object obj, MouseButtonEventArgs arg)
@@ -77,10 +72,5 @@ namespace Game.States
             this.mStateMgr.Window.SetFullscreen(this.mIsFullScreen, this.mStateMgr.Window.Width, this.mStateMgr.Window.Height);
             this.SwitchText(this.mOptionsGUI.Buttons[OptionsGUI.ButtonName.FullScreen]);
         }
-
-        /*private void ClickLoadButton(object obj, MouseButtonEventArgs arg)
-        {
-            if (this.mWorld != null) { this.mWorld.getIslandAt(this.mIslandLoc).load(); }
-        }*/
     }
 }

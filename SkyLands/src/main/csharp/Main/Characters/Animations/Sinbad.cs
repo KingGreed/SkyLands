@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using Mogre;
 
@@ -10,11 +8,13 @@ namespace Game.Animation
     class Sinbad : MeshAnim
     {
         public static readonly Vector3 SINBAD_SIZE = new Vector3(65, 99, 65);
-        public static int FEET_DIFF = 8;
+        public const int FEET_DIFF = 8;
         public enum AnimName : byte { IdleBase, IdleTop, RunBase, RunTop, JumpStart, JumpLoop, JumpEnd, Dance }
 
-        public Sinbad(Entity ent) : base(new AnimationMgr(ent.AllAnimationStates, Enum.GetNames(typeof(AnimName)), new string[] { Enum.GetName(typeof(AnimName),
-            AnimName.JumpStart), Enum.GetName(typeof(AnimName), AnimName.JumpEnd) }), SINBAD_SIZE, FEET_DIFF) { }
+        public Sinbad(Entity ent) : base(new AnimationMgr(ent.AllAnimationStates, Enum.GetNames(typeof(AnimName)),
+                                         new string[] { Enum.GetName(typeof(AnimName), AnimName.JumpStart),
+                                                        Enum.GetName(typeof(AnimName), AnimName.JumpEnd) }),
+                                         SINBAD_SIZE, FEET_DIFF) { }
 
         public override void Idle(bool on = true)
         {
@@ -52,9 +52,14 @@ namespace Game.Animation
             return anims.Contains(anim.ToLower());
         }
 
-        public void SwitchToDebugMode()
+        public override void ToFreeCamMode()
         {
-            this.mAnimMgr.DeleteAllExcept<string[]>(MeshAnim.GetString(AnimName.IdleBase, AnimName.IdleTop, AnimName.JumpStart, AnimName.JumpLoop, AnimName.JumpEnd, AnimName.Dance));
+            this.mAnimMgr.DeleteAllExcept<string[]>(MeshAnim.GetString(AnimName.IdleBase,
+                                                                       AnimName.IdleTop,
+                                                                       AnimName.JumpStart,
+                                                                       AnimName.JumpLoop,
+                                                                       AnimName.JumpEnd,
+                                                                       AnimName.Dance));
         }
     }
 }

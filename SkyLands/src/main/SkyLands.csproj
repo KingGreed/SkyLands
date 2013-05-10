@@ -734,6 +734,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\Characters\Misc\YawSpeed.cs" />
+    <Compile Include="csharp\Main\GUIs\MainGUI.cs" />
+    <Compile Include="csharp\Main\GUIs\StoryEditorGUI.cs" />
     <Compile Include="csharp\Main\GUIs\SecondMenuGUI.cs" />
     <Compile Include="csharp\Main\RTS\AIRTS.cs" />
     <Compile Include="csharp\Main\RTS\PlayerRTS.cs" />
@@ -773,7 +775,7 @@
     <Compile Include="csharp\Main\GUIs\GUIFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\GUIs\InGameMenuGUI.cs">
+    <Compile Include="csharp\Main\GUIs\IGMenuGUI.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\GUIs\InventoryGUI.cs">
@@ -804,15 +806,17 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\Shoot\ShootCube.cs" />
-    <Compile Include="csharp\Main\States\Game\DebugMode.cs">
+    <Compile Include="csharp\Main\States\Main\CameraMgr.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\States\Game\GameInfo.cs">
+    <Compile Include="csharp\Main\States\Main\GameInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\States\Game\GameState.cs">
+    <Compile Include="csharp\Main\States\Main\GameState.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\States\Main\MainState.cs" />
+    <Compile Include="csharp\Main\States\Main\IGMenuState.cs" />
     <Compile Include="csharp\Main\States\Menu\SecondMenuState.cs" />
     <Compile Include="csharp\Main\States\Menu\LoadingState.cs">
       <SubType>Code</SubType>
@@ -835,6 +839,7 @@
     <Compile Include="csharp\Main\States\StateManager.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\States\Main\StoryEditorState.cs" />
     <Compile Include="csharp\Main\World\Blocks\Air.cs" />
     <Compile Include="csharp\Main\World\Blocks\AirBlock.cs">
       <SubType>Code</SubType>

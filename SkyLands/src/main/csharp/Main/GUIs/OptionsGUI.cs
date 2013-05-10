@@ -21,7 +21,7 @@ namespace Game.GUICreator
 
         public Dictionary<ButtonName, Button> Buttons { get { return this.mButtons; } }
 
-        public OptionsGUI(StateManager stateMgr, string name) : base(stateMgr, name) { }
+        public OptionsGUI(StateManager stateMgr) : base(stateMgr, "Options GUI") { }
         
         protected override void CreateGUI()
         {

@@ -1,5 +1,3 @@
-using System;
-
 using Miyagi.Common.Data;
 using Miyagi.UI;
 
@@ -15,11 +13,11 @@ namespace Game.GUICreator
         protected Size       mOriginalWndSize = new Size(1600, 900);
 
         protected Size WndSize          { get { return this.mMiyagiMgr.WndSize; } }
-        private float  RatioX           { get { return (float)this.WndSize.Width / (float)this.mOriginalWndSize.Width; } }
-        private float  RatioY           { get { return (float)this.WndSize.Height / (float)this.mOriginalWndSize.Height; } }
+        private float  RatioX           { get { return this.WndSize.Width / (float)this.mOriginalWndSize.Width; } }
+        private float  RatioY           { get { return this.WndSize.Height / (float)this.mOriginalWndSize.Height; } }
         public bool    IsGUIVisible     { get { return this.mGUI.Visible; } }
-        
-        public GUIFactory(StateManager stateMgr, string name)
+
+	    protected GUIFactory(StateManager stateMgr, string name)
         {
             this.mStateMgr = stateMgr;
             this.mMiyagiMgr = stateMgr.MiyagiMgr;
@@ -38,12 +36,9 @@ namespace Game.GUICreator
         protected abstract void CreateGUI();
         protected virtual void AfterResize() { }
 
-        public virtual void Dispose()      { this.mGUI.Dispose(); }
-        public virtual void Hide() { this.mGUI.Visible = false; }
-        public virtual void Show() { this.mGUI.Visible = true; }
-        public void SwithVisibility()
-        {
-            this.mGUI.Visible = !this.mGUI.Visible;
-        }
+        public virtual void Dispose()  { this.mGUI.Dispose(); }
+        public virtual void Hide()     { this.mGUI.Visible = false; }
+        public virtual void Show()     { this.mGUI.Visible = true; }
+        public void SwitchVisibility() { this.mGUI.Visible = !this.mGUI.Visible; }
 	}
 }

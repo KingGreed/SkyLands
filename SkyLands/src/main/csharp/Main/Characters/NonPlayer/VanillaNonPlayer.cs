@@ -1,17 +1,14 @@
-﻿using System;
-using Mogre;
+﻿using Mogre;
 
-using Game.World;
 using Game.Animation;
-using Game.Shoot;
 
 namespace Game.CharacSystem
 {
     class VanillaNonPlayer : VanillaCharacter
     {
-        public static float DEFAULT_NPC_LIFE = 500;
+        public const float DEFAULT_NPC_LIFE = 500;
         
-        public VanillaNonPlayer(CharacMgr characMgr, string meshName, CharacterInfo info) : base(characMgr, meshName, info)
+        public VanillaNonPlayer(CharacMgr characMgr, string meshName, CharacterInfo info) : base(characMgr, info)
         {
             SceneManager sceneMgr = characMgr.SceneMgr;
             Entity ent = sceneMgr.CreateEntity("CharacterEnt_" + this.mCharInfo.Id, meshName);
@@ -26,7 +23,6 @@ namespace Game.CharacSystem
             this.FeetPosition = this.mCharInfo.SpawnPoint;
             this.mCollisionMgr = new CollisionMgr(characMgr.SceneMgr, this.mCharacMgr.World, this);
         }
-
 
         public new void Update(float frameTime)
         {

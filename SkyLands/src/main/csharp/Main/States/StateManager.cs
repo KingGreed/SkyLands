@@ -13,28 +13,22 @@ namespace Game.States
 {
     public abstract class StateManager : BaseApplication
     {
-        private MiyagiMgr    mMiyagiMgr;
-        private MyConsole    mConsole;
         private Stack<State> mStateStack;
         private Stack<Type>  mNewStates;
         private int          mPopRequested;
-        private GameInfo     mGameInfo;
         private bool         mWaitOneFrame;
-        private bool         mIsInGame;
-        private State        mGameState;
 
         public Root         Root        { get { return this.mRoot; } }
         public SceneManager SceneMgr    { get { return this.mSceneMgr; } }
         public RenderWindow Window      { get { return this.mWindow; } }
         public MoisManager  Input       { get { return this.mInput; } }
-        public MiyagiMgr    MiyagiMgr   { get { return this.mMiyagiMgr; } }
         public Camera       Camera      { get { return this.mCam; } }
         public Viewport     Viewport    { get { return this.mViewport; } }
-        public GameInfo     GameInfo    { get { return this.mGameInfo; } set { this.mGameInfo = value; } }
         public int          NumberState { get { return this.mStateStack.Count; } }
-        public MyConsole    MyConsole   { get { return this.mConsole; } }
-        public bool         IsInGame    { get { return this.mIsInGame; }  set { this.mIsInGame = value; } }
-        public State GameState          { get { return this.mGameState; } set { this.mGameState = value; } }
+        public GameInfo     GameInfo    { get; set; }
+        public MiyagiMgr    MiyagiMgr   { get; private set; }
+        public MyConsole    MyConsole   { get; private set; }
+        public MainState    MainState   { get; private set; }
 
         protected override void Create()
         {
@@ -42,8 +36,8 @@ namespace Game.States
             LogManager.Singleton.DefaultLog.LogMessage("***********************Program\'s Log***********************");
             this.SceneMgr.ShadowTechnique = ShadowTechnique.SHADOWDETAILTYPE_INTEGRATED;
             this.SceneMgr.ShadowFarDistance = 400;
-            this.mMiyagiMgr = new MiyagiMgr(this.mInput, new Vector2(this.mWindow.Width, this.mWindow.Height));
-            this.mConsole = new MyConsole(this);
+            this.MiyagiMgr = new MiyagiMgr(this.mInput, new Vector2(this.mWindow.Width, this.mWindow.Height));
+            this.MyConsole = new MyConsole(this);
             
             this.mStateStack = new Stack<State>();
             this.mNewStates = new Stack<Type>();
@@ -75,41 +69,42 @@ namespace Game.States
 
             if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F2)) { this.OverlayVisibility = !this.OverlayVisibility; }
 
-            this.mConsole.Update();
-            this.mMiyagiMgr.Update();
+            this.MyConsole.Update();
+            this.MiyagiMgr.Update();
 
             if (this.mWaitOneFrame) { this.mWaitOneFrame = false; }
             else if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Update(frameTime); }
         }
 
         /* Add a State to the stack and start it up */
-        private bool PushState(State newState)
+        private void PushState(State newState)
         {
-            if (newState == null)
-                return false;
-            else
+            if (newState == null) {return;}
+
+            LogManager.Singleton.DefaultLog.LogMessage("--- Try to start up state : " + newState);
+
+            if (newState.GetType().IsSubclassOf(typeof(MainState)))
+                this.MainState = (MainState)newState;
+
+            if (!newState.StartupState())
             {
-                LogManager.Singleton.DefaultLog.LogMessage("--- Try to start up state : " + newState.ToString());
-                if (!newState.StartupState())
-                {
-                    LogManager.Singleton.DefaultLog.LogMessage("ERROR : Failed to start up state : " + newState.ToString());
-                    return false;
-                }
-                if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Hide(); }
-                    this.mStateStack.Push(newState);
-                this.mStateStack.Peek().Show();
-
-                this.mInput.Clear();
-
-                return true;
+                LogManager.Singleton.DefaultLog.LogMessage("ERROR : Failed to start up state : " + newState);
+                return;
             }
+
+            if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Hide(); }
+
+            this.mStateStack.Push(newState);
+            this.mStateStack.Peek().Show();
+
+            this.mInput.Clear();
         }
 
         private void PopState()
         {
             if (this.mStateStack.Count > 0)
             {
-                string stateName = this.mStateStack.Peek().ToString();
+                string stateName = this.mStateStack.Peek().Name;
                 this.mStateStack.Peek().ShutdownState();
                 this.mStateStack.Pop();
                 this.mInput.Clear();
@@ -126,6 +121,8 @@ namespace Game.States
             else                            { this.mIsShutDownRequested = true; }   // Will ShutDown in Update()
         }
 
+        public void PopToMenu() { this.RequestStatePop(this.NumberState - 1);}
+
         public void RequestStatePush(params Type[] newStates)
         {
             foreach (Type newState in newStates)
@@ -137,18 +134,18 @@ namespace Game.States
         {
             LogManager.Singleton.DefaultLog.LogMessage("***********************End of Program\'s Log***********************");
             while (this.mStateStack.Count > 0) { this.PopState(); }
-            this.mConsole.Dispose();
-            this.mMiyagiMgr.ShutDown();
+            this.MyConsole.Dispose();
+            this.MiyagiMgr.ShutDown();
             this.mInput.Shutdown(); 
             this.mRoot.Dispose();
         }
 
-        public void WriteOnConsole(object o) { this.mConsole.WriteLine(o); }
+        public void WriteOnConsole(object o) { this.MyConsole.WriteLine(o); }
 
         public void HideGUIs()
         {
-            this.mMiyagiMgr.AllGuisVisibility(false);
-            this.mConsole.GUI.Visible = true;
+            this.MiyagiMgr.AllGuisVisibility(false);
+            this.MyConsole.GUI.Visible = true;
         }
     }
 }

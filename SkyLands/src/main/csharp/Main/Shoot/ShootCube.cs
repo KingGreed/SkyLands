@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using Game.World.Generator;
 using API.Generic;
@@ -14,16 +11,17 @@ namespace Game.Shoot
     class ShootCube
     {
         private const float SCALE_SPEED = 1.4f;
+        private const float INIT_SCALE = 0.85f;
         private const float MAX_SCALE = 1.9f;
-        private const float FIRE_RATE = 500;   // Fire every 500ms
+        private const float FIRE_RATE = 430;   // Fire every x ms
         
-        private SceneManager  mSceneMgr;
-        private VanillaPlayer mPlayer;
-        private BulletManager mBulletMgr;
-        private SceneNode     mNode;
-        private Timer         mTimeSinceLastBall;
-        private bool          mCreated = false;
-        private string        mMaterial;
+        private readonly SceneManager  mSceneMgr;
+        private readonly VanillaPlayer mPlayer;
+        private readonly BulletManager mBulletMgr;
+        private readonly Timer         mTimeSinceLastBall;
+        private SceneNode              mNode;
+        private bool                   mCreated;
+        private string                 mMaterial;
 
         public string Material { set { this.mMaterial = value; } }
 
@@ -81,13 +79,15 @@ namespace Game.Shoot
             ball.End();
 
             /* Determine the location */
-            Ray ray = this.mPlayer.Camera.GetCameraToViewportRay(0.5f, 0.5f);
+            Camera cam = this.mPlayer.MainPlayerCam;
+            Ray ray = cam.GetCameraToViewportRay(0.5f, 0.5f);
             ray.Origin = this.mPlayer.FeetPosition + Vector3.UNIT_Y * this.mPlayer.Size / 1.2f;
 
             this.mNode = /*this.mPlayer.Node.CreateChildSceneNode(ray.GetPoint(50));*/ this.mSceneMgr.RootSceneNode.CreateChildSceneNode(ray.GetPoint(50));
             this.mNode.InheritScale = false;
+            this.mNode.SetScale(INIT_SCALE * Vector3.UNIT_SCALE);
             this.mNode.InheritOrientation = false;
-            this.mNode.Orientation = this.mPlayer.Camera.RealOrientation;
+            this.mNode.Orientation = cam.RealOrientation;
             this.mNode.AttachObject(ball);
             this.mCreated = true;
         }
