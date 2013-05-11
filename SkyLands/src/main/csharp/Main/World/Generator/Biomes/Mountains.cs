@@ -10,7 +10,7 @@ namespace Game.World.Generator.Biomes
 {
     class Mountains : Biome
     {
-        public Mountains() : base((byte) 2, new Pine(), new Portals()) {
+        public Mountains() : base((byte) 2, new Pine(), new Portals(), new SnowDecorator()) {
             this.mGroundCover.Add(new string[] { "Grass" });
             this.mGroundCover.Add(new string[] { "Dirt" });
             this.mGroundCover.Add(new string[] { "Dirt" });

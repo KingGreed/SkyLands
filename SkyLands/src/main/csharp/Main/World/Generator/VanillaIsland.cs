@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 
 
 using API.Geo.Cuboid;
-using API.Generator;
 using API.Generic;
 
 using Mogre;
@@ -14,25 +11,29 @@ using Mogre;
 using Game.Display;
 using Game.World.Blocks;
 
-using Material = API.Generic.Material;
-
-
 namespace Game.World.Generator
 {
-    public abstract class VanillaIsland : Island
-    {
-        static Block defaultBlock = new AirBlock();
+    public abstract class VanillaIsland : Island {
+        static readonly Block defaultBlock = new AirBlock();
 
-        public VanillaIsland(SceneNode node, Vector2 size, API.Geo.World currentWorld)
-            : base(node, size, currentWorld) {
+        public VanillaIsland(SceneNode node, Vector2 size, API.Geo.World currentWorld) : base(node, size, currentWorld) {
+            this.register();
+        }
+
+            public VanillaIsland(SceneNode node, API.Geo.World currentWorld) : base(node, currentWorld) {
+                this.register();
+            }
+        
+        private void register() {
             foreach(KeyValuePair<string, Block> pair in VanillaChunk.staticBlock) {
                 if(!(pair.Value is AirBlock) && pair.Value.getMaterial() != null) {
                     for(int i = 0; i < 6; i++) {
                         if(!this.multiList.ContainsKey(pair.Value.getFace(i))) {
                             switch(pair.Value.getMeshType()) {
+                                case 0: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiBlock(pair.Value.getFace(i), this, this.mWorld)); break;
                                 case 2: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiVerticalHalfBlock(pair.Value.getFace(i), this, this.mWorld)); break;
                                 case 1: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiHorizontalHalfBlock(pair.Value.getFace(i), this, this.mWorld)); break;
-                                case 0: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiBlock(pair.Value.getFace(i), this, this.mWorld)); break;
+                                case 3: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiHorizontalEighthBlock(pair.Value.getFace(i), this, this.mWorld)); break;
                             }
                         }
                     }
@@ -40,38 +41,21 @@ namespace Game.World.Generator
             }
         }
 
-            public VanillaIsland(SceneNode node, API.Geo.World currentWorld) : base(node, currentWorld) {
-            foreach (KeyValuePair<string, Block> pair in VanillaChunk.staticBlock) {
-                if(!(pair.Value is AirBlock) && pair.Value.getMaterial() != null) {
-                    for (int i = 0; i < 6; i++) {
-                        if (!this.multiList.ContainsKey(pair.Value.getFace(i))) {
-                            switch(pair.Value.getMeshType()) {
-                                case 2: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiVerticalHalfBlock  (pair.Value.getFace(i), this, this.mWorld)); break;
-                                case 1: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiHorizontalHalfBlock(pair.Value.getFace(i), this, this.mWorld)); break;
-                                case 0: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiBlock              (pair.Value.getFace(i), this, this.mWorld)); break;
-                            }
-                        }
-                    }
-                }
-            }
 
-
-        }
-       
         public override void initChunks(Vector2 size) {
             for(int x = 0; x < size.x; x++) {
                 for(int z = 0; z < size.y; z++) {
                     this.mChunkList.Add(new Vector3(x, 0, z), new VanillaChunk(new Vector3(16,16,16), new Vector3(x, 0, z), this));
                 }
             }
+
         }
 
         public override int getSurfaceHeight(int x, int z, string restriction = "") {
             for(int y = (int)this.mIslandSize.y * Cst.CHUNK_SIDE; y != 0 ; y--) { 
                 if(!(this.getBlock(x, y, z, false) is AirBlock)) {
                     if (restriction == "") { return y + 1; }
-                    else if (this.getBlock(x, y, z, false).getName() != restriction) { continue; }
-                    else { return y + 1; }
+                    if(this.getBlock(x, y, z, false).getName() == restriction) { return y + 1; }
                 }
             }
             return -1;
@@ -185,7 +169,7 @@ namespace Game.World.Generator
                 if(blockLocation.y < 0) { blockLocation.y += 16; chunkLocation.y -= 1; }
             }
             if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation].hasVisibleFaceAt((int)blockLocation.x, (int)blockLocation.y, (int)blockLocation.z, face); }
-            else { return false; }
+            return false;
         }
 
 
@@ -245,7 +229,7 @@ namespace Game.World.Generator
 
             for (int j = 0; j < 6; j++) {
                 isVisible = this.hasVisiblefaceAt((int) relativePos.x, (int) relativePos.y, (int) relativePos.z, (BlockFace)j);
-                if(isVisible && isVisible != currentvisibleFaces[j]) {
+                if(isVisible && true != currentvisibleFaces[j]) {
                     this.addFaceToScene((BlockFace)j, relativePos, curr.getFace(j));
                 }
             }
@@ -360,9 +344,10 @@ namespace Game.World.Generator
         public override void load() {
             var blockfileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" +
             this.mWorld.getName() + "-Island-" + this.mBiome.getId() + ".sav";
-
-            new FileInfo(blockfileName).Directory.Create();
-
+            DirectoryInfo directoryInfo = new FileInfo(blockfileName).Directory;
+            if(directoryInfo != null) {
+                directoryInfo.Create();
+            }
             StreamReader stream;
 
             try { stream = new StreamReader(blockfileName); }
@@ -381,7 +366,6 @@ namespace Game.World.Generator
             stream.Close();
         }
 
-        private int toInt(char[] b) { return b[3] * 0xFFFFFF + b[2] * 0xFFFF + b[1] * 0xFF + b[0]; }
         public override string getMaterialFromName(string name) { return VanillaChunk.staticBlock[name].getMaterial(); }
 
         public override Block getBlock(int x, int y, int z, bool force) {
@@ -397,14 +381,15 @@ namespace Game.World.Generator
             }
 
             if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation].getBlock(blockLocation); }
-            else if(force) {
+            if(force) {
                 this.mChunkList.Add(chunkLocation, new VanillaChunk(Cst.CHUNK_SIDE * Vector3.UNIT_SCALE, chunkLocation, this));
-                if(force && y > this.mIslandSize.y * Cst.CHUNK_SIDE) { this.mIslandSize.y = (int)System.Math.Ceiling((float)y / 16f); }
-                if(force && x > this.mIslandSize.x * Cst.CHUNK_SIDE) { this.mIslandSize.x = (int)System.Math.Ceiling((float)x / 16f); }
-                if(force && z > this.mIslandSize.z * Cst.CHUNK_SIDE) { this.mIslandSize.z = (int)System.Math.Ceiling((float)z / 16f); }
+                if(y > this.mIslandSize.y * Cst.CHUNK_SIDE) { this.mIslandSize.y = (int)System.Math.Ceiling(y / 16f); }
+                if(x > this.mIslandSize.x * Cst.CHUNK_SIDE) { this.mIslandSize.x = (int)System.Math.Ceiling(x / 16f); }
+                if(z > this.mIslandSize.z * Cst.CHUNK_SIDE) { this.mIslandSize.z = (int)System.Math.Ceiling(z / 16f); }
 
                 return this.mChunkList[chunkLocation].getBlock(blockLocation);
-            } else { return defaultBlock; }
+            }
+            return defaultBlock;
         }
 
         public override Vector3 getBlockCoord(int x, int y, int z) {
@@ -414,18 +399,20 @@ namespace Game.World.Generator
                     blockLocation = new Vector3(x % 16, y % 16, z % 16);
 
             if(this.hasChunk(chunkLocation)) { return blockLocation; }
-            else                             { return -Vector3.UNIT_SCALE; }
+            return -Vector3.UNIT_SCALE;
         }
 
         public override Chunk getChunkFromBlock(int x, int y, int z) {
             Vector3 chunkLocation = new Vector3(x / 16, y / 16, z / 16);
 
             if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation]; }
-            else                             { return null; }
+            return null;
         }
 
+// ReSharper disable UnusedMember.Local
         private Vector3 getBlockCoordFromRelative(int x, int y, int z) { return new Vector3(x % 16, y % 16, z % 16); }
         private Vector3 getChunkCoordFromRelative(int x, int y, int z) { return new Vector3(x / 16, y / 16, z / 16); }
+// ReSharper restore UnusedMember.Local
 
 
         public override void setBlockAt(int x, int y, int z, string material, bool force) {
@@ -445,16 +432,13 @@ namespace Game.World.Generator
                 this.mChunkList.Add(chunkLocation, new VanillaChunk(Cst.CHUNK_SIDE * Vector3.UNIT_SCALE, chunkLocation, this));
                 this.mChunkList[chunkLocation].setBlock(blockLocation, material);
 
-                if(force && y > this.mIslandSize.y * Cst.CHUNK_SIDE) { this.mIslandSize.y = (int)System.Math.Ceiling((float)y / 16f); }
-                if(force && x > this.mIslandSize.x * Cst.CHUNK_SIDE) { this.mIslandSize.x = (int)System.Math.Ceiling((float)x / 16f); }
-                if(force && z > this.mIslandSize.z * Cst.CHUNK_SIDE) { this.mIslandSize.z = (int)System.Math.Ceiling((float)z / 16f); }
+                if(y > this.mIslandSize.y * Cst.CHUNK_SIDE) { this.mIslandSize.y = (int)System.Math.Ceiling(y / 16f); }
+                if(x > this.mIslandSize.x * Cst.CHUNK_SIDE) { this.mIslandSize.x = (int)System.Math.Ceiling(x / 16f); }
+                if(z > this.mIslandSize.z * Cst.CHUNK_SIDE) { this.mIslandSize.z = (int)System.Math.Ceiling(z / 16f); }
             } 
         }
 
         public override void setBlockAt(int x, int y, int z, byte material, bool force) { this.setBlockAt(x, y, z, VanillaChunk.byteToString[material], force); }
 
-        /*public void setBlockAt(int x, int y, int z, string material, bool force) {
-
-        }*/
     }
 }

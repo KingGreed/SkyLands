@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
 using API.Ent;
-using API.Geo;
 using API.Generator;
 using API.Generic;
 
@@ -156,26 +153,9 @@ namespace API.Geo.Cuboid
         /*
          * Returns position of item -1 if item does not exist
          */
-        public bool isinBlocksAdded(Vector3 item) {
-            for(int i = 0; i < this.blocksAdded.Count; i++) {
-                if(this.blocksAdded[i].position == item) { return true; }
-            }
-            return false;
-        }
-        public bool isInBlocksDeleted(Vector3 item) {
-            for(int i = 0; i < this.blocksDeleted.Count; i++) {
-                if(this.blocksDeleted[i].position == item) { return true; }
-            }
-            return false;
-        }
-
-        public bool isInBlocksAdded(Vector3 item, BlockFace face) {
-            for(int i = 0; i < this.blocksAdded.Count; i++) {
-                if(this.blocksAdded[i].position == item && face == this.blocksAdded[i].face) { return true; }
-            }
-            return false;
-        }
-
+        public bool isinBlocksAdded(Vector3 item)   { return this.blocksAdded.Any  (t => t.position == item); }
+        public bool isInBlocksDeleted(Vector3 item) { return this.blocksDeleted.Any(t => t.position == item); }
+        public bool isInBlocksAdded(Vector3 item, BlockFace face) { return this.blocksAdded.Any(t => t.position == item && face == t.face); }
 
         public void removeFromBlocksAdded(int pos)   { this.blocksAdded.RemoveAt  (pos); }
         public void removeFromBlocksDeleted(int pos) { this.blocksDeleted.RemoveAt(pos); }
@@ -184,7 +164,7 @@ namespace API.Geo.Cuboid
             for (int i = 0; i < this.blocksAdded.Count; i++) {
                 if (this.blocksAdded[i].position == item && face == this.blocksAdded[i].face) { return !this.blocksAdded[i].status; }
             }
-            return true;//throw an exception ?
+            return true;
         }
 
         public int getItemPosInBlocksAdded(Vector3 item, BlockFace face) {
@@ -192,13 +172,6 @@ namespace API.Geo.Cuboid
                 if (this.blocksAdded[i].position == item && face == this.blocksAdded[i].face) { return i; }
             }
             return -1;
-        }
-
-        public bool isInBlocksAdded(Vector3 item) {
-            for (int i = 0; i < this.blocksAdded.Count; i++) {
-                if (this.blocksAdded[i].position == item) { return true; }
-            }
-            return false;
         }
 
         public void populate() {

@@ -163,10 +163,11 @@ namespace Game.World
             var playerFileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" +
                 this.getName() + "-player" + ".sav";
 
-            new FileInfo(playerFileName).Directory.Create();
+            DirectoryInfo directoryInfo = new FileInfo(playerFileName).Directory;
+	        if (directoryInfo != null) { directoryInfo.Create(); }
 
 
-            using(TextWriter writer = new StreamWriter(playerFileName)) {
+	        using(TextWriter writer = new StreamWriter(playerFileName)) {
                 writer.WriteLine(e.getIsland().getBiome().getId());
                 writer.WriteLine(e.getPosition().x);
                 writer.WriteLine(e.getPosition().y);
@@ -207,7 +208,7 @@ namespace Game.World
 
         public void generateIslandThreaded()
         {
-            Vector3 pos = new Vector3(this.mIslandLoaded.getPosition().x * Cst.CHUNK_SIDE + 3 * Cst.CHUNK_SIDE, 0, this.mIslandLoaded.getPosition().z * Cst.CHUNK_SIDE + 3 * Cst.CHUNK_SIDE);
+            //Vector3 pos = new Vector3(this.mIslandLoaded.getPosition().x * Cst.CHUNK_SIDE + 3 * Cst.CHUNK_SIDE, 0, this.mIslandLoaded.getPosition().z * Cst.CHUNK_SIDE + 3 * Cst.CHUNK_SIDE);
             /*SceneNode node = this.mStateMgr.SceneManager.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
             this.mIslandList.Add(pos, new RandomIsland(node, new Vector2(13, 13), new Hills(), this));
 

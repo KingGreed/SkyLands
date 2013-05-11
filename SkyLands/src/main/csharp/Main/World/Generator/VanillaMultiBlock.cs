@@ -1,17 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using API.Geo.Cuboid;
-using API.Generator;
-using API.Generic;
-
 using Mogre;
-
-using Game.Display;
-using Game.World.Blocks;
-using Material = API.Generic.Material;
 
 namespace Game.World.Generator
 {
@@ -46,7 +34,7 @@ namespace Game.World.Generator
                 new Vector3(0, 1, 0),
                 new Vector3(0, 1, 0),
                 new Vector3(-1, 0, 0),
-                new Vector3(-1, 0, 0),
+                new Vector3(-1, 0, 0)
             };
 
         public override Vector3 getBlockPointsCoord(int face) { return blockPointCoords[face]; }

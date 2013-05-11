@@ -13,13 +13,11 @@ using Mogre;
 namespace Game.World.Generator.Decorators
 {
     class Pine : Decorator {
-        public Pine() {}
-
         public override void populate(Island curr, Random random) {
             {
                 for (int i = 0; i < (curr.getSize().x + curr.getSize().z) * 4; i++)
                 {
-                    Vector3 pos = this.findRandomPoint(curr, random);
+                    Vector3 pos = this.findRandomPoint(curr, random, "Grass");
 
                     if ((curr.getBlock((int)pos.x, (int)pos.y, (int)pos.z, true) is AirBlock))
                     {

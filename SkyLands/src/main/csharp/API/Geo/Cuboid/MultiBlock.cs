@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using API.Generic;
 
 using Mogre;
-using Material = API.Generic.Material;
 
 namespace API.Geo.Cuboid
 {
@@ -27,10 +23,7 @@ namespace API.Geo.Cuboid
         protected RenderOperation moData;
         protected VertexElement posEl;
         protected HardwareVertexBufferSharedPtr vBuff;
-
-        private uint size = VertexElement.GetTypeSize(VertexElementType.VET_FLOAT3);
-
-        private int faceNumber = 0;
+        private int faceNumber;
         private Vector3 displayCoord;
         
         

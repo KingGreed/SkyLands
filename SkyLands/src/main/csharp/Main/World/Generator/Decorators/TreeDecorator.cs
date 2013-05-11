@@ -1,22 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using API.Generator;
 using API.Geo.Cuboid;
 using API.Generic;
-
-using Game.World.Blocks;
-using Game.World;
 
 namespace Game.World.Generator.Decorators
 {
     class TreeDecorator : Decorator
     {
-
-        public TreeDecorator() { }
-
         public override void populate(Island curr, Random random) {
             int x = random.Next(2, (int)curr.getSize().x) * Cst.CHUNK_SIDE;
             int z = random.Next(2, (int)curr.getSize().z) * Cst.CHUNK_SIDE;

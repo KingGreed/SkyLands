@@ -457,6 +457,9 @@
     <Content Include="resources\Media\materials\textures\sand3.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\materials\textures\snow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\materials\textures\soil.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -467,9 +470,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\materials\textures\stonebricksmooth_carved.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\materials\textures\terrain.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\materials\textures\towerWood.jpg">
@@ -840,6 +840,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\States\Main\StoryEditorState.cs" />
+    <Compile Include="csharp\Main\StoryEditor\ScriptParser\events\OnBlockLeave.cs" />
+    <Compile Include="csharp\Main\StoryEditor\ScriptParser\events\OnBlockEnter.cs" />
+    <Compile Include="csharp\Main\StoryEditor\ScriptParser\events\OnBlockAdded.cs" />
+    <Compile Include="csharp\Main\StoryEditor\ScriptParser\events\OnBlockRemoved.cs" />
+    <Compile Include="csharp\Main\StoryEditor\ScriptParser\events\OnLeftClick.cs" />
+    <Compile Include="csharp\Main\StoryEditor\ScriptParser\parser.cs" />
+    <Compile Include="csharp\Main\StoryEditor\ScriptParser\Items.cs" />
+    <Compile Include="csharp\Main\StoryEditor\ScriptParser\events\OnRightClick.cs" />
     <Compile Include="csharp\Main\World\Blocks\Air.cs" />
     <Compile Include="csharp\Main\World\Blocks\AirBlock.cs">
       <SubType>Code</SubType>
@@ -856,6 +864,7 @@
     <Compile Include="csharp\Main\World\Blocks\Glass.cs" />
     <Compile Include="csharp\Main\World\Blocks\SmoothStone.cs" />
     <Compile Include="csharp\Main\World\Blocks\SmoothStone_carved.cs" />
+    <Compile Include="csharp\Main\World\Blocks\SnowEighthBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\TransparentBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\LevitatorAirBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\LevitatorBlock.cs" />
@@ -912,6 +921,8 @@
     <Compile Include="csharp\Main\World\Generator\Biomes\Plains.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\World\Generator\Decorators\SnowDecorator.cs" />
+    <Compile Include="csharp\Main\World\Generator\VanillaMultiHorizontalEighthBlock.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\Gatherer.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\Pine.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\Pyramid.cs" />

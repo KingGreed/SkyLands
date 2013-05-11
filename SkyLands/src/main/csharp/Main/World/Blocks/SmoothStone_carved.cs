@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Mogre;
-
-namespace Game.World.Blocks
+﻿namespace Game.World.Blocks
 {
     class SmoothStone_Carved : VanillaBlock
     {

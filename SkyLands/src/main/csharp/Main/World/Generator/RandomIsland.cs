@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-
 using LibNoise;
-using LibNoise.Modules;
 using LibNoise.Modules.Source;
 using LibNoise.Modules.Modifier;
 using LibNoise.Modules.Combiner;
-
-using API.Geo.Cuboid;
 using API.Generator;
 using API.Generic;
 
@@ -18,19 +10,17 @@ using Game.World.Blocks;
 
 using Mogre;
 
-using Material = API.Generic.Material;
-
 namespace Game.World.Generator
 {
     public class RandomIsland : VanillaIsland
     {
 
-        private Perlin     ELEVATION  = new Perlin();
-	    private Perlin     ROUGHNESS  = new Perlin();
-	    private Perlin     DETAIL     = new Perlin();
-	    private Turbulence TURBULENCE = new Turbulence();
-	    private ScalePoint SCALE      = new ScalePoint();
-	    private Clamp      FINAL      = new Clamp();
+        private readonly Perlin     ELEVATION  = new Perlin();
+	    private readonly Perlin     ROUGHNESS  = new Perlin();
+	    private readonly Perlin     DETAIL     = new Perlin();
+	    private readonly Turbulence TURBULENCE = new Turbulence();
+	    private readonly ScalePoint SCALE      = new ScalePoint();
+	    private readonly Clamp      FINAL      = new Clamp();
 
         public RandomIsland(SceneNode node, Biome islandBiome, API.Geo.World currentWorld) : base(node, currentWorld) {
             this.mBiome = islandBiome;
@@ -81,9 +71,6 @@ namespace Game.World.Generator
 
         public override void generate(int seed) {
 
-            Vector3 chunkCoord = new Vector3(0, 0, 0),
-                    blockCoord = new Vector3(0, 0, 0);
-
             double minElevation, smoothHeight;
             double maxSum, minSum;
 
@@ -105,8 +92,6 @@ namespace Game.World.Generator
 				    
 			minElevation = minSum;
 			smoothHeight = (maxSum - minElevation) / 2d;
-            int dist = -1;
-
             for (int xx = 0; xx < this.mIslandSize.x * Cst.CHUNK_SIDE; xx++) {
                 for (int zz = 0; zz < this.mIslandSize.z * Cst.CHUNK_SIDE; zz++) {
 
@@ -142,13 +127,13 @@ namespace Game.World.Generator
                                     this.setBlockAt(xx, yy, zz, this.mBiome.getGroundCover()[0][2], true);
                                 }
                             } else {
-                                dist = this.isNearSurface(this.mBiome.getGroundCover().Count - 1, new Vector3(xx, yy, zz));
+                                int dist = this.isNearSurface(this.mBiome.getGroundCover().Count - 1, new Vector3(xx, yy, zz));
                                 if(dist != -1) {
                                     this.setBlockAt(xx, yy, zz, this.mBiome.getGroundCover()[dist][rd.Next(0, this.mBiome.getGroundCover()[dist].Length)], true);
                                 }
                                 else { this.setBlockAt(xx, yy, zz, "Stone", true); }
                             }
-                    	}
+                        }
                         //else                 { block.setMaterial(Material.AIR); } // Not needed
 				    }
 			    }
