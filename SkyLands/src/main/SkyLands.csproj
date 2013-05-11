@@ -433,18 +433,6 @@
     <Content Include="resources\Media\materials\textures\portalGreen.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Media\materials\textures\r2skin_DW.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\materials\textures\r2skin_K.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\materials\textures\r2skin_N.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\materials\textures\r2skin_T.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="resources\Media\materials\textures\redsand1.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -482,6 +470,21 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\materials\textures\woodTop.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\models\texture\r2skin.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\models\texture\r2skin_DW.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\models\texture\r2skin_K.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\models\texture\r2skin_N.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\models\texture\r2skin_T.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\packs\CaelumPack.zip">
@@ -840,14 +843,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\States\Main\StoryEditorState.cs" />
-    <Compile Include="csharp\Main\StoryEditor\ScriptParser\events\OnBlockLeave.cs" />
-    <Compile Include="csharp\Main\StoryEditor\ScriptParser\events\OnBlockEnter.cs" />
-    <Compile Include="csharp\Main\StoryEditor\ScriptParser\events\OnBlockAdded.cs" />
-    <Compile Include="csharp\Main\StoryEditor\ScriptParser\events\OnBlockRemoved.cs" />
-    <Compile Include="csharp\Main\StoryEditor\ScriptParser\events\OnLeftClick.cs" />
+    <Compile Include="csharp\Main\StoryEditor\ScriptParser\ItemMgr.cs" />
     <Compile Include="csharp\Main\StoryEditor\ScriptParser\parser.cs" />
-    <Compile Include="csharp\Main\StoryEditor\ScriptParser\Items.cs" />
-    <Compile Include="csharp\Main\StoryEditor\ScriptParser\events\OnRightClick.cs" />
+    <Compile Include="csharp\Main\StoryEditor\ScriptParser\Item.cs" />
     <Compile Include="csharp\Main\World\Blocks\Air.cs" />
     <Compile Include="csharp\Main\World\Blocks\AirBlock.cs">
       <SubType>Code</SubType>
