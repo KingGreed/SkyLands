@@ -68,7 +68,7 @@ namespace Game.States
                 if (newState != null)    { this.PushState(newState); }
             }
 
-            if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F2)) { this.OverlayVisibility = !this.OverlayVisibility; }
+            //if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F2)) { this.OverlayVisibility = !this.OverlayVisibility; }
 
             this.MyConsole.Update();
             this.MiyagiMgr.Update();
@@ -134,6 +134,7 @@ namespace Game.States
         protected override void Shutdown()
         {
             LogManager.Singleton.DefaultLog.LogMessage("***********************End of Program\'s Log***********************");
+            base.Shutdown();
             while (this.mStateStack.Count > 0) { this.PopState(); }
             this.MyConsole.Dispose();
             this.MiyagiMgr.ShutDown();

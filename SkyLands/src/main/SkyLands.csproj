@@ -517,6 +517,9 @@
     <Content Include="resources\Media\models\robot.skeleton">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="resources\Media\packs\SdkTrays.zip">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="CaelumSharp">

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Mogre;
+﻿using Mogre;
 
 namespace Game.BaseApp
 {
@@ -10,8 +7,8 @@ namespace Game.BaseApp
         public enum TypeLstn { FrameStarted, FrameRendering, FrameEnded }
         public delegate bool FrameLstn(FrameEvent evt);
 
-        private TypeLstn mType;
-        private FrameLstn mListener;
+        private readonly TypeLstn mType;
+        private readonly FrameLstn mListener;
 
         public RootLstn(TypeLstn type, FrameLstn listener)
         {

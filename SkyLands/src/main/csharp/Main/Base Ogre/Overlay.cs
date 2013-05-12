@@ -1,4 +1,3 @@
-using System;
 using Mogre;
 
 
@@ -6,17 +5,17 @@ namespace Game.BaseApp
 {
     public class MyOverlay
     {
-        private RenderWindow   mWindow;
-        private Overlay        mOverlay;
-        private float          mTimeSinceLastDebugUpdate = 1;
-        private OverlayElement mGuiAvg;
-        private OverlayElement mGuiCurr;
-        private OverlayElement mGuiBest;
-        private OverlayElement mGuiWorst;
-        private OverlayElement mGuiTris;
-        private OverlayElement mModesText;
-        private string         mAdditionalInfo = "";
-        private bool           mIsVisible;
+        private readonly RenderWindow   mWindow;
+        private readonly Overlay        mOverlay;
+        private float                   mTimeSinceLastDebugUpdate = 1;
+        private readonly OverlayElement mGuiAvg;
+        private readonly OverlayElement mGuiCurr;
+        private readonly OverlayElement mGuiBest;
+        private readonly OverlayElement mGuiWorst;
+        private readonly OverlayElement mGuiTris;
+        private readonly OverlayElement mModesText;
+        private string                  mAdditionalInfo = "";
+        private bool                    mIsVisible;
 
         public bool Visibility
         { 
@@ -62,9 +61,7 @@ namespace Game.BaseApp
                 mTimeSinceLastDebugUpdate = 0;
             }
             else
-            {
                 mTimeSinceLastDebugUpdate += timeFragment;
-            }
         }
     }
 }

@@ -96,24 +96,23 @@ namespace Game.BaseApp {
 		| all of its children from the system.
 		-----------------------------------------------------------------------------*/
 		public static void nukeOverlayElement(OverlayElement element) {
-			OverlayContainer container = (OverlayContainer)element;
-			if (container != null) {
-				List<OverlayElement> toDelete = new List<OverlayElement>();
+		    if (element == null || !element.GetType().IsInstanceOfType(typeof (OverlayContainer))) { return; }
 
-				OverlayContainer.ChildIterator children = container.GetChildIterator();
-				do {
-					toDelete.Add(children.Current);
-				} while(children.MoveNext());
+		    OverlayContainer container = (OverlayContainer) element;
+		    List<OverlayElement> toDelete = new List<OverlayElement>();
 
-				foreach(OverlayElement t in toDelete) {
-				    nukeOverlayElement(t);
-				}
-			}
-			if (element != null) {
-				OverlayContainer parent = element.Parent;
-				if (parent != null) parent.RemoveChild(element.Name);
-				OverlayManager.Singleton.DestroyOverlayElement(element);
-			}
+		    OverlayContainer.ChildIterator children = container.GetChildIterator();
+		    do
+		    {
+		        toDelete.Add(children.Current);
+		    } while (children.MoveNext());
+
+		    foreach (OverlayElement t in toDelete)
+		        nukeOverlayElement(t);
+
+		    OverlayContainer parent = element.Parent;
+		    if (parent != null) { parent.RemoveChild(element.Name); }
+		    OverlayManager.Singleton.DestroyOverlayElement(element);
 		}
 
 		/*-----------------------------------------------------------------------------
@@ -192,8 +191,8 @@ namespace Game.BaseApp {
 		}
 
 		public OverlayElement getOverlayElement() { return this.mElement;           }
-		public String getName()                   { return this.mElement.Name;      }
-		public TrayLocation getTrayLocation()            { return mTrayLoc;         }
+        public String getName()                   { return this.mElement != null ? this.mElement.Name : ""; }   // Not supposed to test != null
+		public TrayLocation getTrayLocation()     { return mTrayLoc;         }
 		public void hide()                        { this.mElement.Hide();           }
 		public void show()                        { this.mElement.Show();           }
 		public bool IsVisible()                   { return this.mElement.IsVisible; }
@@ -1456,6 +1455,9 @@ namespace Game.BaseApp {
 			this.mDialogShade.Hide();
 			this.mPriorityLayer.Add2D(mDialogShade);
 
+            for(int i = 0; i < this.mWidgets.Length; i++)
+                this.mWidgets[i] = new List<Widget>();
+
 			String[] trayNames = new String[] { "TopLeft", "Top", "TopRight", "Left", "Center", "Right", "BottomLeft", "Bottom", "BottomRight" };
 
 			for (int i = 0; i < 9; i++)    // make the float trays
@@ -1672,18 +1674,27 @@ namespace Game.BaseApp {
 					e.SetDimensions((int)e.Width, (int)e.Height);
 					trayHeight += e.Height;
 
-					Label l = (Label)mWidgets[i][j];
-					if (l != null && l._isFitToTray()) {
-						labelsAndSeps.Add(e);
-						continue;
-					}
-					Separator s = (Separator)mWidgets[i][j];
-					if (s != null && s._isFitToTray())  {
-						labelsAndSeps.Add(e);
-						continue;
-					}
+				    if (mWidgets[i][j].GetType().IsInstanceOfType(typeof (Label)))
+				    {
+				        Label l = (Label) mWidgets[i][j];
+				        if (l != null && l._isFitToTray())
+				        {
+				            labelsAndSeps.Add(e);
+				            continue;
+				        }
+				    }
 
-					if (e.Width > trayWidth) trayWidth = e.Width;
+				    if (mWidgets[i][j].GetType().IsInstanceOfType(typeof(Separator)))
+				    {
+				        Separator s = (Separator) mWidgets[i][j];
+				        if (s != null && s._isFitToTray())
+				        {
+				            labelsAndSeps.Add(e);
+				            continue;
+				        }
+				    }
+
+				    if (e.Width > trayWidth) trayWidth = e.Width;
 				}
 
 				// add paddings and resize trays
@@ -2138,7 +2149,8 @@ namespace Game.BaseApp {
             else if(widget == mStatsPanel) mStatsPanel = null;
             else if(widget == mFpsLabel) mFpsLabel = null;
 
-            mTrays[(int)widget.getTrayLocation()].RemoveChild(widget.getName());
+            if (widget.getName() != "") // Not supposed to do the if
+                mTrays[(int)widget.getTrayLocation()].RemoveChild(widget.getName());
 
             List<Widget> wList = mWidgets[(int)widget.getTrayLocation()];
             wList.Remove(widget);
@@ -2187,7 +2199,7 @@ namespace Game.BaseApp {
             // remove widget from old tray
             List<Widget> wList = mWidgets[(int)widget.getTrayLocation()];
             int it = wList.IndexOf(widget);
-            if(it != wList.Count - 1) {
+            if(it != wList.Count - 1 && it > 0) {
                 wList.RemoveAt(it);
                 mTrays[(int)widget.getTrayLocation()].RemoveChild(widget.getName());
             }
@@ -2418,11 +2430,14 @@ namespace Game.BaseApp {
                     if(!w.getOverlayElement().IsVisible) continue;
                     w._cursorPressed(cursorPos);    // send event to widget
 
-                    SelectMenu m = (SelectMenu)w;
-                    if(m != null && m.isExpanded())       // a menu has begun a top priority session
-					{
-                        setExpandedMenu(m);
-                        return true;
+                    if (w.GetType().IsInstanceOfType(typeof (SelectMenu)))
+                    {
+                        SelectMenu m = (SelectMenu) w;
+                        if (m != null && m.isExpanded()) // a menu has begun a top priority session
+                        {
+                            setExpandedMenu(m);
+                            return true;
+                        }
                     }
                 }
             }

@@ -1,11 +1,12 @@
 using System;
+using System.Collections.Generic;
 using Mogre;
 
 namespace Game.BaseApp
 {
     class ShutdownException : Exception {}
     
-    public abstract class BaseApplication
+    public abstract class BaseApplication : SdkTrayListener
     {
         private const string PLUGINS_CFG = "plugins.cfg";
         private const string RESOURCES_CFG = "resources.cfg";
@@ -18,9 +19,10 @@ namespace Game.BaseApp
         protected Viewport      mViewport;
         protected bool          mIsShutDownRequested = false;
         private int             mRenderMode          = 0;
-        private MyOverlay       mDebugOverlay;
+        private SdkTrayManager  mTrayMgr;
+        private ParamsPanel     mPanel;
 
-        public bool OverlayVisibility        { get { return this.mDebugOverlay.Visibility; } set { this.mDebugOverlay.Visibility = value; } }
+        //public bool OverlayVisibility        { get { return this.mDebugOverlay.Visibility; } set { this.mDebugOverlay.Visibility = value; } }
 
         public void Go()
         {
@@ -70,7 +72,16 @@ namespace Game.BaseApp
             this.mWindow.GetCustomAttribute("WINDOW", out windowHnd);
             this.mInput.Startup(windowHnd, this.mWindow.Width, this.mWindow.Height);
 
-            this.mDebugOverlay = new MyOverlay(this.mWindow);
+            this.mTrayMgr = new SdkTrayManager("trayMgr", this.mWindow, this.mInput.Mouse, this);
+            this.mTrayMgr.showFrameStats(TrayLocation.TL_BOTTOMLEFT);
+            this.mTrayMgr.showLogo(TrayLocation.TL_BOTTOMRIGHT);
+            this.mTrayMgr.hideCursor();
+
+            this.mPanel = this.mTrayMgr.createParamsPanel(TrayLocation.TL_NONE, "DetailsPanel", 200,
+                          new List<string> { "cam.pX", "cam.pY", "cam.pZ","cam.oW", "cam.oX", "cam.oY", "cam.oZ", "Filtering", "Poly Mode" });
+            this.mPanel.setParamValue(7, "Bilinear");
+            this.mPanel.setParamValue(8, "Solid");
+            this.mPanel.hide();
             MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_NONE);
 
             this.Create();
@@ -153,7 +164,38 @@ namespace Game.BaseApp
 
         private void CycleTextureFilteringMode()
         {
-            MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_NONE);
+            //MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_NONE);
+            string newVal;
+            TextureFilterOptions tfo;
+            uint aniso;
+
+            switch (this.mPanel.getParamValue(7).ToUpper()[0])
+            {
+                case 'B':
+                    newVal = "Trilinear";
+                    tfo = TextureFilterOptions.TFO_TRILINEAR;
+                    aniso = 1;
+                    break;
+                case 'T':
+                    newVal = "Anisotropic";
+                    tfo = TextureFilterOptions.TFO_ANISOTROPIC;
+                    aniso = 8;
+                    break;
+                case 'A':
+                    newVal = "None";
+                    tfo = TextureFilterOptions.TFO_NONE;
+                    aniso = 1;
+                    break;
+                default:
+                    newVal = "Bilinear";
+                    tfo = TextureFilterOptions.TFO_BILINEAR;
+                    aniso = 1;
+                    break;
+            }
+
+            MaterialManager.Singleton.SetDefaultTextureFiltering(tfo);
+            MaterialManager.Singleton.DefaultAnisotropy = aniso;
+            this.mPanel.setParamValue(7, newVal);
         }
 
         private void CyclePolygonMode()
@@ -180,7 +222,7 @@ namespace Game.BaseApp
                 this.ProcessInput();
                 this.Update(evt);
 
-                this.mDebugOverlay.Update(evt.timeSinceLastFrame);
+                //this.mDebugOverlay.Update(evt.timeSinceLastFrame);
                 return true;
             }
             catch (ShutdownException)
@@ -190,6 +232,10 @@ namespace Game.BaseApp
             }
         }
 
-        protected abstract void Shutdown();
+        protected virtual void Shutdown()
+        {
+            this.mTrayMgr.closeDialog();
+            this.mTrayMgr = null;
+        }
     }
 }
