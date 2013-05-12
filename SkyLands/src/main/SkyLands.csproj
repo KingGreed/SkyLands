@@ -697,6 +697,7 @@
     <Compile Include="csharp\Main\Base Ogre\Overlay.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\Base Ogre\SdkTrays.cs" />
     <Compile Include="csharp\Main\BlockFactory.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -815,9 +816,7 @@
     <Compile Include="csharp\Main\States\Main\GameInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\States\Main\GameState.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="csharp\Main\States\Main\GameState.cs" />
     <Compile Include="csharp\Main\States\Main\MainState.cs" />
     <Compile Include="csharp\Main\States\Main\IGMenuState.cs" />
     <Compile Include="csharp\Main\States\Menu\SecondMenuState.cs" />

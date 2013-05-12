@@ -24,8 +24,7 @@ namespace Game.States
                 SpawnPoint = playerInfo.SpawnPoint + new Mogre.Vector3(800, 100, 200)
             };
             this.CharacMgr.AddCharacter(iaInfo);
-
-            //ParticleGenerator.mkParticle(this.mStateMgr.SceneMgr, iaInfo.SpawnPoint, "MultiEmitters");
+            
         }
 
         protected override void AfterWorldCreation()
