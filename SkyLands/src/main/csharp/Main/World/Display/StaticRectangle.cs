@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Mogre;
 
 namespace Game.World.Display
@@ -60,17 +56,22 @@ namespace Game.World.Display
             node.AttachObject(block);
         }
 
-        public static void DrawLine(SceneManager sceneMgr, Vector3 p1, Vector3 p2)
+        public static ManualObject CreateLine(SceneManager sceneMgr, Vector3 p1, Vector3 p2)
         {
             ManualObject manOb = sceneMgr.CreateManualObject();
             manOb.Begin("line_material", RenderOperation.OperationTypes.OT_LINE_LIST);
-            manOb.Position(0, 0, 0);
-            manOb.Position(p2 - p1);
+            manOb.Position(p1);
+            manOb.Position(p2);
             manOb.End();
 
+            return manOb;
+        }
+
+        public static void DrawLine(SceneManager sceneMgr, Vector3 p1, Vector3 p2)
+        {
             SceneNode node = sceneMgr.RootSceneNode.CreateChildSceneNode();
             node.Position = p1;
-            node.AttachObject(manOb);
+            node.AttachObject(CreateLine(sceneMgr, Vector3.ZERO, p2 - p1));
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Mogre;
+﻿using Mogre;
 
 using Game.World;
 using API.Generic;
@@ -11,12 +10,12 @@ namespace Game.CharacSystem
         private const float COL_SIDE_MARGE = 0.61f;
         private const int NBR_HIT_POINTS = 15;   // Nbr of points for collisions there are at the same height
 
-        private MainWorld        mWorld;
-        private VanillaCharacter mCharac;
-        private Degree[]         mHitDegrees;
-        private float            mHitRadius;
-        private SceneNode[]      mPoints;    // mPoints is used to show the cube of collision
-        private int              mNbrHitStage;
+        private readonly MainWorld        mWorld;
+        private readonly VanillaCharacter mCharac;
+        private readonly Degree[]         mHitDegrees;
+        private readonly float            mHitRadius;
+        private readonly SceneNode[]      mPoints;    // mPoints is used to show the cube of collision
+        private readonly int              mNbrHitStage;
 
         public CollisionMgr(SceneManager sceneMgr, MainWorld world, VanillaCharacter charac)
         {
@@ -69,7 +68,7 @@ namespace Game.CharacSystem
         {
             if (this.mCharac.Info.IsPlayer)
             {
-                if ((this.mCharac as VanillaPlayer).Input.WasKeyPressed(MOIS.KeyCode.KC_F4))
+                if (((VanillaPlayer) this.mCharac).Input.WasKeyPressed(MOIS.KeyCode.KC_F4))
                     foreach (SceneNode node in this.mPoints) { node.FlipVisibility(); }
                 Vector3[] points = this.GetHitPoints();
                 for (int i = 0; i < this.mPoints.Length; i++)
@@ -81,9 +80,9 @@ namespace Game.CharacSystem
         public Vector3 ComputeCollision(Vector3 absTranslation)  // Takes the wanted translation and returns the possible one
         {
             /* Temp */
-            absTranslation.x = MathHelper.clamp<float>(absTranslation.x, -50, 50);
-            absTranslation.y = MathHelper.clamp<float>(absTranslation.y, -50, 50);
-            absTranslation.z = MathHelper.clamp<float>(absTranslation.z, -50, 50);
+            absTranslation.x = MathHelper.clamp(absTranslation.x, -50, 50);
+            absTranslation.y = MathHelper.clamp(absTranslation.y, -50, 50);
+            absTranslation.z = MathHelper.clamp(absTranslation.z, -50, 50);
 
             Vector3[] hitPoints = this.GetHitPoints();
             Vector3 actTranslation = absTranslation;
@@ -98,7 +97,8 @@ namespace Game.CharacSystem
                 Vector3[] hitPointsToTest = this.GetPointsToTest(actHitPoints, absTranslation, axis);
                 for(int i = 0; i < hitPointsToTest.Length; i++)
                 {
-                    if (this.mWorld.HasPointCollision(ref hitPointsToTest[i]))
+                    hitPointsToTest[i] = MainWorld.AbsToRelative(hitPointsToTest[i]);
+                    if (this.mWorld.HasPointCollision(hitPointsToTest[i]))
                     {
                         /* Compute the possible translation */
                         float val = 0;
@@ -113,7 +113,7 @@ namespace Game.CharacSystem
                             }*/
                         }
 
-                        actHitPoints = this.AddToAll(hitPoints, val * axis);   // Cancel the translation of the actual axis
+                        //actHitPoints = this.AddToAll(hitPoints, val * axis);   // Cancel the translation of the actual axis
                         actTranslation = (actTranslation * (Vector3.UNIT_SCALE - axis)) + val * axis;    // Update the actTranslation
 
                         //if (axis == Vector3.UNIT_Y) { break; }
@@ -151,34 +151,14 @@ namespace Game.CharacSystem
             if (axis == Vector3.UNIT_Y)
             {
                 Vector3[] pointsToTest = new Vector3[NBR_HIT_POINTS];
-                int[] indexes;
-                if (absTranslation.y < 0) { indexes = this.CreateIntArray(0, pointsToTest.Length); }
-                else { indexes = this.CreateIntArray(NBR_HIT_POINTS * (mNbrHitStage - 1), pointsToTest.Length); }
+                int[] indexes = absTranslation.y < 0 ? this.CreateIntArray(0, pointsToTest.Length) :
+                                                       this.CreateIntArray(NBR_HIT_POINTS * (mNbrHitStage - 1), pointsToTest.Length);
 
                 for (int i = 0; i < pointsToTest.Length; i++) { pointsToTest[i] = hitPoints[indexes[i]]; }
                 return pointsToTest;
             }
-            else
-            {
-                /*Vector3 newPos = this.mCharac.FeetPosition + absTranslation;
-                float distMax = this.Distance(hitPoints[0], newPos);
-                pointsToTest = new Vector3[NBR_HIT_POINTS / 2 * this.mNbrHitStage];
-                int actIndex = 0;
-                for (int i = 0; i < NBR_HIT_POINTS; i++)    // Only run through the below points
-                {
-                    float dist = this.Distance(hitPoints[i], newPos);
-                    if (dist <= distMax)
-                    {
-                        for (int j = 0; j < this.mNbrHitStage; j++) // Add the point to test for all stages
-                        {
-                            pointsToTest[actIndex + NBR_HIT_POINTS / 2 * j] = hitPoints[i];
-                            pointsToTest[actIndex + NBR_HIT_POINTS / 2 * j].y += j < this.mNbrHitStage - 1 ? j * Cst.CUBE_SIDE : this.Size.y;
-                        }
-                        actIndex++;
-                    }
-                }*/
-                return hitPoints;
-            }
+
+            return hitPoints;
         }
 
         private int[] CreateIntArray(int begin, int length)
@@ -187,12 +167,5 @@ namespace Game.CharacSystem
             for (int i = begin; i < begin + length; i++) { res[i - begin] = i; }
             return res;
         }
-
-        /*private float Distance (Vector3 v1, Vector3 v2)  // Squared distance without considering the y axis
-        {
-            return (v1.x - v2.x) * (v1.x - v2.x) + (v1.z - v2.z) * (v1.z - v2.z);
-        }*/
-
-        //private void 
     }
 }

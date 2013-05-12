@@ -24,7 +24,7 @@ namespace Game.CharacSystem
         private readonly MainWorld              mWorld;
         private readonly BulletManager          mBulletMgr;
         private readonly HUD                    mHUD;
-        private readonly CameraMgr              mCameraMgr;
+        private readonly User              mCameraMgr;
 
         public StateManager  StateMgr   { get { return this.mStateMgr; } }
         public SceneManager  SceneMgr   { get { return this.mStateMgr.SceneMgr; } }
@@ -33,7 +33,7 @@ namespace Game.CharacSystem
         public VanillaPlayer MainPlayer { get; private set; }
         public BulletManager BulletMgr  { get { return this.mBulletMgr; } }
 
-        public CharacMgr(StateManager stateMgr, MainWorld world, CameraMgr cameraMgr)
+        public CharacMgr(StateManager stateMgr, MainWorld world, User cameraMgr)
         {
             this.mStateMgr = stateMgr;
             this.mInput = stateMgr.Input;
@@ -59,7 +59,7 @@ namespace Game.CharacSystem
             this.mStateMgr.MyConsole.AddCommands(this.mCommands);
         }
 
-        public CharacMgr(StateManager stateMgr, MainWorld world, BulletManager bulletMgr, CameraMgr cameraMgr) : this(stateMgr, world, cameraMgr)
+        public CharacMgr(StateManager stateMgr, MainWorld world, BulletManager bulletMgr, User cameraMgr) : this(stateMgr, world, cameraMgr)
         {
             this.mBulletMgr = bulletMgr;
             this.mHUD = (HUD)stateMgr.MainState.MainGUI;

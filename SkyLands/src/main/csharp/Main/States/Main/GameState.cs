@@ -1,5 +1,4 @@
 ﻿using Game.CharacSystem;
-using Game.World.Display;
 using Game.GUICreator;
 using Game.Shoot;
 using Game.RTS;
@@ -35,7 +34,7 @@ namespace Game.States
 
             this.mPlayerRTS = new PlayerRTS((HUD)this.MainGUI);
             this.mBulletMgr = new BulletManager(this.mStateMgr.SceneMgr, this.mWorld);
-            this.CharacMgr = new CharacMgr(this.mStateMgr, this.mWorld, this.mBulletMgr, this.CameraMgr);
+            this.CharacMgr = new CharacMgr(this.mStateMgr, this.mWorld, this.mBulletMgr, this.User);
             this.mBulletMgr.AttachCharacMgr(this.CharacMgr);
         }
 
@@ -46,7 +45,7 @@ namespace Game.States
             this.mBulletMgr.Update(frameTime);
 
             if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_F1))
-                this.CameraMgr.SwitchFreeCamMode();
+                this.User.SwitchFreeCamMode();
             else if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_E))
             {
 

@@ -2,16 +2,6 @@
 
 namespace Game
 {
-    public enum CubeFace
-    {
-        frontFace,
-        backFace,
-        upperFace,
-        underFace,
-        leftFace,
-        rightFace
-    }
-    
     public class MathHelper {
 	    public const double PI = Math.PI;
 
@@ -226,7 +216,7 @@ namespace Game
 
         public static bool isInBlock(Mogre.Vector3 origin, Mogre.Vector3 p, int side)
         {
-            return (p.x >= origin.x && p.x < origin.x + side) && (p.y >= origin.y && p.y < origin.y + side) && (p.z >= origin.z - 50 && p.z < origin.z);
+            return (p.x >= origin.x && p.x < origin.x + side) && (p.y >= origin.y && p.y < origin.y + side) && (p.z >= origin.z - side && p.z < origin.z);
         }
     }
 

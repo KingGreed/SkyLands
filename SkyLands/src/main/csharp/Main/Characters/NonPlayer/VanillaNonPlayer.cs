@@ -11,9 +11,11 @@ namespace Game.CharacSystem
         public VanillaNonPlayer(CharacMgr characMgr, string meshName, CharacterInfo info) : base(characMgr, info)
         {
             SceneManager sceneMgr = characMgr.SceneMgr;
+            LogManager.Singleton.DefaultLog.LogDetail = LoggingLevel.LL_LOW;
             Entity ent = sceneMgr.CreateEntity("CharacterEnt_" + this.mCharInfo.Id, meshName);
             ent.Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
             ent.SetMaterialName("Robot_T");
+            LogManager.Singleton.DefaultLog.LogDetail = LoggingLevel.LL_NORMAL;
             this.mMesh = new Robot(ent);
 
             this.mNode.AttachObject(ent);

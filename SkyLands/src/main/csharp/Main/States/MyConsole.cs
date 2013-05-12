@@ -65,7 +65,7 @@ namespace Game.IGConsole
                 if (this.mEnabled)
                 {
                     this.Visible = true;
-                    this.mStateMgr.MainState.CameraMgr.IsAllowedToMoveCam = false;
+                    this.mStateMgr.MainState.User.IsAllowedToMoveCam = false;
                 }
                 else
                     this.mTimer.Reset();

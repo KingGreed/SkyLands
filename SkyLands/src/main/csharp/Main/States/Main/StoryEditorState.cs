@@ -10,13 +10,13 @@ namespace Game.States
         protected override void Startup()
         {
             base.Startup();
-            this.CameraMgr.SwitchFreeCamMode();
+            this.User.SwitchFreeCamMode();
         }
 
         protected override void AfterWorldCreation()
         {
             this.MainGUI = new StoryEditorGUI(this.mStateMgr);
-            this.CharacMgr = new CharacMgr(this.mStateMgr, this.mWorld, this.CameraMgr);
+            this.CharacMgr = new CharacMgr(this.mStateMgr, this.mWorld, this.User);
         }
 
         public override void Show()

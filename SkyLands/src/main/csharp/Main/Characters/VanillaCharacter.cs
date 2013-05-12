@@ -37,6 +37,7 @@ namespace Game.CharacSystem
         public MovementInfo  MovementInfo    { get; protected set; }
         public Vector3       Size            { get { return this.mMesh.MeshSize; } }
         public CharacterInfo Info            { get { return this.mCharInfo; } }
+        public CollisionMgr  CollisionMgr    { get { return this.mCollisionMgr; } }
         public bool          WaitForRemove   { get; private set; }
         public Vector3       FeetPosition
         {
@@ -60,6 +61,12 @@ namespace Game.CharacSystem
             this.mForcedDestination = new Queue<Vector3>();
             this.mNode = characMgr.SceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id);
             this.mLastSquaredDist = -1;
+
+        }
+
+        private void test(OverlayElement e)
+        {
+            OverlayContainer c = (OverlayContainer)e;
         }
 
         private void OnFall(bool isFalling)

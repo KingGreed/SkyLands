@@ -806,7 +806,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\Characters\Shoot\ShootCube.cs" />
-    <Compile Include="csharp\Main\States\Main\CameraMgr.cs">
+    <Compile Include="csharp\Main\States\Main\User.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\States\Main\GameInfo.cs">

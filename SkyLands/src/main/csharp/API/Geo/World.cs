@@ -250,5 +250,7 @@ namespace API.Geo
 
         void onBlockEnter(Vector3 blockCoord, Entity e);
         void onBlockLeave(Vector3 blockCoord, Entity e);
+
+        bool HasPointCollision(Vector3 relBlockPos);
     }
 }

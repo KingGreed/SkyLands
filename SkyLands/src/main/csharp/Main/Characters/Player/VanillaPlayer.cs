@@ -35,7 +35,7 @@ namespace Game.CharacSystem
         private readonly Sinbad.AnimName[] mEmotesNames;
         private readonly bool              mIsFirstView;
         private readonly ShootCube         mShootCube;
-        private CameraMgr                  mCameraMgr;
+        private User                  mCameraMgr;
 
         public MoisManager      Input         { get { return this.mInput; } }
         public bool             IsFirstView   { get { return this.mIsFirstView; } }
@@ -50,13 +50,14 @@ namespace Game.CharacSystem
             this.mIsFirstView = true;
 
             SceneManager sceneMgr = characMgr.SceneMgr;
+            LogManager.Singleton.DefaultLog.LogDetail = LoggingLevel.LL_LOW;
             Entity ent = sceneMgr.CreateEntity("CharacterEnt_" + this.mCharInfo.Id, meshName);
-
             ent.Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
             Entity swordL = sceneMgr.CreateEntity("Sword.mesh");
             ent.AttachObjectToBone("Sheath.L", swordL);
             Entity swordR = sceneMgr.CreateEntity("Sword.mesh");
             ent.AttachObjectToBone("Sheath.R", swordR);
+            LogManager.Singleton.DefaultLog.LogDetail = LoggingLevel.LL_NORMAL;
             this.mMesh = new Sinbad(ent);
 
             this.mNode.AttachObject(ent);
@@ -76,7 +77,7 @@ namespace Game.CharacSystem
                 this.mEmotesNames[i] = this.mEmotes[i].Anim;
         }
 
-        public void MakeHimMainPlayer(CameraMgr cameraMgr, MainPlayerCamera cam, HUD hud)
+        public void MakeHimMainPlayer(User cameraMgr, MainPlayerCamera cam, HUD hud)
         {
             this.mCameraMgr = cameraMgr;
             this.MainPlayerCam = cam;
