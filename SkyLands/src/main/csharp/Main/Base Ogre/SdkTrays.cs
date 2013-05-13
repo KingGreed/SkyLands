@@ -1125,8 +1125,8 @@ namespace Game.BaseApp {
 
         protected TextAreaOverlayElement mNamesArea;
 		protected TextAreaOverlayElement mValuesArea;
-		protected List<string> mNames;
-		protected List<string> mValues;
+		protected string[] mNames;
+		protected string[] mValues;
 
 		// Do not instantiate any widgets directly. Use SdkTrayManager.
 		public ParamsPanel(String name, float width, int lines) {
@@ -1137,56 +1137,40 @@ namespace Game.BaseApp {
 			this.mElement.Width = width;
 			this.mElement.Height = this.mNamesArea.Top * 2 + lines * this.mNamesArea.CharHeight;
 
-            this.mNames  = new List<string>();
-            this.mValues = new List<string>();
+            this.mValues = new string[0];
+            this.mNames  = new string[0];
 		}
 
-        
-        public static void Resize<T>(List<T> list, int sz, T c)
-        {
-            int cur = list.Count;
-            if(sz < cur)
-                list.RemoveRange(sz, cur - sz);
-            else if(sz > cur)
-            {
-                if(sz > list.Capacity)//this bit is purely an optimisation, to avoid multiple automatic capacity changes.
-                  list.Capacity = sz;
-                list.AddRange(Enumerable.Repeat(c, sz - cur));
-            }
-        }
-
-		public void setAllParamNames(List<string> paramNames)
-		{
+		public void setAllParamNames(string[] paramNames) {
 			this.mNames = paramNames;
-			this.mValues.Clear();
-			Resize(this.mValues, mNames.Count, "");
-			this.mElement.Height = this.mNamesArea.Top * 2 + mNames.Count * this.mNamesArea.CharHeight;
+			this.mValues = new string[0];
+			Array.Resize<string>(ref this.mValues, mNames.Length);
+			this.mElement.Height = this.mNamesArea.Top * 2 + mNames.Length * this.mNamesArea.CharHeight;
 			this.updateText();
 		}
 
-		public List<string> getAllParamNames() { return mNames; }
+        public string[] getAllParamNames() { return mNames; }
 
-		public void setAllParamValues(List<string> paramValues) {
+        public void setAllParamValues(string[] paramValues) {
 			this.mValues = paramValues;
-			Resize(this.mValues, mNames.Count, "");
+            Array.Resize<string>(ref this.mValues, mNames.Length);
 			this.updateText();
 		}
 
 		public void setParamValue(string paramName, string paramValue) {
-			for (int i = 0; i < this.mNames.Count; i++) {
+			for (int i = 0; i < this.mNames.Length; i++) {
 				if (mNames[i] == paramName) {
 					mValues[i] = paramValue;
 					this.updateText();
 					return;
 				}
 			}
-
 			String desc = "ParamsPanel \"" + getName() + "\" has no parameter \"" + paramName + "\".";
 			throw new Exception("Item not found : " + desc + " ParamsPanel.setParamValue");
 		}
 
 		public void setParamValue(int index, string paramValue) {
-			if (index >= this.mNames.Count) {
+            if(index >= this.mNames.Length) {
 				String desc = "ParamsPanel \"" + getName() + "\" has no parameter at position " +
 					index.ToString() + ".";
 				throw new Exception("Item not found : " + desc + "ParamsPanel.setParamValue");
@@ -1197,7 +1181,7 @@ namespace Game.BaseApp {
 		}
 
 		public string getParamValue(string paramName) {
-			for (int i = 0; i < mNames.Count; i++) {
+            for(int i = 0; i < mNames.Length; i++) {
 				if (mNames[i] == paramName) return mValues[i];
 			}
 			
@@ -1206,7 +1190,7 @@ namespace Game.BaseApp {
 		}
 
 		public string getParamValue(int index) {
-			if (index >= this.mNames.Count) {
+            if(index >= this.mNames.Length) {
 				String desc = "ParamsPanel \"" + getName() + "\" has no parameter at position " +
 					index.ToString() + ".";
 				throw new Exception("Item not found : " + desc + "ParamsPanel.getParamValue");
@@ -1214,7 +1198,7 @@ namespace Game.BaseApp {
 			return mValues[index];
 		}
 
-		public List<string> getAllParamValues() { return mValues; }
+		public string[] getAllParamValues() { return mValues; }
 
 
 		/*-----------------------------------------------------------------------------
@@ -1224,7 +1208,7 @@ namespace Game.BaseApp {
 			string namesDS = "";
 			string valuesDS = "";
 
-			for (int i = 0; i < mNames.Count; i++) {
+			for (int i = 0; i < mNames.Length; i++) {
 				namesDS += mNames[i] + ":\n";
 				valuesDS += mValues[i] + "\n";
 			}
@@ -1810,8 +1794,8 @@ namespace Game.BaseApp {
 			return pp;
 		}
 
-        public ParamsPanel createParamsPanel(TrayLocation trayLoc, string name, float width, List<string> paramNames) {
-			ParamsPanel pp = new ParamsPanel(name, width, paramNames.Count);
+        public ParamsPanel createParamsPanel(TrayLocation trayLoc, string name, float width, string[] paramNames) {
+			ParamsPanel pp = new ParamsPanel(name, width, paramNames.Length);
 			pp.setAllParamNames(paramNames);
 			this.moveWidgetToTray(pp, trayLoc);
 			return pp;
@@ -1841,11 +1825,11 @@ namespace Game.BaseApp {
 		-----------------------------------------------------------------------------*/
         public void showFrameStats(TrayLocation trayLoc, int place = -1) {
 			if (!areFrameStatsVisible()) {
-				List<string> stats = new List<string> {"Average FPS", "Best FPS", "Worst FPS", "Triangles", "Batches"};
+				string[] stats = new string[] {"Average FPS", "Best FPS", "Worst FPS", "Triangles", "Batches"};
 
 			    mFpsLabel = createLabel(TrayLocation.TL_NONE, mName + "/FpsLabel", "FPS:", 180);
 				mFpsLabel._assignListener(this);
-				mStatsPanel = createParamsPanel(TrayLocation.TL_NONE, mName + "/StatsPanel", 180, stats.Count);
+				mStatsPanel = createParamsPanel(TrayLocation.TL_NONE, mName + "/StatsPanel", 180, stats);
 			}
 
 			this.moveWidgetToTray(mFpsLabel, trayLoc, place);
@@ -2284,7 +2268,7 @@ namespace Game.BaseApp {
                 mFpsLabel.setCaption("FPS: " + stats.LastFPS.ToString("N", CultureInfo.InvariantCulture));
 
                 if(mStatsPanel.getOverlayElement().IsVisible) {
-                    mStatsPanel.setAllParamValues(new List<string>
+                    mStatsPanel.setAllParamValues(new string[]
 				    {
 				        stats.AvgFPS.ToString("N", CultureInfo.InvariantCulture),
 				        stats.BestFPS.ToString("N", CultureInfo.InvariantCulture),

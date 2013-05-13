@@ -77,8 +77,7 @@ namespace Game.BaseApp
             this.mTrayMgr.showLogo(TrayLocation.TL_BOTTOMRIGHT);
             this.mTrayMgr.hideCursor();
 
-            this.mPanel = this.mTrayMgr.createParamsPanel(TrayLocation.TL_NONE, "DetailsPanel", 200,
-                          new List<string> { "cam.pX", "cam.pY", "cam.pZ","cam.oW", "cam.oX", "cam.oY", "cam.oZ", "Filtering", "Poly Mode" });
+            this.mPanel = this.mTrayMgr.createParamsPanel(TrayLocation.TL_NONE, "DetailsPanel", 200, new string[] { "cam.pX", "cam.pY", "cam.pZ","cam.oW", "cam.oX", "cam.oY", "cam.oZ", "Filtering", "Poly Mode" });
             this.mPanel.setParamValue(7, "Bilinear");
             this.mPanel.setParamValue(8, "Solid");
             this.mPanel.hide();
@@ -221,6 +220,7 @@ namespace Game.BaseApp
             {
                 this.ProcessInput();
                 this.Update(evt);
+                this.mTrayMgr.frameRenderingQueued(evt);
 
                 //this.mDebugOverlay.Update(evt.timeSinceLastFrame);
                 return true;
