@@ -2132,9 +2132,12 @@ namespace Game.BaseApp {
             if(widget == mLogo) mLogo = null;
             else if(widget == mStatsPanel) mStatsPanel = null;
             else if(widget == mFpsLabel) mFpsLabel = null;
-
-            if (widget.getName() != "") // Not supposed to do the if
+            
+            // Not supposed to do the if
+            if(widget.getName() != "") {
                 mTrays[(int)widget.getTrayLocation()].RemoveChild(widget.getName());
+                widget.getOverlayElement().Hide(); //this seems to fix the non deletion of the overlay image
+            }
 
             List<Widget> wList = mWidgets[(int)widget.getTrayLocation()];
             wList.Remove(widget);
@@ -2262,9 +2265,8 @@ namespace Game.BaseApp {
 
             mWidgetDeathRow.Clear();
 
-            RenderTarget.FrameStats stats = mWindow.GetStatistics();
-
             if(areFrameStatsVisible()) {
+                RenderTarget.FrameStats stats = mWindow.GetStatistics();
                 mFpsLabel.setCaption("FPS: " + stats.LastFPS.ToString("N", CultureInfo.InvariantCulture));
 
                 if(mStatsPanel.getOverlayElement().IsVisible) {

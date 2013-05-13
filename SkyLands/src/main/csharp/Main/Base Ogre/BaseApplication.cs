@@ -74,8 +74,8 @@ namespace Game.BaseApp
 
             this.mTrayMgr = new SdkTrayManager("trayMgr", this.mWindow, this.mInput.Mouse, this);
             this.mTrayMgr.showFrameStats(TrayLocation.TL_BOTTOMLEFT);
-            this.mTrayMgr.showLogo(TrayLocation.TL_BOTTOMRIGHT);
             this.mTrayMgr.hideCursor();
+            this.mTrayMgr.hideFrameStats();
 
             this.mPanel = this.mTrayMgr.createParamsPanel(TrayLocation.TL_NONE, "DetailsPanel", 200, new string[] { "cam.pX", "cam.pY", "cam.pZ","cam.oW", "cam.oX", "cam.oY", "cam.oZ", "Filtering", "Poly Mode" });
             this.mPanel.setParamValue(7, "Bilinear");
@@ -159,6 +159,7 @@ namespace Game.BaseApp
             if (mInput.WasKeyPressed(MOIS.KeyCode.KC_F12))   { this.CyclePolygonMode(); }
             if (mInput.WasKeyPressed(MOIS.KeyCode.KC_F5))    { this.ReloadAllTextures(); }
             if (mInput.WasKeyPressed(MOIS.KeyCode.KC_SYSRQ)) { this.TakeScreenshot(); }
+            if (mInput.WasKeyPressed(MOIS.KeyCode.KC_G))     { this.mPanel.show(); }
         }
 
         private void CycleTextureFilteringMode()
