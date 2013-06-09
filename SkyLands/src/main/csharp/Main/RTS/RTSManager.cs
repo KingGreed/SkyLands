@@ -18,7 +18,6 @@ namespace Game.RTS
                 if (value != this.mCrystals)
                 {
                     this.mCrystals = value;
-                    if (this.mIsPlayer) { (this as PlayerRTS).HUD.UpdateCrystal(this.mCrystals); }
                 }
             }
         }

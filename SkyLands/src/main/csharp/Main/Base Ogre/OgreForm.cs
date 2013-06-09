@@ -20,13 +20,14 @@ namespace Game.BaseApp {
         protected Root mRoot;
         protected SceneManager mSceneMgr;
         protected RenderWindow mWindow;
-        protected MoisManager mInput;
+        protected Controller mController;
         protected Camera mCam;
         protected Viewport mViewport;
         protected bool mIsShutDownRequested = false;
         private int mRenderMode = 0;
 
-        //public event onMouseMoved
+        public static Size WindowSize;
+        public static Point WindowPosition;
         
         public OgreForm() {
             //Awesomium
@@ -42,9 +43,23 @@ namespace Game.BaseApp {
 
             this.webView.DocumentReady += onDocumentReady;
             this.webView.Source = new Uri("file://C:/Users/kingGreed/Lib/Web/SkyLands/index.html");
-            //this.webView.Hide();
+            this.webView.Hide();
 
             this.MinimumSize = new Size(800, 600);
+            WindowSize = this.Size;
+            WindowPosition = this.Location;
+        }
+
+        protected override void OnMove(EventArgs e)
+        {
+            base.OnMove(e);
+            WindowPosition = this.Location;
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+            WindowSize = this.Size;
         }
 
         private void onDocumentReady(object sender, UrlEventArgs e) {
@@ -70,14 +85,10 @@ namespace Game.BaseApp {
             }
         }
 
-
-
-
-        public void OgreForm_Resize(object sender, EventArgs e)   { this.mWindow.WindowMovedOrResized();     }
+        public void OgreForm_Resize(object sender, EventArgs e)   { this.mWindow.WindowMovedOrResized(); }
         public void AddFrameLstn(RootLstn listener)               { listener.AddListener(this.mRoot);        }
         public void RemoveFrameLstn(RootLstn listener)            { listener.RemoveListener(this.mRoot);     }
         public void OgreForm_Disposed(object sender, EventArgs e) { this.mRoot.Dispose(); this.mRoot = null; }
-
 
         public void Go() {
             Show();
@@ -97,10 +108,7 @@ namespace Game.BaseApp {
 
             this.LoadResources();
 
-            this.mInput = new MoisManager();
-            int windowHnd;
-            this.mWindow.GetCustomAttribute("WINDOW", out windowHnd);
-            this.mInput.Startup(windowHnd, this.mWindow.Width, this.mWindow.Height);
+            this.mController = new Controller(this);
 
             MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_NONE);
 
@@ -169,11 +177,11 @@ namespace Game.BaseApp {
         private void ReloadAllTextures() { TextureManager.Singleton.ReloadAll(); }
 
         private void ProcessInput() {
-            this.mInput.Update();
+            this.mController.Update();
 
-            if(mInput.WasKeyPressed(MOIS.KeyCode.KC_F12)) { this.CyclePolygonMode(); }
-            if(mInput.WasKeyPressed(MOIS.KeyCode.KC_F5)) { this.ReloadAllTextures(); }
-            if(mInput.WasKeyPressed(MOIS.KeyCode.KC_SYSRQ)) { this.TakeScreenshot(); }
+            if(mController.WasKeyPressed(Keys.F12)) { this.CyclePolygonMode(); }
+            if(mController.WasKeyPressed(Keys.F5)) { this.ReloadAllTextures(); }
+            if(mController.WasKeyPressed(Keys.PrintScreen)) { this.TakeScreenshot(); }
         }
 
         private void CyclePolygonMode() {

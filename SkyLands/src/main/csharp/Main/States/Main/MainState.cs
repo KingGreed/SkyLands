@@ -3,7 +3,6 @@ using Mogre;
 
 using Game.CharacSystem;
 using Game.World;
-using Game.GUICreator;
 
 namespace Game.States
 {
@@ -14,7 +13,6 @@ namespace Game.States
 
         public User      User { get; protected set; }
         public CharacMgr CharacMgr { get; protected set; }
-        public MainGUI   MainGUI { get; protected set; }
 
         protected MainState(StateManager stateMgr, string name) : base(stateMgr, name) { this.mSelectedEntity = null; }
 
@@ -37,24 +35,34 @@ namespace Game.States
 
         public override void Show()
         {
-            this.mStateMgr.HideGUIs();
-            this.mStateMgr.MiyagiMgr.CursorVisibility = false;
-            if (!this.User.IsFreeCamMode) { this.MainGUI.Show(); }
+            /*this.mStateMgr.HideGUIs();
+            if (!this.User.IsFreeCamMode) { this.MainGUI.Show(); }*/
+            this.mStateMgr.Controller.SetCursorVisibility(false);
+            this.mStateMgr.Controller.BlockMouse = true;
+
             this.User.IsAllowedToMoveCam = true;
+        }
+
+        public override void Hide()
+        {
+            this.mStateMgr.Controller.SetCursorVisibility(true);
+            this.mStateMgr.Controller.BlockMouse = false;
         }
 
         public override void Update(float frameTime)
         {
             this.mWorld.Update(frameTime);
 
-            if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_ESCAPE))
-                this.mStateMgr.RequestStatePush(typeof(IGMenuState));
+            if (this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.Start))
+            {
+                System.Console.WriteLine("Start");
+            }
 
             this.User.Update(frameTime);
             this.CharacMgr.Update(frameTime);
 
             /* Entity selection */
-            if (this.User.IsFreeCamMode && this.mStateMgr.Input.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left))
+            if (this.User.IsFreeCamMode && this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.MainAction))
             {
                 if (this.mSelectedEntity == null)
                 {
@@ -92,7 +100,6 @@ namespace Game.States
         {
             Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop end");
             this.mStateMgr.SceneMgr.DestroyAllParticleSystems();
-            this.MainGUI.Dispose();
             this.CharacMgr.Dispose();
             this.mWorld.Shutdown();
         }

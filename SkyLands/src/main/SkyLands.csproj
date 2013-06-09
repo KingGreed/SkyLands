@@ -76,7 +76,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="resources\Media\fonts\bluehigh.ttf">
+    <Content Include="resources\commands.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\images\CrystalBlock.png">
@@ -373,9 +373,6 @@
     <Content Include="resources\Media\materials\particles\Swarm.particle">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="resources\Media\models\cube.mesh">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <Content Include="resources\Media\materials\textures\cactus.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -475,9 +472,6 @@
     <Content Include="resources\Media\materials\textures\woodTop.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Media\models\texture\r2skin.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="resources\Media\models\texture\r2skin_DW.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -493,16 +487,10 @@
     <Content Include="resources\Media\packs\CaelumPack.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Media\packs\MiyagiPack.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="resources\Media\packs\OgreCore.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\packs\Sinbad.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\skins\background.bmp.old">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\ogre.cfg">
@@ -520,13 +508,16 @@
     <Content Include="resources\Media\models\robot.skeleton">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="resources\Media\packs\SdkTrays.zip">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Awesomium.Core, Version=1.7.0.5, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214" />
-    <Reference Include="Awesomium.Windows.Forms, Version=1.7.0.5, Culture=neutral, PublicKeyToken=9bd24830fbe304a0, processorArchitecture=x86" />
+    <Reference Include="Awesomium.Core, Version=1.7.1.0, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Awesomium Technologies LLC\Awesomium SDK\1.7.1.0\wrappers\Awesomium.NET\Assemblies\Awesomium.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Awesomium.Windows.Forms, Version=1.7.1.0, Culture=neutral, PublicKeyToken=9bd24830fbe304a0, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Awesomium Technologies LLC\Awesomium SDK\1.7.1.0\wrappers\Awesomium.NET\Assemblies\Awesomium.Windows.Forms.dll</HintPath>
+    </Reference>
     <Reference Include="CaelumSharp">
       <HintPath>..\..\..\Libs\CaelumSharp.dll</HintPath>
     </Reference>
@@ -550,6 +541,9 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="XInputDotNetPure">
+      <HintPath>..\..\..\Libs\XInputDotNetPure.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="csharp\Main\Base Ogre\OgreForm.resx">
@@ -560,22 +554,7 @@
     <Content Include="resources\cg.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Media\fonts\TrueTypeFonts.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\images\background.bmp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="resources\Media\images\Cross.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\images\menuPlay.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\skins\BasicSkins.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\skins\MiyagiSkins.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Miyagi.Backend.Mogre.dll">
@@ -698,6 +677,7 @@
     <Compile Include="csharp\Main\Base Ogre\CameraMan.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\Base Ogre\Controller.cs" />
     <Compile Include="csharp\Main\Base Ogre\Listener.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -713,11 +693,9 @@
     <Compile Include="csharp\Main\Base Ogre\Overlay.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\Base Ogre\SdkTrays.cs" />
     <Compile Include="csharp\Main\BlockFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\GUIs\SplashScreen.cs" />
     <Compile Include="csharp\Main\RTS\Buildings\Buildings.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -755,9 +733,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\Characters\Misc\YawSpeed.cs" />
-    <Compile Include="csharp\Main\GUIs\MainGUI.cs" />
-    <Compile Include="csharp\Main\GUIs\StoryEditorGUI.cs" />
-    <Compile Include="csharp\Main\GUIs\SecondMenuGUI.cs" />
     <Compile Include="csharp\Main\RTS\AIRTS.cs" />
     <Compile Include="csharp\Main\RTS\PlayerRTS.cs" />
     <Compile Include="csharp\Main\RTS\RTSManager.cs" />
@@ -790,36 +765,6 @@
     <Compile Include="csharp\Main\Characters\VanillaCharacter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\GUIs\HUD.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="csharp\Main\GUIs\GUIFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="csharp\Main\GUIs\IGMenuGUI.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="csharp\Main\GUIs\InventoryGUI.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="csharp\Main\GUIs\LoadingGUI.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="csharp\Main\GUIs\MenuGUI.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="csharp\Main\GUIs\MiyagiManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="csharp\Main\GUIs\MiyagiMgr.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="csharp\Main\GUIs\OptionsGUI.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="csharp\Main\GUIs\DebugMenuGUI.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="csharp\Main\MathHelper.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -827,6 +772,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="csharp\Main\Characters\Shoot\ShootCube.cs" />
+    <Compile Include="csharp\Main\States\Main\MenuState.cs" />
     <Compile Include="csharp\Main\States\Main\User.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -835,23 +781,6 @@
     </Compile>
     <Compile Include="csharp\Main\States\Main\GameState.cs" />
     <Compile Include="csharp\Main\States\Main\MainState.cs" />
-    <Compile Include="csharp\Main\States\Main\IGMenuState.cs" />
-    <Compile Include="csharp\Main\States\Menu\SecondMenuState.cs" />
-    <Compile Include="csharp\Main\States\Menu\LoadingState.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="csharp\Main\States\Menu\MenuState.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="csharp\Main\States\Menu\OptionsState.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="csharp\Main\States\Menu\DebugMenuState.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="csharp\Main\States\MyConsole.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="csharp\Main\States\State.cs">
       <SubType>Code</SubType>
     </Compile>

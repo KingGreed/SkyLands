@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using Mogre;
 
 using Game.BaseApp;
-using Game.GUICreator;
 using Game.Display;
-using Game.IGConsole;
 using Game.World;
 
 namespace Game.States
@@ -21,13 +19,11 @@ namespace Game.States
         public Root         Root        { get { return this.mRoot; } }
         public SceneManager SceneMgr    { get { return this.mSceneMgr; } }
         public RenderWindow Window      { get { return this.mWindow; } }
-        public MoisManager  Input       { get { return this.mInput; } }
+        public Controller   Controller  { get { return this.mController; } }
         public Camera       Camera      { get { return this.mCam; } }
         public Viewport     Viewport    { get { return this.mViewport; } }
         public int          NumberState { get { return this.mStateStack.Count; } }
         public GameInfo     GameInfo    { get; set; }
-        public MiyagiMgr    MiyagiMgr   { get; private set; }
-        public MyConsole    MyConsole   { get; private set; }
         public MainState    MainState   { get; private set; }
 
         protected override void Create() {
@@ -38,14 +34,13 @@ namespace Game.States
             //LogManager.Singleton.DefaultLog.LogDetail = LoggingLevel.LL_LOW;
             this.SceneMgr.ShadowTechnique = ShadowTechnique.SHADOWDETAILTYPE_INTEGRATED;
             this.SceneMgr.ShadowFarDistance = 400;
-            this.MiyagiMgr = new MiyagiMgr(this.mInput, new Vector2(this.mWindow.Width, this.mWindow.Height));
-            this.MyConsole = new MyConsole(this);
             
             this.mStateStack = new Stack<State>();
             this.mNewStates = new Stack<Type>();
             this.mPopRequested = 0;
             this.mWaitOneFrame = false;
-            this.RequestStatePush(typeof(MainMenu));
+            this.GameInfo = new GameInfo(false);
+            this.RequestStatePush(typeof(GameState));
         }
 
         protected override void Update(FrameEvent evt)
@@ -70,9 +65,6 @@ namespace Game.States
             }
 
             //if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F2)) { this.OverlayVisibility = !this.OverlayVisibility; }
-
-            this.MyConsole.Update();
-            this.MiyagiMgr.Update();
 
             if (this.mWaitOneFrame) { this.mWaitOneFrame = false; }
             else if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Update(frameTime); }
@@ -99,7 +91,7 @@ namespace Game.States
             this.mStateStack.Push(newState);
             this.mStateStack.Peek().Show();
 
-            this.mInput.Clear();
+            this.mController.Clear();
         }
 
         private void PopState()
@@ -109,7 +101,7 @@ namespace Game.States
                 string stateName = this.mStateStack.Peek().Name;
                 this.mStateStack.Peek().ShutdownState();
                 this.mStateStack.Pop();
-                this.mInput.Clear();
+                this.mController.Clear();
                 if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Show(); }
                 LogManager.Singleton.DefaultLog.LogMessage("--- Popped state : " + stateName);
             }
@@ -137,17 +129,6 @@ namespace Game.States
             LogManager.Singleton.DefaultLog.LogMessage("***********************End of Program\'s Log***********************");
             base.Shutdown();
             while (this.mStateStack.Count > 0) { this.PopState(); }
-            this.MyConsole.Dispose();
-            this.MiyagiMgr.ShutDown();
-            this.mInput.Shutdown();
-        }
-
-        public void WriteOnConsole(object o) { this.MyConsole.WriteLine(o); }
-
-        public void HideGUIs()
-        {
-            this.MiyagiMgr.AllGuisVisibility(false);
-            this.MyConsole.GUI.Visible = true;
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Game.CharacSystem;
-using Game.GUICreator;
 using Game.Shoot;
 using Game.RTS;
 using Game.World.Display;
@@ -27,14 +26,11 @@ namespace Game.States
             this.CharacMgr.AddCharacter(iaInfo);
 
             ParticleGenerator.mkParticle(this.mStateMgr.SceneMgr, this.mWorld.getSpawnPoint(), "MultiEmitters");
-            
         }
 
         protected override void AfterWorldCreation()
         {
-            this.MainGUI = new HUD(this.mStateMgr);
-
-            this.mPlayerRTS = new PlayerRTS((HUD)this.MainGUI);
+            this.mPlayerRTS = new PlayerRTS();
             this.mBulletMgr = new BulletManager(this.mStateMgr.SceneMgr, this.mWorld);
             this.CharacMgr = new CharacMgr(this.mStateMgr, this.mWorld, this.mBulletMgr, this.User);
             this.mBulletMgr.AttachCharacMgr(this.CharacMgr);
@@ -46,15 +42,11 @@ namespace Game.States
             
             this.mBulletMgr.Update(frameTime);
 
-            if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_F1))
-                this.User.SwitchFreeCamMode();
-            else if (this.mStateMgr.Input.WasKeyPressed(MOIS.KeyCode.KC_E))
+            if (this.mStateMgr.Controller.WasKeyPressed(System.Windows.Forms.Keys.F1))
             {
-
+                System.Console.WriteLine("F1");
+                this.User.SwitchFreeCamMode();
             }
-            if (this.mStateMgr.Input.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Middle))
-                this.CharacMgr.MainPlayer.setIsPushedByArcaneLevitator(!this.CharacMgr.MainPlayer.MovementInfo.IsPushedByArcaneLevitator);
-
         }
 
         public override void Save() { this.mWorld.save(this.CharacMgr.MainPlayer); }
