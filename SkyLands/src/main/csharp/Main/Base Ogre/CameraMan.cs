@@ -69,8 +69,7 @@ namespace Game.BaseApp
             this.MouseMovement(input.MouseMoveX, input.MouseMoveY);
         }
 
-        public void MouseMovement(int x, int y)
-        {
+        public void MouseMovement(int x, int y) {
             if (mFreeze) { return; }
             this.mCamera.Yaw(new Degree(-x * 0.15f));
             this.mCamera.Pitch(new Degree(-y * 0.15f));

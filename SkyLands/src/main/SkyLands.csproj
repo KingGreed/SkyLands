@@ -370,6 +370,9 @@
     <Content Include="resources\Media\materials\scripts\Thunder.001.material">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\materials\particles\Swarm.particle">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="resources\Media\models\cube.mesh">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -522,6 +525,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Awesomium.Core, Version=1.7.0.5, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214" />
+    <Reference Include="Awesomium.Windows.Forms, Version=1.7.0.5, Culture=neutral, PublicKeyToken=9bd24830fbe304a0, processorArchitecture=x86" />
     <Reference Include="CaelumSharp">
       <HintPath>..\..\..\Libs\CaelumSharp.dll</HintPath>
     </Reference>
@@ -539,13 +544,18 @@
       <HintPath>..\..\..\Libs\MOIS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="csharp\Main\Base Ogre\OgreForm.resx">
+      <DependentUpon>OgreForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="resources\cg.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -685,9 +695,6 @@
     <Compile Include="csharp\API\Math\Point.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\Base Ogre\BaseApplication.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="csharp\Main\Base Ogre\CameraMan.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -697,6 +704,12 @@
     <Compile Include="csharp\Main\Base Ogre\MoisManager.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\Base Ogre\OgreForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="csharp\Main\Base Ogre\OgreForm.Designer.cs">
+      <DependentUpon>OgreForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="csharp\Main\Base Ogre\Overlay.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -704,6 +717,7 @@
     <Compile Include="csharp\Main\BlockFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\GUIs\SplashScreen.cs" />
     <Compile Include="csharp\Main\RTS\Buildings\Buildings.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -810,7 +824,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\Program.cs">
-      <SubType>Code</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="csharp\Main\Characters\Shoot\ShootCube.cs" />
     <Compile Include="csharp\Main\States\Main\User.cs">
@@ -842,7 +856,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\States\StateManager.cs">
-      <SubType>Code</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="csharp\Main\States\Main\StoryEditorState.cs" />
     <Compile Include="csharp\Main\StoryEditor\ScriptParser\ItemMgr.cs" />

@@ -11,7 +11,7 @@ using Game.World;
 
 namespace Game.States
 {
-    public abstract class StateManager : BaseApplication
+    public abstract class StateManager : OgreForm
     {
         private Stack<State> mStateStack;
         private Stack<Type>  mNewStates;
@@ -30,11 +30,12 @@ namespace Game.States
         public MyConsole    MyConsole   { get; private set; }
         public MainState    MainState   { get; private set; }
 
-        protected override void Create()
-        {
+        protected override void Create() {
+
+
             GraphicBlock.generateFace();
             LogManager.Singleton.DefaultLog.LogMessage("***********************Program\'s Log***********************");
-            LogManager.Singleton.DefaultLog.LogDetail = LoggingLevel.LL_LOW;
+            //LogManager.Singleton.DefaultLog.LogDetail = LoggingLevel.LL_LOW;
             this.SceneMgr.ShadowTechnique = ShadowTechnique.SHADOWDETAILTYPE_INTEGRATED;
             this.SceneMgr.ShadowFarDistance = 400;
             this.MiyagiMgr = new MiyagiMgr(this.mInput, new Vector2(this.mWindow.Width, this.mWindow.Height));
@@ -138,8 +139,7 @@ namespace Game.States
             while (this.mStateStack.Count > 0) { this.PopState(); }
             this.MyConsole.Dispose();
             this.MiyagiMgr.ShutDown();
-            this.mInput.Shutdown(); 
-            this.mRoot.Dispose();
+            this.mInput.Shutdown();
         }
 
         public void WriteOnConsole(object o) { this.MyConsole.WriteLine(o); }

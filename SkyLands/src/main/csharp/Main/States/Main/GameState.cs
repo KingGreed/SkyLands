@@ -2,6 +2,7 @@
 using Game.GUICreator;
 using Game.Shoot;
 using Game.RTS;
+using Game.World.Display;
 
 namespace Game.States
 {
@@ -24,6 +25,8 @@ namespace Game.States
                 SpawnPoint = playerInfo.SpawnPoint + new Mogre.Vector3(800, 100, 200)
             };
             this.CharacMgr.AddCharacter(iaInfo);
+
+            ParticleGenerator.mkParticle(this.mStateMgr.SceneMgr, this.mWorld.getSpawnPoint(), "MultiEmitters");
             
         }
 

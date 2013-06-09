@@ -21,16 +21,16 @@ namespace Game.States
         protected override void Startup()
         {
             this.mWorld = new MainWorld(this.mStateMgr);
-            if (!this.mStateMgr.GameInfo.Load) { this.mWorld.populate(); }
             this.mWorld.setSafeSpawnPoint();
-            this.mWorld.display();
 
             this.User = new User(this.mStateMgr, this.mWorld);
 
             this.AfterWorldCreation();
+            if(!this.mStateMgr.GameInfo.Load) { this.mWorld.populate(); }
+            this.mWorld.display();
 
             this.Show();
-            Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop begin");
+            //Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop begin");
         }
 
         protected virtual void AfterWorldCreation() {}

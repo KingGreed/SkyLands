@@ -78,15 +78,13 @@ namespace Game.BaseApp {
         protected OverlayElement mElement;
         protected SdkTrayListener mListener;
 
-		public Widget()
-		{
+		public Widget() {
 			this.mTrayLoc = TrayLocation.TL_NONE;
 			this.mElement = null;
 			this.mListener = null;
 		}
 
-		public void cleanup()
-		{
+		public void cleanup() {
 			if (this.mElement != null) nukeOverlayElement(this.mElement);
 			this.mElement = null;
 		}
@@ -96,23 +94,27 @@ namespace Game.BaseApp {
 		| all of its children from the system.
 		-----------------------------------------------------------------------------*/
 		public static void nukeOverlayElement(OverlayElement element) {
-		    if (element == null || !element.GetType().IsInstanceOfType(typeof (OverlayContainer))) { return; }
+            if(element == null || true) { return; }
 
-		    OverlayContainer container = (OverlayContainer) element;
-		    List<OverlayElement> toDelete = new List<OverlayElement>();
+            OverlayContainer container = (OverlayContainer)element;
 
-		    OverlayContainer.ChildIterator children = container.GetChildIterator();
-		    do
-		    {
-		        toDelete.Add(children.Current);
-		    } while (children.MoveNext());
+            
 
-		    foreach (OverlayElement t in toDelete)
-		        nukeOverlayElement(t);
+            if(container != null) {
+                List<OverlayElement> toDelete = new List<OverlayElement>();
 
-		    OverlayContainer parent = element.Parent;
-		    if (parent != null) { parent.RemoveChild(element.Name); }
-		    OverlayManager.Singleton.DestroyOverlayElement(element);
+                OverlayContainer.ChildIterator children = container.GetChildIterator();
+                do {
+                    toDelete.Add(children.Current);
+                } while(children.MoveNext());
+
+                foreach(OverlayElement t in toDelete)
+                    nukeOverlayElement(t);
+
+                OverlayContainer parent = element.Parent;
+                if(parent != null) { parent.RemoveChild(element.Name); }
+                OverlayManager.Singleton.DestroyOverlayElement(element);
+            }
 		}
 
 		/*-----------------------------------------------------------------------------
@@ -234,7 +236,12 @@ namespace Game.BaseApp {
 			else mFitToContents = true;
 
 			this.setCaption(caption);
+            
 			this.mState = ButtonState.BS_UP;
+
+            this.mElement.Show();
+            this.mBP.Show();
+            this.mTextArea.Show();
 		}
 
 
@@ -1475,25 +1482,21 @@ namespace Game.BaseApp {
         ~SdkTrayManager() {
 			OverlayManager om = OverlayManager.Singleton;
 
-			this.destroyAllWidgets();
 
             // delete widgets queued for destruction
 			for (int i = 0; i < mWidgetDeathRow.Count; i++) { mWidgetDeathRow[i] = null; }
 			mWidgetDeathRow.Clear();
 
-			om.Destroy(mBackdropLayer);
-			om.Destroy(mTraysLayer);
-			om.Destroy(mPriorityLayer);
-			om.Destroy(mCursorLayer);
+			//this.closeDialog();
+			//this.hideLoadingBar();
 
-			this.closeDialog();
-			this.hideLoadingBar();
+			//Widget.nukeOverlayElement(mBackdrop);
+			//Widget.nukeOverlayElement(mCursor);
+			//Widget.nukeOverlayElement(mDialogShade);
 
-			Widget.nukeOverlayElement(mBackdrop);
-			Widget.nukeOverlayElement(mCursor);
-			Widget.nukeOverlayElement(mDialogShade);
+            om.DestroyAll();
 
-			for (int i = 0; i < 10; i++) { Widget.nukeOverlayElement(mTrays[i]); }
+			//for (int i = 0; i < 10; i++) { Widget.nukeOverlayElement(mTrays[i]); }
 		}
 
 		/*-----------------------------------------------------------------------------
@@ -1658,8 +1661,7 @@ namespace Game.BaseApp {
 					e.SetDimensions((int)e.Width, (int)e.Height);
 					trayHeight += e.Height;
 
-				    if (mWidgets[i][j].GetType().IsInstanceOfType(typeof (Label)))
-				    {
+				    if (mWidgets[i][j].GetType().IsInstanceOfType(typeof (Label))) {
 				        Label l = (Label) mWidgets[i][j];
 				        if (l != null && l._isFitToTray())
 				        {
@@ -2134,17 +2136,12 @@ namespace Game.BaseApp {
             else if(widget == mFpsLabel) mFpsLabel = null;
             
             // Not supposed to do the if
-            if(widget.getName() != "") {
-                mTrays[(int)widget.getTrayLocation()].RemoveChild(widget.getName());
-                widget.getOverlayElement().Hide(); //this seems to fix the non deletion of the overlay image
-            }
+            if(widget.getName() != "") { mTrays[(int)widget.getTrayLocation()].RemoveChild(widget.getName()); }
 
-            List<Widget> wList = mWidgets[(int)widget.getTrayLocation()];
-            wList.Remove(widget);
+            mWidgets[(int)widget.getTrayLocation()].Remove(widget);
             if(widget == mExpandedMenu) setExpandedMenu(null);
 
             widget.cleanup();
-
             mWidgetDeathRow.Add(widget);
 
             adjustTrays();
@@ -2184,10 +2181,9 @@ namespace Game.BaseApp {
             if(widget == null) throw new Exception("Widget does not exist.");
 
             // remove widget from old tray
-            List<Widget> wList = mWidgets[(int)widget.getTrayLocation()];
-            int it = wList.IndexOf(widget);
-            if(it != wList.Count - 1 && it > 0) {
-                wList.RemoveAt(it);
+            int it = mWidgets[(int)widget.getTrayLocation()].IndexOf(widget);
+            if(it != mWidgets[(int)widget.getTrayLocation()].Count - 1 && it > 0) {
+                mWidgets[(int)widget.getTrayLocation()].RemoveAt(it);
                 mTrays[(int)widget.getTrayLocation()].RemoveChild(widget.getName());
             }
 

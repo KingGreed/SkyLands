@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using MOIS;
 
-
 namespace Game
 {
     public class MoisManager
@@ -259,8 +258,7 @@ namespace Game
             return c;
         }*/
 
-        private bool OnMouseMoved(MouseEvent arg)
-        {
+        private bool OnMouseMoved(MouseEvent arg) {
             this.mMouseMove.x = arg.state.X.rel;
             this.mMouseMove.y = arg.state.Y.rel;
             this.mMouseMove.z = arg.state.Z.rel;

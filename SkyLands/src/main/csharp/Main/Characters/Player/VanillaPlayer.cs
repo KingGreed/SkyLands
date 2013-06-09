@@ -50,14 +50,12 @@ namespace Game.CharacSystem
             this.mIsFirstView = true;
 
             SceneManager sceneMgr = characMgr.SceneMgr;
-            LogManager.Singleton.DefaultLog.LogDetail = LoggingLevel.LL_LOW;
             Entity ent = sceneMgr.CreateEntity("CharacterEnt_" + this.mCharInfo.Id, meshName);
             ent.Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
             Entity swordL = sceneMgr.CreateEntity("Sword.mesh");
             ent.AttachObjectToBone("Sheath.L", swordL);
             Entity swordR = sceneMgr.CreateEntity("Sword.mesh");
             ent.AttachObjectToBone("Sheath.R", swordR);
-            LogManager.Singleton.DefaultLog.LogDetail = LoggingLevel.LL_NORMAL;
             this.mMesh = new Sinbad(ent);
 
             this.mNode.AttachObject(ent);

@@ -32,8 +32,7 @@ namespace Game.World.Generator.Decorators
             {
                 for (int x = 0 + tmp; x < _width - tmp; x++)
                 {
-                    for (int z = 0 + tmp; z < _width - tmp; z++)
-                    {
+                    for (int z = 0 + tmp; z < _width - tmp; z++) {
 
                         if (y == 0 || y == 7)
                             curr.setBlockAt((int)pos.x + x, (int)pos.y + y - 7, (int)pos.z + z, brick, true);
