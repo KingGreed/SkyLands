@@ -1,114 +1,77 @@
-﻿using System.Globalization;
-using MOIS;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
+using Mogre;
+using XInputDotNetPure;
+
+using Game.BaseApp;
 
 namespace Game
 {
     public class MoisManager
     {
-        private InputManager mInputMgr;
-        private readonly bool[] mKeyDown;
-        private readonly bool[] mKeyPressed;
-        private readonly bool[] mKeyReleased;
-        private readonly bool[] mMouseDown;
-        private readonly bool[] mMousePressed;
-        private readonly bool[] mMouseReleased;
-        private Vector3 mMouseMove;
+        private readonly Dictionary<Keys, bool> mKeyDown;
+        private readonly Dictionary<Keys, bool> mKeyPressed;
+        private readonly Dictionary<Keys, bool> mKeyReleased;
+        private readonly Dictionary<MouseButtons, bool> mMouseDown;
+        private readonly Dictionary<MouseButtons, bool> mMousePressed;
+        private readonly Dictionary<MouseButtons, bool> mMouseReleased;
         private Vector3 mMousePos;
-        private Vector3 mMousePressedPos;
-        private Vector3 mMouseReleasedPos;
-        public delegate bool IsKeyEvent(KeyCode key);   // Represents WasKeyPressed, WasKeyReleased or IsKeyDown
+        private Vector3 mMouseMove;
+        private bool mUpdateMovement = true;
+        public delegate bool IsKeyEvent(Keys key);   // Represents WasKeyPressed, WasKeyReleased or IsKeyDown
 
-        public Keyboard KeyBoard { get; private set; }
-        public Mouse Mouse { get; private set; }
+        public Vector3 MousePos   { get { return this.mMousePos; } }
+        public Vector3 MouseMove  { get { return this.mMouseMove; } }
+        public bool BlockMouse { get; set; }
 
-        public bool IsShiftDown { get { return this.IsOneKeyEventTrue(this.IsKeyDown, KeyCode.KC_LSHIFT, KeyCode.KC_RSHIFT); } }
-        public bool IsCtrltDown { get { return this.IsOneKeyEventTrue(this.IsKeyDown, KeyCode.KC_LCONTROL, KeyCode.KC_RCONTROL); } }
+        public GamePadState GamePadState { get { return GamePad.GetState(PlayerIndex.One, GamePadDeadZone.IndependentAxes); } }
 
-        // Get last relative mouse movement (and wheel movement on Z axis)
-        public int MouseMoveX { get { return (int)this.mMouseMove.x; } }
-        public int MouseMoveY { get { return (int)this.mMouseMove.y; } }
-        public int MouseMoveZ { get { return (int)this.mMouseMove.z; } }
-
-        // Get absolute mouse position within window bounds
-        public int MousePosX { get { return (int)this.mMousePos.x; } }
-        public int MousePosY { get { return (int)this.mMousePos.y; } }
-
-        // Get last absolute mouse position when a mouse button was pressed
-        public int MousePressedPosX { get { return (int)this.mMousePressedPos.x; } }
-        public int MousePressedPosY { get { return (int)this.mMousePressedPos.y; } }
-
-        // Get last absolute mouse position when a mouse button was released
-        public int MouseReleasedPosX { get { return (int)this.mMouseReleasedPos.x; } }
-        public int MouseReleasedPosY { get { return (int)this.mMouseReleasedPos.y; } }
-
-        internal MoisManager()
+        internal MoisManager(OgreForm ogreForm)
         {
-            this.mInputMgr = null;
-            this.KeyBoard = null;
-            this.Mouse = null;
-            this.mKeyDown = new bool[256];
-            this.mKeyPressed = new bool[256];
-            this.mKeyReleased = new bool[256];
-            this.mMouseDown = new bool[8];
-            this.mMousePressed = new bool[8];
-            this.mMouseReleased = new bool[8];
-            this.mMouseMove = new Vector3();
+            this.mKeyDown = new Dictionary<Keys, bool>();
+            this.mKeyPressed = new Dictionary<Keys, bool>();
+            this.mKeyReleased = new Dictionary<Keys, bool>();
+            foreach (Keys key in Enum.GetValues(typeof(Keys)))
+            {
+                if (!this.mKeyDown.ContainsKey(key))
+                {
+                    this.mKeyDown.Add(key, false);
+                    this.mKeyPressed.Add(key, false);
+                    this.mKeyReleased.Add(key, false);
+                }
+            }
+
+            this.mMouseDown = new Dictionary<MouseButtons, bool>();
+            this.mMousePressed = new Dictionary<MouseButtons, bool>();
+            this.mMouseReleased = new Dictionary<MouseButtons, bool>();
+            foreach (MouseButtons button in Enum.GetValues(typeof(MouseButtons)))
+            {
+                this.mMouseDown.Add(button, false);
+                this.mMousePressed.Add(button, false);
+                this.mMouseReleased.Add(button, false);
+            }
+
             this.mMousePos = new Vector3();
-            this.mMousePressedPos = new Vector3();
-            this.mMouseReleasedPos = new Vector3();
+
+            ogreForm.KeyDown += OnKeyPressed;
+            ogreForm.KeyUp += OnKeyReleased;
+            
+            ogreForm.MouseMove += OnMouseMoved;
+            ogreForm.MouseDown += OnMousePressed;
+            ogreForm.MouseUp += OnMouseReleased;
+            ogreForm.MouseLeave += OnMouseLeave;
+            this.BlockMouse = true;
         }
 
-        internal bool Startup(int windowHandle, uint width, uint height)
-        {
-            if (this.mInputMgr != null)
-                return false;
-
-            // initialize input manager
-            ParamList pl = new ParamList();
-            pl.Insert("WINDOW", windowHandle.ToString());
-            this.mInputMgr = InputManager.CreateInputSystem(pl);
-            if (this.mInputMgr == null)
-                return false;
-
-            // initialize keyboard
-            this.KeyBoard = (Keyboard)this.mInputMgr.CreateInputObject(MOIS.Type.OISKeyboard, true);
-            if (this.KeyBoard == null)
-                return false;
-
-            // set up keyboard event handlers
-            this.KeyBoard.KeyPressed += OnKeyPressed;
-            this.KeyBoard.KeyReleased += OnKeyReleased;
-
-            // initialize mouse
-            this.Mouse = (Mouse)this.mInputMgr.CreateInputObject(MOIS.Type.OISMouse, true);
-            if (this.Mouse == null)
-                return false;
-
-            // set up area for absolute mouse positions
-            MouseState_NativePtr state = this.Mouse.MouseState;
-            state.width = (int) width;
-            state.height = (int) height;
-
-            // set up mouse event handlers
-            this.Mouse.MouseMoved += OnMouseMoved;
-            this.Mouse.MousePressed += OnMousePressed;
-            this.Mouse.MouseReleased += OnMouseReleased;
-
-            this.Clear();
-
-            return true;
-        }
-
-        internal void Update()
+        internal virtual void Update()
         {
             this.ClearKeyPressed();
             this.ClearKeyReleased();
             this.ClearMousePressed();
             this.ClearMouseReleased();
-            this.ClearMouseMove();
-
-            this.KeyBoard.Capture();
-            this.Mouse.Capture();
+            this.ClearCursorMove();
         }
 
         public void Clear()
@@ -119,195 +82,120 @@ namespace Game
             this.ClearMousePressed();
             this.ClearMouseReleased();
             this.ClearMouseDown();
-            this.ClearMouseMove();
+            this.ClearCursorMove();
         }
 
-        public bool IsKeyDown(KeyCode key)                       { return this.mKeyDown[(int) key]; }
-        public bool WasKeyPressed(KeyCode key, bool setToFalse = false)
-        {
-            if (setToFalse) { this.mKeyPressed[(int)key] = false; }
-            return this.mKeyPressed[(int) key];
-        }
-        public bool WasKeyReleased(KeyCode key)                  { return this.mKeyReleased[(int)key]; }
-        public bool IsMouseButtonDown(MouseButtonID button)      { return this.mMouseDown[(int) button]; }
-        public bool WasMouseButtonPressed(MouseButtonID button)  { return this.mMousePressed[(int) button]; }
-        public bool WasMouseButtonReleased(MouseButtonID button) { return this.mMouseReleased[(int)button]; }
-        public bool WasMouseMoved()                              { return this.mMouseMove.x != 0 || this.mMouseMove.y != 0 || this.mMouseMove.z != 0; }
+        public bool WasKeyPressed(Keys key)                      { return this.mKeyPressed[key]; }
+        public bool IsKeyDown(Keys key)                          { return this.mKeyDown[key]; }
+        public bool WasKeyReleased(Keys key)                     { return this.mKeyReleased[key]; }
+        public bool IsMouseButtonDown(MouseButtons button)       { return this.mMouseDown[button]; }
+        public bool WasMouseButtonPressed(MouseButtons button)   { return this.mMousePressed[button]; }
+        public bool WasMouseButtonReleased(MouseButtons button)  { return this.mMouseReleased[button]; }
+        public bool WasMouseMoved()                              { return this.mMouseMove.x != 0 || this.mMouseMove.y != 0; }
 
-        public bool IsOneKeyEventTrue(IsKeyEvent keyEvent, params KeyCode[] keys)
+        public bool IsOneKeyEventTrue(IsKeyEvent keyEvent, params Keys[] keys)
         {
-            foreach (KeyCode key in keys)
-                if (keyEvent(key)) { return true; }
-
-            return false;
+            return keys.Any(key => keyEvent(key));
         }
 
-        public bool AreAllKeyEventTrue(IsKeyEvent keyEvent, params KeyCode[] keys)
+        public bool AreAllKeyEventTrue(IsKeyEvent keyEvent, params Keys[] keys)
         {
-            foreach (KeyCode key in keys)
-                if (!keyEvent(key)) { return false; }
-
-            return true;
+            return keys.All(key => keyEvent(key));
         }
 
         private void ClearKeyPressed()
         {
-            for (int i = 0; i < this.mKeyPressed.Length; ++i)
-                this.mKeyPressed[i] = false;
+            foreach (Keys key in Enum.GetValues(typeof(Keys)))
+                this.mKeyPressed[key] = false;
         }
 
         private void ClearKeyReleased()
         {
-            for (int i = 0; i < this.mKeyReleased.Length; ++i)
-                this.mKeyReleased[i] = false;
+            foreach (Keys key in Enum.GetValues(typeof(Keys)))
+                this.mKeyReleased[key] = false;
         }
 
         private void ClearKeyDown()
         {
-            for (int i = 0; i < this.mKeyDown.Length; ++i)
-                this.mKeyDown[i] = false;
+            foreach (Keys key in Enum.GetValues(typeof(Keys)))
+                this.mKeyDown[key] = false;
         }
 
         private void ClearMousePressed()
         {
-            for (int i = 0; i < this.mMousePressed.Length; ++i)
-                this.mMousePressed[i] = false;
+            foreach (MouseButtons button in Enum.GetValues(typeof(MouseButtons)))
+                this.mMousePressed[button] = false;
         }
 
         private void ClearMouseReleased()
         {
-            for (int i = 0; i < this.mMouseReleased.Length; ++i)
-                this.mMouseReleased[i] = false;
+            foreach (MouseButtons button in Enum.GetValues(typeof(MouseButtons)))
+                this.mMouseReleased[button] = false;
         }
 
         private void ClearMouseDown()
         {
-            for (int i = 0; i < this.mMouseDown.Length; ++i)
-                this.mMouseDown[i] = false;
+            foreach (MouseButtons button in Enum.GetValues(typeof(MouseButtons)))
+                this.mMouseDown[button] = false;
         }
 
-        private void ClearMouseMove()
+        private void ClearCursorMove()
         {
             this.mMouseMove.x = 0;
             this.mMouseMove.y = 0;
             this.mMouseMove.z = 0;
         }
 
-        private bool OnKeyPressed(KeyEvent arg)
+        private void OnKeyPressed(object sender, System.EventArgs e)
         {
-            this.mKeyDown[(int)arg.key] = true;
-            this.mKeyPressed[(int)arg.key] = true;
-            return true;
+            KeyEventArgs args = (KeyEventArgs)e;
+            this.mKeyPressed[args.KeyCode] = !this.mKeyDown[args.KeyCode];
+            this.mKeyDown[args.KeyCode] = true;
+            LogManager.Singleton.DefaultLog.LogMessage("Pressed");
         }
 
-        private bool OnKeyReleased(KeyEvent arg)
+        private void OnKeyReleased(object sender, System.EventArgs e)
         {
-            this.mKeyDown[(int)arg.key] = false;
-            this.mKeyReleased[(int)arg.key] = true;
-            return true;
+            KeyEventArgs args = (KeyEventArgs)e;
+            this.mKeyReleased[args.KeyCode] = this.mKeyDown[args.KeyCode];
+            this.mKeyDown[args.KeyCode] = false;
         }
 
-        /*public string GetText()
+        private void OnMouseMoved(object sender, System.EventArgs e)
         {
-            string txt = "";
-            foreach (KeyCode code in Enum.GetValues(typeof(KeyCode)))
+            MouseEventArgs args = (MouseEventArgs)e;
+            if (this.mUpdateMovement)
             {
-                if (this.WasKeyPressed(code))
-                {
-                    char c = this.GetKeyCodeChar(code);
-                    if (c != '\0')
-                    {
-                        //if (c == (char)127)
-                        txt += c;
-                    }
-                }
+                this.mMouseMove.x = args.X - this.mMousePos.x;
+                this.mMouseMove.y = args.Y - this.mMousePos.y;
+                this.mMouseMove.z = args.Delta - this.mMousePos.z;
             }
-
-            return txt;
+            this.mUpdateMovement = true;
+            this.mMousePos.x = args.X;
+            this.mMousePos.y = args.Y;
+            this.mMousePos.z = args.Delta;
         }
 
-        public char GetKeyCodeChar(KeyCode code)
+        private void OnMouseLeave(object sender, System.EventArgs e)
         {
-            char c = '\0';
-            string txt;
-            if      (code == KeyCode.KC_SPACE)     { c = ' '; }
-            else if (code == KeyCode.KC_LBRACKET)  { c = '('; }
-            else if (code == KeyCode.KC_RBRACKET)  { c = ')'; }
-            else if (code == KeyCode.KC_MINUS)     { c = '_'; }
-            else if (code == KeyCode.KC_SLASH)     { c = '/'; }
-            else if (code == KeyCode.KC_BACK)      { c = (char)127; }  // Supr
-            else if (code == KeyCode.KC_DELETE)    { c = (char)8; } // Del
-            
-            if(c == '\0')   // The char isn't a special character
-            {
-                txt = Enum.GetName(typeof(KeyCode), code);
-                txt = txt.Substring(3);
-
-                if (txt.Length == 1)    // Consider the letters and numbers
-                {
-                    char tmp;
-
-                    if (!this.IsShiftDown) { tmp = txt.ToLower()[0]; }
-                    else                   { tmp = txt.ToUpper()[0]; }
-
-                    if ((tmp >= 'a' && tmp <= 'z') || (tmp >= '0' && tmp <= '9') || (tmp >= 'A' && tmp <= 'Z'))
-                        c = tmp;
-                }
-            }
-
-            return c;
-        }*/
-
-        private bool OnMouseMoved(MouseEvent arg) {
-            this.mMouseMove.x = arg.state.X.rel;
-            this.mMouseMove.y = arg.state.Y.rel;
-            this.mMouseMove.z = arg.state.Z.rel;
-            this.mMousePos.x = arg.state.X.abs;
-            this.mMousePos.y = arg.state.Y.abs;
-            return true;
+            Cursor.Position = new System.Drawing.Point(OgreForm.WindowPosition.X + OgreForm.WindowSize.Width / 2,
+                                                       OgreForm.WindowPosition.Y + OgreForm.WindowSize.Height / 2);
+            this.mUpdateMovement = !this.BlockMouse;
+            this.mMousePos = new Vector3(Cursor.Position.X, Cursor.Position.Y, this.mMousePos.z);
         }
 
-        private bool OnMousePressed(MouseEvent arg, MouseButtonID id)
+        private void OnMousePressed(object sender, System.EventArgs e)
         {
-            this.mMouseDown[(int)id] = true;
-            this.mMousePressed[(int)id] = true;
-            this.mMousePos.x = arg.state.X.abs;
-            this.mMousePos.y = arg.state.Y.abs;
-            this.mMousePressedPos.x = arg.state.X.abs;
-            this.mMousePressedPos.y = arg.state.Y.abs;
-            return true;
+            MouseEventArgs args = (MouseEventArgs)e;
+            this.mMouseDown[args.Button] = true;
+            this.mMousePressed[args.Button] = true;
         }
 
-        private bool OnMouseReleased(MouseEvent arg, MouseButtonID id)
+        private void OnMouseReleased(object sender, System.EventArgs e)
         {
-            this.mMouseDown[(int)id] = false;
-            this.mMouseReleased[(int)id] = true;
-            this.mMousePos.x = arg.state.X.abs;
-            this.mMousePos.y = arg.state.Y.abs;
-            this.mMouseReleasedPos.x = arg.state.X.abs;
-            this.mMouseReleasedPos.y = arg.state.Y.abs;
-            return true;
-        }
-
-        internal void Shutdown()
-        {
-            if (this.Mouse != null)
-            {
-                this.mInputMgr.DestroyInputObject(this.Mouse);
-                this.Mouse = null;
-            }
-
-            if (this.KeyBoard != null)
-            {
-                this.mInputMgr.DestroyInputObject(this.KeyBoard);
-                this.KeyBoard = null;
-            }
-
-            if (this.mInputMgr != null)
-            {
-                InputManager.DestroyInputSystem(this.mInputMgr);
-                this.mInputMgr = null;
-            }
+            MouseEventArgs args = (MouseEventArgs)e;
+            this.mMouseDown[args.Button] = false;
+            this.mMouseReleased[args.Button] = true;
         }
     }
 }

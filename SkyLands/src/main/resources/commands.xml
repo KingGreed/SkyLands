@@ -1,0 +1,63 @@
+<Controller>
+  <ContinuousAction id="MoveLeft">
+    <Keyboard>A</Keyboard>
+  </ContinuousAction>
+  <ContinuousAction id="MoveRight">
+    <Keyboard>D</Keyboard>
+  </ContinuousAction>
+  <ContinuousAction id="MoveUp">
+    <Keyboard>W</Keyboard>
+  </ContinuousAction>
+  <ContinuousAction id="MoveDown">
+    <Keyboard>S</Keyboard>
+  </ContinuousAction>
+  
+  <SingleAction id="Jump">
+    <Keyboard>Space</Keyboard>
+    <Xbox>A</Xbox>
+  </SingleAction>
+  <SingleAction id="Sprint">
+    <Keyboard>Shift</Keyboard>
+    <Xbox>LeftStick</Xbox>
+  </SingleAction>
+  <SingleAction id="Levitate">
+    <Keyboard>Q</Keyboard>
+    <Xbox>Y</Xbox>
+  </SingleAction>
+  <SingleAction id="Dance">
+    <Keyboard>NumPad1</Keyboard>
+    <Xbox>DPadLeft</Xbox>
+  </SingleAction>
+  <SingleAction id="MainAction">
+    <Mouse>Left</Mouse>
+    <Xbox>RightTrigger</Xbox>
+  </SingleAction>
+  <SingleAction id="SecondaryAction">
+    <Mouse>Right</Mouse>
+    <Xbox>LeftTrigger</Xbox>
+  </SingleAction>
+  <SingleAction id="MoveSelectorLeft">
+    <Mouse>MoveZ+</Mouse>
+    <Xbox>LeftShoulder</Xbox>
+  </SingleAction>
+  <SingleAction id="MoveSelectorRight">
+    <Mouse>MoveZ-</Mouse>
+    <Xbox>RightShoulder</Xbox>
+  </SingleAction>
+  <SingleAction id="Up">
+    <Keyboard>Q</Keyboard>
+    <Xbox>DPadUp</Xbox>
+  </SingleAction>
+  <SingleAction id="Down">
+    <Keyboard>E</Keyboard>
+    <Xbox>DPadDown</Xbox>
+  </SingleAction>
+  <SingleAction id="Inventory">
+    <Keyboard>I</Keyboard>
+    <Xbox>X</Xbox>
+  </SingleAction>
+  <SingleAction id="Start">
+    <Keyboard>Escape</Keyboard>
+    <Xbox>Start</Xbox>
+  </SingleAction>
+</Controller>

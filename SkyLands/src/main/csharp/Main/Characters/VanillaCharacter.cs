@@ -15,7 +15,7 @@ namespace Game.CharacSystem
 {
     public abstract class VanillaCharacter : Character
     {
-        private const float WALK_SPEED = 300;
+        private const float WALK_SPEED = 350;
         private const float YAW_SPEED = 7;    // Only for forced movement
         private const float SPRINT_FACTOR = 1.65f;
 
@@ -236,7 +236,6 @@ namespace Game.CharacSystem
         public void Hit(Bullet b)
         {
             this.mCharInfo.Life -= b.Damage;
-            if (this.mCharInfo.IsPlayer && ((VanillaPlayer) this).HUD != null) { ((VanillaPlayer) this).HUD.UpdateLife(this.mCharInfo.Life, VanillaPlayer.DEFAULT_PLAYER_LIFE); }
 
             if (this.mCharInfo.Life <= 0)
             {

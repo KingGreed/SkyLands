@@ -62,8 +62,8 @@ namespace Game.Sky
 
         public void Update()
         { 
-            if(this.mStateMgr.Input.IsShiftDown)
-                this.mCaelumSystem.TimeScale += this.mStateMgr.Input.MouseMoveZ;
+            /*if(this.mStateMgr.Input.IsKeyDown()
+                this.mCaelumSystem.TimeScale += this.mStateMgr.Input.MouseMove.z;*/
         }
 
         public void AddListeners()

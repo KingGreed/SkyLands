@@ -68,8 +68,6 @@ namespace Game.CharacSystem
         {
             if (this.mCharac.Info.IsPlayer)
             {
-                if (((VanillaPlayer) this.mCharac).Input.WasKeyPressed(MOIS.KeyCode.KC_F4))
-                    foreach (SceneNode node in this.mPoints) { node.FlipVisibility(); }
                 Vector3[] points = this.GetHitPoints();
                 for (int i = 0; i < this.mPoints.Length; i++)
                     this.mPoints[i].Position = points[i];

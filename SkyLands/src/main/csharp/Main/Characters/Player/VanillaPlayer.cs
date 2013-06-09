@@ -1,10 +1,10 @@
 ﻿using System;
+using System.Windows.Forms;
 using Mogre;
 
 using Game.World;
 using Game.Animation;
 using Game.Shoot;
-using Game.GUICreator;
 
 using API.Geo.Cuboid;
 using API.Generic;
@@ -18,35 +18,34 @@ namespace Game.CharacSystem
         private struct Emote
         {
             private readonly Sinbad.AnimName mAnim;
-            private readonly MOIS.KeyCode mKey;
+            private readonly Controller.UserAction mAction;
 
             public Sinbad.AnimName Anim { get { return this.mAnim; } }
-            public MOIS.KeyCode Key { get { return this.mKey; } }
+            public Controller.UserAction Action { get { return this.mAction; } }
 
-            public Emote(MOIS.KeyCode key, Sinbad.AnimName anim) { this.mKey = key; this.mAnim = anim; }
+            public Emote(Controller.UserAction action, Sinbad.AnimName anim) { this.mAction = action; this.mAnim = anim; }
         }
 
         public const float  DEFAULT_PLAYER_LIFE = 340;
         private const float YAW_SENSIVITY = 0.4f;
         private const float PITCH_SENSIVITY = 0.15f;
 
-        private readonly MoisManager       mInput;
+        private readonly Controller        mController;
         private readonly Emote[]           mEmotes;
         private readonly Sinbad.AnimName[] mEmotesNames;
         private readonly bool              mIsFirstView;
         private readonly ShootCube         mShootCube;
-        private User                  mCameraMgr;
+        private User                       mCameraMgr;
 
-        public MoisManager      Input         { get { return this.mInput; } }
+        public Controller       Input         { get { return this.mController; } }
         public bool             IsFirstView   { get { return this.mIsFirstView; } }
         public MainPlayerCamera MainPlayerCam { get; private set; }
         public Degree           Pitch         { get { return this.MainPlayerCam.Pitch; } }
-        public HUD              HUD           { get; private set; }
         public bool             IsMainPlayer  { get { return this.MainPlayerCam != null; } }
 
-        public VanillaPlayer(CharacMgr characMgr, string meshName, CharacterInfo info, MoisManager input) : base(characMgr, info)
+        public VanillaPlayer(CharacMgr characMgr, string meshName, CharacterInfo info, Controller input) : base(characMgr, info)
         {
-            this.mInput = input;
+            this.mController = input;
             this.mIsFirstView = true;
 
             SceneManager sceneMgr = characMgr.SceneMgr;
@@ -68,19 +67,19 @@ namespace Game.CharacSystem
 
             this.mEmotes = new Emote[]
             {
-                new Emote(MOIS.KeyCode.KC_1, Sinbad.AnimName.Dance)
+                new Emote(Controller.UserAction.Dance, Sinbad.AnimName.Dance)
             };
             this.mEmotesNames = new Sinbad.AnimName[this.mEmotes.Length];
             for (int i = 0; i < this.mEmotes.Length; i++)
                 this.mEmotesNames[i] = this.mEmotes[i].Anim;
         }
 
-        public void MakeHimMainPlayer(User cameraMgr, MainPlayerCamera cam, HUD hud)
+        public void MakeHimMainPlayer(User cameraMgr, MainPlayerCamera cam)
         {
             this.mCameraMgr = cameraMgr;
             this.MainPlayerCam = cam;
-            this.HUD = hud;
-            this.HUD.UpdateLife(this.mCharInfo.Life, DEFAULT_PLAYER_LIFE);
+            /*this.HUD = hud;
+            this.HUD.UpdateLife(this.mCharInfo.Life, DEFAULT_PLAYER_LIFE);*/
         }
 
         public void SwitchFreeCamMode()
@@ -92,24 +91,26 @@ namespace Game.CharacSystem
 
         public new void Update(float frameTime)
         {
-            if(this.mCameraMgr.IsFreeCamMode) {this.MovementInfo.IsAllowedToMove = this.mInput.IsCtrltDown;}
+            if(this.mCameraMgr.IsFreeCamMode) {this.MovementInfo.IsAllowedToMove = this.mController.IsKeyDown(Keys.ControlKey);}
 
             if (this.MovementInfo.IsAllowedToMove)
             {
-                float yawValue = -this.mInput.MouseMoveX * YAW_SENSIVITY;
-                float pitchValue = -this.mInput.MouseMoveY * PITCH_SENSIVITY;
+                float yawValue = -this.mController.Yaw * YAW_SENSIVITY;
+                float pitchValue = -this.mController.Pitch * PITCH_SENSIVITY;
 
                 if (this.mIsFirstView) { this.FirstPersonUpdate(yawValue, pitchValue); }
                 else { this.ThirdPersonUpdate(yawValue, pitchValue); }
 
-                this.MovementInfo.Sprint = this.mInput.IsShiftDown;
+                this.MovementInfo.Sprint = this.mController.IsActionOccuring(Controller.UserAction.Sprint);
+                if(this.mController.HasActionOccured(Controller.UserAction.Levitate))
+                    this.setIsPushedByArcaneLevitator(!this.MovementInfo.IsPushedByArcaneLevitator);
 
                 /* Update emotes animations */
                 if (!this.mMesh.AnimMgr.AreAnimationsPlaying(MeshAnim.GetString(Sinbad.AnimName.JumpStart, Sinbad.AnimName.JumpLoop, Sinbad.AnimName.JumpEnd, Sinbad.AnimName.RunBase, Sinbad.AnimName.RunTop)))
                 {
                     foreach (Emote emote in this.mEmotes)
                     {
-                        if (this.mInput.WasKeyPressed(emote.Key))
+                        if (this.mController.HasActionOccured(emote.Action))
                         {
                             if (!this.mMesh.AnimMgr.AreAnimationsPlaying(MeshAnim.GetString(emote.Anim))) { this.mMesh.AnimMgr.SetAnims(MeshAnim.GetString(emote.Anim)); }
                             else { this.mMesh.AnimMgr.DeleteAnims(MeshAnim.GetString(emote.Anim)); }
@@ -120,10 +121,10 @@ namespace Game.CharacSystem
 
             if (this.mCameraMgr.IsAllowedToMoveCam)
             {
-                if (this.mInput.WasMouseButtonReleased(MOIS.MouseButtonID.MB_Left)) { this.mShootCube.Burst(); }
-                if (this.mInput.IsMouseButtonDown(MOIS.MouseButtonID.MB_Left))
+                if (this.mController.HasActionOccured(Controller.UserAction.MainAction)) { this.mShootCube.Burst(); }
+                if (this.mController.IsActionOccuring(Controller.UserAction.MainAction))
                 {
-                    if ((int) this.HUD.Selector <= 2)
+                    /*if ((int) this.HUD.Selector <= 2)
                     {
                         string material = "";
                         switch (this.HUD.Selector)
@@ -141,21 +142,16 @@ namespace Game.CharacSystem
                         }
                         this.mShootCube.Material = material;
                         this.mShootCube.Grow(frameTime, this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left));
-                    }
+                    }*/
                 }
             }
         }
 
         private void FirstPersonUpdate(float yawValue, float pitchValue)
         {
-            Vector3 moveDirection = new Vector3();
-            if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_W) || this.mInput.IsKeyDown(MOIS.KeyCode.KC_UP)) { moveDirection.z = 1; }
-            if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_S) || this.mInput.IsKeyDown(MOIS.KeyCode.KC_DOWN)) { moveDirection.z = -1; }
-            if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_A) || this.mInput.IsKeyDown(MOIS.KeyCode.KC_LEFT)) { moveDirection.x = 1; }
-            if (this.mInput.IsKeyDown(MOIS.KeyCode.KC_D) || this.mInput.IsKeyDown(MOIS.KeyCode.KC_RIGHT)) { moveDirection.x = -1; }
-            if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_SPACE)) { moveDirection.y = 1; }
-            this.MovementInfo.MoveDirection = moveDirection;
-
+            this.MovementInfo.MoveDirection = new Vector3(this.mController.MovementFactor.x,
+                                                          this.mController.HasActionOccured(Controller.UserAction.Jump) ? 1 : 0,
+                                                          this.mController.MovementFactor.y);
             this.MovementInfo.YawValue = yawValue;
             this.MovementInfo.PitchValue = pitchValue;
         }

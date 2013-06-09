@@ -4,9 +4,7 @@ using Mogre;
 
 using Game.World;
 using Game.States;
-using Game.IGConsole;
 using Game.Shoot;
-using Game.GUICreator;
 
 using API.Ent;
 
@@ -17,18 +15,16 @@ namespace Game.CharacSystem
         private const string SINBAD_MESH = "Sinbad.mesh";
         private const string ROBOT_MESH = "robot.mesh";
 
-        private readonly CommandInfo[]          mCommands;
         private readonly List<VanillaCharacter> mCharacList;
         private readonly StateManager           mStateMgr;
-        private readonly MoisManager            mInput;
+        private readonly Controller             mController;
         private readonly MainWorld              mWorld;
         private readonly BulletManager          mBulletMgr;
-        private readonly HUD                    mHUD;
-        private readonly User              mCameraMgr;
+        private readonly User                   mCameraMgr;
 
         public StateManager  StateMgr   { get { return this.mStateMgr; } }
         public SceneManager  SceneMgr   { get { return this.mStateMgr.SceneMgr; } }
-        public MoisManager   Input      { get { return this.mInput; } }
+        public Controller    Controller      { get { return this.mController; } }
         public MainWorld     World      { get { return this.mWorld; } }
         public VanillaPlayer MainPlayer { get; private set; }
         public BulletManager BulletMgr  { get { return this.mBulletMgr; } }
@@ -36,33 +32,15 @@ namespace Game.CharacSystem
         public CharacMgr(StateManager stateMgr, MainWorld world, User cameraMgr)
         {
             this.mStateMgr = stateMgr;
-            this.mInput = stateMgr.Input;
+            this.mController = stateMgr.Controller;
             this.mWorld = world;
             this.mCameraMgr = cameraMgr;
             this.mCharacList = new List<VanillaCharacter>();
-
-            this.mCommands = new CommandInfo[]
-            {
-                new CommandInfo("getCharacPos", 1, delegate(string[] args)
-                    {
-                        int index;
-                        if (int.TryParse(args[0], out index))
-                            this.mStateMgr.WriteOnConsole("FeetPosition : " + MyConsole.GetString(this.GetCharacterByListPos(index).FeetPosition));
-                    }),
-                new CommandInfo("getCharacYaw", 1, delegate(string[] args)
-                    {
-                        int index;
-                        if (int.TryParse(args[0], out index))
-                            this.mStateMgr.WriteOnConsole(("Yaw : " + this.GetCharacterByListPos(index).GetYaw().ValueAngleUnits));
-                    })
-            };
-            this.mStateMgr.MyConsole.AddCommands(this.mCommands);
         }
 
         public CharacMgr(StateManager stateMgr, MainWorld world, BulletManager bulletMgr, User cameraMgr) : this(stateMgr, world, cameraMgr)
         {
             this.mBulletMgr = bulletMgr;
-            this.mHUD = (HUD)stateMgr.MainState.MainGUI;
         }
 
         public void AddCharacter(CharacterInfo info)
@@ -75,11 +53,11 @@ namespace Game.CharacSystem
                     throw new Exception("Can't add player in the story editor");
                 
                 type = "Player";
-                VanillaPlayer player = new VanillaPlayer(this, SINBAD_MESH, info, this.mInput);
+                VanillaPlayer player = new VanillaPlayer(this, SINBAD_MESH, info, this.mController);
                 this.mCharacList.Add(player);
                 if (this.MainPlayer == null)
                 {
-                    player.MakeHimMainPlayer(this.mCameraMgr, new MainPlayerCamera(this.mStateMgr.Camera, player), this.mHUD);
+                    player.MakeHimMainPlayer(this.mCameraMgr, new MainPlayerCamera(this.mStateMgr.Camera, player));
                     this.MainPlayer = player;
                 }
             }
@@ -122,7 +100,6 @@ namespace Game.CharacSystem
             }
 
             CharacterInfo.ResetID();
-            this.mStateMgr.MyConsole.DeleteCommands(this.mCommands);
         }
     }
 }

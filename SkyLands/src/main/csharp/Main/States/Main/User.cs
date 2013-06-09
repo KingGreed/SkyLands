@@ -65,17 +65,17 @@ namespace Game
 
             if (this.mCameraMan != null && this.IsAllowedToMoveCam)
             {
-                this.mCameraMan.MouseMovement(this.mStateMgr.Input.MouseMoveX, this.mStateMgr.Input.MouseMoveY);
-                this.mCameraMan.UpdateCamera(frameTime, this.mStateMgr.Input);
+                this.mCameraMan.MouseMovement(this.mStateMgr.Controller.Yaw, this.mStateMgr.Controller.Pitch);
+                this.mCameraMan.UpdateCamera(frameTime, this.mStateMgr.Controller);
             }
 
             float dist = this.UpdateSelectedBlock();
 
             /* Cube addition and suppression */
-            if (!this.mStateMgr.Input.IsShiftDown) { this.mStateMgr.MainState.MainGUI.MoveSelector(this.mStateMgr.Input.MouseMoveZ); }
+            //if (!this.mStateMgr.Input.IsShiftDown) { this.mStateMgr.MainState.MainGUI.MoveSelector((int)this.mStateMgr.Input.MouseMove.z); }
 
-            bool leftClick = this.mStateMgr.Input.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left);
-            bool rightClick = this.mStateMgr.Input.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Right);
+            bool leftClick = this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.MainAction);
+            bool rightClick = this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.SecondaryAction);
             bool allowWorldEdition = !(this.mStateMgr.GameInfo.IsInEditorMode ^ this.mStateMgr.MainState.User.IsFreeCamMode);
             if (allowWorldEdition && (leftClick || rightClick))
             {
@@ -93,7 +93,7 @@ namespace Game
 
             if (mainPlayer != null)
             {
-                mainState.MainGUI.SwitchVisibility();
+                //mainState.MainGUI.SwitchVisibility();
                 mainPlayer.SwitchFreeCamMode();
             }
 
@@ -164,7 +164,7 @@ namespace Game
 
         private void AddBlock(float dist)
         {
-            string material = this.mStateMgr.MainState.MainGUI.GetMaterial();
+            string material = "";//this.mStateMgr.MainState.MainGUI.GetMaterial();
             if (this.mSelectedBlock is AirBlock || this.mSelectedBlock is ConstructionBlock || material == "") { return; }
             
             /* Determine the face */
