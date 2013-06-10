@@ -494,6 +494,21 @@
     <Content Include="resources\Media\packs\Sinbad.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\web\jquery.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\web\MainMenu.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\web\MainMenu.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\web\selector.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\web\Selector.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\ogre.cfg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -507,6 +522,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\models\robot.skeleton">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\XInputInterface.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -524,10 +542,6 @@
     </Reference>
     <Reference Include="LibNoise">
       <HintPath>..\..\..\Libs\LibNoise.dll</HintPath>
-    </Reference>
-    <Reference Include="Miyagi, Version=1.2.1.40980, Culture=neutral, PublicKeyToken=418dc626d1eb4589, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Libs\Miyagi.dll</HintPath>
     </Reference>
     <Reference Include="Mogre">
       <HintPath>..\..\..\Libs\Mogre.dll</HintPath>
@@ -554,19 +568,6 @@
     </Content>
     <Content Include="resources\Media\images\Cross.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Miyagi.Backend.Mogre.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Miyagi.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Miyagi.Plugin.Input.Mois.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Miyagi.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
     </Content>
     <Content Include="resources\OgreMain.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -899,6 +900,9 @@
     <Compile Include="csharp\Main\World\Sky\SkyMgr.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="resources\Media\skins\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

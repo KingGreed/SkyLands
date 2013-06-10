@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.IO;
+
 using Awesomium.Core;
 using Game.Display;
 using Mogre;
@@ -28,7 +30,6 @@ namespace Game.BaseApp {
 
             if(!WebCore.IsRunning) { WebCore.Initialize(WebConfig.Default); }
 
-            //this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
 
             this.InitializeComponent();
 
@@ -39,8 +40,10 @@ namespace Game.BaseApp {
             this.Resize += this.OgreForm_Resize;
             this.Move += (sender, args) => WindowPosition = this.Location;
 
+
             this.webView.DocumentReady += onDocumentReady;
-            this.webView.Source = new Uri("file://C:/Users/kingGreed/Lib/Web/SkyLands/index.html");
+            this.webView.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/selector.html");
+            
             this.webView.Hide();
 
             this.MinimumSize = new Size(800, 600);
@@ -72,6 +75,7 @@ namespace Game.BaseApp {
         }
 
         public void OgreForm_Resize(object sender, EventArgs e)   { this.mWindow.WindowMovedOrResized(); WindowSize = this.Size; }
+
         public void AddFrameLstn(RootLstn listener)               { listener.AddListener(this.mRoot);        }
         public void RemoveFrameLstn(RootLstn listener)            { listener.RemoveListener(this.mRoot);     }
 

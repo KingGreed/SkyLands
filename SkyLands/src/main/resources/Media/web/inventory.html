@@ -1,0 +1,237 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="inventory.css"/>
+		<script type="text/javascript" src="jquery.js"> </script>
+		<script type="text/javascript" src="jqueryUI/js/jquery-ui-1.9.2.custom.min.js"></script>
+
+		<script type="text/javascript">
+			var imgHeight = 16, imgWidth = 16;
+
+			var RatioX = 1, RatioTotalX = 1;
+			var RatioY = 1, RatioTotalY = 1;
+
+			var Selected, Position, Clone;
+			
+			$(function() {
+				$(".slot").each(function(index) {
+
+					if(index >= 40) {
+						var row = Math.floor((index - 40) / 3);
+						var col = index % 3;
+
+						var top, left;
+						if(row == 3) {
+							top  = (20 + 18) * RatioTotalY;
+							left =  134 * RatioTotalX;
+						} else {
+							top  = (20 + 18 * row) * RatioTotalY;
+							left = (40 + 18 * col) * RatioTotalX;
+						}
+
+						$(this).children().attr("src", "../materials/textures/fire.png");
+
+						$(this).attr("width",  imgWidth  * RatioTotalX + "px");
+						$(this).attr("height", imgHeight * RatioTotalY + "px");
+
+						$(this).css("top",  top  + "px");
+						$(this).css("left", left + "px");
+
+
+					} else {
+						var row = Math.floor(index / 10);
+						var col = index % 10;
+
+						var top;
+						if(row == 3) {
+							top  = 150 * RatioTotalY;
+						} else {
+							top  = (92 + 18 * row) * RatioTotalY;
+						}
+
+						var left = (8  + 18 * col) * RatioTotalX;
+
+						$(this).css("top",  top  + "px");
+						$(this).css("left", left + "px");
+
+						$(this).children("img").attr("src", "../materials/textures/fire.png");
+
+						$(this).attr("width",  imgWidth  * RatioTotalX + "px");
+						$(this).attr("height", imgHeight * RatioTotalY + "px");
+				}
+
+				});
+
+				$(".item").draggable({
+					containment: "#containor",
+					scroll: false,
+					cursor: "crosshair", cursorAt: { top: 8, left: 8 },
+					start: function() {
+						Selected = $(this);
+						Position = Selected.index(".item");
+
+						Clone = Selected.parent().clone().insertBefore(Selected.parent());
+						Clone.children("img").attr("src", "");
+						Clone.children("span").html("");
+						Selected.parent().appendTo("#containor");
+						Selected.next().css("display", "none");
+					},
+					drag:  function(event, ui) {
+						console.log(ui.offset);
+						if(Selected != null) { Selected.css("opacity", "1"); Selected = null; }
+
+						//in inventory's 3 first rows
+						if(ui.offset.top >= 91 * RatioTotalY && ui.offset.top <= 144 * RatioTotalY && ui.offset.left >= 7 * RatioTotalX && ui.offset.left <= 186 * RatioTotalX) {
+							var row = Math.floor((ui.offset.top - 92 * RatioTotalY) / 16);
+							var col = Math.round((ui.offset.left - 7 * RatioTotalX) / 16) > 9 ? 9 : Math.floor((ui.offset.left - 7 * RatioTotalX) / 16);
+
+							console.log(col);
+
+							var pos = row * 10 + col;
+
+							Selected = $(".slot:eq(" + (pos) + ")");
+
+							Selected.css("opacity", "0.5");
+						}
+
+						if(ui.offset.top >= 149 * RatioTotalY && ui.offset.top <= 166 * RatioTotalY && ui.offset.left >= 7 * RatioTotalX && ui.offset.left <= 186 * RatioTotalX) {
+							var col = Math.floor((ui.offset.left - 7 * RatioTotalX) / 16) > 9 ? 9 : Math.floor((ui.offset.left - 7 * RatioTotalX) / 16);
+
+							Selected = $(".slot:eq(" + (3 * 10 + col) + ")");
+							Selected.css("opacity", "0.5");
+						}
+					},
+					stop: function(e, ui) {
+						Clone.remove();
+						$(this).next().css("display", "block");
+						if(Selected != null) {
+							Selected.css("opacity", "1");
+
+							$(this).parent().insertBefore($(".slot:eq(" + Position + ")"));
+
+							if(Selected.children("img").attr("src") == $(this).attr("src") && $(this).attr("src") != "") {
+								var thisAmount = parseInt($(this) .next().html());
+								var thatAmount = parseInt(Selected.children("span").html());
+								console.log("thisAmount : ", thisAmount + thatAmount);
+
+								if(thisAmount + thatAmount > 64) {
+									setNumber(Selected.index(".slot"), 64);
+									setNumber(Position, (thisAmount + thatAmount) % 64);
+								} else {
+									$(this).attr("src", "");
+									setNumber(Position, 0);
+									setNumber(Selected.index(".slot"), thisAmount + thatAmount)
+								}
+							} else if(Selected.children("img").attr("src") == "") {
+								Selected.children("img").attr("src", $(this).attr("src"));
+								setNumber(Selected.index(".slot"), $(this) .next().html());
+
+								$(this).attr("src", "");
+								setNumber(Position, 0);
+							} else {
+								var selectedItem = Selected.children("img").attr("src");
+								var selectedItemAmount = Selected.children("span").html();
+
+								Selected.children("img").attr("src", $(this).attr("src"));
+								$(this).attr("src", selectedItem);
+
+								Selected.children("span").html($(this) .next().html());
+								$(this) .next().html(selectedItemAmount);
+							}
+						}
+
+								$(this).css("top", "0px");
+								$(this).css("left", "0px");
+
+					},
+					revert: function () {
+						return (Selected == null);
+					}
+
+				});
+
+			});
+
+			function setNumber(at, amount) {
+				console.log("amount at", amount, at);
+				if(amount <= 0) {
+					$(".item:eq(" + at + ")").attr("src", "");
+					$(".item:eq(" + at + ")").next().html("");
+				} else {
+					$(".num:eq(" + at + ")").html(amount);
+					if(amount >= 10) {
+						$(".num:eq(" + at + ")").css("left", 11);
+						if(amount > 64) { $(".num:eq(" + at + ")").html(64); }
+					}
+				}
+
+			}
+		</script>
+
+	</head>
+	<body>
+		<div id="containor">
+			<img src="../images/Inventory.png" id="selectBar" style="position: relative; z-index: -1;"/>
+
+			<div class="slot"><img src="../materials/textures/fire.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<!-- First row done -->
+
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<!-- Second row done -->
+
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<!-- third row done -->
+
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<!-- Fourth row done -->
+
+
+			<!-- Crafting Grid -->
+			<div class="slot"><img src="../images/blank.png" class="item"/></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/></div><!-- result slot -->
+		</div>
+	</body>
+</html>
