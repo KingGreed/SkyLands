@@ -1,34 +1,77 @@
-body {
-	webkit-touch-callout: none;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-	overflow: hidden;
-}
-#containor {
+#selectBar {
 	position: relative;
 	top: -8px;
 	left: -8px;
 }
 
-.slot {
-	position: fixed;
+#first {
+	position: absolute;
+	z-index: 2;
 	top:  3px;
 	left: 3px;
-	width: 16px;
-	height: 16px;
-	font-size: 0.3em;
-}
-.item {
-	position: absolute;
 }
 
-.num {
+#second {
 	position: absolute;
-	top: 11;
-	left: 13;
+	z-index: 2;
+	top:  3px;
+	left: 23px;
+}
+
+#third {
+	position: absolute;
+	z-index: 2;
+	top:  3px;
+	left: 43px;
+}
+
+#fourth {
+	position: absolute;
+	z-index: 2;
+	top:  3px;
+	left: 63px;
+}
+
+#fifth {
+	position: absolute;
+	z-index: 2;
+	top:  3px;
+	left: 83px;
+}
+
+#sixth {
+	position: absolute;
+	z-index: 2;
+	top:  3px;
+	left: 103px;
+}
+
+#seventh {
+	position: absolute;
+	z-index: 2;
+	top:  3px;
+	left: 123px;
+}
+
+#eighth {
+	position: absolute;
+	z-index: 2;
+	top:  3px;
+	left: 143px;
+}
+
+#nineth {
+	position: absolute;
+	z-index: 2;
+	top:  3px;
+	left: 163px;
+}
+
+#tenth {
+	position: absolute;
+	z-index: 2;
+	top:  3px;
+	left: 183px;
 }
 
 #selector {

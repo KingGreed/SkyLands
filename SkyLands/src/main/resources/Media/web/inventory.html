@@ -10,36 +10,9 @@
 			var RatioX = 1, RatioTotalX = 1;
 			var RatioY = 1, RatioTotalY = 1;
 
-			var Selected, Position, Clone, SelectedPos;
-
+			var Selected, Position, Clone;
 			
-			
-			function clamp(val, min, max){
-
-            	if      (val < min) { return min; }
-            	else if (val > max) { return max; }
-            	else                { return val; }
-        	}
-
-			function resize(ratioX, ratioY) {
-				RatioX = ratioX; RatioY = ratioY;
-				RatioTotalX *= ratioX; RatioTotalY *= ratioY;
-
-				var height = document.getElementById("selectBar").offsetHeight;
-
-				$("#selectBar").attr("width", document.getElementById("selectBar").offsetWidth * ratioX + "px");
-				$("#selectBar").attr("height", height * ratioY + "px");
-
-				$(".slot").css("font-size",  0.3 * (RatioTotalY + RatioTotalX) / 2 + "em");
-				$(".num").each(function(index) {
-					if($(this).html().Length == 2) {
-						$(this).css("left", 10 * RatioX + "px");
-					} else {
-						$(this).css("left", 13 * RatioX + "px");
-					}
-				});
-				$(".num").css("top", 10 * RatioY + "px");
-
+			$(function() {
 				$(".slot").each(function(index) {
 
 					if(index >= 40) {
@@ -60,13 +33,8 @@
 						$(this).attr("width",  imgWidth  * RatioTotalX + "px");
 						$(this).attr("height", imgHeight * RatioTotalY + "px");
 
-						$(this).children("img").attr("width",  imgWidth  * RatioTotalX + "px");
-						$(this).children("img").attr("height", imgHeight * RatioTotalY + "px");
-
 						$(this).css("top",  top  + "px");
 						$(this).css("left", left + "px");
-
-
 
 
 					} else {
@@ -89,16 +57,10 @@
 
 						$(this).attr("width",  imgWidth  * RatioTotalX + "px");
 						$(this).attr("height", imgHeight * RatioTotalY + "px");
-
-						$(this).children("img").attr("width",  imgWidth  * RatioTotalX + "px");
-						$(this).children("img").attr("height", imgHeight * RatioTotalY + "px");
-					}
+				}
 
 				});
-			}
-			
-			$(window).load(function() {
-				resize(1, 1);
+
 				$(".item").draggable({
 					containment: "#containor",
 					scroll: false,
@@ -108,71 +70,62 @@
 						Position = Selected.index(".item");
 
 						Clone = Selected.parent().clone().insertBefore(Selected.parent());
-						Clone.children("img").attr("src", "../images/blank.png");
+						Clone.children("img").attr("src", "");
 						Clone.children("span").html("");
 						Selected.parent().appendTo("#containor");
 						Selected.next().css("display", "none");
 					},
-					drag:  function(e, ui) {
-						if(Selected != null) { Selected.css("opacity", "1"); Selected = null; $(".slot").css("opacity", 1); }
+					drag:  function(event, ui) {
+						console.log(ui.offset);
+						if(Selected != null) { Selected.css("opacity", "1"); Selected = null; }
 
-						console.log("x :", e.clientX, "y :", e.clientY);
 						//in inventory's 3 first rows
-						if(e.clientY >= 92 * RatioTotalY && e.clientY <= 143 * RatioTotalY && e.clientX >= 16 * RatioTotalX && e.clientX <= 188 * RatioTotalX) {
-							var row = Math.floor((e.clientY - 91 * RatioTotalY) / 18);
-							var col = clamp(Math.floor((e.clientX - 7 * RatioTotalX) / 16), 1, 10);
+						if(ui.offset.top >= 91 * RatioTotalY && ui.offset.top <= 144 * RatioTotalY && ui.offset.left >= 7 * RatioTotalX && ui.offset.left <= 186 * RatioTotalX) {
+							var row = Math.floor((ui.offset.top - 92 * RatioTotalY) / 16);
+							var col = Math.round((ui.offset.left - 7 * RatioTotalX) / 16) > 9 ? 9 : Math.floor((ui.offset.left - 7 * RatioTotalX) / 16);
 
-							console.log("row :", row, "col :", col);
+							console.log(col);
 
-							var pos = row * 10 + col - 1;
-							pos = pos < 0  ? 0  : pos;
-							pos = pos > 29 ? 29 : pos;
-
-							SelectedPos = pos;
+							var pos = row * 10 + col;
 
 							Selected = $(".slot:eq(" + (pos) + ")");
 
 							Selected.css("opacity", "0.5");
-						} else if(e.clientY >= 150 * RatioTotalY && e.clientY <= 164 * RatioTotalY && e.clientX >= 16 * RatioTotalX && e.clientX <= 188 * RatioTotalX) {
-							var col = clamp(Math.floor((e.clientX - 7 * RatioTotalX) / 16), 1, 10);
+						}
 
-							SelectedPos = (3 * 10 + col - 1);
+						if(ui.offset.top >= 149 * RatioTotalY && ui.offset.top <= 166 * RatioTotalY && ui.offset.left >= 7 * RatioTotalX && ui.offset.left <= 186 * RatioTotalX) {
+							var col = Math.floor((ui.offset.left - 7 * RatioTotalX) / 16) > 9 ? 9 : Math.floor((ui.offset.left - 7 * RatioTotalX) / 16);
 
-							Selected = $(".slot:eq(" + (3 * 10 + col - 1) + ")");
+							Selected = $(".slot:eq(" + (3 * 10 + col) + ")");
 							Selected.css("opacity", "0.5");
 						}
 					},
 					stop: function(e, ui) {
-
 						Clone.remove();
-						$(this).parent().insertBefore($(".slot:eq(" + Position + ")"));
-
 						$(this).next().css("display", "block");
-						if(Selected != null && SelectedPos != Position) {
-							console.log(SelectedPos);
-							console.log(Position);
-							console.log(Selected);
-							console.log($(".slot:eq(" + SelectedPos + ")"));
+						if(Selected != null) {
 							Selected.css("opacity", "1");
 
+							$(this).parent().insertBefore($(".slot:eq(" + Position + ")"));
 
 							if(Selected.children("img").attr("src") == $(this).attr("src") && $(this).attr("src") != "") {
 								var thisAmount = parseInt($(this) .next().html());
 								var thatAmount = parseInt(Selected.children("span").html());
+								console.log("thisAmount : ", thisAmount + thatAmount);
 
 								if(thisAmount + thatAmount > 64) {
 									setNumber(Selected.index(".slot"), 64);
 									setNumber(Position, (thisAmount + thatAmount) % 64);
 								} else {
-									$(this).attr("src", "../images/blank.png");
+									$(this).attr("src", "");
 									setNumber(Position, 0);
-									setNumber(Selected.index(".slot"), thisAmount + thatAmount);
+									setNumber(Selected.index(".slot"), thisAmount + thatAmount)
 								}
-							} else if(Selected.children("img").attr("src") == "../images/blank.png") {
+							} else if(Selected.children("img").attr("src") == "") {
 								Selected.children("img").attr("src", $(this).attr("src"));
-								setNumber(Selected.index(".slot"), $(this).next().html());
+								setNumber(Selected.index(".slot"), $(this) .next().html());
 
-								$(this).attr("src", "../images/blank.png");
+								$(this).attr("src", "");
 								setNumber(Position, 0);
 							} else {
 								var selectedItem = Selected.children("img").attr("src");
@@ -186,8 +139,8 @@
 							}
 						}
 
-						$(this).css("top", "0px");
-						$(this).css("left", "0px");
+								$(this).css("top", "0px");
+								$(this).css("left", "0px");
 
 					},
 					revert: function () {
@@ -199,16 +152,15 @@
 			});
 
 			function setNumber(at, amount) {
+				console.log("amount at", amount, at);
 				if(amount <= 0) {
-					$(".item:eq(" + at + ")").attr("src", "../images/blank.png");
+					$(".item:eq(" + at + ")").attr("src", "");
 					$(".item:eq(" + at + ")").next().html("");
 				} else {
 					$(".num:eq(" + at + ")").html(amount);
-					if(amount < 10) {
-						$(".num:eq(" + at + ")").css("left", 13 * RatioTotalX);
-					} else {
+					if(amount >= 10) {
+						$(".num:eq(" + at + ")").css("left", 11);
 						if(amount > 64) { $(".num:eq(" + at + ")").html(64); }
-						$(".num:eq(" + at + ")").css("left", 10 * RatioTotalX);
 					}
 				}
 

@@ -34,12 +34,13 @@ namespace Game.BaseApp {
 
             if(!WebCore.IsRunning) { WebCore.Initialize(WebConfig.Default); }
 
-
             this.InitializeComponent();
 
             this.CenterToScreen();
             Cursor.Position = new Point(this.Location.X + this.Size.Width / 2,
                                         this.Location.Y + this.Size.Height / 2);
+
+            
 
             this.webView.DocumentReady += onDocumentReady;
             this.webView.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/MainMenu.html");
