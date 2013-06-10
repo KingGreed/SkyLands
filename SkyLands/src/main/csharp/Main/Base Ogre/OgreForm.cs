@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Awesomium.Core;
-using Awesomium.Core.Data;
-
+using Game.Display;
 using Mogre;
 
 namespace Game.BaseApp {
@@ -28,18 +22,22 @@ namespace Game.BaseApp {
 
         public static Size WindowSize;
         public static Point WindowPosition;
-        
-        public OgreForm() {
+
+        protected OgreForm() {
             //Awesomium
 
             if(!WebCore.IsRunning) { WebCore.Initialize(WebConfig.Default); }
 
             //this.SetStyle(ControlStyles.SupportsTransparentBackColor, true);
 
-            InitializeComponent();
+            this.InitializeComponent();
 
-            Disposed += new EventHandler(OgreForm_Disposed);
-            Resize += new EventHandler(OgreForm_Resize);
+            this.CenterToScreen();
+            Cursor.Position = new Point(this.Location.X + this.Size.Width / 2,
+                                        this.Location.Y + this.Size.Height / 2);
+
+            this.Resize += this.OgreForm_Resize;
+            this.Move += (sender, args) => WindowPosition = this.Location;
 
             this.webView.DocumentReady += onDocumentReady;
             this.webView.Source = new Uri("file://C:/Users/kingGreed/Lib/Web/SkyLands/index.html");
@@ -48,18 +46,6 @@ namespace Game.BaseApp {
             this.MinimumSize = new Size(800, 600);
             WindowSize = this.Size;
             WindowPosition = this.Location;
-        }
-
-        protected override void OnMove(EventArgs e)
-        {
-            base.OnMove(e);
-            WindowPosition = this.Location;
-        }
-
-        protected override void OnSizeChanged(EventArgs e)
-        {
-            base.OnSizeChanged(e);
-            WindowSize = this.Size;
         }
 
         private void onDocumentReady(object sender, UrlEventArgs e) {
@@ -85,13 +71,12 @@ namespace Game.BaseApp {
             }
         }
 
-        public void OgreForm_Resize(object sender, EventArgs e)   { this.mWindow.WindowMovedOrResized(); }
+        public void OgreForm_Resize(object sender, EventArgs e)   { this.mWindow.WindowMovedOrResized(); WindowSize = this.Size; }
         public void AddFrameLstn(RootLstn listener)               { listener.AddListener(this.mRoot);        }
         public void RemoveFrameLstn(RootLstn listener)            { listener.RemoveListener(this.mRoot);     }
-        public void OgreForm_Disposed(object sender, EventArgs e) { this.mRoot.Dispose(); this.mRoot = null; }
 
         public void Go() {
-            Show();
+            this.Show();
             while(mRoot != null && mRoot.RenderOneFrame()) { Application.DoEvents(); }
         }
 
@@ -112,9 +97,13 @@ namespace Game.BaseApp {
 
             MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_NONE);
 
-            this.Create();
             this.AddFrameLstn(new RootLstn(RootLstn.TypeLstn.FrameRendering, this.OnFrameRendering));
 
+            GraphicBlock.generateFace();
+            LogManager.Singleton.DefaultLog.LogMessage("***********************Program\'s Log***********************");
+            //LogManager.Singleton.DefaultLog.LogDetail = LoggingLevel.LL_LOW;
+            this.mSceneMgr.ShadowTechnique = ShadowTechnique.SHADOWDETAILTYPE_INTEGRATED;
+            this.mSceneMgr.ShadowFarDistance = 400;
 
             return true;
         }
@@ -131,12 +120,11 @@ namespace Game.BaseApp {
             renderSys.SetConfigOption("Video Mode", "1024 x 768");
             renderSys.SetConfigOption("sRGB Gamma Conversion", "No");
 
-
-            mRoot.RenderSystem = renderSys;
-            mRoot.Initialise(false, "SkyLands");
+            this.mRoot.RenderSystem = renderSys;
+            this.mRoot.Initialise(false, "SkyLands");
             NameValuePairList misc = new NameValuePairList();
             misc["externalWindowHandle"] = Handle.ToString();
-            mWindow = mRoot.CreateRenderWindow("Main RenderWindow", 800, 600, false, misc);
+            this.mWindow = this.mRoot.CreateRenderWindow("Main RenderWindow", 800, 600, false, misc);
 
             return true;
         }
@@ -152,8 +140,6 @@ namespace Game.BaseApp {
             this.mViewport.BackgroundColour = ColourValue.Black;
             this.mCam.AspectRatio = (this.mViewport.ActualWidth / this.mViewport.ActualHeight);
         }
-
-        protected abstract void Create();
 
         protected abstract void Update(FrameEvent evt);
 
@@ -179,27 +165,28 @@ namespace Game.BaseApp {
         private void ProcessInput() {
             this.mController.Update();
 
-            if(mController.WasKeyPressed(Keys.F12)) { this.CyclePolygonMode(); }
-            if(mController.WasKeyPressed(Keys.F5)) { this.ReloadAllTextures(); }
-            if(mController.WasKeyPressed(Keys.PrintScreen)) { this.TakeScreenshot(); }
+            if (this.mController.WasKeyPressed(Keys.F12)) { this.CyclePolygonMode(); }
+            if (this.mController.WasKeyPressed(Keys.F5)) { this.ReloadAllTextures(); }
+            if (this.mController.WasKeyPressed(Keys.PrintScreen)) { this.TakeScreenshot(); }
         }
 
         private void CyclePolygonMode() {
             this.mRenderMode = (this.mRenderMode + 1) % 3;
-            switch(mRenderMode) {
-                case 0: mCam.PolygonMode = PolygonMode.PM_SOLID; break;
-                case 1: mCam.PolygonMode = PolygonMode.PM_WIREFRAME; break;
-                case 2: mCam.PolygonMode = PolygonMode.PM_POINTS; break;
+            switch(this.mRenderMode) {
+                case 0: this.mCam.PolygonMode = PolygonMode.PM_SOLID; break;
+                case 1: this.mCam.PolygonMode = PolygonMode.PM_WIREFRAME; break;
+                case 2: this.mCam.PolygonMode = PolygonMode.PM_POINTS; break;
             }
         }
 
-        private void TakeScreenshot() { mWindow.WriteContentsToTimestampedFile("screenshot", ".png"); }
+        private void TakeScreenshot() { this.mWindow.WriteContentsToTimestampedFile("screenshot", ".png"); }
 
         private bool OnFrameRendering(FrameEvent evt) {
             if(this.mWindow.IsClosed || this.mIsShutDownRequested) { return false; }
             try {
                 this.ProcessInput();
                 this.Update(evt);
+                this.mController.Clear();
                 return true;
             } catch(ShutdownException) {
                 this.mIsShutDownRequested = true;
@@ -207,7 +194,11 @@ namespace Game.BaseApp {
             }
         }
 
-        protected virtual void Shutdown() { }
+        protected virtual void Shutdown(object sender, EventArgs e)
+        {
+            this.mRoot.Dispose();
+            this.mRoot = null;
+        }
     }
 
     class ShutdownException : Exception { }

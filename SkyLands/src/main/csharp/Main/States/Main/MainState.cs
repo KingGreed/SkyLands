@@ -10,6 +10,7 @@ namespace Game.States
     {
         protected MainWorld mWorld;
         private SceneNode   mSelectedEntity;
+        private static int i = 0;   // Temp
 
         public User      User { get; protected set; }
         public CharacMgr CharacMgr { get; protected set; }
@@ -55,7 +56,9 @@ namespace Game.States
 
             if (this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.Start))
             {
-                System.Console.WriteLine("Start");
+                bool visible = i++ % 2 == 0;
+                this.mStateMgr.Controller.SetCursorVisibility(visible);
+                Console.WriteLine("Cursor visibility :" + visible);
             }
 
             this.User.Update(frameTime);
@@ -98,7 +101,7 @@ namespace Game.States
 
         protected override void Shutdown()
         {
-            Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop end");
+            LogManager.Singleton.DefaultLog.LogMessage(" => Game loop end");
             this.mStateMgr.SceneMgr.DestroyAllParticleSystems();
             this.CharacMgr.Dispose();
             this.mWorld.Shutdown();

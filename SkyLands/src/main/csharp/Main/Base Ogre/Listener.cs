@@ -18,16 +18,16 @@ namespace Game.BaseApp
 
         public void AddListener(Root root)
         {
-            if      (this.mType == TypeLstn.FrameStarted)     { root.FrameStarted += new Mogre.FrameListener.FrameStartedHandler(this.mListener); }
-            else if (this.mType == TypeLstn.FrameRendering)   { root.FrameRenderingQueued += new Mogre.FrameListener.FrameRenderingQueuedHandler(this.mListener); }
-            else  /* this.mType == TypeListener.FrameEnded */ { root.FrameEnded += new Mogre.FrameListener.FrameEndedHandler(this.mListener); }
+            if      (this.mType == TypeLstn.FrameStarted)     { root.FrameStarted += new FrameListener.FrameStartedHandler(this.mListener); }
+            else if (this.mType == TypeLstn.FrameRendering)   { root.FrameRenderingQueued += new FrameListener.FrameRenderingQueuedHandler(this.mListener); }
+            else  /* this.mType == TypeListener.FrameEnded */ { root.FrameEnded += new FrameListener.FrameEndedHandler(this.mListener); }
         }
 
         public void RemoveListener(Root root)
         {
-            if      (this.mType == TypeLstn.FrameStarted)     { root.FrameStarted -= new Mogre.FrameListener.FrameStartedHandler(this.mListener); }
-            else if (this.mType == TypeLstn.FrameRendering)   { root.FrameRenderingQueued -= new Mogre.FrameListener.FrameRenderingQueuedHandler(this.mListener); }
-            else  /* this.mType == TypeListener.FrameEnded */ { root.FrameEnded -= new Mogre.FrameListener.FrameEndedHandler(this.mListener); }
+            if      (this.mType == TypeLstn.FrameStarted)     { root.FrameStarted -= new FrameListener.FrameStartedHandler(this.mListener); }
+            else if (this.mType == TypeLstn.FrameRendering)   { root.FrameRenderingQueued -= new FrameListener.FrameRenderingQueuedHandler(this.mListener); }
+            else  /* this.mType == TypeListener.FrameEnded */ { root.FrameEnded -= new FrameListener.FrameEndedHandler(this.mListener); }
         }
     }
         

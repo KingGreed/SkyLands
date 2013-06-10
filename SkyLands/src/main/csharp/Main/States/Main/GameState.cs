@@ -8,7 +8,7 @@ namespace Game.States
     public class GameState : MainState
     {
         private BulletManager mBulletMgr;
-        private PlayerRTS     mPlayerRTS; 
+        private PlayerRTS     mPlayerRTS;
 
         public GameState(StateManager stateMgr) : base(stateMgr, "Game") { }
 
@@ -43,10 +43,7 @@ namespace Game.States
             this.mBulletMgr.Update(frameTime);
 
             if (this.mStateMgr.Controller.WasKeyPressed(System.Windows.Forms.Keys.F1))
-            {
-                System.Console.WriteLine("F1");
                 this.User.SwitchFreeCamMode();
-            }
         }
 
         public override void Save() { this.mWorld.save(this.CharacMgr.MainPlayer); }

@@ -9,10 +9,10 @@ using Game.World;
 
 namespace Game.States
 {
-    public abstract class StateManager : OgreForm
+    public class StateManager : OgreForm
     {
-        private Stack<State> mStateStack;
-        private Stack<Type>  mNewStates;
+        private readonly Stack<State> mStateStack;
+        private readonly Stack<Type>  mNewStates;
         private int          mPopRequested;
         private bool         mWaitOneFrame;
 
@@ -26,29 +26,21 @@ namespace Game.States
         public GameInfo     GameInfo    { get; set; }
         public MainState    MainState   { get; private set; }
 
-        protected override void Create() {
-
-
-            GraphicBlock.generateFace();
-            LogManager.Singleton.DefaultLog.LogMessage("***********************Program\'s Log***********************");
-            //LogManager.Singleton.DefaultLog.LogDetail = LoggingLevel.LL_LOW;
-            this.SceneMgr.ShadowTechnique = ShadowTechnique.SHADOWDETAILTYPE_INTEGRATED;
-            this.SceneMgr.ShadowFarDistance = 400;
-            
+        public StateManager()
+        {
             this.mStateStack = new Stack<State>();
             this.mNewStates = new Stack<Type>();
             this.mPopRequested = 0;
             this.mWaitOneFrame = false;
-            this.GameInfo = new GameInfo(false);
+            this.GameInfo = new GameInfo();
             this.RequestStatePush(typeof(GameState));
+
+            this.Disposed += this.Shutdown;
         }
 
         protected override void Update(FrameEvent evt)
         {
-            if (this.mIsShutDownRequested) { return; }
-
             float frameTime = evt.timeSinceLastFrame;
-            if (frameTime > 0.1) { return; }
 
             while(this.mPopRequested > 0) { this.PopState(); }
 
@@ -91,7 +83,7 @@ namespace Game.States
             this.mStateStack.Push(newState);
             this.mStateStack.Peek().Show();
 
-            this.mController.Clear();
+            this.mController.ClearAll();
         }
 
         private void PopState()
@@ -101,7 +93,7 @@ namespace Game.States
                 string stateName = this.mStateStack.Peek().Name;
                 this.mStateStack.Peek().ShutdownState();
                 this.mStateStack.Pop();
-                this.mController.Clear();
+                this.mController.ClearAll();
                 if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Show(); }
                 LogManager.Singleton.DefaultLog.LogMessage("--- Popped state : " + stateName);
             }
@@ -124,11 +116,11 @@ namespace Game.States
             this.mWaitOneFrame = true;
         }
 
-        protected override void Shutdown()
+        protected override void Shutdown(object sender, EventArgs e)
         {
             LogManager.Singleton.DefaultLog.LogMessage("***********************End of Program\'s Log***********************");
-            base.Shutdown();
             while (this.mStateStack.Count > 0) { this.PopState(); }
+            base.Shutdown(sender, e);
         }
     }
 }

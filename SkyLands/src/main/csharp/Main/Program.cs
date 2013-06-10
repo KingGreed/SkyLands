@@ -1,18 +1,12 @@
-﻿using System;
-using Mogre;
-
-using Game.States;
-using Game.BaseApp;
-
-using Game.Display;
+﻿using Game.States;
 
 
 namespace Game {
-    public class Program : StateManager {
+    public class Program {
         static void Main() {
-            OgreForm form = new Program();
-            form.Setup();
-            form.Go();
+            StateManager stateMgr = new StateManager();
+            if (stateMgr.Setup())
+                stateMgr.Go();
         }
     }
 }

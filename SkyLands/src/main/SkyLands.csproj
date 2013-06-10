@@ -78,6 +78,7 @@
   <ItemGroup>
     <Content Include="resources\commands.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="resources\Media\images\CrystalBlock.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -531,9 +532,6 @@
     <Reference Include="Mogre">
       <HintPath>..\..\..\Libs\Mogre.dll</HintPath>
     </Reference>
-    <Reference Include="MOIS">
-      <HintPath>..\..\..\Libs\MOIS.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -580,9 +578,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\OgreTerrain.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\OIS.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Plugins\Plugin_BSPSceneManager.dll">
@@ -677,11 +672,10 @@
     <Compile Include="csharp\Main\Base Ogre\CameraMan.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\Base Ogre\Controller.cs" />
     <Compile Include="csharp\Main\Base Ogre\Listener.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\Base Ogre\MoisManager.cs">
+    <Compile Include="csharp\Main\Base Ogre\Controller.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\Base Ogre\OgreForm.cs">
@@ -768,9 +762,7 @@
     <Compile Include="csharp\Main\MathHelper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\Program.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="csharp\Main\Program.cs" />
     <Compile Include="csharp\Main\Characters\Shoot\ShootCube.cs" />
     <Compile Include="csharp\Main\States\Main\MenuState.cs" />
     <Compile Include="csharp\Main\States\Main\User.cs">

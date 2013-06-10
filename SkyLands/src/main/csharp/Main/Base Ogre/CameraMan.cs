@@ -30,21 +30,22 @@ namespace Game.BaseApp
             move.Normalise();
 
             move *= 800;
-            if (mFastMove) { move *= 6; } // With shift button pressed, move twice as fast.
-            if (move != Vector3.ZERO) { mCamera.Move(move * frameTime); }
+            if (this.mFastMove) { move *= 6; }
+            if (move != Vector3.ZERO) { this.mCamera.Move(move * frameTime); }
         }
 
         private void UpdateKeys(Controller input)
         {
-            this.mDirectionFactor = new Vector3(input.MovementFactor.x, input.MovementFactor.y, 
-                input.HasActionOccured(Controller.UserAction.Up) ? 1 : input.HasActionOccured(Controller.UserAction.Down) ? -1 : 0);
-            this.FastMove = input.HasActionOccured(Controller.UserAction.Sprint);
+            this.mDirectionFactor = new Vector3(-input.MovementFactor.x,
+                input.HasActionOccured(Controller.UserAction.Up) ? 1 : input.HasActionOccured(Controller.UserAction.Down) ? -1 : 0,
+                input.MovementFactor.y);
+            this.FastMove = input.IsActionOccuring(Controller.UserAction.Sprint);
 
             this.MouseMovement(input.Yaw, input.Pitch);
         }
 
         public void MouseMovement(float yaw, float pitch) {
-            if (mFreeze) { return; }
+            if (this.mFreeze) { return; }
             this.mCamera.Yaw(new Degree(-yaw * 0.15f));
             this.mCamera.Pitch(new Degree(-pitch * 0.15f));
         }

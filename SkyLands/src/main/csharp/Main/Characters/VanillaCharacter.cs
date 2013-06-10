@@ -5,7 +5,6 @@ using Mogre;
 using Game.World;
 using Game.Animation;
 using Game.Characters.IA;
-using Game.Shoot;
 
 using API.Ent;
 using API.Geo.Cuboid;
@@ -64,11 +63,6 @@ namespace Game.CharacSystem
 
         }
 
-        private void test(OverlayElement e)
-        {
-            OverlayContainer c = (OverlayContainer)e;
-        }
-
         private void OnFall(bool isFalling)
         {
             if (isFalling)
@@ -105,8 +99,6 @@ namespace Game.CharacSystem
         public void Update(float frameTime)
         {
             Vector3 translation = Vector3.ZERO;
-
-            this.mCollisionMgr.DrawPoints();
 
             if (this.mCharInfo.Life > 0)
             {
@@ -233,9 +225,15 @@ namespace Game.CharacSystem
             }
         }
 
-        public void Hit(Bullet b)
+        public void Hit(float damage)
         {
-            this.mCharInfo.Life -= b.Damage;
+            this.mCharInfo.Life -= damage;
+
+            if (this.mCharInfo.IsPlayer && this.mCharacMgr.StateMgr.Controller.GamePadState.IsConnected)
+            {
+                float force = damage / VanillaPlayer.DEFAULT_PLAYER_LIFE;
+                this.mCharacMgr.StateMgr.Controller.Vibrate(force, force);
+            }
 
             if (this.mCharInfo.Life <= 0)
             {
@@ -243,7 +241,7 @@ namespace Game.CharacSystem
                 this.MovementInfo.IsPushedByArcaneLevitator = false;
                 
                 if (!this.mCharInfo.IsPlayer) { ((Robot) this.mMesh).Die(); }   // Don't remove the charac right now to play the animation
-                else {this.WaitForRemove = true;}
+                else { this.WaitForRemove = true; }
             }
         }
 
