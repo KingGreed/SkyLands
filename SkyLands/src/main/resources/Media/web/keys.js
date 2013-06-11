@@ -1,2 +1,2 @@
-$(document).keydown(function(e) { jsobject.OnKeyDown(e.which); });
-$(document).keyUp  (function(e) { jsobject.OnKeyUp  (e.which); });
+$(document).keydown(function(e) { console.log(e.which); });
+$(document).keyup(  function(e) { console.log(e.which); });
