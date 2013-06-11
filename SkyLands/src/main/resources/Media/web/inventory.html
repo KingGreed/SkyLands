@@ -10,7 +10,16 @@
 			var RatioX = 1, RatioTotalX = 1;
 			var RatioY = 1, RatioTotalY = 1;
 
-			var Selected, Position, Clone;
+			var Selected, Position, Clone, SelectedPos;
+
+			
+			
+			function clamp(val, min, max){
+
+            	if      (val < min) { return min; }
+            	else if (val > max) { return max; }
+            	else                { return val; }
+        	}
 
 			function resize(ratioX, ratioY) {
 				RatioX = ratioX; RatioY = ratioY;
@@ -18,7 +27,6 @@
 
 				var height = document.getElementById("selectBar").offsetHeight;
 
-				console.log(document.getElementById("selectBar").offsetWidth * ratioX);
 				$("#selectBar").attr("width", document.getElementById("selectBar").offsetWidth * ratioX + "px");
 				$("#selectBar").attr("height", height * ratioY + "px");
 
@@ -105,36 +113,48 @@
 						Selected.parent().appendTo("#containor");
 						Selected.next().css("display", "none");
 					},
-					drag:  function(event, ui) {
-						if(Selected != null) { Selected.css("opacity", "1"); Selected = null; }
+					drag:  function(e, ui) {
+						if(Selected != null) { Selected.css("opacity", "1"); Selected = null; $(".slot").css("opacity", 1); }
 
+						console.log("x :", e.clientX, "y :", e.clientY);
 						//in inventory's 3 first rows
-						if(ui.offset.top >= 91 * RatioTotalY && ui.offset.top <= 144 * RatioTotalY && ui.offset.left >= 7 * RatioTotalX && ui.offset.left <= 186 * RatioTotalX) {
-							var row = Math.floor((ui.offset.top - 92 * RatioTotalY) / 16);
-							var col = Math.round((ui.offset.left - 7 * RatioTotalX) / 16) > 9 ? 9 : Math.floor((ui.offset.left - 7 * RatioTotalX) / 16);
+						if(e.clientY >= 92 * RatioTotalY && e.clientY <= 143 * RatioTotalY && e.clientX >= 16 * RatioTotalX && e.clientX <= 188 * RatioTotalX) {
+							var row = Math.floor((e.clientY - 91 * RatioTotalY) / 18);
+							var col = clamp(Math.floor((e.clientX - 7 * RatioTotalX) / 16), 1, 10);
 
+							console.log("row :", row, "col :", col);
 
-							var pos = row * 10 + col;
+							var pos = row * 10 + col - 1;
+							pos = pos < 0  ? 0  : pos;
+							pos = pos > 29 ? 29 : pos;
+
+							SelectedPos = pos;
 
 							Selected = $(".slot:eq(" + (pos) + ")");
 
 							Selected.css("opacity", "0.5");
-						}
+						} else if(e.clientY >= 150 * RatioTotalY && e.clientY <= 164 * RatioTotalY && e.clientX >= 16 * RatioTotalX && e.clientX <= 188 * RatioTotalX) {
+							var col = clamp(Math.floor((e.clientX - 7 * RatioTotalX) / 16), 1, 10);
 
-						if(ui.offset.top >= 149 * RatioTotalY && ui.offset.top <= 166 * RatioTotalY && ui.offset.left >= 7 * RatioTotalX && ui.offset.left <= 186 * RatioTotalX) {
-							var col = Math.floor((ui.offset.left - 7 * RatioTotalX) / 16) > 9 ? 9 : Math.floor((ui.offset.left - 7 * RatioTotalX) / 16);
+							SelectedPos = (3 * 10 + col - 1);
 
-							Selected = $(".slot:eq(" + (3 * 10 + col) + ")");
+							Selected = $(".slot:eq(" + (3 * 10 + col - 1) + ")");
 							Selected.css("opacity", "0.5");
 						}
 					},
 					stop: function(e, ui) {
+
 						Clone.remove();
+						$(this).parent().insertBefore($(".slot:eq(" + Position + ")"));
+
 						$(this).next().css("display", "block");
-						if(Selected != null) {
+						if(Selected != null && SelectedPos != Position) {
+							console.log(SelectedPos);
+							console.log(Position);
+							console.log(Selected);
+							console.log($(".slot:eq(" + SelectedPos + ")"));
 							Selected.css("opacity", "1");
 
-							$(this).parent().insertBefore($(".slot:eq(" + Position + ")"));
 
 							if(Selected.children("img").attr("src") == $(this).attr("src") && $(this).attr("src") != "") {
 								var thisAmount = parseInt($(this) .next().html());
@@ -146,17 +166,15 @@
 								} else {
 									$(this).attr("src", "../images/blank.png");
 									setNumber(Position, 0);
-									setNumber(Selected.index(".slot"), thisAmount + thatAmount)
+									setNumber(Selected.index(".slot"), thisAmount + thatAmount);
 								}
 							} else if(Selected.children("img").attr("src") == "../images/blank.png") {
 								Selected.children("img").attr("src", $(this).attr("src"));
 								setNumber(Selected.index(".slot"), $(this).next().html());
-								console.log($(this).next().html());
 
 								$(this).attr("src", "../images/blank.png");
 								setNumber(Position, 0);
 							} else {
-								console.log(Selected.html());
 								var selectedItem = Selected.children("img").attr("src");
 								var selectedItemAmount = Selected.children("span").html();
 
@@ -168,8 +186,8 @@
 							}
 						}
 
-								$(this).css("top", "0px");
-								$(this).css("left", "0px");
+						$(this).css("top", "0px");
+						$(this).css("left", "0px");
 
 					},
 					revert: function () {

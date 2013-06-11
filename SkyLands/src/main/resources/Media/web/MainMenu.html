@@ -1,11 +1,11 @@
 <html>
 <head>
-	<link rel="stylesheet" type="text/css" href="MainMenu.css" />
-	<script type="text/javascript" src="jquery.js"> </script>
+  <link rel="stylesheet" type="text/css" href="MainMenu.css" />
+  <script type="text/javascript" src="jquery.js"> </script>
   <script type="text/javascript" src="keys.js"> </script>
 
 
-	<script>
+  <script>
     var RatioTotalX = 1, RatioTotalY = 1;
 
     function isInRectangle(x1, y1, x2, y2, posX, posY) { return posX > x1 && posX < x2 && posY > y1 && posY < y2; }
@@ -35,15 +35,15 @@
           $('#map').css('display', 'block');
         }
       });
-		});
+    });
 
-	</script>
+  </script>
 </head>
 <body>
   <p id="pos" style="color : white;"></p>
     <img src="../images/Menu_Play_select.png" id="img" style="height: 100%; width: 100%; display:none;"/>
   <img src="../images/Menu_options_select.png" id="img" style="height: 100%; width: 100%; display:none;"/>
   <img src="../images/Menu_Exit_select.png" id="img" style="height: 100%; width: 100%; display:none;"/>
-	<img src="../images/Menu_Normal view.png" id="map" style="height: 100%; width: 100%;"/>
+  <img src="../images/Menu_Normal view.png" id="map" style="height: 100%; width: 100%;"/>
 </body>
 </html>
