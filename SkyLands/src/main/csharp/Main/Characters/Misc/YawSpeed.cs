@@ -10,8 +10,9 @@ namespace Game.CharacSystem
         private const float A = (DEGREE_X - 180 * FACTOR_X) / (180 * 180 * DEGREE_X - 180 * DEGREE_X * DEGREE_X);
         private const float B = (FACTOR_X - A * DEGREE_X * DEGREE_X) / DEGREE_X;
 
-        public static float GetFactor(float yawDistance)    // return between -1 and 1
+        public static float GetFactor(Radian yaw)    // return between -1 and 1
         {
+            float yawDistance = yaw.ValueAngleUnits;
             int sign = System.Math.Sign(yawDistance);
             yawDistance *= sign;    // Take the abs value
             

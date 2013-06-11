@@ -22,6 +22,7 @@ namespace Game.CharacSystem
         protected SceneNode     mNode;
         protected MeshAnim      mMesh;
         protected CharacterInfo mCharInfo;
+        private MovementInfo    mMovementInfo;
         protected CollisionMgr  mCollisionMgr;
         private Vector3         mPreviousDirection;
         private Vector3         mPreviousBlockPos;
@@ -33,7 +34,7 @@ namespace Game.CharacSystem
         private double          mLastSquaredDist;
 
         public SceneNode     Node            { get { return this.mNode; } }
-        public MovementInfo  MovementInfo    { get; protected set; }
+        public MovementInfo  MovementInfo    { get { return mMovementInfo; } protected set { mMovementInfo = value; } }
         public Vector3       Size            { get { return this.mMesh.MeshSize; } }
         public CharacterInfo Info            { get { return this.mCharInfo; } }
         public CollisionMgr  CollisionMgr    { get { return this.mCollisionMgr; } }
@@ -107,14 +108,13 @@ namespace Game.CharacSystem
                     float x = this.FeetPosition.x - this.mForcedDestination.Peek().x;
                     float z = this.FeetPosition.z - this.mForcedDestination.Peek().z;
                     float squaredDistance = x * x + z * z;
-                    if (this.mLastSquaredDist == -1 || squaredDistance > 2500)
+                    if (this.mLastSquaredDist == -1 || squaredDistance > 100)
                     {
-                        //float actYaw = this.GetYaw().ValueAngleUnits;
-                        //this.mMovementInfo.YawValue = YAW_SPEED * YawFactor.GetFactor(this.mYawGoal - actYaw);
+                        Radian actYaw = this.GetYaw();
+                        this.mMovementInfo.YawValue = YAW_SPEED * YawFactor.GetFactor(this.mYawGoal - actYaw);
                         //this.mMovementInfo.MoveDirection = this.mMesh.MoveForwardDir;
                         //this.mMovementInfo.MoveDirection = (this.FeetPosition - this.mForcedDestination.Peek()).NormalisedCopy;
-                        //this.mMovementInfo.MoveDirection = this.mMesh.MoveForwardDir;
-                        this.mNode.Translate((this.mForcedDestination.Peek() - this.FeetPosition).NormalisedCopy * WALK_SPEED * frameTime);
+                        //this.mNode.Translate((this.mForcedDestination.Peek() - this.FeetPosition).NormalisedCopy * WALK_SPEED * frameTime);
                         //translation = (this.FeetPosition - this.mForcedDestination.Peek()).NormalisedCopy * WALK_SPEED;
                         this.mLastSquaredDist = squaredDistance;
 
@@ -124,7 +124,7 @@ namespace Game.CharacSystem
                     else
                     {
                         this.mForcedDestination.Dequeue();
-                        //this.ComputeNextYaw();
+                        this.ComputeNextYaw();
                         this.mLastSquaredDist = -1;
                     }
                 }
@@ -135,7 +135,11 @@ namespace Game.CharacSystem
                 }
 
                 if (this.MovementInfo.IsPushedByArcaneLevitator)
+                {
                     translation.y = ArcaneLevitatorSpeed.GetSpeed();
+                    Radian actYaw = this.GetYaw();
+                    Console.WriteLine(actYaw.ValueAngleUnits);
+                }
                 else if (this.MovementInfo.IsJumping)
                     translation.y = JumpSpeed.GetSpeed();
                 else
@@ -196,13 +200,13 @@ namespace Game.CharacSystem
             if (this.mForcedDestination.Count >= 1)
             {
                 Vector3 ab = 100 * Vector3.UNIT_Z;//this.FeetPosition - this.mNode.ConvertLocalToWorldPosition(100 * this.mMesh.MoveForwardDir);
-                Vector3 ac = this.mCharacMgr.MainPlayer.FeetPosition - this.FeetPosition;
+                Vector3 ac = this.mForcedDestination.Peek() - this.FeetPosition;
 
                 Vector2 abNormalized = new Vector2(ab.x, ab.z).NormalisedCopy;
                 Vector2 acNormalized = new Vector2(ac.x, ac.z).NormalisedCopy;
 
-                this.mYawGoal = -Mogre.Math.ACos(abNormalized.DotProduct(acNormalized));
-                this.mNode.SetOrientation(Mogre.Math.Cos(this.mYawGoal / 2), 0, Mogre.Math.Sin(this.mYawGoal / 2), 0);
+                this.mYawGoal = -Mogre.Math.ACos(abNormalized.DotProduct(acNormalized)) + this.GetYaw();
+                //this.mNode.SetOrientation(Mogre.Math.Cos(this.mYawGoal / 2), 0, Mogre.Math.Sin(this.mYawGoal / 2), 0);
                 //this.mYawGoal -= this.GetYaw().ValueAngleUnits;
             }
         }
@@ -245,7 +249,7 @@ namespace Game.CharacSystem
             }
         }
 
-        public void Dispose()   // Must be called by the CharacMgr only. Use mCharacMgr.RemoveCharac(this) instead
+        public void Dispose()   // Must be called by the CharacMgr only.
         {
             this.mNode.RemoveAndDestroyAllChildren();
             this.mCharacMgr.SceneMgr.DestroySceneNode(this.mNode);
