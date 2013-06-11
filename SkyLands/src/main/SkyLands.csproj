@@ -98,9 +98,6 @@
     <Content Include="resources\Media\images\Inventory.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Media\images\Menu.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="resources\Media\images\selector.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

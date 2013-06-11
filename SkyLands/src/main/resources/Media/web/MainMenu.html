@@ -5,25 +5,31 @@
 
 	<script>
 		$(function() {
-			$("#area1").hover(function(){
-    			console.log("mouseOver 1");
+			$("#area1").hover(function() {
+    			$("#map").attr("src", "../images/Menu_Play_select.png");
+  			}, function() {
+  				$("#map").attr("src", "../images/Menu_Normal view.png");
   			});
 
-  			$("#area2").hover(function(){
-    			console.log("mouseOver 2");
+  			$("#area2").hover(function() {
+    			$("#map").attr("src", "../images/Menu_options_select.png");
+  			}, function() {
+  				$("#map").attr("src", "../images/Menu_Normal view.png");
   			});
 
-  			$("#area3").hover(function(){
-    			console.log("mouseOver 3");
+  			$("#area3").hover(function() {
+    			$("#map").attr("src", "../images/Menu_Exit_select.png");
+  			}, function() {
+  				$("#map").attr("src", "../images/Menu_Normal view.png");
   			});
 		});
 	</script>
 </head>
 <body>
-	<img src="../images/Menu.png" usemap="menuMap" id="map"/>
+	<img src="../images/Menu_Normal view.png" usemap="menuMap" id="map"/>
 	<map name="menuMap">
-		<area shape="rect" coords="524, 276, 1220, 392" href="play.html" id="area1">
-		<area shape="rect" coords="360, 486, 1278, 615" href="play.html" id="area2">
+		<area shape="rect" coords="524, 276, 1220, 392" href="play.html"    id="area1">
+		<area shape="rect" coords="360, 486, 1278, 615" href="options.html" id="area2">
 		<area shape="rect" coords="101, 100, 180,  607" href="#" onclick="jsobject.exit()" id="area3">
 	</map>
 </body>
