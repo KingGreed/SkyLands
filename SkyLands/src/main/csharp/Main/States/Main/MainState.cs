@@ -28,7 +28,6 @@ namespace Game.States
             if(!this.mStateMgr.GameInfo.Load) { this.mWorld.populate(); }
             this.mWorld.display();
 
-            this.Show();
             //Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop begin");
         }
 
@@ -56,9 +55,11 @@ namespace Game.States
 
             if (this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.Start))
             {
-                bool visible = i++ % 2 == 0;
-                this.mStateMgr.Controller.SetCursorVisibility(visible);
-                Console.WriteLine("Cursor visibility :" + visible);
+                bool visible = ++i % 2 == 0;
+                if (visible)
+                    this.Show();
+                else
+                    this.Hide();
             }
 
             this.User.Update(frameTime);

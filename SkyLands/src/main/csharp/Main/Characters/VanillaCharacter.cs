@@ -61,7 +61,6 @@ namespace Game.CharacSystem
             this.mForcedDestination = new Queue<Vector3>();
             this.mNode = characMgr.SceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id);
             this.mLastSquaredDist = -1;
-
         }
 
         private void OnFall(bool isFalling)
@@ -112,7 +111,7 @@ namespace Game.CharacSystem
                     {
                         Radian actYaw = this.GetYaw();
                         this.mMovementInfo.YawValue = YAW_SPEED * YawFactor.GetFactor(this.mYawGoal - actYaw);
-                        //this.mMovementInfo.MoveDirection = this.mMesh.MoveForwardDir;
+                        this.mMovementInfo.MoveDirection = this.mMesh.MoveForwardDir;
                         //this.mMovementInfo.MoveDirection = (this.FeetPosition - this.mForcedDestination.Peek()).NormalisedCopy;
                         //this.mNode.Translate((this.mForcedDestination.Peek() - this.FeetPosition).NormalisedCopy * WALK_SPEED * frameTime);
                         //translation = (this.FeetPosition - this.mForcedDestination.Peek()).NormalisedCopy * WALK_SPEED;
@@ -205,7 +204,7 @@ namespace Game.CharacSystem
                 Vector2 abNormalized = new Vector2(ab.x, ab.z).NormalisedCopy;
                 Vector2 acNormalized = new Vector2(ac.x, ac.z).NormalisedCopy;
 
-                this.mYawGoal = -Mogre.Math.ACos(abNormalized.DotProduct(acNormalized)) + this.GetYaw();
+                this.mYawGoal = -Mogre.Math.ACos(abNormalized.DotProduct(acNormalized)) - this.GetYaw();
                 //this.mNode.SetOrientation(Mogre.Math.Cos(this.mYawGoal / 2), 0, Mogre.Math.Sin(this.mYawGoal / 2), 0);
                 //this.mYawGoal -= this.GetYaw().ValueAngleUnits;
             }
@@ -222,7 +221,8 @@ namespace Game.CharacSystem
                 if (this.mPathFinder.Goal.Size > 0) { this.mForcedDestination.Clear(); }
                 while (this.mPathFinder.Goal.Size > 0)
                 {
-                    this.mForcedDestination.Enqueue(this.mPathFinder.Goal.Head.Data * Cst.CUBE_SIDE);
+                    //if(this.mPathFinder.Goal.Size == 1) // temp
+                        this.mForcedDestination.Enqueue(this.mPathFinder.Goal.Head.Data * Cst.CUBE_SIDE);
                     this.mPathFinder.Goal.RemoveFirst();
                 }
                 this.ComputeNextYaw();
