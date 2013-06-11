@@ -2255,6 +2255,9 @@
     <Content Include="resources\Media\web\jqueryUI\js\jquery-ui-1.9.2.custom.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\web\keys.js">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\web\MainMenu.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
