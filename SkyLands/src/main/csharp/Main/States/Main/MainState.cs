@@ -88,7 +88,7 @@ namespace Game.States
                 {
                     int characId = Convert.ToInt32(this.mSelectedEntity.Name.Substring(14));
                     this.mSelectedEntity.ShowBoundingBox = false;
-                    this.CharacMgr.GetCharacterById(characId).MoveTo(this.CharacMgr.World.getSpawnPoint() + Vector3.UNIT_Y);
+                    this.CharacMgr.GetCharacterById(characId).MoveTo(this.CharacMgr.World.getSpawnPoint());
                     this.mSelectedEntity = null;
                 }
             }

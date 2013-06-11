@@ -87,9 +87,6 @@ namespace Game
             this.mUserActions = new bool[Enum.GetValues(typeof(UserAction)).Length];
             this.mUserActionsOccured = new bool[this.mUserActions.Length];
             this.MovementFactor = new Vector2();
-
-            ogreForm.KeyDown += OnKeyPressed;
-            ogreForm.KeyUp += OnKeyReleased;
             
             ogreForm.MouseMove += OnMouseMoved;
             ogreForm.MouseDown += OnMousePressed;
@@ -219,14 +216,14 @@ namespace Game
                 Cursor.Hide();
         }
 
-        private void OnKeyPressed(object sender, EventArgs e)
+        internal void OnKeyPressed(object sender, EventArgs e)
         {
             KeyEventArgs args = (KeyEventArgs)e;
             this.mKeyPressed[args.KeyCode] = !this.mKeyDown[args.KeyCode];
             this.mKeyDown[args.KeyCode] = true;
         }
 
-        private void OnKeyReleased(object sender, EventArgs e)
+        internal void OnKeyReleased(object sender, EventArgs e)
         {
             KeyEventArgs args = (KeyEventArgs)e;
             this.mKeyReleased[args.KeyCode] = this.mKeyDown[args.KeyCode];

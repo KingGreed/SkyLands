@@ -44,7 +44,7 @@ namespace Game.BaseApp {
             this.webView.DocumentReady += onDocumentReady;
             this.webView.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/selector.html");
             
-            this.webView.Hide();
+            //this.webView.Hide();
 
             this.MinimumSize = new Size(800, 600);
             WindowSize = this.Size;
@@ -62,9 +62,11 @@ namespace Game.BaseApp {
             jsobject["test"] = "truc";
 
 
-            jsobject.Bind("LogMsg", false, JSLogger);
+            jsobject.Bind("LogMsg", false, this.JSLogger);
+            jsobject.Bind("OnKeyDown", false, this.BrowserKeyPressed);
+            jsobject.Bind("OnKeyUp", false, this.BrowserKeyReleased);
 
-            this.webView.ExecuteJavascript("logger()");
+            this.webView.ExecuteJavascript("resize(2, 2)");
         }
 
         private void JSLogger(object sender, JavascriptMethodEventArgs args) {
@@ -72,6 +74,16 @@ namespace Game.BaseApp {
             else {
                 LogManager.Singleton.DefaultLog.LogMessage(args.Arguments[0]);
             }
+        }
+
+        private void BrowserKeyPressed(object sender, JavascriptMethodEventArgs args) {
+            if(args.Arguments[0].IsInteger)
+                this.mController.OnKeyPressed(sender, new KeyEventArgs((Keys)((int)args.Arguments[0])));
+        }
+
+        private void BrowserKeyReleased(object sender, JavascriptMethodEventArgs args) {
+            if (args.Arguments[0].IsInteger)
+                this.mController.OnKeyReleased(sender, new KeyEventArgs((Keys)((int)args.Arguments[0])));
         }
 
         public void OgreForm_Resize(object sender, EventArgs e)   { this.mWindow.WindowMovedOrResized(); WindowSize = this.Size; }

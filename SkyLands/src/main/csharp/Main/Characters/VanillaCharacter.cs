@@ -34,14 +34,14 @@ namespace Game.CharacSystem
         private double          mLastSquaredDist;
 
         public SceneNode     Node            { get { return this.mNode; } }
-        public MovementInfo  MovementInfo    { get { return mMovementInfo; } protected set { mMovementInfo = value; } }
+        public MovementInfo  MovementInfo    { get { return this.mMovementInfo; } protected set { this.mMovementInfo = value; } }
         public Vector3       Size            { get { return this.mMesh.MeshSize; } }
         public CharacterInfo Info            { get { return this.mCharInfo; } }
         public CollisionMgr  CollisionMgr    { get { return this.mCollisionMgr; } }
         public bool          WaitForRemove   { get; private set; }
         public Vector3       FeetPosition
         {
-            get         { return this.mNode.Position - new Vector3(0, this.Size.y / 2 + this.mMesh.FeetDiff, 0); }
+            get           { return this.mNode.Position - new Vector3(0, this.Size.y / 2 + this.mMesh.FeetDiff, 0); }
             protected set { this.mNode.SetPosition(value.x, value.y + this.Size.y / 2 + this.mMesh.FeetDiff, value.z); }
         }
 
@@ -111,7 +111,7 @@ namespace Game.CharacSystem
                     {
                         Radian actYaw = this.GetYaw();
                         this.mMovementInfo.YawValue = YAW_SPEED * YawFactor.GetFactor(this.mYawGoal - actYaw);
-                        this.mMovementInfo.MoveDirection = this.mMesh.MoveForwardDir;
+                        //this.mMovementInfo.MoveDirection = this.mMesh.MoveForwardDir;
                         //this.mMovementInfo.MoveDirection = (this.FeetPosition - this.mForcedDestination.Peek()).NormalisedCopy;
                         //this.mNode.Translate((this.mForcedDestination.Peek() - this.FeetPosition).NormalisedCopy * WALK_SPEED * frameTime);
                         //translation = (this.FeetPosition - this.mForcedDestination.Peek()).NormalisedCopy * WALK_SPEED;
@@ -212,21 +212,20 @@ namespace Game.CharacSystem
 
         public void MoveTo(Vector3 destination)
         {
-            //this.mForcedDestination.Enqueue(destination);
-            //this.ComputeNextYaw();
-            this.mPathFinder = new PathFinder(MainWorld.getRelativeFromAbsolute(destination), MainWorld.getRelativeFromAbsolute(this.mNode.Position), this.mCharacMgr.World.getIsland());
+            this.mForcedDestination.Enqueue(destination);
+            this.ComputeNextYaw();
+            /*this.mPathFinder = new PathFinder(MainWorld.getRelativeFromAbsolute(destination), MainWorld.getRelativeFromAbsolute(this.mNode.Position), this.mCharacMgr.World.getIsland());
 
             if (this.mPathFinder.Goal != null)
             {
                 if (this.mPathFinder.Goal.Size > 0) { this.mForcedDestination.Clear(); }
                 while (this.mPathFinder.Goal.Size > 0)
                 {
-                    //if(this.mPathFinder.Goal.Size == 1) // temp
-                        this.mForcedDestination.Enqueue(this.mPathFinder.Goal.Head.Data * Cst.CUBE_SIDE);
+                    this.mForcedDestination.Enqueue(this.mPathFinder.Goal.Head.Data * Cst.CUBE_SIDE);
                     this.mPathFinder.Goal.RemoveFirst();
                 }
                 this.ComputeNextYaw();
-            }
+            }*/
         }
 
         public void Hit(float damage)

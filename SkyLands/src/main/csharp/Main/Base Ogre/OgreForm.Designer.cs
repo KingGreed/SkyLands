@@ -31,16 +31,18 @@ namespace Game.BaseApp {
             // 
             // webView
             // 
-            this.webView.Location = new System.Drawing.Point(329, 546);
+            this.webView.Location = new System.Drawing.Point(439, 672);
+            this.webView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.webView.Size = new System.Drawing.Size(404, 44);
             this.webView.TabIndex = 0;
             // 
             // OgreForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1087, 602);
+            this.ClientSize = new System.Drawing.Size(1449, 741);
             this.Controls.Add(this.webView);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "OgreForm";
             this.Text = "OgreForm";
             this.ResumeLayout(false);
