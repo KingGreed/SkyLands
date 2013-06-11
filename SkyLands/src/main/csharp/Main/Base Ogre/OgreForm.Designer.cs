@@ -31,8 +31,8 @@ namespace Game.BaseApp {
             // 
             // webView
             // 
-            this.webView.Location = new System.Drawing.Point(439, 672);
-            this.webView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.webView.Location = new System.Drawing.Point(290, 371);
+            this.webView.Margin = new System.Windows.Forms.Padding(4);
             this.webView.Size = new System.Drawing.Size(404, 44);
             this.webView.TabIndex = 0;
             // 
@@ -40,9 +40,9 @@ namespace Game.BaseApp {
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1449, 741);
+            this.ClientSize = new System.Drawing.Size(959, 428);
             this.Controls.Add(this.webView);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "OgreForm";
             this.Text = "OgreForm";
             this.ResumeLayout(false);

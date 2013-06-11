@@ -8,6 +8,7 @@ namespace Game.World.Blocks {
         public LevitatorBlock() {
             this.mName = "Levitator";
             this.mMaterial = "";
+            this.mItemTexture = "LevitatorTop.png";
             this.mId = 16;
         }
 

@@ -11,6 +11,7 @@ namespace Game.World.Blocks
         {
             this.mName = "Construction";
             this.mMaterial = "";
+            this.mItemTexture = "constructionBlockSide2.png";
             this.mId = 7;
         }
 

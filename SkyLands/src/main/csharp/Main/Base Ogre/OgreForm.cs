@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.IO;
 
 using Awesomium.Core;
+using Awesomium.Windows.Forms;
 using Game.Display;
 using Mogre;
 
@@ -24,6 +25,8 @@ namespace Game.BaseApp {
 
         public static Size WindowSize;
         public static Point WindowPosition;
+
+        public WebControl WebView { get { return this.webView; } }
 
         protected OgreForm() {
             //Awesomium
@@ -60,7 +63,7 @@ namespace Game.BaseApp {
 
             JSObject jsobject = this.webView.CreateGlobalJavascriptObject("jsobject");
             jsobject["test"] = "truc";
-
+            jsobject["Position"] = 0;
 
             jsobject.Bind("LogMsg", false, this.JSLogger);
             jsobject.Bind("OnKeyDown", false, this.BrowserKeyPressed);

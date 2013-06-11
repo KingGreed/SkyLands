@@ -12,6 +12,7 @@ namespace Game.World.Blocks
         public CactusBlock() {
             this.mName = "Cactus";
             this.mMaterial = "cube/cactus";
+            this.mItemTexture = "cactus.png";
             this.mId = 8;
         }
     }

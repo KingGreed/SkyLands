@@ -2455,6 +2455,7 @@
     <Compile Include="csharp\Main\BlockFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\GUIs\Selector.cs" />
     <Compile Include="csharp\Main\RTS\Buildings\Buildings.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -12,6 +12,7 @@ namespace Game.World.Blocks
         public TowerWoodBlock() {
             this.mName = "TowerWoodBlock";
             this.mMaterial = "darkTower/towerWood";
+            this.mItemTexture = "towerWood.jpg";
             this.mId = 12;
         }
     }

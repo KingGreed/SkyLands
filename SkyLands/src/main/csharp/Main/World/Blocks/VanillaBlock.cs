@@ -14,11 +14,11 @@ namespace Game.World.Blocks
 
         protected static int CUBE_SIDE = Cst.CUBE_SIDE;
 
-        public override int    getMeshType() { return this.mMeshType; }
-        public override string getName()     { return this.mName; }
-        public override string getMaterial() { return this.mMaterial; }
-        public override byte   getId()       { return this.mId; }
-
+        public override int    getMeshType()    { return this.mMeshType; }
+        public override string getName()        { return this.mName; }
+        public override string getMaterial()    { return this.mMaterial; }
+        public override byte   getId()          { return this.mId; }
+        public override string getItemTexture() { return this.mItemTexture; }
 
         public override string getFace(int i) { return this.mMaterial; }
 

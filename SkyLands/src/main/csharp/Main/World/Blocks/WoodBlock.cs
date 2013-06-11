@@ -12,6 +12,7 @@ namespace Game.World.Blocks
         public WoodBlock() {
             this.mName = "Wood";
             this.mId = 4;
+            this.mItemTexture = "wood.png";
         }
 
         public override string getFace(int i) {

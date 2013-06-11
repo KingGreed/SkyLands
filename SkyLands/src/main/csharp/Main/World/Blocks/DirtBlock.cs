@@ -12,6 +12,7 @@ namespace Game.World.Blocks
         public DirtBlock() {
             this.mName = "Dirt";
             this.mMaterial = "cube/dirt";
+            this.mItemTexture = "dirt.jpg";
             this.mId = 2;
         }
     }

@@ -5,11 +5,11 @@ using Mogre;
 using Game.World;
 using Game.Animation;
 using Game.Shoot;
+using Game.GUIs;
+using Game.Buildings;
 
 using API.Geo.Cuboid;
 using API.Generic;
-
-using Game.Buildings;
 
 namespace Game.CharacSystem
 {
@@ -35,7 +35,7 @@ namespace Game.CharacSystem
         private readonly Sinbad.AnimName[] mEmotesNames;
         private readonly bool              mIsFirstView;
         private readonly ShootCube         mShootCube;
-        private User                       mCameraMgr;
+        private User                       mUser;
 
         public Controller       Input         { get { return this.mController; } }
         public bool             IsFirstView   { get { return this.mIsFirstView; } }
@@ -74,9 +74,9 @@ namespace Game.CharacSystem
                 this.mEmotesNames[i] = this.mEmotes[i].Anim;
         }
 
-        public void MakeHimMainPlayer(User cameraMgr, MainPlayerCamera cam)
+        public void MakeHimMainPlayer(User user, MainPlayerCamera cam)
         {
-            this.mCameraMgr = cameraMgr;
+            this.mUser = user;
             this.MainPlayerCam = cam;
             /*this.HUD = hud;
             this.HUD.UpdateLife(this.mCharInfo.Life, DEFAULT_PLAYER_LIFE);*/
@@ -84,14 +84,14 @@ namespace Game.CharacSystem
 
         public void SwitchFreeCamMode()
         {
-            this.mNode.SetVisible(this.mCameraMgr.IsFreeCamMode, true);
-            if (this.mCameraMgr.IsFreeCamMode)
+            this.mNode.SetVisible(this.mUser.IsFreeCamMode, true);
+            if (this.mUser.IsFreeCamMode)
                 this.mMesh.ToFreeCamMode();
         }
 
         public new void Update(float frameTime)
         {
-            if(this.mCameraMgr.IsFreeCamMode) {this.MovementInfo.IsAllowedToMove = this.mController.IsKeyDown(Keys.ControlKey);}
+            if(this.mUser.IsFreeCamMode) {this.MovementInfo.IsAllowedToMove = this.mController.IsKeyDown(Keys.ControlKey);}
 
             if (this.MovementInfo.IsAllowedToMove)
             {
@@ -119,30 +119,13 @@ namespace Game.CharacSystem
                 }
             }
 
-            if (this.mCameraMgr.IsAllowedToMoveCam)
+            if (this.mUser.IsAllowedToMoveCam && this.mUser.Selector.IsBullet)
             {
-                if (this.mController.HasActionOccured(Controller.UserAction.MainAction)) { this.mShootCube.Burst(); }
+                if (this.mController.HasActionEnded(Controller.UserAction.MainAction)) { this.mShootCube.Burst(); }
                 if (this.mController.IsActionOccuring(Controller.UserAction.MainAction))
                 {
-                    /*if ((int) this.HUD.Selector <= 2)
-                    {
-                        string material = "";
-                        switch (this.HUD.Selector)
-                        {
-                            case HUD.Selection.FireCube:
-                                material = "fireball";
-                                break;
-                            case HUD.Selection.WaterCube:
-                                material = "waterball";
-                                break;
-                            case HUD.Selection.MagicCube:
-                                material = "magicball";
-                                break;
-
-                        }
-                        this.mShootCube.Material = material;
-                        this.mShootCube.Grow(frameTime, this.mInput.WasMouseButtonPressed(MOIS.MouseButtonID.MB_Left));
-                    }*/
+                    this.mShootCube.Material = this.mUser.Selector.Material;
+                    this.mShootCube.Grow(frameTime, this.mController.HasActionOccured(Controller.UserAction.MainAction));
                 }
             }
         }

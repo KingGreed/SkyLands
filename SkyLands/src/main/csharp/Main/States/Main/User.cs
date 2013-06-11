@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Windows.Forms;
 using Mogre;
 
 using API.Generic;
@@ -10,13 +11,14 @@ using Game.World;
 using Game.World.Blocks;
 using Game.CharacSystem;
 using Game.World.Display;
+using Game.GUIs;
 
 namespace Game
 {
     public class User
     {
         private const float DIST_MIN_SELECTION = 30;
-        private const float DIST_MAX_SELECTION = 300;
+        private const float DIST_MAX_SELECTION = 250;
         
         private CameraMan              mCameraMan;
         private readonly StateManager  mStateMgr;
@@ -24,7 +26,10 @@ namespace Game
         private readonly SceneNode     mWireCube;
         private Vector3                mSelectedBlockPos;
         private Block                  mSelectedBlock;
+        private Selector               mSelector;
+        private Keys[]                 mFigures;
 
+        public Selector Selector { get { return this.mSelector; } }
         public bool IsAllowedToMoveCam { get; set; }
         public bool IsFreeCamMode { get; private set; }
 
@@ -34,6 +39,12 @@ namespace Game
             this.mWorld = world;
             this.mCameraMan = null;
             this.IsAllowedToMoveCam = true;
+            this.mSelector = new Selector(this.mStateMgr.WebView);
+
+            this.mFigures = new Keys[10];
+            for (int i = 0; i < this.mFigures.Length - 1; i++)
+                this.mFigures[i] = (Keys)(((int)Keys.D1) + i);
+            this.mFigures[this.mFigures.Length - 1] = Keys.D0;
 
             ManualObject[] wires = new ManualObject[12];
             wires[0] = StaticRectangle.CreateLine(this.mStateMgr.SceneMgr, Vector3.ZERO, Vector3.UNIT_X * Cst.CUBE_SIDE);
@@ -72,14 +83,25 @@ namespace Game
             float dist = this.UpdateSelectedBlock();
 
             /* Cube addition and suppression */
-            //if (!this.mStateMgr.Input.IsShiftDown) { this.mStateMgr.MainState.MainGUI.MoveSelector((int)this.mStateMgr.Input.MouseMove.z); }
+            int selectorPos = this.mSelector.SelectorPos;
+            if (this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.MoveSelectorLeft)) { selectorPos--; }
+            if (this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.MoveSelectorRight)) { selectorPos++; }
+            for (int i = 0; i < this.mFigures.Length; i++)
+            {
+                if (this.mStateMgr.Controller.WasKeyPressed(this.mFigures[i]))
+                {
+                    selectorPos = i;
+                    break;
+                }
+            }
+            this.mSelector.SelectorPos = selectorPos;
 
             bool leftClick = this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.MainAction);
             bool rightClick = this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.SecondaryAction);
             bool allowWorldEdition = !(this.mStateMgr.GameInfo.IsInEditorMode ^ this.mStateMgr.MainState.User.IsFreeCamMode);
             if (allowWorldEdition && (leftClick || rightClick))
             {
-                if (leftClick && this.mWorld.onLeftClick(this.mSelectedBlockPos)) { this.AddBlock(dist); }
+                if (leftClick && this.mWorld.onLeftClick(this.mSelectedBlockPos) && !this.mSelector.IsBullet) { this.AddBlock(dist); }
                 if (rightClick && this.mWorld.onRightClick(this.mSelectedBlockPos)) { this.DeleteBlock(); }
             }
         }
@@ -164,7 +186,7 @@ namespace Game
 
         private void AddBlock(float dist)
         {
-            string material = "";//this.mStateMgr.MainState.MainGUI.GetMaterial();
+            string material = this.mSelector.Material;
             if (this.mSelectedBlock is AirBlock || this.mSelectedBlock is ConstructionBlock || material == "") { return; }
             
             /* Determine the face */

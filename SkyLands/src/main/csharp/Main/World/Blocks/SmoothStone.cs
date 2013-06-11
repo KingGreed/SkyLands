@@ -12,6 +12,7 @@ namespace Game.World.Blocks
         public SmoothStone() {
             this.mName = "SmoothStone";
             this.mMaterial = "cube/smoothStone";
+            this.mItemTexture = "stonebricksmooth.png";
             this.mId = 20;
         }
 

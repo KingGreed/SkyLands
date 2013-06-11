@@ -4,10 +4,13 @@ namespace API.Geo.Cuboid
 {
 
     public abstract class Block {
+        protected string mItemTexture;
+        
         public abstract string getName    ();
         public abstract string getMaterial();
         public abstract byte   getId();
         public abstract int    getMeshType();
+        public abstract string getItemTexture();
 
         public abstract string getFace(int i);
 

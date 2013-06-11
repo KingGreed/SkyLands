@@ -10,6 +10,7 @@ namespace Game.World.Blocks
         public WoodenSlab() {
             this.mName = "Wooden Slab";
             this.mMaterial = "cube/planks";
+            this.mItemTexture = "towerWood.jpg";
             this.mId = 13;
             this.mMeshType = 1;
         }

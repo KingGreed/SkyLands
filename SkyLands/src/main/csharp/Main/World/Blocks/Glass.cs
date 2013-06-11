@@ -11,6 +11,7 @@ namespace Game.World.Blocks {
 
             this.mName = "Glass";
             this.mMaterial = "cube/glass";
+            this.mItemTexture = "glass.png";
             this.mId = 22;
         }
 

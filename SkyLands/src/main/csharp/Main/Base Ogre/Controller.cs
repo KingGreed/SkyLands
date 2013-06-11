@@ -36,6 +36,7 @@ namespace Game
         private readonly Dictionary<MouseButtons, bool> mMouseDown;
         private readonly Dictionary<MouseButtons, bool> mMousePressed;
         private readonly Dictionary<MouseButtons, bool> mMouseReleased;
+        private readonly bool[] mUserActionsEnded;
         private readonly bool[] mUserActionsOccured;
         private readonly bool[] mUserActions;
         protected InputName mInputName;
@@ -47,7 +48,8 @@ namespace Game
         public InputName ActualInputName { get { return this.mInputName; } set { this.mInputName = value; this.LoadCommands(); } }
         public Vector2   MovementFactor  { get { return this.mMovementFactor; } private set { this.mMovementFactor = value; } }
         public float     Pitch           { get; private set; }
-        public float     Yaw             { get; private set; }public Vector3 MousePos   { get { return this.mMousePos; } }
+        public float     Yaw             { get; private set; }
+        public Vector3 MousePos          { get { return this.mMousePos; } }
         public Vector3 MouseMove         { get { return this.mMouseMove; } }
         public bool BlockMouse           { get; set; }
 
@@ -86,6 +88,7 @@ namespace Game
 
             this.mUserActions = new bool[Enum.GetValues(typeof(UserAction)).Length];
             this.mUserActionsOccured = new bool[this.mUserActions.Length];
+            this.mUserActionsEnded = new bool[this.mUserActions.Length];
             this.MovementFactor = new Vector2();
             
             ogreForm.MouseMove += OnMouseMoved;
@@ -104,6 +107,7 @@ namespace Game
         public bool WasMouseButtonReleased(MouseButtons button)  { return this.mMouseReleased[button]; }
         public bool WasMouseMoved()                              { return this.mMouseMove.x != 0 || this.mMouseMove.y != 0; }
         public bool HasActionOccured(UserAction a)               { return this.mUserActionsOccured[(int)a]; }
+        public bool HasActionEnded(UserAction a)                 { return this.mUserActionsEnded[(int)a]; }
         public bool IsActionOccuring(UserAction a)               { return this.mUserActions[(int)a]; }
 
         public void Update()
@@ -147,6 +151,8 @@ namespace Game
                 bool newValue = this.GetBoolValue(nodes[i]);
                 if (newValue && !this.mUserActions[actionId])
                     this.mUserActionsOccured[actionId] = true;
+                if(!newValue && this.mUserActions[actionId])
+                    this.mUserActionsEnded[actionId] = true;
                 this.mUserActions[actionId] = newValue;
             }
         }

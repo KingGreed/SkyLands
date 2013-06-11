@@ -7,11 +7,11 @@ using Mogre;
 
 namespace Game.World.Blocks
 {
-    class StoneBlock : VanillaBlock
-    {
+    class StoneBlock : VanillaBlock {
         public StoneBlock() {
             this.mName = "Stone";
             this.mMaterial = "cube/stone";
+            this.mItemTexture = "stone.jpg";
             this.mId = 3;
         }
     }

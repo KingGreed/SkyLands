@@ -10,6 +10,7 @@ namespace Game.World.Blocks
         public GrassBlock() {
             this.mName = "Grass";
             this.mMaterial = "";
+            this.mItemTexture = "dirt.jpg";
             this.mId = 1;
         }
 
