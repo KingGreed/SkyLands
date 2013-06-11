@@ -130,7 +130,7 @@ namespace Game.CharacSystem
                 else
                 {
                     if      (this.mCharInfo.IsPlayer)            { ((VanillaPlayer) this).Update(frameTime); }
-                    else if (this.MovementInfo.IsAllowedToMove) { ((VanillaNonPlayer)this).Update(frameTime); }
+                    else if (this.MovementInfo.IsAllowedToMove)  { ((VanillaNonPlayer)this).Update(frameTime); }
                 }
 
                 if (this.MovementInfo.IsPushedByArcaneLevitator)

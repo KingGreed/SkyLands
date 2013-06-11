@@ -134,7 +134,7 @@ namespace Game.CharacSystem
         {
             this.MovementInfo.MoveDirection = new Vector3(this.mController.MovementFactor.x,
                                                           this.mController.HasActionOccured(Controller.UserAction.Jump) ? 1 : 0,
-                                                          this.mController.MovementFactor.y);
+                                                          this.mController.MovementFactor.z);
             this.MovementInfo.YawValue = yawValue;
             this.MovementInfo.PitchValue = pitchValue;
         }

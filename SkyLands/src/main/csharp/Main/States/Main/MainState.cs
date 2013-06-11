@@ -10,7 +10,6 @@ namespace Game.States
     {
         protected MainWorld mWorld;
         private SceneNode   mSelectedEntity;
-        private static int i = 0;   // Temp
 
         public User      User { get; protected set; }
         public CharacMgr CharacMgr { get; protected set; }

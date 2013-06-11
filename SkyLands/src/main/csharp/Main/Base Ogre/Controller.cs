@@ -23,8 +23,6 @@ namespace Game
             SecondaryAction,
             MoveSelectorLeft,
             MoveSelectorRight,
-            Up,
-            Down,
             Inventory,
             Start
         }
@@ -40,20 +38,20 @@ namespace Game
         private readonly bool[] mUserActionsOccured;
         private readonly bool[] mUserActions;
         protected InputName mInputName;
-        private Vector2 mMovementFactor;
+        private Vector3 mMovementFactor;
         private Vector3 mMousePos;
         private Vector3 mMouseMove;
         private bool mUpdateMovement = true;
         private bool mCursorVisibility;
 
         public InputName ActualInputName { get { return this.mInputName; } set { this.mInputName = value; this.LoadCommands(); } }
-        public Vector2   MovementFactor  { get { return this.mMovementFactor; } private set { this.mMovementFactor = value; } }
+        public Vector3   MovementFactor  { get { return this.mMovementFactor; } private set { this.mMovementFactor = value; } }
         public float     Pitch           { get; private set; }
         public float     Yaw             { get; private set; }
-        public Vector3 MousePos          { get { return this.mMousePos; } }
-        public Vector3 MouseMove         { get { return this.mMouseMove; } }
-        public bool BlockMouse           { get; set; }
-        public bool CursorVisibility
+        public Vector3   MousePos        { get { return this.mMousePos; } }
+        public Vector3   MouseMove       { get { return this.mMouseMove; } }
+        public bool      BlockMouse      { get; set; }
+        public bool      CursorVisibility
         {
             get { return this.mCursorVisibility; }
             set
@@ -101,7 +99,7 @@ namespace Game
             this.mUserActions = new bool[Enum.GetValues(typeof(UserAction)).Length];
             this.mUserActionsOccured = new bool[this.mUserActions.Length];
             this.mUserActionsEnded = new bool[this.mUserActions.Length];
-            this.MovementFactor = new Vector2();
+            this.MovementFactor = new Vector3();
             
             ogreForm.MouseMove += OnMouseMoved;
             ogreForm.MouseDown += OnMousePressed;
@@ -129,27 +127,38 @@ namespace Game
             {
                 this.Yaw = this.GamePadState.ThumbSticks.Right.X * 5;
                 this.Pitch = -this.GamePadState.ThumbSticks.Right.Y * 8;
-                this.mMovementFactor = new Vector2(-this.GamePadState.ThumbSticks.Left.X,
+                this.mMovementFactor = new Vector3(-this.GamePadState.ThumbSticks.Left.X,
+                    this.GamePadState.DPad.Up == XInputDotNetPure.ButtonState.Pressed ? 1 : (this.GamePadState.DPad.Down == XInputDotNetPure.ButtonState.Pressed ? -1 : 0),
                                                    this.GamePadState.ThumbSticks.Left.Y);
             }
-            for (int i = 0; i < 4; i++) // Continuous event
+            int i = 0;
+            for (; i < 6; i++) // Continuous event
             {
+                float value = this.GetFloatValue(nodes[i]);
                 switch (nodes[i].Attributes[0].Value)
                 {
                     case "MoveLeft":
-                        this.mMovementFactor.x += this.GetFloatValue(nodes[i].ChildNodes[0]);
+                        this.mMovementFactor.x += value;
                         break;
 
                     case "MoveRight":
-                        this.mMovementFactor.x -= this.GetFloatValue(nodes[i].ChildNodes[0]);
+                        this.mMovementFactor.x -= value;
                         break;
 
                     case "MoveUp":
-                        this.mMovementFactor.y += this.GetFloatValue(nodes[i].ChildNodes[0]);
+                        this.mMovementFactor.y += value;
                         break;
 
                     case "MoveDown":
-                        this.mMovementFactor.y -= this.GetFloatValue(nodes[i].ChildNodes[0]);
+                        this.mMovementFactor.y -= value;
+                        break;
+
+                    case "MoveForward":
+                        this.mMovementFactor.z += value;
+                        break;
+
+                    case "MoveBack":
+                        this.mMovementFactor.z -= value;
                         break;
                 }
             }
@@ -157,7 +166,7 @@ namespace Game
             this.Yaw += this.MouseMove.x;
             this.Pitch += this.MouseMove.y;
 
-            for (int i = 4; i < nodes.Count; i++) // Single event
+            for (; i < nodes.Count; i++) // Single event
             {
                 int actionId = (int)Enum.Parse(typeof(UserAction), nodes[i].Attributes[0].Value);
                 bool newValue = this.GetBoolValue(nodes[i]);
@@ -171,8 +180,9 @@ namespace Game
 
         private float GetFloatValue(XmlNode node)
         {
-            if (node.LocalName == InputName.Keyboard.ToString())
-                return this.IsKeyDown((Keys)Enum.Parse(typeof(Keys), node.InnerText)) ? 1 : 0;
+            foreach (XmlNode child in node.ChildNodes)
+                if (child.LocalName == InputName.Keyboard.ToString() && this.IsKeyDown((Keys)Enum.Parse(typeof(Keys), child.InnerText)))
+                    return 1;
 
             return 0;
         }
@@ -328,7 +338,7 @@ namespace Game
             for (int i = 0; i < this.mUserActionsOccured.Length; i++)
                 this.mUserActionsOccured[i] = false;
 
-            this.MovementFactor = new Vector2();
+            this.MovementFactor = new Vector3();
             this.Pitch = 0;
             this.Yaw = 0;
         }

@@ -24,7 +24,7 @@ namespace Game.BaseApp
 
             Vector3 move = Vector3.ZERO;
             move += this.mCamera.Direction * this.mDirectionFactor.z;
-            move += this.mCamera.Right * this.mDirectionFactor.x;
+            move -= this.mCamera.Right * this.mDirectionFactor.x;
             move += this.mCamera.Up * this.mDirectionFactor.y;
 
             move.Normalise();
@@ -36,9 +36,10 @@ namespace Game.BaseApp
 
         private void UpdateKeys(Controller input)
         {
-            this.mDirectionFactor = new Vector3(-input.MovementFactor.x,
-                input.HasActionOccured(Controller.UserAction.Up) ? 1 : input.HasActionOccured(Controller.UserAction.Down) ? -1 : 0,
-                input.MovementFactor.y);
+            if (input.MovementFactor != Vector3.ZERO)
+                Console.WriteLine(input.MovementFactor);
+            
+            this.mDirectionFactor = input.MovementFactor;
             this.FastMove = input.IsActionOccuring(Controller.UserAction.Sprint);
 
             this.MouseMovement(input.Yaw, input.Pitch);

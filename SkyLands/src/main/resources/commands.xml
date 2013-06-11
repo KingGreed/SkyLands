@@ -5,15 +5,27 @@ For an azerty keyboard
 <Controller>
   <ContinuousAction id="MoveLeft">
     <Keyboard>Q</Keyboard>
+    <Keyboard>Left</Keyboard>
   </ContinuousAction>
   <ContinuousAction id="MoveRight">
     <Keyboard>D</Keyboard>
+    <Keyboard>Right</Keyboard>
   </ContinuousAction>
   <ContinuousAction id="MoveUp">
-    <Keyboard>Z</Keyboard>
+    <Keyboard>A</Keyboard>
+    <Keyboard>PageUp</Keyboard>
   </ContinuousAction>
   <ContinuousAction id="MoveDown">
+    <Keyboard>E</Keyboard>
+    <Keyboard>PageDown</Keyboard>
+  </ContinuousAction>
+  <ContinuousAction id="MoveForward">
+    <Keyboard>Z</Keyboard>
+    <Keyboard>Up</Keyboard>
+  </ContinuousAction>
+  <ContinuousAction id="MoveBack">
     <Keyboard>S</Keyboard>
+    <Keyboard>Down</Keyboard>
   </ContinuousAction>
   
   <SingleAction id="Jump">
@@ -21,11 +33,12 @@ For an azerty keyboard
     <Xbox>A</Xbox>
   </SingleAction>
   <SingleAction id="Sprint">
-    <Keyboard>Shift</Keyboard>
+    <Keyboard>ShiftKey</Keyboard>
     <Xbox>LeftStick</Xbox>
   </SingleAction>
   <SingleAction id="Levitate">
     <Keyboard>A</Keyboard>
+    <Keyboard>PageUp</Keyboard>
     <Xbox>Y</Xbox>
   </SingleAction>
   <SingleAction id="Dance">
@@ -47,14 +60,6 @@ For an azerty keyboard
   <SingleAction id="MoveSelectorRight">
     <Mouse>MoveZ-</Mouse>
     <Xbox>RightShoulder</Xbox>
-  </SingleAction>
-  <SingleAction id="Up">
-    <Keyboard>A</Keyboard>
-    <Xbox>DPadUp</Xbox>
-  </SingleAction>
-  <SingleAction id="Down">
-    <Keyboard>E</Keyboard>
-    <Xbox>DPadDown</Xbox>
   </SingleAction>
   <SingleAction id="Inventory">
     <Keyboard>I</Keyboard>
