@@ -45,7 +45,7 @@ namespace Game.BaseApp {
 
 
             this.webView.DocumentReady += onDocumentReady;
-            this.webView.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/selector.html");
+            this.webView.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/MainMenu.html");
             
             //this.webView.Hide();
 
@@ -68,8 +68,6 @@ namespace Game.BaseApp {
             jsobject.Bind("LogMsg", false, this.JSLogger);
             jsobject.Bind("OnKeyDown", false, this.BrowserKeyPressed);
             jsobject.Bind("OnKeyUp", false, this.BrowserKeyReleased);
-
-            this.webView.ExecuteJavascript("resize(2, 2)");
         }
 
         private void JSLogger(object sender, JavascriptMethodEventArgs args) {

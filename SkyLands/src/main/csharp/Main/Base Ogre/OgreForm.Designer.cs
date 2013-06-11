@@ -31,9 +31,10 @@ namespace Game.BaseApp {
             // 
             // webView
             // 
-            this.webView.Location = new System.Drawing.Point(290, 371);
+            this.webView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webView.Location = new System.Drawing.Point(0, 0);
             this.webView.Margin = new System.Windows.Forms.Padding(4);
-            this.webView.Size = new System.Drawing.Size(404, 44);
+            this.webView.Size = new System.Drawing.Size(959, 428);
             this.webView.TabIndex = 0;
             // 
             // OgreForm
