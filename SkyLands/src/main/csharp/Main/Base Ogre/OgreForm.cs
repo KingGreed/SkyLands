@@ -41,9 +41,6 @@ namespace Game.BaseApp {
             Cursor.Position = new Point(this.Location.X + this.Size.Width / 2,
                                         this.Location.Y + this.Size.Height / 2);
 
-            this.Resize += this.OgreForm_Resize;
-            this.Move += (sender, args) => WindowPosition = this.Location;
-
             this.webView.DocumentReady += onDocumentReady;
             this.webView.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/MainMenu.html");
             
@@ -126,6 +123,9 @@ namespace Game.BaseApp {
             //LogManager.Singleton.DefaultLog.LogDetail = LoggingLevel.LL_LOW;
             this.mSceneMgr.ShadowTechnique = ShadowTechnique.SHADOWDETAILTYPE_INTEGRATED;
             this.mSceneMgr.ShadowFarDistance = 400;
+
+            this.Resize += this.OgreForm_Resize;
+            this.Move += (sender, args) => WindowPosition = this.Location;
 
             return true;
         }

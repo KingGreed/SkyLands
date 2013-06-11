@@ -2,36 +2,48 @@
 <head>
 	<link rel="stylesheet" type="text/css" href="MainMenu.css" />
 	<script type="text/javascript" src="jquery.js"> </script>
-    <script type="text/javascript" src="keys.js"> </script>
+  <script type="text/javascript" src="keys.js"> </script>
+
 
 	<script>
-		$(function() {
-			$("#area1").hover(function() {
-    			$("#map").attr("src", "../images/Menu_Play_select.png");
-  			}, function() {
-  				$("#map").attr("src", "../images/Menu_Normal view.png");
-  			});
+    var RatioTotalX = 1, RatioTotalY = 1;
 
-  			$("#area2").hover(function() {
-    			$("#map").attr("src", "../images/Menu_options_select.png");
-  			}, function() {
-  				$("#map").attr("src", "../images/Menu_Normal view.png");
-  			});
+    function isInRectangle(x1, y1, x2, y2, posX, posY) { return posX > x1 && posX < x2 && posY > y1 && posY < y2; }
 
-  			$("#area3").hover(function() {
-    			$("#map").attr("src", "../images/Menu_Exit_select.png");
-  			}, function() {
-  				$("#map").attr("src", "../images/Menu_Normal view.png");
-  			});
+    $(window).resize(function() {
+      RatioTotalX = parseInt($('#map').css('width')) / 1600;
+      RatioTotalY = parseInt($('#map').css('height')) / 900;
+    });
+
+    $(window).load(function() {
+      RatioTotalX = parseInt($('#map').css('width')) / 1600;
+      RatioTotalY = parseInt($('#map').css('height')) / 900;
+      $(document).mousemove(function(e){
+        if(isInRectangle(524 * RatioTotalX, 276 * RatioTotalY, 1220 * RatioTotalX, 392 * RatioTotalY, e.pageX, e.pageY)) {
+          $('img').css('display', 'none');
+          $('img:eq(0)').css('display', 'block');
+        } else if(isInRectangle(360 * RatioTotalX, 486 * RatioTotalY, 1278 * RatioTotalX, 615 * RatioTotalY, e.pageX, e.pageY)) {
+          $('img').css('display', 'none');
+          $('img:eq(1)').css('display', 'block');
+        } else if(isInRectangle(101 * RatioTotalX, 100 * RatioTotalY, 180 * RatioTotalX, 607 * RatioTotalY, e.pageX, e.pageY)) {
+          $('img').css('display', 'none');
+          $('img:eq(2)').css('display', 'block');
+        } else {
+          $("img").each(function(index, value) { 
+            $(this).css('display' , 'none'); 
+          });
+          $('#map').css('display', 'block');
+        }
+      });
 		});
+
 	</script>
 </head>
 <body>
-	<img src="../images/Menu_Normal view.png" usemap="menuMap" id="map" style="height: 100%; width: 100%;"/>
-	<map name="menuMap">
-		<area shape="rect" coords="524, 276, 1220, 392" href="play.html"    id="area1">
-		<area shape="rect" coords="360, 486, 1278, 615" href="options.html" id="area2">
-		<area shape="rect" coords="101, 100, 180,  607" href="#" onclick="jsobject.exit()" id="area3">
-	</map>
+  <p id="pos" style="color : white;"></p>
+    <img src="../images/Menu_Play_select.png" id="img" style="height: 100%; width: 100%; display:none;"/>
+  <img src="../images/Menu_options_select.png" id="img" style="height: 100%; width: 100%; display:none;"/>
+  <img src="../images/Menu_Exit_select.png" id="img" style="height: 100%; width: 100%; display:none;"/>
+	<img src="../images/Menu_Normal view.png" id="map" style="height: 100%; width: 100%;"/>
 </body>
 </html>

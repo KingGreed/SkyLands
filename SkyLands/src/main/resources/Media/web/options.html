@@ -1,0 +1,48 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="options.css" />
+	<script type="text/javascript" src="jquery.js"> </script>
+  <script>
+
+  function isInRectangle(x1, y1, x2, y2, posX, posY) { return posX > x1 && posX < x2 && posY > y1 && posY < y2; }
+  var ratioX, ratioY = 1;
+
+    $(window).load(function() {
+      ratioX = parseInt($('#map').css('width')) / 1600;
+      ratioY = parseInt($('#map').css('height')) / 900;
+      $(document).mousemove(function(e) {
+        if(isInRectangle(62 * ratioX, 48 * ratioY, 350 * ratioX, 150 * ratioY, e.pageX, e.pageY)){
+          $("body").css('cursor', 'pointer');
+        }
+        else if(isInRectangle(95 * ratioX, 405 * ratioY, 275 * ratioX, 450 * ratioY, e.pageX, e.pageY)){
+          $("body").css('cursor', 'pointer');
+        }
+        else if(isInRectangle(710 * ratioX, 70 * ratioY, 1470 * ratioX, 200 * ratioY, e.pageX, e.pageY)){
+          $("body").css('cursor', 'pointer');
+        }
+        else if(isInRectangle(570 * ratioX, 350 * ratioY, 1400 * ratioX, 475 * ratioY, e.pageX, e.pageY)){
+          $("body").css('cursor', 'pointer');
+        }
+        else if(isInRectangle(400 * ratioX, 400 * ratioY, 470 * ratioX, 730 * ratioY, e.pageX, e.pageY)){
+          $("body").css('cursor', 'pointer');
+        }
+        else if(isInRectangle(1220 * ratioX, 600 * ratioY, 1400 * ratioX, 760 * ratioY, e.pageX, e.pageY)){
+          $("body").css('cursor', 'pointer');
+        }
+        else
+          $('body').css('cursor', 'default')
+      });
+    });
+
+    $(window).resize(function() {
+      ratioX = parseInt($('#map').css('width')) / 1600;
+      ratioY = parseInt($('#map').css('height')) / 900;
+    });
+    
+  </script>
+</head>
+<body>
+  <p id="pos" style="color : green;"></p>
+	<img src="../images/options.png" id="map" style="height: 100%; width: 100%;"/>
+</body>
+</html>
