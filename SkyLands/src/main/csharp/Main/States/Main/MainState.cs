@@ -35,9 +35,7 @@ namespace Game.States
 
         public override void Show()
         {
-            /*this.mStateMgr.HideGUIs();
-            if (!this.User.IsFreeCamMode) { this.MainGUI.Show(); }*/
-            this.mStateMgr.Controller.SetCursorVisibility(false);
+            this.mStateMgr.Controller.CursorVisibility = false;
             this.mStateMgr.Controller.BlockMouse = true;
 
             this.User.IsAllowedToMoveCam = true;
@@ -45,7 +43,7 @@ namespace Game.States
 
         public override void Hide()
         {
-            this.mStateMgr.Controller.SetCursorVisibility(true);
+            this.mStateMgr.Controller.CursorVisibility = true;
             this.mStateMgr.Controller.BlockMouse = false;
         }
 
@@ -54,13 +52,7 @@ namespace Game.States
             this.mWorld.Update(frameTime);
 
             if (this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.Start))
-            {
-                bool visible = ++i % 2 == 0;
-                if (visible)
-                    this.Show();
-                else
-                    this.Hide();
-            }
+                this.mStateMgr.RequestStatePop();
 
             this.User.Update(frameTime);
             this.CharacMgr.Update(frameTime);

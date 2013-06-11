@@ -44,6 +44,7 @@ namespace Game
         private Vector3 mMousePos;
         private Vector3 mMouseMove;
         private bool mUpdateMovement = true;
+        private bool mCursorVisibility;
 
         public InputName ActualInputName { get { return this.mInputName; } set { this.mInputName = value; this.LoadCommands(); } }
         public Vector2   MovementFactor  { get { return this.mMovementFactor; } private set { this.mMovementFactor = value; } }
@@ -52,6 +53,16 @@ namespace Game
         public Vector3 MousePos          { get { return this.mMousePos; } }
         public Vector3 MouseMove         { get { return this.mMouseMove; } }
         public bool BlockMouse           { get; set; }
+        public bool CursorVisibility
+        {
+            get { return this.mCursorVisibility; }
+            set
+            {
+                this.mCursorVisibility = value;
+                if (this.mCursorVisibility) { Cursor.Show(); }
+                else                        { Cursor.Hide(); }
+            }
+        }
 
         public GamePadState GamePadState { get { return GamePad.GetState(PlayerIndex.One, GamePadDeadZone.IndependentAxes); } }
 
@@ -82,6 +93,7 @@ namespace Game
 
             this.mMousePos = new Vector3();
             this.BlockMouse = true;
+            this.mCursorVisibility = true;
 
             this.mCommands = new XmlDocument();
             this.LoadCommands();
@@ -213,14 +225,6 @@ namespace Game
         }
 
         public void Vibrate(float left, float right) { GamePad.SetVibration(PlayerIndex.One, left, right); }
-
-        public void SetCursorVisibility(bool vis)
-        {
-            if (vis)
-                Cursor.Show();
-            else
-                Cursor.Hide();
-        }
 
         internal void OnKeyPressed(object sender, EventArgs e)
         {

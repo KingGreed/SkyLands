@@ -35,7 +35,7 @@ namespace Game.States
             this.mPopRequested = 0;
             this.mWaitOneFrame = false;
             this.GameInfo = new GameInfo();
-            this.RequestStatePush(typeof(GameState));
+            this.RequestStatePush(typeof(MenuState));
 
             this.Disposed += this.Shutdown;
         }

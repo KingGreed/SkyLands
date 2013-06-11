@@ -134,11 +134,7 @@ namespace Game.CharacSystem
                 }
 
                 if (this.MovementInfo.IsPushedByArcaneLevitator)
-                {
                     translation.y = ArcaneLevitatorSpeed.GetSpeed();
-                    Radian actYaw = this.GetYaw();
-                    Console.WriteLine(actYaw.ValueAngleUnits);
-                }
                 else if (this.MovementInfo.IsJumping)
                     translation.y = JumpSpeed.GetSpeed();
                 else

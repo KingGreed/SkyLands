@@ -13,6 +13,7 @@ namespace Game.BaseApp {
     public abstract partial class OgreForm : Form {
         private const string PLUGINS_CFG = "plugins.cfg";
         private const string RESOURCES_CFG = "resources.cfg";
+        private readonly Size INIT_SIZE = new Size(800, 600);
 
         protected Root mRoot;
         protected SceneManager mSceneMgr;
@@ -42,7 +43,6 @@ namespace Game.BaseApp {
 
             this.Resize += this.OgreForm_Resize;
             this.Move += (sender, args) => WindowPosition = this.Location;
-
 
             this.webView.DocumentReady += onDocumentReady;
             this.webView.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/MainMenu.html");
@@ -87,7 +87,12 @@ namespace Game.BaseApp {
                 this.mController.OnKeyReleased(sender, new KeyEventArgs((Keys)((int)args.Arguments[0])));
         }
 
-        public void OgreForm_Resize(object sender, EventArgs e)   { this.mWindow.WindowMovedOrResized(); WindowSize = this.Size; }
+        public void OgreForm_Resize(object sender, EventArgs e)
+        {
+            this.mWindow.WindowMovedOrResized();
+            WindowSize = this.Size;
+            this.webView.ExecuteJavascript("resize(" + this.Size.Width / 1600 + "," + this.Size.Height / 900 + ")");
+        }
 
         public void AddFrameLstn(RootLstn listener)               { listener.AddListener(this.mRoot);        }
         public void RemoveFrameLstn(RootLstn listener)            { listener.RemoveListener(this.mRoot);     }
@@ -134,14 +139,14 @@ namespace Game.BaseApp {
             renderSys.SetConfigOption("RTT Preferred Mode", "FBO");
             renderSys.SetConfigOption("VSync", "Yes");
             renderSys.SetConfigOption("VSync Interval", "1");
-            renderSys.SetConfigOption("Video Mode", "1024 x 768");
+            renderSys.SetConfigOption("Video Mode", INIT_SIZE.Width + " x " + INIT_SIZE.Height);
             renderSys.SetConfigOption("sRGB Gamma Conversion", "No");
 
             this.mRoot.RenderSystem = renderSys;
             this.mRoot.Initialise(false, "SkyLands");
             NameValuePairList misc = new NameValuePairList();
             misc["externalWindowHandle"] = Handle.ToString();
-            this.mWindow = this.mRoot.CreateRenderWindow("Main RenderWindow", 800, 600, false, misc);
+            this.mWindow = this.mRoot.CreateRenderWindow("Main RenderWindow", (uint)INIT_SIZE.Width, (uint)INIT_SIZE.Height, false, misc);
 
             return true;
         }
