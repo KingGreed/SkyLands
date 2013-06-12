@@ -9,6 +9,12 @@ namespace Game.States
         public override void Show()
         {
             new MainMenu(this.mStateMgr);
+            this.mStateMgr.WebView.Show();
+        }
+
+        public override void Hide()
+        {
+            this.mStateMgr.WebView.Hide();
         }
 
         public override void Update(float frameTime)
