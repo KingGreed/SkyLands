@@ -90,7 +90,7 @@ namespace Game
             }
 
             this.mMousePos = new Vector3();
-            this.BlockMouse = true;
+            this.BlockMouse = false;
             this.mCursorVisibility = true;
 
             this.mCommands = new XmlDocument();

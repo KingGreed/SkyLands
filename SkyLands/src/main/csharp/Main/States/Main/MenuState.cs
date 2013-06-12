@@ -1,9 +1,5 @@
-﻿using System;
-using Mogre;
-
-using Game.CharacSystem;
-using Game.World;
-using Game.BaseApp;
+﻿using Game.BaseApp;
+using Game.GUIs;
 
 namespace Game.States
 {
@@ -18,12 +14,11 @@ namespace Game.States
 
         public override void Show()
         {
-            OgreForm.webView.Show();
+            new MainMenu();
         }
 
         public override void Hide()
         {
-            OgreForm.webView.Hide();
         }
 
         public override void Update(float frameTime)
