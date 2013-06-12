@@ -41,9 +41,7 @@ namespace Game.BaseApp {
             
 
             webView.DocumentReady += onDocumentReady;
-            webView.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/MainMenu.html");
-            
-            //webView.Hide();
+            webView.Hide();
 
             this.MinimumSize = new Size(800, 600);
             WindowSize = this.Size;
@@ -58,8 +56,6 @@ namespace Game.BaseApp {
 
 
             JSObject jsobject = webView.CreateGlobalJavascriptObject("jsobject");
-            jsobject["test"] = "truc";
-            jsobject["Position"] = 0;
 
             jsobject.Bind("LogMsg", false, this.JSLogger);
             jsobject.Bind("OnKeyDown", false, this.BrowserKeyPressed);
