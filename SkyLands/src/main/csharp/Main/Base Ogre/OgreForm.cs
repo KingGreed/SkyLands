@@ -27,6 +27,8 @@ namespace Game.BaseApp {
         public static Size WindowSize;
         public static Point WindowPosition;
 
+        public WebControl WebView { get { return webView; } }
+
         protected OgreForm() {
             //Awesomium
 
@@ -38,10 +40,11 @@ namespace Game.BaseApp {
             Cursor.Position = new Point(this.Location.X + this.Size.Width / 2,
                                         this.Location.Y + this.Size.Height / 2);
 
-            
+
 
             webView.DocumentReady += onDocumentReady;
-            webView.Hide();
+
+            //this.webView.Hide();
 
             this.MinimumSize = new Size(800, 600);
             WindowSize = this.Size;
@@ -49,13 +52,15 @@ namespace Game.BaseApp {
         }
 
         private void onDocumentReady(object sender, UrlEventArgs e) {
-            if((webView == null) || !webView.IsLive) { return; }
+            if(webView == null || !webView.IsLive) { return; }
             webView.DocumentReady -= onDocumentReady;
 
             if(webView.ParentView != null || !webView.IsJavascriptEnabled) { return; }
 
 
             JSObject jsobject = webView.CreateGlobalJavascriptObject("jsobject");
+            jsobject["test"] = "truc";
+            jsobject["Position"] = 0;
 
             jsobject.Bind("LogMsg", false, this.JSLogger);
             jsobject.Bind("OnKeyDown", false, this.BrowserKeyPressed);
@@ -63,8 +68,7 @@ namespace Game.BaseApp {
         }
 
         private void JSLogger(object sender, JavascriptMethodEventArgs args) {
-            if(args.Arguments.Length != 1) { LogManager.Singleton.DefaultLog.LogMessage("JS error : expected 1 argument of type string got : " + args.Arguments.Length + " arguments"); }
-            else {
+            if(args.Arguments.Length != 1) { LogManager.Singleton.DefaultLog.LogMessage("JS error : expected 1 argument of type string got : " + args.Arguments.Length + " arguments"); } else {
                 LogManager.Singleton.DefaultLog.LogMessage(args.Arguments[0]);
             }
         }
@@ -75,23 +79,22 @@ namespace Game.BaseApp {
         }
 
         private void BrowserKeyReleased(object sender, JavascriptMethodEventArgs args) {
-            if (args.Arguments[0].IsInteger)
+            if(args.Arguments[0].IsInteger)
                 this.mController.OnKeyReleased(sender, new KeyEventArgs((Keys)((int)args.Arguments[0])));
         }
 
-        public void OgreForm_Resize(object sender, EventArgs e)
-        {
+        public void OgreForm_Resize(object sender, EventArgs e) {
             this.mWindow.WindowMovedOrResized();
             WindowSize = this.Size;
             webView.ExecuteJavascript("resize(" + this.Size.Width / 1600 + "," + this.Size.Height / 900 + ")");
         }
 
-        public void AddFrameLstn(RootLstn listener)    { listener.AddListener(this.mRoot);        }
-        public void RemoveFrameLstn(RootLstn listener) { listener.RemoveListener(this.mRoot);     }
+        public void AddFrameLstn(RootLstn listener) { listener.AddListener(this.mRoot); }
+        public void RemoveFrameLstn(RootLstn listener) { listener.RemoveListener(this.mRoot); }
 
         public void Go() {
             this.Show();
-            while (mRoot != null && mRoot.RenderOneFrame()) { Application.DoEvents(); }
+            while(mRoot != null && mRoot.RenderOneFrame()) { Application.DoEvents(); }
         }
 
         public bool Setup() {
@@ -182,9 +185,9 @@ namespace Game.BaseApp {
         private void ProcessInput() {
             this.mController.Update();
 
-            if (this.mController.WasKeyPressed(Keys.F12)) { this.CyclePolygonMode(); }
-            if (this.mController.WasKeyPressed(Keys.F5)) { this.ReloadAllTextures(); }
-            if (this.mController.WasKeyPressed(Keys.PrintScreen)) { this.TakeScreenshot(); }
+            if(this.mController.WasKeyPressed(Keys.F12)) { this.CyclePolygonMode(); }
+            if(this.mController.WasKeyPressed(Keys.F5)) { this.ReloadAllTextures(); }
+            if(this.mController.WasKeyPressed(Keys.PrintScreen)) { this.TakeScreenshot(); }
         }
 
         private void CyclePolygonMode() {
@@ -211,8 +214,7 @@ namespace Game.BaseApp {
             }
         }
 
-        protected virtual void Shutdown(object sender, EventArgs e)
-        {
+        protected virtual void Shutdown(object sender, EventArgs e) {
             this.mRoot.Dispose();
             this.mRoot = null;
         }

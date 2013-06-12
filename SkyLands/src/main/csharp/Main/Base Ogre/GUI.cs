@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
+using System.IO;
 
 using Mogre;
 
@@ -18,7 +19,7 @@ namespace Game.BaseApp {
             OgreForm.webView.Location = new Point((int)pos.x,  (int)pos.y);
             OgreForm.webView.Size     = new Size ((int)size.x, (int)size.y);
 
-            OgreForm.webView.Source = new Uri(url);
+            OgreForm.webView.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/MainMenu.html");
             OgreForm.webView.DocumentReady += this.whenDocumentReady;
         }
 
