@@ -1,5 +1,4 @@
-﻿using System;
-using Mogre;
+﻿using Mogre;
 using CaelumSharp;
 
 using Game.BaseApp;
@@ -17,7 +16,7 @@ namespace Game.Sky
         {
             this.mStateMgr = stateMgr;
             this.mCaelumSystem = new CaelumSystem(this.mStateMgr.Root, this.mStateMgr.SceneMgr, CaelumSystem.CaelumComponent.None);
-            this.mListener = new RootLstn(RootLstn.TypeLstn.FrameStarted, mCaelumSystem.FrameStarted);
+            this.mListener = new RootLstn(TypeLstn.FrameStarted, mCaelumSystem.FrameStarted);
 
             this.CreateSky(); this.AddListeners();
         }

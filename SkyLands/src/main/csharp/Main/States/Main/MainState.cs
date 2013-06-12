@@ -2,6 +2,7 @@
 
 using Game.CharacSystem;
 using Game.World;
+using Game.Input;
 
 namespace Game.States
 {
@@ -49,14 +50,14 @@ namespace Game.States
         {
             this.mWorld.Update(frameTime);
 
-            if (this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.Start))
+            if (this.mStateMgr.Controller.HasActionOccured(UserAction.Start))
                 this.mStateMgr.RequestStatePop();
 
             this.User.Update(frameTime);
             this.CharacMgr.Update(frameTime);
 
             /* Entity selection */
-            if (this.User.IsFreeCamMode && this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.MainAction))
+            if (this.User.IsFreeCamMode && this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction))
             {
                 if (this.mSelectedEntity == null)
                 {

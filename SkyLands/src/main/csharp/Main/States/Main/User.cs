@@ -8,6 +8,7 @@ using API.Geo.Cuboid;
 using Game.BaseApp;
 using Game.States;
 using Game.World;
+using Game.Input;
 using Game.World.Blocks;
 using Game.CharacSystem;
 using Game.World.Display;
@@ -84,8 +85,8 @@ namespace Game
 
             /* Cube addition and suppression */
             int selectorPos = this.mSelector.SelectorPos;
-            if (this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.MoveSelectorLeft)) { selectorPos--; }
-            if (this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.MoveSelectorRight)) { selectorPos++; }
+            if (this.mStateMgr.Controller.HasActionOccured(UserAction.MoveSelectorLeft)) { selectorPos--; }
+            if (this.mStateMgr.Controller.HasActionOccured(UserAction.MoveSelectorRight)) { selectorPos++; }
             for (int i = 0; i < this.mFigures.Length; i++)
             {
                 if (this.mStateMgr.Controller.WasKeyPressed(this.mFigures[i]))
@@ -96,8 +97,8 @@ namespace Game
             }
             this.mSelector.SelectorPos = selectorPos;
 
-            bool leftClick = this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.MainAction);
-            bool rightClick = this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.SecondaryAction);
+            bool leftClick = this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction);
+            bool rightClick = this.mStateMgr.Controller.HasActionOccured(UserAction.SecondaryAction);
             bool allowWorldEdition = !(this.mStateMgr.GameInfo.IsInEditorMode ^ this.mStateMgr.MainState.User.IsFreeCamMode);
             if (allowWorldEdition && (leftClick || rightClick))
             {

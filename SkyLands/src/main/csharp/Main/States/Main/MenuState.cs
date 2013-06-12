@@ -1,4 +1,5 @@
-﻿using Game.GUIs;
+﻿using Game.Input;
+using Game.GUIs;
 
 namespace Game.States
 {
@@ -19,9 +20,9 @@ namespace Game.States
 
         public override void Update(float frameTime)
         {
-            if (this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.Start))
+            if (this.mStateMgr.Controller.HasActionOccured(UserAction.Start))
                 this.mStateMgr.RequestStatePop();
-            if (this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.Jump))
+            if (this.mStateMgr.Controller.HasActionOccured(UserAction.Jump))
                 this.mStateMgr.RequestStatePush(typeof(GameState));
         }
     }

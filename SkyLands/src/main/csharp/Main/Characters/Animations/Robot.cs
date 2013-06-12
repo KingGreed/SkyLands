@@ -9,7 +9,7 @@ namespace Game.Animation
     {
         public static readonly Vector3 ROBOT_SIZE = new Vector3(70, 130, 85);
         public const int FEET_DIFF = -65;
-        public enum AnimName : byte { Idle, Walk, Slump, Shoot, Die }
+        private enum AnimName : byte { Idle, Walk, Slump, Shoot, Die }
 
         public Robot(Entity ent) : base(new AnimationMgr(ent.AllAnimationStates, Enum.GetNames(typeof(AnimName)),
                                         new string[] { Enum.GetName(typeof(AnimName), AnimName.Slump),

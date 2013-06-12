@@ -2,9 +2,10 @@
 
 namespace Game.BaseApp
 {
+    public enum TypeLstn { FrameStarted, FrameRendering, FrameEnded }
+
     public class RootLstn
     {
-        public enum TypeLstn { FrameStarted, FrameRendering, FrameEnded }
         public delegate bool FrameLstn(FrameEvent evt);
 
         private readonly TypeLstn mType;

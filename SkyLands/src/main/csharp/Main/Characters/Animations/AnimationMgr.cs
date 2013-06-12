@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Mogre;
 
 namespace Game.Animation
@@ -8,10 +7,10 @@ namespace Game.Animation
     {
         private const float FADE_SPEED = 7.5f;
 
-        private AnimationState[] mAnimStates;   // All the AnimationState available
-        private List<Anim>       mWantedAnims;        // Animations asked by the input or AI
-        private List<string>     mNonLoopedAnimations;
-        private List<string>     mAllAnims;
+        private readonly AnimationState[] mAnimStates;   // All the AnimationState available
+        private readonly List<Anim>       mWantedAnims;        // Animations asked by the input or AI
+        private readonly List<string>     mNonLoopedAnimations;
+        private readonly List<string>     mAllAnims;
 
         public List<Anim> CurrentAnims { get { return this.mWantedAnims; } }
         public List<string> AllAnims  { get { return this.mAllAnims; } }

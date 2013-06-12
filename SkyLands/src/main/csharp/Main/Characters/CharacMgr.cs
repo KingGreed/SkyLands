@@ -1,91 +1,89 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mogre;
 
 using Game.World;
 using Game.States;
+using Game.Input;
 using Game.Shoot;
 
 using API.Ent;
 
 namespace Game.CharacSystem
 {
+    public enum Faction { Blue, Red }
+
     public class CharacMgr : CharacterMgr
     {
         private const string SINBAD_MESH = "Sinbad.mesh";
         private const string ROBOT_MESH = "robot.mesh";
 
-        private readonly List<VanillaCharacter> mCharacList;
-        private readonly StateManager           mStateMgr;
-        private readonly Controller             mController;
-        private readonly MainWorld              mWorld;
-        private readonly BulletManager          mBulletMgr;
-        private readonly User                   mCameraMgr;
+        private readonly List<VanillaCharacter>[] mCharacters;
+        private readonly StateManager             mStateMgr;
+        private readonly Controller               mController;
+        private readonly MainWorld                mWorld;
+        private readonly BulletManager            mBulletMgr;
+        private readonly User                     mCameraMgr;
 
         public StateManager  StateMgr   { get { return this.mStateMgr; } }
         public SceneManager  SceneMgr   { get { return this.mStateMgr.SceneMgr; } }
-        public Controller    Controller      { get { return this.mController; } }
+        public Controller    Controller { get { return this.mController; } }
         public MainWorld     World      { get { return this.mWorld; } }
         public VanillaPlayer MainPlayer { get; private set; }
         public BulletManager BulletMgr  { get { return this.mBulletMgr; } }
 
-        public CharacMgr(StateManager stateMgr, MainWorld world, User cameraMgr)
+        public CharacMgr(StateManager stateMgr, MainWorld world, User cameraMgr, BulletManager bulletMgr = null)
         {
             this.mStateMgr = stateMgr;
             this.mController = stateMgr.Controller;
             this.mWorld = world;
             this.mCameraMgr = cameraMgr;
-            this.mCharacList = new List<VanillaCharacter>();
-        }
-
-        public CharacMgr(StateManager stateMgr, MainWorld world, BulletManager bulletMgr, User cameraMgr) : this(stateMgr, world, cameraMgr)
-        {
             this.mBulletMgr = bulletMgr;
+            this.mCharacters = new List<VanillaCharacter>[Enum.GetValues(typeof(Faction)).Length];
+            for(int i = 0; i < this.mCharacters.Length; i++)
+                this.mCharacters[i] = new List<VanillaCharacter>();
         }
 
         public void AddCharacter(CharacterInfo info)
         {
-            string type;
-
             if (info.IsPlayer)
             {
                 if (this.mStateMgr.GameInfo.IsInEditorMode)
                     throw new Exception("Can't add player in the story editor");
                 
-                type = "Player";
-                VanillaPlayer player = new VanillaPlayer(this, SINBAD_MESH, info, this.mController);
-                this.mCharacList.Add(player);
+                VanillaPlayer player = new VanillaPlayer(this, SINBAD_MESH, info);
+                this.mCharacters[(int)info.Faction].Add(player);
                 if (this.MainPlayer == null)
                 {
                     player.MakeHimMainPlayer(this.mCameraMgr, new MainPlayerCamera(this.mStateMgr.Camera, player));
                     this.MainPlayer = player;
                 }
             }
-            else
-            {
-                type = "NonPlayer";
-                this.mCharacList.Add(new VanillaNonPlayer(this, ROBOT_MESH, info));
-            }
+            else { this.mCharacters[(int)info.Faction].Add(new VanillaNonPlayer(this, ROBOT_MESH, info)); }
 
-            LogManager.Singleton.DefaultLog.LogMessage(type + " " + info.Name + " added");
+            LogManager.Singleton.DefaultLog.LogMessage("Character " + info.Name + " added");
         }
 
-        public VanillaCharacter GetCharacterByListPos(int index) { return this.mCharacList[index]; }
-        public VanillaCharacter GetCharacterById(int id)             { return this.mCharacList.Find(charac => charac.Info.Id == id); }
-
-        public int GetNumberOfCharacter() { return this.mCharacList.Count; }
+        public VanillaCharacter GetCharacterById(int id)
+        {
+            return this.mCharacters.Select(characList => characList.Find(charac => charac.Info.Id == id)).FirstOrDefault(charac => charac != null);
+        }
 
         public void Update(float frameTime)
         {
-            for (int i = 0; i < this.mCharacList.Count; i++)
+            foreach (List<VanillaCharacter> characList in mCharacters)
             {
-                if (this.mCharacList[i].WaitForRemove)
+                for (int i = 0; i < characList.Count; i++)
                 {
-                    this.mCharacList[i].Dispose();
-                    this.mCharacList.Remove(this.mCharacList[i]);
-                    continue;
+                    if (characList[i].WaitForRemove)
+                    {
+                        characList[i].Dispose();
+                        characList.Remove(characList[i]);
+                        continue;
+                    }
+                    characList[i].Update(frameTime);
                 }
-                this.mCharacList[i].Update(frameTime);
             }
 
             if (this.MainPlayer != null && this.mCameraMgr.IsAllowedToMoveCam) { this.MainPlayer.MainPlayerCam.Update(); }
@@ -93,10 +91,13 @@ namespace Game.CharacSystem
 
         public void Dispose()
         {
-            while (this.mCharacList.Count > 0)
+            foreach (List<VanillaCharacter> characList in mCharacters)
             {
-                this.mCharacList[0].Dispose();
-                this.mCharacList.RemoveAt(0);
+                while (characList.Count > 0)
+                {
+                    characList[0].Dispose();
+                    characList.RemoveAt(0);
+                }
             }
 
             CharacterInfo.ResetID();

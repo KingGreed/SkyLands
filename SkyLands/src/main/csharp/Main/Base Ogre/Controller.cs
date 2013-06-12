@@ -7,26 +7,26 @@ using XInputDotNetPure;
 
 using Game.BaseApp;
 
-namespace Game
+namespace Game.Input
 {
+    public enum InputName { Keyboard, Xbox }
+
+    public enum UserAction
+    {
+        Jump,
+        Dance,
+        Sprint,
+        Levitate,
+        MainAction,
+        SecondaryAction,
+        MoveSelectorLeft,
+        MoveSelectorRight,
+        Inventory,
+        Start
+    }
+
     public class Controller
     {
-        public enum InputName { Keyboard, Xbox }
-
-        public enum UserAction
-        {
-            Jump,
-            Dance,
-            Sprint,
-            Levitate,
-            MainAction,
-            SecondaryAction,
-            MoveSelectorLeft,
-            MoveSelectorRight,
-            Inventory,
-            Start
-        }
-
         private readonly XmlDocument mCommands;
         private readonly Dictionary<Keys, bool> mKeyDown;
         private readonly Dictionary<Keys, bool> mKeyPressed;

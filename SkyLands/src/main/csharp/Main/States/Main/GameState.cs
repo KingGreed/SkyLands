@@ -17,10 +17,10 @@ namespace Game.States
         {
             base.Startup();
 
-            CharacterInfo playerInfo = new CharacterInfo("Sinbad", true) { SpawnPoint = this.mWorld.getSpawnPoint() };
+            CharacterInfo playerInfo = new CharacterInfo("Sinbad", Faction.Blue, true) { SpawnPoint = this.mWorld.getSpawnPoint() };
             this.CharacMgr.AddCharacter(playerInfo);
 
-            CharacterInfo iaInfo = new CharacterInfo("Robot-01")
+            CharacterInfo iaInfo = new CharacterInfo("Robot-01", Faction.Red)
             {
                 SpawnPoint = playerInfo.SpawnPoint + new Vector3(800, 100, 200)
             };
@@ -33,7 +33,7 @@ namespace Game.States
         {
             this.mPlayerRTS = new PlayerRTS();
             this.mBulletMgr = new BulletManager(this.mStateMgr.SceneMgr, this.mWorld);
-            this.CharacMgr = new CharacMgr(this.mStateMgr, this.mWorld, this.mBulletMgr, this.User);
+            this.CharacMgr = new CharacMgr(this.mStateMgr, this.mWorld, this.User, this.mBulletMgr);
             this.mBulletMgr.AttachCharacMgr(this.CharacMgr);
         }
 

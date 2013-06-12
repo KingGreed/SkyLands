@@ -11,6 +11,8 @@ using Game.Characters.IA.Misc;
 
 namespace Game.Characters.IA {
     class PathFinder {
+        private const int MAX_SOLUTION_SIZE = 100;
+        
         private AstarLinkedList<Vector3> mGoal;
 
         public AstarLinkedList<Vector3> Goal { get { return this.mGoal; } }
@@ -21,12 +23,11 @@ namespace Game.Characters.IA {
 
 
         public AstarLinkedList<Vector3> findPathTo(Vector3 destination, Vector3 start, Island current) {
-            List<Node> returnList = new List<Node>();
-
             NodeList<Node> open   = new NodeList<Node>();
             NodeList<Node> closed = new NodeList<Node>();
             List<Node> possibleNodes = new List<Node>();
             List<Node> adjacentNodes;
+            int solutionSize = 0;
 
             start.y -= 1;
 
@@ -38,7 +39,7 @@ namespace Game.Characters.IA {
                 curr = open[0];
                 open.RemoveAt(0); closed.Add(curr);
 
-                if(curr.pos == destination) {
+                if(curr.pos == destination || solutionSize >= MAX_SOLUTION_SIZE) {
                     AstarLinkedList<Vector3> solution = new AstarLinkedList<Vector3>();
                     while(curr.parent != null) {
                         curr.pos.y += 1;
@@ -56,6 +57,7 @@ namespace Game.Characters.IA {
                         if(open.Contains(possibleNodes[i])) {
                             if(possibleNodes[i].cost < open[possibleNodes[i]].cost) {
                                 open[possibleNodes[i]].parent = curr;
+                                solutionSize++;
                             }
                         } else { open.DichotomicInsertion(possibleNodes[i]); }
                     }

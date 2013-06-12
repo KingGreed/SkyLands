@@ -48,12 +48,12 @@ namespace Game.World.Generator.Decorators
                     tmp++;
             }
 
-            CharacterInfo iaInfo = new CharacterInfo("Robot-" + Guid.NewGuid().ToString(), false);
+            CharacterInfo iaInfo = new CharacterInfo("Robot-" + Guid.NewGuid().ToString(), Faction.Red);
 
             iaInfo.SpawnPoint = new Vector3(pos.x + _width / 2 - 4, (int)pos.y - 5, (int)pos.z + _width / 2) * API.Generic.Cst.CUBE_SIDE;
             curr.mWorld.getStateMgr().MainState.CharacMgr.AddCharacter(iaInfo);
 
-            iaInfo = new CharacterInfo("Robot-" + Guid.NewGuid().ToString(), false);
+            iaInfo = new CharacterInfo("Robot-" + Guid.NewGuid().ToString(), Faction.Red);
             iaInfo.SpawnPoint = new Vector3(pos.x + _width / 2 + 4, (int)pos.y - 5, (int)pos.z + _width / 2) * API.Generic.Cst.CUBE_SIDE;
             curr.mWorld.getStateMgr().MainState.CharacMgr.AddCharacter(iaInfo);
 

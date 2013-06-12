@@ -5,6 +5,7 @@ using Mogre;
 
 using Game.BaseApp;
 using Game.World;
+using Game.Input;
 
 namespace Game.States
 {
@@ -12,7 +13,7 @@ namespace Game.States
     {
         private readonly Stack<State> mStateStack;
         private readonly Stack<Type>  mNewStates;
-        private int          mPopRequested;
+        private int                   mPopRequested;
 
         public Root         Root        { get { return this.mRoot; } }
         public SceneManager SceneMgr    { get { return this.mSceneMgr; } }

@@ -2,11 +2,13 @@
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
+using Mogre;
 
 using Awesomium.Core;
 using Awesomium.Windows.Forms;
+
 using Game.Display;
-using Mogre;
+using Game.Input;
 
 namespace Game.BaseApp {
 
@@ -113,7 +115,7 @@ namespace Game.BaseApp {
 
             MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_NONE);
 
-            this.AddFrameLstn(new RootLstn(RootLstn.TypeLstn.FrameRendering, this.OnFrameRendering));
+            this.AddFrameLstn(new RootLstn(TypeLstn.FrameRendering, this.OnFrameRendering));
 
             GraphicBlock.generateFace();
             LogManager.Singleton.DefaultLog.LogMessage("***********************Program\'s Log***********************");

@@ -47,11 +47,10 @@ namespace Game.World
             if(!info.Load) {
                 SceneNode node = this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
 
-                //if      (info.Type == GameInfo.TypeWorld.Dome)       { this.mIslandLoaded = new DomeIsland(node, info.Size, this); }
-                if (info.Type == GameInfo.TypeWorld.Plains)          { this.mIslandLoaded = new RandomIsland(node, info.Size, new Plains(), this); }
-                else if (info.Type == GameInfo.TypeWorld.Desert)     { this.mIslandLoaded = new RandomIsland(node, info.Size, new Desert(), this); }
-                else if (info.Type == GameInfo.TypeWorld.Hills)      { this.mIslandLoaded = new RandomIsland(node, info.Size, new Hills(), this); }
-                else  /*(info.Type == GameInfo.TypeWorld.Mountain)*/ { this.mIslandLoaded = new RandomIsland(node, info.Size, new Mountains(), this); }
+                if      (info.Type == TypeWorld.Plains) { this.mIslandLoaded = new RandomIsland(node, info.Size, new Plains(),    this); }
+                else if (info.Type == TypeWorld.Desert) { this.mIslandLoaded = new RandomIsland(node, info.Size, new Desert(),    this); }
+                else if (info.Type == TypeWorld.Hills)  { this.mIslandLoaded = new RandomIsland(node, info.Size, new Hills(),     this); }
+                else                                    { this.mIslandLoaded = new RandomIsland(node, info.Size, new Mountains(), this); }
             } else {
                 this.load();
             }
@@ -187,12 +186,12 @@ namespace Game.World
             try { stream = new StreamReader(playerFileName); }
             catch { throw new Exception("Could not read file : " + playerFileName); }
 
-            GameInfo.TypeWorld g = (GameInfo.TypeWorld)Convert.ToInt32(stream.ReadLine());
+            TypeWorld g = (TypeWorld)Convert.ToInt32(stream.ReadLine());
 
-            if (g == GameInfo.TypeWorld.Plains)                  { this.mIslandLoaded = new RandomIsland(this.getAScenNode(), new Plains(),    this); }
-            else if (g == GameInfo.TypeWorld.Desert)             { this.mIslandLoaded = new RandomIsland(this.getAScenNode(), new Desert(),    this); }
-            else if (g == GameInfo.TypeWorld.Hills)              { this.mIslandLoaded = new RandomIsland(this.getAScenNode(), new Hills(),     this); }
-            else  /*(info.Type == GameInfo.TypeWorld.Mountain)*/ { this.mIslandLoaded = new RandomIsland(this.getAScenNode(), new Mountains(), this); }
+            if (g == TypeWorld.Plains)      { this.mIslandLoaded = new RandomIsland(this.getAScenNode(), new Plains(),    this); }
+            else if (g == TypeWorld.Desert) { this.mIslandLoaded = new RandomIsland(this.getAScenNode(), new Desert(),    this); }
+            else if (g == TypeWorld.Hills)  { this.mIslandLoaded = new RandomIsland(this.getAScenNode(), new Hills(),     this); }
+            else                            { this.mIslandLoaded = new RandomIsland(this.getAScenNode(), new Mountains(), this); }
 
 
 

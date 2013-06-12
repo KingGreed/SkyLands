@@ -1,11 +1,12 @@
-using System;
 using Mogre;
+
+using Game.Input;
 
 namespace Game.BaseApp
 {
     public class CameraMan
     {
-        private Camera  mCamera;
+        private readonly Camera  mCamera;
         private Vector3 mDirectionFactor;
         private bool    mFastMove;
         private bool    mFreeze;
@@ -37,7 +38,7 @@ namespace Game.BaseApp
         private void UpdateKeys(Controller input)
         {
             this.mDirectionFactor = input.MovementFactor;
-            this.FastMove = input.IsActionOccuring(Controller.UserAction.Sprint);
+            this.FastMove = input.IsActionOccuring(UserAction.Sprint);
 
             this.MouseMovement(input.Yaw, input.Pitch);
         }
