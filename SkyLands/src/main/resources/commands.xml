@@ -12,11 +12,11 @@ For an azerty keyboard
     <Keyboard>Right</Keyboard>
   </ContinuousAction>
   <ContinuousAction id="MoveUp">
-    <Keyboard>A</Keyboard>
+    <Keyboard>E</Keyboard>
     <Keyboard>PageUp</Keyboard>
   </ContinuousAction>
   <ContinuousAction id="MoveDown">
-    <Keyboard>E</Keyboard>
+    <Keyboard>A</Keyboard>
     <Keyboard>PageDown</Keyboard>
   </ContinuousAction>
   <ContinuousAction id="MoveForward">
@@ -37,7 +37,7 @@ For an azerty keyboard
     <Xbox>LeftStick</Xbox>
   </SingleAction>
   <SingleAction id="Levitate">
-    <Keyboard>A</Keyboard>
+    <Keyboard>E</Keyboard>
     <Keyboard>PageUp</Keyboard>
     <Xbox>Y</Xbox>
   </SingleAction>

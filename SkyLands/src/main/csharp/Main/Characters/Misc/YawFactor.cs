@@ -1,5 +1,4 @@
-﻿using System;
-using Mogre;
+﻿using Mogre;
 
 namespace Game.CharacSystem
 {
@@ -13,7 +12,8 @@ namespace Game.CharacSystem
         public static float GetFactor(Degree diffYaw)    // return between -1 and 1
         {
             float diffYawFloat = diffYaw.ValueAngleUnits;
-            diffYawFloat = ((diffYawFloat + 180) % 360) - 180;
+            while (diffYawFloat > 180)   { diffYawFloat -= 360; }
+            while (diffYawFloat <= -180) { diffYawFloat += 360; }
             int sign = System.Math.Sign(diffYawFloat);
             diffYawFloat *= sign;    // Take the abs value
 

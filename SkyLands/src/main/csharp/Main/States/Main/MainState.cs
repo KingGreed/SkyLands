@@ -1,5 +1,4 @@
-﻿using System;
-using Mogre;
+﻿using Mogre;
 
 using Game.CharacSystem;
 using Game.World;
@@ -27,7 +26,7 @@ namespace Game.States
             if(!this.mStateMgr.GameInfo.Load) { this.mWorld.populate(); }
             this.mWorld.display();
 
-            //Mogre.LogManager.Singleton.DefaultLog.LogMessage(" => Game loop begin");
+            LogManager.Singleton.DefaultLog.LogMessage(" => Game loop begin");
         }
 
         protected virtual void AfterWorldCreation() {}
@@ -77,7 +76,7 @@ namespace Game.States
                 }
                 else
                 {
-                    int characId = Convert.ToInt32(this.mSelectedEntity.Name.Substring(14));
+                    int characId = System.Convert.ToInt32(this.mSelectedEntity.Name.Substring(14));
                     this.mSelectedEntity.ShowBoundingBox = false;
                     this.CharacMgr.GetCharacterById(characId).MoveTo(this.CharacMgr.World.getSpawnPoint());
                     this.mSelectedEntity = null;

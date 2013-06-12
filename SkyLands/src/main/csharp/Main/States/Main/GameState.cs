@@ -22,7 +22,7 @@ namespace Game.States
 
             CharacterInfo iaInfo = new CharacterInfo("Robot-01")
             {
-                SpawnPoint = playerInfo.SpawnPoint + new Mogre.Vector3(800, 100, 200)
+                SpawnPoint = playerInfo.SpawnPoint + new Vector3(800, 100, 200)
             };
             this.CharacMgr.AddCharacter(iaInfo);
 

@@ -17,6 +17,9 @@ namespace Game.CharacSystem
         private readonly SceneNode[]      mPoints;    // mPoints is used to show the cube of collision
         private readonly int              mNbrHitStage;
 
+        public bool WasHorizontalCollision      { get; private set; }
+        public bool HasHorizontalCollisionEnded { get; private set; }
+
         public CollisionMgr(SceneManager sceneMgr, MainWorld world, VanillaCharacter charac)
         {
             this.mWorld = world;
@@ -75,8 +78,10 @@ namespace Game.CharacSystem
         }
 
 
-        public Vector3 ComputeCollision(Vector3 absTranslation, out bool wasCollision)  // Takes the wanted translation and returns the possible one
+        public Vector3 ComputeCollision(Vector3 absTranslation)  // Takes the wanted translation and returns the possible one
         {
+            bool wasHCollision = this.WasHorizontalCollision;
+            this.WasHorizontalCollision = false;
             absTranslation.x = MathHelper.clamp(absTranslation.x, -50, 50);
             absTranslation.y = MathHelper.clamp(absTranslation.y, -50, 50);
             absTranslation.z = MathHelper.clamp(absTranslation.z, -50, 50);
@@ -104,23 +109,21 @@ namespace Game.CharacSystem
                             if (this.GetNonNullValue(absTranslation * axis) < 0)
                                 val = (hitPointsToTest[i].y + 1) * Cst.CUBE_SIDE - this.mCharac.FeetPosition.y;
                         }
+                        else { this.WasHorizontalCollision = true; }
 
                         actTranslation = (actTranslation * (Vector3.UNIT_SCALE - axis)) + val * axis;    // Update the actTranslation
-                        wasCollision = true;
                         break;
                     }
                 }
             }
 
-            wasCollision = false;
+            this.HasHorizontalCollisionEnded = wasHCollision && !this.WasHorizontalCollision;
             return actTranslation;
         }
 
         private float GetNonNullValue(Vector3 v)
         {
-            if (v.x != 0)      { return v.x; }
-            else if (v.y != 0) { return v.y; }
-            else               { return v.z; }
+            return v.x != 0 ? v.x : (v.y != 0 ? v.y : v.z);
         }
 
         private Vector3[] AddToAll(Vector3[] array, Vector3 add)

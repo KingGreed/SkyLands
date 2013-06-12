@@ -1,15 +1,8 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Mogre;
 
-using Game.World;
 using Game.Animation;
 using Game.Shoot;
-using Game.GUIs;
-using Game.Buildings;
-
-using API.Geo.Cuboid;
-using API.Generic;
 
 namespace Game.CharacSystem
 {
@@ -27,6 +20,7 @@ namespace Game.CharacSystem
         }
 
         public const float  DEFAULT_PLAYER_LIFE = 340;
+        public const float  DEFAULT_PLAYER_MANA = 120;
         private const float YAW_SENSIVITY = 0.4f;
         private const float PITCH_SENSIVITY = 0.15f;
 

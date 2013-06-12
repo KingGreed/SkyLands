@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Reflection;
 using System.Collections.Generic;
-using System.IO;
-
 using Mogre;
 
 using Game.BaseApp;
-using Game.Display;
 using Game.World;
 
 namespace Game.States
@@ -16,7 +13,6 @@ namespace Game.States
         private readonly Stack<State> mStateStack;
         private readonly Stack<Type>  mNewStates;
         private int          mPopRequested;
-        private bool         mWaitOneFrame;
 
         public Root         Root        { get { return this.mRoot; } }
         public SceneManager SceneMgr    { get { return this.mSceneMgr; } }
@@ -33,7 +29,6 @@ namespace Game.States
             this.mStateStack = new Stack<State>();
             this.mNewStates = new Stack<Type>();
             this.mPopRequested = 0;
-            this.mWaitOneFrame = false;
             this.GameInfo = new GameInfo();
             this.RequestStatePush(typeof(MenuState));
 
@@ -58,10 +53,7 @@ namespace Game.States
                 if (newState != null)    { this.PushState(newState); }
             }
 
-            //if (this.mInput.WasKeyPressed(MOIS.KeyCode.KC_F2)) { this.OverlayVisibility = !this.OverlayVisibility; }
-
-            if (this.mWaitOneFrame) { this.mWaitOneFrame = false; }
-            else if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Update(frameTime); }
+            if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Update(frameTime); }
         }
 
         /* Add a State to the stack and start it up */
@@ -115,7 +107,6 @@ namespace Game.States
         {
             foreach (Type newState in newStates)
                 if (newState != null && newState.IsSubclassOf(typeof(State))) { this.mNewStates.Push(newState); }
-            this.mWaitOneFrame = true;
         }
 
         protected override void Shutdown(object sender, EventArgs e)
