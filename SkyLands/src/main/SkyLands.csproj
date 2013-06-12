@@ -2483,6 +2483,7 @@
     <Compile Include="csharp\Main\BlockFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\GUIs\Inventory.cs" />
     <Compile Include="csharp\Main\GUIs\MainMenu.cs" />
     <Compile Include="csharp\Main\GUIs\Selector.cs" />
     <Compile Include="csharp\Main\RTS\Buildings\Buildings.cs">
