@@ -23,7 +23,7 @@
             return true;
         }
 
-        protected abstract void Startup();
+        protected virtual void Startup() {}
 
         public virtual void Hide() {}
 
@@ -38,6 +38,6 @@
             this.mIsStartedUp = false;
         }
 
-        protected abstract void Shutdown();
+        protected virtual void Shutdown() {}
     }
 }

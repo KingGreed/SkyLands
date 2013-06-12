@@ -1,5 +1,4 @@
-﻿using Game.BaseApp;
-using Game.GUIs;
+﻿using Game.GUIs;
 
 namespace Game.States
 {
@@ -7,18 +6,9 @@ namespace Game.States
     {
         public MenuState(StateManager stateMgr) : base(stateMgr, "Menu") { }
         
-        protected override void Startup()
-        {
-
-        }
-
         public override void Show()
         {
-            new MainMenu();
-        }
-
-        public override void Hide()
-        {
+            new MainMenu(this.mStateMgr);
         }
 
         public override void Update(float frameTime)
@@ -27,11 +17,6 @@ namespace Game.States
                 this.mStateMgr.RequestStatePop();
             if (this.mStateMgr.Controller.HasActionOccured(Controller.UserAction.Jump))
                 this.mStateMgr.RequestStatePush(typeof(GameState));
-        }
-        
-        protected override void Shutdown()
-        {
-
         }
     }
 }
