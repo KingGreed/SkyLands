@@ -27,8 +27,6 @@ namespace Game.BaseApp {
         public static Size WindowSize;
         public static Point WindowPosition;
 
-        public WebControl WebView { get { return this.webView; } }
-
         protected OgreForm() {
             //Awesomium
 
@@ -42,10 +40,10 @@ namespace Game.BaseApp {
 
             
 
-            this.webView.DocumentReady += onDocumentReady;
-            this.webView.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/MainMenu.html");
+            webView.DocumentReady += onDocumentReady;
+            webView.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/MainMenu.html");
             
-            //this.webView.Hide();
+            //webView.Hide();
 
             this.MinimumSize = new Size(800, 600);
             WindowSize = this.Size;
@@ -53,13 +51,13 @@ namespace Game.BaseApp {
         }
 
         private void onDocumentReady(object sender, UrlEventArgs e) {
-            if((this.webView == null) || !this.webView.IsLive) { return; }
-            this.webView.DocumentReady -= onDocumentReady;
+            if((webView == null) || !webView.IsLive) { return; }
+            webView.DocumentReady -= onDocumentReady;
 
-            if(this.webView.ParentView != null || !this.webView.IsJavascriptEnabled) { return; }
+            if(webView.ParentView != null || !webView.IsJavascriptEnabled) { return; }
 
 
-            JSObject jsobject = this.webView.CreateGlobalJavascriptObject("jsobject");
+            JSObject jsobject = webView.CreateGlobalJavascriptObject("jsobject");
             jsobject["test"] = "truc";
             jsobject["Position"] = 0;
 
@@ -89,7 +87,7 @@ namespace Game.BaseApp {
         {
             this.mWindow.WindowMovedOrResized();
             WindowSize = this.Size;
-            this.webView.ExecuteJavascript("resize(" + this.Size.Width / 1600 + "," + this.Size.Height / 900 + ")");
+            webView.ExecuteJavascript("resize(" + this.Size.Width / 1600 + "," + this.Size.Height / 900 + ")");
         }
 
         public void AddFrameLstn(RootLstn listener)    { listener.AddListener(this.mRoot);        }

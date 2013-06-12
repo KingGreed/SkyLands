@@ -26,23 +26,23 @@ namespace Game.BaseApp {
         /// </summary>
         protected void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
-            this.webView = new Awesomium.Windows.Forms.WebControl(this.components);
+            webView = new Awesomium.Windows.Forms.WebControl(this.components);
             this.SuspendLayout();
             // 
             // webView
             // 
-            this.webView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webView.Location = new System.Drawing.Point(0, 0);
-            this.webView.Margin = new System.Windows.Forms.Padding(4);
-            this.webView.Size = new System.Drawing.Size(959, 428);
-            this.webView.TabIndex = 0;
+            webView.Dock = System.Windows.Forms.DockStyle.Fill;
+            webView.Location = new System.Drawing.Point(0, 0);
+            webView.Margin = new System.Windows.Forms.Padding(4);
+            webView.Size = new System.Drawing.Size(959, 428);
+            webView.TabIndex = 0;
             // 
             // OgreForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(959, 428);
-            this.Controls.Add(this.webView);
+            this.Controls.Add(webView);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "OgreForm";
             this.Text = "OgreForm";
@@ -52,7 +52,7 @@ namespace Game.BaseApp {
 
         #endregion
 
-        private Awesomium.Windows.Forms.WebControl webView;
+        public static Awesomium.Windows.Forms.WebControl webView;
 
 
 

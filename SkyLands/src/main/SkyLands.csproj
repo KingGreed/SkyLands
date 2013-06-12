@@ -2464,6 +2464,8 @@
     <Compile Include="csharp\Main\Base Ogre\CameraMan.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\Base Ogre\GUI.cs" />
+    <Compile Include="csharp\Main\Base Ogre\GUiFactory.cs" />
     <Compile Include="csharp\Main\Base Ogre\Listener.cs">
       <SubType>Code</SubType>
     </Compile>

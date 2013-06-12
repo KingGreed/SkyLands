@@ -3,6 +3,7 @@ using Mogre;
 
 using Game.CharacSystem;
 using Game.World;
+using Game.BaseApp;
 
 namespace Game.States
 {
@@ -17,12 +18,12 @@ namespace Game.States
 
         public override void Show()
         {
-            this.mStateMgr.WebView.Show();
+            OgreForm.webView.Show();
         }
 
         public override void Hide()
         {
-            this.mStateMgr.WebView.Hide();
+            OgreForm.webView.Hide();
         }
 
         public override void Update(float frameTime)

@@ -39,7 +39,7 @@ namespace Game
             this.mWorld = world;
             this.mCameraMan = null;
             this.IsAllowedToMoveCam = true;
-            this.mSelector = new Selector(this.mStateMgr.WebView);
+            this.mSelector = new Selector(OgreForm.webView);
 
             this.mFigures = new Keys[10];
             for (int i = 0; i < this.mFigures.Length - 1; i++)
