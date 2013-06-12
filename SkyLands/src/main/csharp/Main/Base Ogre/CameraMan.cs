@@ -36,9 +36,6 @@ namespace Game.BaseApp
 
         private void UpdateKeys(Controller input)
         {
-            if (input.MovementFactor != Vector3.ZERO)
-                Console.WriteLine(input.MovementFactor);
-            
             this.mDirectionFactor = input.MovementFactor;
             this.FastMove = input.IsActionOccuring(Controller.UserAction.Sprint);
 

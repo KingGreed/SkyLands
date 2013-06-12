@@ -75,9 +75,8 @@ namespace Game.CharacSystem
         }
 
 
-        public Vector3 ComputeCollision(Vector3 absTranslation)  // Takes the wanted translation and returns the possible one
+        public Vector3 ComputeCollision(Vector3 absTranslation, out bool wasCollision)  // Takes the wanted translation and returns the possible one
         {
-            /* Temp */
             absTranslation.x = MathHelper.clamp(absTranslation.x, -50, 50);
             absTranslation.y = MathHelper.clamp(absTranslation.y, -50, 50);
             absTranslation.z = MathHelper.clamp(absTranslation.z, -50, 50);
@@ -103,23 +102,17 @@ namespace Game.CharacSystem
                         if (axis == Vector3.UNIT_Y)
                         {
                             if (this.GetNonNullValue(absTranslation * axis) < 0)
-                            { val = (hitPointsToTest[i].y + 1) * Cst.CUBE_SIDE - this.mCharac.FeetPosition.y; }
-                            /*else
-                            {
-                                val = charac.FeetPosition.y + charac.Height - temp[i].y * Cst.CUBE_SIDE;
-                                if (absTranslation.y > 0) { absTranslation.y = 0; }
-                            }*/
+                                val = (hitPointsToTest[i].y + 1) * Cst.CUBE_SIDE - this.mCharac.FeetPosition.y;
                         }
 
-                        //actHitPoints = this.AddToAll(hitPoints, val * axis);   // Cancel the translation of the actual axis
                         actTranslation = (actTranslation * (Vector3.UNIT_SCALE - axis)) + val * axis;    // Update the actTranslation
-
-                        //if (axis == Vector3.UNIT_Y) { break; }
+                        wasCollision = true;
                         break;
                     }
                 }
             }
 
+            wasCollision = false;
             return actTranslation;
         }
 
@@ -140,12 +133,6 @@ namespace Game.CharacSystem
 
         private Vector3[] GetPointsToTest(Vector3[] hitPoints, Vector3 absTranslation, Vector3 axis)
         {
-            /*if (axis == Vector3.UNIT_Y)
-            {
-                if (absTranslation.y < 0) { return this.GetIntArray(0, NBR_HIT_POINTS); }
-                else                      { return this.GetIntArray(NBR_HIT_POINTS * (mNbrHitStage - 1), NBR_HIT_POINTS * mNbrHitStage); }
-            }
-            else                          { return this.GetIntArray(0, NBR_HIT_POINTS * mNbrHitStage); }*/
             if (axis == Vector3.UNIT_Y)
             {
                 Vector3[] pointsToTest = new Vector3[NBR_HIT_POINTS];

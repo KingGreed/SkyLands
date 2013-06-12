@@ -27,11 +27,15 @@ namespace Game.CharacSystem
         private Vector3         mPreviousDirection;
         private Vector3         mPreviousBlockPos;
         private float           mTimeSinceDead;   // Wait the end of the animation 
+        private float           mJumpHeight;
 
         private PathFinder      mPathFinder;
         private Queue<Vector3>  mForcedDestination;
-        private Radian          mYawGoal;   // The rotation the charac has to reach to go to the next forcedPoint
+        private Degree          mYawGoal;   // The rotation the charac has to reach to go to the next forcedPoint
         private double          mLastSquaredDist;
+        private bool            mWasCollision, mHasLanded;
+        private int             mIsBlocked;
+        private SceneNode       temp, temp2, temp3, temp4;
 
         public SceneNode     Node            { get { return this.mNode; } }
         public MovementInfo  MovementInfo    { get { return this.mMovementInfo; } protected set { this.mMovementInfo = value; } }
@@ -47,20 +51,39 @@ namespace Game.CharacSystem
 
         public Vector3 BlockPosition
         {
-            get { return MainWorld.getRelativeFromAbsolute(this.FeetPosition); }
+            get { return MainWorld.getRelativeFromAbsolute(this.FeetPosition) + Vector3.NEGATIVE_UNIT_Z; }
         }
 
         protected VanillaCharacter(CharacMgr characMgr, CharacterInfo charInfo)
         {
             this.mCharacMgr = characMgr;
             this.mCharInfo = charInfo;
-            this.MovementInfo = new MovementInfo(OnFall, OnJump);
+            this.MovementInfo = new MovementInfo(this.OnFall, this.OnJump);
             this.mPreviousDirection = Vector3.ZERO;
             this.mTimeSinceDead = 0;
             this.mPreviousBlockPos = -1 * Vector3.UNIT_SCALE;
             this.mForcedDestination = new Queue<Vector3>();
             this.mNode = characMgr.SceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id);
             this.mLastSquaredDist = -1;
+            this.mHasLanded = true;
+
+            ManualObject[] wires = new ManualObject[12];
+            wires[0] = Game.World.Display.StaticRectangle.CreateLine(this.mCharacMgr.StateMgr.SceneMgr, Vector3.ZERO, Vector3.UNIT_X * Cst.CUBE_SIDE, "line_material_red");
+            wires[1] = Game.World.Display.StaticRectangle.CreateLine(this.mCharacMgr.StateMgr.SceneMgr, Vector3.UNIT_X * Cst.CUBE_SIDE, new Vector3(1, 0, 1) * Cst.CUBE_SIDE, "line_material_red");
+            wires[2] = Game.World.Display.StaticRectangle.CreateLine(this.mCharacMgr.StateMgr.SceneMgr, new Vector3(1, 0, 1) * Cst.CUBE_SIDE, Vector3.UNIT_Z * Cst.CUBE_SIDE, "line_material_red");
+            wires[3] = Game.World.Display.StaticRectangle.CreateLine(this.mCharacMgr.StateMgr.SceneMgr, Vector3.UNIT_Z * Cst.CUBE_SIDE, Vector3.ZERO, "line_material_red");
+            wires[4] = Game.World.Display.StaticRectangle.CreateLine(this.mCharacMgr.StateMgr.SceneMgr, Vector3.UNIT_Y * Cst.CUBE_SIDE, new Vector3(1, 1, 0) * Cst.CUBE_SIDE, "line_material_red");
+            wires[5] = Game.World.Display.StaticRectangle.CreateLine(this.mCharacMgr.StateMgr.SceneMgr, new Vector3(1, 1, 0) * Cst.CUBE_SIDE, Vector3.UNIT_SCALE * Cst.CUBE_SIDE, "line_material_red");
+            wires[6] = Game.World.Display.StaticRectangle.CreateLine(this.mCharacMgr.StateMgr.SceneMgr, Vector3.UNIT_SCALE * Cst.CUBE_SIDE, new Vector3(0, 1, 1) * Cst.CUBE_SIDE, "line_material_red");
+            wires[7] = Game.World.Display.StaticRectangle.CreateLine(this.mCharacMgr.StateMgr.SceneMgr, new Vector3(0, 1, 1) * Cst.CUBE_SIDE, Vector3.UNIT_Y * Cst.CUBE_SIDE, "line_material_red");
+            wires[8] = Game.World.Display.StaticRectangle.CreateLine(this.mCharacMgr.StateMgr.SceneMgr, Vector3.ZERO, Vector3.UNIT_Y * Cst.CUBE_SIDE, "line_material_red");
+            wires[9] = Game.World.Display.StaticRectangle.CreateLine(this.mCharacMgr.StateMgr.SceneMgr, Vector3.UNIT_X * Cst.CUBE_SIDE, new Vector3(1, 1, 0) * Cst.CUBE_SIDE, "line_material_red");
+            wires[10] = Game.World.Display.StaticRectangle.CreateLine(this.mCharacMgr.StateMgr.SceneMgr, new Vector3(1, 0, 1) * Cst.CUBE_SIDE, Vector3.UNIT_SCALE * Cst.CUBE_SIDE, "line_material_red");
+            wires[11] = Game.World.Display.StaticRectangle.CreateLine(this.mCharacMgr.StateMgr.SceneMgr, Vector3.UNIT_Z * Cst.CUBE_SIDE, new Vector3(0, 1, 1) * Cst.CUBE_SIDE, "line_material_red");
+            temp4 = this.mCharacMgr.StateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode();
+            foreach (ManualObject wire in wires)
+                temp4.AttachObject(wire);
+            temp4.SetVisible(false);
         }
 
         private void OnFall(bool isFalling)
@@ -80,6 +103,8 @@ namespace Game.CharacSystem
             {
                 this.mMesh.StartJump();
                 JumpSpeed.Jump();
+                this.mHasLanded = false;
+                this.mJumpHeight = 0;
             }
             else { this.MovementInfo.IsFalling = true; }
         }
@@ -102,30 +127,53 @@ namespace Game.CharacSystem
 
             if (this.mCharInfo.Life > 0)
             {
+                //Vector3 relPos = this.BlockPosition; + MainWorld.getRelativeFromAbsolute(-this.mNode.LocalAxes.Transpose() * this.mMesh.MoveForwardDir * 60);
+                //temp4.Position = MainWorld.getRelativeFromAbsolute(this.mForcedDestination.Peek()) * Cst.CUBE_SIDE;
+
+                //if (this.mIsBlocked > 10) { this.DequeueForcedDest(); }
+                
                 if (this.mForcedDestination.Count > 0)
                 {
+                    temp4.SetVisible(true);
+                    temp4.Position = (MainWorld.getRelativeFromAbsolute(this.mForcedDestination.Peek()) + Vector3.NEGATIVE_UNIT_Z) * Cst.CUBE_SIDE; 
+                    
                     float x = this.FeetPosition.x - this.mForcedDestination.Peek().x;
                     float z = this.FeetPosition.z - this.mForcedDestination.Peek().z;
                     float squaredDistance = x * x + z * z;
                     if (this.mLastSquaredDist == -1 || squaredDistance > 100)
                     {
-                        Radian actYaw = this.GetYaw();
-                        this.mMovementInfo.YawValue = YAW_SPEED * YawFactor.GetFactor(this.mYawGoal - actYaw);
-                        //this.mMovementInfo.MoveDirection = this.mMesh.MoveForwardDir;
-                        //this.mMovementInfo.MoveDirection = (this.FeetPosition - this.mForcedDestination.Peek()).NormalisedCopy;
-                        //this.mNode.Translate((this.mForcedDestination.Peek() - this.FeetPosition).NormalisedCopy * WALK_SPEED * frameTime);
-                        //translation = (this.FeetPosition - this.mForcedDestination.Peek()).NormalisedCopy * WALK_SPEED;
-                        this.mLastSquaredDist = squaredDistance;
+                        Degree actYaw = this.GetYaw();
+                        this.mMovementInfo.YawValue = YAW_SPEED * YawFactor.GetFactor(this.mYawGoal - actYaw) / 5;
 
-                        //if (squaredDistance < 4000 && this.mForcedDestination.Peek().y > this.FeetPosition.y)
-                            //this.mMovementInfo.MoveDirection += Vector3.UNIT_Y;
+                        if (temp != null)
+                            this.mCharacMgr.StateMgr.SceneMgr.DestroyManualObject((ManualObject)temp.GetAttachedObject(0));
+                        if (temp2 != null)
+                            this.mCharacMgr.StateMgr.SceneMgr.DestroyManualObject((ManualObject)temp2.GetAttachedObject(0));
+                        if (temp3 != null)
+                            this.mCharacMgr.StateMgr.SceneMgr.DestroyManualObject((ManualObject)temp3.GetAttachedObject(0));
+                        Vector3 p = this.FeetPosition + 50 * Vector3.UNIT_Y;
+                        Vector3 p1 = new Vector3(Mogre.Math.Sin(actYaw) * 100, 0, Mogre.Math.Cos(actYaw) * 100);
+                        Vector3 p2 = new Vector3(Mogre.Math.Sin(this.mYawGoal) * 100, 0, Mogre.Math.Cos(this.mYawGoal) * 100);
+                        temp = World.Display.StaticRectangle.DrawLine(this.mCharacMgr.StateMgr.SceneMgr, p, p + p1, "line_material_red");
+                        temp3 = World.Display.StaticRectangle.DrawLine(this.mCharacMgr.StateMgr.SceneMgr, p, p + p2, "line_material_green");
+                        temp2 = World.Display.StaticRectangle.DrawLine(this.mCharacMgr.StateMgr.SceneMgr, p, this.mForcedDestination.Peek(), "line_material_blue");
+
+                        float diffYaw = System.Math.Abs((this.mYawGoal - actYaw).ValueAngleUnits);
+                        if (diffYaw < 20)
+                        {
+                            float factor = 6 / diffYaw;
+                            this.mMovementInfo.MoveDirection = this.mMesh.MoveForwardDir * (factor <= 1 ? factor : 1) / 5;
+
+                            if (this.mForcedDestination.Peek().y > this.FeetPosition.y)
+                            {
+                                //if (this.mWasCollision ||
+                                //!(this.getIsland().getBlock(relPos, false) is Game.World.Blocks.Air))
+                                this.mMovementInfo.MoveDirection += Vector3.UNIT_Y;
+                            }
+                        }
+                        this.mLastSquaredDist = squaredDistance;
                     }
-                    else
-                    {
-                        this.mForcedDestination.Dequeue();
-                        this.ComputeNextYaw();
-                        this.mLastSquaredDist = -1;
-                    }
+                    else { this.DequeueForcedDest(); }
                 }
                 else
                 {
@@ -174,11 +222,22 @@ namespace Game.CharacSystem
 
         private void Translate(Vector3 relTranslation)  // relTranslation is the translation relative to the player. Return the actual relative translation
         {
-            Vector3 actualTranslation = this.mCollisionMgr.ComputeCollision(relTranslation * this.mNode.LocalAxes.Transpose());
+            Vector3 actualTranslation = this.mCollisionMgr.ComputeCollision(relTranslation * this.mNode.LocalAxes.Transpose(), out this.mWasCollision);
 
             /* Here translate has been modified to avoid collisions */
             this.MovementInfo.IsFalling = actualTranslation.y < 0;
             this.MovementInfo.IsJumping = actualTranslation.y > 0 && JumpSpeed.IsJumping;
+
+            /* For forced movement */
+            if (this.mForcedDestination.Count > 0 && this.mMovementInfo.YawValue < 0.05 && actualTranslation.SquaredLength < 4)
+                this.mIsBlocked++;
+            else
+                this.mIsBlocked = 0;
+            if (!this.mHasLanded)
+            {
+                if (actualTranslation.y == 0) { this.mHasLanded = true; }
+                else                          { this.mJumpHeight += actualTranslation.y; }
+            }
 
             this.mNode.Translate(actualTranslation);
             Vector3 blockPos = MainWorld.getRelativeFromAbsolute(this.FeetPosition);
@@ -190,38 +249,41 @@ namespace Game.CharacSystem
             }
         }
 
+        private void DequeueForcedDest()
+        {
+            this.mForcedDestination.Dequeue();
+            this.ComputeNextYaw();
+            this.mLastSquaredDist = -1;
+        }
+
         private void ComputeNextYaw()
         {
             if (this.mForcedDestination.Count >= 1)
             {
-                Vector3 ab = 100 * Vector3.UNIT_Z;//this.FeetPosition - this.mNode.ConvertLocalToWorldPosition(100 * this.mMesh.MoveForwardDir);
                 Vector3 ac = this.mForcedDestination.Peek() - this.FeetPosition;
-
-                Vector2 abNormalized = new Vector2(ab.x, ab.z).NormalisedCopy;
-                Vector2 acNormalized = new Vector2(ac.x, ac.z).NormalisedCopy;
-
-                this.mYawGoal = -Mogre.Math.ACos(abNormalized.DotProduct(acNormalized)) - this.GetYaw();
-                //this.mNode.SetOrientation(Mogre.Math.Cos(this.mYawGoal / 2), 0, Mogre.Math.Sin(this.mYawGoal / 2), 0);
-                //this.mYawGoal -= this.GetYaw().ValueAngleUnits;
+                this.mYawGoal = Mogre.Math.ACos(new Vector2(ac.x, ac.z).NormalisedCopy.y);
             }
+            else
+                this.mYawGoal = this.GetYaw();
         }
 
         public void MoveTo(Vector3 destination)
         {
-            this.mForcedDestination.Enqueue(destination);
-            this.ComputeNextYaw();
-            /*this.mPathFinder = new PathFinder(MainWorld.getRelativeFromAbsolute(destination), MainWorld.getRelativeFromAbsolute(this.mNode.Position), this.mCharacMgr.World.getIsland());
+            this.mPathFinder = new PathFinder(MainWorld.getRelativeFromAbsolute(destination), MainWorld.getRelativeFromAbsolute(this.mNode.Position), this.mCharacMgr.World.getIsland());
 
             if (this.mPathFinder.Goal != null)
             {
                 if (this.mPathFinder.Goal.Size > 0) { this.mForcedDestination.Clear(); }
-                while (this.mPathFinder.Goal.Size > 0)
+                while (this.mPathFinder.Goal.Size > 1)
                 {
-                    this.mForcedDestination.Enqueue(this.mPathFinder.Goal.Head.Data * Cst.CUBE_SIDE);
+                    Vector3 relPos = this.mPathFinder.Goal.Head.Data;
+                    this.mForcedDestination.Enqueue(Cst.CUBE_SIDE * (relPos + new Vector3(0.5f, 0, -0.5f)));
                     this.mPathFinder.Goal.RemoveFirst();
                 }
+                this.mForcedDestination.Enqueue(destination);   // Enqueue the exact destination for the last one
+                this.mPathFinder.Goal.RemoveFirst();
                 this.ComputeNextYaw();
-            }*/
+            }
         }
 
         public void Hit(float damage)

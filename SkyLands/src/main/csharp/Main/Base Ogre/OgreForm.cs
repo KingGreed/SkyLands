@@ -91,12 +91,12 @@ namespace Game.BaseApp {
             this.webView.ExecuteJavascript("resize(" + this.Size.Width / 1600 + "," + this.Size.Height / 900 + ")");
         }
 
-        public void AddFrameLstn(RootLstn listener)               { listener.AddListener(this.mRoot);        }
-        public void RemoveFrameLstn(RootLstn listener)            { listener.RemoveListener(this.mRoot);     }
+        public void AddFrameLstn(RootLstn listener)    { listener.AddListener(this.mRoot);        }
+        public void RemoveFrameLstn(RootLstn listener) { listener.RemoveListener(this.mRoot);     }
 
         public void Go() {
             this.Show();
-            while(mRoot != null && mRoot.RenderOneFrame()) { Application.DoEvents(); }
+            while (mRoot != null && mRoot.RenderOneFrame()) { Application.DoEvents(); }
         }
 
         public bool Setup() {

@@ -110,8 +110,8 @@ namespace Game.World
 
                 y = this.getSurfaceHeight(x, z);
                 if(y != -1) {
-                    LogManager.Singleton.DefaultLog.LogMessage("New SpawnPoint at : " + new Vector3(x * Cst.CUBE_SIDE, y * Cst.CUBE_SIDE, z * Cst.CUBE_SIDE).ToString());
-                    this.mSpawnPoint = new Vector3(x * Cst.CUBE_SIDE, y * Cst.CUBE_SIDE, z * Cst.CUBE_SIDE);
+                    this.mSpawnPoint = new Vector3(x + 0.5f, y, z - 0.5f) * Cst.CUBE_SIDE;  // the spawnpoint is at the center of the horizontal faces
+                    LogManager.Singleton.DefaultLog.LogMessage("New SpawnPoint at : " + this.mSpawnPoint.ToString());
                     break;
                 }
             }

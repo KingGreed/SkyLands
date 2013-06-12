@@ -114,10 +114,7 @@ namespace Game
             VanillaPlayer mainPlayer = mainState.CharacMgr.MainPlayer;
 
             if (mainPlayer != null)
-            {
-                //mainState.MainGUI.SwitchVisibility();
                 mainPlayer.SwitchFreeCamMode();
-            }
 
             if (this.IsFreeCamMode)
             {
@@ -158,7 +155,7 @@ namespace Game
                 }
                 prevRelBlockPos = actRelBlockPos;
                 actBlock = this.mWorld.getIsland().getBlock(actRelBlockPos, false);
-            } while (actBlock is AirBlock && distance <= DIST_MAX_SELECTION);
+            } while (actBlock is Air && distance <= DIST_MAX_SELECTION);
 
             if (distance > DIST_MAX_SELECTION)
             {
@@ -187,7 +184,7 @@ namespace Game
         private void AddBlock(float dist)
         {
             string material = this.mSelector.Material;
-            if (this.mSelectedBlock is AirBlock || this.mSelectedBlock is ConstructionBlock || material == "") { return; }
+            if (this.mSelectedBlock is Air || this.mSelectedBlock is ConstructionBlock || material == "") { return; }
             
             /* Determine the face */
             Ray ray = this.mStateMgr.Camera.GetCameraToViewportRay(0.5f, 0.5f);
@@ -236,7 +233,7 @@ namespace Game
                     break;
             }
 
-            if (addedBlockPos == MainWorld.AbsToRelative(this.mStateMgr.Camera.Position) || !(this.mWorld.getIsland().getBlock(addedBlockPos, false) is AirBlock) ||
+            if (addedBlockPos == MainWorld.AbsToRelative(this.mStateMgr.Camera.Position) || !(this.mWorld.getIsland().getBlock(addedBlockPos, false) is Air) ||
                (this.mStateMgr.MainState.CharacMgr.MainPlayer != null &&
                 this.mStateMgr.MainState.CharacMgr.MainPlayer.CollisionMgr.GetHitPoints().Any(v => MathHelper.isInBlock(addedBlockPos * Cst.CUBE_SIDE, v, Cst.CUBE_SIDE))))
                 { return; }

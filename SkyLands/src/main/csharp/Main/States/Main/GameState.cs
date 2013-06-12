@@ -2,6 +2,7 @@
 using Game.Shoot;
 using Game.RTS;
 using Game.World.Display;
+using Mogre;
 
 namespace Game.States
 {

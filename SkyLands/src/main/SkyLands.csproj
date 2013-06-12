@@ -2504,7 +2504,7 @@
     <Compile Include="csharp\Main\Characters\Misc\JumpSpeed.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\Characters\Misc\YawSpeed.cs" />
+    <Compile Include="csharp\Main\Characters\Misc\YawFactor.cs" />
     <Compile Include="csharp\Main\RTS\AIRTS.cs" />
     <Compile Include="csharp\Main\RTS\PlayerRTS.cs" />
     <Compile Include="csharp\Main\RTS\RTSManager.cs" />

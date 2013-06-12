@@ -338,6 +338,9 @@ namespace Game
             for (int i = 0; i < this.mUserActionsOccured.Length; i++)
                 this.mUserActionsOccured[i] = false;
 
+            for (int i = 0; i < this.mUserActionsEnded.Length; i++)
+                this.mUserActionsEnded[i] = false;
+
             this.MovementFactor = new Vector3();
             this.Pitch = 0;
             this.Yaw = 0;
