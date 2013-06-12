@@ -36,6 +36,7 @@ namespace Game.BaseApp {
 
 
         public void whenDocumentReady(object sender, UrlEventArgs e) {
+            if(webView == null || !webView.IsLive) { return; }
             this.onDocumentReady(sender, e);
             OgreForm.webView.DocumentReady -= this.whenDocumentReady;
         }

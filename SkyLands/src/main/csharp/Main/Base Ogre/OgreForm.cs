@@ -53,7 +53,6 @@ namespace Game.BaseApp {
 
         private void onDocumentReady(object sender, UrlEventArgs e) {
             if(webView == null || !webView.IsLive) { return; }
-            webView.DocumentReady -= onDocumentReady;
 
             if(webView.ParentView != null || !webView.IsJavascriptEnabled) { return; }
 
