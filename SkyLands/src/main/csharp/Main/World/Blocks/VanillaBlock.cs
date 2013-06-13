@@ -1,7 +1,11 @@
-﻿using API.Geo.Cuboid;
+﻿using System;
+using System.Collections.Generic;
+using Mogre;
+
+using API.Geo.Cuboid;
 using API.Generic;
 
-using Mogre;
+using Game.CharacSystem;
 
 namespace Game.World.Blocks
 {
@@ -28,8 +32,7 @@ namespace Game.World.Blocks
         public override bool onRightClick() { return true; }
         public override bool onLeftClick()  { return true; }
 
-        public override void onBlockEnter(API.Ent.Entity e, Vector3 position) { }
         public override void onBlockLeave(API.Ent.Entity e, Vector3 position) { }
-
+        public override void onBlockEnter(API.Ent.Entity e, Vector3 position) { e.updateTargets(); }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using System.Collections.Generic;
 using Mogre;
 
 using API.Geo.Cuboid;
@@ -11,7 +7,8 @@ using Game.World.Blocks;
 
 using Math = System.Math;
 
-namespace Game.Characters.IA {
+namespace Game.CharacSystem.AI
+{
     class Node {
         public Vector3 pos;
         public int cost;

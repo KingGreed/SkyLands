@@ -5,7 +5,7 @@ using System.Text;
 
 using API.Geo;
 
-namespace Game.Characters.PlayerInventory {
+namespace Game.CharacSystem.PlayerInventory {
     public class CraftTree {
         private byte mVal = 255;
         private bool mEndOfLine = false;

@@ -65,6 +65,7 @@ namespace Game.CharacSystem
             LogManager.Singleton.DefaultLog.LogMessage("Character " + info.Name + " added");
         }
 
+        public List<VanillaCharacter> GetFactionCharacters(Faction faction) { return this.mCharacters[(int)faction]; }
         public VanillaCharacter GetCharacterById(int id)
         {
             return this.mCharacters.Select(characList => characList.Find(charac => charac.Info.Id == id)).FirstOrDefault(charac => charac != null);

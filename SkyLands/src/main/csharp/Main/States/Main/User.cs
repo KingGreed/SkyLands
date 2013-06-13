@@ -83,7 +83,7 @@ namespace Game
 
             float dist = this.UpdateSelectedBlock();
 
-            /* Cube addition and suppression */
+            /* Move Selector */
             int selectorPos = this.mSelector.SelectorPos;
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.MoveSelectorLeft)) { selectorPos--; }
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.MoveSelectorRight)) { selectorPos++; }
@@ -97,13 +97,13 @@ namespace Game
             }
             this.mSelector.SelectorPos = selectorPos;
 
-            bool leftClick = this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction);
-            bool rightClick = this.mStateMgr.Controller.HasActionOccured(UserAction.SecondaryAction);
-            bool allowWorldEdition = !(this.mStateMgr.GameInfo.IsInEditorMode ^ this.mStateMgr.MainState.User.IsFreeCamMode);
-            if (allowWorldEdition && (leftClick || rightClick))
+            /* Cube addition and suppression */
+            if (!(this.mStateMgr.GameInfo.IsInEditorMode ^ this.mStateMgr.MainState.User.IsFreeCamMode))    // Allow world edition
             {
-                if (leftClick && this.mWorld.onLeftClick(this.mSelectedBlockPos) && !this.mSelector.IsBullet) { this.AddBlock(dist); }
-                if (rightClick && this.mWorld.onRightClick(this.mSelectedBlockPos)) { this.DeleteBlock(); }
+                if (this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction) && !this.mSelector.IsBullet && this.mWorld.onLeftClick(this.mSelectedBlockPos))
+                    this.AddBlock(dist);
+                if (this.mStateMgr.Controller.HasActionOccured(UserAction.SecondaryAction) && this.mWorld.onRightClick(this.mSelectedBlockPos)) 
+                    this.DeleteBlock();
             }
         }
 

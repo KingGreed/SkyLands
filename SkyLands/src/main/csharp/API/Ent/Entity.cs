@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mogre;
-
+﻿using Mogre;
 using API.Geo.Cuboid;
+
+using Game.CharacSystem;
 
 namespace API.Ent
 {
@@ -14,6 +11,8 @@ namespace API.Ent
 	     * @return The entities' id.
 	     */
 	    int getId();
+
+        CharacterInfo getCharacInfo();
 
         /*
          * @return the position of the Entity
@@ -80,5 +79,6 @@ namespace API.Ent
 	     */
 
         void setIsPushedByArcaneLevitator(bool value);
+        void updateTargets();
     }
 }

@@ -1,68 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-
 using Mogre;
 
 using API.Geo.Cuboid;
+using API.Generic;
 
-using Game.Characters.IA.Misc;
+using Game.World;
 
-namespace Game.Characters.IA {
-    class PathFinder {
+namespace Game.CharacSystem.AI
+{
+    class PathFinder
+    {
         private const int MAX_SOLUTION_SIZE = 100;
-        
-        private AstarLinkedList<Vector3> mGoal;
+        private const int NB_ITER_PER_UPDATE = 5;
 
-        public AstarLinkedList<Vector3> Goal { get { return this.mGoal; } }
+        private readonly Island         mCurrent;
+        private readonly NodeList<Node> mOpen;
+        private readonly NodeList<Node> mClosed;
+        private readonly List<Node>     mPossibleNodes;
+        private readonly Vector3        mAbsDestination, mRelDestination;
+        private int                     mSolutionSize;
 
-        public PathFinder(Vector3 destination, Vector3 start, Island current) {
-            this.mGoal = this.findPathTo(destination, start, current);
+        public PathFinder(Vector3 destination, Vector3 start, Island current)   // dest in abs value, start rel
+        {
+            this.mOpen = new NodeList<Node>();
+            this.mClosed = new NodeList<Node>();
+            this.mPossibleNodes = new List<Node>();
+            this.mSolutionSize = 0;
+            this.mAbsDestination = destination;
+            this.mRelDestination = MainWorld.getRelativeFromAbsolute(this.mAbsDestination);
+            this.mCurrent = current;
+
+            this.mOpen.Add(new Node(this.mRelDestination, start));
+
+            this.ContinuePathFinding();
         }
 
+        public Stack<Vector3> ContinuePathFinding()
+        {
+            int i = 0;
 
-        public AstarLinkedList<Vector3> findPathTo(Vector3 destination, Vector3 start, Island current) {
-            NodeList<Node> open   = new NodeList<Node>();
-            NodeList<Node> closed = new NodeList<Node>();
-            List<Node> possibleNodes = new List<Node>();
-            List<Node> adjacentNodes;
-            int solutionSize = 0;
+            while (++i < NB_ITER_PER_UPDATE && this.mOpen.Count > 0)
+            {
+                Node curr = this.mOpen[0];
+                this.mOpen.RemoveAt(0);
+                this.mClosed.Add(curr);
 
-            start.y -= 1;
-
-            Node curr;
-
-            open.Add(new Node(destination, start));
-
-            while(open.Count > 0) {
-                curr = open[0];
-                open.RemoveAt(0); closed.Add(curr);
-
-                if(curr.pos == destination || solutionSize >= MAX_SOLUTION_SIZE) {
-                    AstarLinkedList<Vector3> solution = new AstarLinkedList<Vector3>();
-                    while(curr.parent != null) {
-                        curr.pos.y += 1;
-                        solution.AddFirst(curr.pos);
+                if (curr.pos == this.mRelDestination || this.mSolutionSize >= MAX_SOLUTION_SIZE)
+                {
+                    //AstarLinkedList<Vector3> solution = new AstarLinkedList<Vector3>();
+                    Stack<Vector3> path = new Stack<Vector3>();
+                    path.Push(this.mAbsDestination); // Push the exact destination for the first one
+                    while (curr != null)
+                    {
+                        //solution.AddFirst(curr.pos);
+                        path.Push(Cst.CUBE_SIDE * (curr.pos + new Vector3(0.5f, 0, -0.5f)));  // Push the center of the block
                         curr = curr.parent;
                     }
-                    return solution;
+                    return path;
                 }
 
-                adjacentNodes = curr.getAdjacent(current, destination);
-                possibleNodes.AddRange(adjacentNodes);
+                this.mPossibleNodes.AddRange(curr.getAdjacent(this.mCurrent, this.mRelDestination));
 
-                for(int i = 0; i < possibleNodes.Count; i++) {
-                    if(!closed.Contains(possibleNodes[i])) {
-                        if(open.Contains(possibleNodes[i])) {
-                            if(possibleNodes[i].cost < open[possibleNodes[i]].cost) {
-                                open[possibleNodes[i]].parent = curr;
-                                solutionSize++;
-                            }
-                        } else { open.DichotomicInsertion(possibleNodes[i]); }
+                foreach (Node possibleNode in this.mPossibleNodes.Where(node => !this.mClosed.Contains(node)))
+                {
+                    if (this.mOpen.Contains(possibleNode))
+                    {
+                        if (possibleNode.cost < this.mOpen[possibleNode].cost)
+                        {
+                            this.mOpen[possibleNode].parent = curr;
+                            this.mSolutionSize++;
+                        }
                     }
+                    else
+                        this.mOpen.DichotomicInsertion(possibleNode);
                 }
             }
+
             return null;
         }
     }

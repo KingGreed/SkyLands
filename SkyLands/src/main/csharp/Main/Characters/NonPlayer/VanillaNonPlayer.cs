@@ -7,6 +7,8 @@ namespace Game.CharacSystem
     class VanillaNonPlayer : VanillaCharacter
     {
         public const float DEFAULT_NPC_LIFE = 500;
+
+        private VanillaCharacter mTarget;
         
         public VanillaNonPlayer(CharacMgr characMgr, string meshName, CharacterInfo info) : base(characMgr, info)
         {
@@ -15,6 +17,7 @@ namespace Game.CharacSystem
             ent.Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
             ent.SetMaterialName("Robot_T");
             this.mMesh = new Robot(ent);
+            this.mTarget = null;
 
             this.mNode.AttachObject(ent);
             this.mNode.Scale(this.mMesh.MeshSize / ent.BoundingBox.Size);

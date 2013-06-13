@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Game.Characters.IA.Misc
+﻿namespace Game.CharacSystem.AI
 {
     class AstarNode<T> {
         T data;

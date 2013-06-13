@@ -14,9 +14,9 @@ namespace Game.CharacSystem
         private const float YAW_SENSIVITY = 0.4f;
         private const float PITCH_SENSIVITY = 0.15f;
 
-        private readonly bool              mIsFirstView;
-        private readonly ShootCube         mShootCube;
-        private User                       mUser;
+        private readonly bool      mIsFirstView;
+        private readonly ShootCube mShootCube;
+        private User               mUser;
 
         public bool             IsFirstView   { get { return this.mIsFirstView; } }
         public MainPlayerCamera MainPlayerCam { get; private set; }
@@ -42,7 +42,7 @@ namespace Game.CharacSystem
 
             this.mCollisionMgr = new CollisionMgr(characMgr.SceneMgr, this.mCharacMgr.World, this);
             this.FeetPosition = this.mCharInfo.SpawnPoint;
-            this.mShootCube = new ShootCube(this.mCharacMgr.SceneMgr, this, this.mCharacMgr.BulletMgr);
+            this.mShootCube = new ShootCube(this.mCharacMgr.BulletMgr, this);
         }
 
         public void MakeHimMainPlayer(User user, MainPlayerCamera cam)
@@ -53,7 +53,7 @@ namespace Game.CharacSystem
 
         public void SwitchFreeCamMode()
         {
-            this.mNode.SetVisible(this.mUser.IsFreeCamMode, true);
+            //this.mNode.SetVisible(this.mUser.IsFreeCamMode, false);
             if (this.mUser.IsFreeCamMode)
                 this.mMesh.ToFreeCamMode();
         }
@@ -90,10 +90,11 @@ namespace Game.CharacSystem
 
             if (this.mUser.IsAllowedToMoveCam && this.mUser.Selector.IsBullet)
             {
-                if (this.mCharacMgr.Controller.HasActionEnded(UserAction.MainAction)) { this.mShootCube.Burst(); }
+                if (this.mCharacMgr.Controller.HasActionEnded(UserAction.MainAction))
+                { this.mShootCube.Burst(); }
                 if (this.mCharacMgr.Controller.IsActionOccuring(UserAction.MainAction))
                 {
-                    this.mShootCube.Material = this.mUser.Selector.Material;
+                    this.mShootCube.Material = "fireball";  //this.mUser.Selector.Material
                     this.mShootCube.Grow(frameTime, this.mCharacMgr.Controller.HasActionOccured(UserAction.MainAction));
                 }
             }

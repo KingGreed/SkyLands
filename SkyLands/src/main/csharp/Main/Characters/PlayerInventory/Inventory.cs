@@ -5,7 +5,7 @@ using System.Text;
 
 using Mogre;
 
-namespace Game.Characters.PlayerInventory
+namespace Game.CharacSystem.PlayerInventory
 {
     class Inventory
     {

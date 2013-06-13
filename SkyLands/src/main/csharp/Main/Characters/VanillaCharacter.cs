@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using Mogre;
 
-using Game.World;
-using Game.Animation;
-using Game.Characters.IA;
-
 using API.Ent;
 using API.Geo.Cuboid;
-using API.Generic;
+
+using Game.World;
+using Game.Animation;
+using Game.CharacSystem.AI;
 
 namespace Game.CharacSystem
 {
@@ -29,7 +28,7 @@ namespace Game.CharacSystem
         private float           mTimeSinceDead;   // Wait the end of the animation 
 
         private PathFinder      mPathFinder;
-        private Queue<Vector3>  mForcedDestination;
+        private Stack<Vector3>  mForcedDestination;
         private Degree          mYawGoal;   // The rotation the charac has to reach to go to the next forcedPoint
         private double          mLastSquaredDist;
 
@@ -57,7 +56,6 @@ namespace Game.CharacSystem
             this.MovementInfo = new MovementInfo(this.OnFall, this.OnJump);
             this.mPreviousDirection = Vector3.ZERO;
             this.mTimeSinceDead = 0;
-            this.mForcedDestination = new Queue<Vector3>();
             this.mNode = characMgr.SceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id);
             this.mLastSquaredDist = -1;
         }
@@ -95,7 +93,18 @@ namespace Game.CharacSystem
 
             if (this.mCharInfo.Life > 0)
             {
-                if (this.mForcedDestination.Count > 0)
+                if (this.mPathFinder != null)
+                {
+                    this.mForcedDestination = this.mPathFinder.ContinuePathFinding();
+                    if (this.mForcedDestination != null)
+                    {
+                        this.mPathFinder = null;
+                        this.ComputeNextYaw();
+                        this.mLastSquaredDist = -1;
+                    }
+                }
+
+                if (this.mForcedDestination != null)
                 {
                     Vector3 diff = this.mForcedDestination.Peek() - this.FeetPosition; 
                     float squaredDistance = diff.x * diff.x + diff.z * diff.z;
@@ -115,7 +124,7 @@ namespace Game.CharacSystem
                         }
                         this.mLastSquaredDist = squaredDistance;
                     }
-                    else { this.DequeueForcedDest(); }
+                    else { this.PopForcedDest(); }
                 }
                 else
                 {
@@ -174,7 +183,7 @@ namespace Game.CharacSystem
             this.mNode.Translate(actualTranslation);
             Vector3 actBlockPos = this.BlockPosition;
 
-            if(this.mForcedDestination.Count > 0 && this.mCollisionMgr.HasHorizontalCollisionEnded)
+            if(this.mForcedDestination != null && this.mCollisionMgr.HasHorizontalCollisionEnded)
                 this.ComputeNextYaw();
 
             if (prevBlockPos != actBlockPos)
@@ -184,10 +193,13 @@ namespace Game.CharacSystem
             }
         }
 
-        private void DequeueForcedDest()
+        private void PopForcedDest()
         {
-            this.mForcedDestination.Dequeue();
-            this.ComputeNextYaw();
+            this.mForcedDestination.Pop();
+            if (this.mForcedDestination.Count == 0) 
+                this.mForcedDestination = null;
+            else
+                this.ComputeNextYaw();
             this.mLastSquaredDist = -1;
         }
 
@@ -207,21 +219,7 @@ namespace Game.CharacSystem
             Vector3 diff = destination - this.FeetPosition;
             if (diff.x * diff.x + diff.z * diff.z < SQUARED_DIST_PRECISION) { return; }
             
-            this.mPathFinder = new PathFinder(MainWorld.getRelativeFromAbsolute(destination), MainWorld.getRelativeFromAbsolute(this.mNode.Position), this.mCharacMgr.World.getIsland());
-
-            if (this.mPathFinder.Goal != null)
-            {
-                if (this.mPathFinder.Goal.Size > 0) { this.mForcedDestination.Clear(); }
-                while (this.mPathFinder.Goal.Size > 1)
-                {
-                    Vector3 relPos = this.mPathFinder.Goal.Head.Data;
-                    this.mForcedDestination.Enqueue(Cst.CUBE_SIDE * (relPos + new Vector3(0.5f, -1, -0.5f)));
-                    this.mPathFinder.Goal.RemoveFirst();
-                }
-                this.mForcedDestination.Enqueue(destination);   // Enqueue the exact destination for the last one
-                this.mPathFinder.Goal.RemoveFirst();
-                this.ComputeNextYaw();
-            }
+            this.mPathFinder = new PathFinder(destination, this.BlockPosition, this.mCharacMgr.World.getIsland());
         }
 
         public void Hit(float damage)
@@ -254,13 +252,32 @@ namespace Game.CharacSystem
         public String getName()                 { return this.mCharInfo.Name; }
         public String getDisplayName()          { return this.getName(); }
         public void setDisplayName(String name) { this.mCharInfo.Name = name; }
-        public void teleport(Vector3 loc)       { this.FeetPosition = loc; }
         public bool save()                      { throw new NotImplementedException(); }
         public Vector3 getSpawnPoint()          { return this.mCharInfo.SpawnPoint; }
         public void setSpawnPoint(Vector3 loc)  { this.mCharInfo.SpawnPoint = loc; }
+        public void teleport(Vector3 loc)
+        {
+            this.mMovementInfo.ClearInfo();
+            this.mMovementInfo.IsFalling = false;
+            this.mMovementInfo.IsJumping = false;
+            this.mMovementInfo.IsPushedByArcaneLevitator = false;
+            this.mPreviousDirection = Vector3.ZERO;
+            this.mForcedDestination.Clear();
+            
+            Vector3 prevBlockPos = this.BlockPosition;
+            this.FeetPosition = loc;
+            Vector3 actBlockPos = this.BlockPosition;
+
+            if (prevBlockPos != actBlockPos)
+            {
+                this.mCharacMgr.World.onBlockLeave(prevBlockPos, this);
+                this.mCharacMgr.World.onBlockEnter(actBlockPos, this);
+            }
+        }
 
         /* Entity */
         public int getId()                        { return this.mCharInfo.Id; }
+        public CharacterInfo getCharacInfo()      { return this.mCharInfo; }
         public void remove()                      { this.WaitForRemove = true; }
         public bool isRemoved()                   { throw new NotImplementedException(); }
         public bool isSpawned()                   { throw new NotImplementedException(); }
@@ -283,6 +300,18 @@ namespace Game.CharacSystem
 
             this.MovementInfo.IsPushedByArcaneLevitator = isPushedWanted;
             this.mMesh.AnimMgr.DeleteAllAnims();
+        }
+
+        public virtual void updateTargets()
+        {
+            foreach (Faction faction in Enum.GetValues(typeof(Faction)))
+            {
+                if (faction != this.mCharInfo.Faction)
+                {
+                    List<VanillaCharacter> ennemies = this.mCharacMgr.GetFactionCharacters(faction);
+                }
+            }
+
         }
     }
 }

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace Game.Characters.IA.Misc
+namespace Game.CharacSystem.AI
 {
     class NodeList<T> : List<T> where T : Node // truc hyper cheaté qui permet de dire que la NodeList dispose de toutes les méthodes de List
                                                // et que le type générique T est un node

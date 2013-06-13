@@ -220,12 +220,12 @@ namespace Game.Input
                             if (this.MouseMove.z != 0 && !(this.MouseMove.z > 0 ^ child.InnerText.Contains("+")))
                                 return true;
                         }
-                        else if (this.WasMouseButtonPressed((MouseButtons)Enum.Parse(typeof(MouseButtons), child.InnerText)))
+                        else if (this.IsMouseButtonDown((MouseButtons)Enum.Parse(typeof(MouseButtons), child.InnerText)))
                             return true;
                         break;
 
                     case "Keyboard":
-                        if (this.WasKeyPressed((Keys)Enum.Parse(typeof(Keys), child.InnerText)))
+                        if (this.IsKeyDown((Keys)Enum.Parse(typeof(Keys), child.InnerText)))
                             return true;
                         break;
                 }

@@ -6,8 +6,8 @@ namespace Game.CharacSystem
     {
         private readonly VanillaPlayer mPlayer;
         private readonly Camera        mCam;
-        private SceneNode     mCamYawNode, mCamPitchNode;
-        private bool          mIsCameraFirstView;   // Else is in third view
+        private SceneNode              mCamYawNode, mCamPitchNode;
+        private bool                   mIsCameraFirstView;   // Else is in third view
 
         public Degree Pitch { get { return this.mCamPitchNode.Orientation.Pitch; } }
 
@@ -48,16 +48,17 @@ namespace Game.CharacSystem
         {
             if (this.mIsCameraFirstView)
             {
-                this.mPlayer.Node.SetVisible(false);
+                //this.mPlayer.Node.SetVisible(false);
 
                 this.mCamYawNode = this.mPlayer.Node.CreateChildSceneNode();
+                this.mCamYawNode.SetPosition(0, 3.6f, 0);  // Camera is set at eyes level
                 this.mCamYawNode.Yaw(new Degree(180));
 
                 this.mCamPitchNode = this.mCamYawNode.CreateChildSceneNode();
                 this.mCamPitchNode.AttachObject(this);
 
-                ((Camera)this).SetPosition(0, this.mPlayer.Size.y / 2 - 13, 0);  // Camera is set at eyes level
-                ((Camera)this).Orientation = new Quaternion(1, 0, 0, 0);
+                this.mCam.Position = Vector3.ZERO;
+                this.mCam.Orientation = Quaternion.IDENTITY;
             }
             else { }
         }

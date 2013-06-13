@@ -19,6 +19,7 @@ namespace Game.GUIs
 
         public Selector()
             : base(new Vector2(0, 0), new Vector2(404, 44), "file://" + Directory.GetCurrentDirectory() + "/media/web/Selector.html") {
+                this.IsBullet = true;
         }
 
         public override void onDocumentReady(object sender, Awesomium.Core.UrlEventArgs e) {

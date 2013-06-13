@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Mogre;
 
-using Mogre;
-
-namespace Game.Characters.IA.Misc
+namespace Game.CharacSystem.AI
 {
     class AstarLinkedList<T> {
         private AstarNode<T> head = null;

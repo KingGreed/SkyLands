@@ -1,44 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+using Mogre;
 
-using Game.World.Generator;
-using API.Generic;
 using Game.CharacSystem;
 using Game.World;
-
-using Mogre;
 
 namespace Game.Shoot
 {
     public class BulletManager
     {
-        private SceneManager mSceneMgr;
-        private CharacMgr mCharacMgr;
-        private MainWorld mWorld;
-        private List<Bullet> mBullets;
+        private readonly List<Bullet> mBullets;
 
-        public SceneManager SceneMgr  { get { return this.mSceneMgr; } }
-        public CharacMgr    CharacMgr { get { return this.mCharacMgr; } }
-        public MainWorld    World     { get { return this.mWorld; } }
-        
+        public SceneManager SceneMgr  { get; private set; }
+        public CharacMgr    CharacMgr { get; private set; }
+        public MainWorld    World     { get; private set; }
+
         public BulletManager(SceneManager sceneMgr, MainWorld world)
         {
-            this.mSceneMgr = sceneMgr;
-            this.mWorld = world;
+            this.SceneMgr = sceneMgr;
+            this.World = world;
             this.mBullets = new List<Bullet>();
         }
 
-        public void AttachCharacMgr(CharacMgr characMgr)
-        {
-            this.mCharacMgr = characMgr;
-        }
+        public void AttachCharacMgr(CharacMgr characMgr) { this.CharacMgr = characMgr; }
 
-        public void AddBullet(Bullet b)
-        {
-            this.mBullets.Add(b);
-        }
+        public void AddBullet(Bullet b) { this.mBullets.Add(b); }
 
         public void RemoveBullet(Bullet b)
         {

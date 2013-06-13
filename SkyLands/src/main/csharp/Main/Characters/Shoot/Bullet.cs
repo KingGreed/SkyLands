@@ -1,55 +1,44 @@
-﻿using Game.CharacSystem;
-using Game.World;
+﻿using Mogre;
 
-using Mogre;
+using API.Generic;
+using Game.CharacSystem;
+using Game.World;
 
 namespace Game.Shoot
 {
     public class Bullet
     {
-        private const float MAX_LIFE_TIME = 2.5f;
+        public const int DEFAULT_RANGE = 30 * Cst.CUBE_SIDE;
         
-        private BulletManager mBulletMgr;
-        private SceneNode mNode;
-        private VanillaCharacter mCharacSource;
-        private float mSpeed, mTimeSinceCreation;
+        private readonly BulletManager mBulletMgr;
+        private readonly VanillaCharacter mSource;
+        private readonly SceneNode mNode;
         private Ray mRay;
-        private float mDamage;
+        private float mDistTravalled;
 
-        public float Damage { get { return this.mDamage; } }
+        public float Speed         { get; set; }
+        public float Range         { get; set; }
+        public float Damage        { get; set; }
 
-        public Bullet(BulletManager bulletMgr, VanillaCharacter source, float damage)
-        {
-            this.Constr(bulletMgr, null, source, 1500, damage);
-        }
-
-        public Bullet(BulletManager bulletMgr, SceneNode node, VanillaCharacter source, float damage, float speed = 1200)
-        {
-            this.Constr(bulletMgr, node, source, speed, damage);
-        }
-
-        private void Constr(BulletManager bulletMgr, SceneNode node, VanillaCharacter source, float speed, float damage)
+        public Bullet(BulletManager bulletMgr, VanillaCharacter source, SceneNode node)
         {
             this.mBulletMgr = bulletMgr;
+            this.mSource = source;
             this.mNode = node;
             this.mRay = new Ray(this.mNode.Position, this.mNode.Orientation * Vector3.NEGATIVE_UNIT_Z);
-            this.mSpeed = speed;
-            this.mTimeSinceCreation = 0;
-            this.mDamage = damage;
-            this.mCharacSource = source;
         }
 
         public bool Update(float frameTime)
         {
-            if (this.mTimeSinceCreation >= MAX_LIFE_TIME)
+            if (this.mDistTravalled > this.Range)
                 return false;
 
-            this.mTimeSinceCreation += frameTime;
-            float distance = this.mSpeed * frameTime;
+            float distance = this.Speed * frameTime;
+            this.mDistTravalled += distance;
             this.mNode.Translate(distance * Vector3.NEGATIVE_UNIT_Z, Node.TransformSpace.TS_LOCAL);
             this.mRay.Origin = this.mNode.Position;
 
-            if (!(this.mBulletMgr.World.getIsland().getBlock(MainWorld.getRelativeFromAbsolute(this.mNode.Position), false) is Game.World.Blocks.Air))
+            if (!(this.mBulletMgr.World.getIsland().getBlock(MainWorld.getRelativeFromAbsolute(this.mNode.Position), false) is World.Blocks.Air))
                 return false;
 
             RaySceneQuery raySQuery = this.mBulletMgr.SceneMgr.CreateRayQuery(this.mRay);
@@ -64,7 +53,7 @@ namespace Game.Shoot
                     if (s.Length == 2 && s[0] == "CharacterEnt")
                     {
                         int id = int.Parse(s[1]);
-                        if (id != this.mCharacSource.Info.Id)
+                        if (id != this.mSource.Info.Id)
                         {
                             this.mBulletMgr.CharacMgr.GetCharacterById(id).Hit(this.Damage);
                             return false;
@@ -76,7 +65,7 @@ namespace Game.Shoot
             return true;
         }
 
-        public void Dispose()   // Has to be called from the BulletManager only. Else use mBulletManager.RemoveBullet(this) instead
+        public virtual void Dispose()   // Has to be called from the BulletManager only. Else use mBulletManager.RemoveBullet(this) instead
         {
             this.mNode.RemoveAndDestroyAllChildren();
             this.mBulletMgr.SceneMgr.DestroySceneNode(this.mNode);

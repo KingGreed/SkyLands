@@ -5,7 +5,7 @@ using System.Text;
 
 using Mogre;
 
-namespace Game.Characters.PlayerInventory {
+namespace Game.CharacSystem.PlayerInventory {
     public class CraftingMgr {
         private CraftTree c = new CraftTree();
         public CraftingMgr() {
