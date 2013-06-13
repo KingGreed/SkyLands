@@ -15,7 +15,7 @@ namespace Game.BaseApp {
     public abstract partial class OgreForm : Form {
         private const string PLUGINS_CFG = "plugins.cfg";
         private const string RESOURCES_CFG = "resources.cfg";
-        private readonly Size INIT_SIZE = new Size(800, 600);
+        private readonly Size INIT_SIZE = new Size(800, 600), GUI_SIZE = new Size(1600, 900);
 
         protected Root mRoot;
         protected SceneManager mSceneMgr;
@@ -88,6 +88,8 @@ namespace Game.BaseApp {
             this.mWindow.WindowMovedOrResized();
             WindowSize = this.Size;
             webView.ExecuteJavascript("resize(" + this.Size.Width / 1600 + "," + this.Size.Height / 900 + ")");
+            foreach (GUI gui in GUI.GUIs)
+                gui.resize((float)GUI_SIZE.Width / this.Size.Width, (float)GUI_SIZE.Height / this.Size.Height);
         }
 
         public void AddFrameLstn(RootLstn listener) { listener.AddListener(this.mRoot); }

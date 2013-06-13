@@ -13,17 +13,20 @@ using Awesomium.Windows.Forms;
 
 namespace Game.BaseApp {
     public abstract class GUI {
+        public static List<GUI> GUIs = new List<GUI>();
 
-        public GUI(Vector2 pos, Vector2 size, string url) {
+        protected GUI(Vector2 pos, Vector2 size, string url) {
 
             OgreForm.webView.Location = new Point((int)pos.x,  (int)pos.y);
             OgreForm.webView.Size     = new Size ((int)size.x, (int)size.y);
 
             OgreForm.webView.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/MainMenu.html");
             OgreForm.webView.DocumentReady += this.whenDocumentReady;
+
+            GUIs.Add(this);
         }
 
-        public GUI(Vector2 pos, Vector2 size, string url, DockStyle d) : this(pos, size, url) {
+        protected GUI(Vector2 pos, Vector2 size, string url, DockStyle d) : this(pos, size, url) {
             this.setDock(d);
         }
 
