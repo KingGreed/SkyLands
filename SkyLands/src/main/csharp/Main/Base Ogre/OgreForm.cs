@@ -89,7 +89,7 @@ namespace Game.BaseApp {
             WindowSize = this.Size;
             webView.ExecuteJavascript("resize(" + this.Size.Width / 1600 + "," + this.Size.Height / 900 + ")");
             foreach (GUI gui in GUI.GUIs)
-                gui.resize((float)GUI_SIZE.Width / this.Size.Width, (float)GUI_SIZE.Height / this.Size.Height, (float)GUI_SIZE.Width / INIT_SIZE.Width, (float)GUI_SIZE.Height / INIT_SIZE.Height);
+                gui.resize((float)this.Size.Width / INIT_SIZE.Width, (float)this.Size.Height / INIT_SIZE.Height, (float)GUI_SIZE.Width / INIT_SIZE.Width, (float)GUI_SIZE.Height / INIT_SIZE.Height);
         }
 
         public void AddFrameLstn(RootLstn listener) { listener.AddListener(this.mRoot); }

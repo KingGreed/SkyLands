@@ -20,7 +20,7 @@ namespace Game.BaseApp {
             OgreForm.webView.Location = new Point((int)pos.x,  (int)pos.y);
             OgreForm.webView.Size     = new Size ((int)size.x, (int)size.y);
 
-            OgreForm.webView.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/MainMenu.html");
+            OgreForm.webView.Source = new Uri(url);
             OgreForm.webView.DocumentReady += this.whenDocumentReady;
 
             GUIs.Add(this);
