@@ -1,3 +1,11 @@
 body {
-	overflow-x: hidden;
+	overflow: hidden;
+	background-image : url("../images/Load_scenario_normal.png");
+	background-size: cover;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+
+#Scenarios {
+
 }

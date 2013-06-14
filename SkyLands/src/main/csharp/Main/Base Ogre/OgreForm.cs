@@ -32,6 +32,7 @@ namespace Game.BaseApp {
 
         protected OgreForm() {
             //Awesomium
+
             if(!WebCore.IsRunning) { WebCore.Initialize(WebConfig.Default); }
 
             this.InitializeComponent();

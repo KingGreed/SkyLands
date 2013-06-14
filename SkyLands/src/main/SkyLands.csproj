@@ -104,6 +104,9 @@
     <Content Include="resources\Media\images\Inventory.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\images\Load_scenario_normal.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\images\Menu_Exit_select.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

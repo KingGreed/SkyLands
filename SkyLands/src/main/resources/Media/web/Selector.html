@@ -41,6 +41,7 @@
 			function resize(ratioX, ratioY) {
 				RatioX = ratioX;
 				RatioTotalX *= ratioX;
+				RatioTotalY *= ratioY;
 
 				var height = document.getElementById("selectBar").offsetHeight;
 				$("#selectBar").attr("width",  document.getElementById("selectBar").offsetWidth * ratioX + "px");
@@ -53,17 +54,21 @@
 				$(".slot").each(function(index) {
 					var item = $(this);
 					var left = (3  + 20 * index) * RatioTotalX;
+					var top  = 3 * RatioTotalY;
 
 					$(this).css("top",  top  + "px");
 					$(this).css("left", left + "px");
 
-					$(this).children("img").attr("src", "../materials/textures/fire.png");
-
-					$(this).attr("width",  16 * RatioTotalX + "px");
-					$(this).attr("height", 16 * RatioTotalY + "px");
+					$(this).css("width",  16 * RatioTotalX + "px");
+					$(this).css("height", 16 * RatioTotalY + "px");
 
 					$(this).children("img").attr("width",  16  * RatioTotalX + "px");
-					$(this).children("img").attr("height", 16 * RatioTotalY + "px");
+					$(this).children("img").attr("height", 16  * RatioTotalY + "px");
+
+					$(this).children("span").css("left", 13 * RatioTotalX + "px");
+					$(this).children("span").css("top",  11 * RatioTotalY + "px");
+					$(this).css("font-size",  0.3 * (RatioTotalX + RatioTotalY) / 2 + "em");
+
 
 				});
 				setSelectorPosition(Position);
@@ -77,16 +82,16 @@
 	<body style="overflow: hidden;">
 		<div id="containor">
 			<img src="../images/selectBar.png" id="selectBar" style="position: relative; z-index: -1;"/>
-			<div class="slot"><img src="../materials/textures/fire.png" class="item"/><span class="num">3</span></div>
 			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
 			<img src="../images/selector.png" id="selector"/>
 		</div>
 
