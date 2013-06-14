@@ -38,7 +38,7 @@ namespace Game.States
             this.mStateMgr.Controller.CursorVisibility = false;
             this.mStateMgr.Controller.BlockMouse = true;
 
-            this.User.IsAllowedToMoveCam = true;    // Set it to false if a menu opens
+            this.User.IsAllowedToMoveCam = true;
         }
 
         public override void Hide()
@@ -56,10 +56,6 @@ namespace Game.States
 
             this.User.Update(frameTime);
             this.CharacMgr.Update(frameTime);
-
-            if(this.mStateMgr.Controller.HasActionOccured(UserAction.Inventory)) {
-                new Inventory();
-            }
 
             /* Entity selection */
             if (this.User.IsFreeCamMode && this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction))

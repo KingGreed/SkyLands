@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using Mogre;
+﻿using Mogre;
 
 using Game.Input;
 using Game.Animation;
 using Game.Shoot;
+using Game.GUIs;
 
 namespace Game.CharacSystem
 {
@@ -28,6 +28,7 @@ namespace Game.CharacSystem
             ent.AttachObjectToBone("Sheath.R", swordR);
             this.mMesh = new Sinbad(ent);
 
+            this.mNode = characMgr.SceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id, Vector3.ZERO, this.mMesh.InitialOrientation);
             this.mNode.AttachObject(ent);
             this.mNode.Scale(this.mMesh.MeshSize / ent.BoundingBox.Size);
             this.mNode.Orientation = this.mMesh.InitialOrientation;
@@ -53,7 +54,8 @@ namespace Game.CharacSystem
                 this.MovementInfo.MoveDirection = new Vector3(this.mCharacMgr.Controller.MovementFactor.x,
                                                               this.mCharacMgr.Controller.HasActionOccured(UserAction.Jump) ? 1 : 0,
                                                               this.mCharacMgr.Controller.MovementFactor.z);
-                this.MovementInfo.YawValue = this.mCharacMgr.Controller.Yaw;
+                if(this.mUser.IsAllowedToMoveCam)
+                    this.MovementInfo.YawValue = this.mCharacMgr.Controller.Yaw;
 
                 this.MovementInfo.Sprint = this.mCharacMgr.Controller.IsActionOccuring(UserAction.Sprint);
                 if(this.mCharacMgr.Controller.HasActionOccured(UserAction.Levitate))
@@ -62,7 +64,7 @@ namespace Game.CharacSystem
                 ((Sinbad) this.mMesh).UpdateEmotes(this.mCharacMgr.Controller);
             }
 
-            if (!this.mUser.IsFreeCamMode && this.mUser.IsAllowedToMoveCam && this.mUser.Selector.IsBullet)
+            if (!this.mUser.IsFreeCamMode && this.mUser.IsAllowedToMoveCam && Selector.IsBullet)
             {
                 if (this.mCharacMgr.Controller.HasActionEnded(UserAction.MainAction)) { this.mShootCube.Burst(); }
                 if (this.mCharacMgr.Controller.IsActionOccuring(UserAction.MainAction))

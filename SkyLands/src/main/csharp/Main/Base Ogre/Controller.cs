@@ -27,8 +27,8 @@ namespace Game.Input
 
     public class Controller
     {
-        private const float YAW_SENSIVITY = - 0.4f;
-        private const float PITCH_SENSIVITY = - 0.15f;
+        private const float YAW_SENSIVITY = - 0.4f * 0.7f;
+        private const float PITCH_SENSIVITY = - 0.15f * 0.7f;
 
         private readonly XmlDocument mCommands;
         private readonly Dictionary<Keys, bool> mKeyDown;
@@ -187,6 +187,8 @@ namespace Game.Input
                 this.mUserActions[actionId] = newValue;
             }
         }
+
+        public void SwitchCursorVisibility() { this.CursorVisibility = !this.CursorVisibility; }
 
         private float GetFloatValue(XmlNode node)
         {

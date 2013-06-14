@@ -27,9 +27,10 @@ namespace Game.CharacSystem
             ent.SetMaterialName("Robot_T");
             this.mMesh = new Robot(ent);
 
+            this.mNode = characMgr.SceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id, Vector3.ZERO, this.mMesh.InitialOrientation);
             this.mNode.AttachObject(ent);
             this.mNode.Scale(this.mMesh.MeshSize / ent.BoundingBox.Size);
-            this.mNode.Orientation = this.mMesh.InitialOrientation;
+            //this.mNode.Orientation = this.mMesh.InitialOrientation;
 
             this.FeetPosition = this.mCharInfo.SpawnPoint;
             this.mCollisionMgr = new CollisionMgr(characMgr.SceneMgr, this.mCharacMgr.World, this);

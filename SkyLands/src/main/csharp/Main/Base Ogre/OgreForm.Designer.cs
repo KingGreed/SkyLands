@@ -27,6 +27,7 @@ namespace Game.BaseApp {
         protected void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
             webView = new Awesomium.Windows.Forms.WebControl(this.components);
+            SelectBar = new Awesomium.Windows.Forms.WebControl(this.components);
             this.SuspendLayout();
             // 
             // webView
@@ -37,11 +38,18 @@ namespace Game.BaseApp {
             webView.Size = new System.Drawing.Size(959, 428);
             webView.TabIndex = 0;
             // 
+            // SelectBar
+            // 
+            SelectBar.Location = new System.Drawing.Point(441, 340);
+            SelectBar.Size = new System.Drawing.Size(75, 23);
+            SelectBar.TabIndex = 1;
+            // 
             // OgreForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(959, 428);
+            this.Controls.Add(SelectBar);
             this.Controls.Add(webView);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "OgreForm";
@@ -52,7 +60,9 @@ namespace Game.BaseApp {
 
         #endregion
 
+        public static Awesomium.Windows.Forms.WebControl SelectBar;
         public static Awesomium.Windows.Forms.WebControl webView;
+
 
 
 

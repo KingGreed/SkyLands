@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-
-using Awesomium.Windows.Forms;
+﻿using System.Drawing;
 
 using Game.BaseApp;
 
@@ -12,18 +6,17 @@ using Mogre;
 
 namespace Game.GUIs
 {
-    public class Selector : GUI {  
-        public int SelectorPos { get; set; }
-        public string Material { get; set; }
-        public bool IsBullet { get; set; }
+    public static class Selector {
+        public static readonly Size SELECTOR_SIZE = new Size(404, 44);
 
-        public Selector()
-            : base(new Vector2(0, 0), new Vector2(404, 44), "Selector.html") {
-                this.IsBullet = true;
+        static Selector()
+        {
+            SelectorPos = 0;
+            IsBullet = true;
         }
 
-        public override void onDocumentReady(object sender, Awesomium.Core.UrlEventArgs e) {
-            OgreForm.webView.ExecuteJavascript("resize(2, 2)");
-        }
+        public static int SelectorPos { get; set; }
+        public static string Material { get; set; }
+        public static bool IsBullet { get; set; }
     }
 }

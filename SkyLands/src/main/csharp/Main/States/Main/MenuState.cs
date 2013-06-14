@@ -1,5 +1,6 @@
 ﻿using Game.Input;
 using Game.GUIs;
+using Game.BaseApp;
 
 namespace Game.States
 {
@@ -10,12 +11,12 @@ namespace Game.States
         public override void Show()
         {
             new MainMenu(this.mStateMgr);
-            this.mStateMgr.WebView.Show();
+            OgreForm.webView.Show();
         }
 
         public override void Hide()
         {
-            this.mStateMgr.WebView.Hide();
+            OgreForm.webView.Hide();
         }
 
         public override void Update(float frameTime)

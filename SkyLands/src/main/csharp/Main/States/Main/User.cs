@@ -28,12 +28,11 @@ namespace Game
         private SceneNode mCamYawNode, mCamPitchNode;
         private readonly SceneNode mWireCube;
 
-        private Vector3           mSelectedBlockPos;
-        private Block             mSelectedBlock;
-        private readonly Selector mSelector;
+        private Vector3   mSelectedBlockPos;
+        private Block     mSelectedBlock;
+        private Inventory mInventory;
         private readonly Keys[]   mFigures;
 
-        public Selector Selector { get { return this.mSelector; } }
         public bool IsAllowedToMoveCam { get; set; }
         public bool IsFreeCamMode { get; private set; }
 
@@ -45,8 +44,6 @@ namespace Game
             this.mCameraMan = null;
             this.IsAllowedToMoveCam = true;
             this.IsFreeCamMode = true;
-
-            this.mSelector = new Selector();
 
             this.mFigures = new Keys[10];
             for (int i = 0; i < this.mFigures.Length - 1; i++)
@@ -101,15 +98,28 @@ namespace Game
                 mainPlayer.SetIsAllowedToMove(ctrlPressed, false);
                 this.IsAllowedToMoveCam = !ctrlPressed;
             }
+
+            if (this.mStateMgr.Controller.HasActionOccured(UserAction.Inventory))
+            {
+                if (this.mInventory == null)
+                    this.mInventory = new Inventory(new Vector2((float)this.mStateMgr.Size.Width / 2 - Inventory.WANTED_SIZE.x / 2,
+                                                                (float)this.mStateMgr.Size.Height / 2 - Inventory.WANTED_SIZE.y / 2 - 30 * OgreForm.Ratio.y));
+                else
+                {
+                    this.mInventory = null;
+                    OgreForm.webView.Hide();
+                }
+
+                this.mStateMgr.Controller.SwitchCursorVisibility();
+                mainPlayer.SetIsAllowedToMove(this.mInventory == null);
+                this.IsAllowedToMoveCam = this.mInventory == null;
+            }
             
             /* Move camera */
             if (this.IsAllowedToMoveCam)
             {
                 if (this.IsFreeCamMode)
-                {
-                    this.mCameraMan.MouseMovement(this.mStateMgr.Controller.Yaw, this.mStateMgr.Controller.Pitch);
                     this.mCameraMan.UpdateCamera(frameTime, this.mStateMgr.Controller);
-                }
                 else if (mainPlayer.MovementInfo.IsAllowedToMove) // Just pitch the camera
                 {
                     this.mCamPitchNode.Pitch(new Degree(this.mStateMgr.Controller.Pitch));
@@ -122,7 +132,7 @@ namespace Game
                 float dist = this.UpdateSelectedBlock();
                 if (!(this.mStateMgr.GameInfo.IsInEditorMode ^ mainState.User.IsFreeCamMode))    // Allow world edition
                 {
-                    if (this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction) && !this.mSelector.IsBullet && this.mWorld.onLeftClick(this.mSelectedBlockPos))
+                    if (this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction) && !Selector.IsBullet && this.mWorld.onLeftClick(this.mSelectedBlockPos))
                         this.AddBlock(dist);
                     if (this.mStateMgr.Controller.HasActionOccured(UserAction.SecondaryAction) && this.mWorld.onRightClick(this.mSelectedBlockPos))
                         this.DeleteBlock();
@@ -130,7 +140,7 @@ namespace Game
             }
 
             /* Move Selector */
-            int selectorPos = this.mSelector.SelectorPos;
+            int selectorPos = Selector.SelectorPos;
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.MoveSelectorLeft)) { selectorPos--; }
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.MoveSelectorRight)) { selectorPos++; }
             for (int i = 0; i < this.mFigures.Length; i++)
@@ -141,7 +151,7 @@ namespace Game
                     break;
                 }
             }
-            this.mSelector.SelectorPos = selectorPos;
+            Selector.SelectorPos = selectorPos;
         }
 
         public void SwitchFreeCamMode()
@@ -206,7 +216,7 @@ namespace Game
 
         private void AddBlock(float dist)
         {
-            string material = this.mSelector.Material;
+            string material = Selector.Material;
             if (this.mSelectedBlock is Air || this.mSelectedBlock is ConstructionBlock || material == "") { return; }
             
             /* Determine the face */

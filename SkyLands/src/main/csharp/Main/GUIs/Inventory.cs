@@ -1,25 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.IO;
-
-using Awesomium.Windows.Forms;
+using Mogre;
 
 using Game.BaseApp;
-
-using Mogre;
 
 namespace Game.GUIs
 {
     public class Inventory : GUI {
+        private static readonly Vector2 IMAGE_SIZE = new Vector2(192, 179);
+        private const float ratio = 2.2f;
+        public static readonly Vector2 WANTED_SIZE = IMAGE_SIZE * ratio;
 
-        public Inventory()
-            : base(new Vector2(0, 0), new Vector2(350, 330), "inventory.html") {
-        }
+        public Inventory(Vector2 position) : base(position, WANTED_SIZE, "inventory.html") { }
 
         public override void onDocumentReady(object sender, Awesomium.Core.UrlEventArgs e) {
-            OgreForm.webView.ExecuteJavascript("resize(2, 2)");
+            string s = Convert.ToString(ratio).Replace(',', '.');
+            OgreForm.webView.ExecuteJavascript("resize(" + s + ", " + s + ")");
             OgreForm.webView.Show();
         }
     }

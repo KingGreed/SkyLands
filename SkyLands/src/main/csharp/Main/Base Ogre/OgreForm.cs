@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.IO;
+using Game.GUIs;
 using Mogre;
 
 using Awesomium.Core;
-using Awesomium.Windows.Forms;
 
 using Game.Display;
 using Game.Input;
@@ -15,7 +14,7 @@ namespace Game.BaseApp {
     public abstract partial class OgreForm : Form {
         private const string PLUGINS_CFG = "plugins.cfg";
         private const string RESOURCES_CFG = "resources.cfg";
-        private readonly Size INIT_SIZE = new Size(800, 600), GUI_SIZE = new Size(1600, 900);
+        private readonly Size WND_SIZE = new Size(800, 600), INIT_SIZE = new Size(1600, 900);
 
         protected Root mRoot;
         protected SceneManager mSceneMgr;
@@ -28,8 +27,7 @@ namespace Game.BaseApp {
 
         public static Size WindowSize;
         public static Point WindowPosition;
-
-        public WebControl WebView { get { return webView; } }
+        public static Vector2 Ratio;
 
         protected OgreForm() {
             //Awesomium
@@ -46,11 +44,15 @@ namespace Game.BaseApp {
 
             webView.DocumentReady += onDocumentReady;
 
-            //this.webView.Hide();
+            SelectBar.Hide();
+            SelectBar.Size = Selector.SELECTOR_SIZE;
+            SelectBar.Location = new Point(this.Size.Width / 2 - Selector.SELECTOR_SIZE.Width / 2,
+                                           this.Size.Height - Selector.SELECTOR_SIZE.Height);
 
             this.MinimumSize = new Size(800, 600);
             WindowSize = this.Size;
             WindowPosition = this.Location;
+            Ratio = Vector2.UNIT_SCALE;
         }
 
         private void onDocumentReady(object sender, UrlEventArgs e) {
@@ -86,10 +88,11 @@ namespace Game.BaseApp {
 
         public void OgreForm_Resize(object sender, EventArgs e) {
             this.mWindow.WindowMovedOrResized();
-            WindowSize = this.Size;
-            webView.ExecuteJavascript("resize(" + this.Size.Width / 1600 + "," + this.Size.Height / 900 + ")");
+            webView.ExecuteJavascript("resize(" + this.Size.Width / INIT_SIZE.Width + "," + this.Size.Height / INIT_SIZE.Height + ")");
+            Ratio = new Vector2(WND_SIZE.Width / this.Size.Width, WND_SIZE.Height / this.Size.Height);
             foreach (GUI gui in GUI.GUIs)
-                gui.resize((float)this.Size.Width / INIT_SIZE.Width, (float)this.Size.Height / INIT_SIZE.Height, (float)GUI_SIZE.Width / INIT_SIZE.Width, (float)GUI_SIZE.Height / INIT_SIZE.Height);
+                gui.resize((float)WindowSize.Width / this.Size.Width, (float)WindowSize.Height / this.Size.Height, Ratio.x, Ratio.y);
+            WindowSize = this.Size;
         }
 
         public void AddFrameLstn(RootLstn listener) { listener.AddListener(this.mRoot); }
@@ -141,14 +144,14 @@ namespace Game.BaseApp {
             renderSys.SetConfigOption("RTT Preferred Mode", "FBO");
             renderSys.SetConfigOption("VSync", "Yes");
             renderSys.SetConfigOption("VSync Interval", "1");
-            renderSys.SetConfigOption("Video Mode", INIT_SIZE.Width + " x " + INIT_SIZE.Height);
+            renderSys.SetConfigOption("Video Mode", WND_SIZE.Width + " x " + WND_SIZE.Height);
             renderSys.SetConfigOption("sRGB Gamma Conversion", "No");
 
             this.mRoot.RenderSystem = renderSys;
             this.mRoot.Initialise(false, "SkyLands");
             NameValuePairList misc = new NameValuePairList();
             misc["externalWindowHandle"] = Handle.ToString();
-            this.mWindow = this.mRoot.CreateRenderWindow("Main RenderWindow", (uint)INIT_SIZE.Width, (uint)INIT_SIZE.Height, false, misc);
+            this.mWindow = this.mRoot.CreateRenderWindow("Main RenderWindow", (uint)WND_SIZE.Width, (uint)WND_SIZE.Height, false, misc);
 
             return true;
         }

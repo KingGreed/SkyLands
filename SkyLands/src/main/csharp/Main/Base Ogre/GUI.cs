@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
@@ -9,7 +7,6 @@ using System.IO;
 using Mogre;
 
 using Awesomium.Core;
-using Awesomium.Windows.Forms;
 
 namespace Game.BaseApp {
     public abstract class GUI {
@@ -23,6 +20,7 @@ namespace Game.BaseApp {
             OgreForm.webView.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/" + url);
             OgreForm.webView.DocumentReady += this.whenDocumentReady;
 
+            this.setDock(DockStyle.None);
             GUIs.Add(this);
         }
 
@@ -33,8 +31,10 @@ namespace Game.BaseApp {
         public void setDock(DockStyle d) { OgreForm.webView.Dock = d; }
 
         public void resize(float x, float y, float ratioTotalX, float ratioTotalY) {
-            OgreForm.webView.Location = new Point((int)(OgreForm.webView.Location.X * ratioTotalX), (int)(OgreForm.webView.Location.Y * ratioTotalY));
-            OgreForm.webView.ExecuteJavascript("resize(" + x + ", " + y + ")");
+            OgreForm.webView.Location = new Point((int)(OgreForm.webView.Location.X * ratioTotalX),
+                                                  (int)(OgreForm.webView.Location.Y * ratioTotalY));
+            OgreForm.webView.ExecuteJavascript("resize(" + Convert.ToString(x).Replace(',', '.') + ", "
+                                                         + Convert.ToString(y).Replace(',', '.') + ")");
         }
 
 
