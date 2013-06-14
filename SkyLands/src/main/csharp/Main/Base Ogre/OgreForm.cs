@@ -10,7 +10,6 @@ using Game.Display;
 using Game.Input;
 
 namespace Game.BaseApp {
-
     public abstract partial class OgreForm : Form {
         private const string PLUGINS_CFG = "plugins.cfg";
         private const string RESOURCES_CFG = "resources.cfg";
@@ -29,9 +28,10 @@ namespace Game.BaseApp {
         public static Point WindowPosition;
         public static Vector2 Ratio;
 
+
+
         protected OgreForm() {
             //Awesomium
-
             if(!WebCore.IsRunning) { WebCore.Initialize(WebConfig.Default); }
 
             this.InitializeComponent();

@@ -80,6 +80,12 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="resources\Media\images\arrow_new.cur">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\images\arrow_new.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\images\Blank.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

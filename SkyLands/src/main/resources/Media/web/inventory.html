@@ -25,6 +25,7 @@
 				RatioTotalX *= ratioX; RatioTotalY *= ratioY;
 
 				var height = document.getElementById("selectBar").offsetHeight;
+				console.log("test", height);
 
 				$("#selectBar").attr("width", document.getElementById("selectBar").offsetWidth * ratioX + "px");
 				$("#selectBar").attr("height", height * ratioY + "px");
