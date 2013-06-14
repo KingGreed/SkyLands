@@ -11,3 +11,4 @@ TestResults
 *.suo
 *.log
 *.user
+commands.xml
