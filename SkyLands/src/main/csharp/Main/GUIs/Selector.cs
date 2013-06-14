@@ -18,7 +18,7 @@ namespace Game.GUIs
         public bool IsBullet { get; set; }
 
         public Selector()
-            : base(new Vector2(0, 0), new Vector2(404, 44), "file://" + Directory.GetCurrentDirectory() + "/media/web/Selector.html") {
+            : base(new Vector2(0, 0), new Vector2(404, 44), "Selector.html") {
                 this.IsBullet = true;
         }
 

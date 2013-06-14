@@ -3,6 +3,7 @@
 using Game.CharacSystem;
 using Game.World;
 using Game.Input;
+using Game.GUIs;
 
 namespace Game.States
 {
@@ -55,6 +56,10 @@ namespace Game.States
 
             this.User.Update(frameTime);
             this.CharacMgr.Update(frameTime);
+
+            if(this.mStateMgr.Controller.HasActionOccured(UserAction.Inventory)) {
+                new Inventory();
+            }
 
             /* Entity selection */
             if (this.User.IsFreeCamMode && this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction))
