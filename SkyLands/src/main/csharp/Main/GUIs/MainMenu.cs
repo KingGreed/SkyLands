@@ -10,7 +10,7 @@ using Game.BaseApp;
 namespace Game.GUIs {
     public class MainMenu : GUI {
         public MainMenu(StateManager stateMgr)
-            : base(new Vector2(0, 0), new Vector2(404, 44), "file://" + Directory.GetCurrentDirectory() + "/media/web/builder.html", DockStyle.Fill) {
+            : base(new Vector2(0, 0), new Vector2(404, 44), "file://" + Directory.GetCurrentDirectory() + "/media/web/MainMenu.html", DockStyle.Fill) {
             ((JSObject)stateMgr.WebView.CreateGlobalJavascriptObject("MainMenuJSObject")).Bind("exit", false, (sender, args) => stateMgr.RequestStatePop());
         }
 
