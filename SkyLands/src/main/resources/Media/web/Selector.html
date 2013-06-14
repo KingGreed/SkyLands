@@ -2,23 +2,45 @@
 	<head>
 		<link rel="stylesheet" type="text/css" href="selector.css" />
 		<script type="text/javascript" src="jquery.js"> </script>
+        <!-- <script type="text/javascript" src="keys.js"> </script> -->
 		<script>
-			var Ratio = 1;
-			var RatioTotal = 1;
+			var RatioX = 1, RatioTotalX = 1;
+			var RatioY = 1, RatioTotalY = 1;
 			var Position = 0;
-			function setImageAtPosition(position, img) {
+
+			function setImageAtPosition(position, img, amount) {
 				$(".item:eq(" + position +")").attr("src", "../materials/textures/" + img);
 			}
 
 			function setSelectorPosition(pos) {
-					var left = parseInt($(".item:eq(" + pos +")").css("left")) - 3 * RatioTotal;
+					var left = parseInt($(".slot:eq(" + pos +")").css("left")) - 3 * RatioTotalX;
 					$("#selector").css("left", left + "px");
 					Position = pos;
+					//jsObject.Position = pos;
+			}
+
+			function getMaterialAt(pos) {
+				var mat = $(".item:eq(" + pos +")").attr("src");
+				var matArray = mat.split("/");
+				mat = matArray[matArray.length - 1];
+				return mat;
+			}
+
+			function setMaterialAt(position, img) {
+				$(".item:eq(" + position +")").attr("src", "../materials/textures/" + img);
+			}
+
+			function getAmountAt(pos) {
+				return $(".num:ea(" + num + ")").html();
+			}
+
+			function setAmountAt(pos, amount) {
+				 $(".num:ea(" + num + ")").html(amount);
 			}
 
 			function resize(ratioX, ratioY) {
-				Ratio = ratioX;
-				RatioTotal *= ratioX;
+				RatioX = ratioX;
+				RatioTotalX *= ratioX;
 
 				var height = document.getElementById("selectBar").offsetHeight;
 				$("#selectBar").attr("width",  document.getElementById("selectBar").offsetWidth * ratioX + "px");
@@ -28,35 +50,43 @@
 				$("#selector").attr("width", document.getElementById("selector").offsetWidth * ratioX + "px");
 				$("#selector").attr("height", height * ratioY + "px");
 
-				$(".item").each(function(index) {
+				$(".slot").each(function(index) {
 					var item = $(this);
-					var height = document.getElementById(item.attr("id")).offsetHeight;
+					var left = (3  + 20 * index) * RatioTotalX;
 
-					item.attr("width", document.getElementById(item.attr("id")).offsetWidth * Ratio + "px");
-					item.attr("height", height * ratioY + "px");
+					$(this).css("top",  top  + "px");
+					$(this).css("left", left + "px");
 
-					item.css("left", parseInt(item.css("left")) * ratioX + "px");
-					item.css("top", parseInt(item.css("top")) * ratioX + "px");
+					$(this).children("img").attr("src", "../materials/textures/fire.png");
+
+					$(this).attr("width",  16 * RatioTotalX + "px");
+					$(this).attr("height", 16 * RatioTotalY + "px");
+
+					$(this).children("img").attr("width",  16  * RatioTotalX + "px");
+					$(this).children("img").attr("height", 16 * RatioTotalY + "px");
 
 				});
 				setSelectorPosition(Position);
-
 			}
+
+			$(window).load(function() {
+				resize(1, 1);
+			});
 		</script>
 	</head>
 	<body style="overflow: hidden;">
-		<div id="selectBarContainor">
-			<img src="../images/selectBar.png" id="selectBar" style="position: relative; z-index: 1;"/>
-			<img src="../materials/textures/fire.png" class="item" id="first"  />
-			<img src="../materials/textures/fire.png" class="item" id="second" />
-			<img src="../materials/textures/fire.png" class="item" id="third"  />
-			<img src="../materials/textures/fire.png" class="item" id="fourth" />
-			<img src="../materials/textures/fire.png" class="item" id="fifth"  />
-			<img src="../materials/textures/fire.png" class="item" id="sixth"  />
-			<img src="../materials/textures/fire.png" class="item" id="seventh"/>
-			<img src="../materials/textures/fire.png" class="item" id="eighth" />
-			<img src="../materials/textures/fire.png" class="item" id="nineth" />
-			<img src="../materials/textures/fire.png" class="item" id="tenth"  />
+		<div id="containor">
+			<img src="../images/selectBar.png" id="selectBar" style="position: relative; z-index: -1;"/>
+			<div class="slot"><img src="../materials/textures/fire.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
 			<img src="../images/selector.png" id="selector"/>
 		</div>
 
