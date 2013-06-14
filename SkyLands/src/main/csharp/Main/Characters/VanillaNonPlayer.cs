@@ -10,11 +10,12 @@ namespace Game.CharacSystem
 {
     class VanillaNonPlayer : VanillaCharacter
     {
-        public const float DEFAULT_NPC_LIFE = 500;
-        private const float FIRE_RATE = 1.2f,
+        public const float  DEFAULT_NPC_LIFE = 500;
+        private const float FIRE_RATE = 1.6f,
                             GUN_DECALAGE = 5;
 
-        private float mLeftGunTimer, mRightGunTimer;
+        private float mGunTimer;
+        private bool mIsLeftGun;
 
         public VanillaCharacter Target { get; set; }
         
@@ -32,13 +33,11 @@ namespace Game.CharacSystem
 
             this.FeetPosition = this.mCharInfo.SpawnPoint;
             this.mCollisionMgr = new CollisionMgr(characMgr.SceneMgr, this.mCharacMgr.World, this);
-            this.mLeftGunTimer = FIRE_RATE / 2; // Non synchronous shoot
         }
 
         public new void Update(float frameTime)
         {
-            this.mLeftGunTimer += frameTime;
-            this.mRightGunTimer += frameTime;
+            this.mGunTimer += frameTime;
 
             if (this.Target == null) { return; }
 
@@ -48,12 +47,13 @@ namespace Game.CharacSystem
             if(this.mForcedDestination.Count == 0) { this.YawTo(yawGoal); }
 
             float absDiffYaw = System.Math.Abs((((int)(yawGoal - this.GetYaw()).ValueAngleUnits) + 360) % 360);
-            bool leftGun = this.mLeftGunTimer >= FIRE_RATE;
-            if (absDiffYaw < 10 && (leftGun || this.mRightGunTimer >= FIRE_RATE))
+            if (absDiffYaw < 10 && this.mGunTimer >= FIRE_RATE)
             {
-                this.mCharacMgr.BulletMgr.AddBullet(new Bullet(this.mCharacMgr.SceneMgr, this, GUN_DECALAGE * (leftGun ? -1 : 1), this.Target));
-                if (leftGun) { this.mLeftGunTimer = 0; Console.WriteLine("*****Shoot******"); }
-                else         { this.mRightGunTimer = 0; }
+                this.mCharacMgr.BulletMgr.AddBullet(new Bullet(this.mCharacMgr.SceneMgr, this, this.Target, GUN_DECALAGE * (this.mIsLeftGun ? -1 : 1)));
+                this.mGunTimer = 0;
+                this.mIsLeftGun = !this.mIsLeftGun;
+
+                ((Robot)this.mMesh).Shoot();
             }
         }
 

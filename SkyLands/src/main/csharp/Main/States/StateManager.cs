@@ -36,10 +36,8 @@ namespace Game.States
             this.Disposed += this.Shutdown;
         }
 
-        protected override void Update(FrameEvent evt)
+        protected override void Update(float frameTime)
         {
-            float frameTime = evt.timeSinceLastFrame;
-
             while(this.mPopRequested > 0) { this.PopState(); }
 
             for (int i = 0; i < this.mNewStates.Count; i++)

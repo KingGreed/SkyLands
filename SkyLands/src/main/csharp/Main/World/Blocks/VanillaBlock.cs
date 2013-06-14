@@ -31,7 +31,15 @@ namespace Game.World.Blocks
         public override void onBlockLeave(API.Ent.Entity e, Vector3 position) { }
         public override void onBlockEnter(API.Ent.Entity e, Vector3 position) { e.updateTargets(); }
 
-        public static float getBlockOnRay(Island island, Ray ray, float distMax, float minDist, out Vector3 relBlockPos, out Block actBlock)   // distance must be set at a minDist value
+        public static float getBlockOnRay(Island island, Ray ray, float distMax, float distMin)
+        {
+            Vector3 relBlockPos;
+            Block actBlock;
+            return getBlockOnRay(island, ray, distMax, distMin, out relBlockPos, out actBlock);
+        }
+        
+        public static float getBlockOnRay(Island island, Ray ray, float distMax, float minDist,
+                                          out Vector3 relBlockPos, out Block actBlock)
         {
             float distance = minDist;
             relBlockPos = MainWorld.AbsToRelative(ray.GetPoint(distance));

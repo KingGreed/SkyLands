@@ -46,6 +46,7 @@ namespace Game.Input
         private Vector3 mMouseMove;
         private bool mUpdateMovement = true;
         private bool mCursorVisibility;
+        private float mTimeToVibrate;
 
         public InputName ActualInputName { get { return this.mInputName; } set { this.mInputName = value; this.LoadCommands(); } }
         public Vector3   MovementFactor  { get { return this.mMovementFactor; } private set { this.mMovementFactor = value; } }
@@ -123,11 +124,14 @@ namespace Game.Input
         public bool HasActionEnded(UserAction a)                 { return this.mUserActionsEnded[(int)a]; }
         public bool IsActionOccuring(UserAction a)               { return this.mUserActions[(int)a]; }
 
-        public void Update()
+        public void Update(float frameTime)
         {
             XmlNodeList nodes = this.mCommands.ChildNodes[1].ChildNodes;
             if (this.GamePadState.IsConnected)
             {
+                if (this.mTimeToVibrate > 0) { this.mTimeToVibrate -= frameTime; }
+                if (this.mTimeToVibrate < 0) { this.Vibrate(0, 0); }
+
                 this.Yaw = this.GamePadState.ThumbSticks.Right.X * 5;
                 this.Pitch = -this.GamePadState.ThumbSticks.Right.Y * 8;
                 this.mMovementFactor = new Vector3(-this.GamePadState.ThumbSticks.Left.X,
@@ -240,7 +244,11 @@ namespace Game.Input
             return false;
         }
 
-        public void Vibrate(float left, float right) { GamePad.SetVibration(PlayerIndex.One, left, right); }
+        public void Vibrate(float left, float right, float time = 0)
+        {
+            GamePad.SetVibration(PlayerIndex.One, left, right);
+            this.mTimeToVibrate = time;
+        }
 
         internal void OnKeyPressed(object sender, EventArgs e)
         {

@@ -55,7 +55,7 @@ namespace Game.Shoot
 
             this.mCreated = false;
             this.mTimeSinceLastBall.Reset();
-            this.mBulletMgr.AddBullet(new Bullet(this.mSource, this.mNode)
+            this.mBulletMgr.AddBullet(new Bullet(this.mSource, this.mNode, Vector3.NEGATIVE_UNIT_Z)
             {
                 Damage = (0.5f + (this.mNode.GetScale().x - INIT_SCALE) / (MAX_SCALE - INIT_SCALE)) * 130,
                 Range = Bullet.DEFAULT_RANGE,

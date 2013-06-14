@@ -42,6 +42,7 @@ namespace Game.CharacSystem
         public CollisionMgr  CollisionMgr    { get { return this.mCollisionMgr; } }
         public MovementInfo  MovementInfo    { get; private set; }
         public bool          WaitForRemove   { get; private set; }
+        public Quaternion    InitOrientation { get { return this.mMesh.InitialOrientation; } }
         public Vector3       BlockPosition   { get { return MainWorld.getRelativeFromAbsolute(this.FeetPosition); } }
         public Vector3       FeetPosition
         {
@@ -116,6 +117,8 @@ namespace Game.CharacSystem
                 {
                     this.MovementInfo.IsAllowedToMove = this.mWasAllowedToMove;
                     this.MovementInfo.IsMovementForced = false;
+                    this.mNode.Orientation = new Quaternion(Mogre.Math.Cos(this.mYawGoal/2), 0,
+                                                            Mogre.Math.Sin(this.mYawGoal/2), 0);
                 }
 
                 if (this.MovementInfo.IsMovementForced)
@@ -213,10 +216,15 @@ namespace Game.CharacSystem
 
         private void PopForcedDest()
         {
+            if (this.mForcedDestination.Count == 1)
+                this.FeetPosition = this.mForcedDestination.Peek();
+            
             this.mForcedDestination.Pop();
             if (this.mForcedDestination.Count == 0)
             {
                 this.MovementInfo.IsMovementForced = false;
+                this.mNode.Orientation = new Quaternion(Mogre.Math.Cos(this.mYawGoal / 2), 0,
+                                                        Mogre.Math.Sin(this.mYawGoal / 2), 0); 
                 if (this.mWillBeAllowedToMove)
                 {
                     this.MovementInfo.IsAllowedToMove = true;
@@ -253,21 +261,24 @@ namespace Game.CharacSystem
 
         public void Hit(float damage)
         {
+            if (this.mCharInfo.Life <= 0) { return; }
+            Console.WriteLine("Hit : " + damage);
             this.mCharInfo.Life -= damage;
 
             if (this.mCharInfo.IsPlayer && this.mCharacMgr.StateMgr.Controller.GamePadState.IsConnected)
             {
-                float force = damage / VanillaPlayer.DEFAULT_PLAYER_LIFE;
-                this.mCharacMgr.StateMgr.Controller.Vibrate(force, force);
+                float force = damage / VanillaPlayer.DEFAULT_PLAYER_LIFE * 7;
+                this.mCharacMgr.StateMgr.Controller.Vibrate(force, force, 0.2f);
             }
 
             if (this.mCharInfo.Life <= 0)
             {
                 this.MovementInfo.IsJumping = false;
                 this.MovementInfo.IsPushedByArcaneLevitator = false;
-                
-                if (!this.mCharInfo.IsPlayer) { ((Robot) this.mMesh).Die(); }   // Don't remove the charac right now to play the animation
-                else { this.WaitForRemove = true; }
+
+                 // Don't remove the charac right now to play the animation
+                if (!this.mCharInfo.IsPlayer) { ((Robot) this.mMesh).Die(); }
+                else                          { this.WaitForRemove = true; }
             }
         }
 

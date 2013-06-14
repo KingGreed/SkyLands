@@ -165,7 +165,7 @@ namespace Game.BaseApp {
             this.mCam.AspectRatio = (this.mViewport.ActualWidth / this.mViewport.ActualHeight);
         }
 
-        protected abstract void Update(FrameEvent evt);
+        protected abstract void Update(float frameTime);
 
         private void LoadResources() {
             // Load resource paths from config file
@@ -186,8 +186,8 @@ namespace Game.BaseApp {
 
         private void ReloadAllTextures() { TextureManager.Singleton.ReloadAll(); }
 
-        private void ProcessInput() {
-            this.mController.Update();
+        private void ProcessInput(float frameTime) {
+            this.mController.Update(frameTime);
 
             if(this.mController.WasKeyPressed(Keys.F12)) { this.CyclePolygonMode(); }
             if(this.mController.WasKeyPressed(Keys.F5)) { this.ReloadAllTextures(); }
@@ -208,8 +208,9 @@ namespace Game.BaseApp {
         private bool OnFrameRendering(FrameEvent evt) {
             if(this.mWindow.IsClosed || this.mIsShutDownRequested) { return false; }
             try {
-                this.ProcessInput();
-                this.Update(evt);
+                float frameTime = evt.timeSinceLastFrame;
+                this.ProcessInput(frameTime);
+                this.Update(frameTime);
                 this.mController.Clear();
                 return true;
             } catch(ShutdownException) {

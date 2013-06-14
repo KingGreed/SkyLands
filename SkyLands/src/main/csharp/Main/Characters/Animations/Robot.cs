@@ -23,29 +23,29 @@ namespace Game.Animation
 
         public override void Idle(bool on = true)
         {
-            if (on) { this.mAnimMgr.SetAnims(MeshAnim.GetString(AnimName.Idle)); }
-            else { this.mAnimMgr.DeleteAnims(MeshAnim.GetString(AnimName.Idle)); }
+            if (on) { this.mAnimMgr.SetAnims(GetString(AnimName.Idle)); }
+            else { this.mAnimMgr.DeleteAnims(GetString(AnimName.Idle)); }
         }
 
         public override void Walk(bool on = true, int timeFactor = 1)
         {
-            if (on) { this.mAnimMgr.SetAnims(timeFactor, MeshAnim.GetString(AnimName.Walk)); }
-            else    { this.mAnimMgr.DeleteAnims(MeshAnim.GetString(AnimName.Walk)); }
+            if (on) { this.mAnimMgr.SetAnims(timeFactor, GetString(AnimName.Walk)); }
+            else    { this.mAnimMgr.DeleteAnims(GetString(AnimName.Walk)); }
         }
 
         public override void StartJump()
         {
-            this.mAnimMgr.SetAnims(MeshAnim.GetString(AnimName.Slump));
+            this.mAnimMgr.SetAnims(GetString(AnimName.Slump));
         }
 
         public override void JumpLoop()
         {
-            this.mAnimMgr.SetAnims(MeshAnim.GetString(AnimName.Idle));
+            this.mAnimMgr.SetAnims(GetString(AnimName.Idle));
         }
 
         public void Shoot()
         {
-            this.mAnimMgr.AddAnims(MeshAnim.GetString(AnimName.Shoot));
+            this.mAnimMgr.AddAnims(GetString(AnimName.Shoot));
         }
 
         public void Die()

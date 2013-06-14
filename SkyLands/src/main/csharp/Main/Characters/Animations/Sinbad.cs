@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mogre;
 
 using Game.Input;
@@ -11,8 +12,8 @@ namespace Game.Animation
         public static readonly Vector3 SINBAD_SIZE = new Vector3(65, 99, 65);
         public const int FEET_DIFF = 8;
 
-        public enum AnimName : byte { IdleBase, IdleTop, RunBase, RunTop, JumpStart, JumpLoop, JumpEnd, Dance }
-        public struct Emote
+        private enum AnimName : byte { IdleBase, IdleTop, RunBase, RunTop, JumpStart, JumpLoop, JumpEnd, Dance }
+        private struct Emote
         {
             private readonly AnimName mAnim;
             private readonly UserAction mAction;
@@ -25,9 +26,6 @@ namespace Game.Animation
 
         private readonly Emote[] mEmotes;
         private readonly AnimName[] mEmotesNames;
-
-        public Emote[]    Emotes     { get { return this.mEmotes; } }
-        public AnimName[] EmoteNames { get { return this.mEmotesNames; } }
 
         public Sinbad(Entity ent)
             : base(new AnimationMgr(ent.AllAnimationStates, Enum.GetNames(typeof(AnimName)),
@@ -45,29 +43,29 @@ namespace Game.Animation
 
         public override void Idle(bool on = true)
         {
-            if (on) { this.mAnimMgr.SetAnims(MeshAnim.GetString(AnimName.IdleBase, AnimName.IdleTop)); }
-            else    { this.mAnimMgr.DeleteAnims(MeshAnim.GetString(AnimName.IdleBase, AnimName.IdleTop)); }
+            if (on) { this.mAnimMgr.SetAnims(GetString(AnimName.IdleBase, AnimName.IdleTop)); }
+            else    { this.mAnimMgr.DeleteAnims(GetString(AnimName.IdleBase, AnimName.IdleTop)); }
         }
 
         public override void Walk(bool on = true, int timeFactor = 1)
         {
-            if (on) { this.mAnimMgr.SetAnims(timeFactor, MeshAnim.GetString(AnimName.RunBase, AnimName.RunTop)); }
-            else    { this.mAnimMgr.DeleteAnims(MeshAnim.GetString(AnimName.RunBase, AnimName.RunTop)); }
+            if (on) { this.mAnimMgr.SetAnims(timeFactor, GetString(AnimName.RunBase, AnimName.RunTop)); }
+            else    { this.mAnimMgr.DeleteAnims(GetString(AnimName.RunBase, AnimName.RunTop)); }
         }
 
         public override void StartJump()
         {
-            this.mAnimMgr.SetAnims(MeshAnim.GetString(AnimName.JumpStart, AnimName.JumpLoop));
+            this.mAnimMgr.SetAnims(GetString(AnimName.JumpStart, AnimName.JumpLoop));
         }
 
         public override void JumpLoop()
         {
-            this.mAnimMgr.SetAnims(MeshAnim.GetString(AnimName.JumpLoop));
+            this.mAnimMgr.SetAnims(GetString(AnimName.JumpLoop));
         }
 
         public void EndJump()
         {
-            this.mAnimMgr.SetAnims(MeshAnim.GetString(AnimName.JumpEnd));
+            this.mAnimMgr.SetAnims(GetString(AnimName.JumpEnd));
         }
 
         public override bool IsAbleTo(string anim)
@@ -79,9 +77,23 @@ namespace Game.Animation
             return anims.Contains(anim.ToLower());
         }
 
+        public void UpdateEmotes(Controller controller)
+        {
+            if (this.AnimMgr.AreAnimationsPlaying(GetString(AnimName.JumpStart, AnimName.JumpLoop, AnimName.JumpEnd,
+                                                            AnimName.RunBase, AnimName.RunTop))) { return; }
+            foreach (Emote emote in this.mEmotes.Where(emote => controller.HasActionOccured(emote.Action)))
+            {
+                string[] names = GetString(emote.Anim);
+                if (!this.AnimMgr.AreAnimationsPlaying(names))
+                    this.AnimMgr.SetAnims(names);
+                else
+                    this.AnimMgr.DeleteAnims(names);
+            }
+        }
+
         public override void ToFreeCamMode()
         {
-            this.mAnimMgr.DeleteAllExcept<string[]>(MeshAnim.GetString(AnimName.IdleBase,
+            this.mAnimMgr.DeleteAllExcept<string[]>(GetString(AnimName.IdleBase,
                                                                        AnimName.IdleTop,
                                                                        AnimName.JumpStart,
                                                                        AnimName.JumpLoop,

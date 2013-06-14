@@ -80,8 +80,7 @@ namespace Game.CharacSystem
                     {
                         VanillaCharacter charac = characList[i];
                         characList.Remove(characList[i]);
-                        if (charac.Dispose())
-                        { this.MainPlayer = null; }
+                        if (charac.Dispose()) { this.MainPlayer = null; }
                         continue;
                     }
                     characList[i].Update(frameTime);

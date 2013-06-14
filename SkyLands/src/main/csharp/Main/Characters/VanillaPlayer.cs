@@ -59,17 +59,7 @@ namespace Game.CharacSystem
                 if(this.mCharacMgr.Controller.HasActionOccured(UserAction.Levitate))
                     this.setIsPushedByArcaneLevitator(!this.MovementInfo.IsPushedByArcaneLevitator);
 
-                /* Update emotes animations */
-                if (!this.mMesh.AnimMgr.AreAnimationsPlaying(MeshAnim.GetString(Sinbad.AnimName.JumpStart, Sinbad.AnimName.JumpLoop, Sinbad.AnimName.JumpEnd, Sinbad.AnimName.RunBase, Sinbad.AnimName.RunTop)))
-                {
-                    foreach (Sinbad.Emote emote in ((Sinbad)this.mMesh).Emotes.Where(emote => this.mCharacMgr.Controller.HasActionOccured(emote.Action)))
-                    {
-                        if (!this.mMesh.AnimMgr.AreAnimationsPlaying(MeshAnim.GetString(emote.Anim))) 
-                            this.mMesh.AnimMgr.SetAnims(MeshAnim.GetString(emote.Anim));
-                        else
-                            this.mMesh.AnimMgr.DeleteAnims(MeshAnim.GetString(emote.Anim));
-                    }
-                }
+                ((Sinbad) this.mMesh).UpdateEmotes(this.mCharacMgr.Controller);
             }
 
             if (!this.mUser.IsFreeCamMode && this.mUser.IsAllowedToMoveCam && this.mUser.Selector.IsBullet)
