@@ -1,14 +1,14 @@
 \documentclass[article]{report}         % Type of document
 
-\usepackage[utf8]{inputenc}    		 	    % Encoding
-\usepackage[english]{babel}			        % Language
-\usepackage{geometry}           			  % Page margin
-\usepackage{graphicx}           			  % For images
-\usepackage{newcent}            			  % Font
-\usepackage{color}              			  % Colors
-\usepackage{listings}           			  % Lists
-\usepackage[footnote, nolist]{acronym}	% Acronyms
-\usepackage[absolute, overlay]{textpos}	% Text positioning
+\usepackage[utf8]{inputenc}             % Encoding
+\usepackage[english]{babel}             % Language
+\usepackage{geometry}                   % Page margin
+\usepackage{graphicx}                   % For images
+\usepackage{newcent}                    % Font
+\usepackage{color}                      % Colors
+\usepackage{listings}                   % Lists
+\usepackage[footnote, nolist]{acronym}  % Acronyms
+\usepackage[absolute, overlay]{textpos} % Text positioning
 \usepackage[babel=true]{csquotes}
 
 \usepackage{fancyhdr}
@@ -26,8 +26,8 @@
 \usepackage{listings} % includes code
 
 \lstset{
-	tabsize=4,
-	language=matlab,
+  tabsize=4,
+  language=matlab,
         basicstyle=\scriptsize,
         %upquote=true,
         aboveskip={0.5\baselineskip},
@@ -44,12 +44,12 @@
         keywordstyle=\color[rgb]{0,0,1},
         commentstyle=\color[rgb]{0.133,0.545,0.133},
         stringstyle=\color[rgb]{0.627,0.126,0.941},
-	language=Java
+  language=Java
 }
 
 \setlength{\columnsep}{1cm}
-\setlength{\TPHorizModule}{\paperwidth}	% Used for textblock
-\setlength{\TPVertModule}{\paperheight}	% Used for textblock
+\setlength{\TPHorizModule}{\paperwidth} % Used for textblock
+\setlength{\TPVertModule}{\paperheight} % Used for textblock
 \parskip = 0.25cm              % Summary options (spaces between lines)
 
 % Margin
@@ -74,25 +74,25 @@
 % Document
 %
 \begin{document}
-	\thispagestyle{empty}
-  	\begin{titlepage} 
-		\vspace*{1cm} 
-  		\begin{center} 
-  			{\huge{\textsc{4th Oral Presentation} \\ ~ \\{\large From}\\ ~\\ Team \\  ~ \\ }}
-	  		\includegraphics[width = 14cm]{images/Titles/Dedalus.png}
-			\\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ 
-		\end{center}
-			\hfill {\large Erwan  \textsc{Vasseure}}
-			\hfill {\large Aenora \textsc{Tye}}
-  		\hfill {\large Renaud \textsc{Gaubert}}
-			\hfill {\large Romain \textsc{Biessy}}
-  	\end{titlepage} 
+  \thispagestyle{empty}
+    \begin{titlepage} 
+    \vspace*{1cm} 
+      \begin{center} 
+        {\huge{\textsc{4th Oral Presentation} \\ ~ \\{\large From}\\ ~\\ Team \\  ~ \\ }}
+        \includegraphics[width = 14cm]{images/Titles/Dedalus.png}
+      \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ \\ ~ 
+    \end{center}
+      \hfill {\large Erwan  \textsc{Vasseure}}
+      \hfill {\large Aenora \textsc{Tye}}
+      \hfill {\large Renaud \textsc{Gaubert}}
+      \hfill {\large Romain \textsc{Biessy}}
+    \end{titlepage} 
 
-  	\tableofcontents
-  		\pagenumbering{arabic}
-  		\setcounter{page}{2}
-  		\newpage
-		\chapter{\textcolor{blue}{Introduction}}
+    \tableofcontents
+      \pagenumbering{arabic}
+      \setcounter{page}{2}
+      \newpage
+    \chapter{\textcolor{blue}{Introduction}}
       Markus ``Notch'' Persson spent two years on Minecraft full time, helped with five to ten people who were all experienced game developers. \\
       As for us, students of Epita, we spent a mere nine month develeloping and, the result is an awesome game!\\
 
@@ -100,7 +100,7 @@
 
 
 
-		\chapter{\textcolor{blue}{GUI}}
+    \chapter{\textcolor{blue}{GUI}}
       \section{A windowed Game}
         Following the example given by Minecraft, we decided to give up on a full screen game and go for a windowed game.\\
         This means that users can resize the window in which the game is to any size they want.\\
@@ -125,7 +125,7 @@
         \subsection{Main Menu}
 
 
-		\chapter{\textcolor{blue}{Random Terrain Generation}}
+    \chapter{\textcolor{blue}{Random Terrain Generation}}
       \section{Perlin Noise}
         If you look at many things in nature, you will notice that they are fractal. They have various levels of detail. A common example is the outline of a mountain range. It contains large variations in height (the mountains), medium variations (hills), small variations (boulders), tiny variations (stones) . . . you could go on.\\
         Look at almost anything: the distribution of patchy grass on a field, waves in the sea, the movements of an ant, the movement of branches of a tree, patterns in marble, winds. All these phenomena exhibit the same pattern of large and small variations. The Perlin Noise function recreates this by simply adding up noisy functions at a range of different scales.\\
@@ -151,13 +151,15 @@
 
             \begin{lstlisting}
               
-	double noiseValue = (noise[xx, yy, zz]) * noise2[xx, 255 - yy, zz] + noise[xx, yy, zz] - System.Math.Abs(1 / smoothHeight * (yy - smoothHeight - minElevation + 20))
+  double noiseValue = (noise[xx, yy, zz]) * noise2[xx, 255 - yy, zz] + noise[xx, yy, zz] - System.Math.Abs(1 / smoothHeight * (yy - smoothHeight - minElevation + 20))
 
             \end{lstlisting}
 
             Where smoothHeight correspond to (maxElevation - minElevation) / 2. The noise value computed is a value between -1 and 1 and if it is lower than 0 we consider that it is air.
       \section{Different Islands}
-				The smoothHeight value allows us to make different type of Islands, such as plains or even mountains. Because when smoothHeight's value is High, the values computed by noiseValue are higher and tend to be more scattered whereas low values tend to be more concentrated on one level.
+        The smoothHeight value allows us to make different type of Islands, such as plains or even mountains. Because when smoothHeight's value is High, the values computed by noiseValue are higher and tend to be more scattered whereas low values tend to be more concentrated on one level.
+
+        %TODO : image needed
       \section{Decorating the Islands}
         By default, the terrain is just a big cube of stone. However, when generating it, we add air blocks and, solid blocks under air blocks are usually grass (it can be set to another block).\\
         Since we do not want to iterate through the terrain multiple times, this is done when generating the terrain thanks to little algorithm trick :\\
@@ -170,36 +172,83 @@
 
             We create the terrain from the top, which allow us to check for each block if it's under an air block and if that's true, place a block of grass.\\
             In case the block we just created is solid, we calculate it's distance from the surface and if we told the program beforeHand that there was a special block at the block's particular depth then the type of block will be the one we set, else it's stone.\\
+            %TODO : image needed
+            Thus in most of the Islands, the first layer is grass and the next two are dirt. The height and the layers are set in a class called Biome.\\
 
-            Thus in most of the Islands, the first layer is grass and the next two are dirt.
+          Once we finished generating the terrain, the next step is to populate it. Which means to add trees or cactus in the different biomes.\\
+          Basically we choose a random x and a random z and look for the highest solid block. We then add the cactus and trees.  
       \section{Structures}
+          The different structures are usually specific to the biomes and are generated procedurally. As for the cactus and the trees, we get a random point and add the structure.
+          We have multiple structures :
+          \subsection{Pyramid}
+          \subsection{Caverns}
+          \subsection{DarkTower}
+        \subsubsection{Introduction to the dark tower}
+          The dark tower is the biggest structure we made, it is composed of four main towers floating in the sky and is part of the plain biome. This structure is huge because it size can reach 362 blocks on the y axis and has almost 41 floors
 
+        \subsubsection{The main buildings}
+          The tower consists in four main buildings whose height vary between 60 and 88 blocks it has about seven floors which can be climbed using the arcane levitator which as it names implies allows you to levitate. Basically if you are on the levitator, it will lift you up to the next floor.
+
+          \begin{center}
+            \includegraphics[width=7.5cm]{images/DT/Main.png}
+            \includegraphics[width=7.5cm]{images/DT/floor.png}
+          \end{center}
+        finally on the first and last floor of the main tower, bridges connect the main towers to medium towers or another main tower.
+
+        \subsubsection{Bridges}
+          Bridges are generated only by the main towers and allows the player to continue climbing the dark tower. One difficulty we encountered while ``building'' the tower was the orientation. Indeed, the algorith to build a bridge facing north is not the same as the algorithm to build a bridge facing west. We struggled to find a way to ``unify'' those algorithm but we finally choose the simplest solution using a switch. Here is the result :
+          \begin{center}
+            \includegraphics[width=7.5cm]{images/DT/bridge1.png}
+            \includegraphics[width=7.5cm]{images/DT/bridge2.png}
+          \end{center}
+
+        \subsubsection{Lower towers}
+          As I've already said before the main tower are linked by bridges to lower towers their height vary between 15 and 30 blocks and in most of them, the player will find prisonners unit guarded by ennemies and when they are defeated (the ennemies), the prisonners joins the player which can then command them.
+          \begin{center}
+            \includegraphics[width=7.5cm]{images/DT/mediumTowers.png}
+            \includegraphics[width=7.5cm]{images/DT/mediumTowers.png} %TODO : Robots
+          \end{center}
+
+        \subsubsection{Roofs}
+          Among the multiple things which make the tower, one of the most beautiful thing are the structures on the roof, we made 3 of them :
+          \begin{center}
+            \includegraphics[width=5cm]{images/DT/roof1.png}
+            \includegraphics[width=5cm]{images/DT/roof2.png}
+            \includegraphics[width=5cm]{images/DT/roof3.png}
+          \end{center}
+        \subsubsection{DarkBeard}
+          Finally, we had to deal with the bottom of the towers. At the beginning we thought that it would stay flat but, we managed to find a function that made the bottom look amazing. We called it the dark beard.
+
+          \begin{center}
+            \includegraphics[width=7.5cm]{images/Abs.png}
+            \includegraphics[width=7.5cm]{images/DT/DarkBeard.png} %TODO : Robots
+          \end{center}
       \section{Displaying}
       \section{Save and Load}
-		\chapter{\textcolor{blue}{Physics}}
+    \chapter{\textcolor{blue}{Physics}}
       \section{Collisions} %Romain à toi de faire plusieurs parties
       \section{Fall}
-		\chapter{\textcolor{blue}{Gameplay}}
+    \chapter{\textcolor{blue}{Gameplay}}
       \section{Exploring the terrain}
       \section{Adding Blocks}
       \section{Removing Blocks}
       \section{Inventory, Selector}
       \section{Crafting}
-		\chapter{\textcolor{blue}{Strategy}}
+    \chapter{\textcolor{blue}{Strategy}}
       \section{Build your own Base}
       \section{Buy your army of Robots}
       \section{Fight against foes}
       \section{PathFinding}
-		\chapter{\textcolor{blue}{Graphics}}
+    \chapter{\textcolor{blue}{Graphics}}
       \section{High / Low definition}
       \section{Sinbad's skins}
       \section{Particles}
-		\chapter{\textcolor{blue}{Scenario Editor}}
+    \chapter{\textcolor{blue}{Scenario Editor}}
       \section{Basic Idea}
       \section{Structures}
       \section{Scripting}
-		\chapter{\textcolor{blue}{Sound Engine}}
-		\chapter{\textcolor{blue}{Website}}
-		\chapter{\textcolor{blue}{Conclusion}}
-		
+    \chapter{\textcolor{blue}{Sound Engine}}
+    \chapter{\textcolor{blue}{Website}}
+    \chapter{\textcolor{blue}{Conclusion}}
+    
 \end{document}
