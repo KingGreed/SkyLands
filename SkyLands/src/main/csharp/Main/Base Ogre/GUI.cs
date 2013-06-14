@@ -32,8 +32,8 @@ namespace Game.BaseApp {
 
         public void setDock(DockStyle d) { OgreForm.webView.Dock = d; }
 
-        public void resize(float x, float y) {
-            ///TODO resize method (replace widget)
+        public void resize(float x, float y, float ratioTotalX, float ratioTotalY) {
+            OgreForm.webView.Location = new Point((int)(OgreForm.webView.Location.X * ratioTotalX), (int)(OgreForm.webView.Location.Y * ratioTotalY));
             OgreForm.webView.ExecuteJavascript("resize(" + x + ", " + y + ")");
         }
 
