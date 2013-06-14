@@ -30,3 +30,12 @@ body {
 	top: 10;
 	left: 13;
 }
+#BuildingsSelector {
+	position: absolute;
+	top: 35;
+	left: 120;
+	height: 10px;
+	width: 40;
+	background-color: #c6c6c6;
+	font-size: 0.3em;
+}

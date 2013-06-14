@@ -41,17 +41,11 @@
 				$(".slot").each(function(index) {
 
 					if(index >= 40) {
-						var row = Math.floor((index - 40) / 3);
-						var col = (index - 40) % 3;
+						var row = Math.floor((index - 40) / 5);
+						var col = (index - 40) % 5;
 
-						var top, left;
-						if(row == 3) {
-							top  = (20 + 18) * RatioTotalY;
-							left =  134 * RatioTotalX;
-						} else {
-							top  = (20 + 18 * row) * RatioTotalY;
-							left = (40 + 18 * col) * RatioTotalX;
-						}
+						var top  = (24 + 18 * row) * RatioTotalY;
+						var left = (8  + 18 * col) * RatioTotalX;
 
 						$(this).children().attr("src", "../materials/textures/fire.png");
 
@@ -81,6 +75,7 @@
 
 						$(this).children("img").attr("src", "../materials/textures/fire.png");
 
+
 						$(this).attr("width",  imgWidth  * RatioTotalX + "px");
 						$(this).attr("height", imgHeight * RatioTotalY + "px");
 
@@ -95,7 +90,7 @@
 				resize(1, 1);
 
 
-				$(".item").draggable({
+				$(".item:lt(40)").draggable({
 					containment: "#containor",
 					scroll: false,
 					cursor: "crosshair", cursorAt: { top: 8, left: 8 },
@@ -112,34 +107,30 @@
 					drag:  function(e, ui) {
 						if(Selected != null) { Selected.css("opacity", "1"); Selected = null; $(".slot").css("opacity", 1); }
 
-						console.log("x :", e.clientX, "y :", e.clientY);
 						//in inventory's 3 first rows
 						if(e.clientY >= 92 * RatioTotalY && e.clientY <= 143 * RatioTotalY && e.clientX >= 8 * RatioTotalX && e.clientX <= 188 * RatioTotalX) {
 							var row =       Math.floor((e.clientY - 91 * RatioTotalY) / (18 * RatioTotalY));
 							var col = clamp(Math.floor((e.clientX - 8  * RatioTotalX) / (18 * RatioTotalX)), 0, 9);
-							
-							var pos = row * 10 + col;
-							SelectedPos = pos;
 
-							Selected = $(".slot:eq(" + (pos) + ")");
+							SelectedPos = row * 10 + col;
+
+							Selected = $(".slot:eq(" + (SelectedPos) + ")");
 
 							Selected.css("opacity", "0.5");
 						} else if(e.clientY >= 150 * RatioTotalY && e.clientY <= 164 * RatioTotalY && e.clientX >= 8 * RatioTotalX && e.clientX <= 188 * RatioTotalX) {
 							var col = clamp(Math.floor((e.clientX - 8 * RatioTotalX) / (18 * RatioTotalX)), 0, 9);
 
-
 							SelectedPos = (3 * 10 + col);
 
 							Selected = $(".slot:eq(" + SelectedPos + ")");
 							Selected.css("opacity", "0.5");
-						} else if(e.clientY >= 19 * RatioTotalY && e.clientY <= 70 * RatioTotalY && e.clientX >= 40 * RatioTotalX && e.clientX <= 92 * RatioTotalX) {
-							var row = clamp(Math.floor((e.clientY - 19 * RatioTotalY) / (17 * RatioTotalY)), 0, 3);
-							var col = clamp(Math.floor((e.clientX - 40 * RatioTotalX) / (17 * RatioTotalY)), 0, 3);
+						} else if(e.clientY >= 24 * RatioTotalY && e.clientY <= 75 * RatioTotalY && e.clientX >= 8 * RatioTotalX && e.clientX <= 94 * RatioTotalX) {
+							var row = clamp(Math.floor((e.clientY - 24 * RatioTotalY) / (17   * RatioTotalY)), 0, 3);
+							var col = clamp(Math.floor((e.clientX - 8  * RatioTotalX) / (17.2 * RatioTotalX)), 0, 5);
 
-							var pos = 40 + row * 3 + col;
+							SelectedPos = 40 + row * 5 + col;
 
-							SelectedPos = pos;
-							Selected = $(".slot:eq(" + (pos) + ")");
+							Selected = $(".slot:eq(" + (SelectedPos) + ")");
 							Selected.css("opacity", "0.5");
 						}
 					},
@@ -160,41 +151,52 @@
 							var thatAmount = parseInt(Selected.children("span").html());
 
 
-							if(thisImg == thatImg && thisImg != "../images/blank.png") {
-
-								if(thisAmount == 64) {
-									setNumber(SelectedPos, 64);
-									setNumber(Position, thatAmount);
-								} else if(thatAmount == 64) {
-									setNumber(Position, 64);
-									setNumber(SelectedPos, thisAmount);
-								} else if(thisAmount + thatAmount >= 64) {
-									setNumber(SelectedPos, 64);
-									setNumber(Position, thisAmount + thatAmount - 64);
-								} else {
-									setNumber(Position, 0);
-									setNumber(SelectedPos, thisAmount + thatAmount);
+							if(SelectedPos >= 40) {
+								if(thisImg == thatImg) {
+									if(thisAmount > thatAmount) {
+										setNumber(Position, thisAmount - thatAmount);
+										Selected.children("span").html(0);
+									} else if(thisAmount < thatAmount) {
+										setNumber(Position, 0);
+										Selected.children("span").html(thatAmount - thisAmount);
+									} else {
+										setNumber(Position, 0);
+										Selected.children("span").html(0);
+									}
+									//BuilderObject.update();
 								}
-							} else if(thatImg == "../images/blank.png") {
-								Selected.children("img").attr("src", $(this).attr("src"));
-								setNumber(Selected.index(".slot"), $(this).next().html());
-
-								$(this).attr("src", "../images/blank.png");
-								setNumber(Position, 0);
 							} else {
-								var selectedItem = Selected.children("img").attr("src");
-								var selectedItemAmount = Selected.children("span").html();
+								if(thisImg == thatImg && thisImg != "../images/blank.png") {
+									if(thisAmount == 64) {
+										setNumber(SelectedPos, 64);
+										setNumber(Position, thatAmount);
+									} else if(thatAmount == 64) {
+										setNumber(Position, 64);
+										setNumber(SelectedPos, thisAmount);
+									} else if(thisAmount + thatAmount >= 64) {
+										setNumber(SelectedPos, 64);
+										setNumber(Position, thisAmount + thatAmount - 64);
+									} else {
+										setNumber(Position, 0);
+										setNumber(SelectedPos, thisAmount + thatAmount);
+									}
+								} else if(thatImg == "../images/blank.png") {
+									Selected.children("img").attr("src", $(this).attr("src"));
+									setNumber(Selected.index(".slot"), $(this).next().html());
 
-								Selected.children("img").attr("src", $(this).attr("src"));
-								$(this).attr("src", selectedItem);
+									$(this).attr("src", "../images/blank.png");
+									setNumber(Position, 0);
+								} else {
+									var selectedItem = Selected.children("img").attr("src");
+									var selectedItemAmount = Selected.children("span").html();
 
-								Selected.children("span").html($(this) .next().html());
-								$(this) .next().html(selectedItemAmount);
+									Selected.children("img").attr("src", $(this).attr("src"));
+									$(this).attr("src", selectedItem);
+
+									Selected.children("span").html($(this) .next().html());
+									$(this) .next().html(selectedItemAmount);
+								}
 							}
-						}
-
-						if(SelectedPos >= 40) {
-							//InventoryObject.craft();
 						}
 
 						$(this).css("top", "0px");
@@ -202,11 +204,15 @@
 
 					},
 					revert: function () {
-						return (Selected == null);
+						if(Selected == null) { return true; }
+						return (SelectedPos >= 40 && Selected.children("img").attr("src") != $(this).attr("src"));
 					}
-
 				});
-
+				
+				$("#BuildingsSelector").change(function() {
+					
+				});
+				
 			});
 
 			function setNumber(at, amount) {
@@ -238,19 +244,12 @@
 				item.data("max", max).data("magic", magic);
 			}
 
-			function setResult(val, amount) {
-
-				var item = $(".slot:eq(49)");
-				item.children("img").attr("src", val);
-				item.children("span").html(amount);
-
-			}
 		</script>
 
 	</head>
 	<body>
 		<div id="containor">
-			<img src="../images/Inventory.png" id="selectBar" style="position: relative; z-index: -1;"/>
+			<img src="../images/Builder.png" id="selectBar" style="position: relative; z-index: -1;"/>
 
 			<div class="slot"><img src="../materials/textures/fire.png" class="item"/><span class="num">3</span></div>
 			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
@@ -301,17 +300,32 @@
 			<!-- Fourth row done -->
 
 
-			<!-- Crafting Grid -->
+			<!-- Builder Inventory first row -->
 			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">8</span></div>
 			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
 			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
 			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
 			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+
+			<!-- Builder Inventory second row -->
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">8</span></div>
 			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
 			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
 			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
 			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div><!-- result slot -->
+
+			<!-- Builder Inventory third row -->
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">8</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<select id="BuildingsSelector">
+			  <option value="">Head Quarters</option>
+			  <option value="">Crystal Drill</option>
+			  <option value="">Robot Factory</option>
+			  <option value="">Generator</option>
+			</select>
 		</div>
 	</body>
 </html>
