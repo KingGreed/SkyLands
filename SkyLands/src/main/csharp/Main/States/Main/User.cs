@@ -20,15 +20,18 @@ namespace Game
     {
         private const float DIST_MIN_SELECTION = 30;
         private const float DIST_MAX_SELECTION = 250;
-        
-        private CameraMan              mCameraMan;
+
         private readonly StateManager  mStateMgr;
         private readonly API.Geo.World mWorld;
-        private readonly SceneNode     mWireCube;
-        private Vector3                mSelectedBlockPos;
-        private Block                  mSelectedBlock;
-        private Selector               mSelector;
-        private Keys[]                 mFigures;
+
+        private CameraMan mCameraMan;
+        private SceneNode mCamYawNode, mCamPitchNode;
+        private readonly SceneNode mWireCube;
+
+        private Vector3           mSelectedBlockPos;
+        private Block             mSelectedBlock;
+        private readonly Selector mSelector;
+        private readonly Keys[]   mFigures;
 
         public Selector Selector { get { return this.mSelector; } }
         public bool IsAllowedToMoveCam { get; set; }
@@ -38,8 +41,11 @@ namespace Game
         {
             this.mStateMgr = stateMgr;
             this.mWorld = world;
+
             this.mCameraMan = null;
             this.IsAllowedToMoveCam = true;
+            this.IsFreeCamMode = true;
+
             this.mSelector = new Selector();
 
             this.mFigures = new Keys[10];
@@ -68,20 +74,60 @@ namespace Game
             this.mWireCube.SetVisible(false);
         }
 
+        public void InitCamera()
+        {
+            VanillaPlayer mainPlayer = this.mStateMgr.MainState.CharacMgr.MainPlayer;
+            if (mainPlayer != null)
+                mainPlayer.Node.SetVisible(false);
+
+            this.mCamYawNode = this.mStateMgr.MainState.CharacMgr.MainPlayer.Node.CreateChildSceneNode();
+            this.mCamYawNode.SetPosition(0, 3.6f, 0); // Camera is set at eyes level
+            this.mCamYawNode.Yaw(new Degree(180));
+
+            this.mCamPitchNode = this.mCamYawNode.CreateChildSceneNode();
+            this.mCamPitchNode.AttachObject(this.mStateMgr.Camera);
+
+            this.mStateMgr.Camera.Position = Vector3.ZERO;
+            this.mStateMgr.Camera.Orientation = Quaternion.IDENTITY;
+        }
+
         public void Update(float frameTime)
         {
-            /* Move camera */
-            VanillaPlayer mainPlayer = this.mStateMgr.MainState.CharacMgr.MainPlayer;
+            MainState mainState = this.mStateMgr.MainState;
+            VanillaPlayer mainPlayer = mainState.CharacMgr.MainPlayer;
             if (this.IsFreeCamMode && mainPlayer != null)
-                this.IsAllowedToMoveCam = !mainPlayer.MovementInfo.IsAllowedToMove;
-
-            if (this.mCameraMan != null && this.IsAllowedToMoveCam)
             {
-                this.mCameraMan.MouseMovement(this.mStateMgr.Controller.Yaw, this.mStateMgr.Controller.Pitch);
-                this.mCameraMan.UpdateCamera(frameTime, this.mStateMgr.Controller);
+                bool ctrlPressed = this.mStateMgr.Controller.IsKeyDown(Keys.ControlKey);
+                mainPlayer.SetIsAllowedToMove(ctrlPressed, false);
+                this.IsAllowedToMoveCam = !ctrlPressed;
             }
+            
+            /* Move camera */
+            if (this.IsAllowedToMoveCam)
+            {
+                if (this.IsFreeCamMode)
+                {
+                    this.mCameraMan.MouseMovement(this.mStateMgr.Controller.Yaw, this.mStateMgr.Controller.Pitch);
+                    this.mCameraMan.UpdateCamera(frameTime, this.mStateMgr.Controller);
+                }
+                else if (mainPlayer.MovementInfo.IsAllowedToMove) // Just pitch the camera
+                {
+                    this.mCamPitchNode.Pitch(new Degree(this.mStateMgr.Controller.Pitch));
 
-            float dist = this.UpdateSelectedBlock();
+                    if (2 * new Degree(Math.ACos(this.mCamPitchNode.Orientation.w)).ValueAngleUnits > 90.0f) // Limit the pitch between -90 degrees and +90 degrees
+                        this.mCamPitchNode.SetOrientation(Math.Sqrt(0.5f), Math.Sqrt(0.5f) * Math.Sign(this.mCamPitchNode.Orientation.x), 0, 0);
+                }
+
+                /* Cube addition and suppression */
+                float dist = this.UpdateSelectedBlock();
+                if (!(this.mStateMgr.GameInfo.IsInEditorMode ^ mainState.User.IsFreeCamMode))    // Allow world edition
+                {
+                    if (this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction) && !this.mSelector.IsBullet && this.mWorld.onLeftClick(this.mSelectedBlockPos))
+                        this.AddBlock(dist);
+                    if (this.mStateMgr.Controller.HasActionOccured(UserAction.SecondaryAction) && this.mWorld.onRightClick(this.mSelectedBlockPos))
+                        this.DeleteBlock();
+                }
+            }
 
             /* Move Selector */
             int selectorPos = this.mSelector.SelectorPos;
@@ -96,26 +142,16 @@ namespace Game
                 }
             }
             this.mSelector.SelectorPos = selectorPos;
-
-            /* Cube addition and suppression */
-            if (!(this.mStateMgr.GameInfo.IsInEditorMode ^ this.mStateMgr.MainState.User.IsFreeCamMode))    // Allow world edition
-            {
-                if (this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction) && !this.mSelector.IsBullet && this.mWorld.onLeftClick(this.mSelectedBlockPos))
-                    this.AddBlock(dist);
-                if (this.mStateMgr.Controller.HasActionOccured(UserAction.SecondaryAction) && this.mWorld.onRightClick(this.mSelectedBlockPos)) 
-                    this.DeleteBlock();
-            }
         }
 
         public void SwitchFreeCamMode()
         {
+            VanillaPlayer mainPlayer = this.mStateMgr.MainState.CharacMgr.MainPlayer;
+            if (mainPlayer == null) { return; }
+
             this.IsFreeCamMode = !this.IsFreeCamMode;
 
-            MainState mainState = this.mStateMgr.MainState;
-            VanillaPlayer mainPlayer = mainState.CharacMgr.MainPlayer;
-
-            if (mainPlayer != null)
-                mainPlayer.SwitchFreeCamMode();
+            mainPlayer.SwitchFreeCamMode();
 
             if (this.IsFreeCamMode)
             {
@@ -127,36 +163,22 @@ namespace Game
                 cam.Orientation = orientation;
 
                 this.mCameraMan = new CameraMan(cam);
+                mainPlayer.SetIsAllowedToMove(false);
             }
             else
             {
-                if (mainPlayer != null)
-                {
-                    mainPlayer.MainPlayerCam.InitCamera();
-                    mainPlayer.MovementInfo.IsAllowedToMove = true;
-                }
+                this.InitCamera();
+                mainPlayer.SetIsAllowedToMove(true);
                 this.mCameraMan = null;
             }
         }
 
         private float UpdateSelectedBlock()   // return the distance with the selected block
         {
-            float distance = DIST_MIN_SELECTION;
-            Ray ray = this.mStateMgr.Camera.GetCameraToViewportRay(0.5f, 0.5f);
-            Vector3 actRelBlockPos = MainWorld.AbsToRelative(ray.GetPoint(distance));
-            Vector3 prevRelBlockPos = actRelBlockPos;
+            Vector3 relBlockPos;
             Block actBlock;
-
-            do
-            {
-                while (prevRelBlockPos == actRelBlockPos)
-                {
-                    distance += 3;
-                    actRelBlockPos = MainWorld.AbsToRelative(ray.GetPoint(distance));
-                }
-                prevRelBlockPos = actRelBlockPos;
-                actBlock = this.mWorld.getIsland().getBlock(actRelBlockPos, false);
-            } while (actBlock is Air && distance <= DIST_MAX_SELECTION);
+            float distance = VanillaBlock.getBlockOnRay(this.mWorld.getIsland(), this.mStateMgr.Camera.GetCameraToViewportRay(0.5f, 0.5f), DIST_MAX_SELECTION,
+                                                        DIST_MIN_SELECTION, out relBlockPos, out actBlock);
 
             if (distance > DIST_MAX_SELECTION)
             {
@@ -166,7 +188,7 @@ namespace Game
                 return 0;
             }
 
-            this.mSelectedBlockPos = actRelBlockPos;
+            this.mSelectedBlockPos = relBlockPos;
             this.mSelectedBlock = actBlock;
             this.mWireCube.SetVisible(true);
             this.mWireCube.Position = (this.mSelectedBlockPos + Vector3.NEGATIVE_UNIT_Z) * Cst.CUBE_SIDE;

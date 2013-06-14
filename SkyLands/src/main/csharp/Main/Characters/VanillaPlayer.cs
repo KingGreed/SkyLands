@@ -1,4 +1,4 @@
-﻿using System.Windows.Forms;
+﻿using System.Linq;
 using Mogre;
 
 using Game.Input;
@@ -11,22 +11,14 @@ namespace Game.CharacSystem
     {
         public const float  DEFAULT_PLAYER_LIFE = 340;
         public const float  DEFAULT_PLAYER_MANA = 120;
-        private const float YAW_SENSIVITY = 0.4f;
-        private const float PITCH_SENSIVITY = 0.15f;
 
-        private readonly bool      mIsFirstView;
         private readonly ShootCube mShootCube;
         private User               mUser;
 
-        public bool             IsFirstView   { get { return this.mIsFirstView; } }
-        public MainPlayerCamera MainPlayerCam { get; private set; }
-        public Degree           Pitch         { get { return this.MainPlayerCam.Pitch; } }
-        public bool             IsMainPlayer  { get { return this.MainPlayerCam != null; } }
+        public bool IsMainPlayer  { get { return this.mUser != null; } }
 
         public VanillaPlayer(CharacMgr characMgr, string meshName, CharacterInfo info) : base(characMgr, info)
         {
-            this.mIsFirstView = true;
-
             SceneManager sceneMgr = characMgr.SceneMgr;
             Entity ent = sceneMgr.CreateEntity("CharacterEnt_" + this.mCharInfo.Id, meshName);
             ent.Skeleton.BlendMode = SkeletonAnimationBlendMode.ANIMBLEND_CUMULATIVE;
@@ -45,30 +37,23 @@ namespace Game.CharacSystem
             this.mShootCube = new ShootCube(this.mCharacMgr.BulletMgr, this);
         }
 
-        public void MakeHimMainPlayer(User user, MainPlayerCamera cam)
-        {
-            this.mUser = user;
-            this.MainPlayerCam = cam;
-        }
+        public void MakeHimMainPlayer(User user) { this.mUser = user; }
 
         public void SwitchFreeCamMode()
         {
-            //this.mNode.SetVisible(this.mUser.IsFreeCamMode, false);
+            this.mNode.SetVisible(this.mUser.IsFreeCamMode, false);
             if (this.mUser.IsFreeCamMode)
                 this.mMesh.ToFreeCamMode();
         }
 
         public new void Update(float frameTime)
         {
-            if(this.mUser.IsFreeCamMode) {this.MovementInfo.IsAllowedToMove = this.mCharacMgr.Controller.IsKeyDown(Keys.ControlKey);}
-
-            if (this.MovementInfo.IsAllowedToMove)
+            if (this.MovementInfo.IsAllowedToMove && !this.MovementInfo.IsMovementForced)
             {
-                float yawValue = -this.mCharacMgr.Controller.Yaw * YAW_SENSIVITY;
-                float pitchValue = -this.mCharacMgr.Controller.Pitch * PITCH_SENSIVITY;
-
-                if (this.mIsFirstView) { this.FirstPersonUpdate(yawValue, pitchValue); }
-                else { this.ThirdPersonUpdate(yawValue, pitchValue); }
+                this.MovementInfo.MoveDirection = new Vector3(this.mCharacMgr.Controller.MovementFactor.x,
+                                                              this.mCharacMgr.Controller.HasActionOccured(UserAction.Jump) ? 1 : 0,
+                                                              this.mCharacMgr.Controller.MovementFactor.z);
+                this.MovementInfo.YawValue = this.mCharacMgr.Controller.Yaw;
 
                 this.MovementInfo.Sprint = this.mCharacMgr.Controller.IsActionOccuring(UserAction.Sprint);
                 if(this.mCharacMgr.Controller.HasActionOccured(UserAction.Levitate))
@@ -77,21 +62,19 @@ namespace Game.CharacSystem
                 /* Update emotes animations */
                 if (!this.mMesh.AnimMgr.AreAnimationsPlaying(MeshAnim.GetString(Sinbad.AnimName.JumpStart, Sinbad.AnimName.JumpLoop, Sinbad.AnimName.JumpEnd, Sinbad.AnimName.RunBase, Sinbad.AnimName.RunTop)))
                 {
-                    foreach (Sinbad.Emote emote in ((Sinbad)this.mMesh).Emotes)
+                    foreach (Sinbad.Emote emote in ((Sinbad)this.mMesh).Emotes.Where(emote => this.mCharacMgr.Controller.HasActionOccured(emote.Action)))
                     {
-                        if (this.mCharacMgr.Controller.HasActionOccured(emote.Action))
-                        {
-                            if (!this.mMesh.AnimMgr.AreAnimationsPlaying(MeshAnim.GetString(emote.Anim))) { this.mMesh.AnimMgr.SetAnims(MeshAnim.GetString(emote.Anim)); }
-                            else { this.mMesh.AnimMgr.DeleteAnims(MeshAnim.GetString(emote.Anim)); }
-                        }
+                        if (!this.mMesh.AnimMgr.AreAnimationsPlaying(MeshAnim.GetString(emote.Anim))) 
+                            this.mMesh.AnimMgr.SetAnims(MeshAnim.GetString(emote.Anim));
+                        else
+                            this.mMesh.AnimMgr.DeleteAnims(MeshAnim.GetString(emote.Anim));
                     }
                 }
             }
 
-            if (this.mUser.IsAllowedToMoveCam && this.mUser.Selector.IsBullet)
+            if (!this.mUser.IsFreeCamMode && this.mUser.IsAllowedToMoveCam && this.mUser.Selector.IsBullet)
             {
-                if (this.mCharacMgr.Controller.HasActionEnded(UserAction.MainAction))
-                { this.mShootCube.Burst(); }
+                if (this.mCharacMgr.Controller.HasActionEnded(UserAction.MainAction)) { this.mShootCube.Burst(); }
                 if (this.mCharacMgr.Controller.IsActionOccuring(UserAction.MainAction))
                 {
                     this.mShootCube.Material = "fireball";  //this.mUser.Selector.Material
@@ -100,15 +83,14 @@ namespace Game.CharacSystem
             }
         }
 
-        private void FirstPersonUpdate(float yawValue, float pitchValue)
+        public override bool Dispose(bool updateTargets = true)
         {
-            this.MovementInfo.MoveDirection = new Vector3(this.mCharacMgr.Controller.MovementFactor.x,
-                                                          this.mCharacMgr.Controller.HasActionOccured(UserAction.Jump) ? 1 : 0,
-                                                          this.mCharacMgr.Controller.MovementFactor.z);
-            this.MovementInfo.YawValue = yawValue;
-            this.MovementInfo.PitchValue = pitchValue;
-        }
+            bool switchToFreeCamMode = this.IsMainPlayer && !this.mUser.IsFreeCamMode;
+            if (switchToFreeCamMode) { this.mUser.SwitchFreeCamMode(); }
+            
+            base.Dispose(updateTargets);
 
-        private void ThirdPersonUpdate(float yawValue, float pitchValue) { }
+            return this.IsMainPlayer;
+        }
     }
 }

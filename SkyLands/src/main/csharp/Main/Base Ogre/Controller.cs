@@ -27,6 +27,9 @@ namespace Game.Input
 
     public class Controller
     {
+        private const float YAW_SENSIVITY = - 0.4f;
+        private const float PITCH_SENSIVITY = - 0.15f;
+
         private readonly XmlDocument mCommands;
         private readonly Dictionary<Keys, bool> mKeyDown;
         private readonly Dictionary<Keys, bool> mKeyPressed;
@@ -164,7 +167,10 @@ namespace Game.Input
             }
 
             this.Yaw += this.MouseMove.x;
+            this.Yaw *= YAW_SENSIVITY;
             this.Pitch += this.MouseMove.y;
+            this.Pitch *= PITCH_SENSIVITY;
+
 
             for (; i < nodes.Count; i++) // Single event
             {

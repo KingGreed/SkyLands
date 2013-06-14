@@ -2528,7 +2528,7 @@
     <Compile Include="csharp\Main\Characters\Misc\MovementInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\Characters\NonPlayer\VanillaNonPlayer.cs">
+    <Compile Include="csharp\Main\Characters\VanillaNonPlayer.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\Characters\PlayerInventory\CraftingMgr.cs">
@@ -2543,10 +2543,7 @@
     <Compile Include="csharp\Main\Characters\PlayerInventory\Slot.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\Characters\Player\MainPlayerCamera.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="csharp\Main\Characters\Player\VanillaPlayer.cs">
+    <Compile Include="csharp\Main\Characters\VanillaPlayer.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\Characters\VanillaCharacter.cs">
@@ -2627,6 +2624,7 @@
     <Compile Include="csharp\Main\World\Blocks\YellowSandBlock.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\World\Display\ColoredMaterials.cs" />
     <Compile Include="csharp\Main\World\Display\GraphicBlock.cs">
       <SubType>Code</SubType>
     </Compile>

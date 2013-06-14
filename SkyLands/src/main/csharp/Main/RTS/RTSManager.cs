@@ -5,6 +5,8 @@ using System.Text;
 
 namespace Game.RTS
 {
+    public enum Faction { Blue, Red }
+
     public abstract class RTSManager // One RTSManager per faction
     {
         protected int mCrystals;

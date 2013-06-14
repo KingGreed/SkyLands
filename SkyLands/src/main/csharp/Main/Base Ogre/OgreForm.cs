@@ -124,6 +124,7 @@ namespace Game.BaseApp {
             //LogManager.Singleton.DefaultLog.LogDetail = LoggingLevel.LL_LOW;
             this.mSceneMgr.ShadowTechnique = ShadowTechnique.SHADOWDETAILTYPE_INTEGRATED;
             this.mSceneMgr.ShadowFarDistance = 400;
+            Game.World.Display.ColoredMaterials.Init();
 
             this.Resize += this.OgreForm_Resize;
             this.Move += (sender, args) => WindowPosition = this.Location;
@@ -154,7 +155,7 @@ namespace Game.BaseApp {
 
         private void ChooseSceneManager() { this.mSceneMgr = this.mRoot.CreateSceneManager(SceneType.ST_GENERIC); }
         private void CreateCamera() {
-            this.mCam = this.mSceneMgr.CreateCamera("MainCamera");
+            this.mCam = this.mSceneMgr.CreateCamera("Camera");
             this.mCam.NearClipDistance = 5;
         }
 

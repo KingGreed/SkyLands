@@ -7,13 +7,12 @@ using Game.World;
 using Game.States;
 using Game.Input;
 using Game.Shoot;
+using Game.RTS;
 
 using API.Ent;
 
 namespace Game.CharacSystem
 {
-    public enum Faction { Blue, Red }
-
     public class CharacMgr : CharacterMgr
     {
         private const string SINBAD_MESH = "Sinbad.mesh";
@@ -24,7 +23,7 @@ namespace Game.CharacSystem
         private readonly Controller               mController;
         private readonly MainWorld                mWorld;
         private readonly BulletManager            mBulletMgr;
-        private readonly User                     mCameraMgr;
+        private readonly User                     mUser;
 
         public StateManager  StateMgr   { get { return this.mStateMgr; } }
         public SceneManager  SceneMgr   { get { return this.mStateMgr.SceneMgr; } }
@@ -33,12 +32,12 @@ namespace Game.CharacSystem
         public VanillaPlayer MainPlayer { get; private set; }
         public BulletManager BulletMgr  { get { return this.mBulletMgr; } }
 
-        public CharacMgr(StateManager stateMgr, MainWorld world, User cameraMgr, BulletManager bulletMgr = null)
+        public CharacMgr(StateManager stateMgr, MainWorld world, User user, BulletManager bulletMgr = null)
         {
             this.mStateMgr = stateMgr;
             this.mController = stateMgr.Controller;
             this.mWorld = world;
-            this.mCameraMgr = cameraMgr;
+            this.mUser = user;
             this.mBulletMgr = bulletMgr;
             this.mCharacters = new List<VanillaCharacter>[Enum.GetValues(typeof(Faction)).Length];
             for(int i = 0; i < this.mCharacters.Length; i++)
@@ -56,7 +55,7 @@ namespace Game.CharacSystem
                 this.mCharacters[(int)info.Faction].Add(player);
                 if (this.MainPlayer == null)
                 {
-                    player.MakeHimMainPlayer(this.mCameraMgr, new MainPlayerCamera(this.mStateMgr.Camera, player));
+                    player.MakeHimMainPlayer(this.mUser);
                     this.MainPlayer = player;
                 }
             }
@@ -73,30 +72,30 @@ namespace Game.CharacSystem
 
         public void Update(float frameTime)
         {
-            foreach (List<VanillaCharacter> characList in mCharacters)
+            foreach (List<VanillaCharacter> characList in this.mCharacters)
             {
                 for (int i = 0; i < characList.Count; i++)
                 {
                     if (characList[i].WaitForRemove)
                     {
-                        characList[i].Dispose();
+                        VanillaCharacter charac = characList[i];
                         characList.Remove(characList[i]);
+                        if (charac.Dispose())
+                        { this.MainPlayer = null; }
                         continue;
                     }
                     characList[i].Update(frameTime);
                 }
             }
-
-            if (this.MainPlayer != null && this.mCameraMgr.IsAllowedToMoveCam) { this.MainPlayer.MainPlayerCam.Update(); }
         }
 
         public void Dispose()
         {
-            foreach (List<VanillaCharacter> characList in mCharacters)
+            foreach (List<VanillaCharacter> characList in this.mCharacters)
             {
                 while (characList.Count > 0)
                 {
-                    characList[0].Dispose();
+                    characList[0].Dispose(false);
                     characList.RemoveAt(0);
                 }
             }

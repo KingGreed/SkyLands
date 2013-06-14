@@ -32,8 +32,6 @@ namespace Game.CharacSystem.AI
             this.mCurrent = current;
 
             this.mOpen.Add(new Node(this.mRelDestination, start));
-
-            this.ContinuePathFinding();
         }
 
         public Stack<Vector3> ContinuePathFinding()
@@ -77,7 +75,7 @@ namespace Game.CharacSystem.AI
                 }
             }
 
-            return null;
+            return new Stack<Vector3>();
         }
     }
 }

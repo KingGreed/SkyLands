@@ -9,7 +9,6 @@ namespace Game.States
         protected override void Startup()
         {
             base.Startup();
-            this.User.SwitchFreeCamMode();
         }
 
         protected override void AfterWorldCreation()

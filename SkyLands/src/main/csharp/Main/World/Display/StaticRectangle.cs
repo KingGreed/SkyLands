@@ -5,37 +5,6 @@ namespace Game.World.Display
 {
     static class StaticRectangle
     {
-        static StaticRectangle() {
-            /* For drawing lines */
-            String resourceGroupName = "debugger";
-            if (ResourceGroupManager.Singleton.ResourceGroupExists(resourceGroupName) == false)
-                ResourceGroupManager.Singleton.CreateResourceGroup(resourceGroupName);
-
-            MaterialPtr moMaterial2 = MaterialManager.Singleton.Create("line_material_red", resourceGroupName);
-            moMaterial2.ReceiveShadows = false;
-            moMaterial2.GetTechnique(0).SetLightingEnabled(true);
-            moMaterial2.GetTechnique(0).GetPass(0).SetDiffuse(1, 0, 0, 0);
-            moMaterial2.GetTechnique(0).GetPass(0).SetAmbient(1, 0, 0);
-            moMaterial2.GetTechnique(0).GetPass(0).SetSelfIllumination(1, 0, 0);
-            moMaterial2.Dispose();  // dispose pointer, not the material
-
-            MaterialPtr moMaterial3 = MaterialManager.Singleton.Create("line_material_green", resourceGroupName);
-            moMaterial3.ReceiveShadows = false;
-            moMaterial3.GetTechnique(0).SetLightingEnabled(true);
-            moMaterial3.GetTechnique(0).GetPass(0).SetDiffuse(0, 1, 0, 0);
-            moMaterial3.GetTechnique(0).GetPass(0).SetAmbient(0, 1, 0);
-            moMaterial3.GetTechnique(0).GetPass(0).SetSelfIllumination(0, 1, 0);
-            moMaterial3.Dispose();  // dispose pointer, not the material
-
-            MaterialPtr moMaterial = MaterialManager.Singleton.Create("line_material_blue", resourceGroupName);
-            moMaterial.ReceiveShadows = false;
-            moMaterial.GetTechnique(0).SetLightingEnabled(true);
-            moMaterial.GetTechnique(0).GetPass(0).SetDiffuse(0, 0, 1, 0);
-            moMaterial.GetTechnique(0).GetPass(0).SetAmbient(0, 0, 1);
-            moMaterial.GetTechnique(0).GetPass(0).SetSelfIllumination(0, 0, 1);
-            moMaterial.Dispose();  // dispose pointer, not the material
-        }
-        
         static void DisplayRectangle(Vector3 origin, int height, int width, int depth, SceneNode node) {
             ManualObject block = new ManualObject(Guid.NewGuid().ToString());
             block.Begin("cube/Sand", RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
@@ -72,7 +41,7 @@ namespace Game.World.Display
             node.AttachObject(block);
         }
 
-        public static ManualObject CreateLine(SceneManager sceneMgr, Vector3 p1, Vector3 p2, string material = "line_material_blue")
+        public static ManualObject CreateLine(SceneManager sceneMgr, Vector3 p1, Vector3 p2, string material = ColoredMaterials.BLUE)
         {
             ManualObject manOb = sceneMgr.CreateManualObject();
             manOb.Begin(material, RenderOperation.OperationTypes.OT_LINE_LIST);
@@ -83,7 +52,7 @@ namespace Game.World.Display
             return manOb;
         }
 
-        public static SceneNode DrawLine(SceneManager sceneMgr, Vector3 p1, Vector3 p2, string material = "line_material_blue")
+        public static SceneNode DrawLine(SceneManager sceneMgr, Vector3 p1, Vector3 p2, string material = ColoredMaterials.BLUE)
         {
             SceneNode node = sceneMgr.RootSceneNode.CreateChildSceneNode();
             node.Position = p1;

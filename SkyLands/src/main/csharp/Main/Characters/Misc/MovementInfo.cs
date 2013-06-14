@@ -10,8 +10,8 @@ namespace Game.CharacSystem
         private Vector3 mMoveDirection;
 
         public float YawValue                 { get; set; }
-        public float PitchValue               { get; set; }
         public bool IsAllowedToMove           { get; set; }
+        public bool IsMovementForced          { get; set; }
         public bool IsPushedByArcaneLevitator { get; set; }
         public bool Sprint                    { get; set; }
 
@@ -43,6 +43,7 @@ namespace Game.CharacSystem
             this.mIsFalling = false;
             this.mIsJumping = false;
             this.IsPushedByArcaneLevitator = false;
+            this.IsMovementForced = false;
             this.mMoveDirection = new Vector3();
             this.ClearInfo();
         }

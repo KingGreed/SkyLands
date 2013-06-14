@@ -1,8 +1,11 @@
-﻿using Game.CharacSystem;
+﻿using System.Windows.Forms;
+using Game.Input;
+using Mogre;
+
+using Game.CharacSystem;
 using Game.Shoot;
 using Game.RTS;
 using Game.World.Display;
-using Mogre;
 
 namespace Game.States
 {
@@ -19,12 +22,12 @@ namespace Game.States
 
             CharacterInfo playerInfo = new CharacterInfo("Sinbad", Faction.Blue, true) { SpawnPoint = this.mWorld.getSpawnPoint() };
             this.CharacMgr.AddCharacter(playerInfo);
+            this.User.SwitchFreeCamMode();
 
-            CharacterInfo iaInfo = new CharacterInfo("Robot-01", Faction.Red)
+            this.CharacMgr.AddCharacter(new CharacterInfo("Robot-01", Faction.Red)
             {
-                SpawnPoint = playerInfo.SpawnPoint + new Vector3(800, 100, 200)
-            };
-            this.CharacMgr.AddCharacter(iaInfo);
+                SpawnPoint = playerInfo.SpawnPoint + new Vector3(800, 500, 200)
+            });
 
             ParticleGenerator.mkParticle(this.mStateMgr.SceneMgr, this.mWorld.getSpawnPoint(), "MultiEmitters");
         }
@@ -43,7 +46,7 @@ namespace Game.States
             
             this.mBulletMgr.Update(frameTime);
 
-            if (this.mStateMgr.Controller.WasKeyPressed(System.Windows.Forms.Keys.F1))
+            if (this.mStateMgr.Controller.WasKeyPressed(Keys.F1))
                 this.User.SwitchFreeCamMode();
         }
 

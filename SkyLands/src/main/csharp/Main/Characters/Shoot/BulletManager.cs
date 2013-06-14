@@ -27,7 +27,7 @@ namespace Game.Shoot
 
         public void RemoveBullet(Bullet b)
         {
-            b.Dispose();
+            b.Dispose(this.SceneMgr);
             this.mBullets.Remove(b);
         }
 
@@ -35,7 +35,7 @@ namespace Game.Shoot
         {
             for(int i = 0; i < this.mBullets.Count; i++)
             {
-                if (!this.mBullets[i].Update(frameTime))
+                if (!this.mBullets[i].Update(this, frameTime))
                 {
                     this.RemoveBullet(this.mBullets[i]);
                     i--;
@@ -47,7 +47,7 @@ namespace Game.Shoot
         {
             while (this.mBullets.Count > 0)
             {
-                this.mBullets[0].Dispose();
+                this.mBullets[0].Dispose(this.SceneMgr);
                 this.mBullets.RemoveAt(0);
             }
         }

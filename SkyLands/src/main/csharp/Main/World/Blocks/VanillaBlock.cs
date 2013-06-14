@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Mogre;
+﻿using Mogre;
 
 using API.Geo.Cuboid;
 using API.Generic;
-
-using Game.CharacSystem;
 
 namespace Game.World.Blocks
 {
@@ -34,5 +30,24 @@ namespace Game.World.Blocks
 
         public override void onBlockLeave(API.Ent.Entity e, Vector3 position) { }
         public override void onBlockEnter(API.Ent.Entity e, Vector3 position) { e.updateTargets(); }
+
+        public static float getBlockOnRay(Island island, Ray ray, float distMax, float minDist, out Vector3 relBlockPos, out Block actBlock)   // distance must be set at a minDist value
+        {
+            float distance = minDist;
+            relBlockPos = MainWorld.AbsToRelative(ray.GetPoint(distance));
+
+            do
+            {
+                Vector3 prevRelBlockPos = relBlockPos;
+                while (prevRelBlockPos == relBlockPos)
+                {
+                    distance += 3;
+                    relBlockPos = MainWorld.AbsToRelative(ray.GetPoint(distance));
+                }
+                actBlock = island.getBlock(relBlockPos, false);
+            } while (actBlock is Air && distance < distMax);
+
+            return distance;
+        }
     }
 }

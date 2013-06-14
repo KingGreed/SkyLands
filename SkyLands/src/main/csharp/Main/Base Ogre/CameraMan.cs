@@ -12,14 +12,13 @@ namespace Game.BaseApp
         private bool    mFreeze;
 
         public Camera Camera     { get { return this.mCamera; } }
-        public bool FastMove     { set { mFastMove = value; }     get { return mFastMove; } }
-        public bool Freeze       { set { mFreeze = value; }       get { return mFreeze; } }
+        public bool   FastMove   { get { return mFastMove; } set { mFastMove = value; } }
+        public bool   Freeze     { get { return mFreeze; }   set { mFreeze = value; } }
 
         public CameraMan(Camera camera) { this.mCamera = camera; }
 
         public void UpdateCamera(float frameTime, Controller input = null)
         {
-
             if (input != null) { this.UpdateKeys(input); }
             if (this.mFreeze) { return; }
 
@@ -43,10 +42,11 @@ namespace Game.BaseApp
             this.MouseMovement(input.Yaw, input.Pitch);
         }
 
-        public void MouseMovement(float yaw, float pitch) {
+        public void MouseMovement(float yaw, float pitch)
+        {
             if (this.mFreeze) { return; }
-            this.mCamera.Yaw(new Degree(-yaw * 0.15f));
-            this.mCamera.Pitch(new Degree(-pitch * 0.15f));
+            this.mCamera.Yaw(new Degree(yaw));
+            this.mCamera.Pitch(new Degree(pitch));
         }
     }
 }

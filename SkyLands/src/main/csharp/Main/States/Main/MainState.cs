@@ -11,7 +11,7 @@ namespace Game.States
         protected MainWorld mWorld;
         private SceneNode   mSelectedEntity;
 
-        public User      User { get; protected set; }
+        public User      User      { get; protected set; }
         public CharacMgr CharacMgr { get; protected set; }
 
         protected MainState(StateManager stateMgr, string name) : base(stateMgr, name) { this.mSelectedEntity = null; }
@@ -37,7 +37,7 @@ namespace Game.States
             this.mStateMgr.Controller.CursorVisibility = false;
             this.mStateMgr.Controller.BlockMouse = true;
 
-            this.User.IsAllowedToMoveCam = true;
+            this.User.IsAllowedToMoveCam = true;    // Set it to false if a menu opens
         }
 
         public override void Hide()
@@ -83,12 +83,6 @@ namespace Game.States
                     this.mSelectedEntity = null;
                 }
             }
-        }
-
-        public void EnableMovement(bool enable)
-        {
-            this.User.IsAllowedToMoveCam = enable;
-            if(this.CharacMgr.MainPlayer != null) { this.CharacMgr.MainPlayer.MovementInfo.IsAllowedToMove = enable; }
         }
 
         protected override void Shutdown()

@@ -9,7 +9,7 @@ using API.Generic;
 
 using Game.World.Blocks;
 using Game.CharacSystem;
-using Game.States;
+using Game.RTS;
 
 using Mogre;
 
@@ -50,11 +50,11 @@ namespace Game.World.Generator.Decorators
 
             CharacterInfo iaInfo = new CharacterInfo("Robot-" + Guid.NewGuid().ToString(), Faction.Red);
 
-            iaInfo.SpawnPoint = new Vector3(pos.x + _width / 2 - 4, (int)pos.y - 5, (int)pos.z + _width / 2) * API.Generic.Cst.CUBE_SIDE;
+            iaInfo.SpawnPoint = new Vector3(pos.x + _width / 2 - 4, (int)pos.y - 5, (int)pos.z + _width / 2) * Cst.CUBE_SIDE;
             curr.mWorld.getStateMgr().MainState.CharacMgr.AddCharacter(iaInfo);
 
             iaInfo = new CharacterInfo("Robot-" + Guid.NewGuid().ToString(), Faction.Red);
-            iaInfo.SpawnPoint = new Vector3(pos.x + _width / 2 + 4, (int)pos.y - 5, (int)pos.z + _width / 2) * API.Generic.Cst.CUBE_SIDE;
+            iaInfo.SpawnPoint = new Vector3(pos.x + _width / 2 + 4, (int)pos.y - 5, (int)pos.z + _width / 2) * Cst.CUBE_SIDE;
             curr.mWorld.getStateMgr().MainState.CharacMgr.AddCharacter(iaInfo);
 
 

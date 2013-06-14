@@ -1,5 +1,7 @@
 ﻿using Mogre;
 
+using Game.RTS;
+
 namespace Game.CharacSystem
 {
     public struct CharacterInfo
@@ -20,7 +22,7 @@ namespace Game.CharacSystem
         public Faction Faction    { get { return this.mFaction; } }
         public bool    IsPlayer   { get { return this.mIsPlayer; } }
 
-        public CharacterInfo(string name, Faction faction = Faction.Blue, bool isPlayer = false)
+        public CharacterInfo(string name, Faction faction, bool isPlayer = false)
         {
             this.mId = mLastPlayerId;
             mLastPlayerId++;
