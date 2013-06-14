@@ -10,3 +10,4 @@ TestResults
 # Files to ignore here
 *.suo
 *.log
+*.user
