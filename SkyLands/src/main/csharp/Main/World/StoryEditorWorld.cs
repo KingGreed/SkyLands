@@ -17,6 +17,7 @@ using Game.States;
 using Game.Sky;
 using Game.World.Blocks;
 using Game.World.Generator.Biomes;
+using Game.CharacSystem;
 
 using Mogre;
 
@@ -110,9 +111,10 @@ namespace Game.World
 
 
 
-        public void createEntity(Vector3 point, Entity type) { type.getIsland().mEntitiesInIsland.Add(type); }
-        public void createAndSpawnEntity(Vector3 point, Entity e) { throw new NotImplementedException(); }
-	    public void spawnEntity(Entity e) { throw new NotImplementedException(); }
+        public void createAndSpawnEntity(Vector3 point, CharacterInfo c) {
+            this.mStateMgr.MainState.CharacMgr.AddCharacter(c);
+        }
+
 	    public List<Character> getPlayers() { throw new NotImplementedException(); }
         public bool HasPointCollision(Vector3 relBlockPos) { throw new NotImplementedException(); }
 
@@ -157,7 +159,6 @@ namespace Game.World
         public void load() {
 
         }
-
 
         public void Update(float frameTime) { this.mSkyMgr.Update(); }
 

@@ -7,6 +7,7 @@ using API.Ent;
 using API.Geo.Cuboid;
 
 using Game.States;
+using Game.CharacSystem;
 
 using Entity = API.Ent.Entity;
 
@@ -41,16 +42,6 @@ namespace API.Geo
 	    int getSurfaceHeight(int x, int z);
 
 
-	    /**
-	     * Create a new Entity for initialization
-	     * <p/>
-	     * This does not add the Entity to the server. You must call
-	     * {@link #spawnEntity(Entity)} to simulate the Entity in the world
-	     * @param point The point to spawn the Entity
-	     * @param component The component to give the Entity.
-	     * @return The created entity
-	     */
-	    void createEntity(Vector3 point, Entity type);
 
 	    /**
 	     * Create a new Entity for initialization
@@ -61,13 +52,7 @@ namespace API.Geo
 	     * @param prefab The entity prefab.
 	     * @return The created entity
 	     */
-	    void createAndSpawnEntity(Vector3 point, Entity e);
-
-	    /**
-	     * Add a created entity to the world for simulation and syncing to clients
-	     * @param e The entity to spawn
-	     */
-	    void spawnEntity(Entity e);
+        void createAndSpawnEntity(Vector3 point, CharacterInfo c);
 
 
         SceneManager getSceneMgr();

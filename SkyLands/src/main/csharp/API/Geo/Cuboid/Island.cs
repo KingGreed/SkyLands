@@ -28,7 +28,6 @@ namespace API.Geo.Cuboid
         public Dictionary<string, MultiBlock>    multiList = new Dictionary<string, MultiBlock>();
         public List<PositionFaceAndStatus>       blocksAdded;
         public List<PositionFaceAndStatus>       blocksDeleted;
-        public List<Entity>                      mEntitiesInIsland;
 
 
         public Dictionary<Vector3, Chunk> mChunkList;
@@ -48,7 +47,6 @@ namespace API.Geo.Cuboid
             this.blocksDeleted = new List<PositionFaceAndStatus> ();
 
             this.mFaceNode = node.CreateChildSceneNode();
-            this.mEntitiesInIsland = new List<Entity>();
         }
         public Island(SceneNode node, API.Geo.World currentWorld) {
             this.mChunkList = new Dictionary<Vector3, Chunk>();
@@ -60,7 +58,6 @@ namespace API.Geo.Cuboid
             this.blocksDeleted = new List<PositionFaceAndStatus>();
 
             this.mFaceNode = node.CreateChildSceneNode();
-            this.mEntitiesInIsland = new List<Entity>();
         }
 
         //Init
@@ -141,9 +138,10 @@ namespace API.Geo.Cuboid
 
             this.mChunkList = null;
             this.multiList = null;
-            this.mEntitiesInIsland = null;
+
             this.mNode.RemoveAndDestroyAllChildren();
             this.mWorld.getSceneMgr().DestroySceneNode(this.mNode);
+
             this.mWorld.unloadIsland();
         }
 

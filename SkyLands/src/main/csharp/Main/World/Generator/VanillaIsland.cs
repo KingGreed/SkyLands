@@ -309,22 +309,6 @@ namespace Game.World.Generator
                 }
             }
 
-
-
-            var entityfileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" +
-                this.mWorld.getName() + "-Island-entities" + this.mNode.Position.x.ToString() + "-" +
-                this.mNode.Position.y.ToString() + "-" + this.mNode.Position.z.ToString() + ".txt";
-
-
-
-            using(StreamWriter writer = new StreamWriter(entityfileName)) {
-                foreach(API.Ent.Entity e in this.mEntitiesInIsland) {
-                    writer.Write(e.getId());
-                    writer.Write(e.getPosition().x);
-                    writer.Write(e.getPosition().y);
-                    writer.Write(e.getPosition().z);
-                }
-            }
         }
 
         public byte[] linearize(Block[, ,] a) {

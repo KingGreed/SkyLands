@@ -17,6 +17,7 @@ using Game.States;
 using Game.Sky;
 using Game.World.Blocks;
 using Game.World.Generator.Biomes;
+using Game.CharacSystem;
 
 using Mogre;
 
@@ -55,6 +56,10 @@ namespace Game.World
                 this.load();
             }
             this.mSkyMgr = new SkyMgr(this.mStateMgr);
+
+            if(info.Scenario != "") {
+
+            }
 
         }
 
@@ -118,9 +123,9 @@ namespace Game.World
 
 
 
-        public void createEntity(Vector3 point, Entity type) { type.getIsland().mEntitiesInIsland.Add(type); }
-        public void createAndSpawnEntity(Vector3 point, Entity e) { throw new NotImplementedException(); }
-	    public void spawnEntity(Entity e) { throw new NotImplementedException(); }
+        public void createAndSpawnEntity(Vector3 point, CharacterInfo c) {
+            this.mStateMgr.MainState.CharacMgr.AddCharacter(c);
+        }
 	    public List<Character> getPlayers() { throw new NotImplementedException(); }
 
         public static Vector3 getRelativeFromAbsolute(Vector3 absCoord) {
@@ -212,6 +217,11 @@ namespace Game.World
             this.mIslandList.Add(pos, new RandomIsland(node, new Vector2(13, 13), new Hills(), this));
 
             workerThread = new Thread(this.mIslandList[pos].display);*/
+        }
+
+        private void loadScenario(string file) {
+            string[] s = File.ReadAllLines(file);
+
         }
 
         public void Update(float frameTime) { this.mSkyMgr.Update(); }
