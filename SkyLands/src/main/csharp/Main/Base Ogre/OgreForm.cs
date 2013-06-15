@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.IO;
+using Awesomium.Windows.Forms;
 using Mogre;
 using MOIS;
 
 using Awesomium.Core;
-using API.Generic;
 
 using Game.Display;
 using Game.Input;
-using Game.GUIs;
 
 namespace Game.BaseApp {
     public abstract partial class OgreForm : Form {
@@ -28,7 +26,8 @@ namespace Game.BaseApp {
         private Size           mPreviousSize;
         private int            mRenderMode = 0;
 
-        public Vector2 Ratio          { get; set; }
+        public static Vector2 Ratio { get; private set; }
+        public static Vector2 InitSize { get; private set; }
 
         protected OgreForm() {
             //Awesomium
@@ -40,16 +39,11 @@ namespace Game.BaseApp {
             Cursor.Position = new Point(this.Location.X + this.Size.Width / 2,
                                         this.Location.Y + this.Size.Height / 2);
 
+            GUI.WebControls.Add(webView);
             webView.DocumentReady += onDocumentReady;
-            SelectBar.DocumentReady += onSelectBarLoaded;
-            SelectBar.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/Selector.html");
 
-            SelectBar.Size = new Size((int)Selector.WANTED_SIZE.x, (int)Selector.WANTED_SIZE.y);
-            SelectBar.Location = new Point(this.Size.Width / 2 - (int)Selector.WANTED_SIZE.x / 2,
-                                           this.Size.Height - (int)Selector.WANTED_SIZE.y);
-            Console.WriteLine("SelectBar height : " + SelectBar.Location.Y);
-
-            this.MinimumSize = new Size(800, 600);
+            this.MinimumSize = new Size((int)WND_SIZE.x, (int)WND_SIZE.y);
+            InitSize = new Vector2(this.Size.Width, this.Size.Height);
             this.mPreviousSize = this.Size;
             Ratio = Vector2.UNIT_SCALE;
         }
@@ -63,15 +57,6 @@ namespace Game.BaseApp {
             jsobject.Bind("LogMsg", false, this.JSLogger);
         }
 
-        private void onSelectBarLoaded(object sender, UrlEventArgs e)
-        {
-            if (SelectBar == null || !SelectBar.IsLive) { return; }
-            if (SelectBar.ParentView != null || !SelectBar.IsJavascriptEnabled) { return; }
-
-            string ratio = Convert.ToString(Cst.GUI_RATIO).Replace(',', '.');
-            SelectBar.ExecuteJavascript("resize(" + ratio + ", " + ratio + ")");
-        }
-
         private void JSLogger(object sender, JavascriptMethodEventArgs args) {
             if(args.Arguments.Length != 1) {
                 LogManager.Singleton.DefaultLog.LogMessage("JS error : expected 1 argument of type string got : "
@@ -83,11 +68,11 @@ namespace Game.BaseApp {
 
         public void OgreForm_Resize(object sender, EventArgs e) {
             this.mWindow.WindowMovedOrResized();
-            string s = ("resize(" + this.Size.Width / INIT_SIZE.x + "," + this.Size.Height / INIT_SIZE.y + ")");
-            webView.ExecuteJavascript(s.Replace(',', '.'));
-            Ratio = new Vector2(this.Size.Width / WND_SIZE.x, this.Size.Height / WND_SIZE.y);
-            foreach (GUI gui in GUI.GUIs) { gui.resize((float)this.Size.Width / this.mPreviousSize.Width,
-                (float)this.Size.Height / this.mPreviousSize.Height,Ratio.x, Ratio.y); }
+            Ratio = new Vector2(this.Size.Width / InitSize.x, this.Size.Height / InitSize.y);
+            foreach (WebControl webControl in GUI.WebControls) {
+                GUI.resize(webControl, (float)this.Size.Width / this.mPreviousSize.Width,
+                (float)this.Size.Height / this.mPreviousSize.Height);
+            }
             this.mPreviousSize = this.Size;
         }
 

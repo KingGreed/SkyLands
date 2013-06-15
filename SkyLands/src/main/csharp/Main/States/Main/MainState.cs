@@ -1,9 +1,16 @@
-﻿using Mogre;
+﻿using System;
+using System.Drawing;
+using System.IO;
+using Mogre;
+using Awesomium.Core;
+
+using API.Generic;
 
 using Game.BaseApp;
 using Game.CharacSystem;
 using Game.World;
 using Game.Input;
+using Game.GUIs;
 
 namespace Game.States
 {
@@ -21,6 +28,13 @@ namespace Game.States
             this.mWorld = new MainWorld(this.mStateMgr);
             this.mWorld.setSafeSpawnPoint();
 
+            GUI.WebControls.Add(OgreForm.SelectBar);
+            OgreForm.SelectBar.DocumentReady += onSelectBarLoaded;
+            OgreForm.SelectBar.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/Selector.html");
+            OgreForm.SelectBar.Size = new Size((int)Selector.WANTED_SIZE.x, (int)Selector.WANTED_SIZE.y);
+            OgreForm.SelectBar.Location = new Point((int)(OgreForm.InitSize.x / 2 - Selector.WANTED_SIZE.x / 2),
+                                                    500); // (int)(OgreForm.InitSize.y - Selector.WANTED_SIZE.y)
+
             this.User = new User(this.mStateMgr, this.mWorld);
 
             this.AfterWorldCreation();
@@ -28,6 +42,15 @@ namespace Game.States
             this.mWorld.display();
 
             LogManager.Singleton.DefaultLog.LogMessage(" => Game loop begin");
+        }
+
+        private void onSelectBarLoaded(object sender, UrlEventArgs e)
+        {
+            if (OgreForm.SelectBar == null || !OgreForm.SelectBar.IsLive) { return; }
+            if (OgreForm.SelectBar.ParentView != null || !OgreForm.SelectBar.IsJavascriptEnabled) { return; }
+
+            GUI.ResizeJavascript(OgreForm.SelectBar, Cst.GUI_RATIO, Cst.GUI_RATIO);
+            OgreForm.SelectBar.DocumentReady -= onSelectBarLoaded;
         }
 
         protected virtual void AfterWorldCreation() {}
@@ -46,7 +69,7 @@ namespace Game.States
             this.mStateMgr.Controller.CursorVisibility = true;
             this.mStateMgr.Controller.BlockMouse = false;
             OgreForm.SelectBar.Hide();
-            OgreForm.webView.Hide();
+            GUI.Visible = false;
         }
 
         public override void Update(float frameTime)

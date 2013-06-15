@@ -29,7 +29,7 @@ namespace Game.CharacSystem
         protected CharacterInfo mCharInfo;
         protected CollisionMgr  mCollisionMgr;
         private Vector3         mPreviousDirection;
-        private float           mTimeSinceDead, mDistFall;
+        private float           mTimeSinceDead;
 
         private PathFinder       mPathFinder;
         protected Stack<Vector3> mForcedDestination;
@@ -68,7 +68,6 @@ namespace Game.CharacSystem
             {
                 this.mMesh.JumpLoop();
                 GravitySpeed.Reset();
-                this.mDistFall = 0;
             }
             else
             {
@@ -196,7 +195,7 @@ namespace Game.CharacSystem
             this.mMesh.Update(frameTime);
             this.MovementInfo.ClearInfo();
 
-            if (GravitySpeed.GetTimeSinceFall() > 3000) { this.WaitForRemove = true; }
+            if (this.MovementInfo.IsFalling && GravitySpeed.GetTimeSinceFall() > 3000) { this.WaitForRemove = true; }
         }
 
         private void Translate(Vector3 translation)

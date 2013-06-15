@@ -12,13 +12,12 @@ namespace Game.States
         {
             new MainMenu(this.mStateMgr);
             OgreForm.SelectBar.Hide();
-            OgreForm.webView.Show();
             this.mStateMgr.Controller.CursorVisibility = true;
         }
 
         public override void Hide()
         {
-            OgreForm.webView.Hide();
+            GUI.Visible = false;
             OgreForm.SelectBar.Hide();
         }
 

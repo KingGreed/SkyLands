@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Drawing;
 using Mogre;
 
 using API.Generic;
@@ -26,15 +27,15 @@ namespace Game
         private CameraMan mCameraMan;
         private SceneNode mCamYawNode, mCamPitchNode;
         private readonly SceneNode mWireCube;
+        private bool mIsInventoryOpen;
 
-        private Vector3   mSelectedBlockPos;
-        private Block     mSelectedBlock;
-        private InventoryGUI mInventory;
+        private Vector3      mSelectedBlockPos;
+        private Block        mSelectedBlock;
         private readonly MOIS.KeyCode[] mFigures;
 
         public bool IsAllowedToMoveCam { get; set; }
-        public bool IsFreeCamMode { get; private set; }
-        public bool IsGUIOpen { get; set; }
+        public bool IsFreeCamMode      { get; private set; }
+        public bool IsGUIOpen          { get; private set; }
 
         public User(StateManager stateMgr, API.Geo.World world)
         {
@@ -44,10 +45,6 @@ namespace Game
             this.mCameraMan = null;
             this.IsAllowedToMoveCam = true;
             this.IsFreeCamMode = true;
-
-            this.mInventory = new InventoryGUI(new Vector2((float)this.mStateMgr.Size.Width / 2 - InventoryGUI.WANTED_SIZE.x / 2,
-                              (float)this.mStateMgr.Size.Height / 2 - InventoryGUI.WANTED_SIZE.y / 2 - 30 * this.mStateMgr.Ratio.y));
-            this.mInventory.Visible = false;
 
             this.mFigures = new MOIS.KeyCode[10];
             for (int i = 0; i < this.mFigures.Length; i++)
@@ -94,7 +91,8 @@ namespace Game
         public void SwitchGUIVisibility(bool visible)
         {
             this.mStateMgr.Controller.SwitchCursorVisibility();
-            this.mStateMgr.MainState.CharacMgr.MainPlayer.SetIsAllowedToMove(!visible);
+            if(this.mStateMgr.MainState.CharacMgr.MainPlayer != null)
+                this.mStateMgr.MainState.CharacMgr.MainPlayer.SetIsAllowedToMove(!visible);
             this.IsAllowedToMoveCam = !visible;
             this.mStateMgr.Controller.BlockMouse = !visible;
             this.IsGUIOpen = visible;
@@ -107,8 +105,17 @@ namespace Game
 
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.Inventory))
             {
-                this.mInventory.Visible = !this.mInventory.Visible;
-                this.SwitchGUIVisibility(this.mInventory.Visible);
+                if (GUI.Visible && !this.mIsInventoryOpen) { return; }
+                this.mIsInventoryOpen = !this.mIsInventoryOpen;
+
+                if (this.mIsInventoryOpen)
+                {
+                    new InventoryGUI();
+                    this.IsGUIOpen = true;
+                }
+                else { GUI.Visible = false; }
+
+                this.SwitchGUIVisibility(this.mIsInventoryOpen);
             }
             
             /* Move camera */

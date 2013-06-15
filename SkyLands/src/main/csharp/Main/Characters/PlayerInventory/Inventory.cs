@@ -9,7 +9,7 @@ namespace Game.CharacSystem.PlayerInventory
 {
     class Inventory
     {
-        private Slot[,] mInventory = new Slot[10, 4];//hotbar is the 4th line
+        private Slot[,] mInventory = new Slot[10, 4];
 
         public void removeAt(int x, int y, int amount) {
             if(x < 0 || y < 0 || x > 9 || y > 3) { throw new IndexOutOfRangeException(); }

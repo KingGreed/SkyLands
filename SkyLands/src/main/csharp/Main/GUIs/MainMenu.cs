@@ -12,11 +12,13 @@ namespace Game.GUIs {
 
         public MainMenu(StateManager stateMgr)
             : base(new Vector2(0, 0), new Vector2(404, 404), "MainMenu.html", DockStyle.Fill) {
-                this.mStateMgr = stateMgr;
+            this.mStateMgr = stateMgr;
         }
 
         public override void onDocumentReady(object sender, UrlEventArgs e) {
+            base.onDocumentReady(sender, e);
             ((JSObject)OgreForm.webView.CreateGlobalJavascriptObject("MainMenuJSObject")).Bind("exit", false, (sender1, args) => this.mStateMgr.RequestStatePop());
+            Visible = true;
         }
     }
 }

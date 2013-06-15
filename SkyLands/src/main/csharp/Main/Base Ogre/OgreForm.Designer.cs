@@ -40,7 +40,7 @@ namespace Game.BaseApp {
             // 
             // SelectBar
             // 
-            SelectBar.Location = new System.Drawing.Point(441, 340);
+            SelectBar.Location = new System.Drawing.Point(158, 45);
             SelectBar.Size = new System.Drawing.Size(75, 23);
             SelectBar.TabIndex = 1;
             // 
