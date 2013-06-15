@@ -312,8 +312,27 @@
 
           This lag was mostly caused by the fact that when displaying an entity on the terrain, all it's faces are visible even the ones which you can not see.
         \subsection{Displaying Only Faces}
-          We then decided to only display visible faces.\\
-          Thus we began by exploding a block (which had no textures) in 6 different faces.
+          Because of the lag caused by this method, we had no other choice but to find another way of displaying the terrain.\\
+          Thus we came up with the following idea :\\
+          We created in the code the six different faces which are composing a block.\\
+          Thanks to Ogre, this was a fairly easy process, creating an object whith little triangle composing it in the code is no more than seven line!
+          \begin{lstlisting}
+
+ManualObject block = new ManualObject("name");
+block.Begin("texture here", RenderOperation.OperationTypes.OT_TRIANGLE_LIST);
+    block.Position(new Vector3(0,   0,     0));
+    block.Position(new Vector3(0,   100,   0));
+    block.Position(new Vector3(100, 0,     0));
+    block.Position(new Vector3(100, 100,   0));
+
+    block.Triangle(0, 1, 2);
+    block.Triangle(1, 2, 3);
+block.End();
+        \end{lstlisting}
+
+        Of course there are other things we have to do such as specifying the coordinates of the textures or the normals (normals are used in order to cast shadow on the surface).\\
+ 
+        Once the six different faces were created, we would copy them and assign them different textures when we needed to show the face of a visible block;
 
       \section{Save and Load}
     \chapter{\textcolor{blue}{Physics}}

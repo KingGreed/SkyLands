@@ -92,6 +92,9 @@
     <Content Include="resources\Media\images\Builder.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\images\crafting.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\images\CrystalBlock.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -2482,7 +2485,6 @@
     <Compile Include="csharp\Main\BlockFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\GUIs\Builder.cs" />
     <Compile Include="csharp\Main\GUIs\InventoryGUI.cs" />
     <Compile Include="csharp\Main\GUIs\MainMenu.cs" />
     <Compile Include="csharp\Main\GUIs\Selector.cs" />
@@ -2526,7 +2528,6 @@
     <Compile Include="csharp\Main\RTS\AIRTS.cs" />
     <Compile Include="csharp\Main\RTS\PlayerRTS.cs" />
     <Compile Include="csharp\Main\RTS\RTSManager.cs" />
-    <Compile Include="csharp\Main\RTS\VanillaRTS.cs" />
     <Compile Include="csharp\Main\Characters\Shoot\Bullet.cs" />
     <Compile Include="csharp\Main\Characters\Shoot\BulletManager.cs" />
     <Compile Include="csharp\Main\Characters\Misc\MovementInfo.cs">
@@ -2574,6 +2575,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="csharp\Main\States\Main\StoryEditorState.cs" />
+    <Compile Include="csharp\Main\StoryEditor\ScriptParser\Item.cs" />
     <Compile Include="csharp\Main\StoryEditor\ScriptParser\Parser.cs" />
     <Compile Include="csharp\Main\World\Blocks\Air.cs" />
     <Compile Include="csharp\Main\World\Blocks\AirBlock.cs">
@@ -2596,6 +2598,7 @@
     <Compile Include="csharp\Main\World\Blocks\LevitatorAirBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\LevitatorBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\CrystalGateV.cs" />
+    <Compile Include="csharp\Main\World\Blocks\WoodenSlab.cs" />
     <Compile Include="csharp\Main\World\Blocks\TowerWoodBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\DarkWoodBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\DirtBlock.cs">
