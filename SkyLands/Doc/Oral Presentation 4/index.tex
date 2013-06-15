@@ -98,7 +98,8 @@
 
       SkyLands is a Minecraft-like game in which we added some strategy. Thus you are able to create units and buildings in order to defeat your foes just like a strategy game, except that it's in a Minecraft world!\\
 
-
+      At Dedalus corporation we like the variety of languages as well as new technologies! Thus our project has been coded using five differente languages and uses about four frameworks.\\
+      At first there is our 3d engine Ogre written in C++ then our Game which uses Ogre is mostly written in C#. But then what's interesting is that we don't have a GUI but a web UI thus we are using not only HTML and CSS in our menus but JavaScript as well!
 
         \chapter{\textcolor{blue}{Licensing}}
           At Dedalus, we consider that Licensing our code is an important task. According to the French legal code, a license is an authorization.\\
@@ -152,7 +153,7 @@
         \end{textblock}
 
 
-    \chapter{\textcolor{blue}{GUI}}
+    \chapter{\textcolor{blue}{GUI and Web UI}}
       \section{A windowed Game}
         Following the example given by Minecraft, we decided to give up on a full screen game and go for a windowed game.\\
         This means that users can resize the window in which the game is to any size they want.\\
@@ -171,7 +172,7 @@
         Awesomium is a library which provides the special sauce that allowed us to integrate Web UI content in any .NET application! \\
         And guess what! The C\# version of Awesomium is just a wrapper of the C++ version!
 
-      \section{An HTML5, CSS3 and JavaScript Menu}
+      \section{A Web UI}
         Finding a way to display our menus and what's more in HTML, CSS and JavaScript was a releif. However we had to completly destroy the old interface and thus rebuild our GIU from scratch. We first had to rebuild the previous GUI (we chose a different theme that time) and then the ingame HUD.
 
         \subsection{Main Menu}
@@ -308,7 +309,7 @@
         \subsection{Displaying Cubes}
           At first, we thought of dissplaying cubes which where imported entities from blender. \\
           Of course we only displayed visible cubes (cubes which had other cubes adjacent to all his sides were not visibles). However the result was a mere 1 to 10 Frames Per Seconds with a 40 by 40 blocks terrain. In other words a ridiculous amount of FPS.\\
-          
+
           This lag was mostly caused by the fact that when displaying an entity on the terrain, all it's faces are visible even the ones which you can not see.
         \subsection{Displaying Only Faces}
           We then decided to only display visible faces.\\
