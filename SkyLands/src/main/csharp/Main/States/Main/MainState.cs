@@ -16,17 +16,17 @@ namespace Game.States
 {
     public abstract class MainState : State
     {
-        protected MainWorld mWorld;
 
         public User      User      { get; protected set; }
         public CharacMgr CharacMgr { get; protected set; }
+        public MainWorld World     { get; protected set; }
 
         protected MainState(StateManager stateMgr, string name) : base(stateMgr, name) { }
 
         protected override void Startup()
         {
-            this.mWorld = new MainWorld(this.mStateMgr);
-            this.mWorld.setSafeSpawnPoint();
+            this.World = new MainWorld(this.mStateMgr);
+            this.World.setSafeSpawnPoint();
 
             if (!GUI.WebControls.Contains(OgreForm.SelectBar))
             {
@@ -39,11 +39,11 @@ namespace Game.States
                                                         500); // (int)(OgreForm.InitSize.y - Selector.WANTED_SIZE.y)
             }
 
-            this.User = new User(this.mStateMgr, this.mWorld);
+            this.User = new User(this.mStateMgr, this.World);
 
             this.AfterWorldCreation();
-            if(!this.mStateMgr.GameInfo.Load) { this.mWorld.populate(); }
-            this.mWorld.display();
+            if(!this.mStateMgr.GameInfo.Load) { this.World.populate(); }
+            this.World.display();
 
             LogManager.Singleton.DefaultLog.LogMessage(" => Game loop begin");
         }
@@ -78,7 +78,7 @@ namespace Game.States
 
         public override void Update(float frameTime)
         {
-            this.mWorld.Update(frameTime);
+            this.World.Update(frameTime);
 
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.Start))
                 this.mStateMgr.RequestStatePop();
@@ -126,7 +126,7 @@ namespace Game.States
             LogManager.Singleton.DefaultLog.LogMessage(" => Game loop end");
             this.mStateMgr.SceneMgr.DestroyAllParticleSystems();
             this.CharacMgr.Dispose();
-            this.mWorld.Shutdown();
+            this.World.Shutdown();
         }
 
         public abstract void Save();

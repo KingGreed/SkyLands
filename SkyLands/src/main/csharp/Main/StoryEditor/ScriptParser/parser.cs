@@ -7,6 +7,7 @@ using System.Media;
 
 using Game.World.Display;
 using Game.States;
+using Game.CharacSystem;
 
 using Mogre;
 
@@ -52,8 +53,8 @@ namespace Script {
                     return "200";
 
                 case "addLife":
-                    if(operands.Length != 2) { return "500 missing (or too much) parameter(s)"; }
-                    this.addLife(Convert.ToInt32(operands[0]), Convert.ToInt32(operands[1]));
+                    if(operands.Length != 1) { return "500 missing (or too much) parameter(s)"; }
+                    this.addLife(Convert.ToInt32(operands[0]));
                     return "200";
 
 
@@ -71,16 +72,18 @@ namespace Script {
 
         public void mkSound(string s) { new SoundPlayer(s); }
 
-        public void spawnUnit(int x, int y, int z, int camp, string material) {
-
+        public void spawnUnit(int x, int y, int z, int faction, string material) {
+            st.MainState.World.createAndSpawnEntity(new Vector3(x, y, z), new CharacterInfo("Robot" + Guid.NewGuid(), (Game.RTS.Faction)faction));
         }
 
-        public void addRessource(int team, int amount) {
-
+        public void addRessource(int faction, int amount) {
+            if(faction == 0) {
+                
+            }
         }
 
-        public void addLife(int team, int amount) {
-
+        public void addLife(int amount) {
+            st.MainState.CharacMgr.MainPlayer.Hit(-amount);
         }
 
     }

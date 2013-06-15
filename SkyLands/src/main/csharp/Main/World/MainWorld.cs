@@ -36,6 +36,10 @@ namespace Game.World
         private StateManager  mStateMgr;
         private SkyMgr        mSkyMgr;
 
+        List<Script.Item> vs;
+
+        private int mScenarioAdvancement = 0;
+
         public MainWorld(StateManager stateMgr) {
             this.mAge  = 0;
             this.mSeed = 42;
@@ -47,7 +51,6 @@ namespace Game.World
             GameInfo info = this.mStateMgr.GameInfo;
             if(!info.Load) {
                 SceneNode node = this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
-
                 if      (info.Type == TypeWorld.Plains) { this.mIslandLoaded = new RandomIsland(node, info.Size, new Plains(),    this); }
                 else if (info.Type == TypeWorld.Desert) { this.mIslandLoaded = new RandomIsland(node, info.Size, new Desert(),    this); }
                 else if (info.Type == TypeWorld.Hills)  { this.mIslandLoaded = new RandomIsland(node, info.Size, new Hills(),     this); }
@@ -56,11 +59,7 @@ namespace Game.World
                 this.load();
             }
             this.mSkyMgr = new SkyMgr(this.mStateMgr);
-
-            if(info.Scenario != "") {
-
-            }
-
+            if(info.Scenario != "") { this.loadScenario(info.Scenario); }
         }
 
         //get
@@ -138,6 +137,10 @@ namespace Game.World
         }
 
         public void onBlockEnter(Vector3 blockCoord, Entity e) {
+            Script.Item i;
+            if((i = vs.Find(x => x.loc == blockCoord)) != null) {
+                new Script.Parser(this.mStateMgr).Parse(i.s);
+            }
             this.mIslandLoaded.getBlock(blockCoord, false).onBlockEnter(e, blockCoord);
         }
         public void onBlockLeave(Vector3 blockCoord, Entity e) {
@@ -221,8 +224,28 @@ namespace Game.World
 
         private void loadScenario(string file) {
             string[] s = File.ReadAllLines(file);
+            this.mScenarioAdvancement = Convert.ToInt32(s[0]);
 
+            int i = 0;
+            for(int temp = 0; i < s.Length && temp != mScenarioAdvancement; i++) {
+                if(s[i] == "#") { temp++; }
+            }
+
+            string[] pos = s[i].Substring(1).Split(' ');
+            Vector3 structurePosition = new Vector3(t(pos[0]), t(pos[1]), t(pos[2]));
+            vs = new List<Script.Item>();
+            for(; i < s.Length && s[i] != "#"; i++) {
+                if(s[i][0] == 'N') {
+                    string[] ss = s[i].Substring(1).Split(' ');
+                    if(ss.Length >= 5) {
+                        vs.Add(new Script.Item(structurePosition + new Vector3(t(ss[0]), t(ss[1]), t(ss[2])), String.Join(" ", ss, 3, ss.Length - 3)));
+                    } else {
+                        throw new Exception("Error in file scenario");
+                    }
+                }
+            }
         }
+        private int t(string s) { return Convert.ToInt32(s); }
 
         public void Update(float frameTime) { this.mSkyMgr.Update(); }
 
