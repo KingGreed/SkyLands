@@ -206,7 +206,7 @@ namespace Game.CharacSystem
             this.MovementInfo.IsFalling = actualTranslation.y < 0;
             this.MovementInfo.IsJumping = actualTranslation.y > 0 && JumpSpeed.IsJumping;
 
-            if (this.MovementInfo.IsFalling) { this.mDistFall += actualTranslation.y; }
+            if (this.MovementInfo.IsFalling) { this.mDistFall -= actualTranslation.y; }
 
             Vector3 prevBlockPos = this.BlockPosition;
             this.mNode.Translate(actualTranslation);

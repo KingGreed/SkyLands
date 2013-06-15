@@ -46,8 +46,17 @@ namespace Game.States
             
             this.mBulletMgr.Update(frameTime);
 
+            User user = this.mStateMgr.MainState.User;
+            VanillaPlayer mainPlayer = this.mStateMgr.MainState.CharacMgr.MainPlayer;
+            if (user.IsFreeCamMode && mainPlayer != null && !user.IsGUIOpen)
+            {
+                bool ctrlPressed = this.mStateMgr.Controller.IsKeyDown(MOIS.KeyCode.KC_LCONTROL);
+                mainPlayer.SetIsAllowedToMove(ctrlPressed, false);
+                user.IsAllowedToMoveCam = !ctrlPressed;
+            }
+
             if (this.mStateMgr.Controller.WasKeyPressed(MOIS.KeyCode.KC_F1) || this.mStateMgr.Controller.HasActionOccured(UserAction.Dance))
-                this.User.SwitchFreeCamMode();
+                user.SwitchFreeCamMode();
         }
 
         public override void Save() { this.mWorld.save(this.CharacMgr.MainPlayer); }

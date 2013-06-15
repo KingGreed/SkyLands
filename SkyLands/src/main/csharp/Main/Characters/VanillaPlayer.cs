@@ -54,8 +54,8 @@ namespace Game.CharacSystem
                 this.MovementInfo.MoveDirection = new Vector3(this.mCharacMgr.Controller.MovementFactor.x,
                                                               this.mCharacMgr.Controller.HasActionOccured(UserAction.Jump) ? 1 : 0,
                                                               this.mCharacMgr.Controller.MovementFactor.z);
-                if(this.mUser.IsAllowedToMoveCam)
-                    this.MovementInfo.YawValue = this.mCharacMgr.Controller.Yaw;
+                
+                this.MovementInfo.YawValue = this.mCharacMgr.Controller.Yaw;
 
                 this.MovementInfo.Sprint = this.mCharacMgr.Controller.IsActionOccuring(UserAction.Sprint);
                 if(this.mCharacMgr.Controller.HasActionOccured(UserAction.Levitate))

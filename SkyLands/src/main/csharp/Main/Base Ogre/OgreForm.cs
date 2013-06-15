@@ -47,7 +47,7 @@ namespace Game.BaseApp {
             SelectBar.Size = new Size((int)Selector.WANTED_SIZE.x, (int)Selector.WANTED_SIZE.y);
             SelectBar.Location = new Point(this.Size.Width / 2 - (int)Selector.WANTED_SIZE.x / 2,
                                            this.Size.Height - (int)Selector.WANTED_SIZE.y);
-            Console.WriteLine(SelectBar.Location.Y);
+            Console.WriteLine("SelectBar height : " + SelectBar.Location.Y);
 
             this.MinimumSize = new Size(800, 600);
             this.mPreviousSize = this.Size;

@@ -34,6 +34,7 @@ namespace Game
 
         public bool IsAllowedToMoveCam { get; set; }
         public bool IsFreeCamMode { get; private set; }
+        public bool IsGUIOpen { get; set; }
 
         public User(StateManager stateMgr, API.Geo.World world)
         {
@@ -96,18 +97,13 @@ namespace Game
             this.mStateMgr.MainState.CharacMgr.MainPlayer.SetIsAllowedToMove(!visible);
             this.IsAllowedToMoveCam = !visible;
             this.mStateMgr.Controller.BlockMouse = !visible;
+            this.IsGUIOpen = visible;
         }
 
         public void Update(float frameTime)
         {
             MainState mainState = this.mStateMgr.MainState;
             VanillaPlayer mainPlayer = mainState.CharacMgr.MainPlayer;
-            if (this.IsFreeCamMode && mainPlayer != null && this.IsAllowedToMoveCam)
-            {
-                bool ctrlPressed = this.mStateMgr.Controller.IsKeyDown(MOIS.KeyCode.KC_LCONTROL);
-                mainPlayer.SetIsAllowedToMove(ctrlPressed, false);
-                this.IsAllowedToMoveCam = !ctrlPressed;
-            }
 
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.Inventory))
             {
