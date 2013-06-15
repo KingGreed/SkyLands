@@ -24,7 +24,6 @@
 				RatioTotalX *= ratioX; RatioTotalY *= ratioY;
 
 				var height = document.getElementById("selectBar").offsetHeight;
-				console.log("test", height);
 
 				$("#selectBar").attr("width", document.getElementById("selectBar").offsetWidth * ratioX + "px");
 				$("#selectBar").attr("height", height * ratioY + "px");
@@ -54,8 +53,6 @@
 							left = (40 + 18 * col) * RatioTotalX;
 						}
 
-						$(this).children().attr("src", "../materials/textures/fire.png");
-
 						$(this).attr("width",  imgWidth  * RatioTotalX + "px");
 						$(this).attr("height", imgHeight * RatioTotalY + "px");
 
@@ -80,8 +77,6 @@
 						$(this).css("top",  top  + "px");
 						$(this).css("left", left + "px");
 
-						$(this).children("img").attr("src", "../materials/textures/fire.png");
-
 						$(this).attr("width",  imgWidth  * RatioTotalX + "px");
 						$(this).attr("height", imgHeight * RatioTotalY + "px");
 
@@ -89,6 +84,9 @@
 						$(this).children("img").attr("height", imgHeight * RatioTotalY + "px");
 					}
 
+					$(this).children("span").css("left", 13 * RatioTotalX + "px");
+					$(this).children("span").css("top",  10 * RatioTotalY + "px");
+					$(this).css("font-size",  0.3 * (RatioTotalX + RatioTotalY) / 2 + "em");
 				});
 			}
 			
@@ -218,6 +216,7 @@
 					$(".num:eq(" + at + ")").html(amount);
 					if(amount < 10) {
 						$(".num:eq(" + at + ")").css("left", 13 * RatioTotalX);
+
 					} else {
 						if(amount > 64) { $(".num:eq(" + at + ")").html(64); }
 						$(".num:eq(" + at + ")").css("left", 10 * RatioTotalX);
@@ -253,66 +252,66 @@
 		<div id="containor">
 			<img src="../images/Inventory.png" id="selectBar" style="position: relative; z-index: -1;"/>
 
-			<div class="slot"><img src="../materials/textures/fire.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
 			<!-- First row done -->
 
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">5</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">7</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
 			<!-- Second row done -->
 
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
 			<!-- third row done -->
 
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
 			<!-- Fourth row done -->
 
 
 			<!-- Crafting Grid -->
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">8</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div>
-			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num">3</span></div><!-- result slot -->
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
+			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div><!-- result slot -->
 		</div>
 	</body>
 </html>

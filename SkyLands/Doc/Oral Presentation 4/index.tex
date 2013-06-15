@@ -100,6 +100,58 @@
 
 
 
+        \chapter{\textcolor{blue}{Licensing}}
+          At Dedalus, we consider that Licensing our code is an important task. According to the French legal code, a license is an authorization.\\
+          First, we explored the available licenses and, one of the first license we were directed to was the GNU GPL.
+
+          \section{GNU LGPL}
+            \begin{textblock}{0.475}(0.120, 0.470)
+              The GNU Lesser General Public License or LGPL (formerly the GNU Library General Public License) is a free software license published by the Free Software Foundation (FSF). \\
+              The LGPL allows developers and companies to use and integrate LGPL software into their own (even proprietary) software without being required (by the terms of a strong copyleft) to release the source code of their own software-parts. Merely the LGPL software-parts need to be modifiable by end-users (via source code availability): therefore, in the case of proprietary software, the LGPL-parts are usually used in the form of a shared library (e.g. DLL), so that there is a clear separation between the proprietary parts and open source LGPL parts.\\
+          \end{textblock}
+
+          \begin{textblock}{0.628}(0.600, 0.495)
+            \begin{figure}
+              \includegraphics[width=6.5cm]{images/LGPL.png}
+            \end{figure}
+          \end{textblock}
+          ~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\
+          However one of the downside of the LGPL is that if you do not use the code in a DLL, so you put it in your code, your project automatically gets under the LGPL. It is usually said that the licence is viral. That is one the only thing we do not agree with.
+
+        \section{BSD license}
+          BSD licenses are a family of permissive free software licenses, imposing minimal restrictions on the redistribution of covered software. This is in contrast to copyleft licenses, which have reciprocity share-alike requirements. The original BSD license was used for its namesake, the Berkeley Software Distribution (BSD), a Unix-like operating system. The original version has since been revised and its descendants are more properly termed modified BSD licenses.
+          This is the license we choose. Basically, anyone can copy our source code choose the license he wants or even choose to make his code proprietary. But he must say that he used our code. This was the only condition we wanted on our source code.\newpage
+          Here are the terms of our license : \\
+          Redistribution and use in source and binary forms, with or without
+          modification, are permitted provided that the following conditions are met: 
+
+          \begin{enumerate}
+          \item Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+          \item Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+          \end{enumerate}
+
+          THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS enquote{"AS IS"} AND
+          ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+          WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+          DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+          ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+          (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+          LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+          ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+          (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+          SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\\
+
+          The views and conclusions contained in the software and documentation are those
+          of the authors and should not be interpreted as representing official policies, 
+          either expressed or implied, of the FreeBSD Project.\\
+
+        \begin{textblock}{0.628}(0.325, 0.50)
+          \begin{figure}
+            \includegraphics[width=6.5cm]{images/BSD.jpeg}
+          \end{figure}
+        \end{textblock}
+
+
     \chapter{\textcolor{blue}{GUI}}
       \section{A windowed Game}
         Following the example given by Minecraft, we decided to give up on a full screen game and go for a windowed game.\\
@@ -126,7 +178,36 @@
 
 
     \chapter{\textcolor{blue}{Random Terrain Generation}}
-      \section{Perlin Noise}
+      \section{At First Static Terrain}
+        At the begining of the year, the pattern we used for creating islands was very simple and extremely fast.\\
+        We applied basic functions as well as more advanced functions such as :
+
+        \begin{itemize}
+          
+          \item $\sin$ 2d
+          \item $\sin$ 3d
+          \item $\cos$ 3d
+          \item sin(x) cos(y)
+          \item sinc 3d (sin(x) / x)
+        \end{itemize}
+
+            \begin{figure}[h]
+              \includegraphics[width=9cm, height=7cm]{images/Terrain/1.png}
+              \includegraphics[width=9cm, height=7cm]{images/Terrain/2.png}
+              \begin{center}\it The sin(x) * cos(y) and the sinus 3d function\end{center}
+            \end{figure}
+
+
+            \begin{figure}[h]
+              \includegraphics[width=9cm, height=7cm]{images/Terrain/3.png}
+              \includegraphics[width=9cm, height=7cm]{images/Terrain/4.png}
+              \begin{center}\it The sin(x) function represented in 2d and the sinc 3d function\end{center}
+            \end{figure}
+
+            However we quickly understood that using basic functions was not enough. We also wanted random terrain generation however, those functions didn't provide any random factor.\\
+            Therefore after some research we ended up using a Perlinh Noise algorithm.
+ 
+      \section{Then Perlin Noise}
         If you look at many things in nature, you will notice that they are fractal. They have various levels of detail. A common example is the outline of a mountain range. It contains large variations in height (the mountains), medium variations (hills), small variations (boulders), tiny variations (stones) . . . you could go on.\\
         Look at almost anything: the distribution of patchy grass on a field, waves in the sea, the movements of an ant, the movement of branches of a tree, patterns in marble, winds. All these phenomena exhibit the same pattern of large and small variations. The Perlin Noise function recreates this by simply adding up noisy functions at a range of different scales.\\
 
@@ -165,9 +246,9 @@
         Since we do not want to iterate through the terrain multiple times, this is done when generating the terrain thanks to little algorithm trick :\\
 
           \begin{lstlisting}  
-            for (int xx = 0; xx < this.mIslandSize.x * Cst.CHUNK_SIDE; xx++) {
-                for (int zz = 0; zz < this.mIslandSize.z * Cst.CHUNK_SIDE; zz++) {
-                  for (int yy = 250; yy > 0; yy--) {
+            for (int xx = 0; xx < this.mIslandSize.x; xx++) {
+                for (int zz = 0; zz < this.mIslandSize.z; zz++) {
+                  for (int yy = Cst.MAXHEIGHT; yy > 0; yy--) {
           \end{lstlisting}
 
             We create the terrain from the top, which allow us to check for each block if it's under an air block and if that's true, place a block of grass.\\
@@ -224,6 +305,15 @@
             \includegraphics[width=7.5cm]{images/DT/DarkBeard.png} %TODO : Robots
           \end{center}
       \section{Displaying}
+        \subsection{Displaying Cubes}
+          At first, we thought of dissplaying cubes which where imported entities from blender. \\
+          Of course we only displayed visible cubes (cubes which had other cubes adjacent to all his sides were not visibles). However the result was a mere 1 to 10 Frames Per Seconds with a 40 by 40 blocks terrain. In other words a ridiculous amount of FPS.\\
+          
+          This lag was mostly caused by the fact that when displaying an entity on the terrain, all it's faces are visible even the ones which you can not see.
+        \subsection{Displaying Only Faces}
+          We then decided to only display visible faces.\\
+          Thus we began by exploding a block (which had no textures) in 6 different faces.
+
       \section{Save and Load}
     \chapter{\textcolor{blue}{Physics}}
       \section{Collisions} %Romain à toi de faire plusieurs parties

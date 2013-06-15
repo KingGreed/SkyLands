@@ -1,41 +1,56 @@
 \select@language {english}
 \contentsline {chapter}{\numberline {1}\leavevmode {\color {blue}Introduction}}{3}
-\contentsline {chapter}{\numberline {2}\leavevmode {\color {blue}GUI}}{4}
-\contentsline {section}{\numberline {2.1}A windowed Game}{4}
-\contentsline {section}{\numberline {2.2}A GUI flawed}{4}
-\contentsline {section}{\numberline {2.3}An HTML5, CSS3 and JavaScript Menu}{5}
-\contentsline {subsection}{\numberline {2.3.1}Main Menu}{5}
-\contentsline {chapter}{\numberline {3}\leavevmode {\color {blue}Random Terrain Generation}}{6}
-\contentsline {section}{\numberline {3.1}Perlin Noise}{6}
-\contentsline {subsection}{\numberline {3.1.1}Noise}{6}
-\contentsline {subsection}{\numberline {3.1.2}Generating Perlin Noise}{7}
-\contentsline {section}{\numberline {3.2}Different Islands}{7}
-\contentsline {section}{\numberline {3.3}Decorating the Islands}{7}
-\contentsline {section}{\numberline {3.4}Structures}{8}
-\contentsline {section}{\numberline {3.5}Displaying}{8}
-\contentsline {section}{\numberline {3.6}Save and Load}{8}
-\contentsline {chapter}{\numberline {4}\leavevmode {\color {blue}Physics}}{9}
-\contentsline {section}{\numberline {4.1}Collisions}{9}
-\contentsline {section}{\numberline {4.2}Fall}{9}
-\contentsline {chapter}{\numberline {5}\leavevmode {\color {blue}Gameplay}}{10}
-\contentsline {section}{\numberline {5.1}Exploring the terrain}{10}
-\contentsline {section}{\numberline {5.2}Adding Blocks}{10}
-\contentsline {section}{\numberline {5.3}Removing Blocks}{10}
-\contentsline {section}{\numberline {5.4}Inventory, Selector}{10}
-\contentsline {section}{\numberline {5.5}Crafting}{10}
-\contentsline {chapter}{\numberline {6}\leavevmode {\color {blue}Strategy}}{11}
-\contentsline {section}{\numberline {6.1}Build your own Base}{11}
-\contentsline {section}{\numberline {6.2}Buy your army of Robots}{11}
-\contentsline {section}{\numberline {6.3}Fight against foes}{11}
-\contentsline {section}{\numberline {6.4}PathFinding}{11}
-\contentsline {chapter}{\numberline {7}\leavevmode {\color {blue}Graphics}}{12}
-\contentsline {section}{\numberline {7.1}High / Low definition}{12}
-\contentsline {section}{\numberline {7.2}Sinbad's skins}{12}
-\contentsline {section}{\numberline {7.3}Particles}{12}
-\contentsline {chapter}{\numberline {8}\leavevmode {\color {blue}Scenario Editor}}{13}
-\contentsline {section}{\numberline {8.1}Basic Idea}{13}
-\contentsline {section}{\numberline {8.2}Structures}{13}
-\contentsline {section}{\numberline {8.3}Scripting}{13}
-\contentsline {chapter}{\numberline {9}\leavevmode {\color {blue}Sound Engine}}{14}
-\contentsline {chapter}{\numberline {10}\leavevmode {\color {blue}Website}}{15}
-\contentsline {chapter}{\numberline {11}\leavevmode {\color {blue}Conclusion}}{16}
+\contentsline {chapter}{\numberline {2}\leavevmode {\color {blue}Licensing}}{4}
+\contentsline {section}{\numberline {2.1}GNU LGPL}{4}
+\contentsline {section}{\numberline {2.2}BSD license}{4}
+\contentsline {chapter}{\numberline {3}\leavevmode {\color {blue}GUI}}{6}
+\contentsline {section}{\numberline {3.1}A windowed Game}{6}
+\contentsline {section}{\numberline {3.2}A GUI flawed}{6}
+\contentsline {section}{\numberline {3.3}An HTML5, CSS3 and JavaScript Menu}{7}
+\contentsline {subsection}{\numberline {3.3.1}Main Menu}{7}
+\contentsline {chapter}{\numberline {4}\leavevmode {\color {blue}Random Terrain Generation}}{8}
+\contentsline {section}{\numberline {4.1}At First Static Terrain}{8}
+\contentsline {section}{\numberline {4.2}Then Perlin Noise}{9}
+\contentsline {subsection}{\numberline {4.2.1}Noise}{9}
+\contentsline {subsection}{\numberline {4.2.2}Generating Perlin Noise}{9}
+\contentsline {section}{\numberline {4.3}Different Islands}{10}
+\contentsline {section}{\numberline {4.4}Decorating the Islands}{10}
+\contentsline {section}{\numberline {4.5}Structures}{11}
+\contentsline {subsection}{\numberline {4.5.1}Pyramid}{11}
+\contentsline {subsection}{\numberline {4.5.2}Caverns}{11}
+\contentsline {subsection}{\numberline {4.5.3}DarkTower}{11}
+\contentsline {subsubsection}{Introduction to the dark tower}{11}
+\contentsline {subsubsection}{The main buildings}{11}
+\contentsline {subsubsection}{Bridges}{12}
+\contentsline {subsubsection}{Lower towers}{12}
+\contentsline {subsubsection}{Roofs}{12}
+\contentsline {subsubsection}{DarkBeard}{13}
+\contentsline {section}{\numberline {4.6}Displaying}{13}
+\contentsline {subsection}{\numberline {4.6.1}Displaying Cubes}{13}
+\contentsline {subsection}{\numberline {4.6.2}Displaying Only Faces}{13}
+\contentsline {section}{\numberline {4.7}Save and Load}{13}
+\contentsline {chapter}{\numberline {5}\leavevmode {\color {blue}Physics}}{14}
+\contentsline {section}{\numberline {5.1}Collisions}{14}
+\contentsline {section}{\numberline {5.2}Fall}{14}
+\contentsline {chapter}{\numberline {6}\leavevmode {\color {blue}Gameplay}}{15}
+\contentsline {section}{\numberline {6.1}Exploring the terrain}{15}
+\contentsline {section}{\numberline {6.2}Adding Blocks}{15}
+\contentsline {section}{\numberline {6.3}Removing Blocks}{15}
+\contentsline {section}{\numberline {6.4}Inventory, Selector}{15}
+\contentsline {section}{\numberline {6.5}Crafting}{15}
+\contentsline {chapter}{\numberline {7}\leavevmode {\color {blue}Strategy}}{16}
+\contentsline {section}{\numberline {7.1}Build your own Base}{16}
+\contentsline {section}{\numberline {7.2}Buy your army of Robots}{16}
+\contentsline {section}{\numberline {7.3}Fight against foes}{16}
+\contentsline {section}{\numberline {7.4}PathFinding}{16}
+\contentsline {chapter}{\numberline {8}\leavevmode {\color {blue}Graphics}}{17}
+\contentsline {section}{\numberline {8.1}High / Low definition}{17}
+\contentsline {section}{\numberline {8.2}Sinbad's skins}{17}
+\contentsline {section}{\numberline {8.3}Particles}{17}
+\contentsline {chapter}{\numberline {9}\leavevmode {\color {blue}Scenario Editor}}{18}
+\contentsline {section}{\numberline {9.1}Basic Idea}{18}
+\contentsline {section}{\numberline {9.2}Structures}{18}
+\contentsline {section}{\numberline {9.3}Scripting}{18}
+\contentsline {chapter}{\numberline {10}\leavevmode {\color {blue}Sound Engine}}{19}
+\contentsline {chapter}{\numberline {11}\leavevmode {\color {blue}Website}}{20}
+\contentsline {chapter}{\numberline {12}\leavevmode {\color {blue}Conclusion}}{21}
