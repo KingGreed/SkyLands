@@ -20,7 +20,7 @@ namespace Game.CharacSystem
         private const float YAW_SPEED = 7;    // Only for forced movement
         private const float SQUARED_DIST_PRECISION = 100;
         private const float SPRINT_FACTOR = 1.65f;
-        protected const float LIMIT_TARGET_DISTANCE = Bullet.DEFAULT_RANGE * 0.69f;
+        protected const float LIMIT_TARGET_DISTANCE = Bullet.DEFAULT_RANGE * 0.66f;
 
         protected CharacMgr     mCharacMgr;
         protected SceneNode     mNode;

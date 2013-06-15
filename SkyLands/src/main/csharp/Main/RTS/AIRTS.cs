@@ -1,14 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+
+using Game.CharacSystem;
 
 namespace Game.RTS
 {
-    public class AIRTS : RTSManager
+    public class AIRTS : VanillaRTS
     {
-        public AIRTS() : base(false)
+        public AIRTS(RTSManager RTSMgr) : base(RTSMgr)
         {
+            this.Faction = Faction.Red;
+        }
+
+        public override void MyUpdate()
+        {
+            
+            
+            /*foreach (VanillaNonPlayer npc in this.mRTSMgr.CharacMgr.GetFactionCharacters(this.Faction))
+            {
+                
+            }*/
         }
     }
 }

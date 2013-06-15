@@ -145,18 +145,18 @@ namespace Game.World
         }
 
         public void onCreation(Vector3 relCoord) {
-            this.mIslandLoaded.getBlock(MainWorld.getRelativeFromAbsolute(relCoord), false).onCreation(relCoord);
+            this.mIslandLoaded.getBlock(relCoord, false).onCreation(relCoord);
         }
         public void onDeletion(Vector3 relCoord) {
-            this.mIslandLoaded.getBlock(MainWorld.getRelativeFromAbsolute(relCoord), false).onDeletion();
+            this.mIslandLoaded.getBlock(relCoord, false).onDeletion();
         }
 
         public bool onRightClick(Vector3 relCoord) {
-            return this.mIslandLoaded.getBlock(MainWorld.getRelativeFromAbsolute(relCoord), false).onRightClick();
+            return this.mIslandLoaded.getBlock(relCoord, false).onRightClick();
         }
 
         public bool onLeftClick(Vector3 relCoord) {
-            return this.mIslandLoaded.getBlock(MainWorld.getRelativeFromAbsolute(relCoord), false).onLeftClick();
+            return this.mIslandLoaded.getBlock(relCoord, false).onLeftClick();
         }
 
 

@@ -6,7 +6,7 @@ using Mogre;
 using Game.World.Blocks;
 using API.Geo.Cuboid;
 
-namespace Game.Buildings
+namespace Game.RTS
 {
     public class Building
     {

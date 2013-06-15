@@ -1,33 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Game.CharacSystem;
 
 namespace Game.RTS
 {
-    public enum Faction { Blue, Red }
-
-    public abstract class RTSManager // One RTSManager per faction
+    public class RTSManager
     {
-        protected int mCrystals;
-        private bool mIsPlayer;
+        public CharacMgr CharacMgr { get; private set; }
+        public AIRTS AIRTS { get; private set; }
+        public PlayerRTS PlayerRTS { get; private set; }
 
-        public int Crystals
+        public RTSManager(CharacMgr characMgr)
         {
-            get { return this.mCrystals; }
-            set
-            {
-                if (value != this.mCrystals)
-                {
-                    this.mCrystals = value;
-                }
-            }
+            this.CharacMgr = characMgr;
+            this.AIRTS = new AIRTS(this);
+            this.PlayerRTS = new PlayerRTS(this);
         }
 
-        public RTSManager(bool isPlayer)
+        public void Update(float frameTime)
         {
-            this.mIsPlayer = isPlayer;
-            this.mCrystals = 0;
+            this.AIRTS.Update(frameTime);
+            this.PlayerRTS.Update(frameTime);
         }
     }
 }

@@ -11,8 +11,8 @@ namespace Game.States
     public class GameState : MainState
     {
         private BulletManager mBulletMgr;
-        private PlayerRTS     mPlayerRTS;
 
+        public RTSManager RTSManager { get; private set; }
         public GameState(StateManager stateMgr) : base(stateMgr, "Game") { }
 
         protected override void Startup()
@@ -33,7 +33,7 @@ namespace Game.States
 
         protected override void AfterWorldCreation()
         {
-            this.mPlayerRTS = new PlayerRTS();
+            this.RTSManager = new RTSManager(this.CharacMgr);
             this.mBulletMgr = new BulletManager(this.mStateMgr.SceneMgr, this.mWorld);
             this.CharacMgr = new CharacMgr(this.mStateMgr, this.mWorld, this.User, this.mBulletMgr);
             this.mBulletMgr.AttachCharacMgr(this.CharacMgr);
@@ -42,7 +42,8 @@ namespace Game.States
         public override void Update(float frameTime)
         {
             base.Update(frameTime);
-            
+
+            this.RTSManager.Update(frameTime);
             this.mBulletMgr.Update(frameTime);
 
             User user = this.mStateMgr.MainState.User;

@@ -137,7 +137,7 @@ namespace Game
 
                 /* Cube addition and suppression */
                 float dist = this.UpdateSelectedBlock();
-                if (!(this.mStateMgr.GameInfo.IsInEditorMode ^ mainState.User.IsFreeCamMode))    // Allow world edition
+                if (!(this.mStateMgr.GameInfo.IsInEditorMode ^ mainState.User.IsFreeCamMode) && this.mSelectedBlock != null)    // Allow world edition
                 {
                     if (this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction) && !Selector.IsBullet && this.mWorld.onLeftClick(this.mSelectedBlockPos))
                         this.AddBlock(dist);
@@ -160,7 +160,6 @@ namespace Game
             }
             Selector.SelectorPos = selectorPos;
 
-
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.Dance))
                 this.mInventory.addAt(new Slot(5, 1), 0, 0);
         }
@@ -174,7 +173,7 @@ namespace Game
                     Slot s = this.mInventory.getSlot(x, y);
                     if(s != null)
                     {
-                        string res = "setBlockAt(" + (x*10 + y) + ", '" +
+                        string res = "setBlockAt(" + (x + y * 10) + ", '" +
                                     VanillaChunk.staticBlock[VanillaChunk.byteToString[s.item]].getItemTexture() +
                                     "', " + s.amount + ")";
                         OgreForm.webView.ExecuteJavascript(res);
@@ -242,13 +241,13 @@ namespace Game
             this.mWorld.getIsland().removeFromScene(this.mSelectedBlockPos);
             this.mWorld.onDeletion(this.mSelectedBlockPos);
 
-
+            this.mInventory.AddOne(this.mSelectedBlock.getId());
         }
 
         private void AddBlock(float dist)
         {
             string material = Selector.Material;
-            if (this.mSelectedBlock is Air || this.mSelectedBlock is ConstructionBlock || material == "") { return; }
+            if (material == "") { return; }
             
             /* Determine the face */
             Ray ray = this.mStateMgr.Camera.GetCameraToViewportRay(0.5f, 0.5f);

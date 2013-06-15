@@ -22,9 +22,5 @@ namespace API.Geo.Cuboid
 
         public abstract void onBlockEnter(API.Ent.Entity e, Vector3 position);
         public abstract void onBlockLeave(API.Ent.Entity e, Vector3 position);
-
-
-
-
     }
 }

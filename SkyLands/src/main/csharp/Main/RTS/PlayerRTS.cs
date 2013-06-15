@@ -5,12 +5,17 @@ using System.Text;
 
 namespace Game.RTS
 {
-    public class PlayerRTS : RTSManager
+    public class PlayerRTS : VanillaRTS
     {
-        
-        public PlayerRTS() : base(true)
+        public PlayerRTS(RTSManager RTSMgr) : base(RTSMgr)
         {
-            this.Crystals = 150;
+            this.Faction = Faction.Blue;
         }
+
+        public override void MyUpdate()
+        {
+        }
+
+
     }
 }

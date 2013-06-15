@@ -7,11 +7,14 @@ using Mogre;
 
 namespace Game.World.Blocks
 {
-    class AirBlock : VanillaBlock, Air
+    public class AirBlock : VanillaBlock, Air
     {
         public AirBlock() {
             this.mName = "Air";
             this.mMaterial = null;
         }
+
+        public override bool onLeftClick() { return false; }
+        public override bool onRightClick() { return false; }
     }
 }

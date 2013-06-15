@@ -26,7 +26,7 @@ namespace Game.Sky
             this.mCaelumSystem.AttachViewport(this.mStateMgr.Viewport);
 
             this.mCaelumSystem.GetUniversalClock().SetGregorianDateTime(2012, 12, 21, 12, 0, 0);
-            this.mCaelumSystem.TimeScale = 1;
+            this.mCaelumSystem.TimeScale = 7;
             //this.mCaelumSystem.EnsureSingleLightSource = true;
             //this.mCaelumSystem.EnsureSingleShadowSource = true;
             //this.mCaelumSystem.AutoNotifyCameraChanged = false;

@@ -20,6 +20,7 @@ namespace Game.World.Blocks {
 
             current.unload(false);
             w.setIsland(new RandomIsland(w.getSceneMgr().RootSceneNode.CreateChildSceneNode(Vector3.ZERO), new Vector2(current.getSize().x, current.getSize().z), nextBiome, w));
+            w.populate();
             w.getIsland().display();
             w.setSafeSpawnPoint();
             e.teleport(w.getSpawnPoint());

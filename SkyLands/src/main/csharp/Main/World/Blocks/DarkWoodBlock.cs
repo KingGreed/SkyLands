@@ -5,7 +5,7 @@
         public DarkWoodBlock() {
             this.mName = "DarkWood";
             this.mMaterial = "darkTower/darkWood";
-            this.mItemTexture = "wood.png";
+            this.mItemTexture = "darkWood.jpg";
             this.mId = 11;
         }
     }

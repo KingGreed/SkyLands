@@ -11,7 +11,7 @@ namespace Game.World.Blocks
         public RedSandBlock() {
             this.mName = "Red Sand";
             this.mMaterial = "cube/RedSand";
-            this.mItemTexture = "sand.jpg";
+            this.mItemTexture = "sand3.png";
             this.mId = 10;
         }
     }

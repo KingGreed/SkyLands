@@ -8,7 +8,7 @@ using API.Geo.Cuboid;
 using Mogre;
 
 namespace Game.World.Blocks {
-    class LevitatorAirBlock : VanillaBlock, Air {
+    public class LevitatorAirBlock : VanillaBlock, Air {
 
         public LevitatorAirBlock() {
             this.mName = "Levitator air";
@@ -24,5 +24,8 @@ namespace Game.World.Blocks {
                 e.setIsPushedByArcaneLevitator(false);
             }
         }
+
+        public override bool onLeftClick() { return false; }
+        public override bool onRightClick() { return false; }
     }
 }
