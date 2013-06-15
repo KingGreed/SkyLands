@@ -59,9 +59,16 @@ namespace Game.Input
             get { return this.mCursorVisibility; }
             set
             {
+                if (this.mCursorVisibility == value) { return; }
                 this.mCursorVisibility = value;
-                if (this.mCursorVisibility) { Cursor.Show(); }
-                else                        { Cursor.Hide(); }
+                if (this.mCursorVisibility)
+                {
+                    Cursor.Show();
+                }
+                else
+                {
+                    Cursor.Hide();
+                }
             }
         }
 

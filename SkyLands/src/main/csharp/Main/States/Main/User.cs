@@ -90,6 +90,14 @@ namespace Game
             this.mStateMgr.Camera.Orientation = Quaternion.IDENTITY;
         }
 
+        public void SwitchGUIVisibility(bool visible)
+        {
+            this.mStateMgr.Controller.SwitchCursorVisibility();
+            this.mStateMgr.MainState.CharacMgr.MainPlayer.SetIsAllowedToMove(!visible);
+            this.IsAllowedToMoveCam = !visible;
+            this.mStateMgr.Controller.BlockMouse = !visible;
+        }
+
         public void Update(float frameTime)
         {
             MainState mainState = this.mStateMgr.MainState;
@@ -104,10 +112,7 @@ namespace Game
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.Inventory))
             {
                 this.mInventory.Visible = !this.mInventory.Visible;
-
-                this.mStateMgr.Controller.SwitchCursorVisibility();
-                mainPlayer.SetIsAllowedToMove(!this.mInventory.Visible);
-                this.IsAllowedToMoveCam = !this.mInventory.Visible;
+                this.SwitchGUIVisibility(this.mInventory.Visible);
             }
             
             /* Move camera */

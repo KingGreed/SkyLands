@@ -5,6 +5,7 @@ using Mogre;
 
 using API.Ent;
 using API.Geo.Cuboid;
+using API.Generic;
 
 using Game.World;
 using Game.Animation;
@@ -28,7 +29,7 @@ namespace Game.CharacSystem
         protected CharacterInfo mCharInfo;
         protected CollisionMgr  mCollisionMgr;
         private Vector3         mPreviousDirection;
-        private float           mTimeSinceDead;   // Wait the end of the animation 
+        private float           mTimeSinceDead, mDistFall;
 
         private PathFinder       mPathFinder;
         protected Stack<Vector3> mForcedDestination;
@@ -67,9 +68,16 @@ namespace Game.CharacSystem
             {
                 this.mMesh.JumpLoop();
                 GravitySpeed.Reset();
+                this.mDistFall = 0;
             }
-            else if (this.mCharInfo.IsPlayer)
-                ((Sinbad) this.mMesh).EndJump();
+            else
+            {
+                int nbBlockFall = (int)this.mDistFall / Cst.CUBE_SIDE;
+                if(nbBlockFall > 5)
+                    this.Hit(nbBlockFall - 5);
+                if (this.mCharInfo.IsPlayer)
+                    ((Sinbad)this.mMesh).EndJump();
+            }
         }
 
         private void OnJump(bool isJumping)
@@ -197,6 +205,8 @@ namespace Game.CharacSystem
             /* Here translate has been modified to avoid collisions */
             this.MovementInfo.IsFalling = actualTranslation.y < 0;
             this.MovementInfo.IsJumping = actualTranslation.y > 0 && JumpSpeed.IsJumping;
+
+            if (this.MovementInfo.IsFalling) { this.mDistFall += actualTranslation.y; }
 
             Vector3 prevBlockPos = this.BlockPosition;
             this.mNode.Translate(actualTranslation);
