@@ -1,20 +1,46 @@
 ﻿using System;
 using Mogre;
 
+using Awesomium.Core;
+
+using Game.BaseApp;
+using Game.World.Generator;
+
 namespace Game.CharacSystem
 {
     public class Inventory
     {
+        private CraftingMgr mCraftingMgr;
         private Slot[,] mInventory;
         private int[] mYValues;
 
         public Inventory()
         {
+            this.mCraftingMgr = new CraftingMgr();
             this.mInventory = new Slot[10, 4];
             this.mYValues = new int[] { 3, 1, 2, 0 };    // Check the line representing the selectBar at first
         }
 
-        public void removeAt(int x, int y, int amount) {
+        public void onCraft()
+        {
+            byte[,] ingredients = new byte[3,3];
+            for (int y = 0; y < 3; y++)
+            {
+                for (int x = 0; x < 3; x++)
+                {
+                    int id = this.getIdFromIndex(40 + x + y*3);
+                    ingredients[x, y] = (byte)(id == 0 ? 255 : id);
+                }
+            }
+            byte result = this.mCraftingMgr.getCraftingResult(ingredients);
+            if(result == 0) { return; }
+
+            OgreForm.webView.ExecuteJavascript("setBlockAt(50, '" + VanillaChunk.staticBlock[VanillaChunk.byteToString[result]].getItemTexture() +
+                                    "', " + (result == 13 ? 4 : 1) + ")");
+        }
+
+        public void removeAt(int x, int y, int amount)
+        {
             if(x < 0 || y < 0 || x > 9 || y > 3) { throw new IndexOutOfRangeException(); }
             if(amount > 64 || this.mInventory[x, y].amount - amount < 0) { throw new ArgumentException("Invalid amound"); }
             else if(this.mInventory[x, y].amount - amount == 0)          { this.mInventory[x, y] = null; }
@@ -36,6 +62,34 @@ namespace Game.CharacSystem
             }
 
             this.addAt(s, this.getFreeSlot());
+        }
+
+        public void GetInventoryModification()
+        {
+            foreach (int y in this.mYValues)
+            {
+                for (int x = 0; x < 10; x++)
+                {
+                    int index = x + y * 10;
+                    Slot s = null;
+                    string sAmount = OgreForm.webView.ExecuteJavascriptWithResult("getAmountAt(" + index + ")");
+                    if (sAmount != "")
+                    {
+                        int amount = int.Parse(sAmount);
+                        s = new Slot(amount, this.getIdFromIndex(index));
+                    }
+                    this.mInventory[x, y] = s;
+                }
+            }
+        }
+
+        private byte getIdFromIndex(int index)
+        {
+            string imgName = OgreForm.webView.ExecuteJavascriptWithResult("getImageAt(" + index + ")");
+            string[] val = imgName.Split('/');
+            imgName = val[val.Length - 1];
+            if (imgName == "blank.png") { return 0; }
+            return VanillaChunk.textureToBlock[imgName].getId();
         }
 
         public Slot addAt(Slot s, Vector2 pos) { return this.addAt(s, (int)pos.x, (int)pos.y); }

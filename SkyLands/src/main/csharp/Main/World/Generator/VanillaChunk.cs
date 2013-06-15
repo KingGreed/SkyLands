@@ -13,11 +13,13 @@ namespace Game.World.Generator
         public static Dictionary<string, Block>   staticBlock;
         public static Dictionary<byte,   string>  byteToString;
         public static Dictionary<string, string>  materialToString;
+        public static Dictionary<string, Block>   textureToBlock;
 
         static VanillaChunk() {
-            staticBlock      = new Dictionary<string, Block>();
-            byteToString     = new Dictionary<byte,   string>  ();
-            materialToString = new Dictionary<string, string>  ();
+            staticBlock      = new Dictionary<string, Block> ();
+            byteToString     = new Dictionary<byte,   string>();
+            materialToString = new Dictionary<string, string>();
+            textureToBlock   = new Dictionary<string, Block> ();
 
 
             byteToString.Add(0, "Air");
@@ -31,6 +33,9 @@ namespace Game.World.Generator
 
                     if(!staticBlock.ContainsKey(test.getName())) {
                         staticBlock.Add(test.getName(), test);
+
+                        if (test.getItemTexture() != null)
+                            textureToBlock.Add(test.getItemTexture(), test);
                         
                         if(!byteToString.ContainsKey(test.getId())) { byteToString.Add(test.getId() , test.getName()); }
                         else if(test.getId() != 255) { throw new Exception(test.getName() + " has the same Id as " +  byteToString[test.getId()]); }

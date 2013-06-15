@@ -23,6 +23,8 @@ namespace Game.States
 
         protected MainState(StateManager stateMgr, string name) : base(stateMgr, name) { }
 
+        SceneNode mSelectedEntity;
+
         protected override void Startup()
         {
             this.World = new MainWorld(this.mStateMgr);
@@ -87,7 +89,7 @@ namespace Game.States
             this.CharacMgr.Update(frameTime);
 
             /* Entity selection */
-            /*if (this.User.IsFreeCamMode && this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction))
+            if (this.User.IsFreeCamMode && this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction))
             {
                 if (this.mSelectedEntity == null)
                 {
@@ -112,7 +114,7 @@ namespace Game.States
                     this.CharacMgr.GetCharacterById(characId).MoveTo(this.CharacMgr.World.getSpawnPoint());
                     this.mSelectedEntity = null;
                 }
-            }*/
+            }
         }
 
         public void Restart()

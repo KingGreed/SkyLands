@@ -1,6 +1,8 @@
 ﻿using System;
 using Mogre;
 
+using Awesomium.Core;
+
 using API.Generic;
 
 using Game.BaseApp;
@@ -10,17 +12,20 @@ namespace Game.GUIs
     public class InventoryGUI : GUI {
         private static readonly Vector2 IMAGE_SIZE = new Vector2(192, 179);
 
-        private readonly Action mUpdate;
+        private readonly Action mUpdate, mOnCraft;
 
-        public InventoryGUI(Action update)
+        public InventoryGUI(Action update, Action onCaft)
             : base(((OgreForm.InitSize - IMAGE_SIZE * Cst.GUI_RATIO) / 2) - (Vector2.UNIT_Y * (IMAGE_SIZE * Cst.GUI_RATIO).y / 12),
                    IMAGE_SIZE, "inventory.html")
         {
             this.mUpdate = update;
+            this.mOnCraft = onCaft;
         }
-        public override void onDocumentReady(object sender, Awesomium.Core.UrlEventArgs e) {
+        public override void onDocumentReady(object sender, UrlEventArgs e) {
             base.onDocumentReady(sender, e);
             Visible = true;
+            JSObject j = OgreForm.webView.CreateGlobalJavascriptObject("InventoryObject");
+            j.Bind("craft", false, (craftSender, args) => this.mOnCraft());
             this.mUpdate();
         }
     }

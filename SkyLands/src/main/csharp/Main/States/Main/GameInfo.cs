@@ -19,7 +19,7 @@ namespace Game.World
         {
  
             this.Seed = 42;
-            this.Type = TypeWorld.Hills;
+            this.Type = TypeWorld.Plains;
             this.Size = new Vector2(11, 11);
             this.Load = load;
             this.IsInEditorMode = editorMode;

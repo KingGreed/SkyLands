@@ -2591,6 +2591,7 @@
     <Compile Include="csharp\Main\World\Blocks\CrystalGateH.cs" />
     <Compile Include="csharp\Main\World\Blocks\Crystal.cs" />
     <Compile Include="csharp\Main\World\Blocks\Glass.cs" />
+    <Compile Include="csharp\Main\World\Blocks\PlanksBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\SmoothStone.cs" />
     <Compile Include="csharp\Main\World\Blocks\SmoothStone_carved.cs" />
     <Compile Include="csharp\Main\World\Blocks\SnowEighthBlock.cs" />

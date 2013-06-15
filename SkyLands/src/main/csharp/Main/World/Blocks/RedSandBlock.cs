@@ -7,7 +7,7 @@ using Mogre;
 
 namespace Game.World.Blocks
 {
-    class RedSandBlock : VanillaBlock {
+    public class RedSandBlock : VanillaBlock {
         public RedSandBlock() {
             this.mName = "Red Sand";
             this.mMaterial = "cube/RedSand";

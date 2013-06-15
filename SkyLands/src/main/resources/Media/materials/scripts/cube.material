@@ -211,6 +211,20 @@ material cube/cactus
         }
     }
 }
+material cube/planks
+{
+    technique
+    {
+        pass
+        {
+            ambient 1.0 1.0 1.0
+            diffuse 1.0 1.0 1.0
+
+            texture_unit { texture planks.png }
+        }
+    }
+}
+
 material fireball
 {
     technique

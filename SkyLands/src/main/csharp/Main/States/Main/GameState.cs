@@ -19,7 +19,7 @@ namespace Game.States
         {
             base.Startup();
 
-            CharacterInfo playerInfo = new CharacterInfo("Sinbad", Faction.Blue, true) { SpawnPoint = this.mWorld.getSpawnPoint() };
+            CharacterInfo playerInfo = new CharacterInfo("Sinbad", Faction.Blue, true) { SpawnPoint = this.World.getSpawnPoint() };
             this.CharacMgr.AddCharacter(playerInfo);
             this.User.SwitchFreeCamMode();
 
@@ -28,14 +28,14 @@ namespace Game.States
                 SpawnPoint = playerInfo.SpawnPoint + new Vector3(800, 500, 200)
             });
 
-            ParticleGenerator.mkParticle(this.mStateMgr.SceneMgr, this.mWorld.getSpawnPoint(), "MultiEmitters");
+            ParticleGenerator.mkParticle(this.mStateMgr.SceneMgr, this.World.getSpawnPoint(), "MultiEmitters");
         }
 
         protected override void AfterWorldCreation()
         {
             this.RTSManager = new RTSManager(this.CharacMgr);
-            this.mBulletMgr = new BulletManager(this.mStateMgr.SceneMgr, this.mWorld);
-            this.CharacMgr = new CharacMgr(this.mStateMgr, this.mWorld, this.User, this.mBulletMgr);
+            this.mBulletMgr = new BulletManager(this.mStateMgr.SceneMgr, this.World);
+            this.CharacMgr = new CharacMgr(this.mStateMgr, this.World, this.User, this.mBulletMgr);
             this.mBulletMgr.AttachCharacMgr(this.CharacMgr);
         }
 
@@ -59,6 +59,6 @@ namespace Game.States
                 user.SwitchFreeCamMode();
         }
 
-        public override void Save() { this.mWorld.save(this.CharacMgr.MainPlayer); }
+        public override void Save() { this.World.save(this.CharacMgr.MainPlayer); }
     }
 }

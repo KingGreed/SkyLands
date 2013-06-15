@@ -1,31 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 using Mogre;
 
-namespace Game.CharacSystem.PlayerInventory {
-    public class CraftingMgr {
-        private CraftTree c = new CraftTree();
-        public CraftingMgr() {
-
+namespace Game.CharacSystem {
+    public class CraftingMgr
+    {
+        private CraftTree mCraftTree;
+        
+        public CraftingMgr()
+        {
+            this.mCraftTree = new CraftTree();
+            this.addRecipe(7, "#", "#", (byte)4);  // ConstructionBlock ... Wood
         }
 
         public void addRecipe(byte id, params object[] o) {
             if(o.Length < 3 || !(o[0] is string)) { throw new ArgumentException("Must have at least 3 argument"); }
 
-            string[] l = new string[this.getNumLines(o)];
-            for(int i = 0; i < l.Length; i++) {
-                if(o[i] is String && !(o[i + 1] is byte)) { l[i] = (string)o[i]; }
+            string[] lines = new string[this.getNumLines(o)];
+            for(int i = 0; i < lines.Length; i++) {
+                //if (o[i] is String && o[i + 1].GetType() != typeof(int)) { lines[i] = (string)o[i]; }
+                lines[i] = (string)o[i];
             }
 
-            CraftTree temp = c;
-            for(int i = 0; i < l.Length; i++) {
-                for(int j = 0; j < l[i].Length; j++) {
-                    temp = c.add(this.fromCharToByte(l[i][j], o), new CraftTree());
+            for(int i = 0; i < lines.Length; i++) {
+                for(int j = 0; j < lines[i].Length; j++) {
+                    this.mCraftTree.add(this.fromCharToByte(lines[i][j], o), new CraftTree());
                 }
-                temp = c.add(0, new CraftTree());
+                this.mCraftTree.add(255, new CraftTree());
             }
         }
 
@@ -33,7 +35,7 @@ namespace Game.CharacSystem.PlayerInventory {
             if(c == ' ') { return 255; } //Air
             else {
                 for(int i = 0; i < o.Length - 1; i++) {
-                    if(o[i] is string && ((string)o[i]) == c.ToString() && o[i + 1] is byte) { return (byte)o[i + 1]; }
+                    if (o[i] is string && ((string)o[i]) == c.ToString() && o[i + 1].GetType() == typeof(byte)) { return (byte)o[i + 1]; }
                 }
             } throw new ArgumentException("You did not specify char : " + c);
         }
@@ -42,7 +44,7 @@ namespace Game.CharacSystem.PlayerInventory {
         private int getNumLines(object[] o) {
             int num = 0;
             for(int i = 0; i < o.Length - 1; i++) {
-                if(o[i] is String && !(o[i + 1] is byte)) { num++; }
+                if (o[i] is String && o[i + 1].GetType() != typeof(byte)) { num++; }
             }
             return num;
         }
@@ -56,15 +58,15 @@ namespace Game.CharacSystem.PlayerInventory {
             for(int i = 0; i < 3;  i++) { for(int j = 0; j < 3;  j++) { if(craftingGrid[j, i] != 255) { begin = new Vector2(i, j); break; } } }
             for(int i = 2; i >= 0; i--) { for(int j = 2; j >= 0; j--) { if(craftingGrid[j, i] != 255) { end   = new Vector2(i, j); break; } } }
 
-            List<byte> b = new List<byte>();
+            List<byte> bytes = new List<byte>();
 
             for(int i = (int)begin.x; i < (int)end.x; i++) {
                 for(int j = (int)begin.y; j < (int)end.y; j++) {
-                    b.Add(craftingGrid[i, j]);
+                    bytes.Add(craftingGrid[i, j]);
                 }
-                b.Add(0);
+                bytes.Add(255);
             }
-            return 255;
+            return findRecipe(bytes, 0, this.mCraftTree);
         }
 
         public byte findRecipe(List<byte> b, int i, CraftTree c) {

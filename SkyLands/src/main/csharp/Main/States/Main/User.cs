@@ -113,11 +113,15 @@ namespace Game
 
                 if (this.mIsInventoryOpen)
                 {
-                    new InventoryGUI(this.UpdateGraphicInventory);
+                    new InventoryGUI(this.UpdateGraphicInventory, this.mInventory.onCraft);
 
                     this.IsGUIOpen = true;
                 }
-                else { GUI.Visible = false; }
+                else
+                {
+                    GUI.Visible = false;
+                    this.mInventory.GetInventoryModification();
+                }
 
                 this.SwitchGUIVisibility(this.mIsInventoryOpen);
             }
@@ -171,12 +175,9 @@ namespace Game
                 for (int x = 0; x < 10; x++)
                 {
                     Slot s = this.mInventory.getSlot(x, y);
-                    if(s != null)
-                    {
-                        string res = "setBlockAt(" + (x + y * 10) + ", '" +
+                    if(s != null) { OgreForm.webView.ExecuteJavascript("setBlockAt(" + (x + y * 10) + ", '" +
                                     VanillaChunk.staticBlock[VanillaChunk.byteToString[s.item]].getItemTexture() +
-                                    "', " + s.amount + ")";
-                        OgreForm.webView.ExecuteJavascript(res);
+                                    "', " + s.amount + ")");
                     }
                 }
             }

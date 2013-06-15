@@ -138,7 +138,8 @@ namespace Game.World
 
         public void onBlockEnter(Vector3 blockCoord, Entity e) {
             Script.Item i;
-            if((i = vs.Find(x => x.loc == blockCoord)) != null) {
+            if (vs != null && (i = vs.Find(x => x.loc == blockCoord)) != null)
+            {
                 new Script.Parser(this.mStateMgr).Parse(i.s);
             }
             this.mIslandLoaded.getBlock(blockCoord, false).onBlockEnter(e, blockCoord);
