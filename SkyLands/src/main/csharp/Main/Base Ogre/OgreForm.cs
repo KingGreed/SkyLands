@@ -55,6 +55,7 @@ namespace Game.BaseApp {
             JSObject jsobject = webView.CreateGlobalJavascriptObject("jsobject");
 
             jsobject.Bind("LogMsg", false, this.JSLogger);
+            GUI.Visible = false;
         }
 
         private void JSLogger(object sender, JavascriptMethodEventArgs args) {
@@ -81,7 +82,10 @@ namespace Game.BaseApp {
 
         public void Go() {
             this.Show();
-            while(mRoot != null && mRoot.RenderOneFrame()) { Application.DoEvents(); }
+            while (mRoot != null && mRoot.RenderOneFrame())
+            {
+                Application.DoEvents();
+            }
         }
 
         public bool Setup() {

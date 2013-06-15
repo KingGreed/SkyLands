@@ -114,6 +114,7 @@ namespace Game.World
         public void createAndSpawnEntity(Vector3 point, Entity e) { throw new NotImplementedException(); }
 	    public void spawnEntity(Entity e) { throw new NotImplementedException(); }
 	    public List<Character> getPlayers() { throw new NotImplementedException(); }
+        public bool HasPointCollision(Vector3 relBlockPos) { throw new NotImplementedException(); }
 
         public static Vector3 getRelativeFromAbsolute(Vector3 absCoord) {
             absCoord /= Cst.CUBE_SIDE;

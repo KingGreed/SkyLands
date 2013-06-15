@@ -22,7 +22,7 @@ namespace API.Geo.Cuboid
 
         protected RenderOperation moData;
         protected VertexElement posEl;
-        protected HardwareVertexBufferSharedPtr vBuff;
+        protected static HardwareVertexBufferSharedPtr vBuff;
         private int faceNumber;
         private Vector3 displayCoord;
         
@@ -85,7 +85,7 @@ namespace API.Geo.Cuboid
         }
 
         public unsafe void removeFromScene(Vector3 item, int numFaces) {
-            if(this.vBuff == null && this.block != null) {
+            if(vBuff == null && this.block != null) {
                 this.block.GetSection(0).GetRenderOperation(this.moData);
                 this.posEl = this.moData.vertexData.vertexDeclaration.FindElementBySemantic(VertexElementSemantic.VES_POSITION);
             }
@@ -94,7 +94,7 @@ namespace API.Geo.Cuboid
 
             if(elemPosition == -1) { return; }
 
-            this.vBuff = this.moData.vertexData.vertexBufferBinding.GetBuffer(posEl.Source);
+            vBuff = this.moData.vertexData.vertexBufferBinding.GetBuffer(posEl.Source);
             byte* pVertex = (byte*)vBuff.Lock(HardwareBuffer.LockOptions.HBL_NORMAL) + vBuff.VertexSize * this.mIndexInVertexBuffer[elemPosition];
             float* pReal;
 

@@ -26,14 +26,6 @@ namespace API.Ent
 	     */
 	    void setDisplayName(String name);
 
-
-	    /**
-	     * Teleports the player to the given location and inform's the player's client
-	     * 
-	     * @param loc the new location
-	     */
-	    void teleport(Vector3 loc);
-
 	    /**
 	     * Immediately saves the players state to disk
 	     * @return true if successful

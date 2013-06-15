@@ -113,14 +113,13 @@ namespace Game
 
                 if (this.mIsInventoryOpen)
                 {
-                    new InventoryGUI();
+                    new InventoryGUI(this.UpdateGraphicInventory);
 
                     this.IsGUIOpen = true;
                 }
                 else { GUI.Visible = false; }
 
                 this.SwitchGUIVisibility(this.mIsInventoryOpen);
-                this.UpdateInventory(this.mIsInventoryOpen);
             }
             
             /* Move camera */
@@ -163,28 +162,24 @@ namespace Game
 
 
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.Dance))
-                this.mInventory.addAt(new Slot(0, 1), 0, 0);
+                this.mInventory.addAt(new Slot(5, 1), 0, 0);
         }
 
-        public void UpdateInventory(bool set)
+        public void UpdateGraphicInventory()
         {
-            if (set)
+            for (int y = 0; y < 4; y++)
             {
-                for (int y = 0; y < 4; y++)
+                for (int x = 0; x < 10; x++)
                 {
-                    for (int x = 0; x < 10; x++)
+                    Slot s = this.mInventory.getSlot(x, y);
+                    if(s != null)
                     {
-                        Slot s = this.mInventory.getSlot(x, y);
-                        if(s != null)
-                        { OgreForm.webView.ExecuteJavascript("setBlockAt(" + (x * 10 + y) + ", " +
-                            "grass3.jpg" + ", " + s.amount + ")");
-                        } //VanillaChunk.staticBlock[VanillaChunk.byteToString[s.item]].getMaterial()
+                        string res = "setBlockAt(" + (x*10 + y) + ", '" +
+                                    VanillaChunk.staticBlock[VanillaChunk.byteToString[s.item]].getItemTexture() +
+                                    "', " + s.amount + ")";
+                        OgreForm.webView.ExecuteJavascript(res);
                     }
                 }
-            }
-            else
-            {
-
             }
         }
 
@@ -244,8 +239,10 @@ namespace Game
 
         private void DeleteBlock()
         {
-            this.mWorld.onDeletion(this.mSelectedBlockPos);
             this.mWorld.getIsland().removeFromScene(this.mSelectedBlockPos);
+            this.mWorld.onDeletion(this.mSelectedBlockPos);
+
+
         }
 
         private void AddBlock(float dist)

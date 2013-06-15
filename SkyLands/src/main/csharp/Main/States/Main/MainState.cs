@@ -28,12 +28,16 @@ namespace Game.States
             this.mWorld = new MainWorld(this.mStateMgr);
             this.mWorld.setSafeSpawnPoint();
 
-            GUI.WebControls.Add(OgreForm.SelectBar);
-            OgreForm.SelectBar.DocumentReady += onSelectBarLoaded;
-            OgreForm.SelectBar.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/Selector.html");
-            OgreForm.SelectBar.Size = new Size((int)Selector.WANTED_SIZE.x, (int)Selector.WANTED_SIZE.y);
-            OgreForm.SelectBar.Location = new Point((int)(OgreForm.InitSize.x / 2 - Selector.WANTED_SIZE.x / 2),
-                                                    500); // (int)(OgreForm.InitSize.y - Selector.WANTED_SIZE.y)
+            if (!GUI.WebControls.Contains(OgreForm.SelectBar))
+            {
+                GUI.WebControls.Add(OgreForm.SelectBar);
+                OgreForm.SelectBar.DocumentReady += onSelectBarLoaded;
+                OgreForm.SelectBar.Source =
+                    new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/Selector.html");
+                OgreForm.SelectBar.Size = new Size((int) Selector.WANTED_SIZE.x, (int) Selector.WANTED_SIZE.y);
+                OgreForm.SelectBar.Location = new Point((int) (OgreForm.InitSize.x/2 - Selector.WANTED_SIZE.x/2),
+                                                        500); // (int)(OgreForm.InitSize.y - Selector.WANTED_SIZE.y)
+            }
 
             this.User = new User(this.mStateMgr, this.mWorld);
 
@@ -109,6 +113,12 @@ namespace Game.States
                     this.mSelectedEntity = null;
                 }
             }*/
+        }
+
+        public void Restart()
+        {
+            this.Shutdown();
+            this.Startup();
         }
 
         protected override void Shutdown()

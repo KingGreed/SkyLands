@@ -2653,6 +2653,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\World\Generator\Decorators\SnowDecorator.cs" />
+    <Compile Include="csharp\Main\World\Generator\FlatIsland.cs" />
     <Compile Include="csharp\Main\World\Generator\VanillaMultiHorizontalEighthBlock.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\Gatherer.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\Pine.cs" />
@@ -2676,9 +2677,6 @@
     <Compile Include="csharp\Main\World\Generator\Decorators\TreeDecorator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\World\Generator\DomeIsland.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="csharp\Main\World\Generator\RandomIsland.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -2695,6 +2693,7 @@
     <Compile Include="csharp\Main\World\Sky\SkyMgr.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\World\StoryEditorWorld.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="resources\Media\skins\" />

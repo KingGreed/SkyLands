@@ -5,7 +5,6 @@ using Mogre;
 
 using API.Ent;
 using API.Geo.Cuboid;
-using API.Generic;
 
 using Game.World;
 using Game.Animation;
@@ -195,7 +194,8 @@ namespace Game.CharacSystem
             this.mMesh.Update(frameTime);
             this.MovementInfo.ClearInfo();
 
-            if (this.MovementInfo.IsFalling && GravitySpeed.GetTimeSinceFall() > 3000) { this.WaitForRemove = true; }
+            if (this.FeetPosition.y < 0)
+            { this.WaitForRemove = true; }
         }
 
         private void Translate(Vector3 translation)
@@ -339,26 +339,6 @@ namespace Game.CharacSystem
         public bool save()                      { throw new NotImplementedException(); }
         public Vector3 getSpawnPoint()          { return this.mCharInfo.SpawnPoint; }
         public void setSpawnPoint(Vector3 loc)  { this.mCharInfo.SpawnPoint = loc; }
-        public void teleport(Vector3 loc)
-        {
-            this.MovementInfo.ClearInfo();
-            this.MovementInfo.IsFalling = false;
-            this.MovementInfo.IsJumping = false;
-            this.MovementInfo.IsPushedByArcaneLevitator = false;
-            this.MovementInfo.IsMovementForced = false;
-            this.mPreviousDirection = Vector3.ZERO;
-            this.mForcedDestination.Clear();
-            
-            Vector3 prevBlockPos = this.BlockPosition;
-            this.FeetPosition = loc;
-            Vector3 actBlockPos = this.BlockPosition;
-
-            if (prevBlockPos != actBlockPos)
-            {
-                this.mCharacMgr.World.onBlockLeave(prevBlockPos, this);
-                this.mCharacMgr.World.onBlockEnter(actBlockPos, this);
-            }
-        }
 
         /* Entity */
         public int getId()                        { return this.mCharInfo.Id; }
@@ -398,6 +378,28 @@ namespace Game.CharacSystem
                     if (newDistance < oldDistance && newDistance < LIMIT_TARGET_DISTANCE) { ennemy.Target = this; }
                     if (ennemy.Target == this && newDistance > LIMIT_TARGET_DISTANCE) { ennemy.Target = null; }
                 }
+            }
+        }
+
+        public void teleport(Vector3 loc)
+        {
+            this.MovementInfo.ClearInfo();
+            GravitySpeed.Reset();
+            this.MovementInfo.IsFalling = false;
+            this.MovementInfo.IsJumping = false;
+            this.MovementInfo.IsPushedByArcaneLevitator = false;
+            this.MovementInfo.IsMovementForced = false;
+            this.mPreviousDirection = Vector3.ZERO;
+            this.mForcedDestination.Clear();
+
+            Vector3 prevBlockPos = this.BlockPosition;
+            this.FeetPosition = loc;
+            Vector3 actBlockPos = this.BlockPosition;
+
+            if (prevBlockPos != actBlockPos)
+            {
+                this.mCharacMgr.World.onBlockLeave(prevBlockPos, this);
+                this.mCharacMgr.World.onBlockEnter(actBlockPos, this);
             }
         }
     }

@@ -142,7 +142,8 @@ namespace API.Geo.Cuboid
             this.mChunkList = null;
             this.multiList = null;
             this.mEntitiesInIsland = null;
-            this.mWorld.getStateMgr().MainState.CharacMgr.Dispose();
+            this.mNode.RemoveAndDestroyAllChildren();
+            this.mWorld.getSceneMgr().DestroySceneNode(this.mNode);
             this.mWorld.unloadIsland();
         }
 

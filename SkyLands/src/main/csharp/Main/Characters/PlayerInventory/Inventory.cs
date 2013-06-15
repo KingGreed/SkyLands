@@ -1,8 +1,5 @@
 ﻿using System;
-using Game.World.Generator;
 using Mogre;
-
-using Game.BaseApp;
 
 namespace Game.CharacSystem
 {
@@ -36,7 +33,7 @@ namespace Game.CharacSystem
         }
 
         public Vector2 getFreeSlot() {
-            for(int i = 0; i < 10; i++) { for(int j = 0; j < 4; j++) { if(this.mInventory[i, j] == null) { return new Vector2(i, j); } } }
+            for(int i = 0; i < 10; i++) { for(int j = 0; j < 4; j++) { if(this.mInventory[j, i] == null) { return new Vector2(j, i); } } }
             return new Vector2(-1, -1);
         }
 

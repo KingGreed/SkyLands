@@ -18,7 +18,14 @@ namespace Game.CharacSystem
         public bool IsFalling
         {
             get { return this.mIsFalling; }
-            set { if (this.mIsFalling != value && !this.IsPushedByArcaneLevitator) { this.mIsFalling = value; this.mOnFall(this.IsFalling); } }
+            set
+            {
+                if (this.mIsFalling != value && !this.IsPushedByArcaneLevitator)
+                {
+                    this.mIsFalling = value;
+                    this.mOnFall(this.IsFalling);
+                }
+            }
         }
         public bool IsJumping
         {
