@@ -22,7 +22,8 @@ namespace API.Geo.Cuboid
 
         protected RenderOperation moData;
         protected VertexElement posEl;
-        protected static HardwareVertexBufferSharedPtr vBuff;
+        private static List<HardwareVertexBufferSharedPtr> vBufferList = new List<HardwareVertexBufferSharedPtr>();
+        protected HardwareVertexBufferSharedPtr vBuff;
         private int faceNumber;
         private Vector3 displayCoord;
         
@@ -95,6 +96,7 @@ namespace API.Geo.Cuboid
             if(elemPosition == -1) { return; }
 
             vBuff = this.moData.vertexData.vertexBufferBinding.GetBuffer(posEl.Source);
+            vBufferList.Add(vBuff);
             byte* pVertex = (byte*)vBuff.Lock(HardwareBuffer.LockOptions.HBL_NORMAL) + vBuff.VertexSize * this.mIndexInVertexBuffer[elemPosition];
             float* pReal;
 
