@@ -1,9 +1,9 @@
 ﻿using Mogre;
 
+using Game.BaseApp;
 using Game.CharacSystem;
 using Game.World;
 using Game.Input;
-using Game.GUIs;
 
 namespace Game.States
 {
@@ -39,12 +39,15 @@ namespace Game.States
             this.mStateMgr.Controller.BlockMouse = true;
 
             this.User.IsAllowedToMoveCam = true;
+            OgreForm.SelectBar.Show();
         }
 
         public override void Hide()
         {
             this.mStateMgr.Controller.CursorVisibility = true;
             this.mStateMgr.Controller.BlockMouse = false;
+            OgreForm.SelectBar.Hide();
+            OgreForm.webView.Hide();
         }
 
         public override void Update(float frameTime)
@@ -58,7 +61,7 @@ namespace Game.States
             this.CharacMgr.Update(frameTime);
 
             /* Entity selection */
-            if (this.User.IsFreeCamMode && this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction))
+            /*if (this.User.IsFreeCamMode && this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction))
             {
                 if (this.mSelectedEntity == null)
                 {
@@ -83,7 +86,7 @@ namespace Game.States
                     this.CharacMgr.GetCharacterById(characId).MoveTo(this.CharacMgr.World.getSpawnPoint());
                     this.mSelectedEntity = null;
                 }
-            }
+            }*/
         }
 
         protected override void Shutdown()

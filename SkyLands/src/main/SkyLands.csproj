@@ -2276,9 +2276,6 @@
     <Content Include="resources\Media\web\jqueryUI\js\jquery-ui-1.9.2.custom.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Media\web\keys.js">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="resources\Media\web\MainMenu.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -2303,6 +2300,7 @@
     <Content Include="resources\Media\web\Selector.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\MOIS.dll" />
     <Content Include="resources\ogre.cfg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -2339,6 +2337,10 @@
     </Reference>
     <Reference Include="Mogre">
       <HintPath>..\..\..\Libs\Mogre.dll</HintPath>
+    </Reference>
+    <Reference Include="MOIS, Version=1.1.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>resources\MOIS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -2483,7 +2485,7 @@
     <Compile Include="csharp\Main\BlockFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\GUIs\Inventory.cs" />
+    <Compile Include="csharp\Main\GUIs\InventoryGUI.cs" />
     <Compile Include="csharp\Main\GUIs\MainMenu.cs" />
     <Compile Include="csharp\Main\GUIs\Selector.cs" />
     <Compile Include="csharp\Main\RTS\Buildings\Buildings.cs">

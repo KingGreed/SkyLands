@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Windows.Forms;
 using Mogre;
 
 using API.Generic;
@@ -30,8 +29,8 @@ namespace Game
 
         private Vector3   mSelectedBlockPos;
         private Block     mSelectedBlock;
-        private Inventory mInventory;
-        private readonly Keys[]   mFigures;
+        private InventoryGUI mInventory;
+        private readonly MOIS.KeyCode[] mFigures;
 
         public bool IsAllowedToMoveCam { get; set; }
         public bool IsFreeCamMode { get; private set; }
@@ -45,10 +44,13 @@ namespace Game
             this.IsAllowedToMoveCam = true;
             this.IsFreeCamMode = true;
 
-            this.mFigures = new Keys[10];
-            for (int i = 0; i < this.mFigures.Length - 1; i++)
-                this.mFigures[i] = (Keys)(((int)Keys.D1) + i);
-            this.mFigures[this.mFigures.Length - 1] = Keys.D0;
+            this.mInventory = new InventoryGUI(new Vector2((float)this.mStateMgr.Size.Width / 2 - InventoryGUI.WANTED_SIZE.x / 2,
+                              (float)this.mStateMgr.Size.Height / 2 - InventoryGUI.WANTED_SIZE.y / 2 - 30 * this.mStateMgr.Ratio.y));
+            this.mInventory.Visible = false;
+
+            this.mFigures = new MOIS.KeyCode[10];
+            for (int i = 0; i < this.mFigures.Length; i++)
+                this.mFigures[i] = (MOIS.KeyCode)System.Enum.Parse(typeof(MOIS.KeyCode), "KC_NUMPAD" + i);
 
             ManualObject[] wires = new ManualObject[12];
             wires[0] = StaticRectangle.CreateLine(this.mStateMgr.SceneMgr, Vector3.ZERO, Vector3.UNIT_X * Cst.CUBE_SIDE);
@@ -92,27 +94,20 @@ namespace Game
         {
             MainState mainState = this.mStateMgr.MainState;
             VanillaPlayer mainPlayer = mainState.CharacMgr.MainPlayer;
-            if (this.IsFreeCamMode && mainPlayer != null)
+            if (this.IsFreeCamMode && mainPlayer != null && this.IsAllowedToMoveCam)
             {
-                bool ctrlPressed = this.mStateMgr.Controller.IsKeyDown(Keys.ControlKey);
+                bool ctrlPressed = this.mStateMgr.Controller.IsKeyDown(MOIS.KeyCode.KC_LCONTROL);
                 mainPlayer.SetIsAllowedToMove(ctrlPressed, false);
                 this.IsAllowedToMoveCam = !ctrlPressed;
             }
 
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.Inventory))
             {
-                if (this.mInventory == null)
-                    this.mInventory = new Inventory(new Vector2((float)this.mStateMgr.Size.Width / 2 - Inventory.WANTED_SIZE.x / 2,
-                                                                (float)this.mStateMgr.Size.Height / 2 - Inventory.WANTED_SIZE.y / 2 - 30 * OgreForm.Ratio.y));
-                else
-                {
-                    this.mInventory = null;
-                    OgreForm.webView.Hide();
-                }
+                this.mInventory.Visible = !this.mInventory.Visible;
 
                 this.mStateMgr.Controller.SwitchCursorVisibility();
-                mainPlayer.SetIsAllowedToMove(this.mInventory == null);
-                this.IsAllowedToMoveCam = this.mInventory == null;
+                mainPlayer.SetIsAllowedToMove(!this.mInventory.Visible);
+                this.IsAllowedToMoveCam = !this.mInventory.Visible;
             }
             
             /* Move camera */
@@ -267,9 +262,8 @@ namespace Game
             }
 
             if (addedBlockPos == MainWorld.AbsToRelative(this.mStateMgr.Camera.Position) || !(this.mWorld.getIsland().getBlock(addedBlockPos, false) is Air) ||
-               (this.mStateMgr.MainState.CharacMgr.MainPlayer != null &&
-                this.mStateMgr.MainState.CharacMgr.MainPlayer.CollisionMgr.GetHitPoints().Any(v => MathHelper.isInBlock(addedBlockPos * Cst.CUBE_SIDE, v, Cst.CUBE_SIDE))))
-                { return; }
+               (this.mStateMgr.MainState.CharacMgr.MainPlayer != null && this.mStateMgr.MainState.CharacMgr.MainPlayer.CollisionMgr.GetHitPoints().Any
+               (v => MathHelper.isInBlock(addedBlockPos * Cst.CUBE_SIDE, v, Cst.CUBE_SIDE)))) { return; }
 
             this.mWorld.getIsland().addBlockToScene(addedBlockPos, material);
             this.mWorld.onCreation(addedBlockPos);

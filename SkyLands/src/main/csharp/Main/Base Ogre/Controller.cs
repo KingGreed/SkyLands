@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Xml;
 using Mogre;
+using MOIS;
 using XInputDotNetPure;
 
 using Game.BaseApp;
 
 namespace Game.Input
 {
-    public enum InputName { Keyboard, Xbox }
-
     public enum UserAction
     {
         Jump,
@@ -27,35 +26,35 @@ namespace Game.Input
 
     public class Controller
     {
-        private const float YAW_SENSIVITY = - 0.4f * 0.7f;
-        private const float PITCH_SENSIVITY = - 0.15f * 0.7f;
+        private const float YAW_SENSIVITY = - 0.4f * 0.6f;
+        private const float PITCH_SENSIVITY = - 0.15f * 0.6f;
 
+        private readonly OgreForm    mOgreForm;
         private readonly XmlDocument mCommands;
-        private readonly Dictionary<Keys, bool> mKeyDown;
-        private readonly Dictionary<Keys, bool> mKeyPressed;
-        private readonly Dictionary<Keys, bool> mKeyReleased;
+        private readonly Keyboard    mKeyBoard;
+        private readonly bool[]      mKeyDown;
+        private readonly bool[]      mKeyPressed;
+        private readonly bool[]      mKeyReleased;
         private readonly Dictionary<MouseButtons, bool> mMouseDown;
         private readonly Dictionary<MouseButtons, bool> mMousePressed;
         private readonly Dictionary<MouseButtons, bool> mMouseReleased;
         private readonly bool[] mUserActionsEnded;
         private readonly bool[] mUserActionsOccured;
         private readonly bool[] mUserActions;
-        protected InputName mInputName;
-        private Vector3 mMovementFactor;
-        private Vector3 mMousePos;
-        private Vector3 mMouseMove;
-        private bool mUpdateMovement = true;
-        private bool mCursorVisibility;
-        private float mTimeToVibrate;
+        private Mogre.Vector3 mMovementFactor;
+        private Mogre.Vector3 mMousePos;
+        private Mogre.Vector3 mMouseMove;
+        private bool          mUpdateMovement = true;
+        private bool          mCursorVisibility;
+        private float         mTimeToVibrate;
 
-        public InputName ActualInputName { get { return this.mInputName; } set { this.mInputName = value; this.LoadCommands(); } }
-        public Vector3   MovementFactor  { get { return this.mMovementFactor; } private set { this.mMovementFactor = value; } }
-        public float     Pitch           { get; private set; }
-        public float     Yaw             { get; private set; }
-        public Vector3   MousePos        { get { return this.mMousePos; } }
-        public Vector3   MouseMove       { get { return this.mMouseMove; } }
-        public bool      BlockMouse      { get; set; }
-        public bool      CursorVisibility
+        public Mogre.Vector3 MovementFactor  { get { return this.mMovementFactor; } private set { this.mMovementFactor = value; } }
+        public float         Pitch           { get; private set; }
+        public float         Yaw             { get; private set; }
+        public Mogre.Vector3 MousePos        { get { return this.mMousePos; } }
+        public Mogre.Vector3 MouseMove       { get { return this.mMouseMove; } }
+        public bool          BlockMouse      { get; set; }
+        public bool          CursorVisibility
         {
             get { return this.mCursorVisibility; }
             set
@@ -68,20 +67,25 @@ namespace Game.Input
 
         public GamePadState GamePadState { get { return GamePad.GetState(PlayerIndex.One, GamePadDeadZone.IndependentAxes); } }
 
-        public Controller(OgreForm ogreForm)
+        public Controller(OgreForm ogreForm, int windowHnd)
         {
-            this.mKeyDown = new Dictionary<Keys, bool>();
-            this.mKeyPressed = new Dictionary<Keys, bool>();
-            this.mKeyReleased = new Dictionary<Keys, bool>();
-            foreach (Keys key in Enum.GetValues(typeof(Keys)))
-            {
-                if (!this.mKeyDown.ContainsKey(key))
-                {
-                    this.mKeyDown.Add(key, false);
-                    this.mKeyPressed.Add(key, false);
-                    this.mKeyReleased.Add(key, false);
-                }
-            }
+            this.mOgreForm = ogreForm;
+            InputManager inputMgr;
+            this.mKeyDown = new bool[256];
+            this.mKeyPressed = new bool[256];
+            this.mKeyReleased = new bool[256];
+
+            ParamList pl = new ParamList();
+            pl.Insert("WINDOW", windowHnd.ToString());
+            inputMgr = InputManager.CreateInputSystem(pl);
+            if (inputMgr == null) { return; }
+
+            // initialize keyboard
+            this.mKeyBoard = (Keyboard)inputMgr.CreateInputObject(MOIS.Type.OISKeyboard, true);
+            if (this.mKeyBoard == null)
+                return;
+            this.mKeyBoard.KeyPressed += OnKeyPressed;
+            this.mKeyBoard.KeyReleased += OnKeyReleased;
 
             this.mMouseDown = new Dictionary<MouseButtons, bool>();
             this.mMousePressed = new Dictionary<MouseButtons, bool>();
@@ -93,7 +97,7 @@ namespace Game.Input
                 this.mMouseReleased.Add(button, false);
             }
 
-            this.mMousePos = new Vector3();
+            this.mMousePos = new Mogre.Vector3();
             this.BlockMouse = false;
             this.mCursorVisibility = true;
 
@@ -103,26 +107,26 @@ namespace Game.Input
             this.mUserActions = new bool[Enum.GetValues(typeof(UserAction)).Length];
             this.mUserActionsOccured = new bool[this.mUserActions.Length];
             this.mUserActionsEnded = new bool[this.mUserActions.Length];
-            this.MovementFactor = new Vector3();
-            
-            ogreForm.MouseMove += OnMouseMoved;
-            ogreForm.MouseDown += OnMousePressed;
-            ogreForm.MouseUp += OnMouseReleased;
-            ogreForm.MouseLeave += OnMouseLeave;
+            this.MovementFactor = new Mogre.Vector3();
+
+            this.mOgreForm.MouseMove += OnMouseMoved;
+            this.mOgreForm.MouseDown += OnMousePressed;
+            this.mOgreForm.MouseUp += OnMouseReleased;
+            this.mOgreForm.MouseLeave += OnMouseLeave;
         }
 
         private void LoadCommands()  { this.mCommands.Load("commands.xml"); }
 
-        public bool WasKeyPressed(Keys key)                      { return this.mKeyPressed[key]; }
-        public bool WasKeyReleased(Keys key)                     { return this.mKeyReleased[key]; }
-        public bool IsKeyDown(Keys key)                          { return this.mKeyDown[key]; }
-        public bool IsMouseButtonDown(MouseButtons button)       { return this.mMouseDown[button]; }
-        public bool WasMouseButtonPressed(MouseButtons button)   { return this.mMousePressed[button]; }
-        public bool WasMouseButtonReleased(MouseButtons button)  { return this.mMouseReleased[button]; }
-        public bool WasMouseMoved()                              { return this.mMouseMove.x != 0 || this.mMouseMove.y != 0; }
-        public bool HasActionOccured(UserAction a)               { return this.mUserActionsOccured[(int)a]; }
-        public bool HasActionEnded(UserAction a)                 { return this.mUserActionsEnded[(int)a]; }
-        public bool IsActionOccuring(UserAction a)               { return this.mUserActions[(int)a]; }
+        public bool WasKeyPressed(KeyCode key)                  { return this.mKeyPressed[(int)key]; }
+        public bool WasKeyReleased(KeyCode key)                 { return this.mKeyReleased[(int)key]; }
+        public bool IsKeyDown(KeyCode key)                      { return this.mKeyDown[(int)key]; }
+        public bool IsMouseButtonDown(MouseButtons button)      { return this.mMouseDown[button]; }
+        public bool WasMouseButtonPressed(MouseButtons button)  { return this.mMousePressed[button]; }
+        public bool WasMouseButtonReleased(MouseButtons button) { return this.mMouseReleased[button]; }
+        public bool WasMouseMoved()                             { return this.mMouseMove.x != 0 || this.mMouseMove.y != 0; }
+        public bool HasActionOccured(UserAction a)              { return this.mUserActionsOccured[(int)a]; }
+        public bool HasActionEnded(UserAction a)                { return this.mUserActionsEnded[(int)a]; }
+        public bool IsActionOccuring(UserAction a)              { return this.mUserActions[(int)a]; }
 
         public void Update(float frameTime)
         {
@@ -134,10 +138,12 @@ namespace Game.Input
 
                 this.Yaw = this.GamePadState.ThumbSticks.Right.X * 5;
                 this.Pitch = -this.GamePadState.ThumbSticks.Right.Y * 8;
-                this.mMovementFactor = new Vector3(-this.GamePadState.ThumbSticks.Left.X,
+                this.mMovementFactor = new Mogre.Vector3(-this.GamePadState.ThumbSticks.Left.X,
                     this.GamePadState.DPad.Up == XInputDotNetPure.ButtonState.Pressed ? 1 : (this.GamePadState.DPad.Down == XInputDotNetPure.ButtonState.Pressed ? -1 : 0),
                                                    this.GamePadState.ThumbSticks.Left.Y);
             }
+
+            this.mKeyBoard.Capture();
             int i = 0;
             for (; i < 6; i++) // Continuous event
             {
@@ -175,7 +181,6 @@ namespace Game.Input
             this.Pitch += this.MouseMove.y;
             this.Pitch *= PITCH_SENSIVITY;
 
-
             for (; i < nodes.Count; i++) // Single event
             {
                 int actionId = (int)Enum.Parse(typeof(UserAction), nodes[i].Attributes[0].Value);
@@ -193,7 +198,7 @@ namespace Game.Input
         private float GetFloatValue(XmlNode node)
         {
             foreach (XmlNode child in node.ChildNodes)
-                if (child.LocalName == InputName.Keyboard.ToString() && this.IsKeyDown((Keys)Enum.Parse(typeof(Keys), child.InnerText)))
+                if (child.LocalName == "Keyboard" && this.IsKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), child.InnerText)))
                     return 1;
 
             return 0;
@@ -237,7 +242,7 @@ namespace Game.Input
                         break;
 
                     case "Keyboard":
-                        if (this.IsKeyDown((Keys)Enum.Parse(typeof(Keys), child.InnerText)))
+                        if (this.IsKeyDown((KeyCode)Enum.Parse(typeof(KeyCode), child.InnerText)))
                             return true;
                         break;
                 }
@@ -252,18 +257,18 @@ namespace Game.Input
             this.mTimeToVibrate = time;
         }
 
-        internal void OnKeyPressed(object sender, EventArgs e)
+        internal bool OnKeyPressed(KeyEvent e)
         {
-            KeyEventArgs args = (KeyEventArgs)e;
-            this.mKeyPressed[args.KeyCode] = !this.mKeyDown[args.KeyCode];
-            this.mKeyDown[args.KeyCode] = true;
+            this.mKeyPressed[(int)e.key] = !this.mKeyDown[(int)e.key];
+            this.mKeyDown[(int)e.key] = true;
+            return true;
         }
 
-        internal void OnKeyReleased(object sender, EventArgs e)
+        internal bool OnKeyReleased(KeyEvent e)
         {
-            KeyEventArgs args = (KeyEventArgs)e;
-            this.mKeyReleased[args.KeyCode] = this.mKeyDown[args.KeyCode];
-            this.mKeyDown[args.KeyCode] = false;
+            this.mKeyReleased[(int)e.key] = this.mKeyDown[(int)e.key];
+            this.mKeyDown[(int)e.key] = false;
+            return true;
         }
 
         private void OnMouseMoved(object sender, EventArgs e)
@@ -285,10 +290,10 @@ namespace Game.Input
         {
             if (this.BlockMouse)
             {
-                Cursor.Position = new System.Drawing.Point(OgreForm.WindowPosition.X + OgreForm.WindowSize.Width/2,
-                                                           OgreForm.WindowPosition.Y + OgreForm.WindowSize.Height/2);
+                Cursor.Position = new System.Drawing.Point(this.mOgreForm.Location.X + this.mOgreForm.Size.Width / 2,
+                                                           this.mOgreForm.Location.Y + this.mOgreForm.Size.Height / 2);
                 this.mUpdateMovement = false;
-                this.mMousePos = new Vector3(Cursor.Position.X, Cursor.Position.Y, this.mMousePos.z);
+                this.mMousePos = new Mogre.Vector3(Cursor.Position.X, Cursor.Position.Y, this.mMousePos.z);
             }
         }
 
@@ -308,20 +313,20 @@ namespace Game.Input
 
         private void ClearKeyPressed()
         {
-            foreach (Keys key in Enum.GetValues(typeof(Keys)))
-                this.mKeyPressed[key] = false;
+            for(int i = 0; i < this.mKeyPressed.Length; i++)
+                this.mKeyPressed[i] = false;
         }
 
         private void ClearKeyReleased()
         {
-            foreach (Keys key in Enum.GetValues(typeof(Keys)))
-                this.mKeyReleased[key] = false;
+            for (int i = 0; i < this.mKeyReleased.Length; i++)
+                this.mKeyReleased[i] = false;
         }
 
         private void ClearKeyDown()
         {
-            foreach (Keys key in Enum.GetValues(typeof(Keys)))
-                this.mKeyDown[key] = false;
+            for (int i = 0; i < this.mKeyReleased.Length; i++)
+                this.mKeyDown[i] = false;
         }
 
         private void ClearMousePressed()
@@ -357,7 +362,7 @@ namespace Game.Input
             for (int i = 0; i < this.mUserActionsEnded.Length; i++)
                 this.mUserActionsEnded[i] = false;
 
-            this.MovementFactor = new Vector3();
+            this.MovementFactor = new Mogre.Vector3();
             this.Pitch = 0;
             this.Yaw = 0;
         }

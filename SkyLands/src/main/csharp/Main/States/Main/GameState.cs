@@ -46,7 +46,7 @@ namespace Game.States
             
             this.mBulletMgr.Update(frameTime);
 
-            if (this.mStateMgr.Controller.WasKeyPressed(Keys.F1) || this.mStateMgr.Controller.HasActionOccured(UserAction.Dance))
+            if (this.mStateMgr.Controller.WasKeyPressed(MOIS.KeyCode.KC_F1) || this.mStateMgr.Controller.HasActionOccured(UserAction.Dance))
                 this.User.SwitchFreeCamMode();
         }
 

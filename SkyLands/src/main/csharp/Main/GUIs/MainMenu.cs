@@ -8,7 +8,7 @@ using Game.BaseApp;
 
 namespace Game.GUIs {
     public class MainMenu : GUI {
-        private StateManager mStateMgr;
+        private readonly StateManager mStateMgr;
 
         public MainMenu(StateManager stateMgr)
             : base(new Vector2(0, 0), new Vector2(404, 404), "MainMenu.html", DockStyle.Fill) {

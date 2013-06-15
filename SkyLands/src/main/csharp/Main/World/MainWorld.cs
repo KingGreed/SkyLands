@@ -60,7 +60,7 @@ namespace Game.World
 
         //get
 
-        public void populate() { this.mIslandLoaded.populate(); this.setSafeSpawnPoint(); }
+        public void populate() { this.mIslandLoaded.populate(); }
         public void display()  { this.mIslandLoaded.display(); }
 
         public string  getName()          { return this.mName;       }

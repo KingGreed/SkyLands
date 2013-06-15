@@ -299,8 +299,8 @@ namespace Game.CharacSystem
             }
             else
             {
-                this.mWillBeAllowedToMove = allowToMove;
                 this.MovementInfo.IsAllowedToMove = !this.MovementInfo.IsMovementForced && allowToMove;
+                if (this.MovementInfo.IsAllowedToMove) { this.mWillBeAllowedToMove = allowToMove; }
             }
         }
 

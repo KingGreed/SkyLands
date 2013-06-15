@@ -11,6 +11,17 @@ using Awesomium.Core;
 namespace Game.BaseApp {
     public abstract class GUI {
         public static List<GUI> GUIs = new List<GUI>();
+        private bool mVisible;
+
+        public bool Visible {
+            get { return this.mVisible; }
+            set
+            {
+                this.mVisible = value;
+                if (this.mVisible) { OgreForm.webView.Show(); }
+                else               { OgreForm.webView.Hide(); }
+            }
+        }
 
         protected GUI(Vector2 pos, Vector2 size, string url) {
 
@@ -22,6 +33,8 @@ namespace Game.BaseApp {
 
             this.setDock(DockStyle.None);
             GUIs.Add(this);
+
+            this.mVisible = true;
         }
 
         protected GUI(Vector2 pos, Vector2 size, string url, DockStyle d) : this(pos, size, url) {

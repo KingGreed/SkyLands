@@ -4,45 +4,45 @@ For an azerty keyboard
 
 <Controller>
   <ContinuousAction id="MoveLeft">
-    <Keyboard>Q</Keyboard>
-    <Keyboard>Left</Keyboard>
+    <Keyboard>KC_A</Keyboard>
+    <Keyboard>KC_LEFT</Keyboard>
   </ContinuousAction>
   <ContinuousAction id="MoveRight">
-    <Keyboard>D</Keyboard>
-    <Keyboard>Right</Keyboard>
+    <Keyboard>KC_D</Keyboard>
+    <Keyboard>KC_RIGHT</Keyboard>
   </ContinuousAction>
   <ContinuousAction id="MoveUp">
-    <Keyboard>E</Keyboard>
-    <Keyboard>PageUp</Keyboard>
+    <Keyboard>KC_E</Keyboard>
+    <Keyboard>KC_PGUP</Keyboard>
   </ContinuousAction>
   <ContinuousAction id="MoveDown">
-    <Keyboard>A</Keyboard>
-    <Keyboard>PageDown</Keyboard>
+    <Keyboard>KC_Q</Keyboard>
+    <Keyboard>KC_PGDOWN</Keyboard>
   </ContinuousAction>
   <ContinuousAction id="MoveForward">
-    <Keyboard>Z</Keyboard>
-    <Keyboard>Up</Keyboard>
+    <Keyboard>KC_W</Keyboard>
+    <Keyboard>KC_UP</Keyboard>
   </ContinuousAction>
   <ContinuousAction id="MoveBack">
-    <Keyboard>S</Keyboard>
-    <Keyboard>Down</Keyboard>
+    <Keyboard>KC_S</Keyboard>
+    <Keyboard>KC_DOWN</Keyboard>
   </ContinuousAction>
   
   <SingleAction id="Jump">
-    <Keyboard>Space</Keyboard>
+    <Keyboard>KC_SPACE</Keyboard>
     <Xbox>A</Xbox>
   </SingleAction>
   <SingleAction id="Sprint">
-    <Keyboard>ShiftKey</Keyboard>
+    <Keyboard>KC_LSHIFT</Keyboard>
     <Xbox>LeftStick</Xbox>
   </SingleAction>
   <SingleAction id="Levitate">
-    <Keyboard>E</Keyboard>
-    <Keyboard>PageUp</Keyboard>
+    <Keyboard>KC_E</Keyboard>
+    <Keyboard>KC_PGUP</Keyboard>
     <Xbox>Y</Xbox>
   </SingleAction>
   <SingleAction id="Dance">
-    <Keyboard>NumPad1</Keyboard>
+    <Keyboard>KC_NUMPAD1</Keyboard>
     <Xbox>DPadLeft</Xbox>
   </SingleAction>
   <SingleAction id="MainAction">
@@ -62,11 +62,11 @@ For an azerty keyboard
     <Xbox>RightShoulder</Xbox>
   </SingleAction>
   <SingleAction id="Inventory">
-    <Keyboard>I</Keyboard>
+    <Keyboard>KC_I</Keyboard>
     <Xbox>X</Xbox>
   </SingleAction>
   <SingleAction id="Start">
-    <Keyboard>Escape</Keyboard>
+    <Keyboard>KC_ESCAPE</Keyboard>
     <Xbox>Start</Xbox>
   </SingleAction>
 </Controller>

@@ -1,38 +1,37 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using Game.GUIs;
+using System.IO;
 using Mogre;
+using MOIS;
 
 using Awesomium.Core;
+using API.Generic;
 
 using Game.Display;
 using Game.Input;
+using Game.GUIs;
 
 namespace Game.BaseApp {
     public abstract partial class OgreForm : Form {
-        private const string PLUGINS_CFG = "plugins.cfg";
-        private const string RESOURCES_CFG = "resources.cfg";
-        private readonly Size WND_SIZE = new Size(800, 600), INIT_SIZE = new Size(1600, 900);
+        private const string  PLUGINS_CFG = "plugins.cfg";
+        private const string  RESOURCES_CFG = "resources.cfg";
+        private readonly Vector2 WND_SIZE = new Vector2(800, 600), INIT_SIZE = new Vector2(1600, 900);
 
-        protected Root mRoot;
+        protected Root         mRoot;
         protected SceneManager mSceneMgr;
         protected RenderWindow mWindow;
-        protected Controller mController;
-        protected Camera mCam;
-        protected Viewport mViewport;
-        protected bool mIsShutDownRequested = false;
-        private int mRenderMode = 0;
+        protected Controller   mController;
+        protected Camera       mCam;
+        protected Viewport     mViewport;
+        protected bool         mIsShutDownRequested = false;
+        private Size           mPreviousSize;
+        private int            mRenderMode = 0;
 
-        public static Size WindowSize;
-        public static Point WindowPosition;
-        public static Vector2 Ratio;
-
-
+        public Vector2 Ratio          { get; set; }
 
         protected OgreForm() {
             //Awesomium
-
             if(!WebCore.IsRunning) { WebCore.Initialize(WebConfig.Default); }
 
             this.InitializeComponent();
@@ -41,59 +40,55 @@ namespace Game.BaseApp {
             Cursor.Position = new Point(this.Location.X + this.Size.Width / 2,
                                         this.Location.Y + this.Size.Height / 2);
 
-
-
             webView.DocumentReady += onDocumentReady;
+            SelectBar.DocumentReady += onSelectBarLoaded;
+            SelectBar.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/Selector.html");
 
-            SelectBar.Hide();
-            SelectBar.Size = Selector.SELECTOR_SIZE;
-            SelectBar.Location = new Point(this.Size.Width / 2 - Selector.SELECTOR_SIZE.Width / 2,
-                                           this.Size.Height - Selector.SELECTOR_SIZE.Height);
+            SelectBar.Size = new Size((int)Selector.WANTED_SIZE.x, (int)Selector.WANTED_SIZE.y);
+            SelectBar.Location = new Point(this.Size.Width / 2 - (int)Selector.WANTED_SIZE.x / 2,
+                                           this.Size.Height - (int)Selector.WANTED_SIZE.y);
+            Console.WriteLine(SelectBar.Location.Y);
 
             this.MinimumSize = new Size(800, 600);
-            WindowSize = this.Size;
-            WindowPosition = this.Location;
+            this.mPreviousSize = this.Size;
             Ratio = Vector2.UNIT_SCALE;
         }
 
         private void onDocumentReady(object sender, UrlEventArgs e) {
             if(webView == null || !webView.IsLive) { return; }
-
             if(webView.ParentView != null || !webView.IsJavascriptEnabled) { return; }
 
-
             JSObject jsobject = webView.CreateGlobalJavascriptObject("jsobject");
-            jsobject["test"] = "truc";
-            jsobject["Position"] = 0;
 
             jsobject.Bind("LogMsg", false, this.JSLogger);
-            jsobject.Bind("OnKeyDown", false, this.BrowserKeyPressed);
-            jsobject.Bind("OnKeyUp", false, this.BrowserKeyReleased);
+        }
+
+        private void onSelectBarLoaded(object sender, UrlEventArgs e)
+        {
+            if (SelectBar == null || !SelectBar.IsLive) { return; }
+            if (SelectBar.ParentView != null || !SelectBar.IsJavascriptEnabled) { return; }
+
+            string ratio = Convert.ToString(Cst.GUI_RATIO).Replace(',', '.');
+            SelectBar.ExecuteJavascript("resize(" + ratio + ", " + ratio + ")");
         }
 
         private void JSLogger(object sender, JavascriptMethodEventArgs args) {
-            if(args.Arguments.Length != 1) { LogManager.Singleton.DefaultLog.LogMessage("JS error : expected 1 argument of type string got : " + args.Arguments.Length + " arguments"); } else {
+            if(args.Arguments.Length != 1) {
+                LogManager.Singleton.DefaultLog.LogMessage("JS error : expected 1 argument of type string got : "
+                                                            + args.Arguments.Length + " arguments"); }
+            else {
                 LogManager.Singleton.DefaultLog.LogMessage(args.Arguments[0]);
             }
         }
 
-        private void BrowserKeyPressed(object sender, JavascriptMethodEventArgs args) {
-            if(args.Arguments[0].IsInteger)
-                this.mController.OnKeyPressed(sender, new KeyEventArgs((Keys)((int)args.Arguments[0])));
-        }
-
-        private void BrowserKeyReleased(object sender, JavascriptMethodEventArgs args) {
-            if(args.Arguments[0].IsInteger)
-                this.mController.OnKeyReleased(sender, new KeyEventArgs((Keys)((int)args.Arguments[0])));
-        }
-
         public void OgreForm_Resize(object sender, EventArgs e) {
             this.mWindow.WindowMovedOrResized();
-            webView.ExecuteJavascript("resize(" + this.Size.Width / INIT_SIZE.Width + "," + this.Size.Height / INIT_SIZE.Height + ")");
-            Ratio = new Vector2(WND_SIZE.Width / this.Size.Width, WND_SIZE.Height / this.Size.Height);
-            foreach (GUI gui in GUI.GUIs)
-                gui.resize((float)WindowSize.Width / this.Size.Width, (float)WindowSize.Height / this.Size.Height, Ratio.x, Ratio.y);
-            WindowSize = this.Size;
+            string s = ("resize(" + this.Size.Width / INIT_SIZE.x + "," + this.Size.Height / INIT_SIZE.y + ")");
+            webView.ExecuteJavascript(s.Replace(',', '.'));
+            Ratio = new Vector2(this.Size.Width / WND_SIZE.x, this.Size.Height / WND_SIZE.y);
+            foreach (GUI gui in GUI.GUIs) { gui.resize((float)this.Size.Width / this.mPreviousSize.Width,
+                (float)this.Size.Height / this.mPreviousSize.Height,Ratio.x, Ratio.y); }
+            this.mPreviousSize = this.Size;
         }
 
         public void AddFrameLstn(RootLstn listener) { listener.AddListener(this.mRoot); }
@@ -117,7 +112,9 @@ namespace Game.BaseApp {
 
             this.LoadResources();
 
-            this.mController = new Controller(this);
+            int windowHnd;
+            this.mWindow.GetCustomAttribute("WINDOW", out windowHnd);
+            this.mController = new Controller(this, windowHnd);
 
             MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_NONE);
 
@@ -131,7 +128,6 @@ namespace Game.BaseApp {
             Game.World.Display.ColoredMaterials.Init();
 
             this.Resize += this.OgreForm_Resize;
-            this.Move += (sender, args) => WindowPosition = this.Location;
 
             return true;
         }
@@ -145,14 +141,14 @@ namespace Game.BaseApp {
             renderSys.SetConfigOption("RTT Preferred Mode", "FBO");
             renderSys.SetConfigOption("VSync", "Yes");
             renderSys.SetConfigOption("VSync Interval", "1");
-            renderSys.SetConfigOption("Video Mode", WND_SIZE.Width + " x " + WND_SIZE.Height);
+            renderSys.SetConfigOption("Video Mode", WND_SIZE.x + " x " + WND_SIZE.y);
             renderSys.SetConfigOption("sRGB Gamma Conversion", "No");
 
             this.mRoot.RenderSystem = renderSys;
             this.mRoot.Initialise(false, "SkyLands");
             NameValuePairList misc = new NameValuePairList();
             misc["externalWindowHandle"] = Handle.ToString();
-            this.mWindow = this.mRoot.CreateRenderWindow("Main RenderWindow", (uint)WND_SIZE.Width, (uint)WND_SIZE.Height, false, misc);
+            this.mWindow = this.mRoot.CreateRenderWindow("Main RenderWindow", (uint)WND_SIZE.x, (uint)WND_SIZE.y, false, misc);
 
             return true;
         }
@@ -193,9 +189,9 @@ namespace Game.BaseApp {
         private void ProcessInput(float frameTime) {
             this.mController.Update(frameTime);
 
-            if(this.mController.WasKeyPressed(Keys.F12)) { this.CyclePolygonMode(); }
-            if(this.mController.WasKeyPressed(Keys.F5)) { this.ReloadAllTextures(); }
-            if(this.mController.WasKeyPressed(Keys.PrintScreen)) { this.TakeScreenshot(); }
+            if(this.mController.WasKeyPressed(KeyCode.KC_F12)) { this.CyclePolygonMode(); }
+            if (this.mController.WasKeyPressed(KeyCode.KC_F5)) { this.ReloadAllTextures(); }
+            if (this.mController.WasKeyPressed(KeyCode.KC_SYSRQ)) { this.TakeScreenshot(); }
         }
 
         private void CyclePolygonMode() {

@@ -11,12 +11,14 @@ namespace Game.States
         public override void Show()
         {
             new MainMenu(this.mStateMgr);
+            OgreForm.SelectBar.Hide();
             OgreForm.webView.Show();
         }
 
         public override void Hide()
         {
             OgreForm.webView.Hide();
+            OgreForm.SelectBar.Hide();
         }
 
         public override void Update(float frameTime)
