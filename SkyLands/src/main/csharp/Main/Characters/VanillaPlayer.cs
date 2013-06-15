@@ -35,6 +35,7 @@ namespace Game.CharacSystem
 
             this.mCollisionMgr = new CollisionMgr(characMgr.SceneMgr, this.mCharacMgr.World, this);
             this.FeetPosition = this.mCharInfo.SpawnPoint;
+
             this.mShootCube = new ShootCube(this.mCharacMgr.BulletMgr, this);
         }
 

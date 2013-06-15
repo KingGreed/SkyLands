@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Drawing;
 using Mogre;
 
 using API.Generic;
@@ -7,11 +6,12 @@ using API.Geo.Cuboid;
 
 using Game.BaseApp;
 using Game.States;
-using Game.World;
 using Game.Input;
+using Game.World;
 using Game.World.Blocks;
-using Game.CharacSystem;
+using Game.World.Generator;
 using Game.World.Display;
+using Game.CharacSystem;
 using Game.GUIs;
 
 namespace Game
@@ -29,9 +29,10 @@ namespace Game
         private readonly SceneNode mWireCube;
         private bool mIsInventoryOpen;
 
-        private Vector3      mSelectedBlockPos;
-        private Block        mSelectedBlock;
+        private Vector3 mSelectedBlockPos;
+        private Block   mSelectedBlock;
         private readonly MOIS.KeyCode[] mFigures;
+        private Inventory mInventory;
 
         public bool IsAllowedToMoveCam { get; set; }
         public bool IsFreeCamMode      { get; private set; }
@@ -69,6 +70,8 @@ namespace Game
                 this.mWireCube.AttachObject(wire);
 
             this.mWireCube.SetVisible(false);
+
+            this.mInventory = new Inventory();
         }
 
         public void InitCamera()
@@ -111,11 +114,13 @@ namespace Game
                 if (this.mIsInventoryOpen)
                 {
                     new InventoryGUI();
+
                     this.IsGUIOpen = true;
                 }
                 else { GUI.Visible = false; }
 
                 this.SwitchGUIVisibility(this.mIsInventoryOpen);
+                this.UpdateInventory(this.mIsInventoryOpen);
             }
             
             /* Move camera */
@@ -155,6 +160,32 @@ namespace Game
                 }
             }
             Selector.SelectorPos = selectorPos;
+
+
+            if (this.mStateMgr.Controller.HasActionOccured(UserAction.Dance))
+                this.mInventory.addAt(new Slot(0, 1), 0, 0);
+        }
+
+        public void UpdateInventory(bool set)
+        {
+            if (set)
+            {
+                for (int y = 0; y < 4; y++)
+                {
+                    for (int x = 0; x < 10; x++)
+                    {
+                        Slot s = this.mInventory.getSlot(x, y);
+                        if(s != null)
+                        { OgreForm.webView.ExecuteJavascript("setBlockAt(" + (x * 10 + y) + ", " +
+                            "grass3.jpg" + ", " + s.amount + ")");
+                        } //VanillaChunk.staticBlock[VanillaChunk.byteToString[s.item]].getMaterial()
+                    }
+                }
+            }
+            else
+            {
+
+            }
         }
 
         public void SwitchFreeCamMode()

@@ -16,6 +16,9 @@ namespace Game.GUIs
         public override void onDocumentReady(object sender, Awesomium.Core.UrlEventArgs e) {
             base.onDocumentReady(sender, e);
             Visible = true;
+
+            string s = "setBlockAt(" + 0 + ", " + "'grass3.jpg'" + ", " + 5 + ")";
+            OgreForm.webView.ExecuteJavascript(s);
         }
     }
 }

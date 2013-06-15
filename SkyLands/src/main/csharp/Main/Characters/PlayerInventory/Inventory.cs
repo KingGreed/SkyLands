@@ -1,14 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+using Game.World.Generator;
 using Mogre;
 
-namespace Game.CharacSystem.PlayerInventory
+using Game.BaseApp;
+
+namespace Game.CharacSystem
 {
-    class Inventory
+    public class Inventory
     {
+        
+        
         private Slot[,] mInventory = new Slot[10, 4];
 
         public void removeAt(int x, int y, int amount) {
@@ -20,7 +21,8 @@ namespace Game.CharacSystem.PlayerInventory
         public Slot addAt(Slot s, int x, int y) {
             if(x < 0 || y < 0 || x > 9 || y > 3) { throw new IndexOutOfRangeException();          }
             if(s.amount < 0)                     { throw new ArgumentException("Invalid amound"); }
-            if(s.item != this.mInventory[x, y].item) {
+            if (this.mInventory[x, y] == null || s.item != this.mInventory[x, y].item)
+            {
                 Slot tmp = this.mInventory[x, y];
                 this.mInventory[x, y] = s;
                 return tmp;
@@ -43,7 +45,7 @@ namespace Game.CharacSystem.PlayerInventory
             return this.mInventory[x, y];
         }
 
-        public char getItemTypeAt(int x, int y) {
+        public byte getItemTypeAt(int x, int y) {
             if(x < 0 || y < 0 || x > 9 || y > 3) { throw new IndexOutOfRangeException(); }
             return this.mInventory[x, y].item;
         }
