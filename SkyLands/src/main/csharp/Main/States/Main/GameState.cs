@@ -1,5 +1,4 @@
-﻿using System.Windows.Forms;
-using Game.Input;
+﻿using Game.Input;
 using Mogre;
 
 using Game.CharacSystem;

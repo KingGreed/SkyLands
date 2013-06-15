@@ -72,9 +72,8 @@ namespace Game.CharacSystem
             }
             else
             {
-                int nbBlockFall = (int)this.mDistFall / Cst.CUBE_SIDE;
-                if(nbBlockFall > 5)
-                    this.Hit(nbBlockFall - 5);
+                if (GravitySpeed.GetTimeSinceFall() >= 800)
+                    this.Hit(GravitySpeed.GetSpeed() / GravitySpeed.SPEED_TMAX * VanillaPlayer.DEFAULT_PLAYER_LIFE);
                 if (this.mCharInfo.IsPlayer)
                     ((Sinbad)this.mMesh).EndJump();
             }
@@ -196,6 +195,8 @@ namespace Game.CharacSystem
 
             this.mMesh.Update(frameTime);
             this.MovementInfo.ClearInfo();
+
+            if (GravitySpeed.GetTimeSinceFall() > 3000) { this.WaitForRemove = true; }
         }
 
         private void Translate(Vector3 translation)
@@ -205,8 +206,6 @@ namespace Game.CharacSystem
             /* Here translate has been modified to avoid collisions */
             this.MovementInfo.IsFalling = actualTranslation.y < 0;
             this.MovementInfo.IsJumping = actualTranslation.y > 0 && JumpSpeed.IsJumping;
-
-            if (this.MovementInfo.IsFalling) { this.mDistFall -= actualTranslation.y; }
 
             Vector3 prevBlockPos = this.BlockPosition;
             this.mNode.Translate(actualTranslation);
@@ -281,7 +280,7 @@ namespace Game.CharacSystem
 
             if (this.mCharInfo.IsPlayer && this.mCharacMgr.StateMgr.Controller.GamePadState.IsConnected)
             {
-                float force = damage / VanillaPlayer.DEFAULT_PLAYER_LIFE * 7;
+                float force = damage / VanillaPlayer.DEFAULT_PLAYER_LIFE * 9;
                 this.mCharacMgr.StateMgr.Controller.Vibrate(force, force, 0.2f);
             }
 

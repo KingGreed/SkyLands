@@ -10,12 +10,11 @@ namespace Game.States
     public abstract class MainState : State
     {
         protected MainWorld mWorld;
-        private SceneNode   mSelectedEntity;
 
         public User      User      { get; protected set; }
         public CharacMgr CharacMgr { get; protected set; }
 
-        protected MainState(StateManager stateMgr, string name) : base(stateMgr, name) { this.mSelectedEntity = null; }
+        protected MainState(StateManager stateMgr, string name) : base(stateMgr, name) { }
 
         protected override void Startup()
         {
