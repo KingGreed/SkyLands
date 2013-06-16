@@ -13,7 +13,6 @@ namespace Game.World.Blocks
             this.mName = "Crystal";
             this.mMaterial = "cube/Crystal";
             this.mId = 14;
-            this.mMeshType = 1;
         }
 
     }

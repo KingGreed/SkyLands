@@ -154,7 +154,7 @@ material cube/sand
 			ambient 1.0 1.0 1.0
             diffuse 1.0 1.0 1.0
 
-			texture_unit { texture sand.jpg }
+			texture_unit { texture sand.png }
 		}
 	}
 }

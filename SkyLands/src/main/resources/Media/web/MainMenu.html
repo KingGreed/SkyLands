@@ -17,7 +17,7 @@
     $(window).load(function() {
       RatioTotalX = parseInt($('#map').css('width')) / 1600;
       RatioTotalY = parseInt($('#map').css('height')) / 900;
-      $(document).mousemove(function(e){
+      $(document).mousemove(function(e) {
         if(isInRectangle(524 * RatioTotalX, 276 * RatioTotalY, 1220 * RatioTotalX, 392 * RatioTotalY, e.pageX, e.pageY)) {
           $('img').css('display', 'none');
           $('img:eq(0)').css('display', 'block');
@@ -34,15 +34,26 @@
           $('#map').css('display', 'block');
         }
       });
+
+      $(document).click(function(e) {
+        if(isInRectangle(524 * RatioTotalX, 276 * RatioTotalY, 1220 * RatioTotalX, 392 * RatioTotalY, e.pageX, e.pageY)) {
+          MainMenuJSObject.play();
+        } else if(isInRectangle(360 * RatioTotalX, 486 * RatioTotalY, 1278 * RatioTotalX, 615 * RatioTotalY, e.pageX, e.pageY)) {
+          MainMenuJSObject.option();
+        } else if(isInRectangle(101 * RatioTotalX, 100 * RatioTotalY, 180 * RatioTotalX, 607 * RatioTotalY, e.pageX, e.pageY)) {
+          
+        }
+      });
+
     });
 
   </script>
 </head>
 <body oncontextmenu="return false;">
   <p id="pos" style="color : white;"></p>
-    <img src="../images/Menu_Play_select.png" id="img" style="height: 100%; width: 100%; display:none;"/>
+  <img src="../images/Menu_Play_select.png"    id="img" style="height: 100%; width: 100%; display:none;"/>
   <img src="../images/Menu_options_select.png" id="img" style="height: 100%; width: 100%; display:none;"/>
-  <img src="../images/Menu_Exit_select.png" id="img" style="height: 100%; width: 100%; display:none;"/>
-  <img src="../images/Menu_Normal view.png" id="map" style="height: 100%; width: 100%;"/>
+  <img src="../images/Menu_Exit_select.png"    id="img" style="height: 100%; width: 100%; display:none;"/>
+  <img src="../images/Menu_Normal view.png"    id="map" style="height: 100%; width: 100%;"/>
 </body>
 </html>

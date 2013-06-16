@@ -14,7 +14,6 @@ namespace Game.World.Blocks {
             this.mName = "CrystalGate";
             this.mMaterial = "cube/CrystalGate/" + s[new Random().Next(0, 3)];
             this.mId = 19;
-            this.mMeshType = 1;
         }
 
     }

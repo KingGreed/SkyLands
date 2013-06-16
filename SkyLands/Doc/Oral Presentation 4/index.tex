@@ -338,7 +338,10 @@ block.End();
             \includegraphics[width=16cm]{images/Display.png}
         \end{center}
 
-        With this system, we ended up having better Frames Per Seconds than the previous displaying system, but this count was very variable and depended on how many entities were displayed on the sreen.\\ Basically the the terrain we could display was bigger, but we needed to stop displaying entities at a certain distance (usually 3000 pixels) and our terrain couldn't bigger than 12 chunks of 16 blocks.\\
+        With this system, we ended up having better Frames Per Seconds than the previous displaying system, but this count was very variable and depended on how many entities were displayed on the sreen.\\
+        
+        Basically the the terrain we could display was bigger, but we needed to stop displaying entities at a certain distance (usually 3000 pixels) and our terrain couldn't bigger than 12 chunks of 16 blocks.\\
+
         Frames Per Seconds were usually between 15 and 30, and as you might expect, we were a bit disapointed because under 24 Frames Per Seconds, animations are uneven or worse ``choppy'' movement or animations, and the frame rate was more often under 25 than above.\\
 
         \subsection{A better display system}
@@ -357,6 +360,14 @@ block.End();
           And we beleive we could display even more cubes!\\
 
       \section{Save and Load}
+        Saving and loading the terrain would've been too easy if we had choosen to write it in a text file!\\
+        Basically we iterate through the terrain with 3 for (x, y, z) from 0 to the max size and we only need to write the id of the block, which is a byte.\\
+        The only thing we need to do is at the begining of the file write the max-size in x, thhe max-size in the and the max-size in y. Once this is done, we iterate through the terrain using a FileStream and it's methode WriteByte.\\
+
+        As for the reading part, obviously we begin by reading the max-size values in x, y, z and once this is done, we iterate through the file using ReadByte and build the terrain according to the input we read. Nothing really technical!\\
+      
+       The results talk for themselves, for 100 000 blocks = 100 000 bytes = 100 ko. which would be around the number of blocks contained in a 15 * 15 island. So tiny files for big Islands!\\
+
     \chapter{\textcolor{blue}{Physics}}
       \section{Collisions} %Romain à toi de faire plusieurs parties
       \section{Fall}

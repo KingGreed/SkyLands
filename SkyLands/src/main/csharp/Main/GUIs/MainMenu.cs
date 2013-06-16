@@ -17,7 +17,12 @@ namespace Game.GUIs {
 
         public override void onDocumentReady(object sender, UrlEventArgs e) {
             base.onDocumentReady(sender, e);
-            ((JSObject)OgreForm.webView.CreateGlobalJavascriptObject("MainMenuJSObject")).Bind("exit", false, (sender1, args) => this.mStateMgr.RequestStatePop());
+            
+            JSObject j = OgreForm.webView.CreateGlobalJavascriptObject("MainMenuJSObject");
+            j.Bind("exit", false, (sender1, args) => this.mStateMgr.RequestStatePop());
+
+            j.Bind("play", false, (craftSender, args) => new PlayMenu(this.mStateMgr));
+            Visible = true;
         }
     }
 }

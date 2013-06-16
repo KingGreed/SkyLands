@@ -9,7 +9,7 @@ namespace Game.World.Blocks {
             this.mName = "CrystalGate H";
             this.mMaterial = "cube/CrystalGate/" + s[new Random().Next(0, 3)];
             this.mId = 15;
-            this.mMeshType = 1;
+            this.mMeshType = 0;
         }
 
     }

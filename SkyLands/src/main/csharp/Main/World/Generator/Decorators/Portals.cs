@@ -40,7 +40,7 @@ namespace Game.World.Generator.Decorators {
                     for(int x = 0; x < 4; x++) {
                         for(int y = -1; y < 5; y++) {
                             if(x == 0 || x == 3 || y == -1 || y == 4) { current.setBlockAt((int)position.x + x, (int)position.y + y, (int)position.z, "Crystal", true); }
-                            else { current.setBlockAt((int)position.x + x, (int)position.y + y, (int)position.z, "CrystalGate", true); }
+                            else { current.setBlockAt((int)position.x + x, (int)position.y + y, (int)position.z, "CrystalGate H", true); }
                         }
                     }
                 break;

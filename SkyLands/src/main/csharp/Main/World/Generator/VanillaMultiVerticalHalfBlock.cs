@@ -15,14 +15,15 @@ namespace Game.World.Generator
                     new Vector2(0, 1), new Vector2(1, 1), new Vector2(1, 0), new Vector2(0, 0)
                 };
         //see API.generic.BlockFace
-        public static Vector3[] blockPointCoords = 
+        public static Vector3[] blockPointCoords =
             new Vector3[] {
-                new Vector3(0, CUBE_SIDE, 0),             new Vector3(0, 0, 0),                              new Vector3(CUBE_SIDE, 0, 0),                      new Vector3(CUBE_SIDE, CUBE_SIDE, 0),
-                new Vector3(0, 0, -CUBE_SIDE / 2),        new Vector3(0, CUBE_SIDE, -CUBE_SIDE / 2),         new Vector3(CUBE_SIDE, CUBE_SIDE, -CUBE_SIDE / 2), new Vector3(CUBE_SIDE, 0, -CUBE_SIDE / 2),
-                new Vector3(CUBE_SIDE, CUBE_SIDE, 0),     new Vector3(CUBE_SIDE, CUBE_SIDE, -CUBE_SIDE / 2), new Vector3(0, CUBE_SIDE, -CUBE_SIDE / 2),         new Vector3(0, CUBE_SIDE, 0),
-                new Vector3(0, 0, 0),                     new Vector3(0, 0, -CUBE_SIDE / 2),                 new Vector3(CUBE_SIDE, 0, -CUBE_SIDE / 2),         new Vector3(CUBE_SIDE, 0, 0),
-                new Vector3(0, 0, 0),                     new Vector3(0, CUBE_SIDE, 0),                      new Vector3(0, CUBE_SIDE, -CUBE_SIDE / 2),         new Vector3(0, 0, -CUBE_SIDE / 2),
-                new Vector3(CUBE_SIDE, 0, 0),             new Vector3(CUBE_SIDE, 0, -CUBE_SIDE / 2),         new Vector3(CUBE_SIDE, CUBE_SIDE, -CUBE_SIDE / 2), new Vector3(CUBE_SIDE, CUBE_SIDE, 0)            };
+                new Vector3(0, CUBE_SIDE, 0),         new Vector3(0, 0, 0),                          new Vector3(CUBE_SIDE, 0, 0),                  new Vector3(CUBE_SIDE, CUBE_SIDE, 0),
+                new Vector3(0, 0, -CUBE_SIDE),        new Vector3(0, CUBE_SIDE, -CUBE_SIDE),         new Vector3(CUBE_SIDE, CUBE_SIDE, -CUBE_SIDE), new Vector3(CUBE_SIDE, 0, -CUBE_SIDE),
+                new Vector3(CUBE_SIDE, CUBE_SIDE, 0), new Vector3(CUBE_SIDE, CUBE_SIDE, -CUBE_SIDE), new Vector3(0, CUBE_SIDE, -CUBE_SIDE),         new Vector3(0, CUBE_SIDE, 0),
+                new Vector3(0, 0, 0),                 new Vector3(0, 0, -CUBE_SIDE),                 new Vector3(CUBE_SIDE, 0, -CUBE_SIDE),         new Vector3(CUBE_SIDE, 0, 0),
+                new Vector3(0, 0, 0),                 new Vector3(0, CUBE_SIDE, 0),                  new Vector3(0, CUBE_SIDE, -CUBE_SIDE),         new Vector3(0, 0, -CUBE_SIDE),
+                new Vector3(CUBE_SIDE, 0, 0),         new Vector3(CUBE_SIDE, 0, -CUBE_SIDE),         new Vector3(CUBE_SIDE, CUBE_SIDE, -CUBE_SIDE), new Vector3(CUBE_SIDE, CUBE_SIDE, 0),
+            };
 
         public static Vector3[] normals =
             new Vector3[] {
@@ -34,7 +35,7 @@ namespace Game.World.Generator
                 new Vector3(-1, 0, 0)
             };
 
-        public override Vector3 getBlockPointsCoord(int face) { return blockPointCoords[face]; }
+        public override Vector3 getBlockPointsCoord(int face) { return blockPointCoords[face] + (Vector3.NEGATIVE_UNIT_Z / 2); }
         public override Vector2 getTextureCoord(int face)     { return textureCoord[face];     }
         public override Vector3 getNormals(int face)          { return normals[face];          }
 

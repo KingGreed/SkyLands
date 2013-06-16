@@ -113,6 +113,24 @@
     <Content Include="resources\Media\images\Menu_Play_select.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\images\Play\menu play_Back.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\images\Play\menu play_Create_scenar.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\images\Play\menu play_Create_World.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\images\Play\menu play_Load_game.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\images\Play\menu play_Load_scenar.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\images\Play\menu play_normal.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\images\selector.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -467,7 +485,7 @@
     <Content Include="resources\Media\materials\textures\redsand1.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Media\materials\textures\sand.jpg">
+    <Content Include="resources\Media\materials\textures\sand.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\materials\textures\sand2.png">
@@ -2282,6 +2300,12 @@
     <Content Include="resources\Media\web\options.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\web\play.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\web\play.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\web\ScenarioEditorChooseScenario.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -2479,8 +2503,9 @@
     <Compile Include="csharp\Main\BlockFactory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="csharp\Main\GUIs\InventoryGUI.cs" />
+    <Compile Include="csharp\Main\GUIs\PlayMenu.cs" />
     <Compile Include="csharp\Main\GUIs\MainMenu.cs" />
+    <Compile Include="csharp\Main\GUIs\InventoryGUI.cs" />
     <Compile Include="csharp\Main\GUIs\Selector.cs" />
     <Compile Include="csharp\Main\RTS\Buildings\Buildings.cs">
       <SubType>Code</SubType>
@@ -2623,6 +2648,7 @@
     <Compile Include="csharp\Main\World\Blocks\YellowSandBlock.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\World\Generator\Decorators\KingOfTheHill.cs" />
     <Compile Include="csharp\Main\World\Generator\FlatIsland.cs" />
     <Compile Include="csharp\Main\World\Display\ColoredMaterials.cs" />
     <Compile Include="csharp\Main\World\Display\GraphicBlock.cs">
