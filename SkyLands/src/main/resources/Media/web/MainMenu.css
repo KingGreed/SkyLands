@@ -4,3 +4,9 @@ body, html{
   	background-color: black;
 	overflow: hidden;
 }
+
+img {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}

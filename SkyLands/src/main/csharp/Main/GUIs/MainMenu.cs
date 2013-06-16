@@ -13,7 +13,7 @@ namespace Game.GUIs {
         private readonly StateManager mStateMgr;
 
         public MainMenu(StateManager stateMgr)
-            : base(new Vector2(0, 0), new Vector2(404, 404), "MainMenu.html", DockStyle.Fill) {
+            : base(new Vector2(0, 0), new Vector2(404, 404), "MainMenu.html", DockStyle.Left) {
             this.mStateMgr = stateMgr;
         }
 

@@ -2,3 +2,8 @@ body {
 	overflow: hidden;
 	background-color: black;
 }
+img {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}

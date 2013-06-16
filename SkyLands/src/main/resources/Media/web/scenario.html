@@ -1,0 +1,95 @@
+<html>
+	<head>
+		<script type="text/javascript" src="jquery.js"> </script>
+		<style type="text/css">
+			img {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+			}
+		</style>
+		<script type="text/javascript">
+			var ratioX = 1, ratioY = 1;
+			function isInRectangle(x1, y1, x2, y2, posX, posY) { return posX > x1 && posX < x2 && posY > y1 && posY < y2; }
+
+			function resize(ratioInX, ratioInY) {
+				ratioX *= ratioInX;
+				ratioY *= ratioInY;
+
+				$("#background").attr("width",  437 * ratioX + "px");
+				$("#background").attr("height", 800 * ratioY + "px");
+
+				$(".button").each(function() {
+					$(this).attr("width",  297 * ratioX + "px");
+					$(this).attr("height", 81  * ratioY + "px");					
+				})
+
+			}
+
+			//147 45
+			$(window).load(function() {
+				$(document).mousemove(function(e) {
+
+					if(isInRectangle(65 * ratioX, 28 * ratioY, 361 * ratioX, 108 * ratioY, e.pageX, e.pageY)){ //edit
+			          $("body").css('cursor', 'pointer');
+			          $('#edit').css('display', 'block').css("left", 65 * ratioX + "px").css("top", 28 * ratioY + "px");
+			        }
+			        else if(isInRectangle(65 * ratioX, 167 * ratioY, 361 * ratioX, 247 * ratioY, e.pageX, e.pageY)){ //load
+			          $("body").css('cursor', 'pointer');
+			          $('#load').css('display', 'block').css("left", 65 * ratioX + "px").css("top", 167 * ratioY + "px");
+			        }
+			        else if(isInRectangle(65 * ratioX, 305 * ratioY, 361 * ratioX, 385 * ratioY, e.pageX, e.pageY)){ //new
+			          $("body").css('cursor', 'pointer');
+			          $('#new').css('display', 'block').css("left", 65 * ratioX + "px").css("top", 305 * ratioY + "px");
+			        }
+			        else if(isInRectangle(65 * ratioX, 440 * ratioY, 361 * ratioX, 520 * ratioY, e.pageX, e.pageY)){ //save
+			          $("body").css('cursor', 'pointer');
+			          $('#save').css('display', 'block').css("left", 65 * ratioX + "px").css("top", 440 * ratioY + "px");
+			        }
+			        else if(isInRectangle(65 * ratioX, 647 * ratioY, 361 * ratioX, 728 * ratioY, e.pageX, e.pageY)){ //exit
+			          $("body").css('cursor', 'pointer');
+			          $('#exit').css('display', 'block').css("left", 65 * ratioX + "px").css("top", 647 * ratioY + "px");
+			        } else {
+			        	$('#edit').css('display', 'none');
+			        	$('#load').css('display', 'none');
+			        	$('#new').css('display', 'none');
+			        	$('#save').css('display', 'none');
+			        	$('#exit').css('display', 'none');
+			        }
+
+
+				});
+
+				$("img").click(function() {
+					switch($(this).attr("id")) {
+						case "edit":
+							scenarioObject.edit();
+						break;
+						case "load":
+							scenarioObject.load();
+						break;
+						case "new":
+							scenarioObject.new();
+						break;
+						case "save":
+							scenarioObject.save();
+						break;
+						case "exit":
+							scenarioObject.exit();
+						break;
+					}
+				});
+			});
+
+		</script>
+
+	</head>
+	<body style="overflow : hidden;">
+		<img src="../images/scenario/menu_scenar_normal.png" id="background"/>
+		<img src="../images/scenario/edit.png" style="display:none;" id="edit" class="button" />
+		<img src="../images/scenario/load.png" style="display:none;" id="load" class="button" />
+		<img src="../images/scenario/new.png"  style="display:none;" id="new"  class="button" />
+		<img src="../images/scenario/save.png" style="display:none;" id="save" class="button" />
+		<img src="../images/scenario/exit.png" style="display:none;" id="exit" class="button" />
+	</body>
+</html>

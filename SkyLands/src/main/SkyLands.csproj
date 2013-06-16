@@ -2500,6 +2500,7 @@
     <Compile Include="csharp\Main\Base Ogre\OgreForm.Designer.cs">
       <DependentUpon>OgreForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="csharp\Main\Base Ogre\ScenarioCreator.cs" />
     <Compile Include="csharp\Main\BlockFactory.cs">
       <SubType>Code</SubType>
     </Compile>
