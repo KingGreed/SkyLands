@@ -45,7 +45,7 @@ namespace Game.Animation
 
         public void Shoot()
         {
-            this.mAnimMgr.AddAnims(GetString(AnimName.Shoot));
+            this.mAnimMgr.SetAnims(GetString(AnimName.Shoot));
         }
 
         public void Die()

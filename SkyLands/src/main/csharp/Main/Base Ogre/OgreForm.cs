@@ -206,7 +206,9 @@ namespace Game.BaseApp {
             }
         }
 
-        protected virtual void Shutdown(object sender, EventArgs e) {
+        protected virtual void Shutdown(object sender, EventArgs e)
+        {
+            this.mController.Vibrate(0, 0);
             this.mRoot.Dispose();
             this.mRoot = null;
         }

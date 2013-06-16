@@ -70,7 +70,7 @@ namespace Game.CharacSystem
             }
             else
             {
-                if (GravitySpeed.GetTimeSinceFall() >= 800)
+                if (GravitySpeed.GetTimeSinceFall() >= 600)
                     this.Hit(GravitySpeed.GetSpeed() / GravitySpeed.SPEED_TMAX * VanillaPlayer.DEFAULT_PLAYER_LIFE);
                 if (this.mCharInfo.IsPlayer)
                     ((Sinbad)this.mMesh).EndJump();
@@ -274,7 +274,6 @@ namespace Game.CharacSystem
         public void Hit(float damage)
         {
             if (this.mCharInfo.Life <= 0) { return; }
-            Console.WriteLine("Hit : " + damage);
             this.mCharInfo.Life -= damage;
 
             if (this.mCharInfo.IsPlayer && this.mCharacMgr.StateMgr.Controller.GamePadState.IsConnected)

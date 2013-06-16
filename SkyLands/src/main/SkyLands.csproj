@@ -2500,13 +2500,13 @@
     <Compile Include="csharp\Main\Base Ogre\OgreForm.Designer.cs">
       <DependentUpon>OgreForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="csharp\Main\Base Ogre\ScenarioCreator.cs" />
     <Compile Include="csharp\Main\BlockFactory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\GUIs\PlayMenu.cs" />
     <Compile Include="csharp\Main\GUIs\MainMenu.cs" />
     <Compile Include="csharp\Main\GUIs\InventoryGUI.cs" />
+    <Compile Include="csharp\Main\GUIs\ScenarioCreator.cs" />
     <Compile Include="csharp\Main\GUIs\Selector.cs" />
     <Compile Include="csharp\Main\RTS\Buildings\Buildings.cs">
       <SubType>Code</SubType>

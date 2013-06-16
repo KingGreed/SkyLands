@@ -12,8 +12,8 @@ namespace Game.Shoot
     public class Bullet
     {
         public const float DEFAULT_RANGE = 30 * Cst.CUBE_SIDE,
-                           DEFAULT_SPEED = 1500,
-                           DEFAULT_DAMAGE = 5;
+                           DEFAULT_SPEED = 2000,
+                           DEFAULT_DAMAGE = 2;
         
         private readonly VanillaCharacter mSource;
         private readonly SceneNode mYawNode, mPitchNode;
@@ -26,7 +26,7 @@ namespace Game.Shoot
         public float Range  { get; set; }
         public float Damage { get; set; }
 
-        public Bullet(SceneManager sceneMgr, VanillaCharacter source, Vector3 decalage, VanillaCharacter target)
+        public Bullet(VanillaCharacter source, VanillaCharacter target, SceneNode pitchNode, SceneNode yawNode)
         {
             this.mSource = source;
             this.mAccurateTest = false;
@@ -36,35 +36,10 @@ namespace Game.Shoot
             this.Range = DEFAULT_RANGE;
             this.Damage = DEFAULT_DAMAGE;
 
-            Vector3 sourcePoint = source.FeetPosition + (this.mSource.Size.y / 2) * Vector3.UNIT_Y + decalage;
-            Vector3 targetPoint = target.FeetPosition + target.Size.y / 2 * Vector3.UNIT_Y;
-            Vector3 diff = targetPoint - sourcePoint;
-            Degree pitch = -Math.ACos(new Vector2(diff.y, diff.z).NormalisedCopy.y) * Math.Sign(diff.y);
-            Degree yaw = this.mSource.GetYaw();
-            if (yaw.ValueAngleUnits > 90 && yaw.ValueAngleUnits < 270)
-            { 
-                yaw *= -1;
-                yaw += new Degree(180);
-            }
-            float targetDistance = (target.Node.Position - source.Node.Position).Length;
-
-            this.mRay = new Ray(sourcePoint, diff.NormalisedCopy);
-            float blockDistance = VanillaBlock.getBlockOnRay(source.getIsland(), this.mRay, this.Range, 30);
-            System.Console.WriteLine("targetDistance : " + targetDistance + " blockDistance : " + blockDistance);
-            if (targetDistance > blockDistance)
-            {
-                this.mDistTravalled = this.Range;
-                return;
-            }
-
             target.Hit(this.Damage); // Hit the target now
 
-            this.mPitchNode = sceneMgr.RootSceneNode.CreateChildSceneNode(sourcePoint);
-            this.mPitchNode.Pitch(pitch);
-
-            this.mYawNode = this.mPitchNode.CreateChildSceneNode();
-            this.mYawNode.Yaw(yaw);
-            this.mYawNode.AttachObject(StaticRectangle.CreateLine(sceneMgr, Vector3.ZERO, new Vector3(0, 0, 15), ColoredMaterials.YELLOW));
+            this.mPitchNode = pitchNode;
+            this.mYawNode = yawNode;
         }
         
         public Bullet(VanillaCharacter source, SceneNode node, Vector3 forwardDir)

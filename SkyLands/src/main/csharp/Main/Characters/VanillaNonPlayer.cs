@@ -11,8 +11,8 @@ namespace Game.CharacSystem
     class VanillaNonPlayer : VanillaCharacter
     {
         public const float  DEFAULT_NPC_LIFE = 500;
-        private const float FIRE_RATE = 1.6f,
-                            GUN_DECALAGE = 5;
+        private const float FIRE_RATE = 0.7f,
+                            GUN_DECALAGE = 30;
 
         private float mGunTimer;
         private bool mIsLeftGun;
@@ -50,12 +50,21 @@ namespace Game.CharacSystem
             float absDiffYaw = System.Math.Abs((((int)(yawGoal - this.GetYaw()).ValueAngleUnits) + 360) % 360);
             if (absDiffYaw < 10 && this.mGunTimer >= FIRE_RATE)
             {
-                Vector3 decalage = this.mNode.LocalAxes * Vector3.UNIT_X * GUN_DECALAGE * (this.mIsLeftGun ? -1 : 1);
-                this.mCharacMgr.BulletMgr.AddBullet(new Bullet(this.mCharacMgr.SceneMgr, this, decalage, this.Target));
+                Vector3 decalage;
+                Degree yaw = this.GetYaw();
+                float val = yaw.ValueAngleUnits;
+                if (val < 90 || (val >= 180 && val < 270))
+                    decalage = (-Vector3.UNIT_X * Mogre.Math.Sin(val) + Vector3.UNIT_Z * Mogre.Math.Cos(val)) * GUN_DECALAGE;
+                else
+                {
+                    val -= 90;
+                    decalage = (Vector3.UNIT_X * Mogre.Math.Cos(val) - Vector3.UNIT_Z * Mogre.Math.Sin(val)) * GUN_DECALAGE;
+                }
+                if (this.mCharacMgr.BulletMgr.AddBulletAndHit(this, decalage * (this.mIsLeftGun ? -1 : 1), this.Target))
+                    ((Robot)this.mMesh).Shoot();
+
                 this.mGunTimer = 0;
                 this.mIsLeftGun = !this.mIsLeftGun;
-
-                ((Robot)this.mMesh).Shoot();
             }
         }
 
