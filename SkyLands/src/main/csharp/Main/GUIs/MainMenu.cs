@@ -1,8 +1,10 @@
-﻿using Awesomium.Core;
+﻿using System;
+using Awesomium.Core;
 using Mogre;
 
 using Game.States;
 using System.Windows.Forms;
+
 
 using Game.BaseApp;
 
@@ -20,9 +22,12 @@ namespace Game.GUIs {
             
             JSObject j = OgreForm.webView.CreateGlobalJavascriptObject("MainMenuJSObject");
             j.Bind("exit", false, (sender1, args) => this.mStateMgr.RequestStatePop());
+            j.Bind("play", false, HideAndPlay);
+        }
 
-            j.Bind("play", false, (craftSender, args) => new PlayMenu(this.mStateMgr));
-            Visible = true;
+        private void HideAndPlay(object sender, EventArgs e) {
+            Visible = false;
+            new PlayMenu(this.mStateMgr);
         }
     }
 }

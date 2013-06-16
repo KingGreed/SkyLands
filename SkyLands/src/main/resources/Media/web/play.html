@@ -64,9 +64,7 @@
           $('img:eq(3)').css('display', 'block');
         }
         else if(isInRectangle(1220 * ratioX, 600 * ratioY, 1400 * ratioX, 760 * ratioY, e.pageX, e.pageY)){ // create world
-          $("body").css('cursor', 'pointer');
-          $('img').css('display', 'none');
-          $('img:eq(4)').css('display', 'block');
+          PlayMenuJSObject.play(); 
         }
         else{
           $('body').css('cursor', 'default')

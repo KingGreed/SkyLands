@@ -1,4 +1,5 @@
-﻿using Awesomium.Core;
+﻿using System;
+using Awesomium.Core;
 using Mogre;
 
 using Game.States;
@@ -18,9 +19,13 @@ namespace Game.GUIs {
         public override void onDocumentReady(object sender, UrlEventArgs e) {
             base.onDocumentReady(sender, e);
             JSObject j = OgreForm.webView.CreateGlobalJavascriptObject("PlayMenuJSObject");
-            j.Bind("back", false, (sender1, args) => new MainMenu(this.mStateMgr));
-            Visible = true;
-
+            j.Bind("back", false, HideAndPlay);
         }
+
+        private void HideAndPlay(object sender, EventArgs e) {
+            Visible = false;
+            new MainMenu(this.mStateMgr);
+        }
+
     }
 }
