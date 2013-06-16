@@ -67,12 +67,10 @@ namespace Game.CharacSystem
 
             if (!this.mUser.IsFreeCamMode && this.mUser.IsAllowedToMoveCam && Selector.IsBullet)
             {
-                if (this.mCharacMgr.Controller.HasActionEnded(UserAction.MainAction)) { this.mShootCube.Burst(); }
                 if (this.mCharacMgr.Controller.IsActionOccuring(UserAction.MainAction))
-                {
-                    this.mShootCube.Material = "fireball";  //this.mUser.Selector.Material
                     this.mShootCube.Grow(frameTime, this.mCharacMgr.Controller.HasActionOccured(UserAction.MainAction));
-                }
+                if (this.mCharacMgr.Controller.HasActionEnded(UserAction.MainAction))
+                    this.mShootCube.Burst();
             }
         }
 

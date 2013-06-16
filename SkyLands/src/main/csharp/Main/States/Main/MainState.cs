@@ -16,6 +16,7 @@ namespace Game.States
 {
     public abstract class MainState : State
     {
+        private bool mIsSelectBarReady;
 
         public User      User      { get; protected set; }
         public CharacMgr CharacMgr { get; protected set; }
@@ -23,25 +24,22 @@ namespace Game.States
 
         protected MainState(StateManager stateMgr, string name) : base(stateMgr, name) { }
 
-        SceneNode mSelectedEntity;
-
         protected override void Startup()
         {
             this.World = new MainWorld(this.mStateMgr);
             this.World.setSafeSpawnPoint();
 
-            if (!GUI.WebControls.Contains(OgreForm.SelectBar))
-            {
-                GUI.WebControls.Add(OgreForm.SelectBar);
-                OgreForm.SelectBar.DocumentReady += onSelectBarLoaded;
-                OgreForm.SelectBar.Source =
-                    new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/Selector.html");
-                OgreForm.SelectBar.Size = new Size((int) Selector.WANTED_SIZE.x, (int) Selector.WANTED_SIZE.y);
-                OgreForm.SelectBar.Location = new Point((int) (OgreForm.InitSize.x/2 - Selector.WANTED_SIZE.x/2),
-                                                        500); // (int)(OgreForm.InitSize.y - Selector.WANTED_SIZE.y)
-            }
-
             this.User = new User(this.mStateMgr, this.World);
+
+            if (!GUI.WebControls.Contains(OgreForm.SelectBar))
+                GUI.WebControls.Add(OgreForm.SelectBar);
+            OgreForm.SelectBar.DocumentReady += onSelectBarLoaded;
+            OgreForm.SelectBar.Source =
+                new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/Selector.html");
+            OgreForm.SelectBar.Visible = false;
+            OgreForm.SelectBar.Size = new Size((int)Selector.WANTED_SIZE.x, (int)Selector.WANTED_SIZE.y);
+            OgreForm.SelectBar.Location = new Point((int) (OgreForm.InitSize.x/2 - Selector.WANTED_SIZE.x/2),
+                                                    500); // (int)(OgreForm.InitSize.y - Selector.WANTED_SIZE.y)
 
             this.AfterWorldCreation();
             if(!this.mStateMgr.GameInfo.Load) { this.World.populate(); }
@@ -56,7 +54,10 @@ namespace Game.States
             if (OgreForm.SelectBar.ParentView != null || !OgreForm.SelectBar.IsJavascriptEnabled) { return; }
 
             GUI.ResizeJavascript(OgreForm.SelectBar, Cst.GUI_RATIO, Cst.GUI_RATIO);
+            Selector.Init(this.User.Inventory);
+            OgreForm.SelectBar.Visible = true;
             OgreForm.SelectBar.DocumentReady -= onSelectBarLoaded;
+            this.mIsSelectBarReady = true;
         }
 
         protected virtual void AfterWorldCreation() {}
@@ -67,15 +68,16 @@ namespace Game.States
             this.mStateMgr.Controller.BlockMouse = true;
 
             this.User.IsAllowedToMoveCam = true;
-            OgreForm.SelectBar.Show();
+            GUI.Visible = false;
+            OgreForm.SelectBar.Visible = true;
+            if (this.mIsSelectBarReady) { Selector.Init(this.User.Inventory); }
         }
 
         public override void Hide()
         {
             this.mStateMgr.Controller.CursorVisibility = true;
             this.mStateMgr.Controller.BlockMouse = false;
-            OgreForm.SelectBar.Hide();
-            GUI.Visible = false;
+            OgreForm.SelectBar.Visible = false;
         }
 
         public override void Update(float frameTime)
@@ -89,7 +91,7 @@ namespace Game.States
             this.CharacMgr.Update(frameTime);
 
             /* Entity selection */
-            if (this.User.IsFreeCamMode && this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction))
+            /*if (this.User.IsFreeCamMode && this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction))
             {
                 if (this.mSelectedEntity == null)
                 {
@@ -114,7 +116,7 @@ namespace Game.States
                     this.CharacMgr.GetCharacterById(characId).MoveTo(this.CharacMgr.World.getSpawnPoint());
                     this.mSelectedEntity = null;
                 }
-            }
+            }*/
         }
 
         public void Restart()

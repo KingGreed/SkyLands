@@ -1,6 +1,7 @@
-﻿using Game.Input;
-using Mogre;
+﻿using Mogre;
 
+using Game.BaseApp;
+using Game.Input;
 using Game.CharacSystem;
 using Game.Shoot;
 using Game.RTS;
@@ -28,7 +29,7 @@ namespace Game.States
                 SpawnPoint = playerInfo.SpawnPoint + new Vector3(800, 500, 200)
             });
 
-            ParticleGenerator.mkParticle(this.mStateMgr.SceneMgr, this.World.getSpawnPoint(), "MultiEmitters");
+            //ParticleGenerator.mkParticle(this.mStateMgr.SceneMgr, this.World.getSpawnPoint(), "MultiEmitters");
         }
 
         protected override void AfterWorldCreation()
@@ -48,7 +49,7 @@ namespace Game.States
 
             User user = this.mStateMgr.MainState.User;
             VanillaPlayer mainPlayer = this.mStateMgr.MainState.CharacMgr.MainPlayer;
-            if (user.IsFreeCamMode && mainPlayer != null && !user.IsGUIOpen)
+            if (user.IsFreeCamMode && mainPlayer != null && !GUI.Visible)
             {
                 bool ctrlPressed = this.mStateMgr.Controller.IsKeyDown(MOIS.KeyCode.KC_LCONTROL);
                 mainPlayer.SetIsAllowedToMove(ctrlPressed, false);

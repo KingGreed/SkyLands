@@ -7,10 +7,6 @@
 			var RatioY = 1, RatioTotalY = 1;
 			var Position = 0;
 
-			function setImageAtPosition(position, img, amount) {
-				$(".item:eq(" + position +")").attr("src", "../materials/textures/" + img);
-			}
-
 			function setSelectorPosition(pos) {
 					var left = parseInt($(".slot:eq(" + pos +")").css("left")) - 3 * RatioTotalX;
 					$("#selector").css("left", left + "px");

@@ -32,11 +32,10 @@ namespace Game
         private Vector3 mSelectedBlockPos;
         private Block   mSelectedBlock;
         private readonly MOIS.KeyCode[] mFigures;
-        private Inventory mInventory;
 
         public bool IsAllowedToMoveCam { get; set; }
         public bool IsFreeCamMode      { get; private set; }
-        public bool IsGUIOpen          { get; private set; }
+        public Inventory Inventory     { get; private set; }
 
         public User(StateManager stateMgr, API.Geo.World world)
         {
@@ -72,7 +71,7 @@ namespace Game
 
             this.mWireCube.SetVisible(false);
 
-            this.mInventory = new Inventory();
+            this.Inventory = new Inventory();
         }
 
         public void InitCamera()
@@ -99,7 +98,6 @@ namespace Game
                 this.mStateMgr.MainState.CharacMgr.MainPlayer.SetIsAllowedToMove(!visible);
             this.IsAllowedToMoveCam = !visible;
             this.mStateMgr.Controller.BlockMouse = !visible;
-            this.IsGUIOpen = visible;
         }
 
         public void Update(float frameTime)
@@ -107,26 +105,24 @@ namespace Game
             MainState mainState = this.mStateMgr.MainState;
             VanillaPlayer mainPlayer = mainState.CharacMgr.MainPlayer;
 
-            if (this.mStateMgr.Controller.HasActionOccured(UserAction.Inventory))
+            if (!this.mStateMgr.Controller.IsActionOccuring(UserAction.MainAction))
             {
-                if (GUI.Visible && !this.mIsInventoryOpen) { return; }
-                this.mIsInventoryOpen = !this.mIsInventoryOpen;
-
-                if (this.mIsInventoryOpen)
+                if (this.mStateMgr.Controller.HasActionOccured(UserAction.Inventory) && (!GUI.Visible || this.mIsInventoryOpen))
                 {
-                    new InventoryGUI(this.OnInventoryOpen, this.mInventory.onCraft);
+                    this.mIsInventoryOpen = !this.mIsInventoryOpen;
 
-                    this.IsGUIOpen = true;
-                }
-                else
-                {
-                    GUI.Visible = false;
-                    this.mInventory.GetInventoryModification();
-                }
+                    if (this.mIsInventoryOpen)
+                        new InventoryGUI(this.OnInventoryOpen, this.Inventory.OnCraft);
+                    else
+                    {
+                        this.Inventory.GetInventoryModification();
+                        GUI.Visible = false;
+                    }
 
-                this.SwitchGUIVisibility(this.mIsInventoryOpen);
+                    this.SwitchGUIVisibility(this.mIsInventoryOpen);
+                }
             }
-            
+
             /* Move camera */
             if (this.IsAllowedToMoveCam)
             {
@@ -163,10 +159,11 @@ namespace Game
                     break;
                 }
             }
-            Selector.SelectorPos = selectorPos;
+            if(Selector.SelectorPos != selectorPos)
+                Selector.SelectorPos = selectorPos;
 
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.Dance))
-                this.mInventory.addAt(new Slot(5, 1), 0, 0);
+                this.Inventory.addAt(new Slot(5, 1), 0, 0);
         }
 
         public void OnInventoryOpen()
@@ -175,11 +172,11 @@ namespace Game
             {
                 for (int x = 0; x < 10; x++)
                 {
-                    Slot s = this.mInventory.getSlot(x, y);
-                    if(s != null) { OgreForm.webView.ExecuteJavascript("setBlockAt(" + (x + y * 10) + ", '" +
-                                    VanillaChunk.staticBlock[VanillaChunk.byteToString[s.item]].getItemTexture() +
-                                    "', " + s.amount + ")");
-                    }
+                    Slot s = this.Inventory.getSlot(x, y);
+                    if (s == null) { continue; }
+                    string texture = this.Inventory.MagicCubes.ContainsKey(s.item) ? this.Inventory.MagicCubes[s.item] :
+                                         VanillaChunk.staticBlock[VanillaChunk.byteToString[s.item]].getItemTexture();
+                    OgreForm.webView.ExecuteJavascript("setBlockAt(" + (x + y * 10) + ", '" + texture + "', " + s.amount + ")");
                 }
             }
         }
@@ -243,7 +240,7 @@ namespace Game
             this.mWorld.getIsland().removeFromScene(this.mSelectedBlockPos);
             this.mWorld.onDeletion(this.mSelectedBlockPos);
 
-            this.mInventory.Add(this.mSelectedBlock.getId());
+            this.Inventory.Add(this.mSelectedBlock.getId());
         }
 
         private void AddBlock(float dist)

@@ -21,12 +21,22 @@ namespace Game.GUIs
             this.mUpdate = update;
             this.mOnCraft = onCaft;
         }
+
         public override void onDocumentReady(object sender, UrlEventArgs e) {
             base.onDocumentReady(sender, e);
-            Visible = true;
             JSObject j = OgreForm.webView.CreateGlobalJavascriptObject("InventoryObject");
-            j.Bind("craft", false, (craftSender, args) => this.mOnCraft());
+            j.Bind("craft", false, (s1, args) => this.mOnCraft());
+            j.Bind("selectBarUpdate", false, (s2, args) => this.UpdateSelectBar(args));
             this.mUpdate();
+        }
+
+        private void UpdateSelectBar(JavascriptMethodEventArgs args)
+        {
+            int position = (int)args.Arguments[0] - 30;
+            string[] temp = args.Arguments[1].ToString().Split('/');
+            string imageName = temp[temp.Length - 1];
+
+            Selector.SetMaterialAt(position, imageName);
         }
     }
 }

@@ -1,6 +1,7 @@
-﻿using Game.CharacSystem;
+﻿using Mogre;
 
-using Mogre;
+using Game.CharacSystem;
+using Game.GUIs;
 
 namespace Game.Shoot
 {
@@ -18,8 +19,6 @@ namespace Game.Shoot
         private readonly Camera        mCamera;
         private Ray                    mRay;
         private bool                   mCreated;
-
-        public string Material { get; set; }
 
         public ShootCube(BulletManager bulletManager, VanillaPlayer source)
         {
@@ -66,7 +65,7 @@ namespace Game.Shoot
         private void Create()
         {
             Entity cube = this.mBulletMgr.SceneMgr.CreateEntity("cube.mesh");
-            cube.SetMaterialName(this.Material);
+            cube.SetMaterialName(Selector.Material);
 
             this.mNode = this.mBulletMgr.SceneMgr.RootSceneNode.CreateChildSceneNode();
             this.mNode.SetScale(INIT_SCALE * Vector3.UNIT_SCALE);

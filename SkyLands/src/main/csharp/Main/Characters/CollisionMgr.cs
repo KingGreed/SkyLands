@@ -82,9 +82,9 @@ namespace Game.CharacSystem
         {
             bool wasHCollision = this.WasHorizontalCollision;
             this.WasHorizontalCollision = false;
-            absTranslation.x = MathHelper.clamp(absTranslation.x, -50, 50);
-            absTranslation.y = MathHelper.clamp(absTranslation.y, -50, 50);
-            absTranslation.z = MathHelper.clamp(absTranslation.z, -50, 50);
+            absTranslation.x = MathHelper.clamp(absTranslation.x, -Cst.CUBE_SIDE, Cst.CUBE_SIDE);
+            absTranslation.y = MathHelper.clamp(absTranslation.y, -Cst.CUBE_SIDE, Cst.CUBE_SIDE);
+            absTranslation.z = MathHelper.clamp(absTranslation.z, -Cst.CUBE_SIDE, Cst.CUBE_SIDE);
 
             Vector3[] hitPoints = this.GetHitPoints();
             Vector3 actTranslation = absTranslation;

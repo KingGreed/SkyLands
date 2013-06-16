@@ -13,21 +13,14 @@ using API.Generic;
 namespace Game.BaseApp {
     public abstract class GUI {
         public static List<WebControl> WebControls = new List<WebControl>();
-        private static bool mVisible;
         public static bool Visible {
-            get { return mVisible; }
-            set
-            {
-                mVisible = value;
-                if (mVisible) { OgreForm.webView.Show(); }
-                else          { OgreForm.webView.Hide(); }
-            }
+            get { return OgreForm.webView.Visible; }
+            set { OgreForm.webView.Visible = value; }
         }
 
         protected Vector2 mInitSize;
 
         protected GUI(Vector2 pos, Vector2 size, string url) {
-            Visible = false;
             this.mInitSize = size;
 
             pos *= OgreForm.Ratio;
@@ -51,6 +44,7 @@ namespace Game.BaseApp {
             if(OgreForm.webView == null || !OgreForm.webView.IsLive) { return; }
             this.onDocumentReady(sender, e);
             OgreForm.webView.DocumentReady -= this.whenDocumentReady;
+            Visible = true;
         }
 
         public virtual void onDocumentReady(object sender, UrlEventArgs e)

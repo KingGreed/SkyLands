@@ -11,14 +11,8 @@ namespace Game.States
         public override void Show()
         {
             new MainMenu(this.mStateMgr);
-            OgreForm.SelectBar.Hide();
+            OgreForm.SelectBar.Visible = false;
             this.mStateMgr.Controller.CursorVisibility = true;
-        }
-
-        public override void Hide()
-        {
-            GUI.Visible = false;
-            OgreForm.SelectBar.Hide();
         }
 
         public override void Update(float frameTime)
