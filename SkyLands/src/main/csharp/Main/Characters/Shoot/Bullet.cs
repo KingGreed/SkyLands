@@ -26,7 +26,7 @@ namespace Game.Shoot
         public float Range  { get; set; }
         public float Damage { get; set; }
 
-        public Bullet(SceneManager sceneMgr, VanillaCharacter source, VanillaCharacter target, float decalage)
+        public Bullet(SceneManager sceneMgr, VanillaCharacter source, Vector3 decalage, VanillaCharacter target)
         {
             this.mSource = source;
             this.mAccurateTest = false;
@@ -36,7 +36,7 @@ namespace Game.Shoot
             this.Range = DEFAULT_RANGE;
             this.Damage = DEFAULT_DAMAGE;
 
-            Vector3 sourcePoint = source.FeetPosition + (this.mSource.Size.y / 2) * Vector3.UNIT_Y;
+            Vector3 sourcePoint = source.FeetPosition + (this.mSource.Size.y / 2) * Vector3.UNIT_Y + decalage;
             Vector3 targetPoint = target.FeetPosition + target.Size.y / 2 * Vector3.UNIT_Y;
             Vector3 diff = targetPoint - sourcePoint;
             Degree pitch = -Math.ACos(new Vector2(diff.y, diff.z).NormalisedCopy.y) * Math.Sign(diff.y);

@@ -18,7 +18,6 @@ namespace Game.Shoot
         private readonly string[]      mMaterials;
         private SceneNode              mNode;
         private readonly Camera        mCamera;
-        private Ray                    mRay;
         private bool                   mCreated;
 
         public ShootCube(BulletManager bulletManager, VanillaPlayer source)
@@ -27,7 +26,6 @@ namespace Game.Shoot
             this.mBulletMgr = bulletManager;
             this.mTimeSinceLastBall = new Timer();
             this.mCamera = this.mBulletMgr.SceneMgr.GetCamera("Camera");
-            this.mRay = this.mCamera.GetCameraToViewportRay(0.5f, 0.5f);
             this.mMaterials = new string[] { "fireball", "waterball", "magicball" };
         }
 
@@ -67,7 +65,6 @@ namespace Game.Shoot
         private void Create()
         {
             Entity cube = this.mBulletMgr.SceneMgr.CreateEntity("cube.mesh");
-
             cube.SetMaterialName(this.mMaterials[Selector.SelectedId - 252]);
 
             this.mNode = this.mBulletMgr.SceneMgr.RootSceneNode.CreateChildSceneNode();
@@ -79,9 +76,9 @@ namespace Game.Shoot
 
         private void Reposition()
         {
-            this.mRay.Origin = this.mSource.FeetPosition + Vector3.UNIT_Y * this.mSource.Size / 1.2f;
-            this.mNode.Position = this.mRay.GetPoint(50);
-
+            Ray ray = this.mCamera.GetCameraToViewportRay(0.5f, 0.5f);
+            ray.Origin = this.mSource.FeetPosition + Vector3.UNIT_Y * this.mSource.Size / 1.2f;
+            this.mNode.Position = ray.GetPoint(50);
             this.mNode.Orientation = this.mCamera.RealOrientation;
         }
     }

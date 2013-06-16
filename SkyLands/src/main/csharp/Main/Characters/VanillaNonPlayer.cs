@@ -50,7 +50,8 @@ namespace Game.CharacSystem
             float absDiffYaw = System.Math.Abs((((int)(yawGoal - this.GetYaw()).ValueAngleUnits) + 360) % 360);
             if (absDiffYaw < 10 && this.mGunTimer >= FIRE_RATE)
             {
-                this.mCharacMgr.BulletMgr.AddBullet(new Bullet(this.mCharacMgr.SceneMgr, this, this.Target, GUN_DECALAGE * (this.mIsLeftGun ? -1 : 1)));
+                Vector3 decalage = this.mNode.LocalAxes * Vector3.UNIT_X * GUN_DECALAGE * (this.mIsLeftGun ? -1 : 1);
+                this.mCharacMgr.BulletMgr.AddBullet(new Bullet(this.mCharacMgr.SceneMgr, this, decalage, this.Target));
                 this.mGunTimer = 0;
                 this.mIsLeftGun = !this.mIsLeftGun;
 
