@@ -99,7 +99,7 @@
       SkyLands is a Minecraft-like game in which we added some strategy. Thus you are able to create units and buildings in order to defeat your foes just like a strategy game, except that it's in a Minecraft world!\\
 
       At Dedalus corporation we like the variety of languages as well as new technologies! Thus our project has been coded using five differente languages and uses about four frameworks.\\
-      At first there is our 3d engine Ogre written in C++ then our Game which uses Ogre is mostly written in C#. But then what's interesting is that we don't have a GUI but a web UI thus we are using not only HTML and CSS in our menus but JavaScript as well!
+      At first there is our 3d engine Ogre written in C++ then our Game which uses Ogre is mostly written in C\#. But then what's interesting is that we don't have a GUI but a web UI thus we are using not only HTML and CSS in our menus but JavaScript as well!
 
         \chapter{\textcolor{blue}{Licensing}}
           At Dedalus, we consider that Licensing our code is an important task. According to the French legal code, a license is an authorization.\\
@@ -332,7 +332,12 @@ block.End();
 
         Of course there are other things we have to do such as specifying the coordinates of the textures or the normals (normals are used in order to cast shadow on the surface).\\
  
-        Once the six different faces were created, we would copy them and assign them different textures when we needed to show the face of a visible block;
+        Once the six different faces were created, we would iterate through the terrain and each time we would find a visible face (face that is not hidden by another block), we would make a copy of the created face, assign it a texture and then, place it at the correct position.
+
+        \begin{center}
+            \includegraphics[width=16cm]{images/Display.png}
+        \end{center}
+
 
       \section{Save and Load}
     \chapter{\textcolor{blue}{Physics}}

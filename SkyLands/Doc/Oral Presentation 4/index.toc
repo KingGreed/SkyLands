@@ -3,10 +3,10 @@
 \contentsline {chapter}{\numberline {2}\leavevmode {\color {blue}Licensing}}{4}
 \contentsline {section}{\numberline {2.1}GNU LGPL}{4}
 \contentsline {section}{\numberline {2.2}BSD license}{4}
-\contentsline {chapter}{\numberline {3}\leavevmode {\color {blue}GUI}}{6}
+\contentsline {chapter}{\numberline {3}\leavevmode {\color {blue}GUI and Web UI}}{6}
 \contentsline {section}{\numberline {3.1}A windowed Game}{6}
 \contentsline {section}{\numberline {3.2}A GUI flawed}{6}
-\contentsline {section}{\numberline {3.3}An HTML5, CSS3 and JavaScript Menu}{7}
+\contentsline {section}{\numberline {3.3}A Web UI}{7}
 \contentsline {subsection}{\numberline {3.3.1}Main Menu}{7}
 \contentsline {chapter}{\numberline {4}\leavevmode {\color {blue}Random Terrain Generation}}{8}
 \contentsline {section}{\numberline {4.1}At First Static Terrain}{8}
@@ -28,29 +28,29 @@
 \contentsline {section}{\numberline {4.6}Displaying}{13}
 \contentsline {subsection}{\numberline {4.6.1}Displaying Cubes}{13}
 \contentsline {subsection}{\numberline {4.6.2}Displaying Only Faces}{13}
-\contentsline {section}{\numberline {4.7}Save and Load}{13}
-\contentsline {chapter}{\numberline {5}\leavevmode {\color {blue}Physics}}{14}
-\contentsline {section}{\numberline {5.1}Collisions}{14}
-\contentsline {section}{\numberline {5.2}Fall}{14}
-\contentsline {chapter}{\numberline {6}\leavevmode {\color {blue}Gameplay}}{15}
-\contentsline {section}{\numberline {6.1}Exploring the terrain}{15}
-\contentsline {section}{\numberline {6.2}Adding Blocks}{15}
-\contentsline {section}{\numberline {6.3}Removing Blocks}{15}
-\contentsline {section}{\numberline {6.4}Inventory, Selector}{15}
-\contentsline {section}{\numberline {6.5}Crafting}{15}
-\contentsline {chapter}{\numberline {7}\leavevmode {\color {blue}Strategy}}{16}
-\contentsline {section}{\numberline {7.1}Build your own Base}{16}
-\contentsline {section}{\numberline {7.2}Buy your army of Robots}{16}
-\contentsline {section}{\numberline {7.3}Fight against foes}{16}
-\contentsline {section}{\numberline {7.4}PathFinding}{16}
-\contentsline {chapter}{\numberline {8}\leavevmode {\color {blue}Graphics}}{17}
-\contentsline {section}{\numberline {8.1}High / Low definition}{17}
-\contentsline {section}{\numberline {8.2}Sinbad's skins}{17}
-\contentsline {section}{\numberline {8.3}Particles}{17}
-\contentsline {chapter}{\numberline {9}\leavevmode {\color {blue}Scenario Editor}}{18}
-\contentsline {section}{\numberline {9.1}Basic Idea}{18}
-\contentsline {section}{\numberline {9.2}Structures}{18}
-\contentsline {section}{\numberline {9.3}Scripting}{18}
-\contentsline {chapter}{\numberline {10}\leavevmode {\color {blue}Sound Engine}}{19}
-\contentsline {chapter}{\numberline {11}\leavevmode {\color {blue}Website}}{20}
-\contentsline {chapter}{\numberline {12}\leavevmode {\color {blue}Conclusion}}{21}
+\contentsline {section}{\numberline {4.7}Save and Load}{14}
+\contentsline {chapter}{\numberline {5}\leavevmode {\color {blue}Physics}}{15}
+\contentsline {section}{\numberline {5.1}Collisions}{15}
+\contentsline {section}{\numberline {5.2}Fall}{15}
+\contentsline {chapter}{\numberline {6}\leavevmode {\color {blue}Gameplay}}{16}
+\contentsline {section}{\numberline {6.1}Exploring the terrain}{16}
+\contentsline {section}{\numberline {6.2}Adding Blocks}{16}
+\contentsline {section}{\numberline {6.3}Removing Blocks}{16}
+\contentsline {section}{\numberline {6.4}Inventory, Selector}{16}
+\contentsline {section}{\numberline {6.5}Crafting}{16}
+\contentsline {chapter}{\numberline {7}\leavevmode {\color {blue}Strategy}}{17}
+\contentsline {section}{\numberline {7.1}Build your own Base}{17}
+\contentsline {section}{\numberline {7.2}Buy your army of Robots}{17}
+\contentsline {section}{\numberline {7.3}Fight against foes}{17}
+\contentsline {section}{\numberline {7.4}PathFinding}{17}
+\contentsline {chapter}{\numberline {8}\leavevmode {\color {blue}Graphics}}{18}
+\contentsline {section}{\numberline {8.1}High / Low definition}{18}
+\contentsline {section}{\numberline {8.2}Sinbad's skins}{18}
+\contentsline {section}{\numberline {8.3}Particles}{18}
+\contentsline {chapter}{\numberline {9}\leavevmode {\color {blue}Scenario Editor}}{19}
+\contentsline {section}{\numberline {9.1}Basic Idea}{19}
+\contentsline {section}{\numberline {9.2}Structures}{19}
+\contentsline {section}{\numberline {9.3}Scripting}{19}
+\contentsline {chapter}{\numberline {10}\leavevmode {\color {blue}Sound Engine}}{20}
+\contentsline {chapter}{\numberline {11}\leavevmode {\color {blue}Website}}{21}
+\contentsline {chapter}{\numberline {12}\leavevmode {\color {blue}Conclusion}}{22}

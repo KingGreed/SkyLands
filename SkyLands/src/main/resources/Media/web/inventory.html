@@ -216,6 +216,12 @@
 							}
 						}
 
+						if(Position >= 30 && Position < 40) {
+							if(typeof(InventoryObject) != "undefined") {
+								InventoryObject.selectBarUpdate(Position, $(this).attr("src"));
+							}
+						}
+
 						if(Position == 49) {
 							$(".slot").slice(40, 49).each(function() {
 								$(this).children("img").attr("src", "../images/blank.png");
@@ -230,7 +236,7 @@
 					revert: function () {
 						if (Selected == null) {
 							return true;
-						} else if(SelectedPos >= 40 && Selected.children("img").attr("src") != "../images/blank.png") {
+						} else if(SelectedPos >= 40 && (Selected.children("img").attr("src") != "../images/blank.png") || Position == 49) {
 							return true;
 						}
 						return false;
@@ -284,7 +290,7 @@
 		</script>
 
 	</head>
-	<body>
+	<body oncontextmenu="return false;">
 		<div id="containor">
 			<img src="../images/Inventory.png" id="selectBar" style="position: relative; z-index: -1;"/>
 
