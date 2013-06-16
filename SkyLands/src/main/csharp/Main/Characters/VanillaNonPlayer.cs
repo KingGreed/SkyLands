@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using API.Generic;
 using Game.Shoot;
 using Mogre;
 
@@ -76,8 +77,9 @@ namespace Game.CharacSystem
             {
                 foreach (VanillaCharacter ennemy in this.mCharacMgr.GetFactionCharacters(faction))
                 {
-                    float distance = (ennemy.FeetPosition - this.FeetPosition).Length;
-                    if (distance < actTargetDistance && distance < LIMIT_TARGET_DISTANCE)
+                    Vector3 diff = ennemy.FeetPosition - this.FeetPosition;
+                    float distance = diff.Length;
+                    if (distance < actTargetDistance && distance < LIMIT_TARGET_DISTANCE && System.Math.Abs(diff.y / Cst.CUBE_SIDE) <= 6)
                         this.Target = ennemy;
                 }
             }

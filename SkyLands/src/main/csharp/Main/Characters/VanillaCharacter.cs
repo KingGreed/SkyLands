@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using API.Generic;
 using Mogre;
 
 using API.Ent;
@@ -373,9 +374,10 @@ namespace Game.CharacSystem
                 foreach (VanillaNonPlayer ennemy in this.mCharacMgr.GetFactionCharacters(faction).Where(ennemy => ennemy is VanillaNonPlayer))
                 {
                     float oldDistance = ennemy.Target != null ? (ennemy.FeetPosition - ennemy.Target.FeetPosition).Length : LIMIT_TARGET_DISTANCE + 1;
-                    float newDistance = (ennemy.FeetPosition - this.FeetPosition).Length;
-                    if (newDistance < oldDistance && newDistance < LIMIT_TARGET_DISTANCE) { ennemy.Target = this; }
-                    if (ennemy.Target == this && newDistance > LIMIT_TARGET_DISTANCE) { ennemy.Target = null; }
+                    Vector3 diff = ennemy.FeetPosition - this.FeetPosition;
+                    float newDistance = diff.Length;
+                    if (newDistance < oldDistance && newDistance < LIMIT_TARGET_DISTANCE && System.Math.Abs(diff.y / Cst.CUBE_SIDE) <= 6) { ennemy.Target = this; }
+                    if (ennemy.Target == this && (newDistance > LIMIT_TARGET_DISTANCE || System.Math.Abs(diff.y / Cst.CUBE_SIDE) > 6)) { ennemy.Target = null; }
                 }
             }
         }

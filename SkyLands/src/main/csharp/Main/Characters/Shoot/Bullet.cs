@@ -4,7 +4,6 @@ using API.Generic;
 
 using Game.CharacSystem;
 using Game.World;
-using Game.World.Display;
 using Game.World.Blocks;
 
 namespace Game.Shoot
@@ -15,28 +14,26 @@ namespace Game.Shoot
                            DEFAULT_SPEED = 2000,
                            DEFAULT_DAMAGE = 2;
         
-        private readonly VanillaCharacter mSource;
+        private readonly VanillaCharacter mSource, mTarget;
         private readonly SceneNode mYawNode, mPitchNode;
         private Ray     mRay;
-        private Vector3 mForwardDir;
-        private float   mDistTravalled;
-        private bool    mAccurateTest;
+        private Vector3 mForwardDir, mTargetPoint;
+        private float   mDistTravalled, mHitInDist;
 
         public float Speed  { get; set; }
         public float Range  { get; set; }
         public float Damage { get; set; }
 
-        public Bullet(VanillaCharacter source, VanillaCharacter target, SceneNode pitchNode, SceneNode yawNode)
+        public Bullet(VanillaCharacter source, VanillaCharacter target, Vector3 targetPoint, SceneNode pitchNode, SceneNode yawNode, float hitInDist)
         {
             this.mSource = source;
-            this.mAccurateTest = false;
+            this.mTarget = target;
             this.mForwardDir = Vector3.UNIT_Z;
+            this.mHitInDist = hitInDist;
 
             this.Speed = DEFAULT_SPEED;
             this.Range = DEFAULT_RANGE;
             this.Damage = DEFAULT_DAMAGE;
-
-            target.Hit(this.Damage); // Hit the target now
 
             this.mPitchNode = pitchNode;
             this.mYawNode = yawNode;
@@ -47,8 +44,8 @@ namespace Game.Shoot
             this.mSource = source;
             this.mYawNode = node;
             this.mRay = new Ray(this.mYawNode.Position, this.mYawNode.Orientation * Vector3.NEGATIVE_UNIT_Z);
-            this.mAccurateTest = true;
             this.mForwardDir = forwardDir;
+            this.mHitInDist = 0;
         }
 
         public bool Update(BulletManager bulletMgr, float frameTime)
@@ -60,11 +57,22 @@ namespace Game.Shoot
             this.mDistTravalled += distance;
             this.mYawNode.Translate(distance * this.mForwardDir, Node.TransformSpace.TS_LOCAL);
 
-            if (this.mAccurateTest)
+            if (this.mHitInDist > 0 && this.mTarget != null)
+            {
+                if (this.mDistTravalled >= this.mHitInDist)
+                {
+                    float distanceWithTarget = (this.mTargetPoint - this.mPitchNode.Position).Length;
+                    if (distanceWithTarget <= 30) { this.mTarget.Hit(this.Damage); }
+                    this.mDistTravalled = this.Range;
+                }
+            }
+            else
             {
                 this.mRay.Origin = this.mYawNode.Position;
 
-                if (!(bulletMgr.World.getIsland().getBlock(MainWorld.getRelativeFromAbsolute(this.mYawNode.Position), false) is Air))
+                if (
+                    !(bulletMgr.World.getIsland()
+                               .getBlock(MainWorld.getRelativeFromAbsolute(this.mYawNode.Position), false) is Air))
                     return false;
 
                 RaySceneQuery raySQuery = bulletMgr.SceneMgr.CreateRayQuery(this.mRay);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using API.Generic;
 using Game.World.Display;
 using Mogre;
 
@@ -30,6 +31,8 @@ namespace Game.Shoot
             Vector3 sourcePoint = source.FeetPosition + (source.Size.y / 2) * Vector3.UNIT_Y + decalage;
             Vector3 targetPoint = target.FeetPosition + target.Size.y / 2 * Vector3.UNIT_Y;
             Vector3 diff = targetPoint - sourcePoint;
+            if (Math.Abs(diff.y / Cst.CUBE_SIDE) > 6) { return false; }
+
             Degree pitch = -Math.ATan2(diff.y,  diff.z);
             Degree yaw = source.GetYaw();
             if (yaw.ValueAngleUnits > 90 && yaw.ValueAngleUnits < 270)
@@ -37,8 +40,8 @@ namespace Game.Shoot
                 yaw *= -1;
                 yaw += new Degree(180);
             }
-            float targetDistance = (target.Node.Position - source.Node.Position).Length;
 
+            float targetDistance = diff.Length;
             Ray ray = new Ray(sourcePoint + Vector3.NEGATIVE_UNIT_Z, diff.NormalisedCopy);
             float blockDistance = VanillaBlock.getBlockOnRay(source.getIsland(), ray, Bullet.DEFAULT_RANGE, 30);
             if (targetDistance > blockDistance) { return false; }
@@ -50,8 +53,8 @@ namespace Game.Shoot
             SceneNode yawNode = pitchNode.CreateChildSceneNode();
             yawNode.Yaw(yaw);
             yawNode.AttachObject(StaticRectangle.CreateLine(this.SceneMgr, Vector3.ZERO, new Vector3(0, 0, 15), ColoredMaterials.YELLOW));
-            
-            this.mBullets.Add(new Bullet(source, target, pitchNode, yawNode));
+
+            this.mBullets.Add(new Bullet(source, target, targetPoint, pitchNode, yawNode, targetDistance));
             return true;
         }
 
