@@ -308,7 +308,7 @@
       \section{Displaying}
         \subsection{Displaying Cubes}
           At first, we thought of dissplaying cubes which where imported entities from blender. \\
-          Of course we only displayed visible cubes (cubes which had other cubes adjacent to all his sides were not visibles). However the result was a mere 1 to 10 Frames Per Seconds with a 40 by 40 blocks terrain. In other words a ridiculous amount of FPS.\\
+          Of course we only displayed visible cubes (cubes which had other cubes adjacent to all his sides were not visibles). However the result was a mere 1 to 10 Frames Per Seconds with a 40 by 40 blocks terrain. In other words a ridiculous amount of Frames Per Seconds.\\
 
           This lag was mostly caused by the fact that when displaying an entity on the terrain, all it's faces are visible even the ones which you can not see.
         \subsection{Displaying Only Faces}
@@ -338,6 +338,23 @@ block.End();
             \includegraphics[width=16cm]{images/Display.png}
         \end{center}
 
+        With this system, we ended up having better Frames Per Seconds than the previous displaying system, but this count was very variable and depended on how many entities were displayed on the sreen.\\ Basically the the terrain we could display was bigger, but we needed to stop displaying entities at a certain distance (usually 3000 pixels) and our terrain couldn't bigger than 12 chunks of 16 blocks.\\
+        Frames Per Seconds were usually between 15 and 30, and as you might expect, we were a bit disapointed because under 24 Frames Per Seconds, animations are uneven or worse ``choppy'' movement or animations, and the frame rate was more often under 25 than above.\\
+
+        \subsection{A better display system}
+          Though we had a ``working'' display system we wanted it to be better, we also wanted higher Frames Per Seconds. Actually the moment we made the second we were already thinking of a new algorithm.\\
+
+          The basic gist of it is as follows : we create a ManualObject (as defined higher) in which we don't add any point for each different textures.\\
+          We then iterate through terrain looking for visisble faces. When we find one, we add, the face to the manual object corresponding to it's texture.\\
+          Once we finished iterating through the terrain, we close each manual object (by calling the End() method) and then display them.\\
+
+          Basically, each visible faces with the same texture of the terrain are part of the same material. Thus, instead of thousands of entities (1 per visible face) we only have about 20 entities displayed at all times on the screen.\\
+
+          The end result is, terrain of about 121 chunks for plains Biomes and maximum 2000 (mostly for the mountain biome) with an average frame rate of 60 on Epita's computers!\\
+
+          This system is of course more complicated than explained and has consequences on other parts (especially adding and removing blocks), but it was totally worth the cost, we increased the maximum  frame rate by 30 (sometimes more). Also, the Islands size were trippled, getting from 4*4 to 12*12 (on the x and z coordinates) and can even be increased to 30 * 30.\\
+          This means that if we assimilated the terrain as one continuous layer of block (with a height of 1) we would have : 30 * 30 * 16 * 16 = 230400 cubes, counting only top faces and bottom faces : 460800 faces and 921600 triangles, thus around 1 000 000 triangles (with about 60 FPS since the height is only 1).\\
+          And we beleive we could display even more cubes!\\
 
       \section{Save and Load}
     \chapter{\textcolor{blue}{Physics}}

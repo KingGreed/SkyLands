@@ -192,14 +192,24 @@
 									$(this).attr("src", "../images/blank.png");
 									setNumber(Position, 0);
 								} else {
-									var selectedItem = Selected.children("img").attr("src");
-									var selectedItemAmount = Selected.children("span").html();
 
-									Selected.children("img").attr("src", $(this).attr("src"));
-									$(this).attr("src", selectedItem);
+									Selected.children("img").attr("src", thisImg);
+									$(this).attr("src", thatImg);
 
-									Selected.children("span").html($(this) .next().html());
-									$(this) .next().html(selectedItemAmount);
+									Selected.children("span").html(thisAmount);
+									if(thisAmount >= 10) {
+										$(".num:eq(" + SelectedPos + ")").css("left", 10 * RatioTotalX);
+									} else {
+										$(".num:eq(" + SelectedPos + ")").css("left", 13 * RatioTotalX);
+									}
+
+									$(this).next().html(thatAmount);
+
+									if(thatAmount >= 10) {
+										$(".num:eq(" + Position + ")").css("left", 10 * RatioTotalX);
+									} else {
+										$(".num:eq(" + Position + ")").css("left", 13 * RatioTotalX);
+									}
 								}
 							}
 						}
