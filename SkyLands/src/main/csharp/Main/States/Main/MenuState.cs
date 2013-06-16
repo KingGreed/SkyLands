@@ -18,9 +18,15 @@ namespace Game.States
         public override void Update(float frameTime)
         {
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.Start))
-                this.mStateMgr.RequestStatePop();
-            if (this.mStateMgr.Controller.HasActionOccured(UserAction.Jump))
-                this.mStateMgr.RequestStatePush(typeof(GameState));
+            {
+                if (OgreForm.webView.Source.AbsolutePath.Contains("MainMenu"))
+                    this.mStateMgr.RequestStatePop();
+                else
+                {
+                    GUI.Visible = false;
+                    new MainMenu(this.mStateMgr);
+                }
+            }
         }
     }
 }

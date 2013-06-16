@@ -245,8 +245,8 @@ namespace Game
 
         private void AddBlock(float dist)
         {
-            string material = Selector.Material;
-            if (material == "") { return; }
+            string name = VanillaChunk.byteToString[Selector.SelectedId];
+            if (name == "") { return; }
             
             /* Determine the face */
             Ray ray = this.mStateMgr.Camera.GetCameraToViewportRay(0.5f, 0.5f);
@@ -255,7 +255,7 @@ namespace Game
 
             int index = 0;
             float minDist = -1;
-            Vector3[] points = World.Generator.VanillaMultiBlock.blockPointCoords;
+            Vector3[] points = VanillaMultiBlock.blockPointCoords;
             for (int i = 0; i < points.Length; i += 4)
             {
                 Plane p = new Plane(points[i] + absPosBlock, points[i + 1] + absPosBlock, points[i + 2] + absPosBlock);
@@ -299,8 +299,10 @@ namespace Game
                (this.mStateMgr.MainState.CharacMgr.MainPlayer != null && this.mStateMgr.MainState.CharacMgr.MainPlayer.CollisionMgr.GetHitPoints().Any
                (v => MathHelper.isInBlock(addedBlockPos * Cst.CUBE_SIDE, v, Cst.CUBE_SIDE)))) { return; }
 
-            this.mWorld.getIsland().addBlockToScene(addedBlockPos, material);
+            this.mWorld.getIsland().addBlockToScene(addedBlockPos, name);
             this.mWorld.onCreation(addedBlockPos);
+
+            this.Inventory.removeAt(Selector.SelectorPos, 3, 1);
         }
     }
 }

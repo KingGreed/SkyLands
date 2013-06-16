@@ -130,8 +130,14 @@ namespace Game.CharacSystem
         public void removeAt(int x, int y, int amount)
         {
             if (x < 0 || y < 0 || x > 9 || y > 3) { throw new IndexOutOfRangeException(); }
-            if (amount > 64 || this.mInventory[x, y].amount - amount < 0) { throw new ArgumentException("Invalid amound"); }
-            else if (this.mInventory[x, y].amount - amount == 0) { this.mInventory[x, y] = null; }
+            if (this.mInventory[x, y] == null)    { return; }
+            if (this.mInventory[x, y].amount - amount == 0)
+            {
+                this.mInventory[x, y] = null;
+                if (y == 3) { Selector.SetMaterialAt(x, "blank.png"); }
+            }
+            else
+                this.mInventory[x, y].amount -= amount;
         }
 
         public Vector2 getFreeSlot() {

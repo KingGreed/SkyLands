@@ -236,8 +236,8 @@ namespace Game.World.Generator
 
         }
 
-        public override void addBlockToScene(Vector3 relativePos, string material) {
-            this.setBlockAt((int)relativePos.x, (int)relativePos.y, (int)relativePos.z, material, true);
+        public override void addBlockToScene(Vector3 relativePos, string name) {
+            this.setBlockAt((int)relativePos.x, (int)relativePos.y, (int)relativePos.z, name, true);
             
             Block curr = this.getBlock(relativePos, false);
             curr.onCreation(relativePos);

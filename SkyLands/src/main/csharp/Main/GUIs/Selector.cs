@@ -1,26 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
-using Game.CharacSystem;
+using System.Linq;
 using Mogre;
 
 using API.Generic;
 
 using Game.BaseApp;
 using Game.World.Generator;
+using Game.CharacSystem;
 
 namespace Game.GUIs
 {
     public static class Selector {
         public static readonly Vector2 IMAGE_SIZE = new Vector2(202, 22);
         public static readonly Vector2 WANTED_SIZE = IMAGE_SIZE * Cst.GUI_RATIO;
-        public static readonly Dictionary<string, string> magicCubes = 
-            new Dictionary<string, string> { { "fire.png", "fireball" },
-                                             { "waterCube.png", "waterCube" },
-                                             { "crystal.png", "magicball" } };
+        public static readonly Dictionary<byte, string> MagicCubes = new Dictionary<byte, string>
+        { { 252, "fire.png" }, { 253, "waterCube.png" }, { 254, "crystal.png" } };
         
         private static int pos;
 
-        public static string Material { get; private set; }
+        public static byte SelectedId { get; private set; }
         public static bool IsBullet { get; private set; }
         public static int SelectorPos
         {
@@ -30,17 +29,17 @@ namespace Game.GUIs
                 pos = value;
                 OgreForm.SelectBar.ExecuteJavascript("setSelectorPosition(" + pos + ")");
                 string imgName = OgreForm.SelectBar.ExecuteJavascriptWithResult("getMaterialAt(" + pos + ")");
-                if (imgName == "blank.png") { Material = ""; IsBullet = false; return; }
-                if (magicCubes.ContainsKey(imgName))
+                if (imgName == "blank.png") { SelectedId = 0; IsBullet = false; return; }
+
+                foreach (byte b in MagicCubes.Keys.Where(b => MagicCubes[b] == imgName))
                 {
-                    Material = magicCubes[imgName];
+                    SelectedId = b;
                     IsBullet = true;
+                    return;
                 }
-                else
-                {
-                    Material = VanillaChunk.textureToBlock[imgName].getMaterial();
-                    IsBullet = false;
-                }
+
+                SelectedId = VanillaChunk.textureToBlock[imgName].getId();
+                IsBullet = false;
             }
         }
 
@@ -57,10 +56,17 @@ namespace Game.GUIs
             SelectorPos = 0;
         }
 
+        public static void Resize(Vector2 newSize)
+        {
+            //GUI.ResizeJavascript(OgreForm.SelectBar, newSize.x / OgreForm.SelectBar.Size.Width,
+                                                     //newSize.y / OgreForm.SelectBar.Size.Height);
+            OgreForm.SelectBar.Size = new Size((int)newSize.x, (int)newSize.y);
+        }
+
         public static void SetMaterialAt(int position, string imgName)
         {
             OgreForm.SelectBar.ExecuteJavascript("setMaterialAt(" + position + ", '" + imgName + "')");
-            SelectorPos = pos;
+            if (position == pos) { SelectorPos = pos; } // Actualise the static infos
         }
     }
 }

@@ -37,9 +37,6 @@ namespace Game.States
             OgreForm.SelectBar.Source =
                 new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/Selector.html");
             OgreForm.SelectBar.Visible = false;
-            OgreForm.SelectBar.Size = new Size((int)Selector.WANTED_SIZE.x, (int)Selector.WANTED_SIZE.y);
-            OgreForm.SelectBar.Location = new Point((int) (OgreForm.InitSize.x/2 - Selector.WANTED_SIZE.x/2),
-                                                    500); // (int)(OgreForm.InitSize.y - Selector.WANTED_SIZE.y)
 
             this.AfterWorldCreation();
             if(!this.mStateMgr.GameInfo.Load) { this.World.populate(); }
@@ -53,8 +50,13 @@ namespace Game.States
             if (OgreForm.SelectBar == null || !OgreForm.SelectBar.IsLive) { return; }
             if (OgreForm.SelectBar.ParentView != null || !OgreForm.SelectBar.IsJavascriptEnabled) { return; }
 
-            GUI.ResizeJavascript(OgreForm.SelectBar, Cst.GUI_RATIO, Cst.GUI_RATIO);
             Selector.Init(this.User.Inventory);
+            Vector2 size = Selector.WANTED_SIZE * OgreForm.Ratio;
+            Vector2 location = (OgreForm.InitSize / 2 - Selector.WANTED_SIZE / 2) * OgreForm.Ratio;
+            OgreForm.SelectBar.Size = new Size((int)size.x, (int)size.y);
+            OgreForm.SelectBar.Location = new Point((int)location.x, (int)(500 * OgreForm.Ratio.y));
+            Vector2 ratio = new Vector2(size.x / Selector.IMAGE_SIZE.x, size.y / Selector.IMAGE_SIZE.y);
+            GUI.ResizeJavascript(OgreForm.SelectBar, ratio);
             OgreForm.SelectBar.Visible = true;
             OgreForm.SelectBar.DocumentReady -= onSelectBarLoaded;
             this.mIsSelectBarReady = true;

@@ -15,6 +15,7 @@ namespace Game.Shoot
         private readonly BulletManager mBulletMgr;
         private readonly VanillaPlayer mSource;
         private readonly Timer         mTimeSinceLastBall;
+        private readonly string[]      mMaterials;
         private SceneNode              mNode;
         private readonly Camera        mCamera;
         private Ray                    mRay;
@@ -27,6 +28,7 @@ namespace Game.Shoot
             this.mTimeSinceLastBall = new Timer();
             this.mCamera = this.mBulletMgr.SceneMgr.GetCamera("Camera");
             this.mRay = this.mCamera.GetCameraToViewportRay(0.5f, 0.5f);
+            this.mMaterials = new string[] { "fireball", "waterball", "magicball" };
         }
 
         public void Grow(float frameTime, bool allowCreation)
@@ -65,7 +67,8 @@ namespace Game.Shoot
         private void Create()
         {
             Entity cube = this.mBulletMgr.SceneMgr.CreateEntity("cube.mesh");
-            cube.SetMaterialName(Selector.Material);
+
+            cube.SetMaterialName(this.mMaterials[Selector.SelectedId - 252]);
 
             this.mNode = this.mBulletMgr.SceneMgr.RootSceneNode.CreateChildSceneNode();
             this.mNode.SetScale(INIT_SCALE * Vector3.UNIT_SCALE);
