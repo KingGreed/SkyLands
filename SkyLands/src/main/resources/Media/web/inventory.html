@@ -111,7 +111,6 @@
 					drag:  function(e, ui) {
 						if(Selected != null) { Selected.css("opacity", "1"); Selected = null; $(".slot").css("opacity", 1); }
 
-						console.log("x :", e.clientX, "y :", e.clientY);
 						//in inventory's 3 first rows
 						if(e.clientY >= 92 * RatioTotalY && e.clientY <= 143 * RatioTotalY && e.clientX >= 8 * RatioTotalX && e.clientX <= 188 * RatioTotalX) {
 							var row =       Math.floor((e.clientY - 91 * RatioTotalY) / (18 * RatioTotalY));
@@ -158,42 +157,65 @@
 							var thisAmount = parseInt($(this) .next().html());
 							var thatAmount = parseInt(Selected.children("span").html());
 
+							if(SelectedPos >= 40) {
+								if(thatImg == "../images/blank.png") {
+									setNumber(SelectedPos, 1);
+									Selected.children("img").attr("src", thisImg);
 
-							if(thisImg == thatImg && thisImg != "../images/blank.png") {
-
-								if(thisAmount == 64) {
-									setNumber(SelectedPos, 64);
-									setNumber(Position, thatAmount);
-								} else if(thatAmount == 64) {
-									setNumber(Position, 64);
-									setNumber(SelectedPos, thisAmount);
-								} else if(thisAmount + thatAmount >= 64) {
-									setNumber(SelectedPos, 64);
-									setNumber(Position, thisAmount + thatAmount - 64);
-								} else {
-									setNumber(Position, 0);
-									setNumber(SelectedPos, thisAmount + thatAmount);
+									setNumber(Position, thisAmount - 1);
 								}
-							} else if(thatImg == "../images/blank.png") {
-								Selected.children("img").attr("src", $(this).attr("src"));
-								setNumber(Selected.index(".slot"), $(this).next().html());
-
-								$(this).attr("src", "../images/blank.png");
-								setNumber(Position, 0);
 							} else {
-								var selectedItem = Selected.children("img").attr("src");
-								var selectedItemAmount = Selected.children("span").html();
+								if(thisImg == thatImg && thisImg != "../images/blank.png") {
 
-								Selected.children("img").attr("src", $(this).attr("src"));
-								$(this).attr("src", selectedItem);
+									if(thisAmount == 64) {
+										setNumber(SelectedPos, 64);
+										setNumber(Position, thatAmount);
+									} else if(thatAmount == 64) {
+										setNumber(Position, 64);
+										setNumber(SelectedPos, thisAmount);
+									} else if(thisAmount + thatAmount >= 64) {
+										setNumber(SelectedPos, 64);
+										setNumber(Position, thisAmount + thatAmount - 64);
+									} else {
+										setNumber(Position, 0);
+										setNumber(SelectedPos, thisAmount + thatAmount);
+									}
+								} else if(thatImg == "../images/blank.png") {
+									Selected.children("img").attr("src", $(this).attr("src"));
+									setNumber(Selected.index(".slot"), $(this).next().html());
 
-								Selected.children("span").html($(this) .next().html());
-								$(this) .next().html(selectedItemAmount);
+									$(this).attr("src", "../images/blank.png");
+									setNumber(Position, 0);
+								} else {
+									var selectedItem = Selected.children("img").attr("src");
+									var selectedItemAmount = Selected.children("span").html();
+
+									Selected.children("img").attr("src", $(this).attr("src"));
+									$(this).attr("src", selectedItem);
+
+									Selected.children("span").html($(this) .next().html());
+									$(this) .next().html(selectedItemAmount);
+								}
 							}
 						}
 
 						if(SelectedPos >= 40) {
-							InventoryObject.craft();
+							if(typeof(InventoryObject) != "undefined") {
+								InventoryObject.craft();
+							}
+						}
+
+						if(SelectedPos >= 30 && SelectedPos < 40) {
+							if(typeof(InventoryObject) != "undefined") {
+								InventoryObject.selectBarUpdate(SelectedPos, Selected.children("img").attr("src"));
+							}
+						}
+
+						if(Position == 49) {
+							$(".slot").slice(40, 49).each(function() {
+								$(this).children("img").attr("src", "../images/blank.png");
+								$(this).children("span").html("");
+							});
 						}
 
 						$(this).css("top", "0px");
@@ -201,7 +223,12 @@
 
 					},
 					revert: function () {
-						return (Selected == null);
+						if (Selected == null) {
+							return true;
+						} else if(SelectedPos >= 40 && Selected.children("img").attr("src") != "../images/blank.png") {
+							return true;
+						}
+						return false;
 					}
 
 				});

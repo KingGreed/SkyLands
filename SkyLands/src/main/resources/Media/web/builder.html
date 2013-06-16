@@ -160,7 +160,9 @@
 										setNumber(Position, 0);
 										Selected.children("span").html(0);
 									}
-									//BuilderObject.update();
+									if(typeof(BuilderObject) != "undefined") {
+										BuilderObject.update();
+									}
 								}
 							} else {
 								if(thisImg == thatImg && thisImg != "../images/blank.png") {
@@ -196,6 +198,12 @@
 							}
 						}
 
+						if(SelectedPos >= 30 && SelectedPos < 40) {
+							if(typeof(BuilderObject) != "undefined") {
+								BuilderObject.selectBarUpdate(SelectedPos, Selected.children("img").attr("src"));
+							}
+						}
+
 						$(this).css("top", "0px");
 						$(this).css("left", "0px");
 
@@ -207,7 +215,9 @@
 				});
 				
 				$("#BuildingsSelector").change(function() {
-					
+					if(typeof(BuilderObject) != "undefined") {
+						BuilderObject.selectUpdate($(this).val());
+					}
 				});
 				
 			});
@@ -318,10 +328,10 @@
 			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
 			<div class="slot"><img src="../images/blank.png" class="item"/><span class="num"></span></div>
 			<select id="BuildingsSelector">
-			  <option value="">Head Quarters</option>
-			  <option value="">Crystal Drill</option>
-			  <option value="">Robot Factory</option>
-			  <option value="">Generator</option>
+			  <option value="HQ">Head Quarters</option>
+			  <option value="CD">Crystal Drill</option>
+			  <option value="RF">Robot Factory</option>
+			  <option value="G">Generator</option>
 			</select>
 		</div>
 	</body>
