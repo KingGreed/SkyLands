@@ -2,8 +2,6 @@
 
 namespace Game.RTS
 {
-    public enum Faction { Blue, Red }
-
     public abstract class VanillaRTS
     {
         protected RTSManager mRTSMgr;

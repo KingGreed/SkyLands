@@ -1,8 +1,6 @@
 ﻿using System;
 using Mogre;
 
-using Awesomium.Core;
-
 using Game.BaseApp;
 using Game.World.Generator;
 
@@ -32,10 +30,11 @@ namespace Game.CharacSystem
                     ingredients[x, y] = (byte)(id == 0 ? 255 : id);
                 }
             }
-            byte result = this.mCraftingMgr.getCraftingResult(ingredients);
-            if(result == 0) { return; }
 
-            OgreForm.webView.ExecuteJavascript("setBlockAt(50, '" + VanillaChunk.staticBlock[VanillaChunk.byteToString[result]].getItemTexture() +
+            byte result = this.mCraftingMgr.getCraftingResult(ingredients);
+            if (result == 255) { return; }
+
+            OgreForm.webView.ExecuteJavascript("setBlockAt(49, '" + VanillaChunk.staticBlock[VanillaChunk.byteToString[result]].getItemTexture() +
                                     "', " + (result == 13 ? 4 : 1) + ")");
         }
 
@@ -46,9 +45,9 @@ namespace Game.CharacSystem
             else if(this.mInventory[x, y].amount - amount == 0)          { this.mInventory[x, y] = null; }
         }
 
-        public void AddOne(byte item)
+        public void Add(byte item, int amount = 1)
         {
-            Slot s = new Slot(1, item);
+            Slot s = new Slot(amount, item);
             foreach (int y in this.mYValues)
             {
                 for (int x = 0; x < 10; x++)
@@ -76,9 +75,24 @@ namespace Game.CharacSystem
                     if (sAmount != "")
                     {
                         int amount = int.Parse(sAmount);
-                        s = new Slot(amount, this.getIdFromIndex(index));
+                        byte id = this.getIdFromIndex(index);
+                        s = new Slot(amount, id);
+
+                        if (y == 3) // Update SelectBar
+                            OgreForm.SelectBar.ExecuteJavascript("setImageAtPosition(" + x + ", " + id + ")");
                     }
                     this.mInventory[x, y] = s;
+                }
+            }
+
+            /* get crafting table */
+            for (int i = 40; i < 50; i++)
+            {
+                string sAmount = OgreForm.webView.ExecuteJavascriptWithResult("getAmountAt(" + i + ")");
+                if (sAmount != "")
+                {
+                    int amount = int.Parse(sAmount);
+                    this.Add(this.getIdFromIndex(i), amount);
                 }
             }
         }

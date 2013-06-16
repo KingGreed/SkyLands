@@ -11,13 +11,25 @@ namespace Game.GUIs
         public static readonly Vector2 IMAGE_SIZE = new Vector2(202, 22);
         public static readonly Vector2 WANTED_SIZE = IMAGE_SIZE * Cst.GUI_RATIO;
 
-        public static int SelectorPos { get; set; }
-        public static string Material { get; set; }
-        public static bool IsBullet { get; set; }
+        private static int pos = 0;
+
+        public static string Material { get; private set; }
+        public static bool IsBullet { get; private set; }
+        public static int SelectorPos
+        {
+            get { return pos; }
+            set
+            {
+                if (pos != value)
+                {
+                    pos = value;
+                    OgreForm.SelectBar.ExecuteJavascript("setSelectorPosition(" + pos + ")");
+                }
+            }
+        }
 
         static Selector()
         {
-            SelectorPos = 0;
             IsBullet = true;
         }
 

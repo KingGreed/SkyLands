@@ -2,6 +2,8 @@
 
 namespace Game.RTS
 {
+    public enum Faction { Blue, Red }
+
     public class RTSManager
     {
         public CharacMgr CharacMgr { get; private set; }

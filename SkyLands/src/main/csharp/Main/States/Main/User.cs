@@ -48,8 +48,9 @@ namespace Game
             this.IsFreeCamMode = true;
 
             this.mFigures = new MOIS.KeyCode[10];
-            for (int i = 0; i < this.mFigures.Length; i++)
-                this.mFigures[i] = (MOIS.KeyCode)System.Enum.Parse(typeof(MOIS.KeyCode), "KC_NUMPAD" + i);
+            for (int i = 0; i < 9; i++)
+                this.mFigures[i] = (MOIS.KeyCode)System.Enum.Parse(typeof(MOIS.KeyCode), "KC_" + (i + 1));
+            this.mFigures[9] = MOIS.KeyCode.KC_0;
 
             ManualObject[] wires = new ManualObject[12];
             wires[0] = StaticRectangle.CreateLine(this.mStateMgr.SceneMgr, Vector3.ZERO, Vector3.UNIT_X * Cst.CUBE_SIDE);
@@ -113,7 +114,7 @@ namespace Game
 
                 if (this.mIsInventoryOpen)
                 {
-                    new InventoryGUI(this.UpdateGraphicInventory, this.mInventory.onCraft);
+                    new InventoryGUI(this.OnInventoryOpen, this.mInventory.onCraft);
 
                     this.IsGUIOpen = true;
                 }
@@ -168,7 +169,7 @@ namespace Game
                 this.mInventory.addAt(new Slot(5, 1), 0, 0);
         }
 
-        public void UpdateGraphicInventory()
+        public void OnInventoryOpen()
         {
             for (int y = 0; y < 4; y++)
             {
@@ -242,7 +243,7 @@ namespace Game
             this.mWorld.getIsland().removeFromScene(this.mSelectedBlockPos);
             this.mWorld.onDeletion(this.mSelectedBlockPos);
 
-            this.mInventory.AddOne(this.mSelectedBlock.getId());
+            this.mInventory.Add(this.mSelectedBlock.getId());
         }
 
         private void AddBlock(float dist)

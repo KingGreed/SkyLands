@@ -7,11 +7,15 @@ namespace Game.CharacSystem {
     public class CraftingMgr
     {
         private CraftTree mCraftTree;
+        private Dictionary<byte[,], byte> mRecipes;
         
         public CraftingMgr()
         {
             this.mCraftTree = new CraftTree();
-            this.addRecipe(7, "#", "#", (byte)4);  // ConstructionBlock ... Wood
+            //this.addRecipe(7, "#", "#", (byte)4);  // ConstructionBlock
+            this.mRecipes = new Dictionary<byte[,], byte>();
+            this.mRecipes.Add(new byte[,] { { 4, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 } }, 13);   // Planks
+            this.mRecipes.Add(new byte[,] { { 13, 255, 13 }, { 255, 255, 255 }, { 13, 255, 13 } }, 7);  // ConstructionBlock
         }
 
         public void addRecipe(byte id, params object[] o) {
@@ -51,7 +55,16 @@ namespace Game.CharacSystem {
 
         
         public byte getCraftingResult(byte[,] craftingGrid) {
-            if(craftingGrid.GetLength(0) != 3 && craftingGrid.GetLength(1) != 3) { throw new ArgumentException("Crafting must have 9 slots"); }
+            foreach (KeyValuePair<byte[,], byte> keyValuePair in this.mRecipes)
+            {
+                int y = 0, x = 0;
+                for (; y < 3; y++)
+                    for (x = 0; x < 3; x++)
+                        if (keyValuePair.Key[x, y] != craftingGrid[x, y]) { y = 4; x = 4; }
+                if(y == 3 && x == 3 ) { return keyValuePair.Value; }
+            }
+            return 255;
+            /*if(craftingGrid.GetLength(0) != 3 && craftingGrid.GetLength(1) != 3) { throw new ArgumentException("Crafting must have 9 slots"); }
 
             Vector2 begin = Vector2.ZERO, end = Vector2.ZERO;
 
@@ -66,7 +79,7 @@ namespace Game.CharacSystem {
                 }
                 bytes.Add(255);
             }
-            return findRecipe(bytes, 0, this.mCraftTree);
+            return findRecipe(bytes, 0, this.mCraftTree);*/
         }
 
         public byte findRecipe(List<byte> b, int i, CraftTree c) {
