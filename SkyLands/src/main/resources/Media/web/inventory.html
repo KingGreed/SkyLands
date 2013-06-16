@@ -107,6 +107,11 @@
 						Clone.children("span").html("");
 						Selected.parent().appendTo("#containor");
 						Selected.next().css("display", "none");
+
+						if(Position >= 40) {
+							$(".slot:eq(49)").children("img").attr("src", "../images/blank.png");
+							$(".slot:eq(49)").children("span").html("");
+						}
 					},
 					drag:  function(e, ui) {
 						if(Selected != null) { Selected.css("opacity", "1"); Selected = null; $(".slot").css("opacity", 1); }
