@@ -86,7 +86,7 @@ namespace Game.States
         {
             this.World.Update(frameTime);
 
-            if (this.mStateMgr.Controller.HasActionOccured(UserAction.Start))
+            if (this.mStateMgr.Controller.HasActionOccured(UserAction.Start) && !GUI.Visible)
                 this.mStateMgr.RequestStatePop();
 
             this.User.Update(frameTime);

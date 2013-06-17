@@ -12,10 +12,14 @@ namespace Game.CharacSystem {
         public CraftingMgr()
         {
             this.mCraftTree = new CraftTree();
-            //this.addRecipe(7, "#", "#", (byte)4);  // ConstructionBlock
             this.mRecipes = new Dictionary<byte[,], byte>();
-            this.mRecipes.Add(new byte[,] { { 4, 255, 255 }, { 255, 255, 255 }, { 255, 255, 255 } }, 13);   // Planks
+            this.mRecipes.Add(new byte[,] { { 4, 4, 4 }, { 255, 255, 255 }, { 255, 255, 255 } }, 13);   // Planks
             this.mRecipes.Add(new byte[,] { { 13, 255, 13 }, { 255, 255, 255 }, { 13, 255, 13 } }, 7);  // ConstructionBlock
+            this.mRecipes.Add(new byte[,] { { 3, 3, 255 }, { 3, 3, 255 }, { 255, 255, 255 } }, 7);  // ConstructionBlock
+            this.mRecipes.Add(new byte[,] { { 6, 255, 6 }, { 255, 6, 255 }, { 6, 255, 6 } }, 22);  // Glass
+            this.mRecipes.Add(new byte[,] { { 9, 255, 9 }, { 255, 9, 255 }, { 9, 255, 9 } }, 22);  // Glass
+            this.mRecipes.Add(new byte[,] { { 10, 255, 10 }, { 255, 10, 255 }, { 10, 255, 10 } }, 22);  // Glass
+            this.mRecipes.Add(new byte[,] { { 255, 255, 255 }, { 255, 22, 255 }, { 255, 4, 255 } }, 22);  // Levitator
         }
 
         public void addRecipe(byte id, params object[] o) {

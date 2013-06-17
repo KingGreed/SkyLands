@@ -2503,6 +2503,7 @@
     <Compile Include="csharp\Main\BlockFactory.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\GUIs\Builder.cs" />
     <Compile Include="csharp\Main\GUIs\PlayMenu.cs" />
     <Compile Include="csharp\Main\GUIs\MainMenu.cs" />
     <Compile Include="csharp\Main\GUIs\InventoryGUI.cs" />

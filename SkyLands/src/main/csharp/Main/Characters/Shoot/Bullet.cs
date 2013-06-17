@@ -17,23 +17,26 @@ namespace Game.Shoot
         private readonly VanillaCharacter mSource, mTarget;
         private readonly SceneNode mYawNode, mPitchNode;
         private Ray     mRay;
-        private Vector3 mForwardDir, mTargetPoint;
-        private float   mDistTravalled, mHitInDist;
+        private Vector3 mForwardDir;
+        private float   mDistTravalled;
+        private bool mAccurateTest;
 
         public float Speed  { get; set; }
         public float Range  { get; set; }
         public float Damage { get; set; }
 
-        public Bullet(VanillaCharacter source, VanillaCharacter target, Vector3 targetPoint, SceneNode pitchNode, SceneNode yawNode, float hitInDist)
+        public Bullet(VanillaCharacter source, VanillaCharacter target, SceneNode pitchNode, SceneNode yawNode)
         {
             this.mSource = source;
             this.mTarget = target;
             this.mForwardDir = Vector3.UNIT_Z;
-            this.mHitInDist = hitInDist;
+            this.mAccurateTest = false;
 
             this.Speed = DEFAULT_SPEED;
             this.Range = DEFAULT_RANGE;
             this.Damage = DEFAULT_DAMAGE;
+
+            this.mTarget.Hit(this.Damage);
 
             this.mPitchNode = pitchNode;
             this.mYawNode = yawNode;
@@ -45,7 +48,7 @@ namespace Game.Shoot
             this.mYawNode = node;
             this.mRay = new Ray(this.mYawNode.Position, this.mYawNode.Orientation * Vector3.NEGATIVE_UNIT_Z);
             this.mForwardDir = forwardDir;
-            this.mHitInDist = 0;
+            this.mAccurateTest = true;
         }
 
         public bool Update(BulletManager bulletMgr, float frameTime)
@@ -57,16 +60,7 @@ namespace Game.Shoot
             this.mDistTravalled += distance;
             this.mYawNode.Translate(distance * this.mForwardDir, Node.TransformSpace.TS_LOCAL);
 
-            if (this.mHitInDist > 0 && this.mTarget != null)
-            {
-                if (this.mDistTravalled >= this.mHitInDist)
-                {
-                    float distanceWithTarget = (this.mTargetPoint - this.mPitchNode.Position).Length;
-                    if (distanceWithTarget <= 30) { this.mTarget.Hit(this.Damage); }
-                    this.mDistTravalled = this.Range;
-                }
-            }
-            else
+            if(this.mAccurateTest)
             {
                 this.mRay.Origin = this.mYawNode.Position;
 

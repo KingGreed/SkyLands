@@ -26,8 +26,8 @@ namespace Game.Input
 
     public class Controller
     {
-        private const float YAW_SENSIVITY = - 0.4f * 0.6f;
-        private const float PITCH_SENSIVITY = - 0.15f * 0.6f;
+        private const float YAW_SENSIVITY = - 0.4f * 0.7f;
+        private const float PITCH_SENSIVITY = - 0.15f * 0.7f;
 
         private readonly OgreForm    mOgreForm;
         private readonly XmlDocument mCommands;
@@ -143,8 +143,8 @@ namespace Game.Input
                 if (this.mTimeToVibrate > 0) { this.mTimeToVibrate -= frameTime; }
                 if (this.mTimeToVibrate < 0) { this.Vibrate(0, 0); }
 
-                this.Yaw = this.GamePadState.ThumbSticks.Right.X * 5;
-                this.Pitch = -this.GamePadState.ThumbSticks.Right.Y * 8;
+                this.Yaw = this.GamePadState.ThumbSticks.Right.X * 3.5f;
+                this.Pitch = -this.GamePadState.ThumbSticks.Right.Y * 6.5f;
                 this.mMovementFactor = new Mogre.Vector3(-this.GamePadState.ThumbSticks.Left.X,
                     this.GamePadState.DPad.Up == XInputDotNetPure.ButtonState.Pressed ? 1 : (this.GamePadState.DPad.Down == XInputDotNetPure.ButtonState.Pressed ? -1 : 0),
                                                    this.GamePadState.ThumbSticks.Left.Y);

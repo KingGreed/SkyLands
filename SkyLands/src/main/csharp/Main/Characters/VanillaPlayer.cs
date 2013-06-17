@@ -9,7 +9,7 @@ namespace Game.CharacSystem
 {
     public class VanillaPlayer : VanillaCharacter
     {
-        public const float  DEFAULT_PLAYER_LIFE = 340;
+        public const float  DEFAULT_PLAYER_LIFE = 830;
         public const float  DEFAULT_PLAYER_MANA = 120;
 
         private readonly ShootCube mShootCube;

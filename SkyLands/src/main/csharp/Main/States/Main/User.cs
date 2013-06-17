@@ -27,12 +27,13 @@ namespace Game
         private CameraMan mCameraMan;
         private SceneNode mCamYawNode, mCamPitchNode;
         private readonly SceneNode mWireCube;
-        private bool mIsInventoryOpen;
+        private bool mIsInventoryOpen, mIsBuilderOpen;
 
         private Vector3 mSelectedBlockPos;
         private Block   mSelectedBlock;
         private readonly MOIS.KeyCode[] mFigures;
 
+        public static bool OpenBuilder { get; set; }
         public bool IsAllowedToMoveCam { get; set; }
         public bool IsFreeCamMode      { get; private set; }
         public Inventory Inventory     { get; private set; }
@@ -105,22 +106,32 @@ namespace Game
             MainState mainState = this.mStateMgr.MainState;
             VanillaPlayer mainPlayer = mainState.CharacMgr.MainPlayer;
 
+            if (this.mStateMgr.Controller.HasActionOccured(UserAction.Start) && GUI.Visible)
+            {
+                if (this.mIsInventoryOpen) { this.SwitchInventory(false); }
+                else if (this.mIsBuilderOpen) { this.mIsBuilderOpen = false; }
+
+                this.SwitchGUIVisibility(false);
+                GUI.Visible = false;
+            }
+
             if (!this.mStateMgr.Controller.IsActionOccuring(UserAction.MainAction))
             {
                 if (this.mStateMgr.Controller.HasActionOccured(UserAction.Inventory) && (!GUI.Visible || this.mIsInventoryOpen))
                 {
                     this.mIsInventoryOpen = !this.mIsInventoryOpen;
-
-                    if (this.mIsInventoryOpen)
-                        new InventoryGUI(this.OnInventoryOpen, this.Inventory.OnCraft);
-                    else
-                    {
-                        this.Inventory.GetInventoryModification();
-                        GUI.Visible = false;
-                    }
+                    this.SwitchInventory(this.mIsInventoryOpen);
 
                     this.SwitchGUIVisibility(this.mIsInventoryOpen);
                 }
+            }
+
+            if (OpenBuilder)
+            {
+                new Builder();
+                OpenBuilder = false;
+                this.mIsBuilderOpen = true;
+                this.SwitchGUIVisibility(true);
             }
 
             /* Move camera */
@@ -164,6 +175,17 @@ namespace Game
 
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.Dance))
                 this.Inventory.addAt(new Slot(5, 1), 0, 0);
+        }
+
+        private void SwitchInventory(bool open)
+        {
+            if (open)
+                new InventoryGUI(this.OnInventoryOpen, this.Inventory.OnCraft);
+            else
+            {
+                this.Inventory.GetInventoryModification();
+                GUI.Visible = false;
+            }
         }
 
         public void OnInventoryOpen()

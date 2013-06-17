@@ -40,7 +40,7 @@ namespace Game.CharacSystem
             if (result == 255) { return; }
 
             OgreForm.webView.ExecuteJavascript("setBlockAt(49, '" + VanillaChunk.staticBlock[VanillaChunk.byteToString[result]].getItemTexture() +
-                                    "', " + (result == 13 ? 4 : 1) + ")");
+                                    "', " + 1 + ")");
         }
 
         public void Add(byte item, int amount = 1)

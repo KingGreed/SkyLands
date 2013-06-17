@@ -45,8 +45,8 @@ namespace Game.BaseApp
         public void MouseMovement(float frameTime, float yaw, float pitch)
         {
             if (this.mFreeze) { return; }
-            this.mCamera.Yaw(new Degree(yaw));
-            this.mCamera.Pitch(new Degree(pitch));
+            this.mCamera.Yaw(new Degree(yaw * 0.8f));
+            this.mCamera.Pitch(new Degree(pitch * 0.8f));
         }
     }
 }

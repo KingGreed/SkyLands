@@ -26,5 +26,12 @@ namespace Game.World.Blocks
             }
             return "";
         }
+
+        public override bool onLeftClick()
+        {
+            User.OpenBuilder = true;
+
+            return false;
+        }
     }
 }

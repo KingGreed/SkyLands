@@ -279,7 +279,7 @@ namespace Game.CharacSystem
 
             if (this.mCharInfo.IsPlayer && this.mCharacMgr.StateMgr.Controller.GamePadState.IsConnected)
             {
-                float force = damage / VanillaPlayer.DEFAULT_PLAYER_LIFE * 9;
+                float force = (damage + 15) / VanillaPlayer.DEFAULT_PLAYER_LIFE * 7;
                 this.mCharacMgr.StateMgr.Controller.Vibrate(force, force, 0.2f);
             }
 

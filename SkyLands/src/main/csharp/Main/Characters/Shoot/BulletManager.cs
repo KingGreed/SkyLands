@@ -54,7 +54,7 @@ namespace Game.Shoot
             yawNode.Yaw(yaw);
             yawNode.AttachObject(StaticRectangle.CreateLine(this.SceneMgr, Vector3.ZERO, new Vector3(0, 0, 15), ColoredMaterials.YELLOW));
 
-            this.mBullets.Add(new Bullet(source, target, targetPoint, pitchNode, yawNode, targetDistance));
+            this.mBullets.Add(new Bullet(source, target, pitchNode, yawNode));
             return true;
         }
 
