@@ -46,7 +46,7 @@ namespace Game.GUIs
         public static void Init(Inventory inventory)
         {
             for (int i = 0; i < 10; i++)
-                SetMaterialAt(i, "blank.png");
+                SetBlockAt(i, "blank.png");
 
             List<byte> keys = new List<byte>(Inventory.MagicCubes.Keys);
             for (int i = 0; i < Inventory.MagicCubes.Count; i++)
@@ -69,9 +69,12 @@ namespace Game.GUIs
             OgreForm.SelectBar.Size = new Size((int)newSize.x, (int)newSize.y);
         }
 
-        public static void SetMaterialAt(int position, string imgName)
+        public static void SetBlockAt(int position, string imgName, int amount = 1) // imgName = "" to change amount
         {
-            OgreForm.SelectBar.ExecuteJavascript("setMaterialAt(" + position + ", '" + imgName + "')");
+            if(imgName != "")
+                OgreForm.SelectBar.ExecuteJavascript("setMaterialAt(" + position + ", '" + imgName + "')");
+            if(imgName != "blank.png")
+                OgreForm.SelectBar.ExecuteJavascript("setAmountAt(" + position + ", " + amount + ")");
             if (position == pos) { SelectorPos = pos; } // Actualise the static infos
         }
     }

@@ -118,8 +118,8 @@ namespace Game.CharacSystem
 
                 // Update selectBar
                 if (y == 3 && this.mMainInventory) {
-                    Selector.SetMaterialAt(x, MagicCubes.ContainsKey(s.item) ? MagicCubes[s.item] :
-                        VanillaChunk.staticBlock[VanillaChunk.byteToString[s.item]].getItemTexture());
+                    Selector.SetBlockAt(x, MagicCubes.ContainsKey(s.item) ? MagicCubes[s.item] :
+                        VanillaChunk.staticBlock[VanillaChunk.byteToString[s.item]].getItemTexture(), s.amount);
                 }
 
                 return tmp;
@@ -138,10 +138,13 @@ namespace Game.CharacSystem
             if (this.mInventory[y, x].amount - amount == 0)
             {
                 this.mInventory[y, x] = null;
-                if (y == 3 && this.mMainInventory) { Selector.SetMaterialAt(x, "blank.png"); }
+                if (y == 3 && this.mMainInventory) { Selector.SetBlockAt(x, "blank.png"); }
             }
             else
+            {
                 this.mInventory[y, x].amount -= amount;
+                Selector.SetBlockAt(x, "", this.mInventory[y, x].amount);
+            }
         }
 
         public Vector2 getFreeSlot() {
