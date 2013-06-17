@@ -205,7 +205,7 @@
 							}
 						}
 
-						if(SelectedPos >= 30 && SelectedPos < 40) {
+						if((SelectedPos >= 30 && SelectedPos < 40) || (Position >= 30 && Position <= 40)) {
 							if(typeof(BuilderObject) != "undefined") {
 								BuilderObject.selectBarUpdate(SelectedPos, Selected.children("img").attr("src"));
 							}
@@ -214,10 +214,16 @@
 						$(this).css("top", "0px");
 						$(this).css("left", "0px");
 
+
 					},
 					revert: function () {
 						if(Selected == null) { return true; }
-						return (SelectedPos >= 40 && Selected.children("img").attr("src") != $(this).attr("src"));
+						else if(SelectedPos >= 40 && Selected.children("img").attr("src") != $(this).attr("src")) {
+							return true;
+						} else {
+							return false;
+						}
+
 					}
 				});
 				
@@ -264,6 +270,10 @@
 
 			function getAmountAt(pos) {
 				return $(".num:eq(" + pos + ")").html();
+			}
+
+			function setOpacity(opacity, position) {
+				Selected = $(".slot:eq(" + (position) + ")").css("opacity", opacity);
 			}
 
 			function getImageAt(pos) {
