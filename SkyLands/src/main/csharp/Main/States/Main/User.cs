@@ -33,6 +33,7 @@ namespace Game
         private Block   mSelectedBlock;
         private readonly MOIS.KeyCode[] mFigures;
 
+        public static Inventory BuilderInventory { get; set; }
         public static bool OpenBuilder { get; set; }
         public bool IsAllowedToMoveCam { get; set; }
         public bool IsFreeCamMode      { get; private set; }
@@ -46,6 +47,7 @@ namespace Game
             this.mCameraMan = null;
             this.IsAllowedToMoveCam = true;
             this.IsFreeCamMode = true;
+            BuilderInventory = null;
 
             this.mFigures = new MOIS.KeyCode[10];
             for (int i = 0; i < 9; i++)
@@ -72,7 +74,7 @@ namespace Game
 
             this.mWireCube.SetVisible(false);
 
-            this.Inventory = new Inventory();
+            this.Inventory = new Inventory(10, 4, new int[] { 3, 0, 1, 2 }, true);
         }
 
         public void InitCamera()
@@ -108,7 +110,7 @@ namespace Game
 
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.Start) && GUI.Visible)
             {
-                if (this.mIsInventoryOpen) { this.SwitchInventory(false); }
+                if (this.mIsInventoryOpen) { this.SwitchInventory(false); this.mIsInventoryOpen = false; }
                 else if (this.mIsBuilderOpen) { this.mIsBuilderOpen = false; }
 
                 this.SwitchGUIVisibility(false);
@@ -128,7 +130,8 @@ namespace Game
 
             if (OpenBuilder)
             {
-                new Builder();
+                new Builder(this.mSelectedBlockPos);
+                Builder.OnOpen = this.OnBuilderOpen;
                 OpenBuilder = false;
                 this.mIsBuilderOpen = true;
                 this.SwitchGUIVisibility(true);
@@ -183,25 +186,38 @@ namespace Game
                 new InventoryGUI(this.OnInventoryOpen, this.Inventory.OnCraft);
             else
             {
-                this.Inventory.GetInventoryModification();
+                this.Inventory.OnClose();
                 GUI.Visible = false;
             }
         }
 
-        public void OnInventoryOpen()
+        public void OnBuilderOpen()
         {
-            for (int y = 0; y < 4; y++)
+            this.OnInventoryOpen();
+            this.OnOpen(BuilderInventory, BuilderInventory.X * 4);
+        }
+
+        public void OnBuilderClose()
+        {
+            this.Inventory.OnClose(BuilderInventory);
+        }
+
+        public void OnOpen(Inventory inventory, int initIndex)
+        {
+            for (int y = 0; y < inventory.Y; y++)
             {
-                for (int x = 0; x < 10; x++)
+                for (int x = 0; x < inventory.X; x++)
                 {
-                    Slot s = this.Inventory.getSlot(x, y);
+                    Slot s = inventory.getSlot(x, y);
                     if (s == null) { continue; }
-                    string texture = this.Inventory.MagicCubes.ContainsKey(s.item) ? this.Inventory.MagicCubes[s.item] :
-                                         VanillaChunk.staticBlock[VanillaChunk.byteToString[s.item]].getItemTexture();
-                    OgreForm.webView.ExecuteJavascript("setBlockAt(" + (x + y * 10) + ", '" + texture + "', " + s.amount + ")");
+                    string texture = Inventory.MagicCubes.ContainsKey(s.item) ? Inventory.MagicCubes[s.item] :
+                                     VanillaChunk.staticBlock[VanillaChunk.byteToString[s.item]].getItemTexture();
+                    GUI.SetBlockAt(initIndex + x + y * inventory.X, texture, s.amount);
                 }
             }
         }
+
+        public void OnInventoryOpen() { this.OnOpen(this.Inventory, 0); }
 
         public void SwitchFreeCamMode()
         {

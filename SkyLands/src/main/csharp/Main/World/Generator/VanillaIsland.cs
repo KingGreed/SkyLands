@@ -422,7 +422,7 @@ namespace Game.World.Generator
             } 
         }
 
-        public override void setBlockAt(int x, int y, int z, byte material, bool force) { this.setBlockAt(x, y, z, VanillaChunk.byteToString[material], force); }
-
+        public override void setBlockAt(int x, int y, int z, byte id, bool force) { this.setBlockAt(x, y, z, VanillaChunk.byteToString[id], force); }
+        public override void setBlockAt(Vector3 loc, string name, bool force)     { this.setBlockAt((int)loc.x, (int)loc.y, (int)loc.z, name, force); }
     }
 }

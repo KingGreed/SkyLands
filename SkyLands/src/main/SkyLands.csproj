@@ -2609,6 +2609,7 @@
     <Compile Include="csharp\Main\World\Blocks\ConstructionBlock.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\World\Blocks\GhostBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\CrystalGate.cs" />
     <Compile Include="csharp\Main\World\Blocks\CrystalGateH.cs" />
     <Compile Include="csharp\Main\World\Blocks\Crystal.cs" />
@@ -2677,7 +2678,7 @@
     </Compile>
     <Compile Include="csharp\Main\World\Generator\Decorators\SnowDecorator.cs" />
     <Compile Include="csharp\Main\World\Generator\VanillaMultiHorizontalEighthBlock.cs" />
-    <Compile Include="csharp\Main\World\Generator\Decorators\Gatherer.cs" />
+    <Compile Include="csharp\Main\RTS\Buildings\HeadQuarter.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\Pine.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\Pyramid.cs" />
     <Compile Include="csharp\Main\World\Generator\Decorators\Spawner.cs" />

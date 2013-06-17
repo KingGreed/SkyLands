@@ -48,9 +48,15 @@ namespace Game.GUIs
             for (int i = 0; i < 10; i++)
                 SetMaterialAt(i, "blank.png");
 
-            List<byte> keys = new List<byte>(inventory.MagicCubes.Keys);
-            for (int i = 0; i < inventory.MagicCubes.Count; i++)
+            List<byte> keys = new List<byte>(Inventory.MagicCubes.Keys);
+            for (int i = 0; i < Inventory.MagicCubes.Count; i++)
                 inventory.addAt(new Slot(1, keys[i]), i, 3);
+
+            /* Temp */
+            inventory.addAt(new Slot(5, 7), 3, 3);
+            inventory.addAt(new Slot(10, 4), 0, 0);
+            inventory.addAt(new Slot(30, 13), 1, 0);
+            inventory.addAt(new Slot(10, 2), 2, 0);
 
             IsBullet = false;
             SelectorPos = 0;

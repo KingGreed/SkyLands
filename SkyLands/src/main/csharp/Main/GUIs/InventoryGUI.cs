@@ -12,13 +12,13 @@ namespace Game.GUIs
     public class InventoryGUI : GUI {
         private static readonly Vector2 IMAGE_SIZE = new Vector2(192, 179);
 
-        private readonly Action mUpdate, mOnCraft;
+        private readonly Action mOnOpen, mOnCraft;
 
         public InventoryGUI(Action update, Action onCaft)
             : base(((OgreForm.InitSize - IMAGE_SIZE * Cst.GUI_RATIO) / 2) - (Vector2.UNIT_Y * (IMAGE_SIZE * Cst.GUI_RATIO).y / 12),
                    IMAGE_SIZE, "inventory.html")
         {
-            this.mUpdate = update;
+            this.mOnOpen = update;
             this.mOnCraft = onCaft;
         }
 
@@ -26,11 +26,11 @@ namespace Game.GUIs
             base.onDocumentReady(sender, e);
             JSObject j = OgreForm.webView.CreateGlobalJavascriptObject("InventoryObject");
             j.Bind("craft", false, (s1, args) => this.mOnCraft());
-            j.Bind("selectBarUpdate", false, (s2, args) => this.UpdateSelectBar(args));
-            this.mUpdate();
+            j.Bind("selectBarUpdate", false, (s2, args) => UpdateSelectBar(args));
+            this.mOnOpen();
         }
 
-        private void UpdateSelectBar(JavascriptMethodEventArgs args)
+        public static void UpdateSelectBar(JavascriptMethodEventArgs args)
         {
             int position = (int)args.Arguments[0] - 30;
             string[] temp = args.Arguments[1].ToString().Split('/');

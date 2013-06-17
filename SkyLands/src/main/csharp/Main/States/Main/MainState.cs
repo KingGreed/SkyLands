@@ -4,13 +4,12 @@ using System.IO;
 using Mogre;
 using Awesomium.Core;
 
-using API.Generic;
-
 using Game.BaseApp;
 using Game.CharacSystem;
 using Game.World;
 using Game.Input;
 using Game.GUIs;
+using Game.RTS;
 
 namespace Game.States
 {
@@ -28,6 +27,7 @@ namespace Game.States
         {
             this.World = new MainWorld(this.mStateMgr);
             this.World.setSafeSpawnPoint();
+            Building.Island = this.World.getIsland();
 
             this.User = new User(this.mStateMgr, this.World);
 

@@ -69,5 +69,24 @@ namespace Game.BaseApp {
             webControl.ExecuteJavascript("resize(" + Convert.ToString(x).Replace(',', '.') + ", "
                                                    + Convert.ToString(y).Replace(',', '.') + ")");
         }
+
+        public static void SetBlockAt(int pos, string name, int amount)
+        {
+            OgreForm.webView.ExecuteJavascript("setBlockAt(" + pos + ", '" + name + "', " + amount + ")");
+        }
+
+        public static int GetAmountAt(int pos)
+        {
+            string amount = OgreForm.webView.ExecuteJavascriptWithResult("getAmountAt(" + pos + ")");
+            if (amount == "") { return -1; }
+            return int.Parse(amount);
+        }
+
+        public static string GetImageAt(int pos)
+        {
+            string imgName = OgreForm.webView.ExecuteJavascriptWithResult("getImageAt(" + pos + ")");
+            string[] val = imgName.Split('/');
+            return val[val.Length - 1];
+        }
     }
 }

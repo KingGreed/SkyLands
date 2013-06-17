@@ -91,6 +91,7 @@ namespace API.Geo.Cuboid
         //set
         public abstract void setBlockAt(int x, int y, int z, string material, bool force);
         public abstract void setBlockAt(int x, int y, int z, byte material, bool force);
+        public abstract void setBlockAt(Vector3 loc, string name, bool force);
         public abstract string getMaterialFromName(string name);
 
 
