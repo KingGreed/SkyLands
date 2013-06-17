@@ -235,6 +235,8 @@
 				
 			});
 
+			function setSelection(val) { $("#BuildingsSelector").val(val); }
+
 			function setNumber(at, amount) {
 				if(amount <= 0) {
 					$(".item:eq(" + at + ")").attr("src", "../images/blank.png");

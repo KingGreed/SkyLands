@@ -34,15 +34,28 @@
       });
     });
 
-    $(window).resize(function() {
-      ratioX = parseInt($('#map').css('width')) / 1600;
-      ratioY = parseInt($('#map').css('height')) / 900;
-    });
-    
+
+    function BackDisplay(disp) {
+      $("")
+    }    
+
+
+
+
   </script>
 </head>
 <body>
   <p id="pos" style="color : green;"></p>
-	<img src="../images/Options/Menu_Options_normal.png" id="map" style="height: 100%; width: 100%;"/>
+	<img src="../images/Options/Back.png" id="back" />
+  <img src="../images/Options/High_Quality.png" id="HQ" />
+  <img src="../images/Options/Low_Quality.png" id="LQ" />
+  <img src="../images/Options/Music.png" id="Music" />
+  <img src="../images/Options/Music_Off.png" id="MOff" />
+  <img src="../images/Options/Music_On.png" id="MOn" />
+  <img src="../images/Options/Quality.png" id="Quality" />
+  <img src="../images/Options/Vsync.png" id="Vsync" />
+  <img src="../images/Options/VSYNC_Off.png" id="Voff" />
+  <img src="../images/Options/VSYNC_On.png" id="Von" />
+
 </body>
 </html>
