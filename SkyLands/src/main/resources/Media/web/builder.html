@@ -166,7 +166,7 @@
 										Selected.children("span").html(0);
 									}
 									if(typeof(BuilderObject) != "undefined") {
-										BuilderObject.update();
+										BuilderObject.update(SelectedPos, $(".num:eq(" + SelectedPos +")").html());
 									}
 								}
 							} else {
