@@ -145,7 +145,6 @@
 
 						$(this).next().css("display", "block");
 						if(Selected != null && SelectedPos != Position) {
-							Selected.css("opacity", "1");
 
 
 							var thisImg = $(this).attr("src");
@@ -172,6 +171,7 @@
 									}
 								}
 							} else {
+								Selected.css("opacity", "1");
 								if(thisImg == thatImg && thisImg != "../images/blank.png") {
 									if(thisAmount == 64) {
 										setNumber(SelectedPos, 64);
