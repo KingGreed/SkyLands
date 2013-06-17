@@ -113,52 +113,22 @@
     <Content Include="resources\Media\images\Menu_Play_select.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Media\images\Options\Back.png">
+    <Content Include="resources\Media\images\Options\Menu_Options_Back.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Media\images\Options\High_Quality.png">
+    <Content Include="resources\Media\images\Options\Menu_Options_Music_Off.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Media\images\Options\Low_Quality.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\images\Options\Menu_Options.png">
+    <Content Include="resources\Media\images\Options\Menu_Options_Music_On.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\images\Options\Menu_Options_normal.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\images\Options\Menu_Options_Quality_High.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\images\Options\Menu_Options_Quality_Low.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\images\Options\Menu_Options_VSYNC_Off.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\images\Options\Menu_Options_VSYNC_On.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\images\Options\Music.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\images\Options\Music_Off.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\images\Options\Music_On.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\images\Options\Quality.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\images\Options\Vsync.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\images\Options\VSYNC_Off.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\images\Options\VSYNC_On.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\images\Play\menu play_Back.png">
@@ -176,16 +146,16 @@
     <Content Include="resources\Media\images\Play\menu play_scenar.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Media\images\ScenarioLoader\Edit.png">
+    <Content Include="resources\Media\images\ScenarioLoader\Load_scenario_edit.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\images\ScenarioLoader\Load_scenario_new.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\images\ScenarioLoader\Load_scenario_normal.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Media\images\ScenarioLoader\New.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\images\ScenarioLoader\Ok.png">
+    <Content Include="resources\Media\images\ScenarioLoader\Load_scenario_Ok.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\images\Scenario\edit.png">
@@ -2579,6 +2549,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\GUIs\Builder.cs" />
+    <Compile Include="csharp\Main\GUIs\OptionMenu.cs" />
     <Compile Include="csharp\Main\GUIs\ScenarioLoader.cs" />
     <Compile Include="csharp\Main\GUIs\PlayMenu.cs" />
     <Compile Include="csharp\Main\GUIs\MainMenu.cs" />

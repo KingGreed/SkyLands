@@ -36,6 +36,7 @@ namespace Game.GUIs {
 
         private void Scenario(object sender, EventArgs e) {
             Visible = false;
+            new ScenarioLoader(this.mStateMgr);
         }
     }
 }

@@ -229,13 +229,13 @@ namespace Game.World
 
             int i = 0;
             for(int temp = 0; i < s.Length && temp != mScenarioAdvancement; i++) {
-                if(s[i] == "#") { temp++; }
+                if(s[i][0] == '#') { temp++; }
             }
 
             string[] pos = s[i].Substring(1).Split(' ');
             Vector3 structurePosition = new Vector3(t(pos[0]), t(pos[1]), t(pos[2]));
             vs = new List<Script.Item>();
-            for(; i < s.Length && s[i] != "#"; i++) {
+            for(; i < s.Length && s[i][0] != '#'; i++) {
                 if(s[i][0] == 'N') {
                     string[] ss = s[i].Substring(1).Split(' ');
                     if(ss.Length >= 5) {

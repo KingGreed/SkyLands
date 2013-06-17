@@ -5,7 +5,7 @@
   <script>
 
   function isInRectangle(x1, y1, x2, y2, posX, posY) { return posX > x1 && posX < x2 && posY > y1 && posY < y2; }
-  var ratioX, ratioY = 1;
+  var ratioX = 1, ratioY = 1;
 
     $(window).load(function() {
       ratioX = parseInt($('#map').css('width')) / 1600;

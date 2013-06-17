@@ -3,22 +3,90 @@
 	<link rel="stylesheet" type="text/css" href="ScenarioEditorChooseScenario.css" />
 	<script type="text/javascript" src="jquery.js"> </script>
 	<script>
+		var ratioX = 1, ratioY = 1;
+		function isInRectangle(x1, y1, x2, y2, posX, posY) { return posX > x1 && posX < x2 && posY > y1 && posY < y2; }
 		$(function() {
-			
+
+			ratioX = parseInt($('#background').css('width')) / 1600;
+      		ratioY = parseInt($('#background').css('height')) / 900;
+
+	      	$(".clickable").click(function() {
+	      		ScenarioLoaderObject.update($(".clickable").html());
+	      		$(".clickable").removeClass("selected");
+	      		$(this).addClass("selected");
+
+	      	});
+
+	      	$("#text").css("top", 220  * ratioY + "px");
+	      	$("#text").css("left", 480 * ratioX + "px");
+	      	$("#text").css("font-size", 1.5	 * (ratioX + ratioY) + "em");
+
+			$(document).mousemove(function(e) {
+		        if(isInRectangle(198 * ratioX, 722 * ratioY, 604 * ratioX, 816 * ratioY, e.pageX, e.pageY)){
+		          $("body").css('cursor', 'pointer');
+		          $('img').css('display', 'none');
+		          $("#edit").css('display', 'block');
+		        }
+		        else if(isInRectangle(1011 * ratioX, 721 * ratioY, 1418 * ratioX, 816 * ratioY, e.pageX, e.pageY)){
+		          $("body").css('cursor', 'pointer');
+		          $('img').css('display', 'none');
+		          $("#new").css('display', 'block');
+		        }
+		        else if(isInRectangle(662 * ratioX, 712 * ratioY, 945 * ratioX, 841 * ratioY, e.pageX, e.pageY)){
+		          $("body").css('cursor', 'pointer');
+		          $('img').css('display', 'none');
+		          $('#ok').css('display', 'block');
+		        } else{
+		          $('body').css('cursor', 'default')
+		          $("img").css('display' , 'none'); 
+		          $('#background').css('display', 'block');
+		        }
+		      });
+			$(document).click(function(e) {
+		        if(isInRectangle(198 * ratioX, 722 * ratioY, 604 * ratioX, 816 * ratioY, e.pageX, e.pageY)){ //back
+	          		ScenarioLoaderObject.edit();
+		        }
+		        else if(isInRectangle(1011 * ratioX, 721 * ratioY, 1418 * ratioX, 816 * ratioY, e.pageX, e.pageY)){ //load game
+		          addScenario();
+		        }
+		        else if(isInRectangle(662 * ratioX, 712 * ratioY, 945 * ratioX, 841 * ratioY, e.pageX, e.pageY)){ // create world
+		          ScenarioLoaderObject.ok();
+		        }
+		    });
 		});
+
 
 		function addScenario(name) {
 			$("#text").append("<tr><td><span class=\"clickable\">" + name + "</span></td></tr>");
 		}
 
+		function addScenario() {
+			$("#text").append("<tr><td><input id=\"nw\" type=\"text\"></td></tr>");
+			$("#nw").keypress(function(e) {
+			    if(e.which == 13) {
+			     	ScenarioLoaderObject.new($("#nw").val());   
+			    }
+			});
+		}
+
+		$(window).resize(function() {
+        	ratioX = parseInt($('#background').css('width')) / 1600;
+        	ratioY = parseInt($('#background').css('height')) / 900;
+
+        	$("#text").css("top", 220  * ratioY + "px");
+	      	$("#text").css("left", 480 * ratioX + "px");
+	      	$("#text").css("font-size", 1.5 * (ratioX + ratioY) + "em");
+      	});
+
 	</script>
 </head>
 <body>
 	<div id="Scenarios">
-		<img src="../images/ScenarioLoader/Load_scenario_normal.png" id="background"/>
-		<img src="../images/ScenarioLoader/Edit.png" id="edit" style="display : none;" />
-		<img src="../images/ScenarioLoader/New.png"  id="new"  style="display : none;" />
-		<img src="../images/ScenarioLoader/Ok.png"   id="ok"   style="display : none;"/>
+		<img src="../images/ScenarioLoader/Load_scenario_normal.png" id="background" style="height: 100%; width: 100%;"/>
+		<img src="../images/ScenarioLoader/Load_scenario_edit.png"   id="edit"       style="height: 100%; width: 100%; position : absolute; top : 0; left : 0;"/>
+		<img src="../images/ScenarioLoader/Load_scenario_new.png"    id="new"        style="height: 100%; width: 100%; position : absolute; top : 0; left : 0;"/>
+		<img src="../images/ScenarioLoader/Load_scenario_Ok.png"     id="ok"         style="height: 100%; width: 100%; position : absolute; top : 0; left : 0;"/>
+		
 		<table id="text">
 			<tr><td><span class="clickable">Default</span></td></tr>
 			<tr><td><span class="clickable">Test 2</span></td></tr>

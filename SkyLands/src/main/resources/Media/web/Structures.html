@@ -1,0 +1,119 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="ScenarioEditorChooseScenario.css" />
+	<script type="text/javascript" src="jquery.js"> </script>
+	<script>
+		var ratioX = 1, ratioY = 1;
+		function isInRectangle(x1, y1, x2, y2, posX, posY) { return posX > x1 && posX < x2 && posY > y1 && posY < y2; }
+		$(window).load(function() {
+
+			ratioX = parseInt($('#background').css('width')) / 450;
+      		ratioY = parseInt($('#background').css('height')) / 900;
+
+      		$("#text").css("top", 220  * ratioY + "px");
+	      	$("#text").css("left", 100 * ratioX + "px");
+	      	$("#text").css("font-size", 1.5	 * (ratioX + ratioY) + "em");
+
+	      	$(".clickable").click(function() {
+	      		$(".clickable").removeClass("selected");
+	      		$(this).addClass("selected");
+
+	      	});
+
+
+			$(document).mousemove(function(e) {
+		        if(isInRectangle(28 * ratioX, 29 * ratioY, 390 * ratioX, 124 * ratioY, e.pageX, e.pageY)) {
+		          $("body").css('cursor', 'pointer');
+		        }
+		        else if(isInRectangle(350 * ratioX, 160 * ratioY, 425 * ratioX, 300 * ratioY, e.pageX, e.pageY)) {
+		          $("body").css('cursor', 'pointer');
+		          $('img').css('display', 'none');
+		          $("#up").css('display', 'block');
+		        }
+		        else if(isInRectangle(350 * ratioX, 435 * ratioY, 430 * ratioX, 530 * ratioY, e.pageX, e.pageY)) {
+		          $("body").css('cursor', 'pointer');
+		          $('img').css('display', 'none');
+		          $("#ok").css('display', 'block');
+		        }
+		        else if(isInRectangle(350 * ratioX, 580 * ratioY, 425 * ratioX, 820 * ratioY, e.pageX, e.pageY)) {
+		          $("body").css('cursor', 'pointer');
+		          $('img').css('display', 'none');
+		          $('#down').css('display', 'block');
+		        } else{
+		          $('body').css('cursor', 'default')
+		          $("img").css('display' , 'none'); 
+		          $('#background').css('display', 'block');
+		        }
+		      });
+
+			$(document).click(function(e) {
+		        if(isInRectangle(28 * ratioX, 29 * ratioY, 390 * ratioX, 124 * ratioY, e.pageX, e.pageY)) {
+		          addNewStructure();
+		        }
+		        else if(isInRectangle(350 * ratioX, 160 * ratioY, 425 * ratioX, 300 * ratioY, e.pageX, e.pageY)) {
+		          up();
+		        }
+		        else if(isInRectangle(350 * ratioX, 435 * ratioY, 430 * ratioX, 530 * ratioY, e.pageX, e.pageY)) {
+		          StructuresObject.ok($(".selected").html());
+		        }
+		        else if(isInRectangle(350 * ratioX, 580 * ratioY, 425 * ratioX, 820 * ratioY, e.pageX, e.pageY)) {
+		          down();
+		        }
+		      });
+		});
+
+		function addNewStructure() {
+			$("#text").append("<tr><td><input id=\"nw\" type=\"text\"></td></tr>");
+			
+			$("#nw").keypress(function(e) {
+			    if(e.which == 13) {
+			     	StructuresObject.new($("#nw").val());   
+			    }
+			});
+		}
+
+		function addStructure(name) {
+			$("#text").append("<tr><td><span class=\"clickable\">" + name + "</span></td></tr>");
+		}
+
+		function up() {
+			var index = $(".selected").index("span");
+			$(".selected").removeClass("selected");
+
+			$("span:eq(" + (index - 1) + ")").addClass("selected");
+		}
+
+		function down() {
+			var index = $(".selected").index("span");
+			$(".selected").removeClass("selected");
+
+			$("span:eq(" + (index + 1) + ")").addClass("selected");
+		}
+
+
+		$(window).resize(function() {
+        	ratioX = parseInt($('#background').css('width')) / 450;
+        	ratioY = parseInt($('#background').css('height')) / 900;
+
+        	$("#text").css("top", 220  * ratioY + "px");
+	      	$("#text").css("left", 100 * ratioX + "px");
+	      	$("#text").css("font-size", 1.5 * (ratioX + ratioY) + "em");
+      	});
+
+	</script>
+</head>
+<body>
+	<div id="Scenarios">
+		<img src="../images/Structures/Scenario editor_click_up.png"   id="up"         style="position : absolute; top : 0; left : 0; height:100%;"/>
+		<img src="../images/Structures/Scenario editor_OK.png"         id="ok"         style="position : absolute; top : 0; left : 0; height:100%;"/>
+		<img src="../images/Structures/Scenario editor_click_down.png" id="down"       style="position : absolute; top : 0; left : 0; height:100%;"/>
+		<img src="../images/Structures/Scenario editor_normal.png"     id="background" style="position : absolute; top : 0; left : 0; height:100%;"/>
+
+		<table id="text">
+			<tr><td><span class="clickable">Default</span></td></tr>
+			<tr><td><span class="clickable">Test 2</span></td></tr>
+			<tr><td><span class="clickable">Test 3</span></td></tr>
+		</table>
+	</div>
+</body>
+</html>

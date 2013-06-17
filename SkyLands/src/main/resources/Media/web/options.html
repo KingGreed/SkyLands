@@ -7,64 +7,75 @@
   function isInRectangle(x1, y1, x2, y2, posX, posY) { return posX > x1 && posX < x2 && posY > y1 && posY < y2; }
   var ratioX = 1, ratioY = 1;
 
+    var Music = "on";
+    var Vsync = "on";
+
     $(window).load(function() {
+
+      ratioX = parseInt($('#map').css('width')) / 1600;
+      ratioY = parseInt($('#map').css('height')) / 900;
       $(window).mousemove(function(e) {
 
         if(isInRectangle(1448 * ratioX, 398 * ratioY, 1597 * ratioX, 841 * ratioY, e.pageX, e.pageY)){ //back
+          $("img").css("display", "none");
           $("#back").css("display", "block");
         } else if(isInRectangle(1277 * ratioX, 77 * ratioY, 1393 * ratioX, 431 * ratioY, e.pageX, e.pageY)){ //Music
-          $("#Music").css("display", "block");
-        } else if(isInRectangle(610 * ratioX, 295 * ratioY, 1110 * ratioX, 396 * ratioY, e.pageX, e.pageY)){ //Quality
-          $("#Quality").css("display", "block");
+          $("img").css("display", "none");
+          if(Music == "on") {
+            $("#MOn").css("display", "block");
+          } else {
+            $("#MOff").css("display", "block");
+          }
         } else if(isInRectangle(564 * ratioX, 491 * ratioY, 920 * ratioX, 636 * ratioY, e.pageX, e.pageY)){ //VSync
-          $("#Vsync").css("display", "block");
+          $("img").css("display", "none");
+          if(Vsync == "on") {
+            $("#VOn").css("display", "block");
+          } else {
+            $("#VOff").css("display", "block");
+          }
         } else {
-          $("#Vsync").css("display", "none");
-          $("#Quality").css("display", "none");
-          $("#Music").css("display", "none");
+          $("#MOff").css("display", "none");
+          $("#MOn").css("display", "none");
+          $("#VOff").css("display", "none");
+          $("#VOn").css("display", "none");
           $("#back").css("display", "none");
+          $("#map").css("display", "block");
         }
       });
 
       $(window).click(function(e) {
-
         if(isInRectangle(1448 * ratioX, 398 * ratioY, 1597 * ratioX, 841 * ratioY, e.pageX, e.pageY)){ //back
           OptionObject.back();
         } else if(isInRectangle(1277 * ratioX, 77 * ratioY, 1393 * ratioX, 431 * ratioY, e.pageX, e.pageY)){ //Music
-          if($("#MOn").css("display") == "none") {
-            $("#MOn").css("display", "block");
-            $("#MOff").css("display", "none");
-            OptionObject.Music("on");
-          } else {
-            $("#MOn").css("display", "none");
+          $("img").css("display", "none");
+          if(Music == "on") {
+            Music = "off";
             $("#MOff").css("display", "block");
             OptionObject.Music("off");
-          }
-
-        } else if(isInRectangle(610 * ratioX, 295 * ratioY, 1110 * ratioX, 396 * ratioY, e.pageX, e.pageY)){ //Quality
-          if($("#HQ").css("display") == "none") {
-            $("#HQ").css("display", "block");
-            $("#LQ").css("display", "none");
-            OptionObject.Quality("HQ");
           } else {
-            $("#HQ").css("display", "none");
-            $("#LQ").css("display", "block");
-            OptionObject.Quality("LQ");
+            Music = "on";
+            $("#MOn").css("display", "block");
+            OptionObject.Music("on");
           }
         } else if(isInRectangle(564 * ratioX, 491 * ratioY, 920 * ratioX, 636 * ratioY, e.pageX, e.pageY)){ //VSync
-          if($("#Voff").css("display") == "none") {
-            $("#Voff").css("display", "block");
-            $("#Von").css("display", "none");
+          $("img").css("display", "none");
+          if(Vsync == "on") {
+            Vsync = "off";
+            $("#VOff").css("display", "block");
             OptionObject.VSync("off");
           } else {
-            $("#Voff").css("display", "none");
-            $("#Von").css("display", "block");
+            Vsync = "on";
+            $("#VOn").css("display", "block");
             OptionObject.VSync("on");
           }
         }
-      });
 
-      //1520 506
+      });
+      
+      $(window).resize(function() {
+        ratioX = parseInt($('#map').css('width')) / 1600;
+        ratioY = parseInt($('#map').css('height')) / 900;
+      });
     });
 
 
@@ -72,18 +83,13 @@
 </head>
 <body>
   
-    <img src="../images/Options/Menu_Options_normal.png" id="background" style="position:absolute; top : 0px; left: 0px;" />
+  <img src="../images/Options/Menu_Options_normal.png"    id="map"  style="height: 100%; width: 100%;" />
+  <img src="../images/Options/Menu_Options_Back.png"      id="back" style="height: 100%; width: 100%; position : absolute; top : 0; left : 0;" />
+  <img src="../images/Options/Menu_Options_Music_Off.png" id="MOff" style="height: 100%; width: 100%; position : absolute; top : 0; left : 0;" />
+  <img src="../images/Options/Menu_Options_Music_On.png"  id="MOn"  style="height: 100%; width: 100%; position : absolute; top : 0; left : 0;" />
+  <img src="../images/Options/Menu_Options_VSYNC_Off.png" id="VOff" style="height: 100%; width: 100%; position : absolute; top : 0; left : 0;" />
+  <img src="../images/Options/Menu_Options_VSYNC_On.png"  id="VOn"  style="height: 100%; width: 100%; position : absolute; top : 0; left : 0;" />
 
-	<img src="../images/Options/Back.png"         id="back"    style="position:absolute; top : 398px; left: 1448px; display:none;" />
-  <img src="../images/Options/Music.png"        id="Music"   style="position:absolute; top : 77px;  left: 1277px; display:none;" />
-  <img src="../images/Options/Quality.png"      id="Quality" style="position:absolute; top : 295px; left: 610px;  display:none;" />
-  <img src="../images/Options/Vsync.png"        id="Vsync"   style="position:absolute; top : 491px; left: 564;    display:none;" />
-  <img src="../images/Options/High_Quality.png" id="HQ"      style="position:absolute; top : 150px; left: 32px;" />
-  <img src="../images/Options/Music_On.png"     id="MOn"     style="position:absolute; top : 77px; left: 1412px;" />
-  <img src="../images/Options/VSYNC_Off.png"    id="Voff"    style="position:absolute; top : 496px; left: 942px;"  />
-  <img src="../images/Options/Music_Off.png"    id="MOff"    style="position:absolute; top : 201px;  left: 1412px; display:none;" />
-  <img src="../images/Options/VSYNC_On.png"     id="Von"     style="position:absolute; top : 494px; left: 309px;  display:none;" />
-  <img src="../images/Options/Low_Quality.png"  id="LQ"      style="position:absolute; top : 342px; left: 38px;   display:none;" />
 
 </body>
 </html>

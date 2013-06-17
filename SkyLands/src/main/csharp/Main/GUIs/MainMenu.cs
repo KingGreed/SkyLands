@@ -21,13 +21,19 @@ namespace Game.GUIs {
             base.onDocumentReady(sender, e);
             
             JSObject j = OgreForm.webView.CreateGlobalJavascriptObject("MainMenuJSObject");
-            j.Bind("exit", false, (sender1, args) => this.mStateMgr.RequestStatePop());
-            j.Bind("play", false, HideAndPlay);
+            j.Bind("exit",   false, (sender1, args) => this.mStateMgr.RequestStatePop());
+            j.Bind("play",   false, HideAndPlay);
+            j.Bind("option", false, HideAndOption);
         }
 
         private void HideAndPlay(object sender, EventArgs e) {
             Visible = false;
             new PlayMenu(this.mStateMgr);
+        }
+
+        private void HideAndOption(object sender, EventArgs e) {
+            Visible = false;
+            new OptionMenu(this.mStateMgr);
         }
     }
 }

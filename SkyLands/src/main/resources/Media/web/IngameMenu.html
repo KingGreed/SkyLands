@@ -1,0 +1,64 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="ScenarioEditorChooseScenario.css" />
+	<script type="text/javascript" src="jquery.js"> </script>
+	<script>
+		var ratioX = 1, ratioY = 1;
+		function isInRectangle(x1, y1, x2, y2, posX, posY) { return posX > x1 && posX < x2 && posY > y1 && posY < y2; }
+		$(window).load(function() {
+
+			ratioX = parseInt($('#background').css('width')) / 500;
+      		ratioY = parseInt($('#background').css('height')) / 450;
+
+			$(document).mousemove(function(e) {
+		        if(isInRectangle(38 * ratioX, 37 * ratioY, 461 * ratioX, 122 * ratioY, e.pageX, e.pageY)) {
+		          $("body").css('cursor', 'pointer');
+		          $('img').css('display', 'none');
+		          $("#Menu").css('display', 'block');
+		        }
+		        else if(isInRectangle(67 * ratioX, 147 * ratioY, 432 * ratioX, 301 * ratioY, e.pageX, e.pageY)) {
+		          $("body").css('cursor', 'pointer');
+		          $('img').css('display', 'none');
+		          $("#save").css('display', 'block');
+		        }
+		        else if(isInRectangle(101 * ratioX, 317 * ratioY, 398 * ratioX, 409 * ratioY, e.pageX, e.pageY)) {
+		          $("body").css('cursor', 'pointer');
+		          $('img').css('display', 'none');
+		          $('#back').css('display', 'block');
+		        } else{
+		          $('body').css('cursor', 'default')
+		          $("img").css('display' , 'none'); 
+		          $('#background').css('display', 'block');
+		        }
+		      });
+
+			$(document).click(function(e) {
+		        if(isInRectangle(38 * ratioX, 37 * ratioY, 461 * ratioX, 122 * ratioY, e.pageX, e.pageY)) {
+		          	IngameMenuObject.Menu();
+		        }
+		        else if(isInRectangle(67 * ratioX, 147 * ratioY, 432 * ratioX, 301 * ratioY, e.pageX, e.pageY)) {
+		          IngameMenuObject.save();
+		        }
+		        else if(isInRectangle(101 * ratioX, 317 * ratioY, 398 * ratioX, 409 * ratioY, e.pageX, e.pageY)) {
+		          IngameMenuObject.back();
+		        }
+		      });
+		});
+		});
+
+		$(window).resize(function() {
+        	ratioX = parseInt($('#background').css('width')) / 500;
+        	ratioY = parseInt($('#background').css('height')) / 450;
+      	});
+
+	</script>
+</head>
+<body>
+	<div id="Scenarios">
+		<img src="../images/IngameMenu/ingame menu_back.png"   id="back"       style="position : absolute; top : 0; left : 0;"/>
+		<img src="../images/IngameMenu/ingame menu_main.png"   id="Menu"       style="position : absolute; top : 0; left : 0;"/>
+		<img src="../images/IngameMenu/ingame menu_save.png"   id="save"       style="position : absolute; top : 0; left : 0;"/>
+		<img src="../images/IngameMenu/ingame menu_normal.png" id="background" style=""/>
+	</div>
+</body>
+</html>

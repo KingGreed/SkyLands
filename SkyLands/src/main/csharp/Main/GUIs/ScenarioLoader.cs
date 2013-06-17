@@ -6,36 +6,51 @@ using Game.States;
 using System.Windows.Forms;
 
 using Game.BaseApp;
+using System.IO;
 
 namespace Game.GUIs {
     public class ScenarioLoader : GUI {
         private readonly StateManager mStateMgr;
+        private string ScenarioSelected;
+
+        ///TODO explore for scenarios
 
         public ScenarioLoader(StateManager stateMgr)
-            : base(new Vector2(0, 0), new Vector2(404, 404), "play.html", DockStyle.Fill) {
+            : base(new Vector2(0, 0), new Vector2(404, 404), "ScenarioEditorChooseScenario.html", DockStyle.Fill) {
             this.mStateMgr = stateMgr;
         }
 
         public override void onDocumentReady(object sender, UrlEventArgs e) {
             base.onDocumentReady(sender, e);
             JSObject j = OgreForm.webView.CreateGlobalJavascriptObject("ScenarioLoaderObject");
-            j.Bind("back", false, HideAndPlay);
-            j.Bind("play", false, (s, args) => this.mStateMgr.RequestStatePush(typeof(GameState)));
-            j.Bind("load", false, Load);
-            j.Bind("scenario", false, Scenario);
+            j.Bind("edit", false, edit);
+            j.Bind("new", false, New);
+            j.Bind("ok", false, ok);
         }
 
-        private void HideAndPlay(object sender, EventArgs e) {
+        private void ok(object sender, EventArgs e) {
             Visible = false;
             new MainMenu(this.mStateMgr);
         }
 
-        private void Load(object sender, EventArgs e) {
+        private void New(object sender, JavascriptMethodEventArgs e) {
 
+            this.ScenarioSelected = (string)e.Arguments[0];
+
+            var StructuresfileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" + this.ScenarioSelected + "\\structures.scenario";
+            using(TextWriter writer = new StreamWriter(StructuresfileName)) { }
+
+            Visible = false;
+            new StructuresMenu(this.mStateMgr, ScenarioSelected);
+       
         }
 
-        private void Scenario(object sender, EventArgs e) {
-            Visible = false;
+        private void edit(object sender, EventArgs e) {
+            
+        }
+
+        private void update(object sender, JavascriptMethodEventArgs e) {
+            this.ScenarioSelected = (string)e.Arguments[0];
         }
     }
 }
