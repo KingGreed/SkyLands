@@ -78,10 +78,18 @@ namespace Game.CharacSystem
                 {
                     if (characList[i].WaitForRemove)
                     {
-                        VanillaCharacter charac = characList[i];
-                        characList.Remove(characList[i]);
-                        if (charac.Dispose()) { this.MainPlayer = null; }
-                        continue;
+                        if (characList[i] is VanillaPlayer)
+                            characList[i].teleport(characList[i].getSpawnPoint());
+                        else
+                        {
+                            VanillaCharacter charac = characList[i];
+                            characList.Remove(characList[i]);
+                            if (charac.Dispose())
+                            {
+                                this.MainPlayer = null;
+                            }
+                            continue;
+                        }
                     }
                     characList[i].Update(frameTime);
                 }

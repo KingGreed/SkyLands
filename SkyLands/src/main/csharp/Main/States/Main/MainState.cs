@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using Game.csharp.Main.RTS.Buildings;
 using Mogre;
 using Awesomium.Core;
 
@@ -20,6 +21,7 @@ namespace Game.States
         public User      User      { get; protected set; }
         public CharacMgr CharacMgr { get; protected set; }
         public MainWorld World     { get; protected set; }
+        public BuildingManager BuildingMgr { get; protected set; }
 
         protected MainState(StateManager stateMgr, string name) : base(stateMgr, name) { }
 
@@ -27,9 +29,9 @@ namespace Game.States
         {
             this.World = new MainWorld(this.mStateMgr);
             this.World.setSafeSpawnPoint();
-            Building.Island = this.World.getIsland();
 
-            this.User = new User(this.mStateMgr, this.World);
+            this.BuildingMgr = new BuildingManager(this.mStateMgr, this.World.getIsland());
+            this.User = new User(this.mStateMgr, this.World, this.BuildingMgr);
 
             if (!GUI.WebControls.Contains(OgreForm.SelectBar))
                 GUI.WebControls.Add(OgreForm.SelectBar);

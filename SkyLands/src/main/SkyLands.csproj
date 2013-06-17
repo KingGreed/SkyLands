@@ -2556,7 +2556,8 @@
     <Compile Include="csharp\Main\GUIs\InventoryGUI.cs" />
     <Compile Include="csharp\Main\GUIs\ScenarioCreator.cs" />
     <Compile Include="csharp\Main\GUIs\Selector.cs" />
-    <Compile Include="csharp\Main\RTS\Buildings\Buildings.cs">
+    <Compile Include="csharp\Main\RTS\Buildings\BuildingManager.cs" />
+    <Compile Include="csharp\Main\RTS\Buildings\Building.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\Characters\Animations\Anim.cs">
@@ -2594,6 +2595,7 @@
     </Compile>
     <Compile Include="csharp\Main\Characters\Misc\YawFactor.cs" />
     <Compile Include="csharp\Main\RTS\AIRTS.cs" />
+    <Compile Include="csharp\Main\RTS\Buildings\CrystalDrill.cs" />
     <Compile Include="csharp\Main\RTS\PlayerRTS.cs" />
     <Compile Include="csharp\Main\RTS\RTSManager.cs" />
     <Compile Include="csharp\Main\Characters\Shoot\Bullet.cs" />

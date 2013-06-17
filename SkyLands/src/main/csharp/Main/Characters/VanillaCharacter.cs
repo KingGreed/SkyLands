@@ -392,6 +392,7 @@ namespace Game.CharacSystem
             this.MovementInfo.IsMovementForced = false;
             this.mPreviousDirection = Vector3.ZERO;
             this.mForcedDestination.Clear();
+            this.WaitForRemove = false;
 
             Vector3 prevBlockPos = this.BlockPosition;
             this.FeetPosition = loc;

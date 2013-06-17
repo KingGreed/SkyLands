@@ -1,22 +1,33 @@
-﻿using API.Geo.Cuboid;
-
+﻿using API.Generic;
+using Game.World.Generator;
 using Mogre;
+
+using API.Geo.Cuboid;
+using Game.States;
 
 namespace Game.RTS
 {
-    class HeadQuarter : Building
+    public class HeadQuarter : Building
     {
-        public HeadQuarter(Vector3 position) : base(position) { }
+        public Vector3 SpawnPoint { get; set; }
 
-        protected override void Create()
+        private const int sizeX = 10, sizeY = 8, sizeZ = 10;
+
+        public HeadQuarter(StateManager stateMgr, Island island, Vector3 position) : base(stateMgr, island, position) { }
+        protected override void Init()
         {
-            const int sizeX = 10, sizeY = 8, sizeZ = 10;
+            this.SpawnPoint = new Vector3(5, 1, 5);
+            this.mStateMgr.MainState.CharacMgr.MainPlayer.setSpawnPoint((this.SpawnPoint + this.Position) * Cst.CUBE_SIDE);
 
             this.Size = new Vector3(sizeX, sizeY, sizeZ);
             this.mBuilding = new byte[sizeX, sizeY, sizeZ];
-            this.mNeededRessources.Add(2, 5);   // dirt
-            this.mNeededRessources.Add(13, 20); // planks
-            
+            this.mConstrBlock.AddRemainingRessource(2, 5);   // dirt
+            this.mConstrBlock.AddRemainingRessource(13, 20); // planks
+            this.mConsBlockPos = this.SpawnPoint;
+        }
+
+        protected override void Create()
+        {
             byte[,] _base = new byte[sizeX, sizeZ]
             {
                 {0,0,1,1,1,1,1,1,0,0},
@@ -89,6 +100,14 @@ namespace Game.RTS
             for (int x = 0; x < sizeX; x++)
                 for (int z = 0; z < sizeX; z++)
                     this.mBuilding[x, 7, z] = (byte)((_base[x, z] == 0) ? 0 : darkWood);
+
+            base.Create();
+        }
+
+        protected override void OnBuild()
+        {
+            User.RequestBuilderClose = true;
+            base.OnBuild();
         }
     }
 }

@@ -80,10 +80,7 @@ namespace Game.BaseApp {
 
         public void Go() {
             this.Show();
-            while (mRoot != null && mRoot.RenderOneFrame())
-            {
-                Application.DoEvents();
-            }
+            while (mRoot != null && mRoot.RenderOneFrame()) { Application.DoEvents(); }
         }
 
         public bool Setup() {

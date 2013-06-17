@@ -52,20 +52,18 @@ namespace Game.GUIs
             for (int i = 0; i < Inventory.MagicCubes.Count; i++)
                 inventory.addAt(new Slot(1, keys[i]), i, 3);
 
-            /* Temp */
+            // TODO : Temp
             inventory.addAt(new Slot(5, 7), 3, 3);
             inventory.addAt(new Slot(10, 4), 0, 0);
             inventory.addAt(new Slot(30, 13), 1, 0);
-            inventory.addAt(new Slot(10, 2), 2, 0);
+            inventory.addAt(new Slot(5, 2), 2, 0);
+            inventory.addAt(new Slot(50, 3), 3, 0);
 
             IsBullet = false;
             SelectorPos = 0;
         }
 
-        public static void Resize(Vector2 newSize)
-        {
-            //GUI.ResizeJavascript(OgreForm.SelectBar, newSize.x / OgreForm.SelectBar.Size.Width,
-                                                     //newSize.y / OgreForm.SelectBar.Size.Height);
+        public static void Resize(Vector2 newSize) {
             OgreForm.SelectBar.Size = new Size((int)newSize.x, (int)newSize.y);
         }
 
@@ -73,7 +71,7 @@ namespace Game.GUIs
         {
             if(imgName != "")
                 OgreForm.SelectBar.ExecuteJavascript("setMaterialAt(" + position + ", '" + imgName + "')");
-            if(imgName != "blank.png")
+            if(imgName != "blank.png" && amount > 0)
                 OgreForm.SelectBar.ExecuteJavascript("setAmountAt(" + position + ", " + amount + ")");
             if (position == pos) { SelectorPos = pos; } // Actualise the static infos
         }

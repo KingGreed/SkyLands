@@ -35,7 +35,7 @@ namespace Game.GUIs
             int position = (int)args.Arguments[0] - 30;
             string[] temp = args.Arguments[1].ToString().Split('/');
             string imageName = temp[temp.Length - 1];
-            int amount = 1;
+            int amount = int.Parse(args.Arguments[2]);
 
             Selector.SetBlockAt(position, imageName, amount);
         }

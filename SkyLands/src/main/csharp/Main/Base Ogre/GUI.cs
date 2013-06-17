@@ -42,7 +42,7 @@ namespace Game.BaseApp {
             OgreForm.webView.Dock = d;
         }
 
-        public void whenDocumentReady(object sender, UrlEventArgs e) {  //TODO : Error when changing island. All the onDocumentReady are called again
+        public void whenDocumentReady(object sender, UrlEventArgs e) {
             if(OgreForm.webView == null || !OgreForm.webView.IsLive) { return; }
             this.onDocumentReady(sender, e);
             OgreForm.webView.DocumentReady -= this.whenDocumentReady;

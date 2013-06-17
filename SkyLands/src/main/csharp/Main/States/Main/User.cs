@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using Game.RTS;
+using Game.csharp.Main.RTS.Buildings;
 using Mogre;
 
 using API.Generic;
@@ -18,7 +20,7 @@ namespace Game
 {
     public class User
     {
-        private const float DIST_MIN_SELECTION = 30;
+        private const float DIST_MIN_SELECTION = 0;
         private const float DIST_MAX_SELECTION = 250;
 
         private readonly StateManager  mStateMgr;
@@ -28,26 +30,29 @@ namespace Game
         private SceneNode mCamYawNode, mCamPitchNode;
         private readonly SceneNode mWireCube;
         private bool mIsInventoryOpen, mIsBuilderOpen;
+        private BuildingManager mBuildingMgr;
 
         private Vector3 mSelectedBlockPos;
         private Block   mSelectedBlock;
         private readonly MOIS.KeyCode[] mFigures;
 
-        public static Inventory BuilderInventory { get; set; }
+        public static ConstructionBlock ActConstrBlock { get; set; }
         public static bool OpenBuilder { get; set; }
+        public static bool RequestBuilderClose { get; set; }
         public bool IsAllowedToMoveCam { get; set; }
         public bool IsFreeCamMode      { get; private set; }
         public Inventory Inventory     { get; private set; }
 
-        public User(StateManager stateMgr, API.Geo.World world)
+        public User(StateManager stateMgr, API.Geo.World world, BuildingManager buildingMgr)
         {
             this.mStateMgr = stateMgr;
             this.mWorld = world;
+            this.mBuildingMgr = buildingMgr;
 
             this.mCameraMan = null;
             this.IsAllowedToMoveCam = true;
             this.IsFreeCamMode = true;
-            BuilderInventory = null;
+            ActConstrBlock = null;
 
             this.mFigures = new MOIS.KeyCode[10];
             for (int i = 0; i < 9; i++)
@@ -111,8 +116,16 @@ namespace Game
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.Start) && GUI.Visible)
             {
                 if (this.mIsInventoryOpen) { this.SwitchInventory(false); this.mIsInventoryOpen = false; }
-                else if (this.mIsBuilderOpen) { this.mIsBuilderOpen = false; }
+                else if (this.mIsBuilderOpen) { this.mIsBuilderOpen = false; ActConstrBlock.Building.ConfirmBuilding(); }
 
+                this.SwitchGUIVisibility(false);
+                GUI.Visible = false;
+            }
+
+            if (RequestBuilderClose && this.mIsBuilderOpen)
+            {
+                RequestBuilderClose = false;
+                this.mIsBuilderOpen = false;
                 this.SwitchGUIVisibility(false);
                 GUI.Visible = false;
             }
@@ -130,7 +143,7 @@ namespace Game
 
             if (OpenBuilder)
             {
-                new Builder(this.mSelectedBlockPos);
+                new Builder(this.mBuildingMgr, this.mSelectedBlockPos);
                 Builder.OnOpen = this.OnBuilderOpen;
                 OpenBuilder = false;
                 this.mIsBuilderOpen = true;
@@ -194,12 +207,7 @@ namespace Game
         public void OnBuilderOpen()
         {
             this.OnInventoryOpen();
-            this.OnOpen(BuilderInventory, BuilderInventory.X * 4);
-        }
-
-        public void OnBuilderClose()
-        {
-            this.Inventory.OnClose(BuilderInventory);
+            ActConstrBlock.DrawRemainingRessource();
         }
 
         public void OnOpen(Inventory inventory, int initIndex)
@@ -267,6 +275,9 @@ namespace Game
             this.mSelectedBlock = actBlock;
             this.mWireCube.SetVisible(true);
             this.mWireCube.Position = (this.mSelectedBlockPos + Vector3.NEGATIVE_UNIT_Z) * Cst.CUBE_SIDE;
+
+            ConstructionBlock selectedBlock = this.mSelectedBlock as ConstructionBlock;
+            if (selectedBlock != null) { ActConstrBlock = selectedBlock; }
 
             return distance;
         }
@@ -339,6 +350,13 @@ namespace Game
 
             this.mWorld.getIsland().addBlockToScene(addedBlockPos, name);
             this.mWorld.onCreation(addedBlockPos);
+
+            ConstructionBlock selectedBlock = this.mSelectedBlock as ConstructionBlock;
+            if (selectedBlock != null)
+            {
+                ActConstrBlock = selectedBlock;
+                selectedBlock.Faction = Faction.Blue;
+            }
 
             this.Inventory.removeAt(Selector.SelectorPos, 3, 1);
         }

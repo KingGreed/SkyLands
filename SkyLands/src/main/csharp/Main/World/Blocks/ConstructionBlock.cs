@@ -1,23 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 
-using Game.CharacSystem;
+using Game.BaseApp;
+using Game.RTS;
+using Game.World.Generator;
 
 namespace Game.World.Blocks
 {
-    class ConstructionBlock : VanillaBlock
+    public class ConstructionBlock : VanillaBlock
     {
-        private Inventory mInventory;
-        
+        public string Selection { get; set; }
+        public Building Building { get; set; }
+        public Dictionary<byte, int> RemainingRessources { get; private set; }
+
+        public Faction Faction { get; set; }
+
         public ConstructionBlock()
         {
             this.mName = "Construction";
             this.mMaterial = "";
             this.mItemTexture = "constructionBlockSide2.png";
             this.mId = 7;
-            this.mInventory = new Inventory(5, 3, new int[] {0, 1, 2}, false);
+            this.Selection = "";
+            this.RemainingRessources = new Dictionary<byte, int>();
+            this.Faction = Faction.Red;
         }
 
         public override string getFace(int i) {
@@ -35,8 +40,26 @@ namespace Game.World.Blocks
         public override bool onLeftClick()
         {
             User.OpenBuilder = true;
-            User.BuilderInventory = this.mInventory;
+            User.ActConstrBlock = this;
             return false;
+        }
+
+        public void AddRemainingRessource(byte b, int amount)
+        {
+            if (!this.RemainingRessources.ContainsKey(b))
+                this.RemainingRessources.Add(b, amount);
+        }
+
+        public void DrawRemainingRessource()
+        {
+            if (this.Selection == "") { return; }
+
+            int i = 40;
+            foreach (byte b in this.RemainingRessources.Keys)
+            {
+                GUI.SetBlockAt(i, VanillaChunk.staticBlock[VanillaChunk.byteToString[b]].getItemTexture(), this.RemainingRessources[b]);
+                i++;
+            }
         }
     }
 }

@@ -67,7 +67,7 @@ namespace Game.CharacSystem
             this.addAt(s, this.getFreeSlot());
         }
 
-        public void OnClose(Inventory builder = null)
+        public void OnClose()
         {
             foreach (int y in this.mYValues)
             {
@@ -85,19 +85,11 @@ namespace Game.CharacSystem
                 }
             }
 
-            Inventory special = this;
-            int iMax = 48;
-            if (builder != null)
-            {
-                special = builder;
-                iMax = 55;
-            }
-
             /* get crafting table */
-            for (int i = 40; i <= iMax; i++)
+            for (int i = 40; i < 49; i++)
             {
                 int amount = GUI.GetAmountAt(i);
-                if (amount >= 0) { special.Add(this.GetIdFromIndex(i), amount); }
+                if (amount >= 0) { this.Add(this.GetIdFromIndex(i), amount); }
             }
         }
 
@@ -131,6 +123,25 @@ namespace Game.CharacSystem
                 return s;
             } else { this.mInventory[y, x].amount += s.amount; return null; }
         }
+
+        /*public Dictionary<byte, int> GetItems()
+        {
+            Dictionary<byte, int> ressources = new Dictionary<byte, int>();
+            for (int y = 0; y < this.Y; y++)
+            {
+                for (int x = 0; x < this.X; x++)
+                {
+                    Slot s = this.mInventory[y, x];
+                    if (s.item == 0) { continue; }
+                    if (ressources.ContainsKey(s.item))
+                        ressources[s.item] += s.amount;
+                    else
+                        ressources.Add(s.item, s.amount);
+                }
+            }
+
+            return ressources;
+        }*/
 
         public void removeAt(int x, int y, int amount)
         {
