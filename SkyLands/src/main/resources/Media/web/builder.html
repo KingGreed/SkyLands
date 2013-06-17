@@ -252,10 +252,22 @@
 				
 				var item = $(".slot:eq(" + pos + ")");
 
-				item.children("img").attr("src", val);
+				item.children("img").attr("src", "../materials/textures/" + val);
+				
 				item.children("span").html(amount);
+				if(amount >= 10) {
+					$(".num:eq(" + pos + ")").css("left", 10 * RatioTotalX);
+				}
 
 				item.data("max", max).data("magic", magic);
+			}
+
+			function getAmountAt(pos) {
+				return $(".num:eq(" + pos + ")").html();
+			}
+
+			function getImageAt(pos) {
+				return $(".item:eq(" + pos + ")").attr("src");
 			}
 
 		</script>
