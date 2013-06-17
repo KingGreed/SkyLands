@@ -2,10 +2,23 @@ body {
 	overflow: hidden;
 	background-repeat: no-repeat;
 	color: whitesmoke;
+	background-color: black;
+
 }
 
 #background {
 	position: absolute;
 	top: 0px;
 	left: 0px;
+}
+#text {
+	position : absolute;
+	top: 220;
+	left: 480;
+	font-size: 1.5em;
+}
+
+
+.selected {
+	border: solid 1px blue;
 }

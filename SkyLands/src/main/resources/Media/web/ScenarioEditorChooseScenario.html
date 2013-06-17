@@ -4,19 +4,26 @@
 	<script type="text/javascript" src="jquery.js"> </script>
 	<script>
 		$(function() {
-
+			$(".clickable").click(function() {
+				$(".clickable").removeClass("selected");
+				$(this).addClass("selected")
+			});
 
 		});
+
+		function addScenario(name) {
+			$("#text").append("<tr><td><span class=\"clickable\">" + name + "</span></td></tr>");
+		}
+
 	</script>
 </head>
 <body>
 	<div id="Scenarios">
 		<img src="../images/Load_scenario_normal.png" id="background"/>
-		<table>
-			<tr><td>Test 1</td></tr>
-			<tr><td>Mon super Scenario de la mort qui tue avec un nom super long</td></tr>
-			<tr><td>Test 2</td></tr>
-			<tr><td>J'ai plus d'idees</td></tr>
+		<table id="text">
+			<tr><td><span class="clickable">Default</span></td></tr>
+			<tr><td><span class="clickable">Test 2</span></td></tr>
+			<tr><td><span class="clickable">Test 3</span></td></tr>
 		</table>
 	</div>
 </body>
