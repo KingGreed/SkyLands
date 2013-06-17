@@ -246,7 +246,9 @@
 					revert: function () {
 						if (Selected == null) {
 							return true;
-						} else if(SelectedPos >= 40 && (Selected.children("img").attr("src") != "../images/blank.png") || Position == 49) {
+						} else if(SelectedPos >= 40 && Selected.children("img").attr("src") != "../images/blank.png") {
+							return true;
+						} else if(Position == 49 && SelectedPos >= 40) {
 							return true;
 						}
 						return false;
