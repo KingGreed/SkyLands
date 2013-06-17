@@ -212,7 +212,7 @@
 
 						if(Position >= 30 && Position < 40) {
 							if(typeof(BuilderObject) != "undefined") {
-								BuilderObject.selectBarUpdate(SelectedPos, Selected.children("img").attr("src"), Selected.children("span").html());
+								BuilderObject.selectBarUpdate(Position, $(this).attr("src"), Selected.children("span").html());
 							}
 						}
 
