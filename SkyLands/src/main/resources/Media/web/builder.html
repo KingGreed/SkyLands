@@ -135,7 +135,6 @@
 							SelectedPos = 40 + row * 5 + col;
 
 							Selected = $(".slot:eq(" + (SelectedPos) + ")");
-							Selected.css("opacity", "0.5");
 						}
 					},
 					stop: function(e, ui) {
@@ -205,7 +204,13 @@
 							}
 						}
 
-						if((SelectedPos >= 30 && SelectedPos < 40) || (Position >= 30 && Position <= 40)) {
+						if(SelectedPos >= 30 && SelectedPos < 40) {
+							if(typeof(BuilderObject) != "undefined") {
+								BuilderObject.selectBarUpdate(SelectedPos, Selected.children("img").attr("src"), Selected.children("span").html());
+							}
+						}
+
+						if(Position >= 30 && Position < 40) {
 							if(typeof(BuilderObject) != "undefined") {
 								BuilderObject.selectBarUpdate(SelectedPos, Selected.children("img").attr("src"), Selected.children("span").html());
 							}

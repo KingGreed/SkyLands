@@ -4,11 +4,7 @@
 	<script type="text/javascript" src="jquery.js"> </script>
 	<script>
 		$(function() {
-			$(".clickable").click(function() {
-				$(".clickable").removeClass("selected");
-				$(this).addClass("selected")
-			});
-
+			
 		});
 
 		function addScenario(name) {
@@ -19,7 +15,10 @@
 </head>
 <body>
 	<div id="Scenarios">
-		<img src="../images/Load_scenario_normal.png" id="background"/>
+		<img src="../images/ScenarioLoader/Load_scenario_normal.png" id="background"/>
+		<img src="../images/ScenarioLoader/Edit.png" id="edit" style="display : none;" />
+		<img src="../images/ScenarioLoader/New.png"  id="new"  style="display : none;" />
+		<img src="../images/ScenarioLoader/Ok.png"   id="ok"   style="display : none;"/>
 		<table id="text">
 			<tr><td><span class="clickable">Default</span></td></tr>
 			<tr><td><span class="clickable">Test 2</span></td></tr>
