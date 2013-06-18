@@ -34,7 +34,9 @@ namespace Game.GUIs {
         }
 
         private void Load(object sender, EventArgs e) {
-
+            this.mStateMgr.GameInfo = new World.GameInfo(true);
+            this.mStateMgr.RequestStatePush(typeof(GameState));
+            
         }
 
         private void Scenario(object sender, EventArgs e) {

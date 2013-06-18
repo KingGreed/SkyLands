@@ -30,10 +30,10 @@
 
       $(document).click(function(e) {
         if(isInRectangle(61 * ratioX, 165 * ratioY, 269 * ratioX, 317 * ratioY, e.pageX, e.pageY)){ //back
-          PlayMenuJSObject.back();
+          DeathObject.again();
         }
         else if(isInRectangle(1157 * ratioX, 658 * ratioY, 1365 * ratioX, 810 * ratioY, e.pageX, e.pageY)){ //load game
-          PlayMenuJSObject.load();
+          DeathObject.exit();
         }
       });
       $(window).resize(function() {

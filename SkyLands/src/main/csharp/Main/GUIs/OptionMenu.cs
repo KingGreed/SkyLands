@@ -21,10 +21,12 @@ namespace Game.GUIs {
             base.onDocumentReady(sender, e);
 
             JSObject j = OgreForm.webView.CreateGlobalJavascriptObject("OptionObject");
-            j.Bind("back",    false, HideAndMain);
-            j.Bind("Music",   false, MusicUpdate);
-            j.Bind("Quality", false, QualityUpdate);
-            j.Bind("Vsync",   false, VsyncUpdate);
+            if(j != null) {
+                j.Bind("back", false, HideAndMain);
+                j.Bind("Music", false, MusicUpdate);
+                j.Bind("Quality", false, QualityUpdate);
+                j.Bind("Vsync", false, VsyncUpdate);
+            }
         }
 
         private void HideAndMain(object sender, EventArgs e) {
