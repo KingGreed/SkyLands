@@ -9,7 +9,8 @@ namespace Game.RTS
     {
         private const int sizeX = 5, sizeY = 6, sizeZ = 5;
 
-        public CrystalDrill(StateManager stateMgr, Island island, Vector3 position) : base(stateMgr, island, position) { }
+        public CrystalDrill(StateManager stateMgr, Island island, Vector3 position, Faction fact, string selection)
+            : base(stateMgr, island, position, fact, selection) { }
         protected override void Init()
         {
             this.Size = new Vector3(sizeX, sizeY, sizeZ);

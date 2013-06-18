@@ -37,7 +37,6 @@ namespace Game
         private readonly MOIS.KeyCode[] mFigures;
         private Timer mTimeSinceGUIOpen;
 
-        public static ConstructionBlock ActConstrBlock { get; set; }
         public static bool OpenBuilder { get; set; }
         public static bool RequestBuilderClose { get; set; }
         public bool IsAllowedToMoveCam { get; set; }
@@ -58,8 +57,6 @@ namespace Game
             cam.Position = new Vector3(-203, 633, -183);
             cam.Orientation = new Quaternion(0.3977548f, -0.1096644f, -0.8781486f, -0.2421133f);
             this.mCameraMan = new CameraMan(cam);
-
-            ActConstrBlock = null;
 
             this.mFigures = new MOIS.KeyCode[10];
             for (int i = 0; i < 9; i++)
@@ -145,8 +142,8 @@ namespace Game
                     else if (this.mIsBuilderOpen)
                     {
                         this.mIsBuilderOpen = false;
-                        if (ActConstrBlock.Building != null)
-                            ActConstrBlock.Building.ConfirmBuilding();
+                        if (this.mBuildingMgr.HasActualBuilding())
+                            this.mBuildingMgr.GetActualBuilding().WaitForRessources();
                     }
                     else
                     {
@@ -182,9 +179,8 @@ namespace Game
 
             if (OpenBuilder)
             {
-                System.Console.WriteLine("builder open started" );
-                new Builder(this.mBuildingMgr, this.mSelectedBlockPos);
                 Builder.OnOpen = this.OnBuilderOpen;
+                new Builder(this.mBuildingMgr, this.mSelectedBlockPos);
                 OpenBuilder = false;
                 this.mIsBuilderOpen = true;
                 this.SwitchGUIVisibility(true);
@@ -243,9 +239,13 @@ namespace Game
 
         public void OnBuilderOpen()
         {
-            System.Console.WriteLine("OnOpen. Selected : " + ActConstrBlock.Selection);
+            System.Console.WriteLine("OnBuilderOpen : ");
             this.OnInventoryOpen();
-            //ActConstrBlock.DrawRemainingRessource();
+            if (this.mBuildingMgr.HasActualBuilding() && !this.mBuildingMgr.GetActualBuilding().RessourcesDisplayed)
+            {
+                System.Console.WriteLine(this.mBuildingMgr.GetActualBuilding().Selection);
+                this.mBuildingMgr.GetActualBuilding().DrawRemainingRessource();
+            }
         }
 
         public void OnOpen(Inventory inventory, int initIndex)
@@ -313,6 +313,10 @@ namespace Game
             this.mSelectedBlock = actBlock;
             this.mWireCube.SetVisible(true);
             this.mWireCube.Position = (this.mSelectedBlockPos + Vector3.NEGATIVE_UNIT_Z) * Cst.CUBE_SIDE;
+
+            ConstructionBlock constr = this.mSelectedBlock as ConstructionBlock;
+            if (constr != null) { this.mBuildingMgr.ActConstBlock = constr; }
+            else if (!this.mIsBuilderOpen && this.mBuildingMgr.ActConstBlock != null) { this.mBuildingMgr.ActConstBlock = null; }
 
             return distance;
         }
@@ -385,9 +389,6 @@ namespace Game
 
             this.mWorld.getIsland().addBlockToScene(addedBlockPos, name);
             this.mWorld.onCreation(addedBlockPos);
-
-            ConstructionBlock selectedBlock = this.mSelectedBlock as ConstructionBlock;
-            if (selectedBlock != null) { selectedBlock.Faction = Faction.Blue; }
 
             this.Inventory.removeAt(Selector.SelectorPos, 3, 1);
         }

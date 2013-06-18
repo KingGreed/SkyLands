@@ -8,19 +8,12 @@ namespace Game.World.Blocks
 {
     public class ConstructionBlock : VanillaBlock
     {
-        public string Selection { get; set; }
-        public Building Building { get; set; }
-
-        public Faction Faction { get; set; }
-
         public ConstructionBlock()
         {
             this.mName = "Construction";
             this.mMaterial = "";
             this.mItemTexture = "constructionBlockSide2.png";
             this.mId = 7;
-            this.Selection = "";
-            this.Faction = Faction.Red;
         }
 
         public override string getFace(int i) {
@@ -38,7 +31,6 @@ namespace Game.World.Blocks
         public override bool onLeftClick()
         {
             User.OpenBuilder = true;
-            User.ActConstrBlock = this;
             return false;
         }
     }

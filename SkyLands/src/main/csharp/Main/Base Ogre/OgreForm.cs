@@ -52,7 +52,7 @@ namespace Game.BaseApp {
             if(webView == null || !webView.IsLive) { return; }
             if(webView.ParentView != null || !webView.IsJavascriptEnabled) { return; }
 
-            JSObject jsobject = webView.CreateGlobalJavascriptObject("jsobject");
+            JSObject jsobject = webView.CreateGlobalJavascriptObject("jsobject" + Guid.NewGuid());
             jsobject.Bind("LogMsg", false, this.JSLogger);
         }
 

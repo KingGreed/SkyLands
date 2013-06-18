@@ -12,7 +12,8 @@ namespace Game.RTS
 
         private const int sizeX = 10, sizeY = 8, sizeZ = 10;
 
-        public HeadQuarter(StateManager stateMgr, Island island, Vector3 position) : base(stateMgr, island, position) { }
+        public HeadQuarter(StateManager stateMgr, Island island, Vector3 position, Faction fact, string selection)
+            : base(stateMgr, island, position, fact, selection) { }
         protected override void Init()
         {
             this.SpawnPoint = new Vector3(5, 1, 5);

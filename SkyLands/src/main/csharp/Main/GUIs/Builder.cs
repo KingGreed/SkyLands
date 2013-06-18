@@ -15,22 +15,25 @@ namespace Game.GUIs
         private static readonly Vector2 IMAGE_SIZE = new Vector2(192, 179);
 
         public static Action OnOpen;
+        private BuildingManager mBuildingMgr;
 
         public Builder(BuildingManager buildingMgr, Vector3 constructionBlockPos)
             : base(((OgreForm.InitSize - IMAGE_SIZE * Cst.GUI_RATIO) / 2) - (Vector2.UNIT_Y * (IMAGE_SIZE * Cst.GUI_RATIO).y / 12),
                    IMAGE_SIZE, "builder.html")
         {
+            this.mBuildingMgr = buildingMgr;
             JSObject j = OgreForm.webView.CreateGlobalJavascriptObject("BuilderObject");
             j.Bind("selectBarUpdate", false, (s2, args) => InventoryGUI.UpdateSelectBar(args));
-            j.Bind("selectUpdate", false, (s2, args) => buildingMgr.OnBuildingSelection(args.Arguments[0], constructionBlockPos));
-            j.Bind("update", false, (s2, args) => User.ActConstrBlock.Building.OnDrop((int)args.Arguments[0], int.Parse(args.Arguments[1])));
+            j.Bind("selectUpdate", false, (s2, args) => this.mBuildingMgr.OnBuildingSelection(args.Arguments[0], constructionBlockPos));
+            j.Bind("update", false, (s2, args) => this.mBuildingMgr.OnDrop((int)args.Arguments[0], int.Parse(args.Arguments[1])));
         }
 
         public override void onDocumentReady(object sender, UrlEventArgs e)
         {
             base.onDocumentReady(sender, e);
-            if (User.ActConstrBlock.Selection != "" && OgreForm.webView.IsLive)
-                OgreForm.webView.ExecuteJavascript("setSelection('" + User.ActConstrBlock.Selection + "')");
+            if (this.mBuildingMgr.ActConstBlock != null && this.mBuildingMgr.Buildings.ContainsKey(this.mBuildingMgr.ActConstBlock)
+                && OgreForm.webView.IsLive)
+                OgreForm.webView.ExecuteJavascript("setSelection('" + this.mBuildingMgr.GetActualBuilding().Selection + "')");
             
             OnOpen();
         }

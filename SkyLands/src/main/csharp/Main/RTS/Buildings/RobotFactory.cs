@@ -11,7 +11,8 @@ namespace Game.RTS
     {
         private const int sizeX = 5, sizeY = 5, sizeZ = 5;
 
-        public RobotFactory(StateManager stateMgr, Island island, Vector3 position) : base(stateMgr, island, position) { }
+        public RobotFactory(StateManager stateMgr, Island island, Vector3 position, Faction fact, string selection)
+            : base(stateMgr, island, position, fact, selection) { }
         protected override void Init()
         {
             this.Size = new Vector3(sizeX, sizeY, sizeZ);
