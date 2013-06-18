@@ -20,8 +20,8 @@ namespace Game.RTS
 
             this.Size = new Vector3(sizeX, sizeY, sizeZ);
             this.mBuilding = new byte[sizeX, sizeY, sizeZ];
-            this.mConstrBlock.AddRemainingRessource(2, 5);   // dirt
-            this.mConstrBlock.AddRemainingRessource(13, 20); // planks
+            this.mNeededRessources.Add(2, 5);   // dirt
+            this.mNeededRessources.Add(13, 20); // planks
             this.mConsBlockPos = this.SpawnPoint;
         }
 

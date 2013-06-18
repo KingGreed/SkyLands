@@ -245,7 +245,7 @@ namespace Game
         {
             System.Console.WriteLine("OnOpen. Selected : " + ActConstrBlock.Selection);
             this.OnInventoryOpen();
-            ActConstrBlock.DrawRemainingRessource();
+            //ActConstrBlock.DrawRemainingRessource();
         }
 
         public void OnOpen(Inventory inventory, int initIndex)

@@ -10,7 +10,6 @@ namespace Game.World.Blocks
     {
         public string Selection { get; set; }
         public Building Building { get; set; }
-        public Dictionary<byte, int> RemainingRessources { get; private set; }
 
         public Faction Faction { get; set; }
 
@@ -21,7 +20,6 @@ namespace Game.World.Blocks
             this.mItemTexture = "constructionBlockSide2.png";
             this.mId = 7;
             this.Selection = "";
-            this.RemainingRessources = new Dictionary<byte, int>();
             this.Faction = Faction.Red;
         }
 
@@ -42,24 +40,6 @@ namespace Game.World.Blocks
             User.OpenBuilder = true;
             User.ActConstrBlock = this;
             return false;
-        }
-
-        public void AddRemainingRessource(byte b, int amount)
-        {
-            if (!this.RemainingRessources.ContainsKey(b))
-                this.RemainingRessources.Add(b, amount);
-        }
-
-        public void DrawRemainingRessource()
-        {
-            if (this.Selection == "") { return; }
-
-            int i = 40;
-            foreach (byte b in this.RemainingRessources.Keys)
-            {
-                GUI.SetBlockAt(i, VanillaChunk.staticBlock[VanillaChunk.byteToString[b]].getItemTexture(), this.RemainingRessources[b]);
-                i++;
-            }
         }
     }
 }

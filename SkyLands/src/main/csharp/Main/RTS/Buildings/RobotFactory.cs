@@ -16,7 +16,7 @@ namespace Game.RTS
         {
             this.Size = new Vector3(sizeX, sizeY, sizeZ);
             this.mBuilding = new byte[sizeX, sizeY, sizeZ];
-            this.mConstrBlock.AddRemainingRessource(3, 20); // stone
+            this.mNeededRessources.Add(3, 20); // stone
             this.mYDiff = 1;
         }
 

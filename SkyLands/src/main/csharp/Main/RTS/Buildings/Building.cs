@@ -18,6 +18,7 @@ namespace Game.RTS
         protected StateManager mStateMgr;
         protected Island mIsland;
         protected readonly ConstructionBlock mConstrBlock;
+        protected Dictionary<byte, int> mNeededRessources;
         protected Vector3 mConsBlockPos;
         protected List<Vector3> mClearZone;
         protected byte mColoredBlock;
@@ -37,14 +38,25 @@ namespace Game.RTS
             this.mConstrBlock = User.ActConstrBlock;
             this.Faction = User.ActConstrBlock.Faction;
             this.mColoredBlock = (byte) ((this.Faction == Faction.Blue) ? 32 : 31);
+            this.mNeededRessources = new Dictionary<byte, int>();
             this.Position = pos;
             this.mClearZone = new List<Vector3>();
             this.Init();
-            this.mConstrBlock.DrawRemainingRessource();
+            this.DrawRemainingRessource();
         }
 
         protected abstract void Init();
         protected virtual void Create() { this.mIsCreated = true; }
+
+        public void DrawRemainingRessource()
+        {
+            int i = 40;
+            foreach (byte b in this.mNeededRessources.Keys)
+            {
+                GUI.SetBlockAt(i, VanillaChunk.staticBlock[VanillaChunk.byteToString[b]].getItemTexture(), this.mNeededRessources[b]);
+                i++;
+            }
+        }
 
         public void ConfirmBuilding()
         {
@@ -71,7 +83,7 @@ namespace Game.RTS
 
         private void BuildGhost()
         {
-            /*for (int x = 0; x < this.Size.x; x++)
+            for (int x = 0; x < this.Size.x; x++)
             {
                 for (int y = 0; y < this.Size.y; y++)
                 {
@@ -82,7 +94,7 @@ namespace Game.RTS
                             this.mIsland.addBlockToScene(pos, ghostBlock);
                     }
                 }
-            }*/
+            }
         }
 
         public void Build()
@@ -120,9 +132,9 @@ namespace Game.RTS
         {
             string imgName = GUI.GetImageAt(pos);
             byte b = VanillaChunk.textureToBlock[imgName].getId();
-            this.mConstrBlock.RemainingRessources[b] = newAmount;
+            this.mNeededRessources[b] = newAmount;
 
-            if (this.mConstrBlock.RemainingRessources.All(keyValPair => keyValPair.Value <= 0))
+            if (this.mNeededRessources.All(keyValPair => keyValPair.Value <= 0))
                 this.mStateMgr.MainState.BuildingMgr.AddBuilding(this.mConstrBlock);
         }
     }
