@@ -30,25 +30,23 @@ namespace Game
         private SceneNode mCamYawNode, mCamPitchNode;
         private readonly SceneNode mWireCube;
         private bool mIsInventoryOpen, mIsBuilderOpen, mIsMainGUIOpen;
-        private BuildingManager mBuildingMgr;
 
         private readonly MOIS.KeyCode[] mFigures;
         private Timer mTimeSinceGUIOpen;
 
-        public static bool OpenBuilder { get; set; }
+        public static bool OpenBuilder         { get; set; }
         public static bool RequestBuilderClose { get; set; }
+        public bool IsAllowedToMoveCam     { get; set; }
+        public bool IsFreeCamMode          { get; private set; }
+        public Inventory Inventory         { get; private set; }
+        public BuildingManager BuildingMgr { get; set; }
+        public Vector3 SelectedBlockPos    { get; private set; }
+        public Block SelectedBlock         { get; private set; }
 
-        public bool IsAllowedToMoveCam  { get; set; }
-        public bool IsFreeCamMode       { get; private set; }
-        public Inventory Inventory      { get; private set; }
-        public Vector3 SelectedBlockPos { get; private set; }
-        public Block SelectedBlock      { get; private set; }
-
-        public User(StateManager stateMgr, API.Geo.World world, BuildingManager buildingMgr)
+        public User(StateManager stateMgr, API.Geo.World world)
         {
             this.mStateMgr = stateMgr;
             this.mWorld = world;
-            this.mBuildingMgr = buildingMgr;
             this.mTimeSinceGUIOpen = new Timer();
 
             this.mCameraMan = null;
@@ -143,8 +141,8 @@ namespace Game
                     else if (this.mIsBuilderOpen)
                     {
                         this.mIsBuilderOpen = false;
-                        if (this.mBuildingMgr.HasActualBuilding())
-                            this.mBuildingMgr.GetActualBuilding().WaitForRessources();
+                        if (this.BuildingMgr.HasActualBuilding())
+                            this.BuildingMgr.GetActualBuilding().WaitForRessources();
                     }
                     else
                     {
@@ -180,7 +178,7 @@ namespace Game
             if (OpenBuilder)
             {
                 Builder.OnOpen = this.OnBuilderOpen;
-                new Builder(this.mBuildingMgr, this.SelectedBlockPos);
+                new Builder(this.BuildingMgr);
                 OpenBuilder = false;
                 this.mIsBuilderOpen = true;
                 this.SwitchGUIVisibility(true);
@@ -240,8 +238,8 @@ namespace Game
         {
             System.Console.WriteLine("OnBuilderOpen : ");
             this.OnInventoryOpen();
-            if (this.mBuildingMgr.HasActualBuilding() && !this.mBuildingMgr.GetActualBuilding().Placed)
-                this.mBuildingMgr.GetActualBuilding().DrawRemainingRessource();
+            if (this.BuildingMgr.HasActualBuilding() && !this.BuildingMgr.GetActualBuilding().Placed)
+                this.BuildingMgr.GetActualBuilding().DrawRemainingRessource();
         }
 
         public void OnOpen(Inventory inventory, int initIndex)
@@ -311,9 +309,9 @@ namespace Game
             this.mWireCube.Position = (this.SelectedBlockPos + Vector3.NEGATIVE_UNIT_Z) * Cst.CUBE_SIDE;
 
             ConstructionBlock constr = this.SelectedBlock as ConstructionBlock;
-            if (constr != null) { this.mBuildingMgr.ActConsBlockPos = this.SelectedBlockPos; }
-            else if (!this.mIsBuilderOpen && this.mBuildingMgr.ActConsBlockPos != -Vector3.UNIT_SCALE)
-                this.mBuildingMgr.ActConsBlockPos = -Vector3.UNIT_SCALE;
+            if (constr != null) { this.BuildingMgr.ActConsBlockPos = this.SelectedBlockPos; }
+            else if (!this.mIsBuilderOpen && this.BuildingMgr.ActConsBlockPos != -Vector3.UNIT_SCALE)
+                this.BuildingMgr.ActConsBlockPos = -Vector3.UNIT_SCALE;
 
             return distance;
         }

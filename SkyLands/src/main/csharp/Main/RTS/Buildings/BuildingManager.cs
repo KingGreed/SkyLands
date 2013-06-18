@@ -13,15 +13,17 @@ namespace Game.csharp.Main.RTS.Buildings
     public class BuildingManager
     {
         private readonly StateManager mStateMgr;
+        private readonly RTSManager mRTSManager;
         private readonly Island mIsland;
         public Dictionary<Vector3, Building> Buildings { get; set; }
 
         public Vector3 ActConsBlockPos { get; set; }
 
-        public BuildingManager(StateManager stateMgr, Island island)
+        public BuildingManager(StateManager stateMgr, Island island, RTSManager RTSMgr)
         {
             this.mStateMgr = stateMgr;
             this.mIsland = island;
+            this.mRTSManager = RTSMgr;
             this.Buildings = new Dictionary<Vector3, Building>();
         }
 
@@ -65,19 +67,19 @@ namespace Game.csharp.Main.RTS.Buildings
             switch (building)
             {
                 case "HQ":
-                    b = new HeadQuarter(this.mStateMgr, this.mIsland, Faction.Blue, building);
+                    b = new HeadQuarter(this.mStateMgr, this.mIsland, this.mRTSManager.PlayerRTS);
                     break;
 
                 case "CD":
-                    b = new CrystalDrill(this.mStateMgr, this.mIsland, Faction.Blue, building);
+                    b = new CrystalDrill(this.mStateMgr, this.mIsland, this.mRTSManager.PlayerRTS);
                     break;
 
                 case "RF":
-                    b = new RobotFactory(this.mStateMgr, this.mIsland, Faction.Blue, building);
+                    b = new RobotFactory(this.mStateMgr, this.mIsland, this.mRTSManager.PlayerRTS);
                     break;
 
                 case "G":
-                    b = new Generator(this.mStateMgr, this.mIsland, Faction.Blue, building);
+                    b = new Generator(this.mStateMgr, this.mIsland, this.mRTSManager.PlayerRTS);
                     break;
             }
 

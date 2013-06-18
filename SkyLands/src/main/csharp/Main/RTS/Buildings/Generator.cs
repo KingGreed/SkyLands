@@ -11,8 +11,10 @@ namespace Game.RTS
     {
         private const int sizeX = 4, sizeY = 5, sizeZ = 4;
 
-        public Generator(StateManager stateMgr, Island island, Faction fact, string selection)
-            : base(stateMgr, island, fact, selection) { }
+        public Generator(StateManager stateMgr, Island island, VanillaRTS rts, Vector3 position)
+            : base(stateMgr, island, rts, "RF", position) { }
+        public Generator(StateManager stateMgr, Island island, VanillaRTS rts)
+            : base(stateMgr, island, rts, "G") { }
         protected override void Init()
         {
             this.Size = new Vector3(sizeX, sizeY, sizeZ);
@@ -31,7 +33,7 @@ namespace Game.RTS
             {
                 for (int x = 0; x < sizeX; x++)
                 {
-                    for (int z = 0; x < sizeZ; z++)
+                    for (int z = 0; z < sizeZ; z++)
                     {
                         if (x == 0 || x == sizeX - 1 || z == 0 || z == sizeZ - 1) { continue; }
 
@@ -42,6 +44,12 @@ namespace Game.RTS
                     }
                 }
             }
+        }
+
+        protected override void OnBuild()
+        {
+            base.OnBuild();
+            this.RTS.Capacity += 5;
         }
     }
 }

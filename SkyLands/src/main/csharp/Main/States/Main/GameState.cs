@@ -1,4 +1,5 @@
 ﻿using Game.GUIs;
+using Game.csharp.Main.RTS.Buildings;
 using Mogre;
 
 using Game.BaseApp;
@@ -29,7 +30,7 @@ namespace Game.States
             this.CharacMgr.AddCharacter(playerInfo);
             this.User.SwitchFreeCamMode();
 
-            this.CharacMgr.AddCharacter(new CharacterInfo("Robot-01", Faction.Red)
+            this.CharacMgr.AddCharacter(new CharacterInfo("Robot-01", Faction.Blue)
             {
                 SpawnPoint = playerInfo.SpawnPoint + new Vector3(800, 500, 200)
             });
@@ -39,10 +40,12 @@ namespace Game.States
 
         protected override void AfterWorldCreation()
         {
-            this.RTSManager = new RTSManager(this.CharacMgr);
             this.mBulletMgr = new BulletManager(this.mStateMgr.SceneMgr, this.World);
             this.CharacMgr = new CharacMgr(this.mStateMgr, this.World, this.User, this.mBulletMgr);
             this.mBulletMgr.AttachCharacMgr(this.CharacMgr);
+            this.RTSManager = new RTSManager(this.mStateMgr);
+            this.BuildingMgr = new BuildingManager(this.mStateMgr, this.World.getIsland(), this.RTSManager);
+            this.User.BuildingMgr = this.BuildingMgr;
         }
 
         public override void Update(float frameTime)

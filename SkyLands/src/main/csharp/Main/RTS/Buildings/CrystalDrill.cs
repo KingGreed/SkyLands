@@ -1,4 +1,5 @@
-﻿using Mogre;
+﻿using System.Collections.Generic;
+using Mogre;
 
 using API.Geo.Cuboid;
 using Game.States;
@@ -9,8 +10,10 @@ namespace Game.RTS
     {
         private const int sizeX = 5, sizeY = 6, sizeZ = 5;
 
-        public CrystalDrill(StateManager stateMgr, Island island, Faction fact, string selection)
-            : base(stateMgr, island, fact, selection) { }
+        public CrystalDrill(StateManager stateMgr, Island island, VanillaRTS rts, Vector3 position)
+            : base(stateMgr, island, rts, "RF", position) { }
+        public CrystalDrill(StateManager stateMgr, Island island, VanillaRTS rts)
+            : base(stateMgr, island, rts, "CD") { }
         protected override void Init()
         {
             this.Size = new Vector3(sizeX, sizeY, sizeZ);
@@ -49,12 +52,19 @@ namespace Game.RTS
             this.mBuilding[(int)downPoints[4].x, 0, (int)downPoints[4].y] = glass;
             this.mBuilding[(int)downPoints[4].x, sizeY - 1, (int)downPoints[4].y] = this.mColoredBlock;
 
+            this.mClearZone = new List<Vector3>();
             for (int y = sizeY - 3; y < sizeY; y++)
                 for (int x = 0; x < sizeX; x++)
                     for (int z = 0; z < sizeZ; z++)
                         this.mClearZone.Add(new Vector3(x, y, z));
 
             base.Create();
+        }
+
+        protected override void OnBuild()
+        {
+            base.OnBuild();
+            this.RTS.CrystalSpeed += 0.5f;
         }
     }
 }

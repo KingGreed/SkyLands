@@ -17,7 +17,7 @@ namespace Game.GUIs
         public static Action OnOpen;
         private BuildingManager mBuildingMgr;
 
-        public Builder(BuildingManager buildingMgr, Vector3 constructionBlockPos)
+        public Builder(BuildingManager buildingMgr)
             : base(((OgreForm.InitSize - IMAGE_SIZE * Cst.GUI_RATIO) / 2) - (Vector2.UNIT_Y * (IMAGE_SIZE * Cst.GUI_RATIO).y / 12),
                    IMAGE_SIZE, "builder.html")
         {

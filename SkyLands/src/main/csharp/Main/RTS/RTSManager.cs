@@ -1,4 +1,5 @@
 ﻿using Game.CharacSystem;
+using Game.States;
 
 namespace Game.RTS
 {
@@ -6,15 +7,15 @@ namespace Game.RTS
 
     public class RTSManager
     {
-        public CharacMgr CharacMgr { get; private set; }
+        public StateManager StateMgr { get; private set; }
         public AIRTS AIRTS { get; private set; }
         public PlayerRTS PlayerRTS { get; private set; }
 
-        public RTSManager(CharacMgr characMgr)
+        public RTSManager(StateManager stateMgr)
         {
-            this.CharacMgr = characMgr;
-            this.AIRTS = new AIRTS(this);
-            this.PlayerRTS = new PlayerRTS(this);
+            this.StateMgr = stateMgr;
+            this.AIRTS = new AIRTS(this.StateMgr, this);
+            this.PlayerRTS = new PlayerRTS(this.StateMgr, this);
         }
 
         public void Update(float frameTime)

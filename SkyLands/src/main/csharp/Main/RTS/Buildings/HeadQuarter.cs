@@ -12,12 +12,15 @@ namespace Game.RTS
 
         private const int sizeX = 10, sizeY = 10, sizeZ = 10;
 
-        public HeadQuarter(StateManager stateMgr, Island island, Faction fact, string selection)
-            : base(stateMgr, island, fact, selection) { }
+        public HeadQuarter(StateManager stateMgr, Island island, VanillaRTS rts, Vector3 position)
+            : base(stateMgr, island, rts, "HQ", position) { }
+        public HeadQuarter(StateManager stateMgr, Island island, VanillaRTS rts)
+            : base(stateMgr, island, rts, "HQ") { }
         protected override void Init()
         {
             this.SpawnPoint = new Vector3(5, 1, 5);
-            this.mStateMgr.MainState.CharacMgr.MainPlayer.setSpawnPoint((this.SpawnPoint + this.Position) * Cst.CUBE_SIDE);
+            if(this.RTS.Faction == Faction.Blue)
+                this.mStateMgr.MainState.CharacMgr.MainPlayer.setSpawnPoint((this.SpawnPoint + this.Position) * Cst.CUBE_SIDE);
 
             this.Size = new Vector3(sizeX, sizeY, sizeZ);
             this.mBuilding = new byte[sizeX, sizeY, sizeZ];

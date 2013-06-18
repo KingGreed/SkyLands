@@ -25,8 +25,7 @@ namespace Game.States
 
         protected override void Startup() {
 
-            this.BuildingMgr = new BuildingManager(this.mStateMgr, this.World.getIsland());
-            this.User = new User(this.mStateMgr, this.World, this.BuildingMgr);
+            this.User = new User(this.mStateMgr, this.World);
 
             if (!GUI.WebControls.Contains(OgreForm.SelectBar))
                 GUI.WebControls.Add(OgreForm.SelectBar);
@@ -36,7 +35,6 @@ namespace Game.States
             OgreForm.SelectBar.Visible = false;
 
             this.AfterWorldCreation();
-            //Building.Island = this.World.getIsland();
             if(!this.mStateMgr.GameInfo.Load) { this.World.populate(); }
             this.World.display();
 

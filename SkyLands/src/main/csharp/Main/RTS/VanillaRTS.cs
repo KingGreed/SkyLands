@@ -1,15 +1,23 @@
 ﻿using System.Collections.Generic;
+using API.Generic;
+using Game.CharacSystem;
+using Game.States;
+using Mogre;
 
 namespace Game.RTS
 {
     public abstract class VanillaRTS
     {
+        protected StateManager mStateMgr;
         protected RTSManager mRTSMgr;
-        protected List<Building> mBuildings;
-        protected float mCrystals, mCrystalSpeed;
+        protected float mCrystals;
         protected float mTimeSinceInfoUpdate;
+        public float CrystalSpeed { get; set; }
+        public int Capacity { get; set; }
+        public int AmountUnits { get; set; }
 
         public Faction Faction { get; protected set; }
+        public List<Building> Buildings { get; protected set; }
 
         public float Crystals
         {
@@ -17,31 +25,25 @@ namespace Game.RTS
             set { this.mCrystals = value; }
         }
 
-        protected VanillaRTS(RTSManager RTSMgr)
+        protected VanillaRTS(StateManager stateMgr, RTSManager RTSMgr)
         {
+            this.mStateMgr = stateMgr;
             this.mRTSMgr = RTSMgr;
-            this.mBuildings = new List<Building>();
+            this.Buildings = new List<Building>();
             this.mCrystals = 150;
-            this.mCrystalSpeed = 1 / 70;
+            this.CrystalSpeed = 1 / 70;
         }
 
         public void Update(float frameTime)
         {
             this.mTimeSinceInfoUpdate += frameTime;
-            this.mCrystals += this.mCrystalSpeed * frameTime;
+            this.mCrystals += this.CrystalSpeed * frameTime;
 
-            if (this.mTimeSinceInfoUpdate < 1000) { return; }
-
-
-            this.MyUpdate();
-            this.mTimeSinceInfoUpdate = 0;
+            this.MyUpdate(frameTime);
         }
 
-        public abstract void MyUpdate();
+        public abstract void MyUpdate(float frameTime);
 
-        public void AddBuilding()
-        {
-            
-        }
+        public void AddBuilding(Building b) {  this.Buildings.Add(b); }
     }
 }

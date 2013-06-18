@@ -25,7 +25,7 @@ namespace Game.RTS
         protected int mYDiff;
 
         public string Selection { get; set; }
-        public Faction Faction { get; private set; }
+        public VanillaRTS RTS { get; private set; }
         public Vector3 Position { get; protected set; }
         public Vector3 Size { get; protected set; }
         public bool Placed { get; set; }
@@ -34,15 +34,16 @@ namespace Game.RTS
         private bool mIsCreated;
         private int mSymetricFactor = 1;
 
-        protected Building(StateManager stateMgr, Island island, Faction fact, string selection)
+        protected Building(StateManager stateMgr, Island island, VanillaRTS rts, string selection) : this(stateMgr, island, rts, selection, -Vector3.UNIT_SCALE) { }
+        protected Building(StateManager stateMgr, Island island, VanillaRTS rts, string selection, Vector3 position)
         {
             this.mStateMgr = stateMgr;
             this.mIsland = island;
-            this.Faction = fact;
-            this.mColoredBlock = (byte) ((this.Faction == Faction.Blue) ? 32 : 31);
+            this.RTS = rts;
+            this.mColoredBlock = (byte)((this.RTS.Faction == Faction.Blue) ? 32 : 31);
             this.NeededRessources = new Dictionary<byte, int>();
-            this.mClearZone = new List<Vector3>();
-            this.Position = this.mStateMgr.MainState.User.SelectedBlockPos;
+            this.mClearZone = null;
+            this.Position = position == -Vector3.UNIT_SCALE ? this.mStateMgr.MainState.User.SelectedBlockPos : position;
             this.Selection = selection;
             this.NeededRessources = this.mStateMgr.MainState.BuildingMgr.GetNeededRessources(this.Selection);
             this.Init();
@@ -61,7 +62,8 @@ namespace Game.RTS
             int i = 40;
             foreach (byte b in this.NeededRessources.Keys)
             {
-                GUI.SetBlockAt(i, VanillaChunk.staticBlock[VanillaChunk.byteToString[b]].getItemTexture(), this.NeededRessources[b] - this.ActualRessources[b]);
+                GUI.SetBlockAt(i, VanillaChunk.staticBlock[VanillaChunk.byteToString[b]].getItemTexture(),
+                    this.NeededRessources[b] - (this.ActualRessources.ContainsKey(b) ? this.ActualRessources[b] : 0));
                 i++;
             }
         }
@@ -98,7 +100,7 @@ namespace Game.RTS
                     {
                         if (x == 0 && y == 0 && z == 0) { continue; }
                         Vector3 pos = this.RealPos + new Vector3(x, 0, z) * this.mSymetricFactor + Vector3.UNIT_Y * y;
-                        if (this.mBuilding[x, y, z] != 0 || this.mClearZone.Contains(new Vector3(x, y, z)) &&
+                        if ((this.mBuilding[x, y, z] != 0 || this.mClearZone == null || this.mClearZone.Contains(new Vector3(x, y, z))) &&
                             !(this.mIsland.getBlock(pos, false) is ConstructionBlock))
                             this.mIsland.removeFromScene(pos);
                     }
@@ -149,7 +151,6 @@ namespace Game.RTS
                     }
                 }
             }
-            this.Placed = true;
             this.OnBuild();
         }
 
@@ -164,6 +165,8 @@ namespace Game.RTS
             }
             this.mStateMgr.MainState.BuildingMgr.ActConsBlockPos = -Vector3.UNIT_SCALE;
             User.RequestBuilderClose = true;
+            this.Placed = true;
+            this.RTS.AddBuilding(this);
         }
 
         public void OnDrop(int pos, int newAmount)
