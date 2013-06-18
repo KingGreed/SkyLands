@@ -10,6 +10,7 @@ using Mogre;
 
 using Game.Display;
 using Game.World.Blocks;
+using Game.World.Generator.Biomes;
 
 namespace Game.World.Generator
 {
@@ -375,19 +376,27 @@ namespace Game.World.Generator
             stream.Close();
         }
 
+        public void setBlockAt(Vector3 v, byte b, bool force) {
+            this.setBlockAt((int)v.x, (int)v.y, (int)v.z, b, force);
+        }
+
         public void loadStructures(string path) {
             string[] s = File.ReadAllLines(path + "structures.scenario");
 
             for(int i = 0; i < s.Length; i++) {
-                Vector3 v = API.Generator.Decorator.FindRandomPoint(this, new Random());
-                string[] ss = File.ReadAllLines(path + (s[i].Split('-'))[0] + ".terrain");
+                string islandType = (s[i].Split('-'))[1];
+                if((islandType == "Plains" && this.mBiome is Plains)    || (islandType == "Desert" && this.mBiome is Desert) ||
+                   (islandType == "Mount"  && this.mBiome is Mountains) || (islandType == "Hills"  && this.mBiome is Hills)) {
+                    Vector3 v = API.Generator.Decorator.FindRandomPoint(this, new Random());
+                    string[] ss = File.ReadAllLines(path + s[i] + ".terrain");
 
-                int h = 0;
-                for(int x = 0; x < 16; x++) {
-                    for(int y = 0; y < 16; y++) {
-                        for(int z = 0; z < 16; z++) {
-                            this.setBlockAt(v + new Vector3(x, y, z), s[h], true);
-                            h++;
+                    int h = 0;
+                    for(int x = 0; x < 16; x++) {
+                        for(int y = 0; y < 16; y++) {
+                            for(int z = 0; z < 16; z++) {
+                                this.setBlockAt(v + new Vector3(x, y, z), Convert.ToByte(ss[h]), true);
+                                h++;
+                            }
                         }
                     }
                 }

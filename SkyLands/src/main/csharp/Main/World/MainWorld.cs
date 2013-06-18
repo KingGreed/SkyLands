@@ -38,8 +38,6 @@ namespace Game.World
 
         private Dictionary<Vector3, List<string>> d = new Dictionary<Vector3, List<string>>();
 
-        List<Script.Item> vs;
-
         private int mScenarioAdvancement = 0;
 
         public MainWorld(StateManager stateMgr) {
@@ -66,7 +64,7 @@ namespace Game.World
 
                     string[] s = File.ReadAllLines(path + "structures.scenario");
                     for(int i = 0; i < s.Length; i++) {
-                        string[] ss = File.ReadAllLines(path + (s[i].Split('-'))[0] + ".event");
+                        string[] ss = File.ReadAllLines(path + s[i] + ".event");
                         
                         for(int j = 0; j < s.Length; j++) {
                             string[] line = s[j].Split(' ');
@@ -89,7 +87,6 @@ namespace Game.World
                 this.load();
             }
             this.mSkyMgr = new SkyMgr(this.mStateMgr);
-            if(info.Scenario != "") { this.loadScenario(info.Scenario); }
         }
 
         //get
@@ -167,10 +164,11 @@ namespace Game.World
         }
 
         public void onBlockEnter(Vector3 blockCoord, Entity e) {
-            Script.Item i;
-            if (vs != null && (i = vs.Find(x => x.loc == blockCoord)) != null)
-            {
-                new Script.Parser(this.mStateMgr).Parse(i.s);
+            
+            if(d.ContainsKey(blockCoord)) {
+                foreach(string s in d[blockCoord]) {
+                    new Script.Parser(this.mStateMgr).Parse(s); 
+                }
             }
             this.mIslandLoaded.getBlock(blockCoord, false).onBlockEnter(e, blockCoord);
         }
@@ -253,29 +251,6 @@ namespace Game.World
             workerThread = new Thread(this.mIslandList[pos].display);*/
         }
 
-        private void loadScenario(string file) {
-            string[] s = File.ReadAllLines(file);
-            this.mScenarioAdvancement = Convert.ToInt32(s[0]);
-
-            int i = 0;
-            for(int temp = 0; i < s.Length && temp != mScenarioAdvancement; i++) {
-                if(s[i][0] == '#') { temp++; }
-            }
-
-            string[] pos = s[i].Substring(1).Split(' ');
-            Vector3 structurePosition = new Vector3(t(pos[0]), t(pos[1]), t(pos[2]));
-            vs = new List<Script.Item>();
-            for(; i < s.Length && s[i][0] != '#'; i++) {
-                if(s[i][0] == 'N') {
-                    string[] ss = s[i].Substring(1).Split(' ');
-                    if(ss.Length >= 5) {
-                        vs.Add(new Script.Item(structurePosition + new Vector3(t(ss[0]), t(ss[1]), t(ss[2])), String.Join(" ", ss, 3, ss.Length - 3)));
-                    } else {
-                        throw new Exception("Error in file scenario");
-                    }
-                }
-            }
-        }
         private int t(string s) { return Convert.ToInt32(s); }
 
         public void Update(float frameTime) { this.mSkyMgr.Update(); }
