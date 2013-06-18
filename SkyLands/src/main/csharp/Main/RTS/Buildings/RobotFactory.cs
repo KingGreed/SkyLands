@@ -11,18 +11,18 @@ namespace Game.RTS
     {
         private const int sizeX = 5, sizeY = 5, sizeZ = 5;
 
-        public RobotFactory(StateManager stateMgr, Island island, Vector3 position, Faction fact, string selection)
-            : base(stateMgr, island, position, fact, selection) { }
+        public RobotFactory(StateManager stateMgr, Island island, Faction fact, string selection)
+            : base(stateMgr, island, fact, selection) { }
         protected override void Init()
         {
             this.Size = new Vector3(sizeX, sizeY, sizeZ);
             this.mBuilding = new byte[sizeX, sizeY, sizeZ];
-            this.mNeededRessources.Add(3, 20); // stone
             this.mYDiff = 1;
         }
 
         protected override void Create()
         {
+            base.Create();
             const byte smoothStone = 20;
 
             for (int y = 0; y < 2; y++)
@@ -44,8 +44,6 @@ namespace Game.RTS
             for (int y = 2; y < 4; y++)
                 for (int x = 1; x < sizeX - 1; x++)
                     this.mClearZone.Add(new Vector3(x, y, 0));
-
-            base.Create();
         }
     }
 }

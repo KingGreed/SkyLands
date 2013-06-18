@@ -18,7 +18,6 @@ namespace Game.RTS
 
         protected StateManager mStateMgr;
         protected Island mIsland;
-        protected Dictionary<byte, int> mNeededRessources;
         protected Vector3 mConsBlockPos;
         protected List<Vector3> mClearZone;
         protected byte mColoredBlock;
@@ -29,44 +28,42 @@ namespace Game.RTS
         public Faction Faction { get; private set; }
         public Vector3 Position { get; protected set; }
         public Vector3 Size { get; protected set; }
-        public bool RessourcesDisplayed { get; set; }
+        public bool Placed { get; set; }
+        public Dictionary<byte, int> ActualRessources, NeededRessources;
         private Vector3 RealPos { get { return this.Position - Vector3.UNIT_Y * this.mYDiff; } }
         private bool mIsCreated;
         private int mSymetricFactor = 1;
 
-        protected Building(StateManager stateMgr, Island island, Vector3 pos, Faction fact, string selection)
+        protected Building(StateManager stateMgr, Island island, Faction fact, string selection)
         {
             this.mStateMgr = stateMgr;
             this.mIsland = island;
             this.Faction = fact;
             this.mColoredBlock = (byte) ((this.Faction == Faction.Blue) ? 32 : 31);
-            this.mNeededRessources = new Dictionary<byte, int>();
+            this.NeededRessources = new Dictionary<byte, int>();
             this.mClearZone = new List<Vector3>();
-            this.Position = pos;
+            this.Position = this.mStateMgr.MainState.User.SelectedBlockPos;
             this.Selection = selection;
+            this.NeededRessources = this.mStateMgr.MainState.BuildingMgr.GetNeededRessources(this.Selection);
             this.Init();
-            this.DrawRemainingRessource();
         }
 
         protected abstract void Init();
         protected virtual void Create()
         {
+            if (this.mIsCreated)
+                this.BuildGhost(false);
             this.mIsCreated = true;
-            if (this.mBuilding != null)
-            {
-                
-            }
         }
 
         public void DrawRemainingRessource()
         {
             int i = 40;
-            foreach (byte b in this.mNeededRessources.Keys)
+            foreach (byte b in this.NeededRessources.Keys)
             {
-                GUI.SetBlockAt(i, VanillaChunk.staticBlock[VanillaChunk.byteToString[b]].getItemTexture(), this.mNeededRessources[b]);
+                GUI.SetBlockAt(i, VanillaChunk.staticBlock[VanillaChunk.byteToString[b]].getItemTexture(), this.NeededRessources[b] - this.ActualRessources[b]);
                 i++;
             }
-            this.RessourcesDisplayed = true;
         }
 
         public bool IsCharactInBat(VanillaCharacter charac)
@@ -152,6 +149,7 @@ namespace Game.RTS
                     }
                 }
             }
+            this.Placed = true;
             this.OnBuild();
         }
 
@@ -160,9 +158,11 @@ namespace Game.RTS
             if (this.mConsBlockPos != Vector3.ZERO)
             {
                 this.mIsland.removeFromScene(this.Position);
-                this.mIsland.addBlockToScene(this.Position + this.mConsBlockPos, "Construction");
+                Vector3 newPos = this.Position + this.mConsBlockPos*this.mSymetricFactor;
+                this.mIsland.addBlockToScene(newPos, "Construction");
+                this.mStateMgr.MainState.BuildingMgr.ActConsBlockPos = newPos;
             }
-            this.mStateMgr.MainState.BuildingMgr.ActConstBlock = null;
+            this.mStateMgr.MainState.BuildingMgr.ActConsBlockPos = -Vector3.UNIT_SCALE;
             User.RequestBuilderClose = true;
         }
 
@@ -170,10 +170,11 @@ namespace Game.RTS
         {
             string imgName = GUI.GetImageAt(pos);
             byte b = VanillaChunk.textureToBlock[imgName].getId();
-            this.mNeededRessources[b] = newAmount;
+            this.ActualRessources[b] = this.NeededRessources[b] - newAmount;
+            //this.mStateMgr.MainState.User.Inventory.
 
-            if (this.mNeededRessources.All(keyValPair => keyValPair.Value <= 0))
-                this.Build();
+            if (this.NeededRessources.Keys.Any(key => this.NeededRessources[key] > this.ActualRessources[key])) { return; }
+            this.Build();
         }
     }
 }

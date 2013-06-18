@@ -24,17 +24,18 @@ namespace Game.GUIs
             this.mBuildingMgr = buildingMgr;
             JSObject j = OgreForm.webView.CreateGlobalJavascriptObject("BuilderObject");
             j.Bind("selectBarUpdate", false, (s2, args) => InventoryGUI.UpdateSelectBar(args));
-            j.Bind("selectUpdate", false, (s2, args) => this.mBuildingMgr.OnBuildingSelection(args.Arguments[0], constructionBlockPos));
+            j.Bind("selectUpdate", false, (s2, args) => this.mBuildingMgr.OnBuildingSelection(args.Arguments[0]));
             j.Bind("update", false, (s2, args) => this.mBuildingMgr.OnDrop((int)args.Arguments[0], int.Parse(args.Arguments[1])));
         }
 
         public override void onDocumentReady(object sender, UrlEventArgs e)
         {
             base.onDocumentReady(sender, e);
-            if (this.mBuildingMgr.ActConstBlock != null && this.mBuildingMgr.Buildings.ContainsKey(this.mBuildingMgr.ActConstBlock)
-                && OgreForm.webView.IsLive)
+            if (this.mBuildingMgr.HasActualBuilding() && OgreForm.webView.IsLive)
+            {
                 OgreForm.webView.ExecuteJavascript("setSelection('" + this.mBuildingMgr.GetActualBuilding().Selection + "')");
-            
+                this.mBuildingMgr.OnBuildingSelection(this.mBuildingMgr.GetActualBuilding().Selection);
+            }
             OnOpen();
         }
     }

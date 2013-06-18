@@ -14,51 +14,83 @@ namespace Game.csharp.Main.RTS.Buildings
     {
         private readonly StateManager mStateMgr;
         private readonly Island mIsland;
-        public Dictionary<ConstructionBlock, Building> Buildings { get; set; }
-        public bool mAllowCstrBlockToNull { get; set; }
+        public Dictionary<Vector3, Building> Buildings { get; set; }
 
-        private ConstructionBlock mActConstBlock;
-        public ConstructionBlock ActConstBlock {
-            get { return this.mActConstBlock; }
-            set
-            {
-                if (this.mActConstBlock != value && this.mAllowCstrBlockToNull)
-                {
-                    this.mActConstBlock = value;
-                    this.mAllowCstrBlockToNull = false;
-                }
-            }
-        }
+        public Vector3 ActConsBlockPos { get; set; }
 
         public BuildingManager(StateManager stateMgr, Island island)
         {
             this.mStateMgr = stateMgr;
             this.mIsland = island;
-            this.Buildings = new Dictionary<ConstructionBlock, Building>();
-            this.mAllowCstrBlockToNull = true;
+            this.Buildings = new Dictionary<Vector3, Building>();
         }
 
-        public void OnBuildingSelection(string building, Vector3 constructionBlockPos)
+        public Dictionary<byte, int> GetNeededRessources(string selection)
         {
-            Console.WriteLine("OnBuildingSelection : " + building);
-            switch (building)
+            Dictionary<byte, int> ressources = new Dictionary<byte, int>();
+            switch (selection)
             {
                 case "HQ":
-                    this.Buildings[this.ActConstBlock] = new HeadQuarter(this.mStateMgr, this.mIsland, constructionBlockPos, Faction.Blue, building);
+                    ressources.Add(2, 5);   // dirt
+                    ressources.Add(13, 20); // planks
                     break;
 
                 case "CD":
-                    this.Buildings[this.ActConstBlock] = new CrystalDrill(this.mStateMgr, this.mIsland, constructionBlockPos, Faction.Blue, building);
+                    ressources.Add(2, 10); // dirt
+                    ressources.Add(3, 10); // stone
                     break;
 
                 case "RF":
-                    this.Buildings[this.ActConstBlock] = new RobotFactory(this.mStateMgr, this.mIsland, constructionBlockPos, Faction.Blue, building);
+                    ressources.Add(3, 20); // stone
+                    break;
+
+                case "G":
+                    ressources.Add(3, 20); // stone
                     break;
             }
+
+            return ressources;
         }
 
-        public void OnDrop(int pos, int newAmount) { this.Buildings[this.ActConstBlock].OnDrop(pos, newAmount); }
-        public bool HasActualBuilding() { return this.ActConstBlock != null && this.Buildings.ContainsKey(this.ActConstBlock); }
-        public Building GetActualBuilding() { return this.Buildings[this.ActConstBlock]; }
+        public void OnBuildingSelection(string building)
+        {
+            Building b = this.Buildings.FirstOrDefault(keyValPair => keyValPair.Key == this.ActConsBlockPos).Value;
+            Dictionary<byte, int> actualRessources = null;
+            if (b != null)
+            {
+                if (b.Placed) { return; }
+                actualRessources = b.ActualRessources;
+            }
+
+            switch (building)
+            {
+                case "HQ":
+                    b = new HeadQuarter(this.mStateMgr, this.mIsland, Faction.Blue, building);
+                    break;
+
+                case "CD":
+                    b = new CrystalDrill(this.mStateMgr, this.mIsland, Faction.Blue, building);
+                    break;
+
+                case "RF":
+                    b = new RobotFactory(this.mStateMgr, this.mIsland, Faction.Blue, building);
+                    break;
+
+                case "G":
+                    b = new Generator(this.mStateMgr, this.mIsland, Faction.Blue, building);
+                    break;
+            }
+
+            if (actualRessources == null)
+                actualRessources = b.NeededRessources.Keys.ToDictionary(key => key, key => 0);
+            b.ActualRessources = actualRessources;
+            if(!this.Buildings.ContainsKey(this.ActConsBlockPos))
+                this.Buildings.Add(this.ActConsBlockPos, b);
+            b.DrawRemainingRessource();
+        }
+
+        public void OnDrop(int pos, int newAmount) { this.Buildings[this.ActConsBlockPos].OnDrop(pos, newAmount); }
+        public bool HasActualBuilding() { return this.Buildings.ContainsKey(this.ActConsBlockPos); }
+        public Building GetActualBuilding() { return this.Buildings[this.ActConsBlockPos]; }
     }
 }

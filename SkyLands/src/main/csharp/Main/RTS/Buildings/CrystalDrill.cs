@@ -9,14 +9,12 @@ namespace Game.RTS
     {
         private const int sizeX = 5, sizeY = 6, sizeZ = 5;
 
-        public CrystalDrill(StateManager stateMgr, Island island, Vector3 position, Faction fact, string selection)
-            : base(stateMgr, island, position, fact, selection) { }
+        public CrystalDrill(StateManager stateMgr, Island island, Faction fact, string selection)
+            : base(stateMgr, island, fact, selection) { }
         protected override void Init()
         {
             this.Size = new Vector3(sizeX, sizeY, sizeZ);
             this.mBuilding = new byte[sizeX, sizeY, sizeZ];
-            this.mNeededRessources.Add(2, 10); // dirt
-            this.mNeededRessources.Add(3, 10); // stone
             this.mYDiff = sizeY - 3;
         }
 

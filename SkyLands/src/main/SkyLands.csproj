@@ -2634,6 +2634,7 @@
     </Compile>
     <Compile Include="csharp\Main\Characters\Misc\YawFactor.cs" />
     <Compile Include="csharp\Main\RTS\AIRTS.cs" />
+    <Compile Include="csharp\Main\RTS\Buildings\Generator.cs" />
     <Compile Include="csharp\Main\RTS\Buildings\RobotFactory.cs" />
     <Compile Include="csharp\Main\RTS\Buildings\CrystalDrill.cs" />
     <Compile Include="csharp\Main\RTS\PlayerRTS.cs" />

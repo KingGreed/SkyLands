@@ -32,8 +32,6 @@ namespace Game
         private bool mIsInventoryOpen, mIsBuilderOpen, mIsMainGUIOpen;
         private BuildingManager mBuildingMgr;
 
-        private Vector3 mSelectedBlockPos;
-        private Block   mSelectedBlock;
         private readonly MOIS.KeyCode[] mFigures;
         private Timer mTimeSinceGUIOpen;
 
@@ -42,6 +40,8 @@ namespace Game
         public bool IsAllowedToMoveCam { get; set; }
         public bool IsFreeCamMode      { get; private set; }
         public Inventory Inventory     { get; private set; }
+        public Vector3 SelectedBlockPos { get; private set; }
+        public Block SelectedBlock { get; private set; }
 
         public User(StateManager stateMgr, API.Geo.World world, BuildingManager buildingMgr)
         {
@@ -159,7 +159,6 @@ namespace Game
 
             if (RequestBuilderClose && this.mIsBuilderOpen)
             {
-                System.Console.WriteLine("builder close requested");
                 RequestBuilderClose = false;
                 this.mIsBuilderOpen = false;
                 this.SwitchGUIVisibility(false);
@@ -180,7 +179,7 @@ namespace Game
             if (OpenBuilder)
             {
                 Builder.OnOpen = this.OnBuilderOpen;
-                new Builder(this.mBuildingMgr, this.mSelectedBlockPos);
+                new Builder(this.mBuildingMgr, this.SelectedBlockPos);
                 OpenBuilder = false;
                 this.mIsBuilderOpen = true;
                 this.SwitchGUIVisibility(true);
@@ -201,11 +200,11 @@ namespace Game
 
                 /* Cube addition and suppression */
                 float dist = this.UpdateSelectedBlock();
-                if (!(this.mStateMgr.GameInfo.IsInEditorMode ^ mainState.User.IsFreeCamMode) && this.mSelectedBlock != null)    // Allow world edition
+                if (!(this.mStateMgr.GameInfo.IsInEditorMode ^ mainState.User.IsFreeCamMode) && this.SelectedBlock != null)    // Allow world edition
                 {
-                    if (this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction) && !Selector.IsBullet && this.mWorld.onLeftClick(this.mSelectedBlockPos))
+                    if (this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction) && !Selector.IsBullet && this.mWorld.onLeftClick(this.SelectedBlockPos))
                         this.AddBlock(dist);
-                    if (this.mStateMgr.Controller.HasActionOccured(UserAction.SecondaryAction) && this.mWorld.onRightClick(this.mSelectedBlockPos))
+                    if (this.mStateMgr.Controller.HasActionOccured(UserAction.SecondaryAction) && this.mWorld.onRightClick(this.SelectedBlockPos))
                         this.DeleteBlock();
                 }
             }
@@ -241,11 +240,8 @@ namespace Game
         {
             System.Console.WriteLine("OnBuilderOpen : ");
             this.OnInventoryOpen();
-            if (this.mBuildingMgr.HasActualBuilding() && !this.mBuildingMgr.GetActualBuilding().RessourcesDisplayed)
-            {
-                System.Console.WriteLine(this.mBuildingMgr.GetActualBuilding().Selection);
+            if (this.mBuildingMgr.HasActualBuilding() && !this.mBuildingMgr.GetActualBuilding().Placed)
                 this.mBuildingMgr.GetActualBuilding().DrawRemainingRessource();
-            }
         }
 
         public void OnOpen(Inventory inventory, int initIndex)
@@ -303,20 +299,21 @@ namespace Game
 
             if (distance > DIST_MAX_SELECTION)
             {
-                this.mSelectedBlockPos = Vector3.ZERO;
-                this.mSelectedBlock = null;
+                this.SelectedBlockPos = Vector3.ZERO;
+                this.SelectedBlock = null;
                 this.mWireCube.SetVisible(false);
                 return 0;
             }
 
-            this.mSelectedBlockPos = relBlockPos;
-            this.mSelectedBlock = actBlock;
+            this.SelectedBlockPos = relBlockPos;
+            this.SelectedBlock = actBlock;
             this.mWireCube.SetVisible(true);
-            this.mWireCube.Position = (this.mSelectedBlockPos + Vector3.NEGATIVE_UNIT_Z) * Cst.CUBE_SIDE;
+            this.mWireCube.Position = (this.SelectedBlockPos + Vector3.NEGATIVE_UNIT_Z) * Cst.CUBE_SIDE;
 
-            ConstructionBlock constr = this.mSelectedBlock as ConstructionBlock;
-            if (constr != null) { this.mBuildingMgr.ActConstBlock = constr; }
-            else if (!this.mIsBuilderOpen && this.mBuildingMgr.ActConstBlock != null) { this.mBuildingMgr.ActConstBlock = null; }
+            ConstructionBlock constr = this.SelectedBlock as ConstructionBlock;
+            if (constr != null) { this.mBuildingMgr.ActConsBlockPos = this.SelectedBlockPos; }
+            else if (!this.mIsBuilderOpen && this.mBuildingMgr.ActConsBlockPos != -Vector3.UNIT_SCALE)
+                this.mBuildingMgr.ActConsBlockPos = -Vector3.UNIT_SCALE;
 
             return distance;
         }
@@ -325,10 +322,10 @@ namespace Game
 
         private void DeleteBlock()
         {
-            this.mWorld.getIsland().removeFromScene(this.mSelectedBlockPos);
-            this.mWorld.onDeletion(this.mSelectedBlockPos);
+            this.mWorld.getIsland().removeFromScene(this.SelectedBlockPos);
+            this.mWorld.onDeletion(this.SelectedBlockPos);
 
-            this.Inventory.Add(this.mSelectedBlock.getId());
+            this.Inventory.Add(this.SelectedBlock.getId());
         }
 
         private void AddBlock(float dist)
@@ -339,7 +336,7 @@ namespace Game
             /* Determine the face */
             Ray ray = this.mStateMgr.Camera.GetCameraToViewportRay(0.5f, 0.5f);
             Vector3 realIntersection = ray.GetPoint(dist);
-            Vector3 absPosBlock = this.mSelectedBlockPos * Cst.CUBE_SIDE;
+            Vector3 absPosBlock = this.SelectedBlockPos * Cst.CUBE_SIDE;
 
             int index = 0;
             float minDist = -1;
@@ -359,7 +356,7 @@ namespace Game
             }
 
             BlockFace face = (BlockFace)index;
-            Vector3 addedBlockPos = this.mSelectedBlockPos;
+            Vector3 addedBlockPos = this.SelectedBlockPos;
 
             switch (face)
             {
