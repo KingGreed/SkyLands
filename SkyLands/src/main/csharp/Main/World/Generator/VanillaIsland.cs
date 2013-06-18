@@ -311,6 +311,31 @@ namespace Game.World.Generator
 
         }
 
+        public override void save(string name) {
+
+            using(TextWriter writer = new StreamWriter(name)) {
+
+                writer.WriteLine((int)this.mIslandSize.x);
+                writer.WriteLine((int)this.mIslandSize.y);
+                writer.WriteLine((int)this.mIslandSize.z);
+
+                foreach(KeyValuePair<Vector3, Chunk> pair in this.mChunkList) {
+                    writer.WriteLine((int)pair.Key.x);
+                    writer.WriteLine((int)pair.Key.y);
+                    writer.WriteLine((int)pair.Key.z);
+
+                    for(int x = 0; x < 16; x++) {
+                        for(int y = 0; y < 16; y++) {
+                            for(int z = 0; z < 16; z++) {
+                                writer.WriteLine(pair.Value.mBlockList[x, y, z].getId());
+                            }
+                        }
+                    }
+                }
+            }
+
+        }
+
         public byte[] linearize(Block[, ,] a) {
             byte[] b = new byte[a.GetLength(0) * a.GetLength(1) * a.GetLength(2)];
             int i = 0;
@@ -336,6 +361,28 @@ namespace Game.World.Generator
 
             try { stream = new StreamReader(blockfileName); }
             catch { throw new Exception("Could not read file : " + blockfileName); }
+
+
+            this.mIslandSize = new Vector3(Convert.ToInt32(stream.ReadLine()), Convert.ToInt32(stream.ReadLine()), Convert.ToInt32(stream.ReadLine()));
+
+            while(stream.BaseStream.Position != stream.BaseStream.Length) {
+                Vector3 pos = new Vector3(Convert.ToInt32(stream.ReadLine()), Convert.ToInt32(stream.ReadLine()), Convert.ToInt32(stream.ReadLine()));
+                Chunk c = new VanillaChunk(new Vector3(16, 16, 16), pos, this);
+                this.mChunkList.Add(pos, c);
+                for(int x = 0; x < 16; x++) { for(int y = 0; y < 16; y++) { for(int z = 0; z < 16; z++) { c.setBlock(x, y, z, Convert.ToByte(stream.ReadLine())); } } }
+            }
+
+            stream.Close();
+        }
+
+        public override void load(string name) {
+            DirectoryInfo directoryInfo = new FileInfo(name).Directory;
+            if(directoryInfo != null) {
+                directoryInfo.Create();
+            }
+            StreamReader stream;
+
+            try { stream = new StreamReader(name); } catch { throw new Exception("Could not read file : " + name); }
 
 
             this.mIslandSize = new Vector3(Convert.ToInt32(stream.ReadLine()), Convert.ToInt32(stream.ReadLine()), Convert.ToInt32(stream.ReadLine()));

@@ -14,13 +14,6 @@
 	      	$("#text").css("left", 80 * ratioX + "px");
 	      	$("#text").css("font-size", 1.5	 * (ratioX + ratioY) + "em");
 
-	      	$(".clickable").click(function() {
-	      		$(".clickable").removeClass("selected");
-	      		$(this).addClass("selected");
-
-	      	});
-
-
 			$(document).mousemove(function(e) {
 		        if(isInRectangle(28 * ratioX, 29 * ratioY, 390 * ratioX, 124 * ratioY, e.pageX, e.pageY)) {
 		          $("body").css('cursor', 'pointer');
@@ -74,20 +67,24 @@
 
 		function addStructure(name) {
 			$("#text").append("<tr><td><span class=\"clickable\">" + name + "</span></td></tr>");
+			$(".clickable").click(function() {
+	      		$(".clickable").removeClass("selected");
+	      		$(this).addClass("selected");
+	      		StructuresObject.update($(this).html());
+
+	      	});
 		}
 
 		function up() {
 			var index = $(".selected").index("span");
-			$(".selected").removeClass("selected");
-
-			$("span:eq(" + (index - 1) + ")").addClass("selected");
+			$(".selected").parent().parent().insertBefore($("span:eq(" + (index - 1) + ")").parent().parent());
+			StructuresObject.insertUp(index);
 		}
 
 		function down() {
 			var index = $(".selected").index("span");
-			$(".selected").removeClass("selected");
-
-			$("span:eq(" + (index + 1) + ")").addClass("selected");
+			$(".selected").parent().parent().insertAfter($("span:eq(" + (index + 1) + ")").parent().parent());
+			StructuresObject.insertDown(index);
 		}
 
 
@@ -110,10 +107,8 @@
 		<img src="../images/Structures/Scenario editor_normal.png"     id="background" style="position : absolute; top : 0; left : 0; height:100%;"/>
 
 		<table id="text">
-			<tr><td><span class="clickable">Default</span></td></tr>
-			<tr><td><span class="clickable">Test 2</span></td></tr>
-			<tr><td><span class="clickable">Test 3</span></td></tr>
 		</table>
 	</div>
 </body>
 </html>
+

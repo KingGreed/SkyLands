@@ -52,8 +52,10 @@ namespace Game.BaseApp {
             if(webView == null || !webView.IsLive) { return; }
             if(webView.ParentView != null || !webView.IsJavascriptEnabled) { return; }
 
-            JSObject jsobject = webView.CreateGlobalJavascriptObject("jsobject" + Guid.NewGuid());
-            jsobject.Bind("LogMsg", false, this.JSLogger);
+            JSObject jsobject = webView.CreateGlobalJavascriptObject("jsobject");
+            if(jsobject != null) {
+                jsobject.Bind("LogMsg", false, this.JSLogger);
+            }
         }
 
         private void JSLogger(object sender, JavascriptMethodEventArgs args) {

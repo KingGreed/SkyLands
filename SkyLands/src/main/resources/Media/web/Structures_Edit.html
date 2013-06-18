@@ -1,0 +1,78 @@
+<html>
+<head>
+
+	<script type="text/javascript" src="jquery.js"> </script>
+	<script>
+		var ratioX = 1, ratioY = 1;
+		function isInRectangle(x1, y1, x2, y2, posX, posY) { return posX > x1 && posX < x2 && posY > y1 && posY < y2; }
+		$(window).load(function() {
+
+			ratioX = parseInt($('#background').css('width')) / 450;
+      		ratioY = parseInt($('#background').css('height')) / 900;
+
+      		$("#text").css("top", 155  * ratioY + "px");
+	      	$("#text").css("left", 60 * ratioX + "px");
+	      	$("#text").css("width", 293 * ratioX +"px");
+	      	$("#text").css("width", 346 * ratioY +"px");
+
+
+			$(document).mousemove(function(e) {
+		        if(isInRectangle(75 * ratioX, 671 * ratioY, 328 * ratioX, 850 * ratioY, e.pageX, e.pageY)) {
+		          $("body").css('cursor', 'pointer');
+		          $("img").css("display", "none");
+		          $("#ok").css("display", "block");
+		        }  else{
+		          $('body').css('cursor', 'default')
+		          $("img").css('display' , 'none'); 
+		          $('#background').css('display', 'block');
+		        }
+		      });
+
+			$(document).click(function(e) {
+		        if(isInRectangle(75 * ratioX, 671 * ratioY, 328 * ratioX, 850 * ratioY, e.pageX, e.pageY)) {
+		          EditObject.save($("#text").val());
+		        }
+	      	});
+		});
+
+		function emptyText() { $("#text").val(""); }
+
+		function addLine(line) {
+			if($("#text").val() == "") {
+				$("#text").val(line);
+			} else {
+				$("#text").val($("#text").val() + "\n" + line);
+			}
+		}
+
+
+		$(window).resize(function() {
+        	ratioX = parseInt($('#background').css('width')) / 450;
+        	ratioY = parseInt($('#background').css('height')) / 900;
+
+        	$("#text").css("top", 155  * ratioY + "px");
+	      	$("#text").css("left", 60 * ratioX + "px");
+	      	$("#text").css("width", 293 * ratioX +"px");
+	      	$("#text").css("width", 346 * ratioY +"px");
+
+      	});
+
+	</script>
+</head>
+<body>
+	<div id="Scenarios">
+		<img src="../images/Edit/scenar_edit_OK.png"     id="ok"         style="position : absolute; top : 0; left : 0; height:100%; z-index:-2"/>
+		<img src="../images/Edit/scenar_edit_normal.png" id="background" style="position : absolute; top : 0; left : 0; height:100%; z-index:-1"/>
+
+		<textarea rows="20" cols="28" style="z-index : 3; position : absolute;" id="text">
+OnBlockEnterEvent, you can call the following functions :
+-mkParticleAt x y z Name
+-mkDialogue path
+-mkSound path
+-spawnUnit x y z faction material
+-addRessource faction amount
+-addLife amount
+		</textarea>
+	</div>
+</body>
+</html>

@@ -126,8 +126,10 @@ namespace API.Geo.Cuboid
          * Warning this function does not create a thread
 	     */
 	    public virtual void save() { throw new NotImplementedException(); }
+        public abstract void save(string name);
 
         public abstract void load();
+        public abstract void load(string name);
 
 	    /**
 	     * Performs the nessecary tasks to unload this region from the world, and

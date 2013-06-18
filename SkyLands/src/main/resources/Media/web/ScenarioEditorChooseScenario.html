@@ -10,13 +10,6 @@
 			ratioX = parseInt($('#background').css('width')) / 1600;
       		ratioY = parseInt($('#background').css('height')) / 900;
 
-	      	$(".clickable").click(function() {
-	      		$(".clickable").removeClass("selected");
-	      		$(this).addClass("selected");
-	      		ScenarioLoaderObject.update($(".clickable").html());
-
-	      	});
-
 	      	$("#text").css("top", 220  * ratioY + "px");
 	      	$("#text").css("left", 480 * ratioX + "px");
 	      	$("#text").css("font-size", 1.5	 * (ratioX + ratioY) + "em");
@@ -38,26 +31,36 @@
 		          $('#ok').css('display', 'block');
 		        } else{
 		          $('body').css('cursor', 'default')
-		          $("img").css('display' , 'none'); 
+		          $("img").css('display' , 'none');
 		          $('#background').css('display', 'block');
 		        }
 		      });
 			$(document).click(function(e) {
 		        if(isInRectangle(198 * ratioX, 722 * ratioY, 604 * ratioX, 816 * ratioY, e.pageX, e.pageY)){ //back
-	          		ScenarioLoaderObject.edit();
+	          		ScenarioLoaderObject.edit($(".selected").html());
 		        }
 		        else if(isInRectangle(1011 * ratioX, 721 * ratioY, 1418 * ratioX, 816 * ratioY, e.pageX, e.pageY)){ //load game
 		          addScenario();
 		        }
 		        else if(isInRectangle(662 * ratioX, 712 * ratioY, 945 * ratioX, 841 * ratioY, e.pageX, e.pageY)){ // create world
-		          ScenarioLoaderObject.ok();
+		          ScenarioLoaderObject.ok($(".selected").html());
 		        }
 		    });
 		});
 
+			$(".clickable").click(function() {
+	      		$(".clickable").removeClass("selected");
+	      		$(this).addClass("selected");
+	      		ScenarioLoaderObject.update($(".clickable").html());
+	      	});
 
-		function addScenario(name) {
+
+		function addScenarios(name) {
 			$("#text").append("<tr><td><span class=\"clickable\">" + name + "</span></td></tr>");
+			$(".clickable").click(function() {
+	      		$(".clickable").removeClass("selected");
+	      		$(this).addClass("selected");
+	      	});
 		}
 
 		function addScenario() {
@@ -88,9 +91,7 @@
 		<img src="../images/ScenarioLoader/Load_scenario_Ok.png"     id="ok"         style="height: 100%; width: 100%; position : absolute; top : 0; left : 0;"/>
 		
 		<table id="text">
-			<tr><td><span class="clickable">Default</span></td></tr>
-			<tr><td><span class="clickable">Test 2</span></td></tr>
-			<tr><td><span class="clickable">Test 3</span></td></tr>
+			
 		</table>
 	</div>
 </body>

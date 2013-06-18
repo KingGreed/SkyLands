@@ -10,10 +10,13 @@ using Game.BaseApp;
 namespace Game.GUIs {
     public class PlayMenu : GUI {
         private readonly StateManager mStateMgr;
+        private string scenario;
 
-        public PlayMenu(StateManager stateMgr)
+        public PlayMenu(StateManager stateMgr, string scenar = "")
             : base(new Vector2(0, 0), new Vector2(404, 404), "play.html", DockStyle.Fill) {
             this.mStateMgr = stateMgr;
+
+            this.scenario = scenar;
         }
 
         public override void onDocumentReady(object sender, UrlEventArgs e) {

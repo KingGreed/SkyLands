@@ -93,6 +93,12 @@
     <Content Include="resources\Media\images\CrystalBlock.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\images\Edit\scenar_edit_normal.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\images\Edit\scenar_edit_OK.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\images\heart.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -2400,6 +2406,9 @@
     <Content Include="resources\Media\web\Structures.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\web\Structures_Edit.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\MOIS.dll" />
     <Content Include="resources\ogre.cfg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -2586,6 +2595,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\GUIs\Builder.cs" />
+    <Compile Include="csharp\Main\GUIs\Edit.cs" />
     <Compile Include="csharp\Main\GUIs\InGameMenu.cs" />
     <Compile Include="csharp\Main\GUIs\OptionMenu.cs" />
     <Compile Include="csharp\Main\GUIs\ScenarioLoader.cs" />

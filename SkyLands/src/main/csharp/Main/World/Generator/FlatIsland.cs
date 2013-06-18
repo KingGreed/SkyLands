@@ -26,6 +26,11 @@ namespace Game.World.Generator
             this.generate(42);
         }
 
+        public FlatIsland(SceneNode node, API.Geo.World currentWorld, string fileName) : base(node, currentWorld) {
+            this.load(fileName);
+        }
+
+
         public override void generate(int seed) {
             Vector3 chunkTempPosition = new Vector3(0, 0, 0);
 

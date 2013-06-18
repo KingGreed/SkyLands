@@ -1,0 +1,54 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="play.css" />
+	<script type="text/javascript" src="jquery.js"> </script>
+  <script>
+
+  function isInRectangle(x1, y1, x2, y2, posX, posY) { return posX > x1 && posX < x2 && posY > y1 && posY < y2; }
+  var ratioX = 1, ratioY = 1;
+
+    $(window).load(function() {
+      ratioX = parseInt($('#map').css('width')) / 1600;
+      ratioY = parseInt($('#map').css('height')) / 900;
+
+      $(document).mousemove(function(e) {
+        if(isInRectangle(61 * ratioX, 165 * ratioY, 269 * ratioX, 317 * ratioY, e.pageX, e.pageY)){ //back
+          $("body").css('cursor', 'pointer');
+          $('img').css('display', 'none');
+          $('#again').css('display', 'block');
+        }
+        else if(isInRectangle(1157 * ratioX, 658 * ratioY, 1365 * ratioX, 810 * ratioY, e.pageX, e.pageY)){ //load game
+          $("body").css('cursor', 'pointer');
+          $('img').css('display', 'none');
+          $('#exit').css('display', 'block');
+        } else{
+          $('body').css('cursor', 'default')
+          $("img").css('display' , 'none'); 
+          $('#map').css('display', 'block');
+        }
+      });
+
+      $(document).click(function(e) {
+        if(isInRectangle(61 * ratioX, 165 * ratioY, 269 * ratioX, 317 * ratioY, e.pageX, e.pageY)){ //back
+          PlayMenuJSObject.back();
+        }
+        else if(isInRectangle(1157 * ratioX, 658 * ratioY, 1365 * ratioX, 810 * ratioY, e.pageX, e.pageY)){ //load game
+          PlayMenuJSObject.load();
+        }
+      });
+      $(window).resize(function() {
+        ratioX = parseInt($('#map').css('width')) / 1600;
+        ratioY = parseInt($('#map').css('height')) / 900;
+      });
+
+    });
+    
+  </script>
+</head>
+<body oncontextmenu="return false;">
+  <p id="pos" style="color : white;"></p>
+  <img src="../images/GameOver/death screen_again.png" id="again" style="height: 100%; width: 100%; display:none;"/>
+  <img src="../images/GameOver/death screen_exit.png"  id="exit"  style="height: 100%; width: 100%; display:none;"/>
+	<img src="../images/GameOver/death screen_normal.png"    id="map"   style="height: 100%; width: 100%;"/>
+</body>
+</html>

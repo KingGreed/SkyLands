@@ -37,11 +37,12 @@ namespace Game
 
         public static bool OpenBuilder { get; set; }
         public static bool RequestBuilderClose { get; set; }
-        public bool IsAllowedToMoveCam { get; set; }
-        public bool IsFreeCamMode      { get; private set; }
-        public Inventory Inventory     { get; private set; }
+
+        public bool IsAllowedToMoveCam  { get; set; }
+        public bool IsFreeCamMode       { get; private set; }
+        public Inventory Inventory      { get; private set; }
         public Vector3 SelectedBlockPos { get; private set; }
-        public Block SelectedBlock { get; private set; }
+        public Block SelectedBlock      { get; private set; }
 
         public User(StateManager stateMgr, API.Geo.World world, BuildingManager buildingMgr)
         {

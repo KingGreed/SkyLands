@@ -47,14 +47,13 @@ namespace Game.World
 
             SceneNode node = this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
 
-            if(stateMgr.StoryInfo.pathToFile == "") {
-                this.mPath = "";
-                this.mIslandLoaded = new FlatIsland(node, new Vector2(1, 1), this);
-            } else {
+            if(File.Exists(stateMgr.StoryInfo.pathToFile) && new FileInfo(stateMgr.StoryInfo.pathToFile).Length != 0) {
                 this.mPath = stateMgr.StoryInfo.pathToFile;
-                this.load(stateMgr.StoryInfo.pathToFile);
+                this.mIslandLoaded = new FlatIsland(node, this, stateMgr.StoryInfo.pathToFile);
+            } else {
+                this.mIslandLoaded = new FlatIsland(node, new Vector2(1, 1), this);
             }
-
+                
             this.mSkyMgr = new SkyMgr(this.mStateMgr);
 
         }
@@ -62,7 +61,7 @@ namespace Game.World
         //get
 
         public void populate() { this.mIslandLoaded.populate(); }
-        public void display()  { this.mIslandLoaded.display(); }
+        public void display()  { this.mIslandLoaded.display();  }
 
         public string  getName()          { return this.mName;       }
         public long    getAge()           { return this.mAge;        }
@@ -165,29 +164,41 @@ namespace Game.World
         }
 
         public void save() {
+            this.mIslandLoaded.save(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" + this.mStateMgr.StoryInfo.scenario + "\\" + this.mStateMgr.StoryInfo.name + ".terrain");
+        }
 
-            TextWriter writer = new StreamWriter(this.mPath);
+        public void load() {
+        }
 
-            writer.WriteLine(this.mIslandLoaded.getSize().x);
-            writer.WriteLine(this.mIslandLoaded.getSize().y);
-            writer.WriteLine(this.mIslandLoaded.getSize().z);
+        public static Game.GUIs.StructuresMenu sm;
+        public static Game.GUIs.Edit ed;
 
-            for (int x = 0; x < this.mIslandLoaded.getSize().x * 16; x++) {
-                for(int y = 0; y < this.mIslandLoaded.getSize().y * 16; y++) {
-                    for(int z = 0; z < this.mIslandLoaded.getSize().z * 16; z++) {
-                        writer.WriteLine(this.mIslandLoaded.getBlock(x, y, z, false).getId());
-                    }
+        public void Update(float frameTime) {
+            this.mSkyMgr.Update();
+            if(this.mStateMgr.Controller.WasKeyPressed(MOIS.KeyCode.KC_B)  && this.mStateMgr.MainState.User.SelectedBlock != null) {
+                if(ed == null) {
+                    this.save();
+                    ed = new Game.GUIs.Edit(this.mStateMgr, this.mStateMgr.StoryInfo.name, Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" + this.mStateMgr.StoryInfo.scenario + "\\", this.mStateMgr.MainState.User.SelectedBlockPos);
+                    this.mStateMgr.MainState.User.SwitchGUIVisibility(true);
+                } else {
+                    ed = null;
+                    Game.BaseApp.GUI.Visible = false;
+                    this.mStateMgr.MainState.User.SwitchGUIVisibility(false);
                 }
             }
 
-            writer.Close();
+            if(this.mStateMgr.Controller.WasKeyPressed(MOIS.KeyCode.KC_J)) {
+                if(sm == null) {
+                    this.save();
+                    sm = new Game.GUIs.StructuresMenu(this.mStateMgr, this.mStateMgr.StoryInfo.scenario);
+                    this.mStateMgr.MainState.User.SwitchGUIVisibility(true);
+                } else {
+                    sm = null;
+                    Game.BaseApp.GUI.Visible = false;
+                    this.mStateMgr.MainState.User.SwitchGUIVisibility(false);
+                }
+            }
         }
-
-        public void load(string fileName) {
-
-        }
-
-        public void Update(float frameTime) { this.mSkyMgr.Update(); }
 
         public static Vector3 AbsToRelative(Vector3 v)
         {
