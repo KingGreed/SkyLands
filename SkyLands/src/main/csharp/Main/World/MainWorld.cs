@@ -36,6 +36,8 @@ namespace Game.World
         private StateManager  mStateMgr;
         private SkyMgr        mSkyMgr;
 
+        private Dictionary<Vector3, List<string>> d = new Dictionary<Vector3, List<string>>();
+
         List<Script.Item> vs;
 
         private int mScenarioAdvancement = 0;
@@ -55,6 +57,34 @@ namespace Game.World
                 else if (info.Type == TypeWorld.Desert) { this.mIslandLoaded = new RandomIsland(node, info.Size, new Desert(),    this); }
                 else if (info.Type == TypeWorld.Hills)  { this.mIslandLoaded = new RandomIsland(node, info.Size, new Hills(),     this); }
                 else                                    { this.mIslandLoaded = new RandomIsland(node, info.Size, new Mountains(), this); }
+
+                if(info.Scenario != "") {
+                    VanillaIsland isl = (VanillaIsland)this.mIslandLoaded;
+                    isl.loadStructures(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" + info.Scenario + "\\");
+
+                    string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" + info.Scenario + "\\";
+
+                    string[] s = File.ReadAllLines(path + "structures.scenario");
+                    for(int i = 0; i < s.Length; i++) {
+                        string[] ss = File.ReadAllLines(path + (s[i].Split('-'))[0] + ".event");
+                        
+                        for(int j = 0; j < s.Length; j++) {
+                            string[] line = s[j].Split(' ');
+
+                            if(line.Length >= 3) {
+                                Vector3 v = new Vector3(Convert.ToInt32(line[0]), Convert.ToInt32(line[1]), Convert.ToInt32(line[2]));
+                                
+                                if(d.ContainsKey(v)) {
+                                    d[v].Add(string.Join(" ", line, 3, line.Length - 3));
+                                } else {
+                                    d.Add(new Vector3(Convert.ToInt32(line[0]), Convert.ToInt32(line[1]), Convert.ToInt32(line[2])),
+                                        new List<string> { string.Join(" ", line, 3, line.Length - 3) });
+                                }
+                            }
+                        }
+                    }
+                }
+
             } else {
                 this.load();
             }

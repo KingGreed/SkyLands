@@ -375,6 +375,25 @@ namespace Game.World.Generator
             stream.Close();
         }
 
+        public void loadStructures(string path) {
+            string[] s = File.ReadAllLines(path + "structures.scenario");
+
+            for(int i = 0; i < s.Length; i++) {
+                Vector3 v = API.Generator.Decorator.FindRandomPoint(this, new Random());
+                string[] ss = File.ReadAllLines(path + (s[i].Split('-'))[0] + ".terrain");
+
+                int h = 0;
+                for(int x = 0; x < 16; x++) {
+                    for(int y = 0; y < 16; y++) {
+                        for(int z = 0; z < 16; z++) {
+                            this.setBlockAt(v + new Vector3(x, y, z), s[h], true);
+                            h++;
+                        }
+                    }
+                }
+            }
+        }
+
         public override void load(string name) {
             DirectoryInfo directoryInfo = new FileInfo(name).Directory;
             if(directoryInfo != null) {

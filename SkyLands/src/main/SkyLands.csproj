@@ -2595,6 +2595,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\GUIs\Builder.cs" />
+    <Compile Include="csharp\Main\GUIs\DeathMenu.cs" />
     <Compile Include="csharp\Main\GUIs\Edit.cs" />
     <Compile Include="csharp\Main\GUIs\InGameMenu.cs" />
     <Compile Include="csharp\Main\GUIs\OptionMenu.cs" />

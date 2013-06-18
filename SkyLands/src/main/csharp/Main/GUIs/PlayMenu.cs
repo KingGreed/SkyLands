@@ -23,9 +23,16 @@ namespace Game.GUIs {
             base.onDocumentReady(sender, e);
             JSObject j = OgreForm.webView.CreateGlobalJavascriptObject("PlayMenuJSObject");
             j.Bind("back", false, HideAndPlay);
-            j.Bind("play", false, (s, args) => this.mStateMgr.RequestStatePush(typeof(GameState)));
+            j.Bind("play", false, playGame);
             j.Bind("load", false, Load);
             j.Bind("scenario", false, Scenario);
+        }
+
+        private void playGame(object sender, EventArgs e) {
+
+            this.mStateMgr.GameInfo = new World.GameInfo();
+            this.mStateMgr.GameInfo.Scenario = this.scenario;
+            this.mStateMgr.RequestStatePush(typeof(GameState));
         }
 
         private void HideAndPlay(object sender, EventArgs e) {
