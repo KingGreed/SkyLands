@@ -60,9 +60,11 @@ namespace Game.Sky
         }
 
         public void Update()
-        { 
-            /*if(this.mStateMgr.Input.IsKeyDown()
-                this.mCaelumSystem.TimeScale += this.mStateMgr.Input.MouseMove.z;*/
+        {
+            float delta = 0;
+            if (this.mStateMgr.Controller.IsKeyDown(MOIS.KeyCode.KC_ADD)) { delta += 40; }
+            if (this.mStateMgr.Controller.IsKeyDown(MOIS.KeyCode.KC_MINUS)) { delta -= 40; }
+            this.mCaelumSystem.TimeScale += delta;
         }
 
         public void AddListeners()

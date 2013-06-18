@@ -20,6 +20,7 @@ namespace Game.RTS
         protected readonly ConstructionBlock mConstrBlock;
         protected Vector3 mConsBlockPos;
         protected List<Vector3> mClearZone;
+        protected byte mColoredBlock;
         protected byte[, ,] mBuilding;
         protected int mYDiff;
 
@@ -35,6 +36,7 @@ namespace Game.RTS
             this.mIsland = island;
             this.mConstrBlock = User.ActConstrBlock;
             this.Faction = User.ActConstrBlock.Faction;
+            this.mColoredBlock = (byte) ((this.Faction == Faction.Blue) ? 32 : 31);
             this.Position = pos;
             this.mClearZone = new List<Vector3>();
             this.Init();
@@ -47,7 +49,6 @@ namespace Game.RTS
         public void ConfirmBuilding()
         {
             this.Create();
-            this.ClearScene();
             this.BuildGhost();
         }
 
@@ -59,8 +60,9 @@ namespace Game.RTS
                 {
                     for (int z = 0; z < this.Size.z; z++)
                     {
+                        if (x == 0 && y == 0 && z == 0) { continue; }
                         Vector3 pos = new Vector3(x, y, z);
-                        if (this.mBuilding[x, y, z] != 0 || this.mClearZone.Contains(pos))
+                        if (this.mBuilding[x, y, z] != 0 || this.mClearZone.Contains(pos) && !(this.mIsland.getBlock(this.RealPos + pos, false) is ConstructionBlock))
                             this.mIsland.removeFromScene(this.RealPos + pos);
                     }
                 }
@@ -69,42 +71,49 @@ namespace Game.RTS
 
         private void BuildGhost()
         {
-            for (int x = 0; x < this.Size.x; x++)
+            /*for (int x = 0; x < this.Size.x; x++)
             {
                 for (int y = 0; y < this.Size.y; y++)
                 {
                     for (int z = 0; z < this.Size.z; z++)
                     {
-                        if (this.mBuilding[x, y, z] != 0 && !(x == 0 && y == 0 && z == 0))
-                            this.mIsland.addBlockToScene(this.RealPos + new Vector3(x, y, z), ghostBlock);
+                        Vector3 pos = this.RealPos + new Vector3(x, y, z);
+                        if (this.mBuilding[x, y, z] != 0 && (this.mIsland.getBlock(this.RealPos + pos, false) is Air))
+                            this.mIsland.addBlockToScene(pos, ghostBlock);
                     }
                 }
-            }
+            }*/
         }
 
-        private void Build()
+        public void Build()
         {
-            if (!this.mIsCreated) { this.Create(); this.ClearScene(); }
-            
-            for (int x = 0; x < this.Size.x; x++)
+            if (!this.mIsCreated) { this.Create(); }
+            this.ClearScene();
+
+            /*for (int x = 0; x < this.Size.x; x++)
             {
                 for (int y = 0; y < this.Size.y; y++)
                 {
                     for (int z = 0; z < this.Size.z; z++)
                     {
-                        if (this.mBuilding[x, y, z] != 0)
-                            this.mIsland.addBlockToScene(this.RealPos + new Vector3(x, y, z),
-                                VanillaChunk.staticBlock[VanillaChunk.byteToString[this.mBuilding[x, y, z]]].getName());
+                        Vector3 pos = this.RealPos + new Vector3(x, y, z);
+                        if (this.mBuilding[x, y, z] != 0 && !(this.mIsland.getBlock(pos, false) is ConstructionBlock))
+                        {
+                            string name = VanillaChunk.staticBlock[VanillaChunk.byteToString[this.mBuilding[x, y, z]]].getName();
+                            this.mIsland.addBlockToScene(pos, name);
+                        }
                     }
                 }
-            }
+            }*/
             this.OnBuild();
         }
 
         protected virtual void OnBuild()
         {
-            this.mIsland.removeFromScene(this.RealPos + this.mConsBlockPos);
-            this.mIsland.addBlockToScene(this.RealPos + this.mConsBlockPos, "Construction");
+            //this.mIsland.removeFromScene(this.Position + this.mConsBlockPos);
+            //this.mIsland.addBlockToScene(this.Position + this.mConsBlockPos, "Construction");
+            User.ActConstrBlock = null;
+            User.RequestBuilderClose = true;
         }
 
         public void OnDrop(int pos, int newAmount)
@@ -114,7 +123,7 @@ namespace Game.RTS
             this.mConstrBlock.RemainingRessources[b] = newAmount;
 
             if (this.mConstrBlock.RemainingRessources.All(keyValPair => keyValPair.Value <= 0))
-                this.Build();
+                this.mStateMgr.MainState.BuildingMgr.AddBuilding(this.mConstrBlock);
         }
     }
 }

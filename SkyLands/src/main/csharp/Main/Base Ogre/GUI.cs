@@ -66,17 +66,20 @@ namespace Game.BaseApp {
         public static void ResizeJavascript(WebControl webControl, Vector2 ratio) { ResizeJavascript(webControl, ratio.x, ratio.y); }
         public static void ResizeJavascript(WebControl webControl, float x, float y)
         {
+            if (!webControl.IsLive) { return; }
             webControl.ExecuteJavascript("resize(" + Convert.ToString(x).Replace(',', '.') + ", "
                                                    + Convert.ToString(y).Replace(',', '.') + ")");
         }
 
         public static void SetBlockAt(int pos, string name, int amount)
         {
+            if (!OgreForm.webView.IsLive) { return; }
             OgreForm.webView.ExecuteJavascript("setBlockAt(" + pos + ", '" + name + "', " + amount + ")");
         }
 
         public static int GetAmountAt(int pos)
         {
+            if (!OgreForm.webView.IsLive) { return 0; }
             string amount = OgreForm.webView.ExecuteJavascriptWithResult("getAmountAt(" + pos + ")");
             if (amount == "") { return -1; }
             return int.Parse(amount);
@@ -84,6 +87,7 @@ namespace Game.BaseApp {
 
         public static string GetImageAt(int pos)
         {
+            if (!OgreForm.webView.IsLive) { return ""; }
             string imgName = OgreForm.webView.ExecuteJavascriptWithResult("getImageAt(" + pos + ")");
             string[] val = imgName.Split('/');
             return val[val.Length - 1];

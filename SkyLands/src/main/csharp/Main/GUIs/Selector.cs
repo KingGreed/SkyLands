@@ -27,6 +27,9 @@ namespace Game.GUIs
             set
             {
                 pos = value;
+                if(pos >= 10) { pos -= 10; }
+                if (pos < 0) { pos += 10; }
+                if (!OgreForm.SelectBar.IsLive) { return; }
                 OgreForm.SelectBar.ExecuteJavascript("setSelectorPosition(" + pos + ")");
                 string imgName = OgreForm.SelectBar.ExecuteJavascriptWithResult("getMaterialAt(" + pos + ")");
                 if (imgName == "blank.png") { SelectedId = 0; IsBullet = false; return; }
@@ -69,6 +72,7 @@ namespace Game.GUIs
 
         public static void SetBlockAt(int position, string imgName, int amount = 1) // imgName = "" to change amount
         {
+            if (!OgreForm.SelectBar.IsLive) { return; }
             if(imgName != "")
                 OgreForm.SelectBar.ExecuteJavascript("setMaterialAt(" + position + ", '" + imgName + "')");
             if(imgName != "blank.png" && amount > 0)

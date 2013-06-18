@@ -116,7 +116,12 @@ namespace Game
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.Start) && GUI.Visible)
             {
                 if (this.mIsInventoryOpen) { this.SwitchInventory(false); this.mIsInventoryOpen = false; }
-                else if (this.mIsBuilderOpen) { this.mIsBuilderOpen = false; ActConstrBlock.Building.ConfirmBuilding(); }
+                else if (this.mIsBuilderOpen)
+                {
+                    this.mIsBuilderOpen = false;
+                    if(ActConstrBlock.Building != null)
+                        ActConstrBlock.Building.ConfirmBuilding();
+                }
 
                 this.SwitchGUIVisibility(false);
                 GUI.Visible = false;
@@ -124,6 +129,7 @@ namespace Game
 
             if (RequestBuilderClose && this.mIsBuilderOpen)
             {
+                System.Console.WriteLine("builder close requested");
                 RequestBuilderClose = false;
                 this.mIsBuilderOpen = false;
                 this.SwitchGUIVisibility(false);
@@ -143,6 +149,7 @@ namespace Game
 
             if (OpenBuilder)
             {
+                System.Console.WriteLine("builder open started" );
                 new Builder(this.mBuildingMgr, this.mSelectedBlockPos);
                 Builder.OnOpen = this.OnBuilderOpen;
                 OpenBuilder = false;
@@ -188,9 +195,6 @@ namespace Game
             }
             if(Selector.SelectorPos != selectorPos)
                 Selector.SelectorPos = selectorPos;
-
-            if (this.mStateMgr.Controller.HasActionOccured(UserAction.Dance))
-                this.Inventory.addAt(new Slot(5, 1), 0, 0);
         }
 
         private void SwitchInventory(bool open)
@@ -206,6 +210,7 @@ namespace Game
 
         public void OnBuilderOpen()
         {
+            System.Console.WriteLine("OnOpen. Selected : " + ActConstrBlock.Selection);
             this.OnInventoryOpen();
             ActConstrBlock.DrawRemainingRessource();
         }
@@ -275,9 +280,6 @@ namespace Game
             this.mSelectedBlock = actBlock;
             this.mWireCube.SetVisible(true);
             this.mWireCube.Position = (this.mSelectedBlockPos + Vector3.NEGATIVE_UNIT_Z) * Cst.CUBE_SIDE;
-
-            ConstructionBlock selectedBlock = this.mSelectedBlock as ConstructionBlock;
-            if (selectedBlock != null) { ActConstrBlock = selectedBlock; }
 
             return distance;
         }
@@ -352,11 +354,7 @@ namespace Game
             this.mWorld.onCreation(addedBlockPos);
 
             ConstructionBlock selectedBlock = this.mSelectedBlock as ConstructionBlock;
-            if (selectedBlock != null)
-            {
-                ActConstrBlock = selectedBlock;
-                selectedBlock.Faction = Faction.Blue;
-            }
+            if (selectedBlock != null) { selectedBlock.Faction = Faction.Blue; }
 
             this.Inventory.removeAt(Selector.SelectorPos, 3, 1);
         }

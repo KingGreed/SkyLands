@@ -109,6 +109,7 @@ namespace Game.BaseApp {
             //LogManager.Singleton.DefaultLog.LogDetail = LoggingLevel.LL_LOW;
             this.mSceneMgr.ShadowTechnique = ShadowTechnique.SHADOWDETAILTYPE_INTEGRATED;
             this.mSceneMgr.ShadowFarDistance = 400;
+            this.mSceneMgr.ShadowIndexBufferSize = 5;
             Game.World.Display.ColoredMaterials.Init();
 
             this.Resize += this.OgreForm_Resize;

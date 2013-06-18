@@ -2594,6 +2594,7 @@
     <Compile Include="csharp\Main\GUIs\InventoryGUI.cs" />
     <Compile Include="csharp\Main\GUIs\ScenarioCreator.cs" />
     <Compile Include="csharp\Main\GUIs\Selector.cs" />
+    <Compile Include="csharp\Main\GUIs\StructuresMenu.cs" />
     <Compile Include="csharp\Main\RTS\Buildings\BuildingManager.cs" />
     <Compile Include="csharp\Main\RTS\Buildings\Building.cs">
       <SubType>Code</SubType>
@@ -2633,6 +2634,7 @@
     </Compile>
     <Compile Include="csharp\Main\Characters\Misc\YawFactor.cs" />
     <Compile Include="csharp\Main\RTS\AIRTS.cs" />
+    <Compile Include="csharp\Main\RTS\Buildings\RobotFactory.cs" />
     <Compile Include="csharp\Main\RTS\Buildings\CrystalDrill.cs" />
     <Compile Include="csharp\Main\RTS\PlayerRTS.cs" />
     <Compile Include="csharp\Main\RTS\RTSManager.cs" />
@@ -2697,6 +2699,8 @@
     <Compile Include="csharp\Main\World\Blocks\ConstructionBlock.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="csharp\Main\World\Blocks\BlueDoor.cs" />
+    <Compile Include="csharp\Main\World\Blocks\RedDoor.cs" />
     <Compile Include="csharp\Main\World\Blocks\GhostBlock.cs" />
     <Compile Include="csharp\Main\World\Blocks\CrystalGate.cs" />
     <Compile Include="csharp\Main\World\Blocks\CrystalGateH.cs" />

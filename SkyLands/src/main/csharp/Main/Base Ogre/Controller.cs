@@ -117,6 +117,7 @@ namespace Game.Input
             this.MovementFactor = new Mogre.Vector3();
 
             this.mOgreForm.MouseMove += OnMouseMoved;
+            this.mOgreForm.MouseWheel += OnMouseWheel;
             this.mOgreForm.MouseDown += OnMousePressed;
             this.mOgreForm.MouseUp += OnMouseReleased;
             this.mOgreForm.MouseLeave += OnMouseLeave;
@@ -278,6 +279,13 @@ namespace Game.Input
             return true;
         }
 
+        private void OnMouseWheel(object sender, EventArgs e)
+        {
+            MouseEventArgs args = (MouseEventArgs)e;
+            if (this.mUpdateMovement) { this.mMouseMove.z = args.Delta - this.mMousePos.z; }
+            this.mMousePos.z += args.Delta;
+        }
+
         private void OnMouseMoved(object sender, EventArgs e)
         {
             MouseEventArgs args = (MouseEventArgs)e;
@@ -285,12 +293,10 @@ namespace Game.Input
             {
                 this.mMouseMove.x = args.X - this.mMousePos.x;
                 this.mMouseMove.y = args.Y - this.mMousePos.y;
-                this.mMouseMove.z = args.Delta - this.mMousePos.z;
             }
             this.mUpdateMovement = true;
             this.mMousePos.x = args.X;
             this.mMousePos.y = args.Y;
-            this.mMousePos.z = args.Delta;
         }
 
         private void OnMouseLeave(object sender, EventArgs e)

@@ -1,5 +1,4 @@
 ﻿using API.Generic;
-using Game.World.Generator;
 using Mogre;
 
 using API.Geo.Cuboid;
@@ -102,12 +101,6 @@ namespace Game.RTS
                     this.mBuilding[x, 7, z] = (byte)((_base[x, z] == 0) ? 0 : darkWood);
 
             base.Create();
-        }
-
-        protected override void OnBuild()
-        {
-            User.RequestBuilderClose = true;
-            base.OnBuild();
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using API.Generic;
-using Game.World.Generator;
-using Mogre;
+﻿using Mogre;
 
 using API.Geo.Cuboid;
 using Game.States;
@@ -16,10 +14,9 @@ namespace Game.RTS
         {
             this.Size = new Vector3(sizeX, sizeY, sizeZ);
             this.mBuilding = new byte[sizeX, sizeY, sizeZ];
-            this.mConstrBlock.AddRemainingRessource(2, 5); // dirt
-            this.mConstrBlock.AddRemainingRessource(3, 5); // stone
+            this.mConstrBlock.AddRemainingRessource(2, 10); // dirt
+            this.mConstrBlock.AddRemainingRessource(3, 10); // stone
             this.mYDiff = sizeY - 3;
-            this.mConsBlockPos = new Vector3(sizeX / 2, sizeY, sizeZ / 2);
         }
 
         protected override void Create()
@@ -51,7 +48,7 @@ namespace Game.RTS
                     this.mBuilding[(int)downPoints[i].x, y, (int)downPoints[i].y] = b;
             }
             this.mBuilding[(int)downPoints[4].x, 0, (int)downPoints[4].y] = glass;
-            this.mBuilding[(int)downPoints[4].x, sizeY - 1, (int)downPoints[4].y] = glass;
+            this.mBuilding[(int)downPoints[4].x, sizeY - 1, (int)downPoints[4].y] = this.mColoredBlock;
 
             for (int y = sizeY - 3; y < sizeY; y++)
                 for (int x = 0; x < sizeX; x++)
@@ -59,12 +56,6 @@ namespace Game.RTS
                         this.mClearZone.Add(new Vector3(x, y, z));
 
             base.Create();
-        }
-
-        protected override void OnBuild()
-        {
-            User.RequestBuilderClose = true;
-            base.OnBuild();
         }
     }
 }

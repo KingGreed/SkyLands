@@ -5,26 +5,27 @@ using System.Text;
 using API.Geo.Cuboid;
 using Game.RTS;
 using Game.States;
+using Game.World.Blocks;
 using Mogre;
 
 namespace Game.csharp.Main.RTS.Buildings
 {
     public class BuildingManager
     {
-        private StateManager mStateMgr;
-        private List<Building> mBuildings = new List<Building>();
-        private Island mIsland;
+        private readonly StateManager mStateMgr;
+        private readonly Island mIsland;
+        private readonly Dictionary<ConstructionBlock, Building> mBuildings = new Dictionary<ConstructionBlock, Building>();
 
         public BuildingManager(StateManager stateMgr, Island island)
         {
             this.mStateMgr = stateMgr;
             this.mIsland = island;
-            this.mBuildings = new List<Building>();
+            this.mBuildings = new Dictionary<ConstructionBlock, Building>();
         }
 
-
-        public void OnBuildingSelected(string building, Vector3 constructionBlockPos)
+        public void OnBuildingSelection(string building, Vector3 constructionBlockPos)
         {
+            System.Console.WriteLine("OnBuildingSelection : " + building);
             User.ActConstrBlock.Selection = building;
             switch (building)
             {
@@ -35,10 +36,16 @@ namespace Game.csharp.Main.RTS.Buildings
                 case "CD":
                     User.ActConstrBlock.Building = new CrystalDrill(this.mStateMgr, this.mIsland, constructionBlockPos);
                     break;
-            }
 
-            this.mBuildings.Add(User.ActConstrBlock.Building);
+                case "RF":
+                    User.ActConstrBlock.Building = new RobotFactory(this.mStateMgr, this.mIsland, constructionBlockPos);
+                    break;
+            }
         }
 
+        public void AddBuilding(ConstructionBlock constr)
+        {
+            this.mBuildings.Add(constr, null);
+        }
     }
 }

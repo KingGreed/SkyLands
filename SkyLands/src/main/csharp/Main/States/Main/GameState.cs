@@ -60,7 +60,7 @@ namespace Game.States
                 user.IsAllowedToMoveCam = !ctrlPressed;
             }
 
-            if (this.mStateMgr.Controller.WasKeyPressed(MOIS.KeyCode.KC_F1))
+            if (this.mStateMgr.Controller.WasKeyPressed(MOIS.KeyCode.KC_F1) && !GUI.Visible)
                 user.SwitchFreeCamMode();
         }
 
