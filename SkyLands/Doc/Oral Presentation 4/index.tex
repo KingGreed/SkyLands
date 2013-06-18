@@ -175,7 +175,59 @@
       \section{A Web UI}
         Finding a way to display our menus and what's more in HTML, CSS and JavaScript was a releif. However we had to completly destroy the old interface and thus rebuild our GIU from scratch. We first had to rebuild the previous GUI (we chose a different theme that time) and then the ingame HUD.
 
-        \subsection{Main Menu}
+           \subsection{ Main Menu}
+
+    In order for the game to be totally finished, we thought of giving it a very specific and personal style that wouldn't remind the players of any other games. \\
+
+    They also had to match the spirit of the game which is supposed to take place somewhere in space. As a result, all the menus have been recreated: they all now have new skins as well as new features.  \\ 
+ 
+    The Main menu is the only one that didn't changed much: it still links to the ``Play Menu'' the ``Option Menu'' and enables the player to exit the game, but the skin was changed into a spaceship-looking interior. \\
+
+    \includegraphics[width=15cm, height=8cm]{images/Menus/Menu_Normal_view.png} 
+    \newpage
+
+    The ``Option Menu'' was also redesigned in the same theme and now let the player chose to enables sound and VSYNC or not and links back to the Main Menu. \\
+
+    \includegraphics[width=15cm, height=8cm]{images/Menus/Menu_Options_normal.png}
+
+    The ``Play Menu'' allows the player to load a previously saved game and to access the Scenario Editor. After choosing an existing scenario in the Editor the player can launch the game by clicking on ``Create World''. \\
+
+    \includegraphics[width=15cm, height=8cm]{images/Menus/menu_play_normal.png}
+
+    \newpage
+
+    The ``Scenario Menu'' is divided in four interactive parts. The middle blue screen let the player choose an existing scenario among those on the scrolling list, then the ``OK'' button will redirect him to the play menu to launch the scenario. The ``NEW'' button as well as the ``EDIT'' button both link to the scenario editor, NEW will let the player create a world from the scratch thanks to the preexisting structures and maps while EDIT will let the player edit a existing scenario.\\
+
+
+    \includegraphics[width=15cm, height=8cm]{images/Menus/Load_scenario_normal.png}
+
+
+    \begin{textblock}{0.35}(0.47,0.55)
+    The Scenario editor is divided in two parts. Left is the editor and right is the created map displayed. \\
+
+The user can choose a preexisting map in the editor by scrolling up and down with the arrows and clicking ``OK'' to edit it.\\
+
+ The editor will then dispear to let the player travel the map in a first person view so that blocks can be added or removed or made into event-blocks. If no map are satisfying, a new map can be created by typing its name in the textbox. \\
+
+``ADD'' will enable the player to add already existing structures on the map like the pyramid or towers.\\
+    \end{textblock}
+    \includegraphics[width=6cm, height=12cm]{images/Menus/Scenario_editor_normal.png}
+
+    \newpage
+
+    Finally, the ``Ingame Menu'' has been recreated too. Appart from its new spaceship-like skin, it now enable the player to save the game, go back to it or go back to the Main Menu.\\
+
+    \begin{textblock}{0.6}(0.3,0.15)
+    
+    \includegraphics[width=10cm, height=9cm]{images/Menus/ingame_menu_normal.png}
+    
+    \end{textblock}
+
+      ~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\~\\
+
+    A ``GAME OVER'' screen was also added, letting the player respawn somewhere on the map or exit to the Main Menu.\\
+
+    \includegraphics[width=15cm, height=8cm]{images/Menus/death_screen_normal.png}
 
 
     \chapter{\textcolor{blue}{Random Terrain Generation}}
@@ -374,7 +426,48 @@ block.End();
     \chapter{\textcolor{blue}{Gameplay}}
       \section{Exploring the terrain}
       \section{Adding Blocks}
+        \subsection{Adding blocks with the second display system}
+          You've already guessed it adding blocks with the second system was fairly easy (those functionalities were'nt implemented with the first display system).\\
+          Basically when adding a new block, we would ``refresh'' the surrounding blocks, in order to remove faces which were no longer visible.\\
+          And adding to the scene the visible faces.
+
+        \subsection{Adding blocks with the second display system}
+          Even though this system boosted the Frames Per Seconds, it had it disadvantages and, adding blocks was one of them.\\
+          When creating a material, once it has been displayed on the scene, other faces can't be added to it...\\ 
+          Thus we had to think of something else. We came up with an intermediary solution : \\
+          When the player wanted to add blocks, we would add faces (which were all distinct entities, just like the second display system) however, after a certain amount of blocks added, we would start a new thread and recreate another Material, when the new material would be done, we would swap it with the old one and destroy the old one!
+
       \section{Removing Blocks}
+        Dealing with removing blocks with our third display system was really difficult. Mostly because we could not hide any part of the Manual object nor could we recreate it because it woul have taken too much time.\\
+
+        Fortunately, we discovered a way to edit manual objects but it involved using pointers. However at dedalus we like taking risks and, we decided to use pointers!\\
+        Basically, all the points we add to a Manual object are stored in a Vertex buffer and, using pointers we can access them :
+
+        \begin{lstlisting}
+            vertexBuffer = this.manualObjectData.vertexData.vertexBufferBinding.GetBuffer(posEl.Source);
+            vBufferList.Add(vertexBuffer);
+            byte* pVertex = (byte*)vertexBuffer.Lock(HardwareBuffer.LockOptions.HBL_NORMAL) + vertexBuffer.VertexSize * this.mIndexInVertexBuffer[elemPosition];
+            float* pReal;
+
+
+            for(int i = 0; i < numFaces * 4; i++) {
+                posEl.BaseVertexPointerToElement(pVertex, &pReal);
+
+                pReal[0] = 0; pReal[1] = 0; pReal[2] = 0; //A vertex is a Vector3
+                pVertex += vertexBuffer.VertexSize;
+            }
+
+            vertexBuffer.Unlock();
+            \end{lstlisting}
+
+            One of the annoying part is that vertexBuffer which is of type HardwareVertexBufferSharedPtr is an object which is created by Ogre and, when used will be automatically disposed by this one. However C# has a garbage collector which will also try to dispose it after Ogre takes care of it. Thus when the garbage collector tries to dispose of the vertex buffer, the program crashes.\\
+
+
+            Solving this bug was really complicated and, we couldn't find much help on the Mogre's forum
+
+
+
+
       \section{Inventory, Selector}
       \section{Crafting}
     \chapter{\textcolor{blue}{Strategy}}

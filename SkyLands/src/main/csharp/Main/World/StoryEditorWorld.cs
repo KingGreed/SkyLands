@@ -28,6 +28,7 @@ namespace Game.World
         private string   mName;
         private long     mAge;
         private long     mSeed;
+        private string   mPath;
         private Vector3 mSpawnPoint;
 
         private Island   mIslandLoaded;
@@ -47,8 +48,10 @@ namespace Game.World
             SceneNode node = this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
 
             if(stateMgr.StoryInfo.pathToFile == "") {
+                this.mPath = "";
                 this.mIslandLoaded = new FlatIsland(node, new Vector2(1, 1), this);
             } else {
+                this.mPath = stateMgr.StoryInfo.pathToFile;
                 this.load(stateMgr.StoryInfo.pathToFile);
             }
 
@@ -159,6 +162,25 @@ namespace Game.World
 
 	    public void save(Entity e) {
             e.getIsland().save();
+        }
+
+        public void save() {
+
+            TextWriter writer = new StreamWriter(this.mPath);
+
+            writer.WriteLine(this.mIslandLoaded.getSize().x);
+            writer.WriteLine(this.mIslandLoaded.getSize().y);
+            writer.WriteLine(this.mIslandLoaded.getSize().z);
+
+            for (int x = 0; x < this.mIslandLoaded.getSize().x * 16; x++) {
+                for(int y = 0; y < this.mIslandLoaded.getSize().y * 16; y++) {
+                    for(int z = 0; z < this.mIslandLoaded.getSize().z * 16; z++) {
+                        writer.WriteLine(this.mIslandLoaded.getBlock(x, y, z, false).getId());
+                    }
+                }
+            }
+
+            writer.Close();
         }
 
         public void load(string fileName) {

@@ -107,9 +107,9 @@ namespace Game.BaseApp {
             GraphicBlock.generateFace();
             LogManager.Singleton.DefaultLog.LogMessage("***********************Program\'s Log***********************");
             //LogManager.Singleton.DefaultLog.LogDetail = LoggingLevel.LL_LOW;
-            /*this.mSceneMgr.ShadowTechnique = ShadowTechnique.SHADOWDETAILTYPE_INTEGRATED;
-            this.mSceneMgr.ShadowFarDistance = 400;*/
-            World.Display.ColoredMaterials.Init();
+
+            this.mSceneMgr.ShadowFarDistance = 400;
+            Game.World.Display.ColoredMaterials.Init();
 
             this.Resize += this.OgreForm_Resize;
 

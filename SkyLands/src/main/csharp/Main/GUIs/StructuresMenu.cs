@@ -41,12 +41,12 @@ namespace Game.GUIs {
                 OgreForm.webView.ExecuteJavascript("addStructure(" + l[i] + ")");
             }
 
-            Visible = true;
         }
 
         private void disp(object sender, JavascriptMethodEventArgs e) {
             
             string name = (string)e.Arguments[0];
+
             if (File.Exists(this.mStateMgr.StoryInfo.pathToFile))
             {
                 this.mStateMgr.StoryInfo.pathToFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" + scenarioName + "\\" + name + ".scenario";

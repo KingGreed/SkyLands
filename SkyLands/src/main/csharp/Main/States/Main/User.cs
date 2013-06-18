@@ -229,8 +229,7 @@ namespace Game
         {
             if (open)
                 new InventoryGUI(this.OnInventoryOpen, this.Inventory.OnCraft);
-            else
-            {
+            else {
                 this.Inventory.OnClose();
                 GUI.Visible = false;
             }

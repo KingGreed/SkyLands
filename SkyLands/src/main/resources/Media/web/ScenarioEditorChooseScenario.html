@@ -11,9 +11,9 @@
       		ratioY = parseInt($('#background').css('height')) / 900;
 
 	      	$(".clickable").click(function() {
-	      		ScenarioLoaderObject.update($(".clickable").html());
 	      		$(".clickable").removeClass("selected");
 	      		$(this).addClass("selected");
+	      		ScenarioLoaderObject.update($(".clickable").html());
 
 	      	});
 
