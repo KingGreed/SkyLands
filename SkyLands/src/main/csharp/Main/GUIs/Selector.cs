@@ -46,21 +46,30 @@ namespace Game.GUIs
             }
         }
 
-        public static void Init(Inventory inventory)
+        public static void Init(Inventory inventory, bool isInEditorMode)
         {
             for (int i = 0; i < 10; i++)
                 SetBlockAt(i, "blank.png");
 
-            List<byte> keys = new List<byte>(Inventory.MagicCubes.Keys);
-            for (int i = 0; i < Inventory.MagicCubes.Count; i++)
-                inventory.addAt(new Slot(1, keys[i]), i, 3);
+            if (!isInEditorMode)
+            {
+                List<byte> keys = new List<byte>(Inventory.MagicCubes.Keys);
+                for (int i = 0; i < Inventory.MagicCubes.Count; i++)
+                    inventory.addAt(new Slot(1, keys[i]), i, 3);
 
-            // TODO : Temp
-            inventory.addAt(new Slot(5, 7), 3, 3);
-            inventory.addAt(new Slot(10, 4), 0, 0);
-            inventory.addAt(new Slot(30, 13), 1, 0);
-            inventory.addAt(new Slot(5, 2), 2, 0);
-            inventory.addAt(new Slot(50, 3), 3, 0);
+                // TODO : Temp
+                inventory.addAt(new Slot(5, 7), 3, 3);
+                inventory.addAt(new Slot(10, 4), 0, 0);
+                inventory.addAt(new Slot(30, 13), 1, 0);
+                inventory.addAt(new Slot(5, 2), 2, 0);
+                inventory.addAt(new Slot(50, 3), 3, 0);
+            }
+            else
+            {
+                byte[] id = new byte[] {1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 13, 14, 20, 21, 22};
+                for (int i = 0; i < id.Length; i++)
+                    inventory.addAt(new Slot(1, id[i]), i % 10, i / 10);
+            }
 
             IsBullet = false;
             SelectorPos = 0;

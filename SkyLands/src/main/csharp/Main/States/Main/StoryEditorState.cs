@@ -1,10 +1,16 @@
-﻿using Game.CharacSystem;
+﻿using Game.BaseApp;
+using Game.CharacSystem;
+using Game.GUIs;
+using Game.Input;
 using Game.World;
 
 namespace Game.States
 {
     public class StoryEditorState : MainState {
-        public StoryEditorState(StateManager stateMgr) : base(stateMgr, "StoryEditor") { }
+        public StoryEditorState(StateManager stateMgr) : base(stateMgr, "StoryEditor")
+        {
+            this.mStateMgr.GameInfo.IsInEditorMode = true;
+        }
 
         protected override void Startup() {
             this.World = new StoryEditorWorld(this.mStateMgr);
@@ -14,15 +20,15 @@ namespace Game.States
 
         protected override void AfterWorldCreation() {
             this.CharacMgr = new CharacMgr(this.mStateMgr, this.World, this.User);
-            this.User.SwitchFreeCamMode();
-        }
-
-        public override void Show()
-        {
         }
 
         public override void Save()
         {
+        }
+
+        public override void OpenMainGUI()
+        {
+            new StructuresMenu(this.mStateMgr, this.mStateMgr.StoryInfo.pathToFile);
         }
     }
 }

@@ -47,9 +47,11 @@ namespace Game.GUIs {
         private void disp(object sender, JavascriptMethodEventArgs e) {
             
             string name = (string)e.Arguments[0];
-            if(File.Exists(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" + scenarioName + "\\" + name + ".scenario")) {
-
-                this.mStateMgr.StoryInfo.pathToFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" + scenarioName + "\\" + name + ".scenario";
+            this.mStateMgr.StoryInfo.pathToFile = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" + scenarioName + "\\" + name + ".scenario";
+            if (!File.Exists(this.mStateMgr.StoryInfo.pathToFile))
+            {
+                FileStream stream = File.Create(this.mStateMgr.StoryInfo.pathToFile);
+                stream.Close();
             }
             this.mStateMgr.RequestStatePush(typeof(StoryEditorState));
         }

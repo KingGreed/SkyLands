@@ -138,6 +138,14 @@ namespace Game.Input
 
         public void Update(float frameTime)
         {
+            /*if((this.mMousePos.x < 1 || this.mMousePos.x >= this.mOgreForm.Size.Width - 1 ||
+               this.mMousePos.y < 1 || this.mMousePos.y >= this.mOgreForm.Size.Height - 1) && this.BlockMouse) {
+                Cursor.Position = new System.Drawing.Point(this.mOgreForm.Location.X + this.mOgreForm.Size.Width / 2,
+                                                           this.mOgreForm.Location.Y + this.mOgreForm.Size.Height / 2);
+                this.mUpdateMovement = false;
+                this.mMousePos = new Mogre.Vector3(Cursor.Position.X, Cursor.Position.Y, this.mMousePos.z);
+            }*/
+            
             XmlNodeList nodes = this.mCommands.ChildNodes[1].ChildNodes;
             if (this.GamePadState.IsConnected)
             {

@@ -1,4 +1,5 @@
-﻿using Mogre;
+﻿using Game.GUIs;
+using Mogre;
 
 using Game.BaseApp;
 using Game.Input;
@@ -65,5 +66,11 @@ namespace Game.States
         }
 
         public override void Save() { this.World.save(this.CharacMgr.MainPlayer); }
+
+        public override void OpenMainGUI()
+        {
+            InGameMenu.Save = this.Save;
+            new InGameMenu(this.mStateMgr);
+        }
     }
 }

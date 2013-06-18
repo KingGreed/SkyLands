@@ -29,12 +29,13 @@ namespace Game
         private CameraMan mCameraMan;
         private SceneNode mCamYawNode, mCamPitchNode;
         private readonly SceneNode mWireCube;
-        private bool mIsInventoryOpen, mIsBuilderOpen;
+        private bool mIsInventoryOpen, mIsBuilderOpen, mIsMainGUIOpen;
         private BuildingManager mBuildingMgr;
 
         private Vector3 mSelectedBlockPos;
         private Block   mSelectedBlock;
         private readonly MOIS.KeyCode[] mFigures;
+        private Timer mTimeSinceGUIOpen;
 
         public static ConstructionBlock ActConstrBlock { get; set; }
         public static bool OpenBuilder { get; set; }
@@ -48,10 +49,16 @@ namespace Game
             this.mStateMgr = stateMgr;
             this.mWorld = world;
             this.mBuildingMgr = buildingMgr;
+            this.mTimeSinceGUIOpen = new Timer();
 
             this.mCameraMan = null;
             this.IsAllowedToMoveCam = true;
             this.IsFreeCamMode = true;
+            Camera cam = this.mStateMgr.Camera;
+            cam.Position = new Vector3(-203, 633, -183);
+            cam.Orientation = new Quaternion(0.3977548f, -0.1096644f, -0.8781486f, -0.2421133f);
+            this.mCameraMan = new CameraMan(cam);
+
             ActConstrBlock = null;
 
             this.mFigures = new MOIS.KeyCode[10];
@@ -113,18 +120,44 @@ namespace Game
             MainState mainState = this.mStateMgr.MainState;
             VanillaPlayer mainPlayer = mainState.CharacMgr.MainPlayer;
 
-            if (this.mStateMgr.Controller.HasActionOccured(UserAction.Start) && GUI.Visible)
+            if (this.mIsMainGUIOpen && this.mTimeSinceGUIOpen.Milliseconds >= 3500 && this.mStateMgr.GameInfo.IsInEditorMode)
             {
-                if (this.mIsInventoryOpen) { this.SwitchInventory(false); this.mIsInventoryOpen = false; }
-                else if (this.mIsBuilderOpen)
-                {
-                    this.mIsBuilderOpen = false;
-                    if(ActConstrBlock.Building != null)
-                        ActConstrBlock.Building.ConfirmBuilding();
-                }
-
-                this.SwitchGUIVisibility(false);
+                this.mIsMainGUIOpen = false;
                 GUI.Visible = false;
+            }
+
+            if (this.mStateMgr.Controller.HasActionOccured(UserAction.Start))
+            {
+                if (!GUI.Visible)
+                {
+                    this.mStateMgr.MainState.OpenMainGUI();
+                    this.SwitchGUIVisibility(true);
+                    this.mIsMainGUIOpen = true;
+                    this.mTimeSinceGUIOpen.Reset();
+                }
+                else
+                {
+                    if (this.mIsInventoryOpen)
+                    {
+                        this.SwitchInventory(false);
+                        this.mIsInventoryOpen = false;
+                    }
+                    else if (this.mIsBuilderOpen)
+                    {
+                        this.mIsBuilderOpen = false;
+                        if (ActConstrBlock.Building != null)
+                            ActConstrBlock.Building.ConfirmBuilding();
+                    }
+                    else
+                    {
+                        this.mIsMainGUIOpen = false;
+                        /*if (this.mStateMgr.GameInfo.IsInEditorMode)
+                            (this.mStateMgr.MainState as StoryEditorState).OnExit();*/
+                    }
+
+                    this.SwitchGUIVisibility(false);
+                    GUI.Visible = false;
+                }
             }
 
             if (RequestBuilderClose && this.mIsBuilderOpen)

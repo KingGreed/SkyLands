@@ -96,7 +96,7 @@ namespace Game.CharacSystem
         private byte GetIdFromIndex(int index)
         {
             string imgName = GUI.GetImageAt(index);
-            if (imgName == "blank.png") { return 0; }
+            if (imgName == "blank.png" || imgName == "") { return 0; }
             byte id = MagicCubes.Keys.FirstOrDefault(b => MagicCubes[b] == imgName);
             return id != default(byte) ? id : VanillaChunk.textureToBlock[imgName].getId();
         }

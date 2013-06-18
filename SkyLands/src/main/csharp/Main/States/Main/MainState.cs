@@ -16,8 +16,6 @@ namespace Game.States
 {
     public abstract class MainState : State
     {
-        private bool mIsSelectBarReady;
-
         public User          User      { get; protected set; }
         public CharacMgr     CharacMgr { get; protected set; }
         public API.Geo.World World     { get; protected set; }
@@ -50,7 +48,7 @@ namespace Game.States
             if (OgreForm.SelectBar == null || !OgreForm.SelectBar.IsLive) { return; }
             if (OgreForm.SelectBar.ParentView != null || !OgreForm.SelectBar.IsJavascriptEnabled) { return; }
 
-            Selector.Init(this.User.Inventory);
+            Selector.Init(this.User.Inventory, this.mStateMgr.GameInfo.IsInEditorMode);
             Vector2 size = Selector.WANTED_SIZE * OgreForm.Ratio;
             Vector2 location = (OgreForm.InitSize / 2 - Selector.WANTED_SIZE / 2) * OgreForm.Ratio;
             OgreForm.SelectBar.Size = new Size((int)size.x, (int)size.y);
@@ -59,7 +57,6 @@ namespace Game.States
             GUI.ResizeJavascript(OgreForm.SelectBar, ratio);
             OgreForm.SelectBar.Visible = true;
             OgreForm.SelectBar.DocumentReady -= onSelectBarLoaded;
-            this.mIsSelectBarReady = true;
         }
 
         protected virtual void AfterWorldCreation() {}
@@ -72,7 +69,6 @@ namespace Game.States
             this.User.IsAllowedToMoveCam = true;
             GUI.Visible = false;
             OgreForm.SelectBar.Visible = true;
-            if (this.mIsSelectBarReady) { Selector.Init(this.User.Inventory); }
         }
 
         public override void Hide()
@@ -85,9 +81,6 @@ namespace Game.States
         public override void Update(float frameTime)
         {
             this.World.Update(frameTime);
-
-            if (this.mStateMgr.Controller.HasActionOccured(UserAction.Start) && !GUI.Visible)
-                this.mStateMgr.RequestStatePop();
 
             this.User.Update(frameTime);
             this.CharacMgr.Update(frameTime);
@@ -120,6 +113,8 @@ namespace Game.States
                 }
             }*/
         }
+
+        public abstract void OpenMainGUI();
 
         public void Restart()
         {
