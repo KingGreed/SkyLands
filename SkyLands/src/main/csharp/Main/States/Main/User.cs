@@ -308,10 +308,13 @@ namespace Game
             this.mWireCube.SetVisible(true);
             this.mWireCube.Position = (this.SelectedBlockPos + Vector3.NEGATIVE_UNIT_Z) * Cst.CUBE_SIDE;
 
-            ConstructionBlock constr = this.SelectedBlock as ConstructionBlock;
-            if (constr != null) { this.BuildingMgr.ActConsBlockPos = this.SelectedBlockPos; }
-            else if (!this.mIsBuilderOpen && this.BuildingMgr.ActConsBlockPos != -Vector3.UNIT_SCALE)
-                this.BuildingMgr.ActConsBlockPos = -Vector3.UNIT_SCALE;
+            if (!this.mStateMgr.GameInfo.IsInEditorMode)
+            {
+                ConstructionBlock constr = this.SelectedBlock as ConstructionBlock;
+                if (constr != null) { this.BuildingMgr.ActConsBlockPos = this.SelectedBlockPos; }
+                else if (!this.mIsBuilderOpen && this.BuildingMgr.ActConsBlockPos != -Vector3.UNIT_SCALE)
+                    this.BuildingMgr.ActConsBlockPos = -Vector3.UNIT_SCALE;
+            }
 
             return distance;
         }

@@ -67,14 +67,14 @@ namespace Game.GUIs {
         }
 
         private void Down(object sender, JavascriptMethodEventArgs e) {
-            int index = Convert.ToInt32(e.Arguments[0]);
+            int index = Convert.ToInt32(e.Arguments[0].ToString());
 
             scenarios.Insert(index - 1, scenarios[index]);
             scenarios.RemoveAt(index + 1);
         }
 
         private void Up(object sender, JavascriptMethodEventArgs e) {
-            int index = Convert.ToInt32(e.Arguments[0]);
+            int index = Convert.ToInt32(e.Arguments[0].ToString());
 
             scenarios.Insert(index + 1, scenarios[index]);
             scenarios.RemoveAt(index);
