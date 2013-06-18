@@ -13,11 +13,11 @@ namespace Game.Shoot
     {
         private readonly List<Bullet> mBullets;
 
-        public SceneManager SceneMgr  { get; private set; }
-        public CharacMgr    CharacMgr { get; private set; }
-        public MainWorld    World     { get; private set; }
+        public SceneManager  SceneMgr  { get; private set; }
+        public CharacMgr     CharacMgr { get; private set; }
+        public API.Geo.World World     { get; private set; }
 
-        public BulletManager(SceneManager sceneMgr, MainWorld world)
+        public BulletManager(SceneManager sceneMgr, API.Geo.World world)
         {
             this.SceneMgr = sceneMgr;
             this.World = world;

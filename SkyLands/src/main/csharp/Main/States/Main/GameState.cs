@@ -6,6 +6,7 @@ using Game.CharacSystem;
 using Game.Shoot;
 using Game.RTS;
 using Game.World.Display;
+using Game.World;
 
 namespace Game.States
 {
@@ -18,6 +19,9 @@ namespace Game.States
 
         protected override void Startup()
         {
+            this.World = new MainWorld(this.mStateMgr);
+            this.World.setSafeSpawnPoint();
+
             base.Startup();
 
             CharacterInfo playerInfo = new CharacterInfo("Sinbad", Faction.Blue, true) { SpawnPoint = this.World.getSpawnPoint() };

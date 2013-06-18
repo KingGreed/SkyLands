@@ -37,12 +37,13 @@ namespace Game.GUIs {
 
             this.ScenarioSelected = (string)e.Arguments[0];
 
-            var StructuresfileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" + this.ScenarioSelected + "\\structures.scenario";
-            using(TextWriter writer = new StreamWriter(StructuresfileName)) { }
+            var StructuresfileName = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\SkyLands\\" + this.ScenarioSelected + "\\";
+            System.IO.Directory.CreateDirectory(StructuresfileName);
+            FileStream f = System.IO.File.Create(StructuresfileName + "structures.scenario");
+            f.Close();
 
             Visible = false;
-            new StructuresMenu(this.mStateMgr, ScenarioSelected);
-       
+            new StructuresMenu(this.mStateMgr, ScenarioSelected);      
         }
 
         private void edit(object sender, EventArgs e) {

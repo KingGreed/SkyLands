@@ -10,7 +10,7 @@ namespace Game.CharacSystem
         private const float COL_SIDE_MARGE = 0.61f;
         private const int NBR_HIT_POINTS = 15;   // Nbr of points for collisions there are at the same height
 
-        private readonly MainWorld        mWorld;
+        private readonly API.Geo.World    mWorld;
         private readonly VanillaCharacter mCharac;
         private readonly Degree[]         mHitDegrees;
         private readonly float            mHitRadius;
@@ -20,7 +20,7 @@ namespace Game.CharacSystem
         public bool WasHorizontalCollision      { get; private set; }
         public bool HasHorizontalCollisionEnded { get; private set; }
 
-        public CollisionMgr(SceneManager sceneMgr, MainWorld world, VanillaCharacter charac)
+        public CollisionMgr(SceneManager sceneMgr, API.Geo.World world, VanillaCharacter charac)
         {
             this.mWorld = world;
             this.mCharac = charac;

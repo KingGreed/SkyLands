@@ -176,7 +176,9 @@ namespace API.Geo.Cuboid
 
         public void populate() {
             LogManager.Singleton.DefaultLog.LogMessage("Perlin set");
-            this.mBiome.decorate(this, new Random());
+            if(this.mBiome != null) {
+                this.mBiome.decorate(this, new Random());
+            }
             LogManager.Singleton.DefaultLog.LogMessage("Island decorated");
         }
     }

@@ -18,17 +18,14 @@ namespace Game.States
     {
         private bool mIsSelectBarReady;
 
-        public User      User      { get; protected set; }
-        public CharacMgr CharacMgr { get; protected set; }
-        public MainWorld World     { get; protected set; }
+        public User          User      { get; protected set; }
+        public CharacMgr     CharacMgr { get; protected set; }
+        public API.Geo.World World     { get; protected set; }
         public BuildingManager BuildingMgr { get; protected set; }
 
         protected MainState(StateManager stateMgr, string name) : base(stateMgr, name) { }
 
-        protected override void Startup()
-        {
-            this.World = new MainWorld(this.mStateMgr);
-            this.World.setSafeSpawnPoint();
+        protected override void Startup() {
 
             this.BuildingMgr = new BuildingManager(this.mStateMgr, this.World.getIsland());
             this.User = new User(this.mStateMgr, this.World, this.BuildingMgr);
@@ -41,6 +38,7 @@ namespace Game.States
             OgreForm.SelectBar.Visible = false;
 
             this.AfterWorldCreation();
+            //Building.Island = this.World.getIsland();
             if(!this.mStateMgr.GameInfo.Load) { this.World.populate(); }
             this.World.display();
 

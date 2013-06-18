@@ -45,7 +45,12 @@ namespace Game.World
 
 
             SceneNode node = this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.ZERO);
-            this.mIslandLoaded = new FlatIsland(node, new Vector2(1, 1), this);
+
+            if(stateMgr.StoryInfo.pathToFile == "") {
+                this.mIslandLoaded = new FlatIsland(node, new Vector2(1, 1), this);
+            } else {
+                this.load(stateMgr.StoryInfo.pathToFile);
+            }
 
             this.mSkyMgr = new SkyMgr(this.mStateMgr);
 
@@ -156,7 +161,7 @@ namespace Game.World
             e.getIsland().save();
         }
 
-        public void load() {
+        public void load(string fileName) {
 
         }
 

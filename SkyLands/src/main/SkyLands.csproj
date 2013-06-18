@@ -95,6 +95,18 @@
     <Content Include="resources\Media\images\heart.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\images\IngameMenu\ingame menu_back.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\images\IngameMenu\ingame menu_main.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\images\IngameMenu\ingame menu_normal.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\images\IngameMenu\ingame menu_save.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\images\Inventory.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -177,6 +189,18 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\images\selector.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\images\Structures\Scenario editor_click_down.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\images\Structures\Scenario editor_click_up.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\images\Structures\Scenario editor_normal.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\images\Structures\Scenario editor_OK.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\images\Transparent.png">
@@ -588,6 +612,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\web\builder.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\web\IngameMenu.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\web\inventory.css">
@@ -2333,6 +2360,9 @@
     <Content Include="resources\Media\web\jqueryUI\js\jquery-ui-1.9.2.custom.min.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\web\LoadingScreen.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\web\MainMenu.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -2351,6 +2381,9 @@
     <Content Include="resources\Media\web\play.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\web\scenario.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\web\ScenarioEditorChooseScenario.css">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -2361,6 +2394,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\web\Selector.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\web\Structures.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\MOIS.dll" />
@@ -2549,6 +2585,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="csharp\Main\GUIs\Builder.cs" />
+    <Compile Include="csharp\Main\GUIs\StructuresMenu.cs" />
+    <Compile Include="csharp\Main\GUIs\InGameMenu.cs" />
     <Compile Include="csharp\Main\GUIs\OptionMenu.cs" />
     <Compile Include="csharp\Main\GUIs\ScenarioLoader.cs" />
     <Compile Include="csharp\Main\GUIs\PlayMenu.cs" />
@@ -2648,6 +2686,7 @@
     <Compile Include="csharp\Main\States\Main\StoryEditorState.cs" />
     <Compile Include="csharp\Main\StoryEditor\ScriptParser\Item.cs" />
     <Compile Include="csharp\Main\StoryEditor\ScriptParser\Parser.cs" />
+    <Compile Include="csharp\Main\StoryEditor\StoryEditorInfo.cs" />
     <Compile Include="csharp\Main\World\Blocks\Air.cs" />
     <Compile Include="csharp\Main\World\Blocks\AirBlock.cs">
       <SubType>Code</SubType>

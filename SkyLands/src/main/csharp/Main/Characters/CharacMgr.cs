@@ -21,18 +21,18 @@ namespace Game.CharacSystem
         private readonly List<VanillaCharacter>[] mCharacters;
         private readonly StateManager             mStateMgr;
         private readonly Controller               mController;
-        private readonly MainWorld                mWorld;
+        private readonly API.Geo.World            mWorld;
         private readonly BulletManager            mBulletMgr;
         private readonly User                     mUser;
 
         public StateManager  StateMgr   { get { return this.mStateMgr; } }
         public SceneManager  SceneMgr   { get { return this.mStateMgr.SceneMgr; } }
         public Controller    Controller { get { return this.mController; } }
-        public MainWorld     World      { get { return this.mWorld; } }
+        public API.Geo.World World      { get { return this.mWorld; } }
         public VanillaPlayer MainPlayer { get; private set; }
         public BulletManager BulletMgr  { get { return this.mBulletMgr; } }
 
-        public CharacMgr(StateManager stateMgr, MainWorld world, User user, BulletManager bulletMgr = null)
+        public CharacMgr(StateManager stateMgr, API.Geo.World world, User user, BulletManager bulletMgr = null)
         {
             this.mStateMgr = stateMgr;
             this.mController = stateMgr.Controller;

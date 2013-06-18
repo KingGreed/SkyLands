@@ -6,6 +6,7 @@ using Mogre;
 using Game.BaseApp;
 using Game.World;
 using Game.Input;
+using Game.StoryEditor;
 
 namespace Game.States
 {
@@ -15,15 +16,16 @@ namespace Game.States
         private readonly Stack<Type>  mNewStates;
         private int                   mPopRequested;
 
-        public Root         Root        { get { return this.mRoot; } }
-        public SceneManager SceneMgr    { get { return this.mSceneMgr; } }
-        public RenderWindow Window      { get { return this.mWindow; } }
-        public Controller   Controller  { get { return this.mController; } }
-        public Camera       Camera      { get { return this.mCam; } }
-        public Viewport     Viewport    { get { return this.mViewport; } }
-        public int          NumberState { get { return this.mStateStack.Count; } }
-        public GameInfo     GameInfo    { get; set; }
-        public MainState    MainState   { get; private set; }
+        public Root            Root        { get { return this.mRoot; } }
+        public SceneManager    SceneMgr    { get { return this.mSceneMgr; } }
+        public RenderWindow    Window      { get { return this.mWindow; } }
+        public Controller      Controller  { get { return this.mController; } }
+        public Camera          Camera      { get { return this.mCam; } }
+        public Viewport        Viewport    { get { return this.mViewport; } }
+        public int             NumberState { get { return this.mStateStack.Count; } }
+        public GameInfo        GameInfo    { get; set; }
+        public StoryEditorInfo StoryInfo   { get; set; }
+        public MainState       MainState   { get; private set; }
 
         public StateManager()
         {
@@ -31,6 +33,7 @@ namespace Game.States
             this.mNewStates = new Stack<Type>();
             this.mPopRequested = 0;
             this.GameInfo = new GameInfo();
+            this.StoryInfo = new StoryEditorInfo();
             this.RequestStatePush(typeof(MenuState));
 
             this.Disposed += this.Shutdown;

@@ -51,7 +51,8 @@ namespace API.Geo.Cuboid
             displayCoord = this.mWorld.getDisplayCoords(this.mIsland.getPosition(), loc);
 
             for(int i = 0; i < 4; i++) {
-                block.Position(displayCoord + getBlockPointsCoord((int)face * 4 + i)); block.TextureCoord(getTextureCoord((int)face * 4 + i));
+                block.Position(displayCoord + getBlockPointsCoord((int)face * 4 + i)); 
+                block.TextureCoord(getTextureCoord((int)face * 4 + i));
                 block.Normal(this.getNormals((int)face));
                 this.faceNumber++;
             }
