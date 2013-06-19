@@ -618,6 +618,12 @@
     <Content Include="resources\Media\packs\Sinbad.zip">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\sounds\dark castle.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="resources\Media\sounds\Desert Theme.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\web\builder.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

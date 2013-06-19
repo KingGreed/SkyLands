@@ -23,7 +23,8 @@ namespace Game.States
 
         protected MainState(StateManager stateMgr, string name) : base(stateMgr, name) { }
 
-        protected override void Startup() {
+        protected override void Startup()
+        {
 
             this.User = new User(this.mStateMgr, this.World);
 

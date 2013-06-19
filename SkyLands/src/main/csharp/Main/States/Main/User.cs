@@ -141,7 +141,7 @@ namespace Game
                     else if (this.mIsBuilderOpen)
                     {
                         this.mIsBuilderOpen = false;
-                        if (this.BuildingMgr.HasActualBuilding())
+                        if (this.BuildingMgr.HasActualBuilding() && !this.BuildingMgr.GetActualBuilding().Placed)
                             this.BuildingMgr.GetActualBuilding().WaitForRessources();
                     }
                     else
@@ -326,7 +326,8 @@ namespace Game
             this.mWorld.getIsland().removeFromScene(this.SelectedBlockPos);
             this.mWorld.onDeletion(this.SelectedBlockPos);
 
-            this.Inventory.Add(this.SelectedBlock.getId());
+            if (!this.mStateMgr.GameInfo.IsInEditorMode)
+                this.Inventory.Add(this.SelectedBlock.getId());
         }
 
         private void AddBlock(float dist)
@@ -388,7 +389,8 @@ namespace Game
             this.mWorld.getIsland().addBlockToScene(addedBlockPos, name);
             this.mWorld.onCreation(addedBlockPos);
 
-            this.Inventory.removeAt(Selector.SelectorPos, 3, 1);
+            if (!this.mStateMgr.GameInfo.IsInEditorMode)
+                this.Inventory.removeAt(Selector.SelectorPos, 3, 1);
         }
     }
 }

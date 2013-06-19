@@ -47,7 +47,8 @@ namespace Game.csharp.Main.RTS.Buildings
                     break;
 
                 case "G":
-                    ressources.Add(3, 20); // stone
+                    ressources.Add(2, 5);   // dirt
+                    ressources.Add(3, 15); // stone
                     break;
             }
 

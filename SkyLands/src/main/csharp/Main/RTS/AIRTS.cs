@@ -53,7 +53,7 @@ namespace Game.RTS
                 string[] possibilities = new string[] { "CD", "G", "RF"};
                 goal = possibilities[this.mRandom.Next(0, 3)];
             }
-
+            if (this.mRTSMgr.PlayerRTS.Buildings.Count < this.Buildings.Count + 5) { return; }
             Building building = null;
             switch (goal)
             {

@@ -1,4 +1,5 @@
-﻿using Game.GUIs;
+﻿using System.Media;
+using Game.GUIs;
 using Game.csharp.Main.RTS.Buildings;
 using Mogre;
 
@@ -15,12 +16,18 @@ namespace Game.States
     public class GameState : MainState
     {
         private BulletManager mBulletMgr;
+        private SoundPlayer mSoundPlayer;
 
         public RTSManager RTSManager { get; private set; }
         public GameState(StateManager stateMgr) : base(stateMgr, "Game") { }
 
         protected override void Startup()
         {
+            if(this.mStateMgr.GameInfo.Type == TypeWorld.Plains)
+                this.mSoundPlayer = new SoundPlayer("Media/sounds/dark casle.wav");
+            else
+                this.mSoundPlayer = new SoundPlayer("Media/sounds/Desert Theme.wav");
+
             this.World = new MainWorld(this.mStateMgr);
             this.World.setSafeSpawnPoint();
 
@@ -30,7 +37,7 @@ namespace Game.States
             this.CharacMgr.AddCharacter(playerInfo);
             this.User.SwitchFreeCamMode();
 
-            this.CharacMgr.AddCharacter(new CharacterInfo("Robot-01", Faction.Blue)
+            this.CharacMgr.AddCharacter(new CharacterInfo("Robot-01", Faction.Red)
             {
                 SpawnPoint = playerInfo.SpawnPoint + new Vector3(800, 500, 200)
             });
@@ -46,6 +53,19 @@ namespace Game.States
             this.RTSManager = new RTSManager(this.mStateMgr);
             this.BuildingMgr = new BuildingManager(this.mStateMgr, this.World.getIsland(), this.RTSManager);
             this.User.BuildingMgr = this.BuildingMgr;
+        }
+
+        public override void Show()
+        {
+            base.Show();
+            this.mSoundPlayer.PlayLooping();
+
+        }
+
+        public override void Hide()
+        {
+            base.Hide();
+            this.mSoundPlayer.Stop();
         }
 
         public override void Update(float frameTime)
@@ -74,6 +94,12 @@ namespace Game.States
         {
             InGameMenu.Save = this.Save;
             new InGameMenu(this.mStateMgr);
+        }
+
+        protected override void Shutdown()
+        {
+            base.Shutdown();
+            this.mSoundPlayer.Stop();
         }
     }
 }

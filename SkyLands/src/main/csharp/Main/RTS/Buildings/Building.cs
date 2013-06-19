@@ -173,8 +173,8 @@ namespace Game.RTS
         {
             string imgName = GUI.GetImageAt(pos);
             byte b = VanillaChunk.textureToBlock[imgName].getId();
+            if (!this.ActualRessources.ContainsKey(b) || !this.NeededRessources.ContainsKey(b)) { return; }
             this.ActualRessources[b] = this.NeededRessources[b] - newAmount;
-            //this.mStateMgr.MainState.User.Inventory.
 
             if (this.NeededRessources.Keys.Any(key => this.NeededRessources[key] > this.ActualRessources[key])) { return; }
             this.Build();
