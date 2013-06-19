@@ -149,7 +149,6 @@ namespace Game.CharacSystem
                             this.PopForcedDest();
                     }
                 }
-
                 if (this.mCharInfo.IsPlayer) { ((VanillaPlayer) this).Update(frameTime); }
                 else                         { ((VanillaNonPlayer) this).Update(frameTime); }
 

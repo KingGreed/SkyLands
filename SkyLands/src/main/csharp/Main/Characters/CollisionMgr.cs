@@ -14,7 +14,6 @@ namespace Game.CharacSystem
         private readonly VanillaCharacter mCharac;
         private readonly Degree[]         mHitDegrees;
         private readonly float            mHitRadius;
-        private readonly SceneNode[]      mPoints;    // mPoints is used to show the cube of collision
         private readonly int              mNbrHitStage;
 
         public bool WasHorizontalCollision      { get; private set; }
@@ -28,22 +27,9 @@ namespace Game.CharacSystem
 
             this.mHitRadius = charac.Size.x / 2 * COL_SIDE_MARGE;
             this.mHitDegrees = new Degree[NBR_HIT_POINTS];
-            this.mPoints = new SceneNode[this.mHitDegrees.Length * this.mNbrHitStage];
             Degree delta = 360 / this.mHitDegrees.Length;
             for (int i = 0; i < this.mHitDegrees.Length; i++)
-            {
                 this.mHitDegrees[i] = i * delta;
-
-                for (int j = 0; j < this.mNbrHitStage; j++)
-                {
-                    Entity cube = sceneMgr.CreateEntity("cube.mesh");
-                    int index = i + j * NBR_HIT_POINTS;
-                    this.mPoints[index] = sceneMgr.RootSceneNode.CreateChildSceneNode();
-                    this.mPoints[index].AttachObject(cube);
-                    this.mPoints[index].Scale(0.01f * Vector3.UNIT_SCALE);
-                    this.mPoints[index].SetVisible(false);
-                }
-            }
         }
 
         public Vector3[] GetHitPoints()
@@ -66,17 +52,6 @@ namespace Game.CharacSystem
 
             return hitPoints;
         }
-
-        public void DrawPoints()
-        {
-            if (this.mCharac.Info.IsPlayer)
-            {
-                Vector3[] points = this.GetHitPoints();
-                for (int i = 0; i < this.mPoints.Length; i++)
-                    this.mPoints[i].Position = points[i];
-            }
-        }
-
 
         public Vector3 ComputeCollision(Vector3 absTranslation)  // Takes the wanted translation and returns the possible one
         {
