@@ -20,7 +20,6 @@ namespace Game.RTS
         public RobotFactory(StateManager stateMgr, Island island, VanillaRTS rts, Vector3 position)
             : base(stateMgr, island, rts, "RF", position)
         {
-            this.mTimeSinceLastPop = new Timer();
         }
         protected override void Init()
         {
@@ -60,7 +59,7 @@ namespace Game.RTS
         {
             base.OnBuild();
             this.mSpawnPoint = (this.Position + new Vector3(2, 1, 2)) * Cst.CUBE_SIDE;
-            this.mTimeSinceLastPop.Reset();
+            this.mTimeSinceLastPop = new Timer();
         }
 
         public void CreateUnit()

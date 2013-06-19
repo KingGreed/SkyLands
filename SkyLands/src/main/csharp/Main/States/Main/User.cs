@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 using Game.RTS;
 using Game.csharp.Main.RTS.Buildings;
 using Mogre;
@@ -15,6 +17,7 @@ using Game.World.Generator;
 using Game.World.Display;
 using Game.CharacSystem;
 using Game.GUIs;
+using Timer = Mogre.Timer;
 
 namespace Game
 {

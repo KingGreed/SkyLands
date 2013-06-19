@@ -53,7 +53,7 @@ namespace Game.RTS
                 string[] possibilities = new string[] { "CD", "G", "RF"};
                 goal = possibilities[this.mRandom.Next(0, 3)];
             }
-            if (this.mRTSMgr.PlayerRTS.Buildings.Count < this.Buildings.Count + 5) { return; }
+            if (this.mRTSMgr.PlayerRTS.Buildings.Count < this.Buildings.Count - 5) { return; }
             Building building = null;
             switch (goal)
             {
@@ -89,6 +89,7 @@ namespace Game.RTS
             const float radius = 8;
 
             bool ok = false;
+            Console.WriteLine("Begim");
             while (!ok)
             {
                 int essai = 0;
@@ -100,8 +101,10 @@ namespace Game.RTS
                     essai++;
                 }
             }
+            Console.WriteLine("Boucle1");
             while (this.mStateMgr.MainState.World.getIsland().getBlock(newBase, false) is Air)
                 newBase.y--;
+            Console.WriteLine("Boucle2");
             while (!(this.mStateMgr.MainState.World.getIsland().getBlock(newBase, false) is Air))
                 newBase.y++;
             this.mBase = newBase;

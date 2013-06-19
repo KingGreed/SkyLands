@@ -12,12 +12,12 @@ using Game.BaseApp;
 namespace Game.GUIs {
     public class InGameMenu : GUI {
         private readonly StateManager mStateMgr;
-        private static readonly Vector2 IMAGE_SIZE = new Vector2(500, 450);
+        public static readonly Vector2 IMAGE_SIZE = new Vector2(500, 450);
 
         public static Action Save;
 
         public InGameMenu(StateManager stateMgr)
-            : base((OgreForm.InitSize - IMAGE_SIZE) / 2 - Vector2.UNIT_Y * 40, IMAGE_SIZE / 2.2f, "IngameMenu.html")
+            : base((OgreForm.InitSize - IMAGE_SIZE) / 2 - Vector2.UNIT_Y * 40, IMAGE_SIZE / Cst.GUI_RATIO, "IngameMenu.html")
         {
             this.mStateMgr = stateMgr;
         }
