@@ -16,8 +16,6 @@ namespace Game.CharacSystem {
             this.addRecipe(22, new Object[] { "X X", " X ", "X X", "X", (byte)10 });           // Glass
             this.addRecipe(22, new Object[] { "", " X ", " Y ", "X", (byte)6, "Y", (byte)4 }); // Levitator
 
-            this.mRecipes.Add(new byte[,] { { 255, 255, 255 }, { 255, 22, 255 }, { 255, 4, 255 } }, 22);  // Levitator
-
 
         }
         /* Call examples :
