@@ -6,7 +6,7 @@ namespace Game.World.Display {
 
         public static SceneNode mkParticle(SceneManager sceneMgr, string particle) {
             ParticleSystem p = sceneMgr.CreateParticleSystem("particle" + Guid.NewGuid().ToString(), particle);
-            SceneNode particleNode = sceneMgr.RootSceneNode.CreateChildSceneNode("Particle");
+            SceneNode particleNode = sceneMgr.RootSceneNode.CreateChildSceneNode("Particle" + Guid.NewGuid().ToString());
             particleNode.AttachObject(p);
 
             return particleNode;
