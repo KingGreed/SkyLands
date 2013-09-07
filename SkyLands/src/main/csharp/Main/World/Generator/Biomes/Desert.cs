@@ -11,7 +11,7 @@ namespace Game.World.Generator.Biomes
 {
     class Desert : Biome
     {
-        public Desert() : base((byte) 1, new CactusDecorator(), new Pyramid(), new Tower(), new Spawner(), new KingOfTheHill()) {
+        public Desert() : base((byte) 1, new CactusDecorator(), new Pyramid(), new KingOfTheHill()) {
             this.mGroundCover.Add(new string[] { "Sand", "Yellow Sand", "Red Sand" });
             this.mGroundCover.Add(new string[] { "Sand", "Yellow Sand", "Red Sand" });
             this.mGroundCover.Add(new string[] { "Sand", "Yellow Sand", "Red Sand" });

@@ -42,6 +42,7 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
             }
 
 
+
             new DarkBeard().makeDarkBeard(current, towerHeight, loc, xMax, zMax);
             new RoofBuilder().build(current, loc + Vector3.UNIT_Y * towerHeight, new Vector2(xMax, zMax), rd);
             new Bridge(this.mSourceBuilding, this.getEntrance(this.mSourceBuilding, 1, loc), new NullTower()).build(current);

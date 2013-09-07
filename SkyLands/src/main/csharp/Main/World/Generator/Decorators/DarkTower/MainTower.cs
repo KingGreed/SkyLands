@@ -9,6 +9,7 @@ using API.Generic;
 using API.Geo.Cuboid;
 
 using Game.World.Blocks;
+using Game.Display;
 
 using Mogre;
 
@@ -59,6 +60,9 @@ namespace Game.World.Generator.Decorators.DarkTowerPopulator {
             if(this.towerNum == 4) {
                 Vector3 pos = new Vector3((loc + Vector3.UNIT_Y * towerHeight).x + xMax / 2, (loc + Vector3.UNIT_Y * towerHeight).y, (loc + Vector3.UNIT_Y * towerHeight).z + zMax / 2);
                 Portals.makePortal(1, current, pos);
+                Game.World.Display.ParticleGenerator.mkParticle(current.mWorld.getSceneMgr(), pos * Cst.CUBE_SIDE, "MultiEmitters");
+
+
             } else {
                 new RoofBuilder().build(current, loc + Vector3.UNIT_Y * towerHeight, new Vector2(xMax, zMax), rd);
             }

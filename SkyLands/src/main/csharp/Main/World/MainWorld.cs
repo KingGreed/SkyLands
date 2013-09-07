@@ -18,6 +18,7 @@ using Game.Sky;
 using Game.World.Blocks;
 using Game.World.Generator.Biomes;
 using Game.CharacSystem;
+using Game.World.Display;
 
 using Mogre;
 
@@ -162,6 +163,7 @@ namespace Game.World
 
             return absCoord;
         }
+        SceneNode n;
 
         public void onBlockEnter(Vector3 blockCoord, Entity e) {
             
@@ -170,6 +172,10 @@ namespace Game.World
                     new Script.Parser(this.mStateMgr).Parse(s); 
                 }
             }
+            if(blockCoord.y >= 200 && n == null) {
+                n = ParticleGenerator.mkParticle(this.mStateMgr.SceneMgr, blockCoord + Vector3.UNIT_Y * 600, "Snow");
+            }
+
             this.mIslandLoaded.getBlock(blockCoord, false).onBlockEnter(e, blockCoord);
         }
         public void onBlockLeave(Vector3 blockCoord, Entity e) {
