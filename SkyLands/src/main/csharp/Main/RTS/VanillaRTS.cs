@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using API.Generic;
-using Game.CharacSystem;
+using System.Linq;
 using Game.States;
-using Mogre;
 
 namespace Game.RTS
 {
@@ -12,9 +10,10 @@ namespace Game.RTS
         protected RTSManager mRTSMgr;
         protected float mCrystals;
         protected float mTimeSinceInfoUpdate;
-        public float CrystalSpeed { get; set; }
+        public int CrystalSpeed { get; set; }
         public int Capacity { get; set; }
         public int AmountUnits { get; set; }
+        public int NbFactory { get; set; }
 
         public Faction Faction { get; protected set; }
         public List<Building> Buildings { get; protected set; }
@@ -31,19 +30,38 @@ namespace Game.RTS
             this.mRTSMgr = RTSMgr;
             this.Buildings = new List<Building>();
             this.mCrystals = 150;
-            this.CrystalSpeed = 1 / 70;
+            this.CrystalSpeed = 5;
         }
 
         public void Update(float frameTime)
         {
             this.mTimeSinceInfoUpdate += frameTime;
-            this.mCrystals += this.CrystalSpeed * frameTime;
+            if (this.mTimeSinceInfoUpdate < 1) { return; }
 
-            this.MyUpdate(frameTime);
+            this.mCrystals += this.CrystalSpeed;
+            this.Update();
         }
 
-        public abstract void MyUpdate(float frameTime);
+        protected abstract void Update();
 
-        public void AddBuilding(Building b) {  this.Buildings.Add(b); }
+        public void AddBuilding(Building b) { this.Buildings.Add(b); }
+
+        public int CreateRobot(int nb) // Try to create nb robots if there are enough factories available. Return the actual number of robot created
+        {
+            if (this.Crystals < RobotFactory.ROBOT_COST || this.AmountUnits >= this.Capacity) { return 0; }
+
+            RobotFactory[] factories = this.Buildings.OfType<RobotFactory>().ToArray();
+            int nbRobotCreated = 0;
+            for (int i = 0; i < factories.Count() && nbRobotCreated < nb; i++)
+            {
+                if (factories[i].CanCreateUnit)
+                {
+                    factories[i].CreateUnit();
+                    nbRobotCreated++;
+                }
+            }
+
+            return nbRobotCreated;
+        }
     }
 }

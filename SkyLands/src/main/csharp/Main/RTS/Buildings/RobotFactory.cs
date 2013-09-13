@@ -11,10 +11,14 @@ namespace Game.RTS
 {
     public class RobotFactory : Building
     {
+        public const int ROBOT_COST = 30;
+        
         private const int sizeX = 5, sizeY = 6, sizeZ = 5;
 
         private Vector3 mSpawnPoint;  // Absolute coord
-        public Timer mTimeSinceLastPop;
+        private Timer mTimeSinceLastPop;
+
+        public bool CanCreateUnit { get { return this.mTimeSinceLastPop.Milliseconds >= 8000; } }
 
         public RobotFactory(StateManager stateMgr, Island island, VanillaRTS rts) : base(stateMgr, island, rts, "RF") { }
         public RobotFactory(StateManager stateMgr, Island island, VanillaRTS rts, Vector3 position)
@@ -60,15 +64,16 @@ namespace Game.RTS
             base.OnBuild();
             this.mSpawnPoint = (this.Position + new Vector3(2, 1, 2)) * Cst.CUBE_SIDE;
             this.mTimeSinceLastPop = new Timer();
+            this.RTS.NbFactory++;
         }
 
-        public void CreateUnit()
+        public void CreateUnit()    // Called by VanillaRTS only
         {
-            if (this.mTimeSinceLastPop.Milliseconds >= 8000 && this.RTS.Crystals > 30 && this.RTS.AmountUnits < this.RTS.Capacity)
+            if (this.CanCreateUnit)
             {
-                this.RTS.Crystals -= 30;
+                this.RTS.Crystals -= ROBOT_COST;
                 this.RTS.AmountUnits++;
-                this.mStateMgr.MainState.CharacMgr.AddCharacter(new CharacterInfo("Robot-01", Faction.Red)
+                this.mStateMgr.MainState.CharacMgr.AddCharacter(new CharacterInfo("Robot", this.RTS.Faction)
                 {
                     SpawnPoint = this.mSpawnPoint
                 });

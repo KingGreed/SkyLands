@@ -1,6 +1,4 @@
-﻿using API.Generic;
-using Game.World.Generator;
-using Mogre;
+﻿using Mogre;
 
 using API.Geo.Cuboid;
 using Game.States;
@@ -12,7 +10,7 @@ namespace Game.RTS
         private const int sizeX = 4, sizeY = 5, sizeZ = 4;
 
         public Generator(StateManager stateMgr, Island island, VanillaRTS rts, Vector3 position)
-            : base(stateMgr, island, rts, "RF", position) { }
+            : base(stateMgr, island, rts, "G", position) { }
         public Generator(StateManager stateMgr, Island island, VanillaRTS rts)
             : base(stateMgr, island, rts, "G") { }
         protected override void Init()

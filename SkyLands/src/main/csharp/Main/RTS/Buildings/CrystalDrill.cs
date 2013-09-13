@@ -64,7 +64,7 @@ namespace Game.RTS
         protected override void OnBuild()
         {
             base.OnBuild();
-            this.RTS.CrystalSpeed += 0.5f;
+            this.RTS.CrystalSpeed += 5;
         }
     }
 }

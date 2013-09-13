@@ -7,9 +7,13 @@ namespace Game.RTS
 {
     public class AIRTS : VanillaRTS
     {
-        private float mTimer;
-        private Vector3 mBase;
+        private Vector3 mSafeBuildPos;
         private Random mRandom;
+        private string mNextBuilding;
+        private int mNbUpdateSkipped;
+
+        public int NbBuildingsAllowedToAdd { get; set; }
+        public int NbRobotsAllowedToAdd { get; set; }
         
         public AIRTS(StateManager stateMgr, RTSManager RTSMgr) : base(stateMgr, RTSMgr)
         {
@@ -19,62 +23,61 @@ namespace Game.RTS
                 new Vector2(isldSize.x, 0), new Vector2(isldSize.x, isldSize.z) };
 
             Vector2 coin = (16 * corner[new Random().Next(0, 4)] + 10 * Vector2.UNIT_SCALE) / 1.3f;
-            this.mBase = new Vector3(coin.x, 16 * isldSize.y, coin.y);
-            this.SetSafeYPoint();
+            this.mSafeBuildPos = new Vector3(coin.x, 16 * isldSize.y, coin.y);
+            while (this.mStateMgr.MainState.World.getIsland().getBlock(this.mSafeBuildPos, false) is Air && this.mSafeBuildPos.y > 0)
+                this.mSafeBuildPos.y--;
+            this.mSafeBuildPos.y++;
+
             this.mRandom = new Random();
+            this.mNextBuilding = "";
+            this.mNbUpdateSkipped = 0;
+            this.NbRobotsAllowedToAdd = 0;
+            this.NbBuildingsAllowedToAdd = 4;
         }
 
-        private void SetSafeYPoint()
+        protected override void Update()
         {
-            while (this.mStateMgr.MainState.World.getIsland().getBlock(this.mBase, false) is Air && this.mBase.y > 0)
-                this.mBase.y--;
-            this.mBase.y++;
-        }
+            if (this.mNbUpdateSkipped++ < 5) { return; }
+            this.mNbUpdateSkipped = 0;
 
-        public override void MyUpdate(float frametime)
-        {
-            this.mTimer += frametime;
-            if (this.mTimer < 10 + this.mRandom.Next(-5, 5)) { return; }
-            this.mTimer = 0;
-            string goal = "";
+            int nbRobotTocreate = 0;
+            if (this.AmountUnits < 3) { nbRobotTocreate = 3 - this.AmountUnits; }
+            if (this.NbRobotsAllowedToAdd > nbRobotTocreate) { nbRobotTocreate = this.NbRobotsAllowedToAdd; }
+            this.NbRobotsAllowedToAdd = nbRobotTocreate - this.CreateRobot(nbRobotTocreate);
 
-            if (!this.Buildings.Exists(b => b.Selection == "HQ"))                       { goal = "HQ"; }
-            else if (this.mRTSMgr.PlayerRTS.CrystalSpeed > 1.3 * this.CrystalSpeed)     { goal = "CD"; }
-            else if (this.mRTSMgr.PlayerRTS.Capacity > 1.3 * this.Capacity)             { goal = "G"; }
-            else if (this.mRTSMgr.PlayerRTS.Buildings.FindAll(b => b.Selection == "RF")
-                .Count > 1.3 * this.Buildings.FindAll(b => b.Selection == "RF").Count)  { goal = "RF"; }
-            else if (this.mRTSMgr.PlayerRTS.AmountUnits > 1.3f * this.AmountUnits)
+            if (this.NbBuildingsAllowedToAdd <= 0) { return; }
+            if(this.mNextBuilding == "")
             {
-                RobotFactory fact = this.Buildings.Find(b => b.Selection == "RF") as RobotFactory;
-                if (fact != null) { fact.CreateUnit(); }
+                if (!this.Buildings.Exists(b => b.Selection == "HQ"))                                             { this.mNextBuilding = "HQ"; }
+                else if (this.mRTSMgr.PlayerRTS.CrystalSpeed > 1.3 * this.CrystalSpeed || this.CrystalSpeed == 5) { this.mNextBuilding = "CD"; }
+                else if (this.mRTSMgr.PlayerRTS.Capacity > 1.3 * this.Capacity || this.Capacity == 0)             { this.mNextBuilding = "G"; }
+                else if (this.mRTSMgr.PlayerRTS.NbFactory > 1.3 * this.NbFactory || this.NbFactory == 0)          { this.mNextBuilding = "RF"; }
+                else { mNextBuilding = new string[] { "CD", "G", "RF" }[this.mRandom.Next(0, 3)]; }
             }
-            else
-            {
-                string[] possibilities = new string[] { "CD", "G", "RF"};
-                goal = possibilities[this.mRandom.Next(0, 3)];
-            }
-            if (this.mRTSMgr.PlayerRTS.Buildings.Count < this.Buildings.Count - 5) { return; }
+
             Building building = null;
-            switch (goal)
+            switch (this.mNextBuilding)
             {
                 case "HQ":
-                    building = new HeadQuarter(this.mStateMgr, this.mStateMgr.MainState.World.getIsland(), this, this.mBase);
+                    building = new HeadQuarter(this.mStateMgr, this.mStateMgr.MainState.World.getIsland(), this, this.mSafeBuildPos);
                     break;
                 case "CD":
-                    building = new CrystalDrill(this.mStateMgr, this.mStateMgr.MainState.World.getIsland(), this, this.mBase);
+                    building = new CrystalDrill(this.mStateMgr, this.mStateMgr.MainState.World.getIsland(), this, this.mSafeBuildPos);
                     break;
                 case "RF":
-                    building = new RobotFactory(this.mStateMgr, this.mStateMgr.MainState.World.getIsland(), this, this.mBase);
+                    building = new RobotFactory(this.mStateMgr, this.mStateMgr.MainState.World.getIsland(), this, this.mSafeBuildPos);
                     break;
                 case "G":
-                    building = new Generator(this.mStateMgr, this.mStateMgr.MainState.World.getIsland(), this, this.mBase);
+                    building = new Generator(this.mStateMgr, this.mStateMgr.MainState.World.getIsland(), this, this.mSafeBuildPos);
                     break;
             }
             if (building != null)
             {
                 building.Build();
                 this.Buildings.Add(building);
-                this.ReplaceBasePoint();
+                this.ComputeNextBuildPos();
+                this.mNextBuilding = "";
+                this.NbBuildingsAllowedToAdd--;
             }
 
             /*foreach (VanillaNonPlayer npc in this.mRTSMgr.CharacMgr.GetFactionCharacters(this.Faction))
@@ -83,31 +86,25 @@ namespace Game.RTS
             }*/
         }
 
-        private void ReplaceBasePoint()
+        private void ComputeNextBuildPos()
         {
-            Vector3 newBase = this.mBase;
-            const float radius = 8;
+            Vector3 newSafePos;
+            const float radius = 11;
+            //float dist = radius;
 
-            bool ok = false;
-            Console.WriteLine("Begim");
-            while (!ok)
-            {
-                int essai = 0;
-                while (!ok && essai < 5)
-                {
-                    ok = this.Buildings.TrueForAll(b => (b.Position - newBase).Length > radius);
-                    float angle = new Random().Next(0, 360);
-                    newBase = this.mBase + new Vector3((float)System.Math.Cos(angle), 0, (float)System.Math.Sin(angle)) * radius;
-                    essai++;
-                }
-            }
-            Console.WriteLine("Boucle1");
-            while (this.mStateMgr.MainState.World.getIsland().getBlock(newBase, false) is Air)
-                newBase.y--;
-            Console.WriteLine("Boucle2");
-            while (!(this.mStateMgr.MainState.World.getIsland().getBlock(newBase, false) is Air))
-                newBase.y++;
-            this.mBase = newBase;
+            Console.WriteLine("Begin");
+            do {
+                float angle = new Random().Next(0, 360);
+                newSafePos = this.mSafeBuildPos + new Vector3((int)(System.Math.Cos(angle) * radius), 0, (int)(System.Math.Sin(angle) * radius));
+            } while (this.Buildings.TrueForAll(b => (b.Position - newSafePos).Length > radius));
+
+            /*while (this.mStateMgr.MainState.World.getIsland().getBlock(newSafePos, false) is Air)
+                newSafePos.y--;*/
+            while (!(this.mStateMgr.MainState.World.getIsland().getBlock(newSafePos, false) is Air))
+                newSafePos.y++;
+
+            Console.WriteLine("Build pos : " + newSafePos);
+            this.mSafeBuildPos = newSafePos;
         }
     }
 }

@@ -58,7 +58,7 @@ namespace Game.States
         public override void Show()
         {
             base.Show();
-            this.mSoundPlayer.PlayLooping();
+            //this.mSoundPlayer.PlayLooping();
 
         }
 

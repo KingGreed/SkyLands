@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Game.States;
+﻿using Game.States;
 
 namespace Game.RTS
 {
@@ -13,11 +9,8 @@ namespace Game.RTS
             this.Faction = Faction.Blue;
         }
 
-        public override void MyUpdate(float frameTime)
+        protected override void Update()
         {
-
-            if (this.mTimeSinceInfoUpdate < 1) { return; }
-            this.mTimeSinceInfoUpdate = 0;
 
         }
 
