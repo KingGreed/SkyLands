@@ -92,6 +92,7 @@ namespace Game.RTS
 
         private void ClearScene()
         {
+            Chunk.Clean = false;
             for (int x = 0; x < this.Size.x; x++)
             {
                 for (int y = 0; y < this.Size.y; y++)
@@ -102,14 +103,17 @@ namespace Game.RTS
                         Vector3 pos = this.RealPos + new Vector3(x, 0, z) * this.mSymetricFactor + Vector3.UNIT_Y * y;
                         if ((this.mBuilding[x, y, z] != 0 || this.mClearZone == null || this.mClearZone.Contains(new Vector3(x, y, z))) &&
                             !(this.mIsland.getBlock(pos, false) is ConstructionBlock))
-                            this.mIsland.removeFromScene(pos);
+                            this.mIsland.removeBlock(pos);
                     }
                 }
             }
+            Chunk.Clean = true;
+            this.mIsland.clean();
         }
 
         private void BuildGhost(bool create)
         {
+            Chunk.Clean = false;
             for (int x = 0; x < this.Size.x; x++)
             {
                 for (int y = 0; y < this.Size.y; y++)
@@ -120,13 +124,15 @@ namespace Game.RTS
                         if (this.mBuilding[x, y, z] != 0 && !(this.mIsland.getBlock(pos, false) is ConstructionBlock))
                         {
                             if(create)
-                                this.mIsland.addBlockToScene(pos, ghostBlock);
+                                this.mIsland.setBlockAt(pos, ghostBlock, true);
                             else
-                                this.mIsland.removeFromScene(pos);
+                                this.mIsland.removeBlock(pos);
                         }
                     }
                 }
             }
+            Chunk.Clean = true;
+            this.mIsland.clean();
         }
 
         public void Build()
@@ -135,7 +141,7 @@ namespace Game.RTS
             if (this.IsCharactInBat(this.mStateMgr.MainState.CharacMgr.MainPlayer))
                 this.mSymetricFactor = -1;
             this.ClearScene();
-
+            Chunk.Clean = false;
             for (int x = 0; x < this.Size.x; x++)
             {
                 for (int y = 0; y < this.Size.y; y++)
@@ -146,21 +152,23 @@ namespace Game.RTS
                         if (this.mBuilding[x, y, z] != 0 && !(this.mIsland.getBlock(pos, false) is ConstructionBlock))
                         {
                             string name = VanillaChunk.staticBlock[VanillaChunk.byteToString[this.mBuilding[x, y, z]]].getName();
-                            this.mIsland.addBlockToScene(pos, name);
+                            this.mIsland.setBlockAt(pos, name, true);
                         }
                     }
                 }
             }
             this.OnBuild();
+            Chunk.Clean = true;
+            this.mIsland.clean();
         }
 
         protected virtual void OnBuild()
         {
             if (this.mConsBlockPos != Vector3.ZERO)
             {
-                this.mIsland.removeFromScene(this.Position);
+                this.mIsland.removeBlock(this.Position);
                 Vector3 newPos = this.Position + this.mConsBlockPos*this.mSymetricFactor;
-                this.mIsland.addBlockToScene(newPos, "Construction");
+                this.mIsland.setBlockAt(newPos, "Construction", true);
                 this.mStateMgr.MainState.BuildingMgr.ActConsBlockPos = newPos;
             }
             this.mStateMgr.MainState.BuildingMgr.ActConsBlockPos = -Vector3.UNIT_SCALE;

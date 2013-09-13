@@ -326,7 +326,7 @@ namespace Game
 
         private void DeleteBlock()
         {
-            this.mWorld.getIsland().removeFromScene(this.SelectedBlockPos);
+            this.mWorld.getIsland().removeBlock(this.SelectedBlockPos);
             this.mWorld.onDeletion(this.SelectedBlockPos);
 
             if (!this.mStateMgr.GameInfo.IsInEditorMode)
@@ -389,7 +389,7 @@ namespace Game
                (this.mStateMgr.MainState.CharacMgr.MainPlayer != null && this.mStateMgr.MainState.CharacMgr.MainPlayer.CollisionMgr.GetHitPoints().Any
                (v => MathHelper.isInBlock(addedBlockPos * Cst.CUBE_SIDE, v, Cst.CUBE_SIDE)))) { return; }
 
-            this.mWorld.getIsland().addBlockToScene(addedBlockPos, name);
+            this.mWorld.getIsland().setBlockAt(addedBlockPos, name, true);
             this.mWorld.onCreation(addedBlockPos);
 
             if (!this.mStateMgr.GameInfo.IsInEditorMode)

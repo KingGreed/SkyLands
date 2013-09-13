@@ -28,6 +28,7 @@ namespace API.Geo.Cuboid
         public Dictionary<string, MultiBlock>    multiList = new Dictionary<string, MultiBlock>();
         public List<PositionFaceAndStatus>       blocksAdded;
         public List<PositionFaceAndStatus>       blocksDeleted;
+        public bool                              displayed = false;
 
 
         public Dictionary<Vector3, Chunk> mChunkList;
@@ -37,7 +38,6 @@ namespace API.Geo.Cuboid
 
         public Island(SceneNode node, Vector2 size, API.Geo.World currentWorld) {
             this.mChunkList = new Dictionary<Vector3,Chunk>();
-            this.initChunks(size);
 
             this.mNode = node;
             this.mIslandSize  = new Vector3(size.x, 0, size.y);
@@ -60,8 +60,7 @@ namespace API.Geo.Cuboid
             this.mFaceNode = node.CreateChildSceneNode();
         }
 
-        //Init
-        public abstract void initChunks(Vector2 size);
+
         //get
 	    public Vector3 getSize()       { return this.mIslandSize;  }
         public Vector3 getPosition()   { return this.mNode.Position; }
@@ -85,8 +84,9 @@ namespace API.Geo.Cuboid
 
         public virtual List<Character> getPlayers() { throw new NotImplementedException(); }
 
-        public abstract bool hasVisiblefaceAt(int x, int y, int z, BlockFace face);
+        public abstract bool hasVisibleFaceAt(int x, int y, int z, BlockFace face);
         public abstract void setVisibleFaceAt(int x, int y, int z, BlockFace face, bool val);
+        public abstract bool setVisibleFaces(Vector3 blockCoord, Block curr);
 
         //set
         public abstract void setBlockAt(int x, int y, int z, string material, bool force);
@@ -94,6 +94,11 @@ namespace API.Geo.Cuboid
         public abstract void setBlockAt(Vector3 loc, string name, bool force);
         public abstract string getMaterialFromName(string name);
 
+        public void clean() {
+            foreach (KeyValuePair<Vector3, Chunk> pair in this.mChunkList) {
+                pair.Value.clean();
+            }
+        }
 
         //Has
 
@@ -114,11 +119,7 @@ namespace API.Geo.Cuboid
 	     */
         public abstract void display();
 
-        public abstract void removeFromScene(Vector3 item);
-        public abstract void refreshBlock   (Vector3 relativePos);
-        public abstract void addBlockToScene(Vector3 relativePos, string material);
-        public abstract void addFaceToScene(BlockFace face, Vector3 relativePos, string material);
-
+        public abstract void removeBlock(Vector3 item);
 
 
 	    /**

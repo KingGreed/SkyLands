@@ -18,39 +18,13 @@ namespace Game.World.Generator
         static readonly Block defaultBlock = new AirBlock();
 
         public VanillaIsland(SceneNode node, Vector2 size, API.Geo.World currentWorld) : base(node, size, currentWorld) {
-            this.register();
+            
         }
 
-            public VanillaIsland(SceneNode node, API.Geo.World currentWorld) : base(node, currentWorld) {
-                this.register();
-            }
+        public VanillaIsland(SceneNode node, API.Geo.World currentWorld) : base(node, currentWorld) {
         
-        private void register() {
-            foreach(KeyValuePair<string, Block> pair in VanillaChunk.staticBlock) {
-                if(!(pair.Value is AirBlock) && pair.Value.getMaterial() != null) {
-                    for(int i = 0; i < 6; i++) {
-                        if(!this.multiList.ContainsKey(pair.Value.getFace(i))) {
-                            switch(pair.Value.getMeshType()) {
-                                case 0: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiBlock(pair.Value.getFace(i), this, this.mWorld)); break;
-                                case 2: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiVerticalHalfBlock(pair.Value.getFace(i), this, this.mWorld)); break;
-                                case 1: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiHorizontalHalfBlock(pair.Value.getFace(i), this, this.mWorld)); break;
-                                case 3: this.multiList.Add(pair.Value.getFace(i), new VanillaMultiHorizontalEighthBlock(pair.Value.getFace(i), this, this.mWorld)); break;
-                            }
-                        }
-                    }
-                }
-            }
         }
-
-
-        public override void initChunks(Vector2 size) {
-            for(int x = 0; x < size.x; x++) {
-                for(int z = 0; z < size.y; z++) {
-                    this.mChunkList.Add(new Vector3(x, 0, z), new VanillaChunk(new Vector3(16,16,16), new Vector3(x, 0, z), this));
-                }
-            }
-
-        }
+        
 
         public override int getSurfaceHeight(int x, int z, string restriction = "") {
             for(int y = (int)this.mIslandSize.y * Cst.CHUNK_SIDE; y != 0 ; y--) { 
@@ -67,37 +41,20 @@ namespace Game.World.Generator
 
         public override void display() {
 
-            Block curr;
             LogManager.Singleton.DefaultLog.LogMessage("Now displaying");
 
-            foreach(KeyValuePair<Vector3, Chunk> pair in this.mChunkList) {
-                for(int x = 0; x < Cst.CHUNK_SIDE; x++) {
-                    for(int y = 0; y < Cst.CHUNK_SIDE; y++) {
-                        for(int z = 0; z < Cst.CHUNK_SIDE; z++) {
-                            curr = pair.Value.getBlock(x, y, z);
-
-                            if(curr.getMaterial() != null && this.setVisibleFaces(new Vector3(x, y, z) + pair.Key * Cst.CHUNK_SIDE, curr)) {
-                                for(int i = 0; i < 6; i++) {
-                                    if(this.hasVisiblefaceAt(pair.Value, x, y, z, (BlockFace)i)) {
-                                        this.multiList[curr.getFace(i)].addBlock(pair.Key * Cst.CHUNK_SIDE + new Vector3(x, y, z), (BlockFace)i);
-                                    }
-                                }
-
-                            }
-                        }
-                    }
-                }
+            Chunk.Clean = true;
+            foreach (KeyValuePair<Vector3, Chunk> pair in this.mChunkList) {
+                pair.Value.generateVisualChunk();
             }
-            foreach(KeyValuePair<string, MultiBlock> pair in this.multiList) {
-                pair.Value.display(this, this.mWorld);
-                pair.Value.addMultiToScene();
-            }
+            this.displayed = true;
+
         }
 
         public bool hasVisiblefaceAt(Chunk c, int x, int y, int z, BlockFace i) { return c.hasVisibleFaceAt(x, y, z, i); }
 
         //For optimization purpose returns wether the block has visible faces
-        public bool setVisibleFaces(Vector3 blockCoord, Block curr)
+        public override bool setVisibleFaces(Vector3 blockCoord, Block curr)
         {
 
             if (curr is AirBlock) { return false; }
@@ -160,7 +117,7 @@ namespace Game.World.Generator
             if(this.hasChunk(chunkLocation)) { this.mChunkList[chunkLocation].setVisibleFaceAt((int)blockLocation.x, (int)blockLocation.y, (int)blockLocation.z, face, val); }
         }
 
-        public override bool hasVisiblefaceAt(int x, int y, int z, BlockFace face) {
+        public override bool hasVisibleFaceAt(int x, int y, int z, BlockFace face) {
             Vector3 chunkLocation = new Vector3(x / 16, y / 16, z / 16),
                     blockLocation = new Vector3(x % 16, y % 16, z % 16);
 
@@ -171,115 +128,6 @@ namespace Game.World.Generator
             }
             if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation].hasVisibleFaceAt((int)blockLocation.x, (int)blockLocation.y, (int)blockLocation.z, face); }
             return false;
-        }
-
-
-        public override void removeFromScene(Vector3 item) {
-            Block curr = this.getBlock(item, false);
-            if (curr is Air) { return; }
-
-            bool isInAdded = false;
-            Dictionary<string, int> faces = new Dictionary<string, int>();
-
-            for (int i = 0; i < 6; i++) {
-                if (this.isInBlocksAdded(item, (BlockFace)i)) {
-                    isInAdded = true;
-                } else {
-                    if (this.hasVisiblefaceAt((int)item.x, (int)item.y, (int)item.z, (BlockFace)i)) {
-                        if (!faces.ContainsKey(curr.getFace(i))) { faces.Add(curr.getFace(i), 1); }
-                        else { faces[curr.getFace(i)]++; }
-                    }
-                }
-            }
-
-            foreach (KeyValuePair<string, int> pair in faces) {
-                this.multiList[pair.Key].removeFromScene(item, pair.Value);
-            }
-
-            if (isInAdded) {
-                string cubeNodeName = "Node-" + item.x * Cst.CUBE_SIDE + "-" + item.y * Cst.CUBE_SIDE + "-" + item.z * Cst.CUBE_SIDE;
-                
-                this.mFaceNode.RemoveAndDestroyChild(cubeNodeName);
-            }
-
-            this.setBlockAt((int) item.x, (int) item.y, (int) item.z, "Air", false);
-            curr.onDeletion();
-
-            refreshBlock(new Vector3(item.x,   item.y-1, item.z));
-            refreshBlock(new Vector3(item.x,   item.y+1, item.z));
-            refreshBlock(new Vector3(item.x+1, item.y,   item.z));
-            refreshBlock(new Vector3(item.x-1, item.y,   item.z));
-            refreshBlock(new Vector3(item.x,   item.y,   item.z+1));
-            refreshBlock(new Vector3(item.x,   item.y,   item.z-1));
-
-        }
-
-        public override void refreshBlock(Vector3 relativePos) {
-
-            Block curr = this.getBlock(relativePos, false);
-            bool[] currentvisibleFaces = new bool[6];
-            bool isVisible;
-            int i = 0;
-
-            foreach (BlockFace face in Enum.GetValues(typeof(BlockFace))) {
-                currentvisibleFaces[i] = this.hasVisiblefaceAt((int) relativePos.x, (int) relativePos.y, (int) relativePos.z, face);
-                i++;
-            }
-            
-            this.setVisibleFaces(relativePos, curr);
-
-            for (int j = 0; j < 6; j++) {
-                isVisible = this.hasVisiblefaceAt((int) relativePos.x, (int) relativePos.y, (int) relativePos.z, (BlockFace)j);
-                if(isVisible && true != currentvisibleFaces[j]) {
-                    this.addFaceToScene((BlockFace)j, relativePos, curr.getFace(j));
-                }
-            }
-
-        }
-
-        public override void addBlockToScene(Vector3 relativePos, string name) {
-            this.setBlockAt((int)relativePos.x, (int)relativePos.y, (int)relativePos.z, name, true);
-            
-            Block curr = this.getBlock(relativePos, false);
-            curr.onCreation(relativePos);
-            if(this.setVisibleFaces(relativePos, curr)) {
-                for(int i = 0; i < 6; i++) {
-                    
-                    if (this.hasVisiblefaceAt((int)relativePos.x, (int)relativePos.y, (int)relativePos.z, (BlockFace) i)) {
-                        this.addFaceToScene((BlockFace) i, relativePos, curr.getFace(i));
-                    }
-                }
-            }
-
-        }
-
-        public override void addFaceToScene(BlockFace face, Vector3 relativePos, string material) {
-
-            if(material == null) { return; }
-            this.blocksAdded.Add(new PositionFaceAndStatus(relativePos, face));
-            
-            relativePos += this.getPosition();
-            relativePos *= Cst.CUBE_SIDE;
-
-            string cubeNodeName = "Node-" + relativePos.x + "-" + relativePos.y + "-" + relativePos.z;
-            SceneNode blockNode;
-            string faceName, faceEntName;
-            Entity ent;
-
-            if(this.mWorld.getSceneMgr().HasSceneNode(cubeNodeName)) {
-                blockNode = this.mWorld.getSceneMgr().GetSceneNode(cubeNodeName);
-            } else {
-                blockNode = this.mFaceNode.CreateChildSceneNode(cubeNodeName, relativePos);
-            }
-            
-            faceName = GraphicBlock.getFaceName(face);
-            faceEntName = "face-" + relativePos.x + "-" + relativePos.y + "-" + relativePos.z + "-" + faceName;
-
-            if (this.mWorld.getSceneMgr().HasEntity(faceEntName)) { this.mWorld.getSceneMgr().DestroyEntity(faceEntName); }
-
-            ent = this.mWorld.getSceneMgr().CreateEntity(faceEntName, faceName);
-            ent.SetMaterialName(material);
-            blockNode.AttachObject(ent);
         }
 
 
@@ -380,6 +228,10 @@ namespace Game.World.Generator
             this.setBlockAt((int)v.x, (int)v.y, (int)v.z, b, force);
         }
 
+        public override void removeBlock(Vector3 item) {
+            this.setBlockAt((int)item.x, (int)item.y, (int)item.z, "Air", true);
+        }
+
         public void loadStructures(string path) {
             string[] s = File.ReadAllLines(path + "structures.scenario");
 
@@ -442,6 +294,8 @@ namespace Game.World.Generator
             if(this.hasChunk(chunkLocation)) { return this.mChunkList[chunkLocation].getBlock(blockLocation); }
             if(force) {
                 this.mChunkList.Add(chunkLocation, new VanillaChunk(Cst.CHUNK_SIDE * Vector3.UNIT_SCALE, chunkLocation, this));
+                this.mChunkList[chunkLocation].generateVisualChunk();
+
                 if(y > this.mIslandSize.y * Cst.CHUNK_SIDE) { this.mIslandSize.y = (int)System.Math.Ceiling(y / 16f); }
                 if(x > this.mIslandSize.x * Cst.CHUNK_SIDE) { this.mIslandSize.x = (int)System.Math.Ceiling(x / 16f); }
                 if(z > this.mIslandSize.z * Cst.CHUNK_SIDE) { this.mIslandSize.z = (int)System.Math.Ceiling(z / 16f); }
@@ -490,6 +344,7 @@ namespace Game.World.Generator
             else if(force) {
                 this.mChunkList.Add(chunkLocation, new VanillaChunk(Cst.CHUNK_SIDE * Vector3.UNIT_SCALE, chunkLocation, this));
                 this.mChunkList[chunkLocation].setBlock(blockLocation, material);
+                this.mChunkList[chunkLocation].generateVisualChunk();
 
                 if(y > this.mIslandSize.y * Cst.CHUNK_SIDE) { this.mIslandSize.y = (int)System.Math.Ceiling(y / 16f); }
                 if(x > this.mIslandSize.x * Cst.CHUNK_SIDE) { this.mIslandSize.x = (int)System.Math.Ceiling(x / 16f); }

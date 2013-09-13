@@ -27,19 +27,17 @@ namespace Game.World
 {
     public class MainWorld : API.Geo.World
     {
-        private string   mName;
-        private long     mAge;
-        private long     mSeed;
-        private Vector3  mSpawnPoint;
+        protected string mName;
+        protected long mAge;
+        protected long mSeed;
+        protected Vector3 mSpawnPoint;
 
-        private Island   mIslandLoaded;
+        protected Island mIslandLoaded;
 
-        private StateManager  mStateMgr;
-        private SkyMgr        mSkyMgr;
+        protected StateManager mStateMgr;
+        protected SkyMgr mSkyMgr;
 
-        private Dictionary<Vector3, List<string>> d = new Dictionary<Vector3, List<string>>();
-
-        private int mScenarioAdvancement = 0;
+        protected Dictionary<Vector3, List<string>> d = new Dictionary<Vector3, List<string>>();
 
         public MainWorld(StateManager stateMgr) {
             this.mAge  = 0;

@@ -38,6 +38,6 @@ namespace Game.World.Generator
         public override Vector2 getTextureCoord(int face)     { return textureCoord[face];     }
         public override Vector3 getNormals(int face)          { return normals[face];          }
 
-        public VanillaMultiHorizontalEighthBlock(string mat, Island current, API.Geo.World mainWorld) : base(mat, current, mainWorld) { }
+        public VanillaMultiHorizontalEighthBlock(string mat, Island current, API.Geo.World mainWorld, int meshType) : base(mat, current, mainWorld, meshType) { }
     }
 }
