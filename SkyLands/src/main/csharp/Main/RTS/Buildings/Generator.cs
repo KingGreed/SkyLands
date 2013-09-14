@@ -7,7 +7,7 @@ namespace Game.RTS
 {
     public class Generator : Building
     {
-        private const int sizeX = 4, sizeY = 5, sizeZ = 4;
+        public const int sizeX = 2, sizeY = 6, sizeZ = 2;
 
         public Generator(StateManager stateMgr, Island island, VanillaRTS rts, Vector3 position)
             : base(stateMgr, island, rts, "G", position) { }
@@ -33,10 +33,9 @@ namespace Game.RTS
                 {
                     for (int z = 0; z < sizeZ; z++)
                     {
-                        if (x == 0 || x == sizeX - 1 || z == 0 || z == sizeZ - 1) { continue; }
-
                         byte b = glass;
-                        if (y == 0 || y == sizeY - 1) { b = smoothScarvedStone; }
+                        if (y <= 1) { b = smoothScarvedStone; }
+                        else if (y == sizeY - 1) { b = this.mColoredBlock; }
 
                         this.mBuilding[x, y, z] = b;
                     }

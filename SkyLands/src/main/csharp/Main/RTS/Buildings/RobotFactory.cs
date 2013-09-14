@@ -13,7 +13,7 @@ namespace Game.RTS
     {
         public const int ROBOT_COST = 30;
         
-        private const int sizeX = 5, sizeY = 6, sizeZ = 5;
+        public const int sizeX = 5, sizeY = 6, sizeZ = 5;
 
         private Vector3 mSpawnPoint;  // Absolute coord
         private Timer mTimeSinceLastPop;

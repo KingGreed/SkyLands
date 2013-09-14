@@ -239,7 +239,6 @@ namespace Game
 
         public void OnBuilderOpen()
         {
-            System.Console.WriteLine("OnBuilderOpen : ");
             this.OnInventoryOpen();
             if (this.BuildingMgr.HasActualBuilding() && !this.BuildingMgr.GetActualBuilding().Placed)
                 this.BuildingMgr.GetActualBuilding().DrawRemainingRessource();

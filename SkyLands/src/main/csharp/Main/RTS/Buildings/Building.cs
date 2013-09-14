@@ -14,11 +14,10 @@ namespace Game.RTS
 {
     public abstract class Building
     {
-        private const string ghostBlock = "GhostBlock";
+        private const string GHOST_BLOCK = "GhostBlock";
 
         protected StateManager mStateMgr;
         protected Island mIsland;
-        protected Vector3 mConsBlockPos;
         protected List<Vector3> mClearZone;
         protected byte mColoredBlock;
         protected byte[, ,] mBuilding;
@@ -31,7 +30,7 @@ namespace Game.RTS
         public bool Placed { get; set; }
         public Dictionary<byte, int> ActualRessources, NeededRessources;
         private Vector3 RealPos { get { return this.Position - Vector3.UNIT_Y * this.mYDiff; } }
-        private bool mIsCreated;
+        private bool mIsCreated, mIsGhostBuilt;
         private int mSymetricFactor = 1;
 
         protected Building(StateManager stateMgr, Island island, VanillaRTS rts, string selection) : this(stateMgr, island, rts, selection, -Vector3.UNIT_SCALE) { }
@@ -50,12 +49,7 @@ namespace Game.RTS
         }
 
         protected abstract void Init();
-        protected virtual void Create()
-        {
-            if (this.mIsCreated)
-                this.BuildGhost(false);
-            this.mIsCreated = true;
-        }
+        protected virtual void Create() { this.mIsCreated = true; }
 
         public void DrawRemainingRessource()
         {
@@ -86,12 +80,13 @@ namespace Game.RTS
             this.Create();
             if (this.IsCharactInBat(this.mStateMgr.MainState.CharacMgr.MainPlayer))
                 this.mSymetricFactor = -1;
-            this.ClearScene();
-            this.BuildGhost(true);
+            this.BuildGhost();
         }
 
-        private void ClearScene()
+        private void BuildGhost()
         {
+            if (this.mIsGhostBuilt) { return; }
+            this.mIsGhostBuilt = true;
             Chunk.Clean = false;
             for (int x = 0; x < this.Size.x; x++)
             {
@@ -99,35 +94,10 @@ namespace Game.RTS
                 {
                     for (int z = 0; z < this.Size.z; z++)
                     {
-                        if (x == 0 && y == 0 && z == 0) { continue; }
+                        if(x == 0 && y == 0 && z == 0) { continue; }
                         Vector3 pos = this.RealPos + new Vector3(x, 0, z) * this.mSymetricFactor + Vector3.UNIT_Y * y;
-                        if ((this.mBuilding[x, y, z] != 0 || this.mClearZone == null || this.mClearZone.Contains(new Vector3(x, y, z))) &&
-                            !(this.mIsland.getBlock(pos, false) is ConstructionBlock))
-                            this.mIsland.removeBlock(pos);
-                    }
-                }
-            }
-            Chunk.Clean = true;
-            this.mIsland.clean();
-        }
-
-        private void BuildGhost(bool create)
-        {
-            Chunk.Clean = false;
-            for (int x = 0; x < this.Size.x; x++)
-            {
-                for (int y = 0; y < this.Size.y; y++)
-                {
-                    for (int z = 0; z < this.Size.z; z++)
-                    {
-                        Vector3 pos = this.RealPos + new Vector3(x, 0, z) * this.mSymetricFactor + Vector3.UNIT_Y * y;
-                        if (this.mBuilding[x, y, z] != 0 && !(this.mIsland.getBlock(pos, false) is ConstructionBlock))
-                        {
-                            if(create)
-                                this.mIsland.setBlockAt(pos, ghostBlock, true);
-                            else
-                                this.mIsland.removeBlock(pos);
-                        }
+                        if (this.mBuilding[x, y, z] != 0 && this.mIsland.getBlock(pos, false) is Air)
+                            this.mIsland.setBlockAt(pos, GHOST_BLOCK, true);
                     }
                 }
             }
@@ -140,7 +110,6 @@ namespace Game.RTS
             if (!this.mIsCreated) { this.Create(); }
             if (this.IsCharactInBat(this.mStateMgr.MainState.CharacMgr.MainPlayer))
                 this.mSymetricFactor = -1;
-            this.ClearScene();
             Chunk.Clean = false;
             for (int x = 0; x < this.Size.x; x++)
             {
@@ -149,7 +118,7 @@ namespace Game.RTS
                     for (int z = 0; z < this.Size.z; z++)
                     {
                         Vector3 pos = this.RealPos + new Vector3(x, 0, z) * this.mSymetricFactor + Vector3.UNIT_Y * y;
-                        if (this.mBuilding[x, y, z] != 0 && !(this.mIsland.getBlock(pos, false) is ConstructionBlock))
+                        if (this.mBuilding[x, y, z] != 0)
                         {
                             string name = VanillaChunk.staticBlock[VanillaChunk.byteToString[this.mBuilding[x, y, z]]].getName();
                             this.mIsland.setBlockAt(pos, name, true);
@@ -164,13 +133,6 @@ namespace Game.RTS
 
         protected virtual void OnBuild()
         {
-            if (this.mConsBlockPos != Vector3.ZERO)
-            {
-                this.mIsland.removeBlock(this.Position);
-                Vector3 newPos = this.Position + this.mConsBlockPos*this.mSymetricFactor;
-                this.mIsland.setBlockAt(newPos, "Construction", true);
-                this.mStateMgr.MainState.BuildingMgr.ActConsBlockPos = newPos;
-            }
             this.mStateMgr.MainState.BuildingMgr.ActConsBlockPos = -Vector3.UNIT_SCALE;
             User.RequestBuilderClose = true;
             this.Placed = true;

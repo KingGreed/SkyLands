@@ -10,7 +10,7 @@ namespace Game.RTS
     {
         public Vector3 SpawnPoint { get; set; }
 
-        private const int sizeX = 10, sizeY = 10, sizeZ = 10;
+        public const int sizeX = 10, sizeY = 10, sizeZ = 10;
 
         public HeadQuarter(StateManager stateMgr, Island island, VanillaRTS rts, Vector3 position)
             : base(stateMgr, island, rts, "HQ", position) { }
@@ -24,7 +24,7 @@ namespace Game.RTS
 
             this.Size = new Vector3(sizeX, sizeY, sizeZ);
             this.mBuilding = new byte[sizeX, sizeY, sizeZ];
-            this.mConsBlockPos = this.SpawnPoint;
+            //this.mConsBlockPos = this.SpawnPoint;
             this.mYDiff = 2;
         }
 

@@ -8,7 +8,7 @@ namespace Game.RTS
 {
     public class CrystalDrill : Building
     {
-        private const int sizeX = 5, sizeY = 6, sizeZ = 5;
+        public const int sizeX = 5, sizeY = 6, sizeZ = 5;
 
         public CrystalDrill(StateManager stateMgr, Island island, VanillaRTS rts, Vector3 position)
             : base(stateMgr, island, rts, "RF", position) { }
