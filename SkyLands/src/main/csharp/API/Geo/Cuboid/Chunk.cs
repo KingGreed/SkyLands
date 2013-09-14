@@ -27,6 +27,7 @@ namespace API.Geo.Cuboid
         public Block[, ,]     mBlockList;
         protected Island      mIsland;
         protected bool[, , ,] mVisible;
+        public bool           mDisplayed = false;
         public static bool    Clean;
 
         public Dictionary<string, MultiBlock> multiList = new Dictionary<string, MultiBlock>();

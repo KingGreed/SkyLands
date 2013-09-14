@@ -43,8 +43,7 @@ namespace Game.RTS {
         }
 
         protected abstract void Init();
-        protected virtual void Create()
-        {
+        protected virtual void Create() {
             this.mIsCreated = true;
             if (this.IsCharactInBat(this.mStateMgr.MainState.CharacMgr.MainPlayer))
                 this.mSymetricFactor = -1;
@@ -79,12 +78,9 @@ namespace Game.RTS {
             if (this.mIsGhostBuilt) { return; }
             this.mIsGhostBuilt = true;
             this.mIsland.stopCleaning();
-            for (int x = 0; x < this.Size.x; x++)
-            {
-                for (int y = 0; y < this.Size.y; y++)
-                {
-                    for (int z = 0; z < this.Size.z; z++)
-                    {
+            for (int x = 0; x < this.Size.x; x++) {
+                for (int y = 0; y < this.Size.y; y++) {
+                    for (int z = 0; z < this.Size.z; z++) {
                         Vector3 pos = this.RealPos + new Vector3(x, 0, z) * this.mSymetricFactor + Vector3.UNIT_Y * y;
                         if (this.mBuilding[x, y, z] != 0 && this.mIsland.getBlock(pos, false) is Air)
                             this.mIsland.setBlockAt(pos, GHOST_BLOCK, true);
@@ -97,17 +93,13 @@ namespace Game.RTS {
         public void Build() {
             if (!this.mIsCreated) { this.Create(); }
             this.mIsland.stopCleaning();
-            for (int x = 0; x < this.Size.x; x++)
-            {
-                for (int y = 0; y < this.Size.y; y++)
-                {
-                    for (int z = 0; z < this.Size.z; z++)
-                    {
+            for (int x = 0; x < this.Size.x; x++) {
+                for (int y = 0; y < this.Size.y; y++) {
+                    for (int z = 0; z < this.Size.z; z++) {
                         Vector3 pos = this.RealPos + new Vector3(x, 0, z) * this.mSymetricFactor + Vector3.UNIT_Y * y;
                         if (this.mBuilding[x, y, z] == 99)
                             this.mIsland.removeBlock(pos);
-                        else if (this.mBuilding[x, y, z] != 0)
-                        {
+                        else if (this.mBuilding[x, y, z] != 0) {
                             string name = VanillaChunk.staticBlock[VanillaChunk.byteToString[this.mBuilding[x, y, z]]].getName();
                             this.mIsland.setBlockAt(pos, name, true);
                         }

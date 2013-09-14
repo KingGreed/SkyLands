@@ -75,6 +75,7 @@ namespace Game.World.Generator
 
         public override void generateVisualChunk() {
             this.multiList.Clear();
+            this.mDisplayed = true;
 
             for (int x = 0; x < mChunkSize.x; x++) {
                 for (int y = 0; y < mChunkSize.y; y++) {
@@ -86,14 +87,13 @@ namespace Game.World.Generator
                             if(!this.hasVisibleFaceAt(x, y, z, (BlockFace)i)) {
                                 continue;
                             }
-
-                            if (!this.multiList.ContainsKey(this.mBlockList[x, y, z].getFace(i))) {
-                                this.addBlockType(this.mBlockList[x, y, z].getMeshType(), this.mBlockList[x, y, z].getFace(i));
+                            string face = this.mBlockList[x, y, z].getFace(i);
+                            MultiBlock val;
+                            if (!this.multiList.TryGetValue(face, out val)) {
+                                this.addBlockType(this.mBlockList[x, y, z].getMeshType(), face);
                             }
 
-                            if (this.hasVisibleFaceAt(x, y, z, (BlockFace)i)) {
-                                this.multiList[this.mBlockList[x, y, z].getFace(i)].addBlock(this.mChunkLocation * Cst.CHUNK_SIDE + new Vector3(x, y, z), (BlockFace)i);
-                            }
+                            this.multiList[face].addBlock(this.mChunkLocation * Cst.CHUNK_SIDE + new Vector3(x, y, z), (BlockFace)i);
 
                         }
                     }
@@ -107,9 +107,10 @@ namespace Game.World.Generator
         }
 
         public override void setBlock(int x, int y, int z, string material) {
-            if (this.mIsland.displayed) {
+            if (this.mIsland.displayed && this.mDisplayed) {
                 this.mIsland.dirtyChunks.Add(this);
                 this.updateBlock((int)this.mChunkLocation.x * 16 + x, (int)this.mChunkLocation.y * 16 + y, (int)this.mChunkLocation.z * 16 + z, this.mBlockList[x, y, z], this);
+
                 this.mBlockList[x, y, z] = staticBlock[material];
                 this.mIsland.setVisibleFaces(new Vector3((int)this.mChunkLocation.x * 16 + x, (int)this.mChunkLocation.y * 16 + y, (int)this.mChunkLocation.z * 16 + z), this.mBlockList[x, y, z]);
 
@@ -165,14 +166,15 @@ namespace Game.World.Generator
                     continue;
                 }
                 used = true;
-                if (c.multiList.TryGetValue(b.getFace(i), out val)) {
-                    c.dirtyMultiListInsert(b.getFace(i), c.multiList[b.getFace(i)]);
-                    c.multiList.Remove(b.getFace(i));
+                string face = b.getFace(i);
+                if (c.multiList.TryGetValue(face, out val)) {
+                    c.dirtyMultiListInsert(face, c.multiList[face]);
+                    c.multiList.Remove(face);
                 }
-                else if (!c.dirtyMultiListName.Contains(b.getFace(i))) {
-                    c.addBlockType(b.getMeshType(), b.getFace(i));
-                    c.dirtyMultiListInsert(b.getFace(i), c.multiList[b.getFace(i)]);
-                    c.multiList.Remove(b.getFace(i));
+                else if (!c.dirtyMultiListName.Contains(face)) {
+                    c.addBlockType(b.getMeshType(), face);
+                    c.dirtyMultiListInsert(face, c.multiList[face]);
+                    c.multiList.Remove(face);
                 }
             }
             return used;
