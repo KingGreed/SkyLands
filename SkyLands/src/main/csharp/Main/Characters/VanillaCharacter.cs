@@ -98,6 +98,8 @@ namespace Game.CharacSystem
             }
         }
 
+        public SceneNode getNode() { return this.mNode; }
+
         private void OnJump(bool isJumping)
         {
             if (isJumping)

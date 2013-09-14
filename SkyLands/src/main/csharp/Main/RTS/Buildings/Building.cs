@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Game.BaseApp;
+using Game.World.Display;
 using Game.CharacSystem;
 using Game.States;
 using Game.World.Generator;
@@ -91,6 +92,10 @@ namespace Game.RTS {
         }
 
         public void Build() {
+
+            //RedCreation
+            ParticleGenerator.mkParticle(this.mStateMgr.SceneMgr, this.mIsland.mWorld.getDisplayCoords(this.mIsland.getPosition(), this.RealPos) + Vector3.UNIT_Y * 3, "RedCreation");
+
             if (!this.mIsCreated) { this.Create(); }
             this.mIsland.stopCleaning();
             for (int x = 0; x < this.Size.x; x++) {

@@ -75,8 +75,9 @@ namespace API.Ent
         Island getIsland();
 
 	    /**
-	     * Interact with this entity.
+	     * Gets the entity SceneNode
 	     */
+        SceneNode getNode();
 
         /**
          * Teleports the player to the given location and inform's the player's client

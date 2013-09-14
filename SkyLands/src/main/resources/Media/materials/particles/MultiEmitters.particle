@@ -262,3 +262,231 @@ particle_system MultiEmitters
 
 }
 
+particle_system RedCreation
+
+{
+
+	material Particles/Special.001
+
+	particle_width 50.0
+
+	particle_height 50.0
+
+	quota 2000
+
+	cull_each false
+
+	sorted false
+
+	local_space false
+
+	iteration_interval 0.0
+
+	nonvisible_update_timeout 0.0
+
+	billboard_type point
+
+	billboard_origin center
+
+	billboard_rotation_type texcoord
+
+	point_rendering false
+
+	accurate_facing false
+
+
+
+	emitter Ring
+
+	{
+
+		position 0.0 0.0 2000.0
+
+		direction 0.0 1.0 0.0
+
+		angle 0.0
+
+		width 1500.0
+
+		height 1500.0
+
+		depth 50.0
+
+		inner_width 0.9
+
+		inner_height 0.9
+
+		emission_rate 500.0
+
+		velocity_min 1.0
+
+		velocity_max 1.0
+
+		time_to_live_min 2.52
+
+		time_to_live_max 5.0
+
+		duration_min 0.0
+
+		duration_max 0.0
+
+		repeat_delay_min 0.0
+
+		repeat_delay_max 0.0
+
+		colour_range_start 1 0 0
+
+		colour_range_end 0.5 0 0
+
+	}
+
+
+
+	emitter Box
+
+	{
+
+		position 400.0 -350.0 2000.0
+
+		direction 0.0 1.0 0.0
+
+		angle 0.0
+
+		width 100.0
+
+		height 100.0
+
+		depth 100.0
+
+		emission_rate 50.0
+
+		velocity_min 1.0
+
+		velocity_max 1.0
+
+		time_to_live_min 5.0
+
+		time_to_live_max 5.0
+
+		duration_min 0.0
+
+		duration_max 0.0
+
+		repeat_delay_min 0.0
+
+		repeat_delay_max 0.0
+
+		colour_range_start 1 0 0
+
+		colour_range_end 0.5 0 0
+
+	}
+
+
+
+	emitter Box
+
+	{
+
+		position 0.0 450.0 2000.0
+
+		direction 0.0 1.0 0.0
+
+		angle 0.0
+
+		width 100.0
+
+		height 100.0
+
+		depth 100.0
+
+		emission_rate 50.0
+
+		velocity_min 1.0
+
+		velocity_max 1.0
+
+		time_to_live_min 5.0
+
+		time_to_live_max 5.0
+
+		duration_min 0.0
+
+		duration_max 0.0
+
+		repeat_delay_min 0.0
+
+		repeat_delay_max 0.0
+
+		colour_range_start 1 0 0
+
+		colour_range_end 0.5 0 0
+
+	}
+
+
+
+	emitter Box
+
+	{
+
+		position -400.0 -350.0 2000.0
+
+		direction 0.0 1.0 0.0
+
+		angle 0.0
+
+		width 100.0
+
+		height 100.0
+
+		depth 100.0
+
+		emission_rate 50.0
+
+		velocity_min 1.0
+
+		velocity_max 1.0
+
+		time_to_live_min 5.0
+
+		time_to_live_max 5.0
+
+		duration_min 0.0
+
+		duration_max 0.0
+
+		repeat_delay_min 0.0
+
+		repeat_delay_max 0.0
+
+		colour_range_start 1 0 0
+
+		colour_range_end 0.5 0 0
+
+	}
+
+
+
+	affector LinearForce
+
+	{
+
+		force_vector 0.0 100.0 0.0
+
+		force_application add
+
+	}
+
+
+
+	affector Scaler
+
+	{
+
+		rate 48.24
+
+	}
+
+}
+

@@ -170,8 +170,16 @@ namespace Game.World
                     new Script.Parser(this.mStateMgr).Parse(s); 
                 }
             }
-            if(blockCoord.y >= 200 && n == null) {
-                n = ParticleGenerator.mkParticle(this.mStateMgr.SceneMgr, blockCoord + Vector3.UNIT_Y * 600, "Snow");
+            if (blockCoord.y >= 200) {
+                if (n == null) {
+                    n = ParticleGenerator.mkParticle(this.mStateMgr.SceneMgr, -Vector3.UNIT_Y * 10, "Snow", e.getNode());
+                }
+            }
+            else if(n != null) {
+                this.getSceneMgr().DestroyParticleSystem((ParticleSystem)n.GetAttachedObject(0));
+                n.RemoveAndDestroyAllChildren();
+                this.getSceneMgr().DestroySceneNode(n);
+                n = null;
             }
 
             this.mIslandLoaded.getBlock(blockCoord, false).onBlockEnter(e, blockCoord);
