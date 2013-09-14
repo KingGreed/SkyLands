@@ -72,7 +72,7 @@ For an azerty keyboard
     <Keyboard>KC_O</Keyboard>
     <Xbox>DPadUp</Xbox>
   </SingleAction>
-  <SingleAction id="Select">
+  <SingleAction id="Retreat">
     <Keyboard>KC_T</Keyboard>
     <Xbox>DPadDown</Xbox>
   </SingleAction>
@@ -81,7 +81,7 @@ For an azerty keyboard
     <Xbox>DPadLeft</Xbox>
   </SingleAction>
   <SingleAction id="GoTo">
-    <Keyboard>KC_T</Keyboard>
+    <Keyboard>KC_M</Keyboard>
     <Xbox>DPadRight</Xbox>
   </SingleAction>
   <SingleAction id="Start">

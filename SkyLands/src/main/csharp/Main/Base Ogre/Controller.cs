@@ -23,7 +23,7 @@ namespace Game.Input
         Inventory,
         CreateUnit,
         SelectAll,
-        Select,
+        Retreat,
         FollowMe,
         GoTo,
         Start
