@@ -54,15 +54,16 @@ namespace API.Geo.Cuboid
         }
 
         public void clean() {
-            if (Clean) {
-                HashSet<string> keys = new HashSet<string>();
+            if (Clean && this.dirtyMultiList.Count > 0
+                ) {
+                Dictionary<string, MultiBlock> cleanedMultiList = new Dictionary<string,MultiBlock>();
 
                 foreach (MultiBlock item in dirtyMultiList) {
                     string face = item.getMaterial();
                     int meshType = item.meshType;
                     item.Remove();
                     this.addBlockType(meshType, face);
-                    keys.Add(face);
+                    cleanedMultiList.Add(face, this.multiList[face]);
                 }
                 this.clearDirtyMultiList();
                 
@@ -76,18 +77,17 @@ namespace API.Geo.Cuboid
                                 if (!this.hasVisibleFaceAt(x, y, z, (BlockFace)i)) {
                                     continue;
                                 }
-                                if (keys.Contains(this.mBlockList[x, y, z].getFace(i))) {
-                                    this.multiList[this.mBlockList[x, y, z].getFace(i)].addBlock(this.mChunkLocation * Cst.CHUNK_SIDE + new Vector3(x, y, z), (BlockFace)i);
+                                MultiBlock val;
+                                if (cleanedMultiList.TryGetValue(this.mBlockList[x, y, z].getFace(i), out val)) {
+                                    val.addBlock(this.mChunkLocation * Cst.CHUNK_SIDE + new Vector3(x, y, z), (BlockFace)i);
                                 }
                             }
                         }
                     }
                 }
 
-                foreach (KeyValuePair<string, MultiBlock> pair in this.multiList) {
-                    if(keys.Contains(pair.Key)) {
-                        pair.Value.display(this.mIsland, this.mIsland.mWorld);
-                    }
+                foreach (KeyValuePair<string, MultiBlock> pair in cleanedMultiList) {
+                    pair.Value.display(this.mIsland, this.mIsland.mWorld);
                 }
 
             }
@@ -129,16 +129,6 @@ namespace API.Geo.Cuboid
         public void setBlock(Vector3 loc, byte material)   { this.setBlock((int)loc.x, (int)loc.y, (int)loc.z, material); }
         public abstract void setBlock(int x, int y, int z, string material);
         public abstract void setBlock(int x, int y, int z, byte   material);
-
-        public void setDirty(int x, int y, int z) {
-            if (this.mBlockList[x, y, z].getName() == "Air") { return; }
-            for (int i = 0; i < 6; i++) {
-                if(this.multiList.ContainsKey(this.mBlockList[x, y, z].getFace(i)) && this.hasVisibleFaceAt(x,y,z, (BlockFace)i)) {
-                    this.dirtyMultiListInsert(this.mBlockList[x, y, z].getFace(i), this.multiList[this.mBlockList[x, y, z].getFace(i)]);
-                    this.multiList.Remove(this.mBlockList[x, y, z].getFace(i));
-                }
-            }
-        }
 
         public int getNumOfVisibleFaces(int x, int y, int z) { 
             int num = 0;

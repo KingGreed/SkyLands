@@ -108,6 +108,7 @@ namespace Game.World.Generator
 
         public override void setBlock(int x, int y, int z, string material) {
             if (this.mIsland.displayed) {
+                this.mIsland.dirtyChunks.Add(this);
                 this.updateBlock((int)this.mChunkLocation.x * 16 + x, (int)this.mChunkLocation.y * 16 + y, (int)this.mChunkLocation.z * 16 + z, this.mBlockList[x, y, z], this);
                 this.mBlockList[x, y, z] = staticBlock[material];
                 this.mIsland.setVisibleFaces(new Vector3((int)this.mChunkLocation.x * 16 + x, (int)this.mChunkLocation.y * 16 + y, (int)this.mChunkLocation.z * 16 + z), this.mBlockList[x, y, z]);
@@ -158,13 +159,13 @@ namespace Game.World.Generator
             }
             
             bool used = false;
-
+            MultiBlock val;
             for (int i = 0; i < 6; i++) {
                 if (!this.mIsland.hasVisibleFaceAt(absX, absY, absZ, (BlockFace)i)) {
                     continue;
                 }
                 used = true;
-                if (c.multiList.ContainsKey(b.getFace(i))) {
+                if (c.multiList.TryGetValue(b.getFace(i), out val)) {
                     c.dirtyMultiListInsert(b.getFace(i), c.multiList[b.getFace(i)]);
                     c.multiList.Remove(b.getFace(i));
                 }

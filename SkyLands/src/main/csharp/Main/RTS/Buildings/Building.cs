@@ -78,6 +78,8 @@ namespace Game.RTS {
         private void BuildGhost() {
             if (this.mIsGhostBuilt) { return; }
             this.mIsGhostBuilt = true;
+            this.mIsland.stopCleaning();
+
             for (int x = 0; x < this.Size.x; x++) {
                 for (int y = 0; y < this.Size.y; y++) {
                     for (int z = 0; z < this.Size.z; z++) {
@@ -88,12 +90,14 @@ namespace Game.RTS {
                     }
                 }
             }
+            this.mIsland.clean();
         }
 
         public void Build() {
             if (!this.mIsCreated) { this.Create(); }
             if (this.IsCharactInBat(this.mStateMgr.MainState.CharacMgr.MainPlayer))
                 this.mSymetricFactor = -1;
+            this.mIsland.stopCleaning();
             for (int x = 0; x < this.Size.x; x++) {
                 for (int y = 0; y < this.Size.y; y++) {
                     for (int z = 0; z < this.Size.z; z++) {
@@ -106,6 +110,7 @@ namespace Game.RTS {
                 }
             }
             this.OnBuild();
+            this.mIsland.clean();
         }
 
         protected virtual void OnBuild() {

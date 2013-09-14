@@ -29,6 +29,7 @@ namespace API.Geo.Cuboid
         public List<PositionFaceAndStatus>       blocksAdded;
         public List<PositionFaceAndStatus>       blocksDeleted;
         public bool                              displayed = false;
+        public HashSet<Chunk>                    dirtyChunks = new HashSet<Chunk>();
 
 
         public Dictionary<Vector3, Chunk> mChunkList;
@@ -94,9 +95,14 @@ namespace API.Geo.Cuboid
         public abstract void setBlockAt(Vector3 loc, string name, bool force);
         public abstract string getMaterialFromName(string name);
 
+        public void stopCleaning() {
+            Chunk.Clean = false;
+        }
+
         public void clean() {
-            foreach (KeyValuePair<Vector3, Chunk> pair in this.mChunkList) {
-                pair.Value.clean();
+            Chunk.Clean = true;
+            foreach (Chunk c in this.dirtyChunks) {
+                c.clean();
             }
         }
 
