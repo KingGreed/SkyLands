@@ -144,6 +144,10 @@ namespace Game.RTS {
                         this.mCircle = new Circle(this.mCircle, 5 + this.mRandom.Next(0, 6));
                 } while (!posAccepted);
 
+                pos.x = (float)System.Math.Round(pos.x);
+                pos.y = (float)System.Math.Round(pos.y);
+                pos.z = (float)System.Math.Round(pos.z);
+
                 Island island = this.mWorld.getIsland();
                 int diffY = 0;
                 Vector3 pDown = pos;

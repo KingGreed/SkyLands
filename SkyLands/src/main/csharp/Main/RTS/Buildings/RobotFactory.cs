@@ -64,7 +64,10 @@ namespace Game.RTS
             else
                 diff.x++;
             this.mSpawnPoint = (this.Position + diff) * Cst.CUBE_SIDE;
-            System.Console.WriteLine(this.mSymetricFactor);
+            System.Console.WriteLine("factory pos : " + this.Position);
+            System.Console.WriteLine("spawnpoint : " + this.mSpawnPoint);
+            System.Console.WriteLine();
+
             this.mTimeSinceLastPop = new Timer();
             this.RTS.NbFactory++;
         }

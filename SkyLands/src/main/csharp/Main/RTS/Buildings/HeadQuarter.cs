@@ -95,7 +95,7 @@ namespace Game.RTS
                 }
             }
 
-            for (int y = 3; y < 5; y++)
+            for (int y = 3; y < 6; y++)
                 for (int x = 0; x < 2; x++)
                     this.mBuilding[sizeX / 2 + x - 1, y, 0] = 0;
 

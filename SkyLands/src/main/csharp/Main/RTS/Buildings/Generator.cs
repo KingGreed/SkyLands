@@ -7,7 +7,7 @@ namespace Game.RTS
 {
     public class Generator : Building
     {
-        public const int sizeX = 2, sizeY = 6, sizeZ = 2;
+        public const int sizeX = 2, sizeY = 7, sizeZ = 2;
 
         public Generator(StateManager stateMgr, Island island, VanillaRTS rts, Vector3 position)
             : base(stateMgr, island, rts, "G", position) { }
@@ -27,20 +27,19 @@ namespace Game.RTS
             const byte smoothScarvedStone = 21; 
             const byte glass = 22;
 
-            for (int y = 0; y < sizeY; y++)
+            for (int y = 0; y < sizeY - 1; y++)
             {
                 for (int x = 0; x < sizeX; x++)
                 {
                     for (int z = 0; z < sizeZ; z++)
                     {
                         byte b = glass;
-                        if (y <= 1) { b = smoothScarvedStone; }
-                        else if (y == sizeY - 1) { b = this.mColoredBlock; }
-
+                        if (y <= 1 || y == sizeY - 2) { b = smoothScarvedStone; }
                         this.mBuilding[x, y, z] = b;
                     }
                 }
             }
+            this.mBuilding[0, sizeY - 1, 0] = this.mColoredBlock;
         }
 
         protected override void OnBuild()
