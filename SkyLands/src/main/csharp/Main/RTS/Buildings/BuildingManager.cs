@@ -61,7 +61,7 @@ namespace Game.csharp.Main.RTS.Buildings
             Dictionary<byte, int> actualRessources = null;
             if (b != null)
             {
-                if (b.Placed) { return; }
+                if (b.Built) { return; }
                 actualRessources = b.ActualRessources;
             }
 

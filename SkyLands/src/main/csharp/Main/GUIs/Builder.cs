@@ -33,8 +33,9 @@ namespace Game.GUIs
             base.onDocumentReady(sender, e);
             if (this.mBuildingMgr.HasActualBuilding() && OgreForm.webView.IsLive)
             {
-                OgreForm.webView.ExecuteJavascript("setSelection('" + this.mBuildingMgr.GetActualBuilding().Selection + "')");
-                this.mBuildingMgr.OnBuildingSelection(this.mBuildingMgr.GetActualBuilding().Selection);
+                string selection = this.mBuildingMgr.GetActualBuilding().Selection;
+                OgreForm.webView.ExecuteJavascript("setSelection('" + selection + "')");
+                this.mBuildingMgr.OnBuildingSelection(selection);
             }
             OnOpen();
         }

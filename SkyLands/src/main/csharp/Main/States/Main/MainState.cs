@@ -20,12 +20,12 @@ namespace Game.States
         public CharacMgr     CharacMgr { get; protected set; }
         public API.Geo.World World     { get; protected set; }
         public BuildingManager BuildingMgr { get; protected set; }
+        public RTSManager RTSMgr           { get; protected set; }
 
         protected MainState(StateManager stateMgr, string name) : base(stateMgr, name) { }
 
         protected override void Startup()
         {
-
             this.User = new User(this.mStateMgr, this.World);
 
             if (!GUI.WebControls.Contains(OgreForm.SelectBar))

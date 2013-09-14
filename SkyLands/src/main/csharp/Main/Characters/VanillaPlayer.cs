@@ -74,14 +74,17 @@ namespace Game.CharacSystem
             }
         }
 
-        public override bool Dispose(bool updateTargets = true)
+        public void BackToSpawnPoint()
         {
-            bool switchToFreeCamMode = this.IsMainPlayer && !this.mUser.IsFreeCamMode;
-            if (switchToFreeCamMode) { this.mUser.SwitchFreeCamMode(); }
-            
-            base.Dispose(updateTargets);
+            this.teleport(this.getSpawnPoint());
+            this.mCharInfo.Life = DEFAULT_PLAYER_LIFE;
+            this.mCharInfo.Mana = DEFAULT_PLAYER_MANA;
+        }
 
-            return this.IsMainPlayer;
+        public override void Dispose(bool updateTargets = true)
+        {
+            if (this.IsMainPlayer && !this.mUser.IsFreeCamMode) { this.mUser.SwitchFreeCamMode(); }
+            base.Dispose(updateTargets);
         }
     }
 }

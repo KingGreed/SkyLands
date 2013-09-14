@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Mogre;
 
-using Game.World;
 using Game.States;
 using Game.Input;
 using Game.Shoot;
@@ -46,6 +45,14 @@ namespace Game.CharacSystem
 
         public void AddCharacter(CharacterInfo info)
         {
+            if (info.RTS == null)
+            {
+                if (info.Faction == Faction.Red)
+                    info.RTS = this.mStateMgr.MainState.RTSMgr.AIRTS;
+                else
+                    info.RTS = this.mStateMgr.MainState.RTSMgr.PlayerRTS;
+            }
+            
             if (info.IsPlayer)
             {
                 if (this.mStateMgr.GameInfo.IsInEditorMode)
@@ -79,15 +86,12 @@ namespace Game.CharacSystem
                     if (characList[i].WaitForRemove)
                     {
                         if (characList[i] is VanillaPlayer)
-                            characList[i].teleport(characList[i].getSpawnPoint());
+                            ((VanillaPlayer)characList[i]).BackToSpawnPoint();
                         else
                         {
                             VanillaCharacter charac = characList[i];
                             characList.Remove(characList[i]);
-                            if (charac.Dispose())
-                            {
-                                this.MainPlayer = null;
-                            }
+                            charac.Dispose();
                             continue;
                         }
                     }

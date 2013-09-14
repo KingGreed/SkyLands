@@ -17,8 +17,9 @@ namespace Game.RTS
 
         private Vector3 mSpawnPoint;  // Absolute coord
         private Timer mTimeSinceLastPop;
+        private bool mHasCreateOneUnit = false;
 
-        public bool CanCreateUnit { get { return this.mTimeSinceLastPop.Milliseconds >= 8000; } }
+        public bool CanCreateUnit { get { return !this.mHasCreateOneUnit || this.mTimeSinceLastPop.Milliseconds >= 8000; } }
 
         public RobotFactory(StateManager stateMgr, Island island, VanillaRTS rts) : base(stateMgr, island, rts, "RF") { }
         public RobotFactory(StateManager stateMgr, Island island, VanillaRTS rts, Vector3 position)
@@ -48,37 +49,39 @@ namespace Game.RTS
                         this.mBuilding[x, y, z] = smoothStone;
 
             for (int y = 2; y < 5; y++)
-                this.mBuilding[2, y, 2] = 0;
+                this.mBuilding[2, y, 2] = 99;
 
             for (int y = 2; y < 5; y++)
                 this.mBuilding[2, y, 1] = this.mColoredBlock;
-
-            this.mClearZone = new List<Vector3>();
-            for (int y = 2; y < 5; y++)
-                for (int x = 1; x < sizeX - 1; x++)
-                    this.mClearZone.Add(new Vector3(x, y, 0));
         }
 
         protected override void OnBuild()
         {
             base.OnBuild();
-            this.mSpawnPoint = (this.Position + new Vector3(2, 1, 2)) * Cst.CUBE_SIDE;
+            Vector3 diff = new Vector3(sizeX / 2f * this.mSymetricFactor, 1, sizeZ / 2f * this.mSymetricFactor);
+            if (this.mSymetricFactor == 1)
+                diff.z--;
+            else
+                diff.x++;
+            this.mSpawnPoint = (this.Position + diff) * Cst.CUBE_SIDE;
+            System.Console.WriteLine(this.mSymetricFactor);
             this.mTimeSinceLastPop = new Timer();
             this.RTS.NbFactory++;
         }
 
         public void CreateUnit()    // Called by VanillaRTS only
         {
-            if (this.CanCreateUnit)
-            {
-                this.RTS.Crystals -= ROBOT_COST;
-                this.RTS.AmountUnits++;
-                this.mStateMgr.MainState.CharacMgr.AddCharacter(new CharacterInfo("Robot", this.RTS.Faction)
-                {
-                    SpawnPoint = this.mSpawnPoint
-                });
-                this.mTimeSinceLastPop.Reset();
-            }
+            if (!this.CanCreateUnit) { return; }
+
+            this.RTS.Crystals -= ROBOT_COST;
+            this.RTS.AmountUnits++;
+            CharacterInfo info = new CharacterInfo("Robot", this.RTS) {SpawnPoint = this.mSpawnPoint};
+            int id = info.Id;
+            this.mStateMgr.MainState.CharacMgr.AddCharacter(info);
+            if(this.mSymetricFactor == 1)
+                this.mStateMgr.MainState.CharacMgr.GetCharacterById(id).YawTo(180);
+            this.mTimeSinceLastPop.Reset();
+            this.mHasCreateOneUnit = true;
         }
     }
 }

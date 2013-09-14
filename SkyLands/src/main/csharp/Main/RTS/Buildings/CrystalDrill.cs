@@ -52,12 +52,6 @@ namespace Game.RTS
             this.mBuilding[(int)downPoints[4].x, 0, (int)downPoints[4].y] = glass;
             this.mBuilding[(int)downPoints[4].x, sizeY - 1, (int)downPoints[4].y] = this.mColoredBlock;
 
-            this.mClearZone = new List<Vector3>();
-            for (int y = sizeY - 3; y < sizeY; y++)
-                for (int x = 0; x < sizeX; x++)
-                    for (int z = 0; z < sizeZ; z++)
-                        this.mClearZone.Add(new Vector3(x, y, z));
-
             base.Create();
         }
 

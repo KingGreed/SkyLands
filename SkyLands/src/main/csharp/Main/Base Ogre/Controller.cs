@@ -21,6 +21,7 @@ namespace Game.Input
         MoveSelectorLeft,
         MoveSelectorRight,
         Inventory,
+        CreateUnit,
         Start
     }
 
@@ -250,7 +251,7 @@ namespace Game.Input
                     case "Mouse":
                         if (child.InnerText.Contains("MoveZ"))
                         {
-                            if (this.MouseMove.z != 0 && !(this.MouseMove.z > 0 ^ child.InnerText.Contains("+")))
+                            if (this.MouseMove.z != 0 && !(this.MouseMove.z < 0 ^ child.InnerText.Contains("+")))
                                 return true;
                         }
                         else if (this.IsMouseButtonDown((MouseButtons)Enum.Parse(typeof(MouseButtons), child.InnerText)))
@@ -290,7 +291,7 @@ namespace Game.Input
         private void OnMouseWheel(object sender, EventArgs e)
         {
             MouseEventArgs args = (MouseEventArgs)e;
-            if (this.mUpdateMovement) { this.mMouseMove.z = args.Delta - this.mMousePos.z; }
+            if (this.mUpdateMovement) { this.mMouseMove.z = args.Delta; }
             this.mMousePos.z += args.Delta;
         }
 

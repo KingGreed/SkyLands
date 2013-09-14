@@ -71,12 +71,12 @@ namespace Game.RTS {
             int coinId = 0;// this.mRandom.Next(0, 4);
             float angleMin = coinId * 90;
             float angleMax = (coinId + 1) * 90;
-            Console.WriteLine("coinId : " + coinId + "\ncorner : " + corner[coinId]);
+            //Console.WriteLine("coinId : " + coinId + "\ncorner : " + corner[coinId]);
 
             Vector2 coin = corner[coinId];
             int y = this.mWorld.getSurfaceHeight((int)coin.x, (int)coin.y);
             this.mBasePos = new Vector3(coin.x + Mogre.Math.Cos(new Degree(angleMin)) * 8, y, coin.y + Mogre.Math.Cos(new Degree(angleMax)) * 8);
-            Console.WriteLine("basePos : " + mBasePos);
+            //Console.WriteLine("basePos : " + mBasePos);
 
             this.mCircle = new Circle(mBasePos, angleMin, angleMax);
 
@@ -87,7 +87,7 @@ namespace Game.RTS {
         }
 
         protected override void Update() {
-            if (this.mNbUpdateSkipped++ < 30) { return; }
+            if (this.mNbUpdateSkipped++ < 10) { return; }
             this.mNbUpdateSkipped = 0;
 
             int nbRobotTocreate = 0;
@@ -178,7 +178,7 @@ namespace Game.RTS {
                 /* Test if the building is in the bounds of the terrain */
                 if (posAccepted) {
                     Vector3 islandSize = island.getSize() * 16;
-                    Vector2 halfSize = new Vector2(Mogre.Math.Ceil(sizeX / 2f), Mogre.Math.Ceil(sizeX / 2f));
+                    Vector2 halfSize = new Vector2(Mogre.Math.Ceil(sizeX / 2f), Mogre.Math.Ceil(sizeZ / 2f));
                     Vector2 min = new Vector2(pos.x - halfSize.x, pos.z - halfSize.y);
                     Vector2 max = new Vector2(pos.x + halfSize.x, pos.z + halfSize.y);
                     if (min.x < 0 || min.y < 0 || max.x > islandSize.x || max.y > islandSize.z)

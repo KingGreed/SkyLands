@@ -30,13 +30,14 @@ namespace Game.RTS
             this.mRTSMgr = RTSMgr;
             this.Buildings = new List<Building>();
             this.mCrystals = 150;
-            this.CrystalSpeed = 5;
+            this.CrystalSpeed = 0;
         }
 
         public void Update(float frameTime)
         {
             this.mTimeSinceInfoUpdate += frameTime;
             if (this.mTimeSinceInfoUpdate < 1) { return; }
+            this.mTimeSinceInfoUpdate = 0;
 
             this.mCrystals += this.CrystalSpeed;
             this.Update();
@@ -44,13 +45,14 @@ namespace Game.RTS
 
         protected abstract void Update();
 
-        public void AddBuilding(Building b) { this.Buildings.Add(b); }
+        public virtual void AddBuilding(Building b) { this.Buildings.Add(b); }
 
-        public int CreateRobot(int nb) // Try to create nb robots if there are enough factories available. Return the actual number of robot created
+        public virtual int CreateRobot(int nb) // Try to create nb robots if there are enough factories available (nb = -1, crate the max). Return the actual number of robot created
         {
             if (this.Crystals < RobotFactory.ROBOT_COST || this.AmountUnits >= this.Capacity) { return 0; }
 
             RobotFactory[] factories = this.Buildings.OfType<RobotFactory>().ToArray();
+            if (nb == -1) { nb = factories.Count(); }
             int nbRobotCreated = 0;
             for (int i = 0; i < factories.Count() && nbRobotCreated < nb; i++)
             {

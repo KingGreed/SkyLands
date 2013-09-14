@@ -24,7 +24,6 @@ namespace Game.RTS
 
             this.Size = new Vector3(sizeX, sizeY, sizeZ);
             this.mBuilding = new byte[sizeX, sizeY, sizeZ];
-            //this.mConsBlockPos = this.SpawnPoint;
             this.mYDiff = 2;
         }
 
@@ -32,58 +31,69 @@ namespace Game.RTS
         {
             base.Create();
 
-            byte[,] _base = new byte[sizeX, sizeZ]
+            byte[,] _base = new byte[sizeX,sizeZ] // 0 air, 1 wood, 2 empty
             {
-                {0,0,1,1,1,1,1,1,0,0},
-                {0,1,0,0,0,0,0,0,1,0},
-                {1,0,0,0,0,0,0,0,0,1},
-                {1,0,0,0,0,0,0,0,0,1},
-                {1,0,0,0,0,0,0,0,0,1},
-                {1,0,0,0,0,0,0,0,0,1},
-                {1,0,0,0,0,0,0,0,0,1},
-                {1,0,0,0,0,0,0,0,0,1},
-                {0,1,0,0,0,0,0,0,1,0},
-                {0,0,1,1,1,1,1,1,0,0}
+                {0, 0, 1, 1, 1, 1, 1, 1, 0, 0},
+                {0, 1, 2, 2, 2, 2, 2, 2, 1, 0},
+                {1, 2, 2, 2, 2, 2, 2, 2, 2, 1},
+                {1, 2, 2, 2, 2, 2, 2, 2, 2, 1},
+                {1, 2, 2, 2, 2, 2, 2, 2, 2, 1},
+                {1, 2, 2, 2, 2, 2, 2, 2, 2, 1},
+                {1, 2, 2, 2, 2, 2, 2, 2, 2, 1},
+                {1, 2, 2, 2, 2, 2, 2, 2, 2, 1},
+                {0, 1, 2, 2, 2, 2, 2, 2, 1, 0},
+                {0, 0, 1, 1, 1, 1, 1, 1, 0, 0}
             };
-            byte[,] _middle = new byte[sizeX, sizeZ]
+            byte[,] _middle = new byte[sizeX,sizeZ] // o air, 1 darkWood
             {
-                {0,0,1,1,1,1,1,1,0,0},
-                {0,1,1,1,1,1,1,1,1,0},
-                {1,1,1,1,1,1,1,1,1,1},
-                {1,1,1,1,1,1,1,1,1,1},
-                {1,1,1,1,1,1,1,1,1,1},
-                {1,1,1,1,1,1,1,1,1,1},
-                {1,1,1,1,1,1,1,1,1,1},
-                {1,1,1,1,1,1,1,1,1,1},
-                {0,1,1,1,1,1,1,1,1,0},
-                {0,0,1,1,1,1,1,1,0,0}
+                {0, 0, 1, 1, 1, 1, 1, 1, 0, 0},
+                {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+                {0, 0, 1, 1, 1, 1, 1, 1, 0, 0}
             };
-            byte[,] _roof = new byte[sizeX, sizeZ]
+            byte[,] _roof = new byte[sizeX,sizeZ] // 0 air, 1 wood, 2 glass
             {
-                {0,0,1,1,1,1,1,1,0,0},
-                {0,1,1,1,1,1,1,1,1,0},
-                {1,1,2,2,1,1,2,2,1,1},
-                {1,1,2,2,1,1,2,2,1,1},
-                {1,1,1,1,2,2,1,1,1,1},
-                {1,1,1,1,2,2,1,1,1,1},
-                {1,1,2,2,1,1,2,2,1,1},
-                {1,1,2,2,1,1,2,2,1,1},
-                {0,1,1,1,1,1,1,1,1,0},
-                {0,0,1,1,1,1,1,1,0,0}
+                {0, 0, 1, 1, 1, 1, 1, 1, 0, 0},
+                {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+                {1, 1, 2, 2, 1, 1, 2, 2, 1, 1},
+                {1, 1, 2, 2, 1, 1, 2, 2, 1, 1},
+                {1, 1, 1, 1, 2, 2, 1, 1, 1, 1},
+                {1, 1, 1, 1, 2, 2, 1, 1, 1, 1},
+                {1, 1, 2, 2, 1, 1, 2, 2, 1, 1},
+                {1, 1, 2, 2, 1, 1, 2, 2, 1, 1},
+                {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+                {0, 0, 1, 1, 1, 1, 1, 1, 0, 0}
             };
             const byte wood = 4;
             const byte darkWood = 11;
             const byte glass = 22;
 
-            for(int y = 0; y < 3; y++)
+            for (int y = 0; y < 3; y++)
                 for (int x = 0; x < sizeX; x++)
                     for (int z = 0; z < sizeZ; z++)
                         this.mBuilding[x, y, z] = (byte) ((_middle[x, z] == 0) ? 0 : darkWood);
 
             for (int y = 3; y < 8; y++)
+            {
                 for (int x = 0; x < sizeX; x++)
+                {
                     for (int z = 0; z < sizeZ; z++)
-                        this.mBuilding[x, y, z] = (byte)((_base[x, z] == 0) ? 0 : wood);
+                    {
+                        byte b = 0;
+                        if (_base[x, z] == 1)
+                            b = wood;
+                        else if (_base[x, z] == 2)
+                            b = 99;
+                        this.mBuilding[x, y, z] = b;
+                    }
+                }
+            }
 
             for (int y = 3; y < 5; y++)
                 for (int x = 0; x < 2; x++)
@@ -104,7 +114,14 @@ namespace Game.RTS
 
             for (int x = 0; x < sizeX; x++)
                 for (int z = 0; z < sizeX; z++)
-                    this.mBuilding[x, sizeY - 1, z] = (byte)((_base[x, z] == 0) ? 0 : darkWood);
+                    this.mBuilding[x, sizeY - 1, z] = (byte)((_base[x, z] == 0 || _base[x, z] == 2) ? 0 : darkWood);
+        }
+
+        protected override void OnBuild()
+        {
+            base.OnBuild();
+            this.RTS.CrystalSpeed += 5;
+            this.RTS.Capacity += 20;
         }
     }
 }

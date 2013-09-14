@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using Game.RTS;
@@ -17,6 +18,7 @@ using Game.World.Generator;
 using Game.World.Display;
 using Game.CharacSystem;
 using Game.GUIs;
+using Math = Mogre.Math;
 using Timer = Mogre.Timer;
 
 namespace Game
@@ -35,7 +37,7 @@ namespace Game
         private bool mIsInventoryOpen, mIsBuilderOpen, mIsMainGUIOpen;
 
         private readonly MOIS.KeyCode[] mFigures;
-        private Timer mTimeSinceGUIOpen;
+        private readonly Timer mTimeSinceGUIOpen;
 
         public static bool OpenBuilder         { get; set; }
         public static bool RequestBuilderClose { get; set; }
@@ -45,6 +47,7 @@ namespace Game
         public BuildingManager BuildingMgr { get; set; }
         public Vector3 SelectedBlockPos    { get; private set; }
         public Block SelectedBlock         { get; private set; }
+        public PlayerRTS PlayerRTS         { get; set; }
 
         public User(StateManager stateMgr, API.Geo.World world)
         {
@@ -144,7 +147,7 @@ namespace Game
                     else if (this.mIsBuilderOpen)
                     {
                         this.mIsBuilderOpen = false;
-                        if (this.BuildingMgr.HasActualBuilding() && !this.BuildingMgr.GetActualBuilding().Placed)
+                        if (this.BuildingMgr.HasActualBuilding() && !this.BuildingMgr.GetActualBuilding().Built)
                             this.BuildingMgr.GetActualBuilding().WaitForRessources();
                     }
                     else
@@ -187,6 +190,12 @@ namespace Game
                 this.SwitchGUIVisibility(true);
             }
 
+            if (this.mStateMgr.Controller.HasActionOccured(UserAction.CreateUnit))
+            {
+                int created = this.PlayerRTS.CreateRobot(1);
+                Console.WriteLine("C : " + created);
+            }
+
             /* Move camera */
             if (this.IsAllowedToMoveCam)
             {
@@ -223,7 +232,7 @@ namespace Game
                     break;
                 }
             }
-            if(Selector.SelectorPos != selectorPos)
+            if (Selector.SelectorPos != selectorPos)
                 Selector.SelectorPos = selectorPos;
         }
 
@@ -240,7 +249,7 @@ namespace Game
         public void OnBuilderOpen()
         {
             this.OnInventoryOpen();
-            if (this.BuildingMgr.HasActualBuilding() && !this.BuildingMgr.GetActualBuilding().Placed)
+            if (this.BuildingMgr.HasActualBuilding() && !this.BuildingMgr.GetActualBuilding().Built)
                 this.BuildingMgr.GetActualBuilding().DrawRemainingRessource();
         }
 

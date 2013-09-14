@@ -48,6 +48,7 @@ namespace Game.World.Generator.Decorators
                     tmp++;
             }
 
+
             CharacterInfo iaInfo = new CharacterInfo("Robot-" + Guid.NewGuid().ToString(), Faction.Red);
 
             iaInfo.SpawnPoint = new Vector3(pos.x + _width / 2 - 4, (int)pos.y - 5, (int)pos.z + _width / 2) * Cst.CUBE_SIDE;

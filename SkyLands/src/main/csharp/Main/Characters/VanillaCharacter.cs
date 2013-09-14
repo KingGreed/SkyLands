@@ -194,8 +194,7 @@ namespace Game.CharacSystem
             this.mMesh.Update(frameTime);
             this.MovementInfo.ClearInfo();
 
-            if (this.FeetPosition.y < 0)
-            { this.WaitForRemove = true; }
+            if (this.FeetPosition.y < 0) { this.WaitForRemove = true; }
         }
 
         private void Translate(Vector3 translation)
@@ -311,7 +310,7 @@ namespace Game.CharacSystem
             }
         }
 
-        public virtual bool Dispose(bool updateTargets = true)   // Must be called by the CharacMgr only. Return if it is the mainPlayer
+        public virtual void Dispose(bool updateTargets = true)   // Must be called by the CharacMgr only.
         {
             if (updateTargets)
             {
@@ -325,10 +324,9 @@ namespace Game.CharacSystem
                 }
             }
 
+            this.mCharInfo.RTS.AmountUnits--;
             this.mNode.RemoveAndDestroyAllChildren();
             this.mCharacMgr.SceneMgr.DestroySceneNode(this.mNode);
-
-            return false;
         }
 
         /* Character */

@@ -33,11 +33,11 @@ namespace Game.States
 
             base.Startup();
 
-            CharacterInfo playerInfo = new CharacterInfo("Sinbad", Faction.Blue, true) { SpawnPoint = this.World.getSpawnPoint() };
+            CharacterInfo playerInfo = new CharacterInfo("Sinbad", this.RTSManager.PlayerRTS, true) { SpawnPoint = this.World.getSpawnPoint() };
             this.CharacMgr.AddCharacter(playerInfo);
             this.User.SwitchFreeCamMode();
 
-            this.CharacMgr.AddCharacter(new CharacterInfo("Robot-01", Faction.Red)
+            this.CharacMgr.AddCharacter(new CharacterInfo("Robot-01", this.RTSManager.AIRTS)
             {
                 SpawnPoint = playerInfo.SpawnPoint + new Vector3(800, 500, 200)
             });
@@ -47,12 +47,14 @@ namespace Game.States
 
         protected override void AfterWorldCreation()
         {
+            this.RTSManager = new RTSManager(this.mStateMgr);
+            this.RTSMgr = this.RTSManager;
             this.mBulletMgr = new BulletManager(this.mStateMgr.SceneMgr, this.World);
             this.CharacMgr = new CharacMgr(this.mStateMgr, this.World, this.User, this.mBulletMgr);
             this.mBulletMgr.AttachCharacMgr(this.CharacMgr);
-            this.RTSManager = new RTSManager(this.mStateMgr);
             this.BuildingMgr = new BuildingManager(this.mStateMgr, this.World.getIsland(), this.RTSManager);
             this.User.BuildingMgr = this.BuildingMgr;
+            this.User.PlayerRTS = this.RTSManager.PlayerRTS;
         }
 
         public override void Show()

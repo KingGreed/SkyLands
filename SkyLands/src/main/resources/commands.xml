@@ -65,6 +65,10 @@ For an azerty keyboard
     <Keyboard>KC_I</Keyboard>
     <Xbox>X</Xbox>
   </SingleAction>
+  <SingleAction id="CreateUnit">
+    <Keyboard>KC_C</Keyboard>
+    <Xbox>B</Xbox>
+  </SingleAction>
   <SingleAction id="Start">
     <Keyboard>KC_ESCAPE</Keyboard>
     <Xbox>Start</Xbox>
