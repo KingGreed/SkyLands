@@ -54,8 +54,7 @@ namespace API.Geo.Cuboid
         }
 
         public void clean() {
-            if (Clean && this.dirtyMultiList.Count > 0
-                ) {
+            if (Clean && this.dirtyMultiList.Count > 0) {
                 Dictionary<string, MultiBlock> cleanedMultiList = new Dictionary<string,MultiBlock>();
 
                 foreach (MultiBlock item in dirtyMultiList) {

@@ -80,10 +80,22 @@ namespace Game.RTS {
             this.mIsGhostBuilt = true;
             this.mIsland.stopCleaning();
 
+<<<<<<< HEAD
             for (int x = 0; x < this.Size.x; x++) {
                 for (int y = 0; y < this.Size.y; y++) {
                     for (int z = 0; z < this.Size.z; z++) {
                         if (x == 0 && y == 0 && z == 0) { continue; }
+=======
+        private void BuildGhost(bool create)
+        {
+            this.mIsland.stopCleaning();
+            for (int x = 0; x < this.Size.x; x++)
+            {
+                for (int y = 0; y < this.Size.y; y++)
+                {
+                    for (int z = 0; z < this.Size.z; z++)
+                    {
+>>>>>>> Ghost buildaings updated
                         Vector3 pos = this.RealPos + new Vector3(x, 0, z) * this.mSymetricFactor + Vector3.UNIT_Y * y;
                         if (this.mBuilding[x, y, z] != 0 && this.mIsland.getBlock(pos, false) is Air)
                             this.mIsland.setBlockAt(pos, GHOST_BLOCK, true);
