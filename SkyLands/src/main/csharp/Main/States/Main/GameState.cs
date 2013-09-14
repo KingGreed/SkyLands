@@ -37,7 +37,7 @@ namespace Game.States
             this.CharacMgr.AddCharacter(playerInfo);
             this.User.SwitchFreeCamMode();
 
-            this.CharacMgr.AddCharacter(new CharacterInfo("Robot-01", this.RTSManager.AIRTS)
+            this.CharacMgr.AddCharacter(new CharacterInfo("Robot-01", this.RTSManager.PlayerRTS)
             {
                 SpawnPoint = playerInfo.SpawnPoint + new Vector3(800, 500, 200)
             });

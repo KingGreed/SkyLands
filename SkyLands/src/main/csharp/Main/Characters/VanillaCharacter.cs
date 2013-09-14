@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using API.Generic;
+using Game.World.Display;
 using Mogre;
 
 using API.Ent;
@@ -25,11 +26,13 @@ namespace Game.CharacSystem
 
         protected CharacMgr     mCharacMgr;
         protected SceneNode     mNode;
+        private   SceneNode[]   mWireBoxes;
         protected MeshAnim      mMesh;
         protected CharacterInfo mCharInfo;
         protected CollisionMgr  mCollisionMgr;
         private Vector3         mPreviousDirection;
         private float           mTimeSinceDead;
+        private bool            mIsFriendlySelected, mIsHostilelySelected;
 
         private PathFinder       mPathFinder;
         protected Stack<Vector3> mForcedDestination;
@@ -60,6 +63,23 @@ namespace Game.CharacSystem
             this.mTimeSinceDead = 0;
             this.mLastSquaredDist = -1;
             this.mForcedDestination = new Stack<Vector3>();
+        }
+
+        protected void FinishCreation()
+        {
+            this.FeetPosition = this.mCharInfo.SpawnPoint;
+            this.mCollisionMgr = new CollisionMgr(this.mCharacMgr.SceneMgr, this.mCharacMgr.World, this);
+
+            this.mWireBoxes = new SceneNode[2];
+            for (int i = 0; i < 2; i++)
+            {
+                this.mWireBoxes[i] = this.mNode.CreateChildSceneNode();
+                this.mWireBoxes[i].InheritScale = false;
+                this.mWireBoxes[i].InheritOrientation = true;
+                this.mWireBoxes[i].AttachObject(StaticRectangle.CreateRectangle(this.mCharacMgr.SceneMgr, new Vector3(-Cst.CUBE_SIDE/2, 0, -Cst.CUBE_SIDE/2),
+                    new Vector3(1, 2, 1)*Cst.CUBE_SIDE, i == 0 ? ColoredMaterials.BLUE : ColoredMaterials.RED));
+                this.mWireBoxes[i].SetVisible(false);
+            }
         }
 
         private void OnFall(bool isFalling)
@@ -309,6 +329,34 @@ namespace Game.CharacSystem
                 if (this.MovementInfo.IsAllowedToMove) { this.mWillBeAllowedToMove = allowToMove; }
             }
         }
+
+        public void SetSelected(bool selected, bool friendly = true)
+        {
+            if (!selected)
+            {
+                for(int i = 0; i < 2; i++)
+                    this.mWireBoxes[i].SetVisible(false);
+                this.mIsFriendlySelected = false;
+                this.mIsHostilelySelected = false;
+            }
+            else if (friendly)
+            {
+                this.mIsFriendlySelected = true;
+                this.mIsHostilelySelected = !this.mIsFriendlySelected;
+                this.mWireBoxes[0].SetVisible(this.mIsFriendlySelected);
+                this.mWireBoxes[1].SetVisible(!this.mIsFriendlySelected);
+            }
+            else
+            {
+                this.mIsHostilelySelected = true;
+                this.mIsFriendlySelected = !this.mIsHostilelySelected;
+                this.mWireBoxes[0].SetVisible(!this.mIsHostilelySelected);
+                this.mWireBoxes[1].SetVisible(this.mIsHostilelySelected);
+            }
+        }
+
+        public bool IsFriendlySelected() { return this.mIsFriendlySelected; }
+        public bool IsHostilelySelected() { return this.mIsHostilelySelected; }
 
         public virtual void Dispose(bool updateTargets = true)   // Must be called by the CharacMgr only.
         {

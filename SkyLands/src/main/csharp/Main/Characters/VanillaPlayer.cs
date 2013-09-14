@@ -33,10 +33,8 @@ namespace Game.CharacSystem
             this.mNode.Scale(this.mMesh.MeshSize / ent.BoundingBox.Size);
             this.mNode.Orientation = this.mMesh.InitialOrientation;
 
-            this.mCollisionMgr = new CollisionMgr(characMgr.SceneMgr, this.mCharacMgr.World, this);
-            this.FeetPosition = this.mCharInfo.SpawnPoint;
-
             this.mShootCube = new ShootCube(this.mCharacMgr.BulletMgr, this);
+            this.FinishCreation();
         }
 
         public void MakeHimMainPlayer(User user) { this.mUser = user; }

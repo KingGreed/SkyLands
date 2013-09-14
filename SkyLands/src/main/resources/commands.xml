@@ -43,7 +43,6 @@ For an azerty keyboard
   </SingleAction>
   <SingleAction id="Dance">
     <Keyboard>KC_NUMPAD1</Keyboard>
-    <Xbox>DPadLeft</Xbox>
   </SingleAction>
   <SingleAction id="MainAction">
     <Mouse>Left</Mouse>
@@ -66,8 +65,24 @@ For an azerty keyboard
     <Xbox>X</Xbox>
   </SingleAction>
   <SingleAction id="CreateUnit">
-    <Keyboard>KC_C</Keyboard>
+    <Keyboard>KC_P</Keyboard>
     <Xbox>B</Xbox>
+  </SingleAction>
+  <SingleAction id="SelectAll">
+    <Keyboard>KC_O</Keyboard>
+    <Xbox>DPadUp</Xbox>
+  </SingleAction>
+  <SingleAction id="Select">
+    <Keyboard>KC_T</Keyboard>
+    <Xbox>DPadDown</Xbox>
+  </SingleAction>
+  <SingleAction id="FollowMe">
+    <Keyboard>KC_F</Keyboard>
+    <Xbox>DPadLeft</Xbox>
+  </SingleAction>
+  <SingleAction id="GoTo">
+    <Keyboard>KC_T</Keyboard>
+    <Xbox>DPadRight</Xbox>
   </SingleAction>
   <SingleAction id="Start">
     <Keyboard>KC_ESCAPE</Keyboard>

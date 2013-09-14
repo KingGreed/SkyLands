@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using Game.States;
-using Game.World;
 using Game.World.Blocks;
 using Mogre;
 
@@ -90,7 +89,7 @@ namespace Game.RTS {
         }
 
         protected override void Update() {
-            //if (this.mNbUpdateSkipped++ < 5) { return; }
+            if (this.mNbUpdateSkipped++ < 5) { return; }
             this.mNbUpdateSkipped = 0;
 
             int nbRobotTocreate = 0;
@@ -102,7 +101,7 @@ namespace Game.RTS {
             {
                 this.mWaitingBuilding.Build();
                 this.mNextBuilding = "";
-                //this.NbBuildingsAllowedToAdd--;
+                this.NbBuildingsAllowedToAdd--;
                 this.mWaitingBuilding = null;
             }
             else if (this.NbBuildingsAllowedToAdd > 0)

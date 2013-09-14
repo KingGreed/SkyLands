@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -34,7 +35,8 @@ namespace Game
         private CameraMan mCameraMan;
         private SceneNode mCamYawNode, mCamPitchNode;
         private readonly SceneNode mWireCube;
-        private bool mIsInventoryOpen, mIsBuilderOpen, mIsMainGUIOpen;
+        private bool mIsInventoryOpen, mIsBuilderOpen, mIsMainGUIOpen, mAreAllCharacSelected;
+        private HashSet<VanillaNonPlayer> mSelectedAllies;
 
         private readonly MOIS.KeyCode[] mFigures;
         private readonly Timer mTimeSinceGUIOpen;
@@ -62,30 +64,15 @@ namespace Game
             cam.Position = new Vector3(-203, 633, -183);
             cam.Orientation = new Quaternion(0.3977548f, -0.1096644f, -0.8781486f, -0.2421133f);
             this.mCameraMan = new CameraMan(cam);
+            this.mSelectedAllies = new HashSet<VanillaNonPlayer>();
 
             this.mFigures = new MOIS.KeyCode[10];
             for (int i = 0; i < 9; i++)
                 this.mFigures[i] = (MOIS.KeyCode)System.Enum.Parse(typeof(MOIS.KeyCode), "KC_" + (i + 1));
             this.mFigures[9] = MOIS.KeyCode.KC_0;
 
-            ManualObject[] wires = new ManualObject[12];
-            wires[0] = StaticRectangle.CreateLine(this.mStateMgr.SceneMgr, Vector3.ZERO, Vector3.UNIT_X * Cst.CUBE_SIDE);
-            wires[1] = StaticRectangle.CreateLine(this.mStateMgr.SceneMgr, Vector3.UNIT_X * Cst.CUBE_SIDE, new Vector3(1, 0, 1) * Cst.CUBE_SIDE);
-            wires[2] = StaticRectangle.CreateLine(this.mStateMgr.SceneMgr, new Vector3(1, 0, 1) * Cst.CUBE_SIDE, Vector3.UNIT_Z * Cst.CUBE_SIDE);
-            wires[3] = StaticRectangle.CreateLine(this.mStateMgr.SceneMgr, Vector3.UNIT_Z * Cst.CUBE_SIDE, Vector3.ZERO);
-            wires[4] = StaticRectangle.CreateLine(this.mStateMgr.SceneMgr, Vector3.UNIT_Y * Cst.CUBE_SIDE, new Vector3(1, 1, 0) * Cst.CUBE_SIDE);
-            wires[5] = StaticRectangle.CreateLine(this.mStateMgr.SceneMgr, new Vector3(1, 1, 0) * Cst.CUBE_SIDE, Vector3.UNIT_SCALE * Cst.CUBE_SIDE);
-            wires[6] = StaticRectangle.CreateLine(this.mStateMgr.SceneMgr, Vector3.UNIT_SCALE * Cst.CUBE_SIDE, new Vector3(0, 1, 1) * Cst.CUBE_SIDE);
-            wires[7] = StaticRectangle.CreateLine(this.mStateMgr.SceneMgr, new Vector3(0, 1, 1) * Cst.CUBE_SIDE, Vector3.UNIT_Y * Cst.CUBE_SIDE);
-            wires[8] = StaticRectangle.CreateLine(this.mStateMgr.SceneMgr, Vector3.ZERO, Vector3.UNIT_Y * Cst.CUBE_SIDE);
-            wires[9] = StaticRectangle.CreateLine(this.mStateMgr.SceneMgr, Vector3.UNIT_X * Cst.CUBE_SIDE, new Vector3(1, 1, 0) * Cst.CUBE_SIDE);
-            wires[10] = StaticRectangle.CreateLine(this.mStateMgr.SceneMgr, new Vector3(1, 0, 1) * Cst.CUBE_SIDE, Vector3.UNIT_SCALE * Cst.CUBE_SIDE);
-            wires[11] = StaticRectangle.CreateLine(this.mStateMgr.SceneMgr, Vector3.UNIT_Z * Cst.CUBE_SIDE, new Vector3(0, 1, 1) * Cst.CUBE_SIDE);
-
             this.mWireCube = this.mStateMgr.SceneMgr.RootSceneNode.CreateChildSceneNode();
-            foreach (ManualObject wire in wires)
-                this.mWireCube.AttachObject(wire);
-
+            this.mWireCube.AttachObject(StaticRectangle.CreateRectangle(this.mStateMgr.SceneMgr, Vector3.UNIT_SCALE * Cst.CUBE_SIDE));
             this.mWireCube.SetVisible(false);
 
             this.Inventory = new Inventory(10, 4, new int[] { 3, 0, 1, 2 }, true);
@@ -191,14 +178,34 @@ namespace Game
             }
 
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.CreateUnit))
+                this.PlayerRTS.CreateRobot(1);
+
+            if (this.mStateMgr.Controller.HasActionOccured(UserAction.SelectAll))
             {
-                int created = this.PlayerRTS.CreateRobot(1);
-                Console.WriteLine("C : " + created);
+                this.mAreAllCharacSelected = !this.mAreAllCharacSelected;
+                foreach (VanillaNonPlayer charac in this.mStateMgr.MainState.CharacMgr.GetFactionCharacters(Faction.Blue).OfType<VanillaNonPlayer>())
+                {
+                    if (!charac.IsFriendlySelected() && this.mAreAllCharacSelected)
+                        this.mSelectedAllies.Add(charac);
+                    else if (charac.IsFriendlySelected() && !this.mAreAllCharacSelected)
+                        this.mSelectedAllies.Remove(charac);
+
+                    charac.SetSelected(this.mAreAllCharacSelected, true);
+                }
+            }
+
+            if (this.mStateMgr.Controller.HasActionOccured(UserAction.GoTo))
+            {
+                foreach (VanillaNonPlayer ally in mSelectedAllies)
+                {
+                    ally.MoveTo((this.SelectedBlockPos + new Vector3(0.5f, 1, -0.5f)) * Cst.CUBE_SIDE);
+                }
             }
 
             /* Move camera */
             if (this.IsAllowedToMoveCam)
             {
+                bool secondaryActionHandled = false;
                 if (this.IsFreeCamMode)
                     this.mCameraMan.UpdateCamera(frameTime, this.mStateMgr.Controller);
                 else if (mainPlayer.MovementInfo.IsAllowedToMove) // Just pitch the camera
@@ -207,6 +214,9 @@ namespace Game
 
                     if (2 * new Degree(Math.ACos(this.mCamPitchNode.Orientation.w)).ValueAngleUnits > 90.0f) // Limit the pitch between -90 degrees and +90 degrees
                         this.mCamPitchNode.SetOrientation(Math.Sqrt(0.5f), Math.Sqrt(0.5f) * Math.Sign(this.mCamPitchNode.Orientation.x), 0, 0);
+
+                    if (this.mStateMgr.Controller.HasActionOccured(UserAction.SecondaryAction))
+                        secondaryActionHandled = this.UpdateSelectedNPC();
                 }
 
                 /* Cube addition and suppression */
@@ -215,7 +225,7 @@ namespace Game
                 {
                     if (this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction) && !Selector.IsBullet && this.mWorld.onLeftClick(this.SelectedBlockPos))
                         this.AddBlock(dist);
-                    if (this.mStateMgr.Controller.HasActionOccured(UserAction.SecondaryAction) && this.mWorld.onRightClick(this.SelectedBlockPos))
+                    if (!secondaryActionHandled && this.mStateMgr.Controller.HasActionOccured(UserAction.SecondaryAction) && this.mWorld.onRightClick(this.SelectedBlockPos))
                         this.DeleteBlock();
                 }
             }
@@ -297,6 +307,47 @@ namespace Game
                 mainPlayer.SetIsAllowedToMove(true);
                 this.mCameraMan = null;
             }
+        }
+
+        private bool UpdateSelectedNPC() // Return if the secondaryAction was meant to select a NPC
+        {
+            VanillaNonPlayer selectedCharac = this.GetSelectedNPC();
+            if (selectedCharac != null && selectedCharac.Info.Faction == Faction.Blue)
+            {
+                Console.WriteLine("Ally selected");
+                if (this.mSelectedAllies.Contains(selectedCharac))
+                {
+                    selectedCharac.SetSelected(false);
+                    this.mSelectedAllies.Remove(selectedCharac);
+                }
+                else
+                {
+                    selectedCharac.SetSelected(true);
+                    this.mSelectedAllies.Add(selectedCharac);
+                }
+            }
+
+            return selectedCharac != null;
+        }
+
+        private VanillaNonPlayer GetSelectedNPC()
+        {
+            RaySceneQuery raySceneQuery = this.mStateMgr.SceneMgr.CreateRayQuery(this.mStateMgr.Camera.GetCameraToViewportRay(0.5f, 0.5f));
+            raySceneQuery.SetSortByDistance(true);
+
+            foreach (RaySceneQueryResultEntry raySQREntry in raySceneQuery.Execute())
+            {
+                if (raySQREntry.movable != null)
+                {
+                    string name = raySQREntry.movable.Name;
+                    if (!name.Contains("CharacterEnt_")) { continue; }
+                    int id = int.Parse(name.Split('_')[1]);
+                    VanillaNonPlayer npc = this.mStateMgr.MainState.CharacMgr.GetCharacterById(id) as VanillaNonPlayer;
+                    if(npc != null)
+                        return npc;
+                }
+            }
+            return null;
         }
 
         private float UpdateSelectedBlock()   // return the distance with the selected block

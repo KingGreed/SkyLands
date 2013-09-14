@@ -83,34 +83,6 @@ namespace Game.States
 
             this.User.Update(frameTime);
             this.CharacMgr.Update(frameTime);
-
-            /* Entity selection */
-            /*if (this.User.IsFreeCamMode && this.mStateMgr.Controller.HasActionOccured(UserAction.MainAction))
-            {
-                if (this.mSelectedEntity == null)
-                {
-                    RaySceneQuery raySceneQuery = this.CharacMgr.SceneMgr.CreateRayQuery(new Ray());
-                    raySceneQuery.Ray = this.mStateMgr.Camera.GetCameraToViewportRay(0.5f, 0.5f);
-
-                    RaySceneQueryResult.Enumerator itr = (RaySceneQueryResult.Enumerator) raySceneQuery.Execute().GetEnumerator();
-
-                    while (itr.MoveNext())
-                    {
-                        if (itr.Current.movable.Name.Contains("CharacterEnt_"))
-                        {
-                            this.mSelectedEntity = ((SceneNode)itr.Current.movable.ParentNode);
-                            this.mSelectedEntity.ShowBoundingBox = true;
-                        }
-                    }
-                }
-                else
-                {
-                    int characId = System.Convert.ToInt32(this.mSelectedEntity.Name.Substring(14));
-                    this.mSelectedEntity.ShowBoundingBox = false;
-                    this.CharacMgr.GetCharacterById(characId).MoveTo(this.CharacMgr.World.getSpawnPoint());
-                    this.mSelectedEntity = null;
-                }
-            }*/
         }
 
         public abstract void OpenMainGUI();

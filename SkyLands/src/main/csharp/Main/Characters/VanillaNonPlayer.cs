@@ -9,7 +9,7 @@ using Game.RTS;
 
 namespace Game.CharacSystem
 {
-    class VanillaNonPlayer : VanillaCharacter
+    public class VanillaNonPlayer : VanillaCharacter
     {
         public const float  DEFAULT_NPC_LIFE = 500;
         private const float FIRE_RATE = 0.7f,
@@ -30,11 +30,8 @@ namespace Game.CharacSystem
 
             this.mNode = characMgr.SceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id, Vector3.ZERO, this.mMesh.InitialOrientation);
             this.mNode.AttachObject(ent);
-            this.mNode.Scale(this.mMesh.MeshSize / ent.BoundingBox.Size);
             //this.mNode.Orientation = this.mMesh.InitialOrientation;
-
-            this.FeetPosition = this.mCharInfo.SpawnPoint;
-            this.mCollisionMgr = new CollisionMgr(characMgr.SceneMgr, this.mCharacMgr.World, this);
+            this.FinishCreation();
         }
 
         public new void Update(float frameTime)

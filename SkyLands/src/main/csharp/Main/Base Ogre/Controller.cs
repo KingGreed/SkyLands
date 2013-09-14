@@ -22,6 +22,10 @@ namespace Game.Input
         MoveSelectorRight,
         Inventory,
         CreateUnit,
+        SelectAll,
+        Select,
+        FollowMe,
+        GoTo,
         Start
     }
 
@@ -153,11 +157,9 @@ namespace Game.Input
                 if (this.mTimeToVibrate > 0) { this.mTimeToVibrate -= frameTime; }
                 if (this.mTimeToVibrate < 0) { this.Vibrate(0, 0); }
 
-                this.Yaw = this.GamePadState.ThumbSticks.Right.X * 3.5f;
+                this.Yaw = this.GamePadState.ThumbSticks.Right.X * 6.5f;
                 this.Pitch = -this.GamePadState.ThumbSticks.Right.Y * 6.5f;
-                this.mMovementFactor = new Mogre.Vector3(-this.GamePadState.ThumbSticks.Left.X,
-                    this.GamePadState.DPad.Up == XInputDotNetPure.ButtonState.Pressed ? 1 : (this.GamePadState.DPad.Down == XInputDotNetPure.ButtonState.Pressed ? -1 : 0),
-                                                   this.GamePadState.ThumbSticks.Left.Y);
+                this.mMovementFactor = new Mogre.Vector3(-this.GamePadState.ThumbSticks.Left.X, 0, this.GamePadState.ThumbSticks.Left.Y);
             }
 
             this.mKeyBoard.Capture();

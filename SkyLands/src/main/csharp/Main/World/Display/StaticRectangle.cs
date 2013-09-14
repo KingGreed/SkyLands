@@ -52,6 +52,39 @@ namespace Game.World.Display
             return manOb;
         }
 
+        public static ManualObject CreateRectangle(SceneManager sceneMgr, Vector3 size, string material = ColoredMaterials.BLUE) { return CreateRectangle(sceneMgr, Vector3.ZERO, size, material); }
+        public static ManualObject CreateRectangle(SceneManager sceneMgr, Vector3 pos, Vector3 size, string material = ColoredMaterials.BLUE)
+        {
+            Vector3[,] points = new Vector3[2,4];
+            for (int y = 0; y < 2; y++)
+            {
+                points[y, 0] = pos + y * Vector3.UNIT_Y * size.y;
+                points[y, 1] = pos + new Vector3(1, y, 0) * size;
+                points[y, 2] = pos + new Vector3(1, y, 1) * size;
+                points[y, 3] = pos + new Vector3(0, y, 1) * size;
+            }
+            
+            ManualObject manOb = sceneMgr.CreateManualObject();
+            manOb.Begin(material, RenderOperation.OperationTypes.OT_LINE_LIST);
+            for (int y = 0; y < 2; y++)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    manOb.Position(points[y, i]);
+                    manOb.Position(points[y, (i + 1)%4]);
+                }
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                manOb.Position(points[0, i]);
+                manOb.Position(points[1, i]);
+            }
+
+            manOb.End();
+            return manOb;
+        }
+
         public static SceneNode DrawLine(SceneManager sceneMgr, Vector3 p1, Vector3 p2, string material = ColoredMaterials.BLUE)
         {
             SceneNode node = sceneMgr.RootSceneNode.CreateChildSceneNode();
