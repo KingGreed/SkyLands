@@ -35,11 +35,11 @@ namespace Game.CharacSystem
             if (!this.mMainInventory) { return; }
 
             byte[,] ingredients = new byte[3,3];
-            for (int y = 0; y < 3; y++)
+            for (int x = 0; x < 3; x++)
             {
-                for (int x = 0; x < 3; x++)
+                for (int y = 0; y < 3; y++)
                 {
-                    int id = this.GetIdFromIndex(40 + x + y*3);
+                    int id = this.GetIdFromIndex(40 + y + x*3);
                     ingredients[y, x] = (byte)(id == 0 ? 255 : id);
                 }
             }

@@ -30,19 +30,25 @@ namespace Game.CharacSystem {
 
             string[] lines = new string[this.getNumLines(o)];
 
+            string val;
             for (int i = 0; i < lines.Length; i++) {
-                lines[i] = (string)o[i];
+                val = (string)o[i];
+                if (val.Length == 3) {
+                    lines[i] = val;
+                }
+                else if (val.Length < 3) {
+                    for (; val.Length < 3; ) {
+                        val += " ";
+                    }
+                    lines[i] = val;
+                }
+                else {
+                    throw new ArgumentException("Argument {0} is too long");
+                }
             }
 
             CraftTree c = this.mCraftTree;
             for (int i = 0; i < lines.Length; i++) {
-                
-                if (lines[i] == "") {//empty lines
-                    for (int j = 0; j < 3; j++) {
-                        c.add(255, new CraftTree());
-                    }
-                }
-
                 for (int j = 0; j < lines[i].Length; j++) {
                     if (i == lines.Length - 1 && j == lines[i].Length - 1) {//last one has the result
                         c = c.add(this.fromCharToByte(lines[i][j], o), new CraftTree(resultId));
@@ -54,7 +60,7 @@ namespace Game.CharacSystem {
                 }
 
                 if (i != lines.Length - 1) {
-                    c.add(255, new CraftTree());
+                    c = c.add(255, new CraftTree());
                 }
             }
         }
