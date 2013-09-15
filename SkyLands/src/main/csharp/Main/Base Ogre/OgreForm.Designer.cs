@@ -1,4 +1,5 @@
-﻿using Awesomium.Core;
+﻿using System.ComponentModel;
+using Awesomium.Core;
 
 namespace Game.BaseApp {
     partial class OgreForm {
@@ -24,8 +25,10 @@ namespace Game.BaseApp {
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         protected void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OgreForm));
             webView = new Awesomium.Windows.Forms.WebControl(this.components);
             SelectBar = new Awesomium.Windows.Forms.WebControl(this.components);
             Hud = new Awesomium.Windows.Forms.WebControl(this.components);
@@ -45,7 +48,7 @@ namespace Game.BaseApp {
             SelectBar.Size = new System.Drawing.Size(56, 19);
             SelectBar.TabIndex = 1;
             // 
-            // webControl1
+            // Hud
             // 
             Hud.Location = new System.Drawing.Point(0, 0);
             Hud.Size = new System.Drawing.Size(800, 29);
@@ -59,6 +62,7 @@ namespace Game.BaseApp {
             this.Controls.Add(Hud);
             this.Controls.Add(SelectBar);
             this.Controls.Add(webView);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "OgreForm";
             this.Text = "OgreForm";
             this.ResumeLayout(false);
@@ -70,6 +74,7 @@ namespace Game.BaseApp {
         public static Awesomium.Windows.Forms.WebControl Hud;
         public static Awesomium.Windows.Forms.WebControl SelectBar;
         public static Awesomium.Windows.Forms.WebControl webView;
+
 
 
 
