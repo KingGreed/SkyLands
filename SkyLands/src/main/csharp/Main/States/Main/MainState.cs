@@ -32,10 +32,19 @@ namespace Game.States
             {
                 if (!GUI.WebControls.Contains(OgreForm.SelectBar))
                     GUI.WebControls.Add(OgreForm.SelectBar);
+                
                 OgreForm.SelectBar.DocumentReady += onSelectBarLoaded;
                 OgreForm.SelectBar.Source =
                     new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/Selector.html");
                 OgreForm.SelectBar.Visible = false;
+
+                
+                if (!GUI.WebControls.Contains(OgreForm.Hud))
+                    GUI.WebControls.Add(OgreForm.Hud);
+
+                OgreForm.Hud.DocumentReady += onHUDLoaded;
+                OgreForm.Hud.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/HUD.html");
+                OgreForm.Hud.Visible = false;
             }
 
             this.AfterWorldCreation();
@@ -43,6 +52,29 @@ namespace Game.States
             this.World.display();
 
             LogManager.Singleton.DefaultLog.LogMessage(" => Game loop begin");
+        }
+
+        private void onHUDLoaded(object sender, UrlEventArgs e) {
+            if (OgreForm.Hud == null || !OgreForm.Hud.IsLive) { return; }
+            if (OgreForm.Hud.ParentView != null || !OgreForm.Hud.IsJavascriptEnabled) { return; }
+
+            string[] buttons = new string[] { "Menu", "" };
+            string[] inputs  = new string[] { "0", "0", "0" };
+
+            Hud.Init(buttons, inputs);
+            Vector2 size = Hud.WANTED_SIZE * OgreForm.Ratio;
+            Vector2 location;
+            location.x = (OgreForm.InitSize.x / 2 - Hud.WANTED_SIZE.x / 2) * OgreForm.Ratio.x;
+            location.y = 0;
+
+            OgreForm.Hud.Size = new Size((int)size.x, (int)size.y);
+            OgreForm.Hud.Location = new Point((int)location.x, (int)(500 * OgreForm.Ratio.y));
+
+            Vector2 ratio = new Vector2(size.x / Hud.IMAGE_SIZE.x, size.y / Hud.IMAGE_SIZE.y);
+            GUI.ResizeJavascript(OgreForm.Hud, ratio);
+
+            OgreForm.Hud.Visible = true;
+            OgreForm.Hud.DocumentReady -= onHUDLoaded;
         }
 
         private void onSelectBarLoaded(object sender, UrlEventArgs e)
@@ -71,6 +103,7 @@ namespace Game.States
             this.User.IsAllowedToMoveCam = true;
             GUI.Visible = false;
             OgreForm.SelectBar.Visible = true;
+            OgreForm.Hud.Visible = true;
         }
 
         public override void Hide()
@@ -80,6 +113,7 @@ namespace Game.States
             this.mStateMgr.Controller.CursorVisibility = true;
             this.mStateMgr.Controller.BlockMouse = false;
             OgreForm.SelectBar.Visible = false;
+            OgreForm.Hud.Visible = false;
         }
 
         public override void Update(float frameTime)

@@ -48,7 +48,7 @@ namespace Game.BaseApp {
             // webControl1
             // 
             Hud.Location = new System.Drawing.Point(0, 0);
-            Hud.Size = new System.Drawing.Size(900, 19);
+            Hud.Size = new System.Drawing.Size(800, 29);
             Hud.TabIndex = 2;
             // 
             // OgreForm
