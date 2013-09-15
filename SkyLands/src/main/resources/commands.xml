@@ -65,7 +65,7 @@ For an azerty keyboard
     <Xbox>X</Xbox>
   </SingleAction>
   <SingleAction id="CreateUnit">
-    <Keyboard>KC_P</Keyboard>
+    <Keyboard>KC_C</Keyboard>
     <Xbox>B</Xbox>
   </SingleAction>
   <SingleAction id="SelectAll">
@@ -73,7 +73,7 @@ For an azerty keyboard
     <Xbox>DPadUp</Xbox>
   </SingleAction>
   <SingleAction id="Retreat">
-    <Keyboard>KC_T</Keyboard>
+    <Keyboard>KC_R</Keyboard>
     <Xbox>DPadDown</Xbox>
   </SingleAction>
   <SingleAction id="FollowMe">
@@ -81,7 +81,7 @@ For an azerty keyboard
     <Xbox>DPadLeft</Xbox>
   </SingleAction>
   <SingleAction id="GoTo">
-    <Keyboard>KC_M</Keyboard>
+    <Keyboard>KC_G</Keyboard>
     <Xbox>DPadRight</Xbox>
   </SingleAction>
   <SingleAction id="Start">

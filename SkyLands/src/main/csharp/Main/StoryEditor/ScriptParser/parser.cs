@@ -83,7 +83,7 @@ namespace Script {
         }
 
         public void addLife(int amount) {
-            st.MainState.CharacMgr.MainPlayer.Hit(-amount);
+            st.MainState.CharacMgr.MainPlayer.Heal(amount);
         }
 
     }

@@ -36,7 +36,7 @@ namespace Game.Shoot
             this.Range = DEFAULT_RANGE;
             this.Damage = DEFAULT_DAMAGE;
 
-            this.mTarget.Hit(this.Damage);
+            this.mTarget.Hit(this.Damage, source);
 
             this.mPitchNode = pitchNode;
             this.mYawNode = yawNode;
@@ -82,7 +82,7 @@ namespace Game.Shoot
                             int id = int.Parse(s[1]);
                             if (id != this.mSource.Info.Id)
                             {
-                                bulletMgr.CharacMgr.GetCharacterById(id).Hit(this.Damage);
+                                bulletMgr.CharacMgr.GetCharacterById(id).Hit(this.Damage, this.mSource);
                                 return false;
                             }
                         }

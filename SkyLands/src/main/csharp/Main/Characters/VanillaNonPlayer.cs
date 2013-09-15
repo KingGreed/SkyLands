@@ -30,7 +30,6 @@ namespace Game.CharacSystem
 
             this.mNode = characMgr.SceneMgr.RootSceneNode.CreateChildSceneNode("CharacterNode_" + this.mCharInfo.Id, Vector3.ZERO, this.mMesh.InitialOrientation);
             this.mNode.AttachObject(ent);
-            //this.mNode.Orientation = this.mMesh.InitialOrientation;
             this.FinishCreation();
         }
 
@@ -40,7 +39,7 @@ namespace Game.CharacSystem
 
             if (this.Target == null) { return; }
 
-            Vector3 targetPos = this.Target.Node.Position;
+            Vector3 targetPos = this.Target.FeetPosition;
             Vector3 diff = targetPos - this.FeetPosition;
             Degree yawGoal = Mogre.Math.ACos(new Vector2(diff.x, diff.z).NormalisedCopy.y) * System.Math.Sign(diff.x);
             if(this.mForcedDestination.Count == 0) { this.YawTo(yawGoal); }
@@ -64,6 +63,12 @@ namespace Game.CharacSystem
                 this.mGunTimer = 0;
                 this.mIsLeftGun = !this.mIsLeftGun;
             }
+        }
+
+        public void SetTargetAndFollow(VanillaCharacter ennemy)
+        {
+            this.Target = ennemy;
+            this.Follow(ennemy, Cst.CUBE_SIDE * 15);
         }
 
         public override void updateTargets()

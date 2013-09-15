@@ -37,8 +37,11 @@ namespace Game.CharacSystem
         private PathFinder       mPathFinder;
         protected Stack<Vector3> mForcedDestination;
         private Degree           mYawGoal;
+        private VanillaCharacter mFollow;
+        private Vector3          mDestination;
         private double           mLastSquaredDist;
-        private bool             mWasAllowedToMove, mWillBeAllowedToMove;
+        private float            mStaySqrDistToGoal;
+        private bool             mWasAllowedToMove, mWillBeAllowedToMove, mIsBlocked;
 
         public SceneNode     Node            { get { return this.mNode; } }
         public Vector3       Size            { get { return this.mMesh.MeshSize; } }
@@ -46,6 +49,7 @@ namespace Game.CharacSystem
         public CollisionMgr  CollisionMgr    { get { return this.mCollisionMgr; } }
         public MovementInfo  MovementInfo    { get; private set; }
         public bool          WaitForRemove   { get; private set; }
+        public bool          IsFollowing     { get { return this.mFollow != null; } }
         public Quaternion    InitOrientation { get { return this.mMesh.InitialOrientation; } }
         public Vector3       BlockPosition   { get { return MainWorld.getRelativeFromAbsolute(this.FeetPosition); } }
         public Vector3       FeetPosition
@@ -98,8 +102,6 @@ namespace Game.CharacSystem
             }
         }
 
-        public SceneNode getNode() { return this.mNode; }
-
         private void OnJump(bool isJumping)
         {
             if (isJumping)
@@ -123,6 +125,10 @@ namespace Game.CharacSystem
 
             if (this.mCharInfo.Life > 0)
             {
+                if (this.mFollow != null && !this.mFollow.MovementInfo.IsPushedByArcaneLevitator && this.mForcedDestination.Count == 0 &&
+                    (this.mFollow.FeetPosition - this.mDestination).SquaredLength > this.mStaySqrDistToGoal)
+                    this.FindPathTo(this.mFollow.FeetPosition);
+                
                 if (this.mPathFinder != null)
                 {
                     this.mForcedDestination = this.mPathFinder.ContinuePathFinding();
@@ -154,14 +160,19 @@ namespace Game.CharacSystem
                     {
                         Vector3 diff = this.mForcedDestination.Peek() - this.FeetPosition;
                         float squaredDistance = diff.x * diff.x + diff.z * diff.z;
-                        if (this.mLastSquaredDist == -1 || squaredDistance > SQUARED_DIST_PRECISION)
+                        if ((this.mDestination - this.FeetPosition).SquaredLength < this.mStaySqrDistToGoal)
+                        {
+                            while(this.mForcedDestination.Count > 0)
+                                this.PopForcedDest(false);
+                        }
+                        else if (this.mLastSquaredDist == -1 || squaredDistance > SQUARED_DIST_PRECISION)
                         {
                             if (absDiffYaw < 20)
                             {
                                 float factor = 6 / absDiffYaw;
                                 this.MovementInfo.MoveDirection = this.mMesh.MoveForwardDir * (factor <= 1 ? factor : 1);
 
-                                if (this.mForcedDestination.Peek().y > this.FeetPosition.y)
+                                if (this.mForcedDestination.Peek().y > this.FeetPosition.y || this.mIsBlocked)
                                     this.MovementInfo.MoveDirection += Vector3.UNIT_Y;
                             }
                             this.mLastSquaredDist = squaredDistance;
@@ -221,6 +232,7 @@ namespace Game.CharacSystem
         private void Translate(Vector3 translation)
         {
             Vector3 actualTranslation = this.mCollisionMgr.ComputeCollision(translation * this.mNode.LocalAxes.Transpose());
+            this.mIsBlocked = (translation.x > 0 && actualTranslation.x == 0) || (translation.z > 0 && actualTranslation.z == 0);
 
             /* Here translate has been modified to avoid collisions */
             this.MovementInfo.IsFalling = actualTranslation.y < 0;
@@ -240,10 +252,10 @@ namespace Game.CharacSystem
             }
         }
 
-        private void PopForcedDest()
+        private void PopForcedDest(bool allowTP = true)
         {
-            if (this.mForcedDestination.Count == 1)
-                this.FeetPosition = this.mForcedDestination.Peek();
+            if (allowTP && this.mForcedDestination.Count == 1)
+                this.FeetPosition = this.mDestination;
             
             this.mForcedDestination.Pop();
             if (this.mForcedDestination.Count == 0)
@@ -253,6 +265,7 @@ namespace Game.CharacSystem
                 {
                     this.MovementInfo.IsAllowedToMove = true;
                     this.mWillBeAllowedToMove = false;
+                    this.mDestination = Vector3.ZERO;
                 }
             }
             else
@@ -266,13 +279,25 @@ namespace Game.CharacSystem
             this.mYawGoal = Mogre.Math.ACos(new Vector2(diff.x, diff.z).NormalisedCopy.y) * System.Math.Sign(diff.x);
         }
 
-        public void MoveTo(Vector3 destination)
+        public void MoveTo(Vector3 destination, float stayAtDist = 0)
         {
             Vector3 diff = destination - this.FeetPosition;
-            if (diff.x * diff.x + diff.z * diff.z < SQUARED_DIST_PRECISION || MainWorld.AbsToRelative(destination) == this.BlockPosition)
+            if (diff.x * diff.x + diff.z * diff.z < SQUARED_DIST_PRECISION + stayAtDist * stayAtDist || MainWorld.AbsToRelative(destination) == this.BlockPosition)
                 return;
-            
-            this.mPathFinder = new PathFinder(destination, this.BlockPosition, this.mCharacMgr.World.getIsland());
+
+            this.mStaySqrDistToGoal = stayAtDist * stayAtDist;
+
+            /* Disable the previous orders */
+            this.mFollow = null;
+            this.mYawGoal = this.GetYaw();
+
+            this.FindPathTo(destination);
+        }
+
+        private void FindPathTo(Vector3 destination)
+        {
+            this.mDestination = destination;
+            this.mPathFinder = new PathFinder(this.mDestination, this.BlockPosition, this.mCharacMgr.World.getIsland());
         }
 
         public void YawTo(Degree angle) // A continuous yaw
@@ -283,9 +308,33 @@ namespace Game.CharacSystem
             this.MovementInfo.IsMovementForced = true;
         }
 
-        public void Hit(float damage)
+        public void Follow(VanillaCharacter charac, float distMax = Cst.CUBE_SIDE * 3)
         {
-            if (this.mCharInfo.Life <= 0) { return; }
+            this.mYawGoal = this.GetYaw();
+            this.mForcedDestination.Clear();
+            this.mFollow = charac;
+            this.mStaySqrDistToGoal = distMax * distMax;
+        }
+
+        public void StopFollowing()
+        {
+            this.mFollow = null;
+            this.mYawGoal = this.GetYaw();
+            this.mForcedDestination.Clear();
+        }
+
+        public void Heal(float heal)
+        {
+            if (heal >= 0) { return; }
+            this.mCharInfo.Life += heal;
+            float maxLife = this.Info.IsPlayer ? VanillaPlayer.DEFAULT_PLAYER_LIFE : VanillaNonPlayer.DEFAULT_NPC_LIFE;
+
+            if (this.mCharInfo.Life > maxLife) { this.mCharInfo.Life = maxLife; }
+        }
+
+        public void Hit(float damage, VanillaCharacter source = null)
+        {
+            if (this.mCharInfo.Life <= 0 || damage <= 0) { return; }
             this.mCharInfo.Life -= damage;
 
             if (this.mCharInfo.IsPlayer && this.mCharacMgr.StateMgr.Controller.GamePadState.IsConnected)
@@ -299,10 +348,13 @@ namespace Game.CharacSystem
                 this.MovementInfo.IsJumping = false;
                 this.MovementInfo.IsPushedByArcaneLevitator = false;
 
-                 // Don't remove the charac right now to play the animation
-                if (!this.mCharInfo.IsPlayer) { ((Robot) this.mMesh).Die(); }
-                else                          { this.WaitForRemove = true; }
+                // Don't remove the charac right now to play the animation
+                if (!this.mCharInfo.IsPlayer) { ((Robot)this.mMesh).Die(); }
+                else { this.WaitForRemove = true; }
             }
+            else if (!this.Info.IsPlayer && ((VanillaNonPlayer) this).Target == null && !this.MovementInfo.IsMovementForced &&
+                this.mFollow == null && source != null)
+                ((VanillaNonPlayer) this).SetTargetAndFollow(source);
         }
 
         public void SetIsAllowedToMove(bool allowToMove, bool waitEndForcedMovement = true)
@@ -351,6 +403,8 @@ namespace Game.CharacSystem
         public bool IsFriendlySelected() { return this.mIsFriendlySelected; }
         public bool IsHostilelySelected() { return this.mIsHostilelySelected; }
 
+        public bool IsFollowingCharac(VanillaCharacter charac) { return this.mFollow == charac; }
+
         public virtual void Dispose(bool updateTargets = true)   // Must be called by the CharacMgr only.
         {
             if (updateTargets)
@@ -389,6 +443,7 @@ namespace Game.CharacSystem
         public void setViewDistance(int distance) { throw new NotImplementedException(); }
         public int getViewDistance()              { throw new NotImplementedException(); }
         public Chunk getChunk()                   { throw new NotImplementedException(); }
+        public SceneNode getNode() { return this.mNode; }
 
         public Island getIsland() { return this.mCharacMgr.World.getIsland(); }
         public Vector3 getPosition() { return this.BlockPosition; }

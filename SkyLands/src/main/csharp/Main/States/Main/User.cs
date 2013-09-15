@@ -37,6 +37,7 @@ namespace Game
         private readonly SceneNode mWireCube;
         private bool mIsInventoryOpen, mIsBuilderOpen, mIsMainGUIOpen, mAreAllCharacSelected;
         private HashSet<VanillaNonPlayer> mSelectedAllies;
+        private Random mRandom;
 
         private readonly MOIS.KeyCode[] mFigures;
         private readonly Timer mTimeSinceGUIOpen;
@@ -65,6 +66,7 @@ namespace Game
             cam.Orientation = new Quaternion(0.3977548f, -0.1096644f, -0.8781486f, -0.2421133f);
             this.mCameraMan = new CameraMan(cam);
             this.mSelectedAllies = new HashSet<VanillaNonPlayer>();
+            this.mRandom = new Random();
 
             this.mFigures = new MOIS.KeyCode[10];
             for (int i = 0; i < 9; i++)
@@ -190,15 +192,35 @@ namespace Game
                     else if (charac.IsFriendlySelected() && !this.mAreAllCharacSelected)
                         this.mSelectedAllies.Remove(charac);
 
-                    charac.SetSelected(this.mAreAllCharacSelected, true);
+                    charac.SetSelected(this.mAreAllCharacSelected);
                 }
             }
 
             if (this.mStateMgr.Controller.HasActionOccured(UserAction.GoTo))
             {
-                foreach (VanillaNonPlayer ally in mSelectedAllies)
+                int nbAllies = this.mSelectedAllies.Count;
+                if (nbAllies <= 0) { return; }
+                VanillaNonPlayer npc = this.GetSelectedNPC();
+                if (npc != null && npc.Info.Faction == Faction.Red)
+                    foreach (VanillaNonPlayer ally in this.mSelectedAllies)
+                        ally.SetTargetAndFollow(npc);
+                else if (this.SelectedBlockPos != Vector3.ZERO)
                 {
-                    ally.MoveTo((this.SelectedBlockPos + new Vector3(0.5f, 1, -0.5f)) * Cst.CUBE_SIDE);
+                    int randomMax = (int) ((nbAllies / 4f + 0.5f) * Cst.CUBE_SIDE);
+                    Vector3 imprecision = nbAllies == 1 ? Vector3.ZERO : new Vector3(this.mRandom.Next(0, randomMax), 0, this.mRandom.Next(0, randomMax));
+                    foreach (VanillaNonPlayer ally in this.mSelectedAllies)
+                        ally.MoveTo((this.SelectedBlockPos + new Vector3(0.5f, 1, -0.5f)) * Cst.CUBE_SIDE + imprecision);
+                }
+            }
+
+            if (this.mStateMgr.Controller.HasActionOccured(UserAction.FollowMe))
+            {
+                foreach (VanillaNonPlayer ally in this.mSelectedAllies)
+                {
+                    if(ally.IsFollowingCharac(mainPlayer))
+                        ally.StopFollowing();
+                    else
+                        ally.Follow(mainPlayer, Cst.CUBE_SIDE*2 + this.mRandom.Next(0, 100));
                 }
             }
 
