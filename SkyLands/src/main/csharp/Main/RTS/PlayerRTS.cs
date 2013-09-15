@@ -1,4 +1,6 @@
-﻿using Game.States;
+﻿using Game.CharacSystem;
+using Game.GUIs;
+using Game.States;
 
 namespace Game.RTS
 {
@@ -11,7 +13,11 @@ namespace Game.RTS
 
         protected override void StepUpdate()
         {
-
+            string[] input = new string[3];
+            input[0] = this.Crystals.ToString();
+            input[1] = ((int)this.mStateMgr.MainState.CharacMgr.MainPlayer.Info.Life) + " / " + VanillaPlayer.DEFAULT_PLAYER_LIFE;
+            input[2] = this.AmountUnits + " / " + this.Capacity;
+            Hud.SetInput(input);
         }
 
         public override void AddBuilding(Building b)

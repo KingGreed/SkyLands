@@ -14,7 +14,7 @@ namespace Game.BaseApp {
     public abstract partial class OgreForm : Form {
         private const string  PLUGINS_CFG = "plugins.cfg";
         private const string  RESOURCES_CFG = "resources.cfg";
-        private readonly Vector2 WND_SIZE = new Vector2(800, 600);
+        private readonly Vector2 WND_SIZE = new Vector2(1024, 768);
 
         protected Root         mRoot;
         protected SceneManager mSceneMgr;

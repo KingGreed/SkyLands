@@ -642,7 +642,9 @@
     <Content Include="resources\Media\web\GameOver.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Media\web\HUD.html" />
+    <Content Include="resources\Media\web\HUD.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\web\IngameMenu.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

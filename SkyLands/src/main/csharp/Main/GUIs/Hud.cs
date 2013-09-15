@@ -20,12 +20,21 @@ namespace Game.GUIs {
                 throw new ArgumentException("array size is wrong");
             }
 
-            for (int i = 0; i < 2; i++) {
-                OgreForm.Hud.ExecuteJavascript("setButton(" + i + "," + buttons[i] + "')");
+            for (int i = 0; i < 2; i++)
+            {
+                string fun = "setButton(" + (i + 1) + ", '" + buttons[i] + "')";
+                OgreForm.Hud.ExecuteJavascript(fun);
             }
 
-            for (int i = 0; i < 3; i++) {
-                OgreForm.Hud.ExecuteJavascript("setInput(" + i + "," + inputs[i] + "')");
+            SetInput(inputs);
+        }
+
+        public static void SetInput(string[] input)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                string fun = "setInput(" + (i + 1) + ", '" + input[i] + "')";
+                OgreForm.Hud.ExecuteJavascript(fun);
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.IO;
+using API.Generic;
 using Game.csharp.Main.RTS.Buildings;
 using Mogre;
 using Awesomium.Core;
@@ -62,13 +63,10 @@ namespace Game.States
             string[] inputs  = new string[] { "0", "0", "0" };
 
             Hud.Init(buttons, inputs);
-            Vector2 size = Hud.WANTED_SIZE * OgreForm.Ratio;
-            Vector2 location;
-            location.x = (OgreForm.InitSize.x / 2 - Hud.WANTED_SIZE.x / 2) * OgreForm.Ratio.x;
-            location.y = 0;
+            Vector2 size = new Vector2(this.mStateMgr.Width, (int)(this.mStateMgr.Height * 0.05f));
 
             OgreForm.Hud.Size = new Size((int)size.x, (int)size.y);
-            OgreForm.Hud.Location = new Point((int)location.x, (int)(500 * OgreForm.Ratio.y));
+            OgreForm.Hud.Location = new Point(0, 0);
 
             Vector2 ratio = new Vector2(size.x / Hud.IMAGE_SIZE.x, size.y / Hud.IMAGE_SIZE.y);
             GUI.ResizeJavascript(OgreForm.Hud, ratio);
@@ -86,7 +84,7 @@ namespace Game.States
             Vector2 size = Selector.WANTED_SIZE * OgreForm.Ratio;
             Vector2 location = (OgreForm.InitSize / 2 - Selector.WANTED_SIZE / 2) * OgreForm.Ratio;
             OgreForm.SelectBar.Size = new Size((int)size.x, (int)size.y);
-            OgreForm.SelectBar.Location = new Point((int)location.x, (int)(500 * OgreForm.Ratio.y));
+            OgreForm.SelectBar.Location = new Point((int)location.x, (int)(500f * this.mStateMgr.Height / 600 * OgreForm.Ratio.y));
             Vector2 ratio = new Vector2(size.x / Selector.IMAGE_SIZE.x, size.y / Selector.IMAGE_SIZE.y);
             GUI.ResizeJavascript(OgreForm.SelectBar, ratio);
             OgreForm.SelectBar.Visible = true;

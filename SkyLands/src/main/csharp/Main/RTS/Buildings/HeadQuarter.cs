@@ -121,7 +121,7 @@ namespace Game.RTS
         {
             base.OnBuild();
             this.RTS.CrystalSpeed += 5;
-            this.RTS.Capacity += 20;
+            this.RTS.Capacity += 2;
         }
     }
 }
