@@ -35,15 +35,18 @@ namespace Game.RTS
 
         public void Update(float frameTime)
         {
+            this.Update();
             this.mTimeSinceInfoUpdate += frameTime;
             if (this.mTimeSinceInfoUpdate < 1) { return; }
             this.mTimeSinceInfoUpdate = 0;
 
             this.mCrystals += this.CrystalSpeed;
-            this.Update();
+            this.StepUpdate();
         }
 
-        protected abstract void Update();
+        protected abstract void StepUpdate();   // Called every seconds
+
+        protected virtual void Update() {}  // Called each frame
 
         public virtual void AddBuilding(Building b) { this.Buildings.Add(b); }
 

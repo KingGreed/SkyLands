@@ -9,7 +9,7 @@ namespace Game.RTS
             this.Faction = Faction.Blue;
         }
 
-        protected override void Update()
+        protected override void StepUpdate()
         {
 
         }

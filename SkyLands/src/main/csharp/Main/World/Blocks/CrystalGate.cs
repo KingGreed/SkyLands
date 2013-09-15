@@ -11,19 +11,13 @@ namespace Game.World.Blocks {
     abstract class CrystalGate : VanillaBlock {
         public override void onBlockEnter(API.Ent.Entity e, Vector3 position) {
             Island current = e.getIsland();
-            Biome nextBiome;
-            API.Geo.World w = current.mWorld;
+            TypeWorld newWorld;
 
-            if      (current.getBiome() is Hills)       { nextBiome = new Desert();    }
-            else if (current.getBiome() is Desert)      { nextBiome = new Mountains(); }
-            else /* (current.getBiome() is Mountains)*/ { nextBiome = new Plains(); }
+            if      (current.getBiome() is Hills)       { newWorld = TypeWorld.Desert; }
+            else if (current.getBiome() is Desert)      { newWorld = TypeWorld.Mountain; }
+            else /* (current.getBiome() is Mountains)*/ { newWorld = TypeWorld.Plains; }
 
-            current.unload(false);
-            w.setIsland(new RandomIsland(w.getSceneMgr().RootSceneNode.CreateChildSceneNode(Vector3.ZERO), new Vector2(current.getSize().x, current.getSize().z), nextBiome, w));
-            w.populate();
-            w.getIsland().display();
-            w.setSafeSpawnPoint();
-            e.teleport(w.getSpawnPoint());
+            StateManager.ChangeIsland(newWorld);
         }
     }
 }

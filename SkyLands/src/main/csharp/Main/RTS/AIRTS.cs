@@ -38,11 +38,13 @@ namespace Game.RTS {
                     this.mPossibleAngles.Add(new Degree(i * this.mDeltaAngle));
             }
 
-            public Vector3 GetPoint() {
-                if (this.mPossibleAngles.Count <= 0) { return -Vector3.UNIT_SCALE; }
+            public Vector3 GetPoint()
+            {
+                int nbPossibleAngles = this.mPossibleAngles.Count;
+                if (nbPossibleAngles <= 0) { return -Vector3.UNIT_SCALE; }
 
                 Random random = new Random();
-                int n = random.Next(0, this.mPossibleAngles.Count - 1);
+                int n = nbPossibleAngles == 1 ? 0 : random.Next(0, nbPossibleAngles - 1);
                 this.mLastAngle = this.mPossibleAngles[n];
                 this.mPossibleAngles.Remove(this.mLastAngle);
 
@@ -65,6 +67,7 @@ namespace Game.RTS {
         private Vector3 mBasePos;
         private string mNextBuilding;
         private int mNbUpdateSkipped;
+        private float mAverageHeight;
 
         public int NbBuildingsAllowedToAdd { get; set; }
         public int NbRobotsAllowedToAdd { get; set; }
@@ -78,7 +81,8 @@ namespace Game.RTS {
             this.mRandom = new Random();
             int x = this.mRandom.Next(7, (int)isldSize.x);
             int z = this.mRandom.Next(7, (int)isldSize.z);
-            this.mBasePos = new Vector3(x, this.mWorld.getSurfaceHeight(x, z), z);
+            this.mAverageHeight = this.mWorld.getSurfaceHeight(x, z);
+            this.mBasePos = new Vector3(x, this.mAverageHeight, z);
 
             this.mCircle = new Circle(mBasePos);
 
@@ -88,15 +92,8 @@ namespace Game.RTS {
             this.NbBuildingsAllowedToAdd = 4;
         }
 
-        protected override void Update() {
-            if (this.mNbUpdateSkipped++ < 5) { return; }
-            this.mNbUpdateSkipped = 0;
-
-            int nbRobotTocreate = 0;
-            if (this.AmountUnits < 3) { nbRobotTocreate = 3 - this.AmountUnits; }
-            if (this.NbRobotsAllowedToAdd > nbRobotTocreate) { nbRobotTocreate = this.NbRobotsAllowedToAdd; }
-            this.NbRobotsAllowedToAdd = nbRobotTocreate - this.CreateRobot(nbRobotTocreate);
-
+        protected override void Update()
+        {
             if (this.mWaitingBuilding != null)
             {
                 this.mWaitingBuilding.Build();
@@ -104,7 +101,19 @@ namespace Game.RTS {
                 this.NbBuildingsAllowedToAdd--;
                 this.mWaitingBuilding = null;
             }
-            else if (this.NbBuildingsAllowedToAdd > 0)
+        }
+
+        protected override void StepUpdate()
+        {
+            if (this.mNbUpdateSkipped++ < 6) { return; }
+            this.mNbUpdateSkipped = 0;
+
+            int nbRobotTocreate = 0;
+            if (this.AmountUnits < 3) { nbRobotTocreate = 3 - this.AmountUnits; }
+            if (this.NbRobotsAllowedToAdd > nbRobotTocreate) { nbRobotTocreate = this.NbRobotsAllowedToAdd; }
+            this.NbRobotsAllowedToAdd = nbRobotTocreate - this.CreateRobot(nbRobotTocreate);
+
+            if (this.mWaitingBuilding == null && this.NbBuildingsAllowedToAdd > 0)
                 new Thread(this.ChooseBuilding).Start();
 
             /*foreach (VanillaNonPlayer npc in this.mRTSMgr.CharacMgr.GetFactionCharacters(this.Faction))
@@ -140,8 +149,6 @@ namespace Game.RTS {
                     this.mWaitingBuilding = new Generator(this.mStateMgr, island, this, this.GetBuildPos(Generator.sizeX, Generator.sizeZ));
                     break;
             }
-            if(this.mNextBuilding != "")
-                Console.WriteLine("building chosen " + this.mNextBuilding);
         }
 
         private Vector3 GetBuildPos(int sizeX, int sizeZ) {
@@ -153,11 +160,11 @@ namespace Game.RTS {
                     pos = this.mCircle.GetPoint();
                     posAccepted = pos != -Vector3.UNIT_SCALE;
                     if (!posAccepted)
-                        this.mCircle = new Circle(this.mCircle, this.mCircle.Radius == 0 ? 10 : 5 + this.mRandom.Next(0, 6));
+                        this.mCircle = new Circle(this.mCircle, this.mCircle.Radius == 0 ? 12 : 5 + this.mRandom.Next(0, 6));
                 } while (!posAccepted);
 
                 pos.x = (float)System.Math.Round(pos.x);
-                pos.y = (float)System.Math.Round(pos.y);
+                pos.y = (float)System.Math.Round(this.mAverageHeight);
                 pos.z = (float)System.Math.Round(pos.z);
 
                 Island island = this.mWorld.getIsland();
@@ -204,6 +211,8 @@ namespace Game.RTS {
                 if (!posAccepted) { this.mCircle.RejectLastAngle(); }   // Delete the angles near the rejected one
 
             } while (!posAccepted);
+
+            this.mAverageHeight += (pos.y - this.mAverageHeight) / (this.Buildings.Count + 1);  // the building hasn't been added yet
 
             return pos;
         }

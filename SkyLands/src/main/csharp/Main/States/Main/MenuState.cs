@@ -13,6 +13,7 @@ namespace Game.States
             new MainMenu(this.mStateMgr);
             OgreForm.SelectBar.Visible = false;
             this.mStateMgr.Controller.CursorVisibility = true;
+            this.mStateMgr.SoundPlayer.Stop();
         }
 
         public override void Update(float frameTime)

@@ -28,12 +28,15 @@ namespace Game.States
         {
             this.User = new User(this.mStateMgr, this.World);
 
-            if (!GUI.WebControls.Contains(OgreForm.SelectBar))
-                GUI.WebControls.Add(OgreForm.SelectBar);
-            OgreForm.SelectBar.DocumentReady += onSelectBarLoaded;
-            OgreForm.SelectBar.Source =
-                new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/Selector.html");
-            OgreForm.SelectBar.Visible = false;
+            if (!this.mStateMgr.IsOnWorldChangement)
+            {
+                if (!GUI.WebControls.Contains(OgreForm.SelectBar))
+                    GUI.WebControls.Add(OgreForm.SelectBar);
+                OgreForm.SelectBar.DocumentReady += onSelectBarLoaded;
+                OgreForm.SelectBar.Source =
+                    new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/Selector.html");
+                OgreForm.SelectBar.Visible = false;
+            }
 
             this.AfterWorldCreation();
             if(!this.mStateMgr.GameInfo.Load) { this.World.populate(); }
@@ -72,6 +75,8 @@ namespace Game.States
 
         public override void Hide()
         {
+            if (this.mStateMgr.IsOnWorldChangement) { return; }
+
             this.mStateMgr.Controller.CursorVisibility = true;
             this.mStateMgr.Controller.BlockMouse = false;
             OgreForm.SelectBar.Visible = false;

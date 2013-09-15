@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
-
+using API.Generic;
 using Game.BaseApp;
 using Game.World.Display;
 using Game.CharacSystem;
@@ -93,8 +93,8 @@ namespace Game.RTS {
 
         public void Build() {
 
-            //RedCreation
-            ParticleGenerator.mkParticle(this.mStateMgr.SceneMgr, this.mIsland.mWorld.getDisplayCoords(this.mIsland.getPosition(), this.RealPos) + Vector3.UNIT_Y * 3, "RedCreation");
+            ParticleGenerator.CreateBuildingRing(this.mStateMgr.SceneMgr, (this.Position + new Vector3(0.5f, 0, 0.5f) * this.Size - Vector3.UNIT_Z) * Cst.CUBE_SIDE,
+                                                 new Vector2(this.Size.x, this.Size.z), this.RTS.Faction);
 
             if (!this.mIsCreated) { this.Create(); }
             this.mIsland.stopCleaning();
@@ -116,8 +116,11 @@ namespace Game.RTS {
         }
 
         protected virtual void OnBuild() {
-            this.mStateMgr.MainState.BuildingMgr.ActConsBlockPos = -Vector3.UNIT_SCALE;
-            User.RequestBuilderClose = true;
+            if (this.RTS.Faction == Faction.Blue)
+            {
+                this.mStateMgr.MainState.BuildingMgr.ActConsBlockPos = -Vector3.UNIT_SCALE;
+                User.RequestBuilderClose = true;
+            }
             this.Built = true;
             this.RTS.AddBuilding(this);
         }

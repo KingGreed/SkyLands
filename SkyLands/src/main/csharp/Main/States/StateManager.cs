@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Media;
 using System.Reflection;
 using System.Collections.Generic;
 using Mogre;
@@ -15,6 +16,7 @@ namespace Game.States
         private readonly Stack<State> mStateStack;
         private readonly Stack<Type>  mNewStates;
         private int                   mPopRequested;
+        private static TypeWorld      mNewWorld;
 
         public Root            Root        { get { return this.mRoot; } }
         public SceneManager    SceneMgr    { get { return this.mSceneMgr; } }
@@ -26,6 +28,8 @@ namespace Game.States
         public GameInfo        GameInfo    { get; set; }
         public StoryEditorInfo StoryInfo   { get; set; }
         public MainState       MainState   { get; private set; }
+        public SoundPlayer     SoundPlayer { get; set; }
+        public bool    IsOnWorldChangement { get; private set; }
 
         public StateManager()
         {
@@ -35,12 +39,23 @@ namespace Game.States
             this.GameInfo = new GameInfo();
             this.StoryInfo = new StoryEditorInfo();
             this.RequestStatePush(typeof(MenuState));
+            mNewWorld = TypeWorld.Hills;
+            this.SoundPlayer = new SoundPlayer();
+            this.SoundPlayer.SoundLocationChanged += (o, args) => this.SoundPlayer.PlayLooping();
 
             this.Disposed += this.Shutdown;
         }
 
         protected override void Update(float frameTime)
         {
+            if (this.GameInfo.Type != mNewWorld)
+            {
+                this.GameInfo.Type = mNewWorld;
+                this.IsOnWorldChangement = true;
+                this.RequestStatePop();
+                this.RequestStatePush(typeof(GameState));
+            }
+            
             while(this.mPopRequested > 0) { this.PopState(); }
 
             for (int i = 0; i < this.mNewStates.Count; i++)
@@ -79,6 +94,7 @@ namespace Game.States
             this.mStateStack.Push(newState);
             this.mStateStack.Peek().Show();
 
+            this.IsOnWorldChangement = false;
             this.mController.ClearAll();
         }
 
@@ -90,7 +106,7 @@ namespace Game.States
                 this.mStateStack.Peek().ShutdownState();
                 this.mStateStack.Pop();
                 this.mController.ClearAll();
-                if (this.mStateStack.Count > 0) { this.mStateStack.Peek().Show(); }
+                if (this.mStateStack.Count > 0 && this.mNewStates.Count == 0) { this.mStateStack.Peek().Show(); }
                 LogManager.Singleton.DefaultLog.LogMessage("--- Popped state : " + stateName);
             }
 
@@ -110,6 +126,8 @@ namespace Game.States
             foreach (Type newState in newStates)
                 if (newState != null && newState.IsSubclassOf(typeof(State))) { this.mNewStates.Push(newState); }
         }
+
+        public static void ChangeIsland(TypeWorld newWorld) { mNewWorld = newWorld; }
 
         protected override void Shutdown(object sender, EventArgs e)
         {

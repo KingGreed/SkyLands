@@ -16,18 +16,12 @@ namespace Game.States
     public class GameState : MainState
     {
         private BulletManager mBulletMgr;
-        private SoundPlayer mSoundPlayer;
 
         public RTSManager RTSManager { get; private set; }
         public GameState(StateManager stateMgr) : base(stateMgr, "Game") { }
 
         protected override void Startup()
         {
-            if(this.mStateMgr.GameInfo.Type == TypeWorld.Plains)
-                this.mSoundPlayer = new SoundPlayer("Media/sounds/dark casle.wav");
-            else
-                this.mSoundPlayer = new SoundPlayer("Media/sounds/Desert Theme.wav");
-
             this.World = new MainWorld(this.mStateMgr);
             this.World.setSafeSpawnPoint();
 
@@ -36,13 +30,6 @@ namespace Game.States
             CharacterInfo playerInfo = new CharacterInfo("Sinbad", this.RTSManager.PlayerRTS, true) { SpawnPoint = this.World.getSpawnPoint() };
             this.CharacMgr.AddCharacter(playerInfo);
             this.User.SwitchFreeCamMode();
-
-            this.CharacMgr.AddCharacter(new CharacterInfo("Robot-01", this.RTSManager.PlayerRTS)
-            {
-                SpawnPoint = playerInfo.SpawnPoint + new Vector3(800, 500, 200)
-            });
-
-            //ParticleGenerator.mkParticle(this.mStateMgr.SceneMgr, this.World.getSpawnPoint(), "MultiEmitters");
         }
 
         protected override void AfterWorldCreation()
@@ -60,14 +47,11 @@ namespace Game.States
         public override void Show()
         {
             base.Show();
-            //this.mSoundPlayer.PlayLooping();
 
-        }
-
-        public override void Hide()
-        {
-            base.Hide();
-            this.mSoundPlayer.Stop();
+            if (this.mStateMgr.GameInfo.Type == TypeWorld.Plains)
+                this.mStateMgr.SoundPlayer.SoundLocation = "Media/sounds/dark castle.wav";
+            else if (this.mStateMgr.SoundPlayer.SoundLocation == "")
+                this.mStateMgr.SoundPlayer.SoundLocation = "Media/sounds/Desert Theme.wav";
         }
 
         public override void Update(float frameTime)
@@ -98,10 +82,10 @@ namespace Game.States
             new InGameMenu(this.mStateMgr);
         }
 
-        protected override void Shutdown()
+        /*protected override void Shutdown()
         {
             base.Shutdown();
             this.mSoundPlayer.Stop();
-        }
+        }*/
     }
 }
