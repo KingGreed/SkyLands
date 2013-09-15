@@ -28,30 +28,37 @@ namespace Game.BaseApp {
             this.components = new System.ComponentModel.Container();
             webView = new Awesomium.Windows.Forms.WebControl(this.components);
             SelectBar = new Awesomium.Windows.Forms.WebControl(this.components);
+            Hud = new Awesomium.Windows.Forms.WebControl(this.components);
             this.SuspendLayout();
             // 
             // webView
             // 
             webView.Dock = System.Windows.Forms.DockStyle.Fill;
             webView.Location = new System.Drawing.Point(0, 0);
-            webView.Margin = new System.Windows.Forms.Padding(4);
-            webView.Size = new System.Drawing.Size(959, 428);
+            webView.Size = new System.Drawing.Size(884, 353);
             webView.TabIndex = 0;
             // 
             // SelectBar
             // 
-            SelectBar.Location = new System.Drawing.Point(158, 45);
-            SelectBar.Size = new System.Drawing.Size(75, 23);
+            SelectBar.Location = new System.Drawing.Point(118, 37);
+            SelectBar.Margin = new System.Windows.Forms.Padding(2);
+            SelectBar.Size = new System.Drawing.Size(56, 19);
             SelectBar.TabIndex = 1;
+            // 
+            // webControl1
+            // 
+            Hud.Location = new System.Drawing.Point(0, 0);
+            Hud.Size = new System.Drawing.Size(900, 19);
+            Hud.TabIndex = 2;
             // 
             // OgreForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(959, 428);
+            this.ClientSize = new System.Drawing.Size(884, 353);
+            this.Controls.Add(Hud);
             this.Controls.Add(SelectBar);
             this.Controls.Add(webView);
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "OgreForm";
             this.Text = "OgreForm";
             this.ResumeLayout(false);
@@ -60,8 +67,11 @@ namespace Game.BaseApp {
 
         #endregion
 
+        public static Awesomium.Windows.Forms.WebControl Hud;
         public static Awesomium.Windows.Forms.WebControl SelectBar;
         public static Awesomium.Windows.Forms.WebControl webView;
+
+
 
 
 

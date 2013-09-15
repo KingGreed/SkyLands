@@ -111,6 +111,7 @@
     <Content Include="resources\Media\images\heart.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\images\HUD.png" />
     <Content Include="resources\Media\images\IngameMenu\ingame menu_back.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -289,9 +290,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\materials\particleTextures\Plasma03.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="resources\Media\materials\particleTextures\snow.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="resources\Media\materials\particleTextures\Special.000.png">
@@ -642,6 +640,7 @@
     <Content Include="resources\Media\web\GameOver.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\web\HUD.html" />
     <Content Include="resources\Media\web\IngameMenu.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -1,0 +1,83 @@
+<html>
+<head>
+  <script type="text/javascript" src="jquery.js"> </script>
+  <style type="text/css">
+  * { margin: 0; padding: 0; border: 0; }
+
+    body {
+      background-color: black;
+    }
+    img {
+      position: relative;
+      z-index: -1;
+    }
+    p {
+      color: white;
+    }
+  </style>
+  <script>
+    var RatioTotalX = 1, RatioTotalY = 1;
+
+    function setButton(num, str) {
+      $("#button" + num).html(str);
+      replacePs();
+    }
+
+    function setInput(num ,str) {
+      $("#input" + num).html(str);
+      replacePs();
+    }
+
+    function replacePs() {
+      $("#button1").css("top",  4   * RatioTotalY + "px");
+      $("#button1").css("left", 92  * RatioTotalX + "px");
+
+      $("#button2").css("top",  4   * RatioTotalY + "px");
+      $("#button2").css("left", 318 * RatioTotalX + "px");
+
+      $("#input1").css("top",  4    * RatioTotalY + "px");
+      $("#input1").css("left", 525  * RatioTotalX + "px");
+
+      $("#input2").css("top",  4    * RatioTotalY + "px");
+      $("#input2").css("left", 635  * RatioTotalX + "px");
+
+      $("#input3").css("top",  4    * RatioTotalY + "px");
+      $("#input3").css("left", 755  * RatioTotalX + "px");
+
+      $("p").css("font-size", 1 * (RatioTotalY + RatioTotalY) / 2 + "em");
+
+    }
+
+    function resize(ratioX, ratioY) {
+
+      var height = document.getElementById("hud").offsetHeight;
+      $("#hud").attr("width",  document.getElementById("hud").offsetWidth * ratioX + "px");
+      $("#hud").attr("height", height * ratioY + "px");
+
+      RatioTotalX = parseInt($('#hud').css('width')) / 800;
+      RatioTotalY = parseInt($('#hud').css('height')) / 29;
+        
+      replacePs();
+    }
+
+    $(window).resize(function() {
+      RatioTotalX = parseInt($('#hud').css('width')) / 800;
+      RatioTotalY = parseInt($('#hud').css('height')) / 29;
+      replacePs();
+    });
+
+
+  </script>
+</head>
+<body oncontextmenu="return true;">
+  <div id="containor">
+  <img id="hud" src="../images/HUD.png"/>
+    <p id="button1" style="position: absolute; top: 4px; left: 92px;">button1</p>
+    <p id="button2" style="position: absolute; top: 4px; left: 318px;">button2</p>
+
+    <p id="input1" style="position: absolute; top: 4px; left: 525px;">input1</p>
+    <p id="input2" style="position: absolute; top: 4px; left: 635px;">input2</p>
+    <p id="input3" style="position: absolute; top: 4px; left: 755px;">input3</p>
+  </div>
+</body>
+</html>
