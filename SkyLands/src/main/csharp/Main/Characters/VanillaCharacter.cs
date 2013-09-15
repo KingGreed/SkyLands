@@ -144,7 +144,6 @@ namespace Game.CharacSystem
                 {
                     this.MovementInfo.IsAllowedToMove = this.mWasAllowedToMove;
                     this.MovementInfo.IsMovementForced = false;
-                    this.SetToYawGoal();
                 }
 
                 if (this.MovementInfo.IsMovementForced)
@@ -250,7 +249,6 @@ namespace Game.CharacSystem
             if (this.mForcedDestination.Count == 0)
             {
                 this.MovementInfo.IsMovementForced = false;
-                this.SetToYawGoal();
                 if (this.mWillBeAllowedToMove)
                 {
                     this.MovementInfo.IsAllowedToMove = true;
@@ -266,13 +264,6 @@ namespace Game.CharacSystem
         {
             Vector3 diff = this.mForcedDestination.Peek() - this.FeetPosition;
             this.mYawGoal = Mogre.Math.ACos(new Vector2(diff.x, diff.z).NormalisedCopy.y) * System.Math.Sign(diff.x);
-        }
-
-        private void SetToYawGoal()
-        {
-            /*this.mNode.Orientation =
-                new Quaternion(Mogre.Math.Cos(this.mYawGoal/2), 0, Mogre.Math.Sin(this.mYawGoal/2), 0);*/
-            //this.mNode.SetOrientation(Mogre.Math.Cos(this.mYawGoal / 2), 0, Mogre.Math.Sin(this.mYawGoal / 2), 0);
         }
 
         public void MoveTo(Vector3 destination)

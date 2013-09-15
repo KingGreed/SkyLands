@@ -13,7 +13,7 @@ namespace Game.GUIs {
         private readonly StateManager mStateMgr;
 
         public DeathMenu(StateManager stateMgr)
-            : base(new Vector2(0, 0), new Vector2(404, 404), "options.html", DockStyle.Fill) {
+            : base(new Vector2(0, 0), new Vector2(404, 404), "GameOver.html", DockStyle.Fill) {
             this.mStateMgr = stateMgr;
         }
 
@@ -21,17 +21,17 @@ namespace Game.GUIs {
             base.onDocumentReady(sender, e);
 
             JSObject j = OgreForm.webView.CreateGlobalJavascriptObject("DeathObject");
-            j.Bind("again", false, exit);
-            j.Bind("exit",  false, again);
+            j.Bind("again", false, again);
+            j.Bind("exit",  false, exit);
         }
 
         private void exit(object sender, EventArgs e) {
-            Visible = false;
-            new MainMenu(this.mStateMgr);
+            this.mStateMgr.RequestStatePop(2);
         }
 
         private void again(object sender, EventArgs e) {
-            
+            this.mStateMgr.RequestStatePop();
+            StateManager.ChangeIsland();
         }
 
     }

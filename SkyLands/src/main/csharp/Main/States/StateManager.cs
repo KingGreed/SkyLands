@@ -17,6 +17,7 @@ namespace Game.States
         private readonly Stack<Type>  mNewStates;
         private int                   mPopRequested;
         private static TypeWorld      mNewWorld;
+        private static bool           mChangeWorld;
 
         public Root            Root        { get { return this.mRoot; } }
         public SceneManager    SceneMgr    { get { return this.mSceneMgr; } }
@@ -48,10 +49,11 @@ namespace Game.States
 
         protected override void Update(float frameTime)
         {
-            if (this.GameInfo.Type != mNewWorld)
+            if (mChangeWorld)
             {
                 this.GameInfo.Type = mNewWorld;
                 this.IsOnWorldChangement = true;
+                mChangeWorld = false;
                 this.RequestStatePop();
                 this.RequestStatePush(typeof(GameState));
             }
@@ -115,8 +117,9 @@ namespace Game.States
 
         public void RequestStatePop(int pop = 1)
         {
-            if (this.mStateStack.Count > 1) { this.mPopRequested = pop; } // Will pop the state in Update()
-            else                            { this.mIsShutDownRequested = true; }   // Will ShutDown in Update()
+            int totalPop = this.mPopRequested + pop;
+            if (this.mStateStack.Count > totalPop) { this.mPopRequested = totalPop; } // Will pop the state in Update()
+            else                                   { this.mIsShutDownRequested = true; }   // Will ShutDown in Update()
         }
 
         public void PopToMenu() { this.RequestStatePop(this.NumberState - 1);}
@@ -127,7 +130,12 @@ namespace Game.States
                 if (newState != null && newState.IsSubclassOf(typeof(State))) { this.mNewStates.Push(newState); }
         }
 
-        public static void ChangeIsland(TypeWorld newWorld) { mNewWorld = newWorld; }
+        public static void ChangeIsland(TypeWorld newWorld)
+        {
+            mNewWorld = newWorld;
+            StateManager.ChangeIsland();
+        }
+        public static void ChangeIsland() { mChangeWorld = true; }
 
         protected override void Shutdown(object sender, EventArgs e)
         {

@@ -86,7 +86,7 @@ namespace Game.CharacSystem
                     if (characList[i].WaitForRemove)
                     {
                         if (characList[i] is VanillaPlayer)
-                            ((VanillaPlayer)characList[i]).BackToSpawnPoint();
+                            this.mStateMgr.RequestStatePush(typeof(DeathMenuState));
                         else
                         {
                             VanillaCharacter charac = characList[i];

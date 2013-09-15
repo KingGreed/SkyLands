@@ -1,24 +1,20 @@
-﻿using Game.Input;
-using Game.GUIs;
-using Game.BaseApp;
+﻿using Game.GUIs;
 
 namespace Game.States
 {
-    public class MenuState : State
+    public class DeathMenuState : State
     {
-        public MenuState(StateManager stateMgr) : base(stateMgr, "Menu") { }
-        
+        public DeathMenuState(StateManager stateMgr) : base(stateMgr, "DeathMenu") { }
+
         public override void Show()
         {
-            new MainMenu(this.mStateMgr);
-            OgreForm.SelectBar.Visible = false;
+            new DeathMenu(this.mStateMgr);
             this.mStateMgr.Controller.CursorVisibility = true;
-            this.mStateMgr.SoundPlayer.Stop();
         }
 
         public override void Update(float frameTime)
         {
-            if (this.mStateMgr.Controller.HasActionOccured(UserAction.Start))
+            /*if (this.mStateMgr.Controller.HasActionOccured(UserAction.Start))
             {
                 if (OgreForm.webView.Source.AbsolutePath.Contains("MainMenu"))
                     this.mStateMgr.RequestStatePop();
@@ -27,7 +23,7 @@ namespace Game.States
                     GUI.Visible = false;
                     new MainMenu(this.mStateMgr);
                 }
-            }
+            }*/
         }
     }
 }

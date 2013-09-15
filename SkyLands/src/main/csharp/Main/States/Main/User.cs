@@ -280,6 +280,13 @@ namespace Game
 
         public void OnInventoryOpen() { this.OnOpen(this.Inventory, 0); }
 
+        /*public void OpenDeathMenu()
+        {
+            new DeathMenu(this.mStateMgr);
+            this.SwitchGUIVisibility(true);
+            this.mTimeSinceGUIOpen.Reset();
+        }*/
+
         public void SwitchFreeCamMode()
         {
             VanillaPlayer mainPlayer = this.mStateMgr.MainState.CharacMgr.MainPlayer;

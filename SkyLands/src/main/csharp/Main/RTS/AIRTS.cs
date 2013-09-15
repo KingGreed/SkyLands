@@ -13,7 +13,8 @@ namespace Game.RTS {
         private struct Circle
         {
             private Vector3 mCenter;
-            private float mRadius, mDeltaAngle;
+            private float mRadius;
+            private int mDeltaAngle;
             private Degree mLastAngle;
             private List<Degree> mPossibleAngles;
 
@@ -32,6 +33,7 @@ namespace Game.RTS {
                 this.mRadius = prev.mRadius + addRadius;
                 this.mPossibleAngles = new List<Degree>();
                 int nbAngle = (int)(2 * Mogre.Math.PI * this.mRadius / 10);// 10 is the max building size
+                if (nbAngle > 360) { nbAngle = 360; }
 
                 this.mDeltaAngle = nbAngle == 1 ? 0 : 360 / nbAngle;
                 for (int i = 0; i < nbAngle; i++)
