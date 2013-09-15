@@ -80,6 +80,8 @@ namespace Game.RTS
             this.mStateMgr.MainState.CharacMgr.AddCharacter(info);
             if(this.mSymetricFactor == 1)
                 this.mStateMgr.MainState.CharacMgr.GetCharacterById(id).YawTo(180);
+            //VanillaCharacter charac = this.mStateMgr.MainState.CharacMgr.GetCharacterById(id);
+            //charac.SetForcedDest((this.Position + new Vector3(0, 1, 2 * this.mSymetricFactor)) * Cst.CUBE_SIDE);
             this.mTimeSinceLastPop.Reset();
             this.mHasCreateOneUnit = true;
         }

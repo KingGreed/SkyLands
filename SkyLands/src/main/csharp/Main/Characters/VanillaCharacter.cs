@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using API.Generic;
+using Game.World.Blocks;
 using Game.World.Display;
 using Mogre;
 
@@ -119,13 +120,18 @@ namespace Game.CharacSystem
                     - this.mMesh.InitialOrientation.Yaw;
         }
 
+        public bool IsOnFloor()
+        {
+            return !this.MovementInfo.IsFalling && !this.MovementInfo.IsJumping && !this.MovementInfo.IsPushedByArcaneLevitator;
+        }
+
         public void Update(float frameTime)
         {
             Vector3 translation = Vector3.ZERO;
 
             if (this.mCharInfo.Life > 0)
             {
-                if (this.mFollow != null && !this.mFollow.MovementInfo.IsPushedByArcaneLevitator && this.mForcedDestination.Count == 0 &&
+                if (this.mFollow != null && !this.mFollow.IsOnFloor() && this.mForcedDestination.Count == 0 &&
                     (this.mFollow.FeetPosition - this.mDestination).SquaredLength > this.mStaySqrDistToGoal)
                     this.FindPathTo(this.mFollow.FeetPosition);
                 
@@ -294,8 +300,19 @@ namespace Game.CharacSystem
             this.FindPathTo(destination);
         }
 
+        public void SetForcedDest(Vector3 dest) // Temp
+        {
+            this.mForcedDestination.Clear();
+            this.mForcedDestination.Push(dest);
+            this.mDestination = dest;
+            this.mWasAllowedToMove = this.MovementInfo.IsAllowedToMove;
+            this.MovementInfo.IsAllowedToMove = false;
+            this.MovementInfo.IsMovementForced = true;
+        }
+
         private void FindPathTo(Vector3 destination)
         {
+            if (!(this.mCharacMgr.World.getIsland().getBlock(MainWorld.AbsToRelative(destination), false) is Air)) { Console.WriteLine("path rejected"); return; }
             this.mDestination = destination;
             this.mPathFinder = new PathFinder(this.mDestination, this.BlockPosition, this.mCharacMgr.World.getIsland());
         }
