@@ -170,9 +170,10 @@ namespace Game.World
                     new Script.Parser(this.mStateMgr).Parse(s); 
                 }
             }
+
             if (blockCoord.y >= 200) {
                 if (n == null) {
-                    n = ParticleGenerator.mkParticle(this.mStateMgr.SceneMgr, -Vector3.UNIT_Y * 10, "Snow", e.getNode());
+                    n = ParticleGenerator.mkParticle(this.mStateMgr.SceneMgr, Vector3.NEGATIVE_UNIT_Y * 250, "Snow", e.getNode());
                 }
             }
             else if(n != null) {

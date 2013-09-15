@@ -42,7 +42,7 @@ namespace Game.States
             this.RequestStatePush(typeof(MenuState));
             mNewWorld = TypeWorld.Hills;
             this.SoundPlayer = new SoundPlayer();
-            this.SoundPlayer.SoundLocationChanged += (o, args) => this.SoundPlayer.PlayLooping();
+            //this.SoundPlayer.SoundLocationChanged += (o, args) => this.SoundPlayer.PlayLooping();
 
             this.Disposed += this.Shutdown;
         }

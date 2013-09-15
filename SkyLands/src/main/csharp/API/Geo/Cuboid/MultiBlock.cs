@@ -70,26 +70,6 @@ namespace API.Geo.Cuboid
             }
         }
 
-        public void DestroyAllAttachedMovableObjects(SceneNode node) {
-            if (node == null) {
-                return;
-            }
-           // Destroy all the attached objects
-            SceneNode.ObjectIterator it = node.GetAttachedObjectIterator();
-
-
-           while (it.MoveNext()) {
-              node.Creator.DestroyMovableObject(it.Current);
-           }
-
-           // Recurse to child SceneNodes
-           SceneNode.ChildNodeIterator itChild = node.GetChildIterator();
-
-           while (itChild.MoveNext()) {
-              DestroyAllAttachedMovableObjects((SceneNode)itChild.Current);
-           }
-        }
-
         public string getMaterial() { return this.mMaterial; }
 
         public string getName()          { return this.mName; }

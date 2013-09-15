@@ -291,6 +291,9 @@
     <Content Include="resources\Media\materials\particleTextures\Plasma03.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="resources\Media\materials\particleTextures\snow.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\materials\particleTextures\Special.000.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
