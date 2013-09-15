@@ -30,11 +30,11 @@ namespace Game.States
             CharacterInfo playerInfo = new CharacterInfo("Sinbad", this.RTSManager.PlayerRTS, true) { SpawnPoint = this.World.getSpawnPoint() };
             this.CharacMgr.AddCharacter(playerInfo);
 
-            CharacterInfo ally1 = new CharacterInfo("Robot01", this.RTSManager.PlayerRTS) { SpawnPoint = this.World.getSpawnPoint() - Vector3.UNIT_X * 5 };
+            /*CharacterInfo ally1 = new CharacterInfo("Robot01", this.RTSManager.PlayerRTS) { SpawnPoint = this.World.getSpawnPoint() - Vector3.UNIT_X * 5 };
             this.CharacMgr.AddCharacter(ally1);
 
             CharacterInfo ally2 = new CharacterInfo("Robot02", this.RTSManager.PlayerRTS) { SpawnPoint = this.World.getSpawnPoint() + Vector3.UNIT_X * 5 };
-            this.CharacMgr.AddCharacter(ally2);
+            this.CharacMgr.AddCharacter(ally2);*/
 
             this.User.SwitchFreeCamMode();
         }

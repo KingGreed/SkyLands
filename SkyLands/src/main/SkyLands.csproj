@@ -111,7 +111,9 @@
     <Content Include="resources\Media\images\heart.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="resources\Media\images\HUD.png" />
+    <Content Include="resources\Media\images\HUD.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="resources\Media\images\IngameMenu\ingame menu_back.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
