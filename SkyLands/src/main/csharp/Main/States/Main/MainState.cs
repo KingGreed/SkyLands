@@ -35,6 +35,7 @@ namespace Game.States
                     GUI.WebControls.Add(OgreForm.SelectBar);
                 
                 OgreForm.SelectBar.DocumentReady += onSelectBarLoaded;
+                OgreForm.SelectBar.Crashed += OnCrashed;
                 OgreForm.SelectBar.Source =
                     new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/Selector.html");
                 OgreForm.SelectBar.Visible = false;
@@ -44,6 +45,7 @@ namespace Game.States
                     GUI.WebControls.Add(OgreForm.Hud);
 
                 OgreForm.Hud.DocumentReady += onHUDLoaded;
+                OgreForm.Hud.Crashed       += OnCrashed;
                 OgreForm.Hud.Source = new Uri("file://" + Directory.GetCurrentDirectory() + "/media/web/HUD.html");
                 OgreForm.Hud.Visible = false;
             }
@@ -73,6 +75,11 @@ namespace Game.States
 
             OgreForm.Hud.Visible = true;
             OgreForm.Hud.DocumentReady -= onHUDLoaded;
+        }
+
+        private void OnCrashed(object sender, CrashedEventArgs e) {
+            // Oops! The WebView crashed.
+            Mogre.LogManager.Singleton.DefaultLog.LogMessage(e.Status.ToString());
         }
 
         private void onSelectBarLoaded(object sender, UrlEventArgs e)
