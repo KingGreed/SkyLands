@@ -19,7 +19,7 @@ namespace Game.CharacSystem
         public bool WasHorizontalCollision      { get; private set; }
         public bool HasHorizontalCollisionEnded { get; private set; }
 
-        public CollisionMgr(SceneManager sceneMgr, API.Geo.World world, VanillaCharacter charac)
+        public CollisionMgr(API.Geo.World world, VanillaCharacter charac)
         {
             this.mWorld = world;
             this.mCharac = charac;

@@ -63,8 +63,8 @@ namespace Game.BaseApp {
             this.Controls.Add(SelectBar);
             this.Controls.Add(webView);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "OgreForm";
-            this.Text = "OgreForm";
+            this.Name = "SkyLands";
+            this.Text = "SkyLands";
             this.ResumeLayout(false);
 
         }

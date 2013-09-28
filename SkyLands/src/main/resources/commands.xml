@@ -13,11 +13,9 @@ For an azerty keyboard
   </ContinuousAction>
   <ContinuousAction id="MoveUp">
     <Keyboard>KC_E</Keyboard>
-    <Keyboard>KC_PGUP</Keyboard>
   </ContinuousAction>
   <ContinuousAction id="MoveDown">
     <Keyboard>KC_Q</Keyboard>
-    <Keyboard>KC_PGDOWN</Keyboard>
   </ContinuousAction>
   <ContinuousAction id="MoveForward">
     <Keyboard>KC_W</Keyboard>
@@ -38,7 +36,6 @@ For an azerty keyboard
   </SingleAction>
   <SingleAction id="Levitate">
     <Keyboard>KC_E</Keyboard>
-    <Keyboard>KC_PGUP</Keyboard>
     <Xbox>Y</Xbox>
   </SingleAction>
   <SingleAction id="Dance">

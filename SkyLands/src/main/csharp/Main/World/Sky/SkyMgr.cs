@@ -26,7 +26,7 @@ namespace Game.Sky
             this.mCaelumSystem.AttachViewport(this.mStateMgr.Viewport);
 
             this.mCaelumSystem.GetUniversalClock().SetGregorianDateTime(2012, 12, 21, 12, 0, 0);
-            this.mCaelumSystem.TimeScale = 7;
+            this.mCaelumSystem.TimeScale = 25;
             //this.mCaelumSystem.EnsureSingleLightSource = true;
             //this.mCaelumSystem.EnsureSingleShadowSource = true;
             //this.mCaelumSystem.AutoNotifyCameraChanged = false;
@@ -62,8 +62,8 @@ namespace Game.Sky
         public void Update()
         {
             float delta = 0;
-            if (this.mStateMgr.Controller.IsKeyDown(MOIS.KeyCode.KC_ADD)) { delta += 40; }
-            if (this.mStateMgr.Controller.IsKeyDown(MOIS.KeyCode.KC_MINUS)) { delta -= 40; }
+            if (this.mStateMgr.Controller.IsKeyDown(MOIS.KeyCode.KC_PGUP)) { delta += 40; }
+            if (this.mStateMgr.Controller.IsKeyDown(MOIS.KeyCode.KC_PGDOWN)) { delta -= 40; }
             this.mCaelumSystem.TimeScale += delta;
         }
 

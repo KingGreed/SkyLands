@@ -12,14 +12,16 @@ namespace Game.CharacSystem.AI
     class PathFinder
     {
         private const int MAX_SOLUTION_SIZE = 100;
-        private const int NB_ITER_PER_UPDATE = 5;
+        private const int NB_ITER_PER_UPDATE = 5, MAX_NB_ITER = 500;
 
         private readonly Island         mCurrent;
         private readonly NodeList<Node> mOpen;
         private readonly NodeList<Node> mClosed;
         private readonly List<Node>     mPossibleNodes;
         private readonly Vector3        mAbsDestination, mRelDestination;
-        private int                     mSolutionSize;
+        private int                     mSolutionSize, mNbTotIter;
+
+        public bool HaveGiveUp { get; private set; }
 
         public PathFinder(Vector3 destination, Vector3 start, Island current)   // dest in abs value, start rel
         {
@@ -27,6 +29,7 @@ namespace Game.CharacSystem.AI
             this.mClosed = new NodeList<Node>();
             this.mPossibleNodes = new List<Node>();
             this.mSolutionSize = 0;
+            this.mNbTotIter = 0;
             this.mAbsDestination = destination;
             this.mRelDestination = MainWorld.getRelativeFromAbsolute(this.mAbsDestination);
             this.mCurrent = current;
@@ -40,18 +43,18 @@ namespace Game.CharacSystem.AI
 
             while (++i < NB_ITER_PER_UPDATE && this.mOpen.Count > 0)
             {
+                this.mNbTotIter++;
                 Node curr = this.mOpen[0];
                 this.mOpen.RemoveAt(0);
                 this.mClosed.Add(curr);
 
-                if (curr.pos == this.mRelDestination || this.mSolutionSize >= MAX_SOLUTION_SIZE)
+                this.HaveGiveUp = this.mNbTotIter >= MAX_NB_ITER || this.mSolutionSize >= MAX_SOLUTION_SIZE;
+                if (curr.pos == this.mRelDestination || this.HaveGiveUp)
                 {
-                    //AstarLinkedList<Vector3> solution = new AstarLinkedList<Vector3>();
                     Stack<Vector3> path = new Stack<Vector3>();
                     path.Push(this.mAbsDestination); // Push the exact destination for the first one
                     while (curr != null)
                     {
-                        //solution.AddFirst(curr.pos);
                         path.Push(Cst.CUBE_SIDE * (curr.pos + new Vector3(0.5f, 0, -0.5f)));  // Push the center of the block
                         curr = curr.parent;
                     }

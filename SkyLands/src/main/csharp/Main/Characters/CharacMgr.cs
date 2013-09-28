@@ -81,6 +81,7 @@ namespace Game.CharacSystem
         {
             foreach (List<VanillaCharacter> characList in this.mCharacters)
             {
+                List<VanillaCharacter> needToRemove = new List<VanillaCharacter>();
                 for (int i = 0; i < characList.Count; i++)
                 {
                     if (characList[i].WaitForRemove)
@@ -90,13 +91,17 @@ namespace Game.CharacSystem
                         else
                         {
                             VanillaCharacter charac = characList[i];
-                            characList.Remove(characList[i]);
+                            needToRemove.Add(charac);
+                            this.mStateMgr.MainState.User.RemoveSelectedAlly((VanillaNonPlayer)charac);
                             charac.Dispose();
                             continue;
                         }
                     }
                     characList[i].Update(frameTime);
                 }
+
+                foreach (VanillaCharacter charac in needToRemove)
+                    characList.Remove(charac);
             }
         }
 

@@ -268,6 +268,11 @@ namespace Game
                 Selector.SelectorPos = selectorPos;
         }
 
+        public void RemoveSelectedAlly(VanillaNonPlayer charac)
+        {
+            this.mSelectedAllies.Remove(charac);
+        }
+
         private void SwitchInventory(bool open)
         {
             if (open)
@@ -425,6 +430,8 @@ namespace Game
         {
             string name = VanillaChunk.byteToString[Selector.SelectedId];
             if (name == "") { return; }
+
+            if (this.GetSelectedNPC() != null) { return; }
             
             /* Determine the face */
             Ray ray = this.mStateMgr.Camera.GetCameraToViewportRay(0.5f, 0.5f);

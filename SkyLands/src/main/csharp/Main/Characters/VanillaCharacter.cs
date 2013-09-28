@@ -73,7 +73,7 @@ namespace Game.CharacSystem
         protected void FinishCreation()
         {
             this.FeetPosition = this.mCharInfo.SpawnPoint;
-            this.mCollisionMgr = new CollisionMgr(this.mCharacMgr.SceneMgr, this.mCharacMgr.World, this);
+            this.mCollisionMgr = new CollisionMgr(this.mCharacMgr.World, this);
 
             this.mWireBoxes = new SceneNode[2];
             for (int i = 0; i < 2; i++)
@@ -97,7 +97,7 @@ namespace Game.CharacSystem
             else
             {
                 if (GravitySpeed.GetTimeSinceFall() >= 600)
-                    this.Hit(GravitySpeed.GetSpeed() / GravitySpeed.SPEED_TMAX * VanillaPlayer.DEFAULT_PLAYER_LIFE);
+                    this.Hit(GravitySpeed.GetSpeed() / GravitySpeed.SPEED_TMAX * VanillaPlayer.DEFAULT_PLAYER_LIFE * 0.8f);
                 if (this.mCharInfo.IsPlayer)
                     ((Sinbad)this.mMesh).EndJump();
             }
@@ -131,7 +131,7 @@ namespace Game.CharacSystem
 
             if (this.mCharInfo.Life > 0)
             {
-                if (this.mFollow != null && !this.mFollow.IsOnFloor() && this.mForcedDestination.Count == 0 &&
+                if (this.mFollow != null && this.mFollow.IsOnFloor() && this.mForcedDestination.Count == 0 &&
                     (this.mFollow.FeetPosition - this.mDestination).SquaredLength > this.mStaySqrDistToGoal)
                     this.FindPathTo(this.mFollow.FeetPosition);
                 
@@ -146,6 +146,12 @@ namespace Game.CharacSystem
                         this.MovementInfo.IsMovementForced = true;
                         this.mWasAllowedToMove = this.MovementInfo.IsAllowedToMove;
                         this.MovementInfo.IsAllowedToMove = false;
+                    }
+                    else if (this.mPathFinder.HaveGiveUp)
+                    {
+                        this.mPathFinder = null;
+                        this.mDestination = Vector3.ZERO;
+                        Console.WriteLine("forget path");
                     }
                 }
 
@@ -300,7 +306,7 @@ namespace Game.CharacSystem
             this.FindPathTo(destination);
         }
 
-        public void SetForcedDest(Vector3 dest) // Temp
+        /*public void SetForcedDest(Vector3 dest) // Temp
         {
             this.mForcedDestination.Clear();
             this.mForcedDestination.Push(dest);
@@ -308,12 +314,13 @@ namespace Game.CharacSystem
             this.mWasAllowedToMove = this.MovementInfo.IsAllowedToMove;
             this.MovementInfo.IsAllowedToMove = false;
             this.MovementInfo.IsMovementForced = true;
-        }
+        }*/
 
         private void FindPathTo(Vector3 destination)
         {
             if (!(this.mCharacMgr.World.getIsland().getBlock(MainWorld.AbsToRelative(destination), false) is Air)) { Console.WriteLine("path rejected"); return; }
             this.mDestination = destination;
+            Console.WriteLine("Create pathfinder");
             this.mPathFinder = new PathFinder(this.mDestination, this.BlockPosition, this.mCharacMgr.World.getIsland());
         }
 
@@ -354,10 +361,14 @@ namespace Game.CharacSystem
             if (this.mCharInfo.Life <= 0 || damage <= 0) { return; }
             this.mCharInfo.Life -= damage;
 
-            if (this.mCharInfo.IsPlayer && this.mCharacMgr.StateMgr.Controller.GamePadState.IsConnected)
+            if (this.mCharInfo.IsPlayer)
             {
-                float force = (damage + 15) / VanillaPlayer.DEFAULT_PLAYER_LIFE * 7;
-                this.mCharacMgr.StateMgr.Controller.Vibrate(force, force, 0.2f);
+                if (this.mCharacMgr.StateMgr.Controller.GamePadState.IsConnected)
+                {
+                    float force = (damage + 15)/VanillaPlayer.DEFAULT_PLAYER_LIFE*7;
+                    this.mCharacMgr.StateMgr.Controller.Vibrate(force, force, 0.2f);
+                }
+                ((PlayerRTS)this.mCharInfo.RTS).UpdateLife();
             }
 
             if (this.mCharInfo.Life <= 0)
