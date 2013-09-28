@@ -247,12 +247,23 @@ namespace Game.World
 
         }
 
-        public bool HasPointCollision(Vector3 relBlockPos)
+        public bool HasPointCollision(Vector3 absBlockPos)
         {
-            relBlockPos += this.mIslandLoaded.getPosition();
+            Vector3 relBlockPos = MainWorld.AbsToRelative(absBlockPos) + this.mIslandLoaded.getPosition();
 
-            Block block = this.mIslandLoaded.getBlock(relBlockPos, false);
-            return !(block == null || block is Air);
+            Block block = this.mIslandLoaded.getBlock(relBlockPos, false);/* || !(block is SnowEighthBlock && absBlockPos.y - (relBlockPos.y * Cst.CUBE_SIDE) > Cst.CUBE_SIDE / 8)*/
+            if (block == null || block is Air) { return false; }
+            if (block is SnowEighthBlock)
+            {
+                Console.Write("Snow : ");
+                if (absBlockPos.y >= (relBlockPos.y*Cst.CUBE_SIDE) + Cst.CUBE_SIDE/8)
+                {
+                    Console.WriteLine("no col");
+                    return false;
+                }
+                Console.WriteLine("col");
+            }
+            return true;
         }
 
         public void generateIslandThreaded()

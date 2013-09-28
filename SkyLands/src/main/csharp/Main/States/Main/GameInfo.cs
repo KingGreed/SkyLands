@@ -16,7 +16,7 @@ namespace Game.World
         public GameInfo(bool load = false, bool editorMode = false, string scenario = "")
         {
             this.Seed = 42;
-            this.Type = TypeWorld.Mountain;
+            this.Type = TypeWorld.Hills;
             this.Size = new Vector2(11, 11);
             this.Load = load;
             this.IsInEditorMode = editorMode;

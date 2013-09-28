@@ -1,4 +1,5 @@
-﻿using Mogre;
+﻿using Game.World.Blocks;
+using Mogre;
 
 using Game.World;
 using API.Generic;
@@ -74,15 +75,17 @@ namespace Game.CharacSystem
                 Vector3[] hitPointsToTest = this.GetPointsToTest(actHitPoints, absTranslation, axis);
                 for(int i = 0; i < hitPointsToTest.Length; i++)
                 {
-                    hitPointsToTest[i] = MainWorld.AbsToRelative(hitPointsToTest[i]);
+                    Vector3 relHitPoint = MainWorld.AbsToRelative(hitPointsToTest[i]);
                     if (this.mWorld.HasPointCollision(hitPointsToTest[i]))
                     {
                         /* Compute the possible translation */
                         float val = 0;
                         if (axis == Vector3.UNIT_Y)
                         {
+                            float blockHeight = Cst.CUBE_SIDE;
+                            if (mWorld.getIsland().getBlock(relHitPoint, false) is SnowEighthBlock) { blockHeight /= 8; }
                             if (this.GetNonNullValue(absTranslation * axis) < 0)
-                                val = (hitPointsToTest[i].y + 1) * Cst.CUBE_SIDE - this.mCharac.FeetPosition.y;
+                                val = (relHitPoint.y * Cst.CUBE_SIDE + blockHeight) - this.mCharac.FeetPosition.y;
                         }
                         else { this.WasHorizontalCollision = true; }
 
