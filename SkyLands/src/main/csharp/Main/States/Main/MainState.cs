@@ -67,13 +67,13 @@ namespace Game.States
             Hud.Init(buttons, inputs);
             Vector2 size = new Vector2(this.mStateMgr.Width, (int)(this.mStateMgr.Height * 0.05f));
 
+            OgreForm.Hud.Visible = true;
             OgreForm.Hud.Size = new Size((int)size.x, (int)size.y);
             OgreForm.Hud.Location = new Point(0, 0);
 
             Vector2 ratio = new Vector2(size.x / Hud.IMAGE_SIZE.x, size.y / Hud.IMAGE_SIZE.y);
             GUI.ResizeJavascript(OgreForm.Hud, ratio);
-
-            OgreForm.Hud.Visible = true;
+            
             OgreForm.Hud.DocumentReady -= onHUDLoaded;
         }
 
