@@ -31,6 +31,7 @@ namespace Game.GUIs {
 
         public static void SetInput(string[] input)
         {
+            if (!OgreForm.Hud.Visible) { return; }
             for (int i = 0; i < 3; i++)
             {
                 string fun = "setInput(" + (i + 1) + ", '" + input[i] + "')";
@@ -39,7 +40,8 @@ namespace Game.GUIs {
         }
 
         public static void Resize(Vector2 newSize) {
-            OgreForm.Hud.Size = new Size((int)newSize.x, (int)newSize.y);
+            if (OgreForm.Hud.Visible)
+                OgreForm.Hud.Size = new Size((int)newSize.x, (int)newSize.y);
         }
     
     }
