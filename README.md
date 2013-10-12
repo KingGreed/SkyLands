@@ -18,6 +18,7 @@ The commands are designed for a qwerty keyboard but you can easily change most o
 * Escape: show the ingame menu or to close a menu
 * F1: switch from debug camera mode to player view
 * Ctrl: if in camera mode allow to use some commands as if we were in player view (i.e Ctrl + Numpad1 to dance)
+* Page Up (or Down) to speed up (or slow down) time
 
 ##### Basic commands
 * Look around with the mouse
