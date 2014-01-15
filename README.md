@@ -1,7 +1,7 @@
 SkyLands
 ========
 
-__Projet de Sup Epita 2017__
+__Yet another minecraft clone__
 
 You'll need to download Aweomium  : http://awesomium.com/
 
