@@ -6,7 +6,7 @@ __Yet another minecraft clone__
 You'll need to download Aweomium  : http://awesomium.com/
 
 ### LibNoise
-We are using a self made port of @RoyAwesome's port of LibNoise which we compiled in a dll (source will be out soon on GitHub).
+We are using a self made port of @RoyAwesome's port of LibNoise which we compiled in a dll.
 
 ### Commands
 
